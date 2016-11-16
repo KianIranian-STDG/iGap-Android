@@ -46,6 +46,7 @@ public class StructMessageInfo implements Parcelable {
     public ProtoGlobal.RoomMessageType messageType;
     public MyType.SendType sendType;
     public RealmRoomMessage replayTo;
+    public RealmRoomMessage forwardedFrom;
     public String songArtist;
     public long songLength;
     public String messageText = "";
@@ -217,6 +218,7 @@ public class StructMessageInfo implements Parcelable {
         int tmpSendType = in.readInt();
         this.sendType = tmpSendType == -1 ? null : MyType.SendType.values()[tmpSendType];
         this.replayTo = Parcels.unwrap(in.readParcelable(RealmRoomMessage.class.getClassLoader()));
+        this.forwardedFrom = Parcels.unwrap(in.readParcelable(RealmRoomMessage.class.getClassLoader()));
         this.songArtist = in.readString();
         this.songLength = in.readLong();
         this.messageText = in.readString();
@@ -266,7 +268,7 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public static StructMessageInfo buildForContact(long messageID, long senderID,
-                                                    MyType.SendType sendType, long time, ProtoGlobal.RoomMessageStatus status, String username,
+                                                    MyType.SendType sendType, long time, ProtoGlobal.RoomMessageStatus status,
                                                     String firstName, String lastName, String number, long replayToMessageId) {
         StructMessageInfo info = new StructMessageInfo();
 
@@ -290,7 +292,7 @@ public class StructMessageInfo implements Parcelable {
         realm.close();
 
         // contact exclusive
-        info.userInfo = new StructRegisteredInfo(lastName, firstName, number, username, senderID);
+        info.userInfo = new StructRegisteredInfo(lastName, firstName, number, senderID);
         return info;
     }
 
@@ -327,6 +329,7 @@ public class StructMessageInfo implements Parcelable {
                 RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, message.getForwardFrom().getAuthor().getUser().getUserId()).findFirst();
                 if (userInfo != null) {
                     messageInfo.forwardMessageFrom = userInfo.getDisplayName();
+                    messageInfo.forwardedFrom = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, message.getForwardFrom().getMessageId()).findFirst();
                 }
             }
 
@@ -350,6 +353,7 @@ public class StructMessageInfo implements Parcelable {
                 RealmRoom roomInfo = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.getForwardFrom().getAuthor().getRoom().getRoomId()).findFirst();
                 if (roomInfo != null) {
                     messageInfo.forwardMessageFrom = roomInfo.getTitle();
+                    messageInfo.forwardedFrom = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, message.getForwardFrom().getMessageId()).findFirst();
                 }
             }
         }
@@ -410,6 +414,7 @@ public class StructMessageInfo implements Parcelable {
                     .findFirst();
             if (userInfo != null) {
                 messageInfo.forwardMessageFrom = userInfo.getDisplayName();
+                messageInfo.forwardedFrom = roomMessage.getForwardMessage();
             }
         }
         if (roomMessage.getLocation() != null) {
@@ -468,6 +473,7 @@ public class StructMessageInfo implements Parcelable {
         dest.writeInt(this.messageType == null ? -1 : this.messageType.ordinal());
         dest.writeInt(this.sendType == null ? -1 : this.sendType.ordinal());
         dest.writeParcelable(Parcels.wrap(this.replayTo), flags);
+        dest.writeParcelable(Parcels.wrap(this.forwardedFrom), flags);
         dest.writeString(this.songArtist);
         dest.writeLong(this.songLength);
         dest.writeString(this.messageText);

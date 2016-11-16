@@ -75,6 +75,27 @@ public final class AndroidUtils {
         }
     }
 
+    public static String saveBitmap(Bitmap bmp) {
+        FileOutputStream out = null;
+        String outPath = G.DIR_TEMP + "/thumb_" + Long.toString(SUID.id().get());
+        try {
+            out = new FileOutputStream(outPath);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return outPath;
+    }
+
     /**
      * get n bytes from file, starts from beginning
      *

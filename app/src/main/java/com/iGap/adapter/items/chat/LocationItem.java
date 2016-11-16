@@ -1,6 +1,7 @@
 package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -35,7 +36,15 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.location.setText(mMessage.location);
+        if (mMessage.forwardedFrom != null) {
+            if (!TextUtils.isEmpty(mMessage.forwardedFrom.getLocation().toString())) {
+                holder.location.setText(mMessage.forwardedFrom.getLocation().toString());
+            }
+        } else {
+            if (!TextUtils.isEmpty(mMessage.location)) {
+                holder.location.setText(mMessage.location);
+            }
+        }
     }
 
     @Override

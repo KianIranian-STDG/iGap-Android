@@ -56,11 +56,23 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.cslf_txt_file_name.setText(mMessage.attachment.name);
-        holder.cslf_txt_file_size.setText(
-                AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+        if (mMessage.forwardedFrom != null) {
+            if (mMessage.forwardedFrom.getAttachment() != null) {
+                holder.cslf_txt_file_name.setText(mMessage.forwardedFrom.getAttachment().getName());
+                holder.cslf_txt_file_size.setText(
+                        AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
+            }
 
-        setTextIfNeeded(holder.messageText);
+            setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
+        } else {
+            if (mMessage.attachment != null) {
+                holder.cslf_txt_file_name.setText(mMessage.attachment.name);
+                holder.cslf_txt_file_size.setText(
+                        AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+            }
+
+            setTextIfNeeded(holder.messageText, mMessage.messageText);
+        }
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

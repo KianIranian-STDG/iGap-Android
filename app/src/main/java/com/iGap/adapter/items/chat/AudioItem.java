@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -74,21 +75,43 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.fileSize.setText(
-                AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
-        holder.fileName.setText(mMessage.attachment.name);
-        if (mMessage.songArtist != null && !mMessage.songArtist.isEmpty()) {
-            holder.songArtist.setText(mMessage.songArtist);
+        if (mMessage.forwardedFrom != null) {
+            if (mMessage.forwardedFrom.getAttachment() != null) {
+                holder.fileSize.setText(
+                        AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
+                holder.fileName.setText(mMessage.forwardedFrom.getAttachment().getName());
+                holder.playerView.setEnabled(mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal());
+                if (mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
+                    holder.playerView.setMediaPlayer(makeMediaPlayer(holder.itemView.getContext(), AndroidUtils.suitablePath(mMessage.forwardedFrom.getAttachment().getLocalFilePath())));
+                    String artistName = AndroidUtils.getAudioArtistName(mMessage.forwardedFrom.getAttachment().getLocalFilePath());
+                    if (!TextUtils.isEmpty(artistName)) {
+                        holder.songArtist.setText(artistName);
+                    } else {
+                        holder.songArtist.setText(holder.itemView.getResources().getString(R.string.unknown_artist));
+                    }
+                }
+            }
+
+            setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
+
         } else {
-            holder.songArtist.setText(holder.itemView.getResources().getString(R.string.unknown_artist));
-        }
+            if (mMessage.attachment != null) {
+                holder.fileSize.setText(
+                        AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+                holder.fileName.setText(mMessage.attachment.name);
+                holder.playerView.setEnabled(mMessage.attachment.isFileExistsOnLocal());
+                if (mMessage.attachment.isFileExistsOnLocal()) {
+                    holder.playerView.setMediaPlayer(makeMediaPlayer(holder.itemView.getContext(), AndroidUtils.suitablePath(mMessage.attachment.getLocalFilePath())));
+                }
+            }
+            if (!TextUtils.isEmpty(mMessage.songArtist)) {
+                holder.songArtist.setText(mMessage.songArtist);
+            } else {
+                holder.songArtist.setText(holder.itemView.getResources().getString(R.string.unknown_artist));
+            }
 
-        holder.playerView.setEnabled(mMessage.attachment.isFileExistsOnLocal());
-        if (mMessage.attachment.isFileExistsOnLocal()) {
-            holder.playerView.setMediaPlayer(makeMediaPlayer(holder.itemView.getContext(), AndroidUtils.suitablePath(mMessage.attachment.getLocalFilePath())));
+            setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
-
-        setTextIfNeeded(holder.messageText);
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

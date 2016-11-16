@@ -30,6 +30,11 @@ public class RealmRoomMessageLocation extends RealmObject {
         return messageLocation;
     }
 
+    @Override
+    public String toString() {
+        return Double.toString(getLocationLat()) + "," + Double.toString(getLocationLong());
+    }
+
     public double getLocationLat() {
         return locationLat;
     }

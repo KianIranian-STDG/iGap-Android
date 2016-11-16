@@ -35,8 +35,17 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.name.setText(mMessage.userInfo.displayName);
-        holder.number.setText(mMessage.userInfo.phone);
+        if (mMessage.forwardedFrom != null) {
+            if (mMessage.forwardedFrom.getRoomMessageContact() != null) {
+                holder.name.setText(mMessage.forwardedFrom.getRoomMessageContact().getFirstName() + " " + mMessage.forwardedFrom.getRoomMessageContact().getLastName());
+                holder.number.setText(mMessage.forwardedFrom.getRoomMessageContact().getLastPhoneNumber());
+            }
+        } else {
+            if (mMessage.userInfo != null) {
+                holder.name.setText(mMessage.userInfo.displayName);
+                holder.number.setText(mMessage.userInfo.phone);
+            }
+        }
     }
 
     @Override

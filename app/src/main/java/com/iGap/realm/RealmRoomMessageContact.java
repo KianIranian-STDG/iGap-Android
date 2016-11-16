@@ -101,6 +101,13 @@ public class RealmRoomMessageContact extends RealmObject {
         realm.close();
     }
 
+    public String getLastPhoneNumber() {
+        if (phones == null || phones.isEmpty()) {
+            return null;
+        }
+        return phones.last().getString();
+    }
+
     public RealmList<RealmString> getEmails() {
         return emails;
     }

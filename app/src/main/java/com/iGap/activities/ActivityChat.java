@@ -62,14 +62,6 @@ import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.adapter.items.chat.AudioItem;
-import com.iGap.adapter.items.chat.ChannelAudioItem;
-import com.iGap.adapter.items.chat.ChannelContactItem;
-import com.iGap.adapter.items.chat.ChannelFileItem;
-import com.iGap.adapter.items.chat.ChannelGifItem;
-import com.iGap.adapter.items.chat.ChannelImageItem;
-import com.iGap.adapter.items.chat.ChannelTextItem;
-import com.iGap.adapter.items.chat.ChannelVideoItem;
-import com.iGap.adapter.items.chat.ChannelVoiceItem;
 import com.iGap.adapter.items.chat.ContactItem;
 import com.iGap.adapter.items.chat.FileItem;
 import com.iGap.adapter.items.chat.GifItem;
@@ -935,19 +927,13 @@ public class ActivityChat extends ActivityEnhanced
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
             if (!messageInfo.isTimeMessage()) {
-                switch (messageInfo.messageType) {
+                switch (messageInfo.forwardedFrom != null ? ProtoGlobal.RoomMessageType.valueOf(messageInfo.forwardedFrom.getMessageType()) : messageInfo.messageType) {
                     case TEXT:
                         if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
-                        } else {
-                            if (!addTop) {
-                                mAdapter.add(new ChannelTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ChannelTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -958,12 +944,6 @@ public class ActivityChat extends ActivityEnhanced
                             } else {
                                 mAdapter.add(0, new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else {
-                            if (!addTop) {
-                                mAdapter.add(new ChannelImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ChannelImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
                         }
                         break;
                     case IMAGE_TEXT:
@@ -972,12 +952,6 @@ public class ActivityChat extends ActivityEnhanced
                                 mAdapter.add(new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
-                        } else {
-                            if (!addTop) {
-                                mAdapter.add(new ChannelImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ChannelImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -988,12 +962,6 @@ public class ActivityChat extends ActivityEnhanced
                             } else {
                                 mAdapter.add(0, new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else {
-                            if (!addTop) {
-                                mAdapter.add(new ChannelVideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ChannelVideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
                         }
                         break;
                     case VIDEO_TEXT:
@@ -1002,12 +970,6 @@ public class ActivityChat extends ActivityEnhanced
                                 mAdapter.add(new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
-                        } else {
-                            if (!addTop) {
-                                mAdapter.add(new ChannelVideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ChannelVideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -1019,10 +981,7 @@ public class ActivityChat extends ActivityEnhanced
                             } else {
                                 mAdapter.add(0, new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } /*else {
-                        mAdapter.add(new ChannelVideoItem(chatType,this).setMessage(messageInfo)
-                        .withIdentifier(identifier));
-                    }*/
+                        }
                         break;
                     case FILE:
                     case FILE_TEXT:
@@ -1032,12 +991,6 @@ public class ActivityChat extends ActivityEnhanced
                             } else {
                                 mAdapter.add(0, new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else if (chatType == CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new ChannelFileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ChannelFileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
                         }
                         break;
                     case VOICE:
@@ -1046,12 +999,6 @@ public class ActivityChat extends ActivityEnhanced
                                 mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
-                        } else if (chatType == CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new ChannelVoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ChannelVoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -1063,12 +1010,6 @@ public class ActivityChat extends ActivityEnhanced
                             } else {
                                 mAdapter.add(0, new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else if (chatType == CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new ChannelAudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ChannelAudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
                         }
                         break;
                     case CONTACT:
@@ -1078,12 +1019,6 @@ public class ActivityChat extends ActivityEnhanced
                             } else {
                                 mAdapter.add(0, new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else if (chatType == CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new ChannelContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ChannelContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
                         }
                         break;
                     case GIF:
@@ -1092,12 +1027,6 @@ public class ActivityChat extends ActivityEnhanced
                                 mAdapter.add(new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
-                        } else if (chatType == CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new ChannelGifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ChannelGifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -2433,11 +2362,9 @@ public class ActivityChat extends ActivityEnhanced
                 ContactUtils contactUtils = new ContactUtils(getApplicationContext(), latestUri);
                 String name = contactUtils.retrieveName();
                 String number = contactUtils.retrieveNumber();
-                // FIXME: 10/5/2016 [Alireza] get username
-                String username = "username";
                 messageType = ProtoGlobal.RoomMessageType.CONTACT;
                 // FIXME: 10/18/2016 [Alireza] lastName "" gozashtam jash, firstName esme kamele
-                messageInfo = StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, username, name, "", number,
+                messageInfo = StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, name, "", number,
                         userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_paint:
@@ -2500,7 +2427,14 @@ public class ActivityChat extends ActivityEnhanced
                     finalMessageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
                 }
 
-                switchAddItem(new ArrayList<>(Arrays.asList(finalMessageInfo)), false);
+                if (finalMessageType == ProtoGlobal.RoomMessageType.VIDEO || finalMessageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                    Bitmap bitmap = FileUtils.getThumbnail(getApplicationContext(), new File(finalFilePath));
+                    if (bitmap != null) {
+                        String path = AndroidUtils.saveBitmap(bitmap);
+                        roomMessage.getAttachment().setLocalThumbnailPath(path);
+                    }
+                }
+                switchAddItem(new ArrayList<>(Collections.singletonList(finalMessageInfo)), false);
 
                 if (finalFilePath != null && finalMessageType != ProtoGlobal.RoomMessageType.CONTACT) {
                     new UploadTask().execute(finalFilePath, finalMessageId, finalMessageType, mRoomId, getWrittenMessage());

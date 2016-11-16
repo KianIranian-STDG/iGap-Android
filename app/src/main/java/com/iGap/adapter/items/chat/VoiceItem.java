@@ -53,9 +53,17 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.elapsedTime.setText("0");
-        holder.duration.setText(AppUtils.humanReadableDuration(mMessage.attachment.duration));
-        setTextIfNeeded(holder.messageText);
+        if (mMessage.forwardedFrom != null) {
+            if (mMessage.forwardedFrom.getAttachment() != null) {
+                holder.duration.setText(AppUtils.humanReadableDuration(mMessage.forwardedFrom.getAttachment().getDuration()));
+            }
+            setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
+        } else {
+            if (mMessage.attachment != null) {
+                holder.duration.setText(AppUtils.humanReadableDuration(mMessage.attachment.duration));
+            }
+            setTextIfNeeded(holder.messageText, mMessage.messageText);
+        }
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

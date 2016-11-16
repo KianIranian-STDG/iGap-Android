@@ -35,13 +35,12 @@ public class StructRegisteredInfo implements Parcelable {
     public StructRegisteredInfo() {
     }
 
-    public StructRegisteredInfo(String lastName, String firstName, String phone, String username,
+    public StructRegisteredInfo(String lastName, String firstName, String phone,
                                 long id) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.displayName = firstName + " " + lastName;
         this.phone = phone;
-        this.username = username;
         this.id = id;
     }
 
