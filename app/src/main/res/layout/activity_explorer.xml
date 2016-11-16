@@ -57,14 +57,16 @@
                 </com.iGap.libs.rippleeffect.RippleView>
 
                 <TextView
+                    android:id="@+id/ae_txt_file_path"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:text=""
+                    android:gravity="left|center"
+                    android:text="dd"
+                    android:maxLines="3"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/sp18" />
+                    android:textSize="@dimen/sp12"/>
 
                 <Button
                     android:id="@+id/asm_btn_menu"

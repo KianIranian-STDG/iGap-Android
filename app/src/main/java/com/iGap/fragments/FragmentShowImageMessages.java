@@ -184,8 +184,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             helper.attachToRecyclerView(mRecyclerView);
 
             ImageMessageItem selectedItem = findByToken(mSelectedToken);
-            mCount.setText(
-                    String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
+
             mFileName.setText(selectedItem.message.getAttachment().getName());
             mMessageTime.setText(TimeUtils.getChatSettingsTimeAgo(getContext(),
                     new Date(selectedItem.message.getUpdateTime())));
@@ -200,7 +199,11 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
     private void preSelect() {
         for (ImageMessageItem item : mAdapter.getAdapterItems()) {
             if (item.message.getAttachment().getToken().equalsIgnoreCase(mSelectedToken)) {
-                mRecyclerView.scrollToPosition(mAdapter.getPosition(item));
+                int position = mAdapter.getPosition(item);
+                mRecyclerView.scrollToPosition(position);
+
+                mCount.setText(String.format(getString(R.string.d_of_d), position + 1, mAdapter.getAdapterItemCount()));
+
                 break;
             }
         }

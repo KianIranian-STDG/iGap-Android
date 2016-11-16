@@ -73,6 +73,10 @@ public class VoiceRecord {
         this.itemTag = itemTag;
     }
 
+    public String getItemTag() {
+        return itemTag;
+    }
+
     public void stopVoiceRecord() {
         if (null != mediaRecorder) {
             try {

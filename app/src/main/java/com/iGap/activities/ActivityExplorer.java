@@ -9,7 +9,9 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iGap.R;
@@ -34,7 +36,7 @@ public class ActivityExplorer extends ActivityEnhanced {
     ArrayList<StructExplorerItem> item;
     ArrayList<String> node;          //path of the hierychical directory
     ArrayList<Integer> mscroll;
-
+    TextView txtCurentPath;
     MaterialDesignTextView btnBack;
 
     StructExplorerItem x;
@@ -60,7 +62,7 @@ public class ActivityExplorer extends ActivityEnhanced {
         if (mode == null)
             mode = "normal";
 
-
+        txtCurentPath = (TextView) findViewById(R.id.ae_txt_file_path);
         recyclerView = (RecyclerView) findViewById(R.id.ae_recycler_view_explorer);
         recyclerView.setItemViewCacheSize(100);
         mLayoutManager = new LinearLayoutManager(ActivityExplorer.this);
@@ -91,6 +93,7 @@ public class ActivityExplorer extends ActivityEnhanced {
         }
 
         fill(nextnode, position);
+
     }
 
     @Override
@@ -155,7 +158,7 @@ public class ActivityExplorer extends ActivityEnhanced {
             rootcount++;
         }
 
-
+        txtCurentPath.setText("root");
         recyclerView.setAdapter(
                 new AdapterExplorer(item, new AdapterExplorer.OnItemClickListenerExplorer() {
 
@@ -181,7 +184,7 @@ public class ActivityExplorer extends ActivityEnhanced {
 
                     int po = getItemId(Environment.getExternalStorageDirectory().toString(), "Documents");
 
-                    onItemClickInernal(po);
+                    onItemClickInernal(po - 1);
                 }
             }
             first = false;
@@ -226,7 +229,7 @@ public class ActivityExplorer extends ActivityEnhanced {
     void fill(String nextnod, int position) {
 
         try {
-
+            Log.e("ddd", nextnod);
             File fileDir = new File(nextnod);
 
             if (fileDir.isDirectory()) {
@@ -272,6 +275,7 @@ public class ActivityExplorer extends ActivityEnhanced {
                                 onItemClickInernal(position);
                             }
                         }));
+                txtCurentPath.setText(nextnod);
 
                 node.add(nextnod);
             } else if (fileDir.isFile()) {
@@ -301,7 +305,7 @@ public class ActivityExplorer extends ActivityEnhanced {
             mime = mime.toLowerCase();
 
             if (mime.endsWith(".txt") || mime.endsWith(".pdf") || mime.endsWith(".doc") || mime.endsWith(".xls") || mime.endsWith(".snb")
-                    || mime.endsWith(".ppt") || mime.endsWith(".html") || mime.endsWith(".htm") || mime.endsWith(".docx"))
+                    || mime.endsWith(".ppt") || mime.endsWith(".html") || mime.endsWith(".htm") || mime.endsWith(".docx") || mime.endsWith(".xml"))
                 result = true;
 
         } else {

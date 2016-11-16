@@ -38,7 +38,8 @@ public class UploadService extends Service {
         Log.e("ddd", path + "   " + roomId);
 
         sendVoice(path, roomId);
-        return super.onStartCommand(intent, flags, startId);
+
+        return START_NOT_STICKY;
     }
 
 

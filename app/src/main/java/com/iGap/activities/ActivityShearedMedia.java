@@ -22,16 +22,20 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.fragments.FragmentShowImage;
+import com.iGap.interfaces.OnClientSearchRoomHistory;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
+import com.iGap.proto.ProtoClientSearchRoomHistory;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.iGap.request.RequestClientSearchRoomHistory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -311,6 +315,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private void fillListImage() {
 
+        getImageListFromServer();
+
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
@@ -431,4 +437,234 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         realm.close();
     }
+
+
+    //********************************************************************************************
+
+    private int offsetIMAGE = 0;
+    private int offsetVIDEO = 0;
+    private int offsetAUDIO = 0;
+    private int offsetVOICE = 0;
+    private int offsetGIF = 0;
+    private int offsetFILE = 0;
+    private int offsetURL = 0;
+
+
+    private void getImageListFromServer() {
+
+
+        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
+            @Override
+            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+                for (ProtoGlobal.RoomMessage message : resultList) {
+
+                    Log.e("ddd", message + "      eeee");
+
+                }
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
+            }
+
+            @Override
+            public void onTimeOut() {
+                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
+            }
+        };
+
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetIMAGE, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE);
+
+    }
+
+    private void getVIDEOListFromServer() {
+
+        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
+            @Override
+            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+                for (ProtoGlobal.RoomMessage message : resultList) {
+
+                    Log.e("ddd", message + "      eeee");
+
+                }
+
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
+            }
+
+            @Override
+            public void onTimeOut() {
+                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
+            }
+        };
+
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetVIDEO, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO);
+
+    }
+
+    private void getAUDIOListFromServer() {
+
+
+        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
+            @Override
+            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+                for (ProtoGlobal.RoomMessage message : resultList) {
+
+                    Log.e("ddd", message + "      eeee");
+
+                }
+
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
+            }
+
+            @Override
+            public void onTimeOut() {
+                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
+            }
+        };
+
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetAUDIO, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
+
+    }
+
+    private void getVOICEListFromServer() {
+
+
+        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
+            @Override
+            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+                for (ProtoGlobal.RoomMessage message : resultList) {
+
+                    Log.e("ddd", message + "      eeee");
+
+                }
+
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
+            }
+
+            @Override
+            public void onTimeOut() {
+                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
+            }
+        };
+
+        ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter voiceFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE;
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetVOICE, voiceFilter);
+
+    }
+
+    private void getGIFListFromServer() {
+
+
+        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
+            @Override
+            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+                for (ProtoGlobal.RoomMessage message : resultList) {
+
+                    Log.e("ddd", message + "      eeee");
+
+                }
+
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
+            }
+
+            @Override
+            public void onTimeOut() {
+                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
+            }
+        };
+
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetGIF, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF);
+
+    }
+
+    private void getFILEListFromServer() {
+
+
+        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
+            @Override
+            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+                for (ProtoGlobal.RoomMessage message : resultList) {
+
+                    Log.e("ddd", message + "      eeee");
+
+                }
+
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
+            }
+
+            @Override
+            public void onTimeOut() {
+                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
+            }
+        };
+
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetFILE, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE);
+
+    }
+
+    private void getURLListFromServer() {
+
+
+        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
+            @Override
+            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+                for (ProtoGlobal.RoomMessage message : resultList) {
+
+                    Log.e("ddd", message + "      eeee");
+
+                }
+
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
+            }
+
+            @Override
+            public void onTimeOut() {
+                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
+            }
+        };
+
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetURL, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL);
+
+    }
+
+
 }

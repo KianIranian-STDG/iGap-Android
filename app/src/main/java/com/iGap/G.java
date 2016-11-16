@@ -34,6 +34,7 @@ import com.iGap.interfaces.OnClearChatHistory;
 import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnClientGetRoomListResponse;
 import com.iGap.interfaces.OnClientGetRoomResponse;
+import com.iGap.interfaces.OnClientSearchRoomHistory;
 import com.iGap.interfaces.OnConnectionChangeState;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnDraftMessage;
@@ -204,6 +205,7 @@ public class G extends Application {
     public static OnConnectionChangeState onConnectionChangeState;
     public static OnReceiveInfoLocation onReceiveInfoLocation;
     public static OnUserRegistration onUserRegistration;
+    public static OnClientSearchRoomHistory onClientSearchRoomHistory;
     public static OnUserVerification onUserVerification;
     public static OnReceivePageInfoTOS onReceivePageInfoTOS;
     public static OnUserLogin onUserLogin;

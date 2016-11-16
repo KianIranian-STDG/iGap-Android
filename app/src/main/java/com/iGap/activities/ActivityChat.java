@@ -6,7 +6,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,7 +44,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -199,6 +197,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.iGap.G.context;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
@@ -1414,6 +1413,12 @@ public class ActivityChat extends ActivityEnhanced
         rippleBackButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
+
+                if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
+                    ActivityPopUpNotification.isGoingToChatFromPopUp = false;
+                    Intent intent = new Intent(context, ActivityMain.class);
+                    startActivity(intent);
+                }
                 finish();
             }
         });
@@ -1893,44 +1898,54 @@ public class ActivityChat extends ActivityEnhanced
         Intent intent = new Intent(Intent.ACTION_SEND);
         String choserDialogText = "";
 
-        if (messageInfo.messageType.toString().equals("TEXT")) {
-            intent.setType("text/plain");
-            intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.messageText);
-        } else if (messageInfo.messageType.toString().equals("CONTACT")) {
-            intent.setType("text/plain");
-            intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.userInfo.firstName + "\n" + messageInfo.userInfo.phone);
-        } else if (messageInfo.messageType.toString().equals("VOICE") || messageInfo.messageType.toString().equals("AUDIO") || messageInfo.messageType.toString().equals("AUDIO_TEXT")) {
-            intent.setType("audio/*");
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
-            choserDialogText = "Share audio file";
-        } else if (messageInfo.messageType.toString().equals("IMAGE") || messageInfo.messageType.toString().equals("IMAGE_TEXT")) {
-            intent.setType("image/*");
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
-            choserDialogText = "Share image";
-        } else if (messageInfo.messageType.toString().equals("VIDEO") || messageInfo.messageType.toString().equals("VIDEO_TEXT")) {
-            intent.setType("video/*");
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
-            choserDialogText = "Share video file";
-        } else if (messageInfo.messageType.toString().equals("FILE") || messageInfo.messageType.toString().equals("FILE_TEXT")) {
-            Uri uri = Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath()));
+        Log.e("ddd", messageInfo.messageType.toString() + "   " + messageInfo.location + "   " + messageInfo);
 
-            String mimeType = null;
-            if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
-                ContentResolver cr = getContentResolver();
-                mimeType = cr.getType(uri);
-            } else {
-                String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
-                mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase());
-            }
+        switch (messageInfo.messageType.toString()) {
 
-            if (mimeType == null || mimeType.length() < 1) {
-                mimeType = "*/*";
-            }
+            case "TEXT":
+                intent.setType("text/plain");
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.messageText);
+                break;
+            case "CONTACT":
+                intent.setType("text/plain");
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.userInfo.firstName + "\n" + messageInfo.userInfo.phone);
+                break;
+            case "LOCATION":
+                intent.setType("text/plain");
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.location);
+                break;
+            case "VOICE":
+            case "AUDIO":
+            case "AUDIO_TEXT":
+                intent.setType("audio/*");
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+                choserDialogText = "Share audio file";
+                break;
+            case "IMAGE":
+            case "IMAGE_TEXT":
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+                choserDialogText = "Share image";
+                break;
+            case "VIDEO":
+            case "VIDEO_TEXT":
+                intent.setType("video/*");
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+                choserDialogText = "Share video file";
+                break;
+            case "FILE":
+            case "FILE_TEXT":
+                Uri uri = Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath()));
+                String mimeType = FileUtils.getMimeType(ActivityChat.this, uri);
 
-            intent.setType(mimeType);
-            Log.e("ddd", mimeType + "");
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
-            choserDialogText = "Share  file";
+                if (mimeType == null || mimeType.length() < 1) {
+                    mimeType = "*/*";
+                }
+
+                intent.setType(mimeType);
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                choserDialogText = "Share  file";
+                break;
         }
 
         startActivity(Intent.createChooser(intent, choserDialogText));
@@ -1987,14 +2002,23 @@ public class ActivityChat extends ActivityEnhanced
         } else if (emojiPopup != null && emojiPopup.isShowing()) {
             emojiPopup.dismiss();
         } else {
+
+            if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
+                ActivityPopUpNotification.isGoingToChatFromPopUp = false;
+                Intent intent = new Intent(context, ActivityMain.class);
+                startActivity(intent);
+            }
             super.onBackPressed();
         }
     }
 
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
 
-        voiceRecord.dispatchTouchEvent(event);
+
+        if (voiceRecord.getItemTag().equals("ivVoice"))
+            voiceRecord.dispatchTouchEvent(event);
 
         return super.dispatchTouchEvent(event);
     }
@@ -2099,7 +2123,6 @@ public class ActivityChat extends ActivityEnhanced
             }
             if (requestCode == AttachFile.request_code_contact_phone) {
                 latestUri = data.getData();
-                // contacts user uri so filePath is empty for contact
                 sendMessage(requestCode, "");
                 return;
             }
@@ -2379,6 +2402,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 break;
             case AttachFile.request_code_contact_phone:
+                if (latestUri == null) {
+                    Log.e("ddd", "can not get result pic contact");
+                    break;
+                }
+
                 ContactUtils contactUtils = new ContactUtils(getApplicationContext(), latestUri);
                 String name = contactUtils.retrieveName();
                 String number = contactUtils.retrieveNumber();

@@ -79,6 +79,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     public static boolean isPopUpVisible = false;
     public static OnComplete onComplete;
+    public static boolean isGoingToChatFromPopUp = false;
 
     //////////////////////////////////////////   appbar component
     ViewPager viewPager;
@@ -333,7 +334,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             }
         }
 
-        realm.close();
+        //   realm.close();
 
         if (unreadList.size() < 1) {
             finish();
@@ -345,7 +346,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        voiceRecord.dispatchTouchEvent(event);
+        if (voiceRecord.getItemTag().equals("ivVoice"))
+            voiceRecord.dispatchTouchEvent(event);
         return super.dispatchTouchEvent(event);
     }
 
@@ -378,7 +380,18 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(identity);
     }
 
+    private void goToChatActivity() {
 
+        Intent intent = new Intent(context, ActivityChat.class);
+        intent.putExtra("RoomId", unreadList.get(viewPager.getCurrentItem()).getRoomId());
+        startActivity(intent);
+
+        isGoingToChatFromPopUp = true;
+
+        finish();
+
+
+    }
 
     private class InitComponnet {
 
@@ -458,10 +471,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             txtName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ActivityChat.class);
-                    intent.putExtra("RoomId", unreadList.get(viewPager.getCurrentItem()).getRoomId());
-                    startActivity(intent);
-                    finish();
+                    goToChatActivity();
                 }
             });
 
@@ -471,10 +481,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             imvUserPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ActivityChat.class);
-                    intent.putExtra("RoomId", unreadList.get(viewPager.getCurrentItem()).getRoomId());
-                    startActivity(intent);
-                    finish();
+                    goToChatActivity();
                 }
             });
 
@@ -679,10 +686,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ActivityChat.class);
-                    intent.putExtra("RoomId", unreadList.get(position).getRoomId());
-                    startActivity(intent);
-                    finish();
+                    goToChatActivity();
 
                 }
             });
