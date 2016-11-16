@@ -3,6 +3,7 @@ package com.iGap.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,17 +26,14 @@ import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.AndroidUtils;
-import com.iGap.module.HelperDecodeFile;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmAvatarPath;
+import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 public class FragmentDrawerMenu extends MenuFragment {
     public static Bitmap decodeBitmapProfile = null;
@@ -100,7 +98,7 @@ public class FragmentDrawerMenu extends MenuFragment {
         txtUserName.setText(username);
         txtPhoneNumber.setText(phoneNumber);
 
-        setImage();
+        setImage(realmUserInfo.getUserId());
 
         RelativeLayout layoutUserPicture =
                 (RelativeLayout) v.findViewById(R.id.lm_layout_user_picture);
@@ -236,27 +234,56 @@ public class FragmentDrawerMenu extends MenuFragment {
 
     //TODO [Saeed Mozaffari] [2016-09-10 2:49 PM] -dar har vorud be barname decode kardane tasvir eshtebah ast.
 
-    public void setImage() {
-        final Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatarPath> realmAvatarPaths =
-                realm.where(RealmAvatarPath.class).findAll();
-        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+    public void setImage(long userId) {
+//        final Realm realm = Realm.getDefaultInstance();
+//        RealmResults<RealmAvatarPath> realmAvatarPaths =
+//                realm.where(RealmAvatarPath.class).findAll();
+//        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
+//
+//        if (realmAvatarPaths.size() > 0) {
+//            pathImageDecode = realmAvatarPaths.first().getPathImage();
+//            decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));
+//            imgUserPhoto.setImageBitmap(decodeBitmapProfile);
+//        } else {
+//            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+//            if (realmUserInfo.getUserInfo().getColor() == null) {
+//                imgUserPhoto.setImageBitmap(
+//                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
+//                                (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60),
+//                                " ", "#117f7f7f"));
+//            } else {
+//                imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
+//                        (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
+//            }
+//        }
 
-        if (realmAvatarPaths.size() > 0) {
-            pathImageDecode = realmAvatarPaths.first().getPathImage();
-            decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));
-            imgUserPhoto.setImageBitmap(decodeBitmapProfile);
-        } else {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo.getUserInfo().getColor() == null) {
-                imgUserPhoto.setImageBitmap(
-                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                                (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60),
-                                " ", "#117f7f7f"));
-            } else {
-                imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-                        (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
+        final Realm realm = Realm.getDefaultInstance();
+
+        RealmAvatar realmAvatar = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getLastAvatar();
+        if (realmAvatar != null) {
+            if (realmAvatar.getFile().getLocalFilePath() != null) {
+
+                File imgFile = new File(realmAvatar.getFile().getLocalFilePath());
+
+                if (imgFile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    imgUserPhoto.setImageBitmap(myBitmap);
+                } else {
+                    showInitials();
+                }
+
+            } else if (realmAvatar.getFile().getLocalThumbnailPath() != null) {
+                File imgFile = new File(realmAvatar.getFile().getLocalThumbnailPath());
+
+                if (imgFile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    imgUserPhoto.setImageBitmap(myBitmap);
+                } else {
+                    showInitials();
+                }
             }
+        } else {
+            showInitials();
         }
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
@@ -284,8 +311,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                     public void run() {
                         if (imagePath == null) {
                             Realm realm1 = Realm.getDefaultInstance();
-                            RealmUserInfo realmUserInfo =
-                                    realm1.where(RealmUserInfo.class).findFirst();
+                            RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
                             imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
                                     (int) imgUserPhoto.getContext()
                                             .getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
@@ -305,6 +331,17 @@ public class FragmentDrawerMenu extends MenuFragment {
             }
         };
 
+        realm.close();
+    }
+
+    private void showInitials() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        imgUserPhoto.setImageBitmap(
+                HelperImageBackColor.drawAlphabetOnPicture(
+                        (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100)
+                        , realmUserInfo.getUserInfo().getInitials()
+                        , realmUserInfo.getUserInfo().getColor()));
         realm.close();
     }
 }

@@ -280,7 +280,7 @@
     <string name="waiting_for_network">Waiting For Network…</string>
     <string name="connecting">Connecting…</string>
     <string name="updating">Updating…</string>
-    <string name="last_seen_recently">Last seen Recently</string>
+    <string name="last_seen_recently">last seen recently</string>
     <string name="member">Members</string>
     <string name="save_ok">Save OK:</string>
     <string name="exception">Exception:</string>

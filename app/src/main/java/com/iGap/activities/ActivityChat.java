@@ -112,7 +112,6 @@ import com.iGap.module.EndlessRecyclerOnScrollListener;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.FileUtils;
 import com.iGap.module.HelperDecodeFile;
-import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
@@ -1685,9 +1684,9 @@ public class ActivityChat extends ActivityEnhanced
         Log.i("CCC", "2 status : " + status);
         if (status != null) {
             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                //String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
-                //txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
-                txtLastSeen.setText(LastSeenTimeUtil.computeTime(userId, time));
+                String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
+                //txtLastSeen.setText(LastSeenTimeUtil.computeTime(userId, time));
             } else {
                 txtLastSeen.setText(status);
             }
