@@ -410,7 +410,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 break;
                             case AUDIO:
                             case AUDIO_TEXT:
-                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+                                holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
                                 break;
                             case FILE:
                             case FILE_TEXT:
@@ -518,6 +518,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void requestForThumbnail() {
+        if (mMessage.attachment == null) {
+            return;
+        }
         // create new download attachment once with attachment token
         if (mMessage.downloadAttachment == null) {
             mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token);
