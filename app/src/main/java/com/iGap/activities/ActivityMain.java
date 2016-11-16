@@ -158,7 +158,7 @@ public class ActivityMain extends ActivityEnhanced
 
         G.helperNotificationAndBadge.cancelNotification();
 
-        G.onConverttoGroup = new OpenFragment() {
+        G.onConvertToGroup = new OpenFragment() {
             @Override
             public void openFragmentOnActivity(String type, final Long roomId) {
                 runOnUiThread(new Runnable() {

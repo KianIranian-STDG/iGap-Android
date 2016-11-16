@@ -74,6 +74,7 @@ import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImageMessages;
+import com.iGap.helper.HelperConvertEnumToString;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
@@ -196,20 +197,14 @@ import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.module.AttachFile.getFilePathFromUri;
-import static com.iGap.proto.ProtoGlobal.ClientAction.CAPTURING_IMAGE;
-import static com.iGap.proto.ProtoGlobal.ClientAction.CAPTURING_VIDEO;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
-import static com.iGap.proto.ProtoGlobal.ClientAction.PAINTING;
-import static com.iGap.proto.ProtoGlobal.ClientAction.RECORING_VOICE;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_DOCUMENT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_FILE;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_GIF;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_IMAGE;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_LOCATION;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_VIDEO;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_VOICE;
-import static com.iGap.proto.ProtoGlobal.ClientAction.TYPING;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -277,7 +272,7 @@ public class ActivityChat extends ActivityEnhanced
     private MessagesAdapter<AbstractMessage> mAdapter;
     private static ProtoGlobal.Room.Type chatType;
     private long lastSeen;
-    private static long mRoomId;
+    private static long mRoomId = 0;
     private Button btnUp;
     private Button btnDown;
     private TextView txtChannelMute;
@@ -405,7 +400,7 @@ public class ActivityChat extends ActivityEnhanced
         G.onSetAction = this;
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
-
+        Log.i("TTT", "onResume");
         HelperNotificationAndBadge.isChatRoomNow = true;
 
         if (MusicPlayer.mp != null) {
@@ -434,15 +429,14 @@ public class ActivityChat extends ActivityEnhanced
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         activityChatForFinish = this;
-
+        Log.i("TTT", "onCreate");
         checkIfOrientationChanged(getResources().getConfiguration());
 
+        //call from ActivityGroupProfile
         onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
-
                 txtLastSeen.setText(messageOne + " member");
-
             }
         };
 
@@ -524,8 +518,6 @@ public class ActivityChat extends ActivityEnhanced
                         realm1.close();
                     }
                 }, 300);
-
-                Log.e("ddd", messageOne);
             }
         };
 
@@ -576,6 +568,8 @@ public class ActivityChat extends ActivityEnhanced
                         color = realmRegisteredInfo.getColor();
                         lastSeen = realmRegisteredInfo.getLastSeen();
                         userStatus = realmRegisteredInfo.getStatus();
+                        Log.i("CCC", "1 userStatus : " + userStatus);
+                        Log.i("CCC", "lastSeen : " + lastSeen);
                     } else {
                         title = realmRoom.getTitle();
                         initialize = realmRoom.getInitials();
@@ -630,13 +624,28 @@ public class ActivityChat extends ActivityEnhanced
         getUserInfo();
         updateStatus();
         setUpEmojiPopup();
+        checkAction();
+    }
+
+    private void checkAction() {
+        // check action for room
+        if ((mRoomId != 0) || (txtLastSeen != null)) {
+            String action = HelperSetAction.checkExistAction(mRoomId);
+            if (action != null) {
+                txtLastSeen.setText(action);
+            }
+        }
     }
 
     private void updateStatus() {
         G.onUpdateUserStatusInChangePage = new OnUpdateUserStatusInChangePage() {
             @Override
-            public void updateStatus(String status, long lastSeen) {
+            public void updateStatus(long peerId, String status, long lastSeen) {
                 setUserStatus(status, lastSeen);
+
+                if (chatType == CHAT) {
+                    new RequestUserInfo().userInfo(peerId);
+                }
             }
         };
     }
@@ -1319,7 +1328,7 @@ public class ActivityChat extends ActivityEnhanced
                     @Override
                     public void onClick(View view) {
 
-                        G.onConverttoGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
+                        G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
                         finish();
                         popupWindow.dismiss();
                     }
@@ -1523,13 +1532,15 @@ public class ActivityChat extends ActivityEnhanced
 
                         final RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(identity)).findFirst();
 
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                room.setLastMessageId(roomMessage.getMessageId());
-                                room.setLastMessageTime(roomMessage.getUpdateTimeAsSeconds());
-                            }
-                        });
+                        if (roomMessage != null) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    room.setLastMessageId(roomMessage.getMessageId());
+                                    room.setLastMessageTime(roomMessage.getUpdateTimeAsSeconds());
+                                }
+                            });
+                        }
 
                         realm.copyToRealmOrUpdate(room);
 
@@ -1662,9 +1673,9 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void setUserStatus(String status, long time) {
+        Log.i("CCC", "2 status : " + status);
         if (status != null) {
             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                Log.i("CCC", "setUserStatus AcitivityChat time : " + time);
                 String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
                 txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
             } else {
@@ -4049,7 +4060,7 @@ public class ActivityChat extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String action = getCorrectNameAction(clientAction.toString());
+                        String action = HelperConvertEnumToString.convertActionEnum(clientAction);
                         if (action != null) {
                             txtLastSeen.setText(action);
                         } else {
@@ -4070,7 +4081,7 @@ public class ActivityChat extends ActivityEnhanced
                         realm.close();
 
 
-                        String action = getCorrectNameAction(clientAction.toString());
+                        String action = HelperConvertEnumToString.convertActionEnum(clientAction);
                         if (action != null) {
                             if (!name.isEmpty()) {
                                 txtLastSeen.setText(name + " is " + action);
@@ -4086,41 +4097,6 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    private String getCorrectNameAction(String action) {
-        String actionName = null;
-
-        if (action.equals(TYPING.toString())) {
-            actionName = getResources().getString(R.string.typing);
-        } else if (action.equals(SENDING_IMAGE.toString())) {
-            actionName = getResources().getString(R.string.sending_image);
-        } else if (action.equals(CAPTURING_IMAGE.toString())) {
-            actionName = getResources().getString(R.string.capturing_image);
-        } else if (action.equals(SENDING_VIDEO.toString())) {
-            actionName = getResources().getString(R.string.sending_video);
-        } else if (action.equals(CAPTURING_VIDEO.toString())) {
-            actionName = getResources().getString(R.string.capturing_video);
-        } else if (action.equals(SENDING_AUDIO.toString())) {
-            actionName = getResources().getString(R.string.sending_audio);
-        } else if (action.equals(RECORING_VOICE.toString())) {
-            actionName = getResources().getString(R.string.recording_voice);
-        } else if (action.equals(SENDING_VOICE.toString())) {
-            actionName = getResources().getString(R.string.sending_voice);
-        } else if (action.equals(SENDING_DOCUMENT.toString())) {
-            actionName = getResources().getString(R.string.sending_document);
-        } else if (action.equals(SENDING_GIF.toString())) {
-            actionName = getResources().getString(R.string.sending_gif);
-        } else if (action.equals(SENDING_FILE.toString())) {
-            actionName = getResources().getString(R.string.sending_file);
-        } else if (action.equals(SENDING_LOCATION.toString())) {
-            actionName = getResources().getString(R.string.sending_location);
-        } else if (action.equals(CHOOSING_CONTACT.toString())) {
-            actionName = getResources().getString(R.string.choosing_contact);
-        } else if (action.equals(PAINTING.toString())) {
-            actionName = getResources().getString(R.string.painting);
-        }
-
-        return actionName;
-    }
 
     @Override
     public void onUserUpdateStatus(long userId, final long time, final String status) {

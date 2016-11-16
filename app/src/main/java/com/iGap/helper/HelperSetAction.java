@@ -177,4 +177,23 @@ public class HelperSetAction {
             }
         }
     }
+
+    /**
+     * check that this room have any action for show to user
+     * hint : call this method in start room
+     *
+     * @param roomId roomId that come to that
+     * @return action for this room
+     */
+
+    public static String checkExistAction(long roomId) {
+
+        for (StructAction struct : structActions) {
+            if (struct.roomId == roomId) {
+                return HelperConvertEnumToString.convertActionEnum(struct.action);
+            }
+        }
+
+        return null;
+    }
 }

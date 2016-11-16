@@ -1,5 +1,5 @@
 package com.iGap.interfaces;
 
 public interface OnUpdateUserStatusInChangePage {
-    void updateStatus(String status, long time);
+    void updateStatus(long peerId, String status, long time);
 }

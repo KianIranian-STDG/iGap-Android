@@ -254,7 +254,7 @@ public class G extends Application {
     public static OnGroupGetMemberList onGroupGetMemberList;
     public static OnUserGetDeleteToken onUserGetDeleteToken;
     public static OnGroupDelete onGroupDelete;
-    public static OpenFragment onConverttoGroup;
+    public static OpenFragment onConvertToGroup;
     public static OnChatConvertToGroup onChatConvertToGroup;
     public static OnUserUpdateStatus onUserUpdateStatus;
     public static OnUpdateUserStatusInChangePage onUpdateUserStatusInChangePage;

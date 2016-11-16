@@ -135,7 +135,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         super.onPause();
 
         if (G.onUpdateUserStatusInChangePage != null) {
-            G.onUpdateUserStatusInChangePage.updateStatus(userStatus, lastSeen);
+            G.onUpdateUserStatusInChangePage.updateStatus(userId, userStatus, lastSeen);
         }
     }
 
