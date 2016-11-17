@@ -554,7 +554,6 @@ public class ActivityMain extends ActivityEnhanced
             }
         });
 
-        loadLocalChatList();
         getChatsList();
     }
 
@@ -564,14 +563,25 @@ public class ActivityMain extends ActivityEnhanced
      * @param room ProtoGlobal.Room
      */
     private void putChatToDatabase(final ProtoGlobal.Room room) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        final Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.copyToRealmOrUpdate(RealmRoom.convert(room, realm));
             }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.add(new RoomItem().setInfo())
+                    }
+                });
+
+                realm.close();
+            }
         });
-        realm.close();
     }
 
     @Override
@@ -864,7 +874,6 @@ public class ActivityMain extends ActivityEnhanced
                             }
                             putChatToDatabase(room);
                         }
-                        loadLocalChatList();
                     }
                 });
             }
@@ -908,9 +917,7 @@ public class ActivityMain extends ActivityEnhanced
         testIsSecure();
     }
 
-    private void loadLocalChatList() {
-        mAdapter.clear();
-
+    private void loadChatsFromLocal() {
         Realm realm = Realm.getDefaultInstance();
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.LAST_MESSAGE_TIME, Sort.DESCENDING)) {
             final RoomItem roomItem = new RoomItem();
@@ -971,6 +978,8 @@ public class ActivityMain extends ActivityEnhanced
         }
 
         realm.close();
+
+        getChatsList();
     }
 
     @Override
@@ -1001,7 +1010,7 @@ public class ActivityMain extends ActivityEnhanced
         if (mAdapter != null) {
             mAdapter.clear();
             // check if new rooms exist, add to adapter
-            // loadLocalChatList();
+            // loadChatsFromLocal();
             final Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
