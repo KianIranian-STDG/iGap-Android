@@ -99,8 +99,6 @@ import com.iGap.module.UploaderUtil;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmMigrationClass;
-import com.iGap.realm.RealmRegisteredInfo;
-import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestQueue;
@@ -354,7 +352,8 @@ public class G extends Application {
                         }
                     });
 
-                    if (G.onChangeUserPhotoListener != null) {
+                    //TODO [Saeed Mozaffari] [2016-11-17 9:33 AM] - problem . vaghti dir migire jaygozine ghabli mishe dar drawer
+                    /*if (G.onChangeUserPhotoListener != null) {
                         RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
                         RealmAvatar lastAvatar = registeredInfo.getLastAvatar();
                         if (lastAvatar == null) {
@@ -368,7 +367,7 @@ public class G extends Application {
                                 G.onChangeUserPhotoListener.onChangePhoto(null);
                             }
                         }
-                    }
+                    }*/
 
                     realm.close();
                 }
@@ -391,7 +390,7 @@ public class G extends Application {
     public void onCreate() {
         MultiDex.install(getApplicationContext());
         super.onCreate();
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(com.iGap.BuildConfig.DEBUG).build()).build());
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(com.iGap.BuildConfig.DEBUG).build()).build());//com.iGap.BuildConfig.DEBUG
 
         SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);

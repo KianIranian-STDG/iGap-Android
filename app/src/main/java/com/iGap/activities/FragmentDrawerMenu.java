@@ -86,7 +86,7 @@ public class FragmentDrawerMenu extends MenuFragment {
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         String username = realmUserInfo.getUserInfo().getDisplayName();
         String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
-        realm.close();
+
 
         imgUserPhoto = (ImageView) v.findViewById(R.id.lm_imv_user_picture);
 
@@ -99,9 +99,9 @@ public class FragmentDrawerMenu extends MenuFragment {
         txtPhoneNumber.setText(phoneNumber);
 
         setImage(realmUserInfo.getUserId());
+        realm.close();
 
-        RelativeLayout layoutUserPicture =
-                (RelativeLayout) v.findViewById(R.id.lm_layout_user_picture);
+        RelativeLayout layoutUserPicture = (RelativeLayout) v.findViewById(R.id.lm_layout_user_picture);
         layoutUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
