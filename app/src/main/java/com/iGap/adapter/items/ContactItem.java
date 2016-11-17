@@ -14,6 +14,8 @@ import com.iGap.module.StructContactInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestFileDownload;
@@ -85,7 +87,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
     private void setAvatar(ViewHolder holder) {
 
         String avatarPath = null;
-        if (mContact.avatar != null) {
+        if (mContact.avatar != null && mContact.avatar.isValid() && mContact.avatar.getFile() != null && mContact.avatar.getFile().isValid()) {
             avatarPath = mContact.avatar.getFile().getLocalThumbnailPath();
         }
 
@@ -105,7 +107,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
                                 mContact.initials, mContact.color));
             }
         } else {
-            if (mContact.avatar != null && mContact.avatar.getFile() != null) {
+            if (mContact.avatar != null && mContact.avatar.isValid() && mContact.avatar.getFile() != null && mContact.avatar.getFile().isValid()) {
                 onRequestDownloadThumbnail(mContact.avatar.getFile().getToken(), false);
             }
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
@@ -121,7 +123,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    mContact.avatar.getFile().setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
+                    realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, mContact.avatar.getFile().getId()).findFirst().setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
                 }
             });
             realm.close();

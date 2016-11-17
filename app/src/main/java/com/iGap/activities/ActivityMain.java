@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -184,6 +185,13 @@ public class ActivityMain extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                contentLoading.hide();
+                            }
+                        });
 
                         for (final ProtoGlobal.Room room : roomList) {
                             Log.i("PPP", "getTitle : " + room.getTitle() + "  ||  getMessage : " + room.getLastMessage().getMessage() + "  ||  getStatus : " + room.getLastMessage().getStatus());
@@ -372,6 +380,8 @@ public class ActivityMain extends ActivityEnhanced
     }
 
     private void initComponent() {
+
+        contentLoading = (ContentLoadingProgressBar) findViewById(R.id.loadingContent);
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.fragmentContainer);
 
@@ -910,10 +920,14 @@ public class ActivityMain extends ActivityEnhanced
         }, 1000);
     }
 
+    private ContentLoadingProgressBar contentLoading;
+
     private void getChatsList() {
         if (G.socketConnection) {
+            contentLoading.show();
             testIsSecure();
         } else {
+            contentLoading.hide();
             // FIXME: 11/17/2016 [Alireza] sort rooms by their last message
             Realm realm = Realm.getDefaultInstance();
             for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.ID, Sort.DESCENDING)) {
@@ -947,7 +961,8 @@ public class ActivityMain extends ActivityEnhanced
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         // adapter may be null because it's initializing async
-        if (mAdapter != null) {
+        // FIXME: 11/17/2016 [Alireza] commented and not to be commented because adapter would not be updated
+        /*if (mAdapter != null) {
             mAdapter.clear();
             // check if new rooms exist, add to adapter
             // loadChatsFromLocal();
@@ -964,7 +979,7 @@ public class ActivityMain extends ActivityEnhanced
             });
 
             realm.close();
-        }
+        }*/
 
         startService(new Intent(this, ServiceContact.class));
     }

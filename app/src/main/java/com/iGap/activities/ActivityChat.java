@@ -332,29 +332,31 @@ public class ActivityChat extends ActivityEnhanced
                     public void execute(Realm realm) {
                         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
-                        final ArrayList<Long> offlineSeenId = new ArrayList<>();
+                        if (realmClientCondition != null) {
+                            final ArrayList<Long> offlineSeenId = new ArrayList<>();
 
-                        long id = SUID.id().get();
+                            long id = SUID.id().get();
 
-                        for (RealmRoomMessage roomMessage : element) {
-                            if (roomMessage != null) {
-                                if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId() && !roomMessage.getStatus()
-                                        .equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                            for (RealmRoomMessage roomMessage : element) {
+                                if (roomMessage != null) {
+                                    if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId() && !roomMessage.getStatus()
+                                            .equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
 
-                                    roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                                        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
-                                    RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class);
-                                    realmOfflineSeen.setId(id++);
-                                    realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
-                                    realm.copyToRealmOrUpdate(realmOfflineSeen);
+                                        RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class);
+                                        realmOfflineSeen.setId(id++);
+                                        realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
+                                        realm.copyToRealmOrUpdate(realmOfflineSeen);
 
-                                    realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                    offlineSeenId.add(roomMessage.getMessageId());
+                                        realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                        offlineSeenId.add(roomMessage.getMessageId());
+                                    }
                                 }
                             }
-                        }
-                        for (long seenId : offlineSeenId) {
-                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, seenId, ProtoGlobal.RoomMessageStatus.SEEN);
+                            for (long seenId : offlineSeenId) {
+                                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, seenId, ProtoGlobal.RoomMessageStatus.SEEN);
+                            }
                         }
 
                         if (chatType != null) {
@@ -1063,12 +1065,8 @@ public class ActivityChat extends ActivityEnhanced
 
     private void deSelectMessage(int position) {
 
-        try {
-            if (mAdapter.getItem(position).mMessage.view != null) {
-                ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(null);
-            }
-        } catch (NullPointerException e) {
-
+        if (mAdapter.getItem(position) != null && mAdapter.getItem(position).mMessage.view != null) {
+            ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(null);
         }
     }
 
