@@ -41,7 +41,7 @@
             android:layout_weight="1"
             android:gravity="center|left"
             android:orientation="vertical"
-            android:padding="5dp">
+            >
 
             <TextView
                 android:id="@+id/ml_txt_music_name"
@@ -51,7 +51,7 @@
                 android:singleLine="true"
                 android:text="music name"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/sp18" />
+                android:textSize="@dimen/sp16"/>
 
             <TextView
                 android:id="@+id/ml_txt_music_place"
@@ -61,7 +61,7 @@
                 android:singleLine="true"
                 android:text="place"
                 android:textColor="@color/gray_4c"
-                android:textSize="@dimen/sp16" />
+                android:textSize="@dimen/sp14"/>
         </LinearLayout>
 
         <com.iGap.libs.rippleeffect.RippleView

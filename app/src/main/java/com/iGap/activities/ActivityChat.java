@@ -1055,15 +1055,23 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void selectMessage(int position) {
-        if (mAdapter.getItem(position).mMessage.view != null) {
-            ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+        try {
+            if (mAdapter.getItem(position).mMessage.view != null) {
+                ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+            }
+        } catch (NullPointerException e) {
+
         }
     }
 
     private void deSelectMessage(int position) {
 
-        if (mAdapter.getItem(position).mMessage.view != null) {
-            ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(null);
+        try {
+            if (mAdapter.getItem(position).mMessage.view != null) {
+                ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(null);
+            }
+        } catch (NullPointerException e) {
+
         }
     }
 

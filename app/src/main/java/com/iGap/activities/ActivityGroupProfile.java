@@ -81,6 +81,7 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
@@ -158,6 +159,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
     private String participantsCountLabel;
     private RealmList<RealmMember> members;
     public static OnMenuClick onMenuClick;
+    private Long userID = 0l;
 
     private long startMessageId = 0;
 
@@ -176,6 +178,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         Bundle extras = getIntent().getExtras();
         roomId = extras.getLong("RoomId");
+
 
         Realm realm = Realm.getDefaultInstance();
         Log.i("PPP", "********** roomId : " + roomId);
@@ -205,6 +208,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
         Log.i("PPP", "********** members : " + members);
         Log.i("PPP", "********** role : " + role);
         description = realmGroupRoom.getDescription();
+
+
+        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+        if (userInfo != null)
+            userID = userInfo.getUserId();
 
         realm.close();
         initComponent();
@@ -751,15 +759,22 @@ public class ActivityGroupProfile extends ActivityEnhanced
             @Override
             public boolean onClick(View v, IAdapter adapter, ContactItemGroupProfile item, final int position) {
 
-                Log.e("dddd", " invite click  " + position + "   " + v + "       " + adapter + "    " + item + "     " + v.getTag());
-                // TODO: 9/14/2016 nejati     go into clicked user page
-
                 ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
-                Intent intent = new Intent(ActivityGroupProfile.this, ActivityContactsProfile.class);
-                intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
-                intent.putExtra("RoomId", roomId);
-                intent.putExtra("enterFrom", GROUP.toString());
+                Intent intent = null;
+
+                if (contactItemGroupProfile.mContact.peerId == userID) {
+                    intent = new Intent(ActivityGroupProfile.this, ActivitySetting.class);
+                } else {
+                    intent = new Intent(ActivityGroupProfile.this, ActivityContactsProfile.class);
+                    intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
+                    intent.putExtra("RoomId", roomId);
+                    intent.putExtra("enterFrom", GROUP.toString());
+                }
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+
+                finish();
 
                 return false;
             }

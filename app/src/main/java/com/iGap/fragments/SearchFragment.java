@@ -170,26 +170,32 @@ public class SearchFragment extends Fragment {
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<IItem>() {
             @Override
             public boolean filter(IItem currentItem, CharSequence constraint) {
-                if (currentItem instanceof SearchItemHeader) {
-                    SearchItemHeader sih = (SearchItemHeader) currentItem;
-                    if (sih.text.equals(getString(R.string.chats)) && chatHeaderGone) {
-                        return true;
-                    } else if (sih.text.equals(getString(R.string.contacts)) && contactHeaderGone) {
-                        return true;
-                    } else if (sih.text.equals(getString(R.string.messages)) && messageHeaderGone) {
-                        return true;
-                    }
 
-                    return false;
-                } else {
-                    SearchItem si = (SearchItem) currentItem;
+                try {
+                    if (currentItem instanceof SearchItemHeader) {
+                        SearchItemHeader sih = (SearchItemHeader) currentItem;
+                        if (sih.text.equals(getString(R.string.chats)) && chatHeaderGone) {
+                            return true;
+                        } else if (sih.text.equals(getString(R.string.contacts)) && contactHeaderGone) {
+                            return true;
+                        } else if (sih.text.equals(getString(R.string.messages)) && messageHeaderGone) {
+                            return true;
+                        }
 
-                    if (si.item.type == SearchType.message) {
-                        return !si.item.comment.toLowerCase().contains(String.valueOf(constraint).toLowerCase());
+                        return false;
                     } else {
-                        return !si.item.name.toLowerCase().contains(String.valueOf(constraint).toLowerCase());
+                        SearchItem si = (SearchItem) currentItem;
+
+                        if (si.item.type == SearchType.message) {
+                            return !si.item.comment.toLowerCase().contains(String.valueOf(constraint).toLowerCase());
+                        } else {
+                            return !si.item.name.toLowerCase().contains(String.valueOf(constraint).toLowerCase());
+                        }
                     }
+                } catch (Exception e) {
+                    return true;
                 }
+
             }
         });
 

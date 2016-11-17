@@ -194,6 +194,7 @@ public class ActivityMain extends ActivityEnhanced
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                // TODO: 11/17/2016   check this code    repeat too time
                                 mAdapter.add(new RoomItem().setInfo(StructChatInfo.convert(builder.getRoom())));
                                 mAdapter.add(0, new RoomItem().setInfo(StructChatInfo.convert(builder.getRoom())));
                                 scrollToTop();
