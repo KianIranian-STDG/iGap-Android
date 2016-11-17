@@ -4,6 +4,7 @@ import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.iGap.G;
+import com.iGap.module.SUID;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmClientCondition;
@@ -79,11 +80,8 @@ public class ChatSendMessageResponse extends MessageHandler {
                     new RequestClientGetRoom().clientGetRoom(chatSendMessageResponse.getRoomId());
                 } else {
                     // update last message sent/received in room table
-                    if (room.getLastMessageTime() < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
-                        room.setLastMessageId(roomMessage.getMessageId());
-                        room.setLastMessageTime(roomMessage.getUpdateTime());
-
-                        realm.copyToRealmOrUpdate(room);
+                    if (room.getLastMessage().getUpdateTime() < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
+                        room.setLastMessage(RealmRoomMessage.put(roomMessage));
                     }
                 }
 
@@ -128,7 +126,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                     if (roomMessage.hasForwardFrom()) { // forward message
 
                         RealmRoomMessage forward = realm.createObject(RealmRoomMessage.class);
-                        forward.setMessageId(System.nanoTime());
+                        forward.setMessageId(SUID.id().get());
 
                         realmRoomMessage.setForwardMessage(fillRoomMessage(forward, roomMessage));
                     } else if (roomMessage.hasReplyTo()) { // reply message
@@ -161,7 +159,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                                 // forwardMessage shouldn't be null but client check it for insuring
                                 if (forwardMessage == null) {
                                     forwardMessage = realm.createObject(RealmRoomMessage.class);
-                                    forwardMessage.setMessageId(System.nanoTime());
+                                    forwardMessage.setMessageId(SUID.id().get());
                                 }
                                 realmRoomMessage.setForwardMessage(fillRoomMessage(forwardMessage, roomMessage));
                             } else if (roomMessage.hasReplyTo()) { // reply message
@@ -170,7 +168,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                                 // replyMessage shouldn't be null but client check it for insuring
                                 if (replyMessage == null) {
                                     replyMessage = realm.createObject(RealmRoomMessage.class);
-                                    replyMessage.setMessageId(System.nanoTime());
+                                    replyMessage.setMessageId(SUID.id().get());
                                 }
                                 realmRoomMessage.setReplyTo(fillRoomMessage(replyMessage, roomMessage));
                             }
@@ -190,7 +188,7 @@ public class ChatSendMessageResponse extends MessageHandler {
             if (!messageId.contains(roomMessage.getMessageId())) {
                 if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
                     G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(),
-                            roomMessage.getMessageType().toString(), roomMessage, ProtoGlobal.Room.Type.CHAT);
+                            roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHAT);
                 }
             } else {
                 messageId.remove(messageId.indexOf(roomMessage.getMessageId()));
@@ -207,7 +205,7 @@ public class ChatSendMessageResponse extends MessageHandler {
     private RealmRoomMessage fillRoomMessage(RealmRoomMessage realmRoomMessage, ProtoGlobal.RoomMessage roomMessage) {
         realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
         realmRoomMessage.setStatus(roomMessage.getStatus().toString());
-        realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
+        realmRoomMessage.setMessageType(roomMessage.getMessageType());
         realmRoomMessage.setMessage(roomMessage.getMessage());
 
         if (roomMessage.hasAttachment()) {

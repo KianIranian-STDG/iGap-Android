@@ -53,7 +53,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     public ChatSendMessageUtil build(ProtoGlobal.Room.Type roomType, long roomId,
                                      RealmRoomMessage message) {
         ChatSendMessageUtil builder =
-                newBuilder(roomType, ProtoGlobal.RoomMessageType.valueOf(message.getMessageType()),
+                newBuilder(roomType, message.getMessageType(),
                         roomId);
         if (message.getMessage() != null && !message.getMessage().isEmpty()) {
             builder.message(message.getMessage());
@@ -191,7 +191,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     }
 
     @Override
-    public void onMessageReceive(long roomId, String message, String messageType,
+    public void onMessageReceive(long roomId, String message, ProtoGlobal.RoomMessageType messageType,
                                  ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
         if (onChatSendMessageResponse != null) {
             onChatSendMessageResponse.onMessageReceive(roomId, message, messageType, roomMessage,

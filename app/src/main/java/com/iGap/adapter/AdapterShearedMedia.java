@@ -80,16 +80,16 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                         .findAll();
 
         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-            String type = realmRoomMessage.getMessageType();
-            if (type.equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || type.equals(
+            ProtoGlobal.RoomMessageType type = realmRoomMessage.getMessageType();
+            if (type.equals(ProtoGlobal.RoomMessageType.VOICE) || type.equals(
                     ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(
                     ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||
-                    type.equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || type.equals(
-                    ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()) ||
+                    type.equals(ProtoGlobal.RoomMessageType.VIDEO) || type.equals(
+                    ProtoGlobal.RoomMessageType.VIDEO_TEXT) ||
                     type.equals(ProtoGlobal.RoomMessageType.FILE.toString()) || type.equals(
                     ProtoGlobal.RoomMessageType.FILE_TEXT.toString()) ||
-                    type.equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || type.equals(
-                    ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+                    type.equals(ProtoGlobal.RoomMessageType.IMAGE) || type.equals(
+                    ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
 
                 counter++;
             }
@@ -108,7 +108,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (list.get(position)
                 .getMessageType()
-                .equals(ProtoGlobal.RoomMessageType.TEXT.toString())) {
+                .equals(ProtoGlobal.RoomMessageType.TEXT)) {
             isHeader = true;
         }
 
@@ -174,7 +174,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (!list.get(position)
                 .getMessageType()
-                .equals(ProtoGlobal.RoomMessageType.TEXT.toString())) {
+                .equals(ProtoGlobal.RoomMessageType.TEXT)) {
 
             // set blue back ground for selected file
             FrameLayout layout =
@@ -192,9 +192,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 if (list.get(position)
                         .getMessageType()
-                        .equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || list.get(position)
+                        .equals(ProtoGlobal.RoomMessageType.VIDEO) || list.get(position)
                         .getMessageType()
-                        .equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString())) {
+                        .equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT)) {
                     path = list.get(position).getAttachment().getLocalThumbnailPath();
                     if (path == null) path = "";
 
@@ -261,9 +261,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (list.get(position)
                     .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || list.get(position)
+                    .equals(ProtoGlobal.RoomMessageType.IMAGE) || list.get(position)
                     .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+                    .equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
                 selectImage(position);
             } else if (list.get(position)
                     .getMessageType()
@@ -273,17 +273,17 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                             .equals(ProtoGlobal.RoomMessageType.FILE_TEXT.toString()) ||
                     list.get(position)
                             .getMessageType()
-                            .equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) ||
+                            .equals(ProtoGlobal.RoomMessageType.VIDEO) ||
                     list.get(position)
                             .getMessageType()
-                            .equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString())) {
+                            .equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT)) {
 
                 Intent intent = HelperMimeType.appropriateProgram(
                         list.get(position).getAttachment().getLocalFilePath());
                 if (intent != null) context.startActivity(intent);
             } else if (list.get(position)
                     .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.VOICE.toString()) ||
+                    .equals(ProtoGlobal.RoomMessageType.VOICE) ||
                     list.get(position)
                             .getMessageType()
                             .equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) ||
@@ -358,9 +358,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         int selectedPicture = 0;
 
         for (RealmRoomMessage mMessage : list) {
-            if (mMessage.getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE.toString())
+            if (mMessage.getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE)
                     || mMessage.getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+                    .equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
                 listPic.add(StructMessageInfo.convert(mMessage));
             }
         }
@@ -463,7 +463,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (list.get(position)
                     .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                    .equals(ProtoGlobal.RoomMessageType.VIDEO)) {
 
                 itemView.findViewById(R.id.smsl_ll_video).setVisibility(View.VISIBLE);
 

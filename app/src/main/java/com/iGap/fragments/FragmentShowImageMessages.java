@@ -26,6 +26,7 @@ import com.iGap.adapter.ImageMessagesAdapter;
 import com.iGap.adapter.items.ImageMessageItem;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.SUID;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
@@ -141,10 +142,10 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                         .findAll();
         if (!roomMessages.isEmpty()) {
             // there is at least on history in DB
-            long identifier = System.nanoTime();
+            long identifier = SUID.id().get();
             for (RealmRoomMessage roomMessage : roomMessages) {
                 ProtoGlobal.RoomMessageType messageType =
-                        ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
+                        roomMessage.getMessageType();
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE
                         || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                     mAdapter.add(new ImageMessageItem().setMessage(roomMessage)

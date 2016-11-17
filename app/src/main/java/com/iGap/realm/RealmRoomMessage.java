@@ -62,7 +62,7 @@ public class RealmRoomMessage extends RealmObject {
             }
             message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
-            message.setMessageType(input.getMessageType().toString());
+            message.setMessageType(input.getMessageType());
             message.setMessageVersion(input.getMessageVersion());
             if (input.hasReplyTo()) {
                 message.setReplyTo(RealmRoomMessage.put(input.getReplyTo()));
@@ -87,7 +87,7 @@ public class RealmRoomMessage extends RealmObject {
             }
             message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
-            message.setMessageType(input.getMessageType().toString());
+            message.setMessageType(input.getMessageType());
             message.setMessageVersion(input.getMessageVersion());
             if (input.hasReplyTo()) {
                 message.setReplyTo(RealmRoomMessage.put(input.getReplyTo()));
@@ -145,8 +145,8 @@ public class RealmRoomMessage extends RealmObject {
         return ProtoGlobal.RoomMessageType.valueOf(messageType);
     }
 
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
+    public void setMessageType(ProtoGlobal.RoomMessageType messageType) {
+        this.messageType = messageType.toString();
     }
 
     public String getMessage() {

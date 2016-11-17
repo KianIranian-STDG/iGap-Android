@@ -252,7 +252,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                 if (mList.get(position)
                         .getMessageType()
-                        .equals(ProtoGlobal.RoomMessageType.TEXT.toString())) {
+                        .equals(ProtoGlobal.RoomMessageType.TEXT)) {
                     return spanItemCount;
                 } else {
                     return 1;
@@ -326,17 +326,17 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         String firstItmeTime = "";
         String secendItemTime = "";
         SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
-        String type = "";
+        ProtoGlobal.RoomMessageType type = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             try {
                 type = realmRoomMessage.getMessageType();
             } catch (NullPointerException e) {
             }
-            if (type.equals(ProtoGlobal.RoomMessageType.VIDEO.toString()) || type.equals(
-                    ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()) ||
-                    type.equals(ProtoGlobal.RoomMessageType.IMAGE.toString()) || type.equals(
-                    ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString())) {
+            if (type.equals(ProtoGlobal.RoomMessageType.VIDEO) || type.equals(
+                    ProtoGlobal.RoomMessageType.VIDEO_TEXT) ||
+                    type.equals(ProtoGlobal.RoomMessageType.IMAGE) || type.equals(
+                    ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
 
                 secendItemTime = month_date.format(realmRoomMessage.getUpdateTime());
 
@@ -344,7 +344,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     RealmRoomMessage message = new RealmRoomMessage();
                     message.setMessage(secendItemTime);
-                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                     mList.add(message);
 
                     firstItmeTime = secendItemTime;
@@ -368,7 +368,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         String firstItmeTime = "";
         String secendItemTime = "";
         SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
-        String type = "";
+        ProtoGlobal.RoomMessageType type = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             try {
@@ -384,7 +384,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     RealmRoomMessage message = new RealmRoomMessage();
                     message.setMessage(secendItemTime);
-                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                     mList.add(message);
 
                     firstItmeTime = secendItemTime;
@@ -408,7 +408,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         String firstItmeTime = "";
         String secendItemTime = "";
         SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
-        String type = "";
+        ProtoGlobal.RoomMessageType type = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             try {
@@ -417,7 +417,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
             if (type.equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(
                     ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||
-                    type.equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
+                    type.equals(ProtoGlobal.RoomMessageType.VOICE)) {
 
                 secendItemTime = month_date.format(realmRoomMessage.getUpdateTime());
 
@@ -425,7 +425,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     RealmRoomMessage message = new RealmRoomMessage();
                     message.setMessage(secendItemTime);
-                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                     mList.add(message);
 
                     firstItmeTime = secendItemTime;

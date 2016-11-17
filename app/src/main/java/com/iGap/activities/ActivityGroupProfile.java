@@ -65,6 +65,7 @@ import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupGetMemberList;
@@ -183,7 +184,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
         role = realmGroupRoom.getRole();
-        noLastMessage = realmRoom.getLastMessageId();
+        noLastMessage = realmRoom.getLastMessage().getMessageId();
 
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
         members = realmGroupRoom.getMembers();
@@ -901,7 +902,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         if (resultCode == Activity.RESULT_OK) {
             String filePath = null;
-            long avatarId = System.nanoTime();
+            long avatarId = SUID.id().get();
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
                     filePath = AttachFile.imagePath;
