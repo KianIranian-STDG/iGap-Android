@@ -74,7 +74,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
 
                     realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
                     realmRoomMessage.setStatus(roomMessage.getStatus().toString());
-                    realmRoomMessage.setMessageType(roomMessage.getMessageType().toString());
+                    realmRoomMessage.setMessageType(roomMessage.getMessageType());
                     realmRoomMessage.setMessage(roomMessage.getMessage());
 
                     realmRoomMessage.setAttachment(roomMessage.getMessageId(),

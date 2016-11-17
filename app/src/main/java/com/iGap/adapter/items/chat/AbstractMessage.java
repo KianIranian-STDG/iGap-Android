@@ -279,7 +279,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (mMessage.replayTo != null) {
                 holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
 
-                AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), ProtoGlobal.RoomMessageType.valueOf(mMessage.replayTo.getMessageType()), mMessage.replayTo.getAttachment());
+                AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getMessageType(), mMessage.replayTo.getAttachment());
 
                 Realm realm = Realm.getDefaultInstance();
                 RealmRegisteredInfo replayToInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.replayTo.getUserId()).findFirst();
@@ -337,7 +337,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 // file doesn't exist on local, I check for a thumbnail
                 // if thumbnail exists, I load it into the view
                 if (attachment.isThumbnailExistsOnLocal()) {
-                    if ((mMessage.forwardedFrom != null && (mMessage.forwardedFrom.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString()) || mMessage.forwardedFrom.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString()) || mMessage.forwardedFrom.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString()) || mMessage.forwardedFrom.getMessageType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()))) || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                    if ((mMessage.forwardedFrom != null && (mMessage.forwardedFrom.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || mMessage.forwardedFrom.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT || mMessage.forwardedFrom.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || mMessage.forwardedFrom.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT)) || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                         ViewGroup view = (ViewGroup) holder.itemView.findViewById(R.id.thumbnail).getParent();
                         if (view != null) {
                             int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(), attachment.getWidth(), attachment.getHeight());
@@ -399,7 +399,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     @Override
                     public void onProgressFinished() {
                         // TODO: 10/15/2016 [Alireza] onClick babate har kodom age niaz bood, masalan vase play, bayad video ro play kone
-                        switch (mMessage.forwardedFrom != null ? ProtoGlobal.RoomMessageType.valueOf(mMessage.forwardedFrom.getMessageType()) : mMessage.messageType) {
+                        switch (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType) {
                             case IMAGE:
                             case IMAGE_TEXT:
                                 holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
@@ -444,12 +444,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst().getAttachment().setLocalFilePath(AndroidUtils.suitableAppFilePath(ProtoGlobal.RoomMessageType.valueOf(mMessage.forwardedFrom.getMessageType())) + "/" + fileName);
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst().getAttachment().setLocalFilePath(AndroidUtils.suitableAppFilePath(mMessage.forwardedFrom.getMessageType()) + "/" + fileName);
                     }
                 });
                 realm.close();
                 try {
-                    AndroidUtils.cutFromTemp(ProtoGlobal.RoomMessageType.valueOf(mMessage.forwardedFrom.getMessageType()), fileName);
+                    AndroidUtils.cutFromTemp(mMessage.forwardedFrom.getMessageType(), fileName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -41,6 +41,65 @@ public class RealmRoomMessage extends RealmObject {
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
 
+    public static RealmRoomMessage put(ProtoGlobal.RoomMessage input) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoomMessage message;
+        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, input.getMessageId()).count() > 0) {
+            message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, input.getMessageId()).findFirst();
+            message.setMessageId(input.getMessageId());
+            message.setMessage(input.getMessage());
+            message.setStatus(input.getStatus().toString());
+            message.setUserId(input.getAuthor().getUser().getUserId());
+            message.setRoomId(input.getAuthor().getRoom().getRoomId());
+            if (input.hasAttachment()) {
+                message.setAttachment(RealmAttachment.build(input.getAttachment()));
+            }
+            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
+            message.setDeleted(input.getDeleted());
+            message.setEdited(input.getEdited());
+            if (input.hasForwardFrom()) {
+                message.setForwardMessage(RealmRoomMessage.put(input.getForwardFrom()));
+            }
+            message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
+            message.setLog(RealmRoomMessageLog.build(input.getLog()));
+            message.setMessageType(input.getMessageType());
+            message.setMessageVersion(input.getMessageVersion());
+            if (input.hasReplyTo()) {
+                message.setReplyTo(RealmRoomMessage.put(input.getReplyTo()));
+            }
+            message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
+            message.setStatusVersion(input.getStatusVersion());
+            message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+        } else {
+            message = realm.createObject(RealmRoomMessage.class, input.getMessageId());
+            message.setMessage(input.getMessage());
+            message.setStatus(input.getStatus().toString());
+            message.setUserId(input.getAuthor().getUser().getUserId());
+            message.setRoomId(input.getAuthor().getRoom().getRoomId());
+            if (input.hasAttachment()) {
+                message.setAttachment(RealmAttachment.build(input.getAttachment()));
+            }
+            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
+            message.setDeleted(input.getDeleted());
+            message.setEdited(input.getEdited());
+            if (input.hasForwardFrom()) {
+                message.setForwardMessage(RealmRoomMessage.put(input.getForwardFrom()));
+            }
+            message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
+            message.setLog(RealmRoomMessageLog.build(input.getLog()));
+            message.setMessageType(input.getMessageType());
+            message.setMessageVersion(input.getMessageVersion());
+            if (input.hasReplyTo()) {
+                message.setReplyTo(RealmRoomMessage.put(input.getReplyTo()));
+            }
+            message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
+            message.setStatusVersion(input.getStatusVersion());
+            message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+        }
+        realm.close();
+
+        return message;
+    }
 
     public long getRoomId() {
         return roomId;
@@ -82,12 +141,12 @@ public class RealmRoomMessage extends RealmObject {
         this.statusVersion = statusVersion;
     }
 
-    public String getMessageType() {
-        return messageType;
+    public ProtoGlobal.RoomMessageType getMessageType() {
+        return ProtoGlobal.RoomMessageType.valueOf(messageType);
     }
 
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
+    public void setMessageType(ProtoGlobal.RoomMessageType messageType) {
+        this.messageType = messageType.toString();
     }
 
     public String getMessage() {

@@ -16,15 +16,8 @@ import com.iGap.R;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.ShouldScrolledBehavior;
-import com.iGap.module.StructChatInfo;
-import com.iGap.module.StructMessageAttachment;
-import com.iGap.realm.RealmRegisteredInfo;
-import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageFields;
-import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
@@ -81,9 +74,9 @@ public class ActivitySelectChat extends ActivityEnhanced {
             @Override
             public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item,
                                    int position) {
-                if (!item.mInfo.readOnly) {
+                if (!item.mInfo.getReadOnly()) {
                     Intent intent = new Intent(ActivitySelectChat.this, ActivityChat.class);
-                    intent.putExtra("RoomId", item.mInfo.chatId);
+                    intent.putExtra("RoomId", item.mInfo.getId());
                     intent.putParcelableArrayListExtra(ARG_FORWARD_MESSAGE, mForwardMessages);
                     startActivity(intent);
                     finish();
@@ -110,57 +103,11 @@ public class ActivitySelectChat extends ActivityEnhanced {
         mAdapter.clear();
 
         Realm realm = Realm.getDefaultInstance();
+        // FIXME: 11/17/2016 [Alireza] sort by last messa
         for (RealmRoom realmRoom : realm.where(RealmRoom.class)
-                .findAllSorted(RealmRoomFields.LAST_MESSAGE_TIME, Sort.DESCENDING)) {
+                .findAllSorted(RealmRoomFields.ID, Sort.DESCENDING)) {
             final RoomItem roomItem = new RoomItem();
-            StructChatInfo info = new StructChatInfo();
-            info.unreadMessagesCount = realmRoom.getUnreadCount();
-            info.chatId = realmRoom.getId();
-            info.chatTitle = realmRoom.getTitle();
-            info.initials = realmRoom.getInitials();
-            info.ownerId = realmRoom.getId();
-            info.readOnly = realmRoom.getReadOnly();
-            switch (realmRoom.getType()) {
-                case CHAT:
-                    info.chatType = RoomType.CHAT;
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                            .equalTo(RealmRegisteredInfoFields.ID, realmRoom.getChatRoom().getPeerId())
-                            .findFirst();
-                    info.avatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(
-                            realmRegisteredInfo.getLastAvatar()) : new StructMessageAttachment();
-                    info.ownerId = realmRoom.getChatRoom().getPeerId();
-                    break;
-                case CHANNEL:
-                    info.chatType = RoomType.CHANNEL;
-                    info.memberCount = realmRoom.getChannelRoom().getParticipantsCountLabel();
-                    info.description = realmRoom.getChannelRoom().getDescription();
-                    info.avatarCount = realmRoom.getChannelRoom().getAvatarCount();
-                    info.avatar = StructMessageAttachment.convert(realmRoom.getAvatar());
-                    break;
-                case GROUP:
-                    info.chatType = RoomType.GROUP;
-                    info.memberCount = realmRoom.getGroupRoom().getParticipantsCountLabel();
-                    info.description = realmRoom.getGroupRoom().getDescription();
-                    info.avatarCount = realmRoom.getGroupRoom().getAvatarCount();
-                    info.avatar = StructMessageAttachment.convert(realmRoom.getAvatar());
-                    break;
-            }
-            info.color = realmRoom.getColor();
-            info.lastMessageId = realmRoom.getLastMessageId();
-            info.lastMessageTime = realmRoom.getLastMessageTime();
-            info.lastMessageStatus = realmRoom.getLastMessageStatus();
-            RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class)
-                    .equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessageId())
-                    .findFirst();
-            if (lastMessage != null) {
-                info.lastMessageTime = lastMessage.getUpdateTime();
-                info.lastMessageSenderIsMe = lastMessage.isSenderMe();
-                info.lastMessageStatus = lastMessage.getStatus();
-            }
-            info.muteNotification = realmRoom.getMute(); // FIXME
-
-            roomItem.setInfo(info);
-            //roomItem.setComplete(this);
+            roomItem.setInfo(realmRoom);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

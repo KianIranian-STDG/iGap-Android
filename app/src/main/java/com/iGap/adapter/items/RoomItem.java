@@ -2,26 +2,27 @@ package com.iGap.adapter.items;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AvatarsAdapter;
+import com.iGap.adapter.RoomsAdapter;
 import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
-import com.iGap.module.StructChatInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
-import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
+import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
@@ -38,6 +39,8 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
+import static android.view.View.GONE;
+
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/``016.
  */
@@ -48,20 +51,19 @@ import io.realm.Sort;
 public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         implements IChatItemAvatar {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
-    public StructChatInfo mInfo;
+    public RealmRoom mInfo;
     public OnComplete mComplete;
-
 
     public RoomItem setComplete(OnComplete complete) {
         this.mComplete = complete;
         return this;
     }
 
-    public StructChatInfo getInfo() {
+    public RealmRoom getInfo() {
         return mInfo;
     }
 
-    public RoomItem setInfo(StructChatInfo info) {
+    public RoomItem setInfo(RealmRoom info) {
         this.mInfo = info;
         return this;
     }
@@ -107,13 +109,13 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     }
 
     public void onRequestDownloadAvatarThumbnail(String token, boolean done) {
-        final String fileName = "thumb_" + token + "_" + mInfo.avatar.name;
+        final String fileName = "thumb_" + token + "_" + mInfo.getAvatar().getFile().getName();
         if (done) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, mInfo.avatar.token).findFirst();
+                    RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, mInfo.getAvatar().getFile().getToken()).findFirst();
                     attachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
                 }
             });
@@ -125,9 +127,9 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         ProtoFileDownload.FileDownload.Selector selector =
                 ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
         String identity =
-                mInfo.avatar.token + '*' + selector.toString() + '*' + mInfo.avatar.smallThumbnail.size + '*' + fileName + '*' + 0;
+                mInfo.getAvatar().getFile().getToken() + '*' + selector.toString() + '*' + mInfo.getAvatar().getFile().getSmallThumbnail().getSize() + '*' + fileName + '*' + 0;
 
-        new RequestFileDownload().download(token, 0, (int) mInfo.avatar.smallThumbnail.size,
+        new RequestFileDownload().download(token, 0, (int) mInfo.getAvatar().getFile().getSmallThumbnail().getSize(),
                 selector, identity);
     }
 
@@ -137,11 +139,11 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     }
 
     private void requestForUserInfo() {
-        if (!mInfo.userInfoAlreadyRequested) {
+        if (!RoomsAdapter.userInfoAlreadyRequests.contains(mInfo.getOwnerId())) {
             RequestUserInfo requestUserInfo = new RequestUserInfo();
-            requestUserInfo.userInfo(mInfo.ownerId);
+            requestUserInfo.userInfo(mInfo.getOwnerId());
 
-            mInfo.userInfoAlreadyRequested = true;
+            RoomsAdapter.userInfoAlreadyRequests.add(mInfo.getOwnerId());
         }
     }
 
@@ -149,30 +151,31 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (!mInfo.draftMessage.isEmpty()) {
-            holder.messageStatus.setVisibility(View.GONE);
+        if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
+            holder.messageStatus.setVisibility(GONE);
             holder.lastMessage.setVisibility(View.VISIBLE);
             holder.lastMessageSender.setVisibility(View.VISIBLE);
             holder.lastMessageSender.setText("Draft : ");
             holder.lastMessageSender.setTextColor(Color.parseColor("#ff4644"));
-            holder.lastMessage.setText(mInfo.draftMessage);
+            holder.lastMessage.setText(mInfo.getDraft().getMessage());
         } else {
-            String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.chatType, mInfo.lastMessageId);
-            if (lastMessage == null) {
-                lastMessage = mInfo.lastMessage;
-            }
-
-            if (lastMessage == null || lastMessage.isEmpty()) {
-                holder.messageStatus.setVisibility(View.GONE);
-                holder.lastMessage.setVisibility(View.GONE);
-                holder.lastMessageSender.setVisibility(View.GONE);
-            } else {
-                if (mInfo.lastMessageSenderIsMe) {
-                    AppUtils.rightMessageStatus(holder.messageStatus, mInfo.lastMessageStatus);
-                    holder.messageStatus.setVisibility(View.VISIBLE);
-                } else {
-                    holder.messageStatus.setVisibility(View.GONE);
+            if (mInfo.getLastMessage() != null) {
+                String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage().getMessageId());
+                if (lastMessage == null) {
+                    lastMessage = mInfo.getLastMessage().getMessage();
                 }
+
+                if (lastMessage == null || lastMessage.isEmpty()) {
+                    holder.messageStatus.setVisibility(GONE);
+                    holder.lastMessage.setVisibility(GONE);
+                    holder.lastMessageSender.setVisibility(GONE);
+                } else {
+                    if (mInfo.getLastMessage().isSenderMe()) {
+                        AppUtils.rightMessageStatus(holder.messageStatus, mInfo.getLastMessage().getStatus());
+                        holder.messageStatus.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.messageStatus.setVisibility(GONE);
+                    }
 
                  /*
                  * here i get latest message from chat history with chatId and
@@ -182,148 +185,151 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                  * room be different latest message sender showing will be wrong
                  */
 
-                String lastMessageSender = "";
-                if (mInfo.lastMessageSenderIsMe) {
-                    lastMessageSender = "You : ";
-                } else {
-                    Realm realm1 = Realm.getDefaultInstance();
-                    RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class)
-                            .equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.chatId)
-                            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-                    if (!results.isEmpty()) {
-                        RealmRoomMessage realmRoomMessage = results.first();
-                        if (realmRoomMessage != null) {
-                            RealmRegisteredInfo realmRegisteredInfo =
-                                    realm1.where(RealmRegisteredInfo.class)
-                                            .equalTo(RealmRegisteredInfoFields.ID,
-                                                    realmRoomMessage.getUserId())
-                                            .findFirst();
-                            if (realmRegisteredInfo != null) {
-                                lastMessageSender = realmRegisteredInfo.getDisplayName() + " : ";
+                    String lastMessageSender = "";
+                    if (mInfo.getLastMessage().isSenderMe()) {
+                        lastMessageSender = "You : ";
+                    } else {
+                        Realm realm1 = Realm.getDefaultInstance();
+                        RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class)
+                                .equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.getId())
+                                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                        if (!results.isEmpty()) {
+                            RealmRoomMessage realmRoomMessage = results.first();
+                            if (realmRoomMessage != null) {
+                                RealmRegisteredInfo realmRegisteredInfo =
+                                        realm1.where(RealmRegisteredInfo.class)
+                                                .equalTo(RealmRegisteredInfoFields.ID,
+                                                        realmRoomMessage.getUserId())
+                                                .findFirst();
+                                if (realmRegisteredInfo != null) {
+                                    lastMessageSender = realmRegisteredInfo.getDisplayName() + " : ";
+                                }
                             }
                         }
+                        realm1.close();
                     }
-                    realm1.close();
-                }
 
-                if (mInfo.chatType == RoomType.GROUP) {
-                    holder.lastMessageSender.setText(lastMessageSender);
-                    holder.lastMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
-                    holder.lastMessageSender.setVisibility(View.VISIBLE);
-                } else {
-                    holder.lastMessageSender.setVisibility(View.GONE);
-                }
+                    if (mInfo.getType() == RoomType.GROUP) {
+                        holder.lastMessageSender.setText(lastMessageSender);
+                        holder.lastMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
+                        holder.lastMessageSender.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.lastMessageSender.setVisibility(GONE);
+                    }
 
-                holder.lastMessage.setVisibility(View.VISIBLE);
+                    holder.lastMessage.setVisibility(View.VISIBLE);
 
-
-                Realm realm = Realm.getDefaultInstance();
-                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mInfo.lastMessageId).findFirst();
-                if (realmRoomMessage != null) {
-
-                    if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.VOICE.toString())) {
-                        holder.lastMessage.setText(R.string.voice_message);
-                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                        holder.lastMessage.setText(R.string.video_message);
-                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.FILE.toString())) {
-                        holder.lastMessage.setText(R.string.file_message);
-                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
-                        holder.lastMessage.setText(R.string.audio_message);
-                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-                        holder.lastMessage.setText(R.string.image_message);
-                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.CONTACT.toString())) {
-                        holder.lastMessage.setText(R.string.contact_message);
-                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.GIF.toString())) {
-                        holder.lastMessage.setText(R.string.gif_message);
-                    } else if (realmRoomMessage.getMessageType().contains(ProtoGlobal.RoomMessageType.LOCATION.toString())) {
-                        holder.lastMessage.setText(R.string.location_message);
+                    if (mInfo.getLastMessage() != null) {
+                        switch (mInfo.getLastMessage().getMessageType()) {
+                            case VOICE:
+                                holder.lastMessage.setText(R.string.voice_message);
+                                break;
+                            case VIDEO:
+                                holder.lastMessage.setText(R.string.video_message);
+                                break;
+                            case FILE:
+                                holder.lastMessage.setText(R.string.file_message);
+                                break;
+                            case AUDIO:
+                                holder.lastMessage.setText(R.string.audio_message);
+                                break;
+                            case IMAGE:
+                                holder.lastMessage.setText(R.string.image_message);
+                                break;
+                            case CONTACT:
+                                holder.lastMessage.setText(R.string.contact_message);
+                                break;
+                            case GIF:
+                                holder.lastMessage.setText(R.string.gif_message);
+                                break;
+                            case LOCATION:
+                                holder.lastMessage.setText(R.string.location_message);
+                                break;
+                            default:
+                                holder.lastMessage.setText(lastMessage);
+                                break;
+                        }
                     } else {
                         holder.lastMessage.setText(lastMessage);
                     }
-
-
-                } else {
-                    holder.lastMessage.setText(lastMessage);
                 }
-                realm.close();
+            } else {
+                holder.lastMessage.setVisibility(GONE);
+                holder.lastSeen.setVisibility(GONE);
+                holder.messageStatus.setVisibility(GONE);
             }
         }
 
-        if (mInfo.avatar != null) {
+        if (mInfo.getAvatar() != null && mInfo.getAvatar().getFile() != null) {
 
-            if (mInfo.avatar.isFileExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalFilePath()), holder.image);
-            } else if (mInfo.avatar.isThumbnailExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.avatar.getLocalThumbnailPath()), holder.image);
+            if (mInfo.getAvatar().getFile().isFileExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.getAvatar().getFile().getLocalFilePath()), holder.image);
+            } else if (mInfo.getAvatar().getFile().isThumbnailExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.getAvatar().getFile().getLocalThumbnailPath()), holder.image);
 
             } else {
                 holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView
                         .getContext()
                         .getResources()
-                        .getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
+                        .getDimension(R.dimen.dp60), mInfo.getInitials(), mInfo.getColor()));
 
-                if (mInfo.chatType != RoomType.CHAT) {
-                    if (mInfo.avatar.token != null && !mInfo.avatar.token.isEmpty()) {
-                        requestForAvatarThumbnail(mInfo.avatar.token);
+                if (mInfo.getType() != RoomType.CHAT) {
+                    if (mInfo.getAvatar().getFile().getToken() != null && !mInfo.getAvatar().getFile().getToken().isEmpty()) {
+                        requestForAvatarThumbnail(mInfo.getAvatar().getFile().getToken());
                     }
                 } else {
-                    if (mInfo.avatar.token != null && !mInfo.avatar.token.isEmpty()) {
-                        requestForAvatarThumbnail(mInfo.avatar.token);
+                    if (mInfo.getAvatar().getFile().getToken() != null && !mInfo.getAvatar().getFile().getToken().isEmpty()) {
+                        requestForAvatarThumbnail(mInfo.getAvatar().getFile().getToken());
                     } else {
                         requestForUserInfo();
                     }
                 }
             }
         } else {
-            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.initials, mInfo.color));
-
-            if (mInfo.chatType != RoomType.CHAT) {
-                requestForAvatarThumbnail(mInfo.avatar.token);
-            } else {
-                requestForUserInfo();
-            }
+            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.getInitials(), mInfo.getColor()));
+            requestForUserInfo();
         }
 
-        if (mInfo.chatType == RoomType.CHAT) {
-            holder.chatIcon.setVisibility(View.GONE);
-        } else if (mInfo.chatType == RoomType.GROUP) {
+        if (mInfo.getType() == RoomType.CHAT) {
+            holder.chatIcon.setVisibility(GONE);
+        } else if (mInfo.getType() == RoomType.GROUP) {
             holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.GROUP));
             holder.chatIcon.setTypeface(G.flaticon);
-        } else if (mInfo.chatType == RoomType.CHANNEL) {
+        } else if (mInfo.getType() == RoomType.CHANNEL) {
             holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
             holder.chatIcon.setTypeface(G.fontawesome);
         }
 
-        holder.name.setText(mInfo.chatTitle);
+        holder.name.setText(mInfo.getTitle());
 
-        if (mInfo.lastMessageTime != 0) {
+        if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateTime() != 0) {
             holder.lastSeen.setText(
-                    TimeUtils.toLocal(mInfo.lastMessageTime, G.ROOM_LAST_MESSAGE_TIME));
+                    TimeUtils.toLocal(mInfo.getLastMessage().getUpdateTime(), G.ROOM_LAST_MESSAGE_TIME));
             holder.lastSeen.setVisibility(View.VISIBLE);
         } else {
-            holder.lastSeen.setVisibility(View.GONE);
+            holder.lastSeen.setVisibility(GONE);
         }
 
-        if (mInfo.unreadMessagesCount < 1) {
-            holder.unreadMessage.setVisibility(View.GONE);
+        if (mInfo.getUnreadCount() < 1) {
+            holder.unreadMessage.setVisibility(GONE);
         } else {
             holder.unreadMessage.setVisibility(View.VISIBLE);
 
-            holder.unreadMessage.setText(Integer.toString(mInfo.unreadMessagesCount));
+            holder.unreadMessage.setText(Integer.toString(mInfo.getUnreadCount()));
 
-            if (mInfo.muteNotification) {
+            if (mInfo.getMute()) {
                 holder.unreadMessage.setBackgroundResource(R.drawable.oval_gray);
             } else {
                 holder.unreadMessage.setBackgroundResource(R.drawable.oval_green);
             }
         }
 
-        if (mInfo.muteNotification) {
+        if (mInfo.getMute()) {
             holder.mute.setVisibility(View.VISIBLE);
         } else {
-            holder.mute.setVisibility(View.GONE);
+            holder.mute.setVisibility(GONE);
         }
     }
 

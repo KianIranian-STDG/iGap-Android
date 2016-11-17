@@ -390,7 +390,7 @@ public class StructMessageInfo implements Parcelable {
                 messageInfo.initials = realmRegisteredInfo.getInitials();
             }
         }
-        messageInfo.messageType = ProtoGlobal.RoomMessageType.valueOf(roomMessage.getMessageType());
+        messageInfo.messageType = roomMessage.getMessageType();
         messageInfo.time = roomMessage.getUpdateTime();
         if (roomMessage.getAttachment() != null) {
             messageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
@@ -406,7 +406,7 @@ public class StructMessageInfo implements Parcelable {
             messageInfo.sendType = MyType.SendType.recvive;
         }
         if (roomMessage.getMessageType()
-                .equalsIgnoreCase(ProtoGlobal.RoomMessageType.CONTACT.toString())) {
+                == ProtoGlobal.RoomMessageType.CONTACT) {
             messageInfo.userInfo = StructRegisteredInfo.build(roomMessage.getRoomMessageContact());
         }
         if (roomMessage.getForwardMessage() != null) {

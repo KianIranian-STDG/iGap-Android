@@ -45,7 +45,7 @@ public class RealmAttachment extends RealmObject {
         RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, file.getToken()).findFirst();
         if (realmAttachment == null) {
             realmAttachment = realm.createObject(RealmAttachment.class);
-            long id = System.nanoTime();
+            long id = SUID.id().get();
 
             realmAttachment.setId(id);
 

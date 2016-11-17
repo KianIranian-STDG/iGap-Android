@@ -116,7 +116,7 @@ public final class AppUtils {
         if (message.getMessage() != null && !message.getMessage().isEmpty()) {
             return message.getMessage();
         } else {
-            switch (ProtoGlobal.RoomMessageType.valueOf(message.getMessageType())) {
+            switch (message.getMessageType()) {
                 case AUDIO:
                     if (message.getAttachment() == null) {
                         return null;

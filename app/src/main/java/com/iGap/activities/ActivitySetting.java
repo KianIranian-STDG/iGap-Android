@@ -61,6 +61,7 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.IncomingSms;
 import com.iGap.module.SHP_SETTING;
+import com.iGap.module.SUID;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
@@ -1659,7 +1660,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) {
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                idAvatar = System.nanoTime();
+                                idAvatar = SUID.id().get();
                                 pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
                                 nameImageFile = new File(pathSaveImage);
                                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -1702,7 +1703,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         } else {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            idAvatar = System.nanoTime();
+                            idAvatar = SUID.id().get();
                             startActivityForResult(intent, IntentRequests.REQ_GALLERY);
                             dialog.dismiss();
                         }

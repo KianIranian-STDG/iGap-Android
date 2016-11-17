@@ -1,8 +1,5 @@
 package com.iGap.realm;
 
-import android.text.format.DateUtils;
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
@@ -28,13 +25,28 @@ public class RealmRoom extends RealmObject {
     private boolean mute;
     private RealmGroupRoom group_room;
     private RealmChannelRoom channel_room;
-    private long lastMessageId;
-    private long lastMessageTime;
-    private String lastMessage;
-    private String lastMessageStatus;
+    private RealmRoomMessage lastMessage;
     private RealmRoomDraft draft;
+
+    public RealmRoomMessage getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(RealmRoomMessage lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
     private RealmDraftFile draftFile;
     private RealmAvatar avatar;
+
+    public long getOwnerId() {
+        switch (ProtoGlobal.Room.Type.valueOf(type)) {
+            case CHAT:
+                return getChatRoom().getPeerId();
+            default:
+                return id;
+        }
+    }
 
     /**
      * convert ProtoGlobal.Room to RealmRoom for saving into database
@@ -85,13 +97,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getGroupRoom().getAvatar()));
                 break;
         }
-        realmRoom.setLastMessageTime(room.getLastMessage().getUpdateTime());
-        realmRoom.setLastMessage(getLastMessageInternal(room));
-
-        Log.e("ddd", realmRoom.getLastMessage().toString() + "");
-
-        realmRoom.setLastMessageId(room.getLastMessage().getMessageId());
-        realmRoom.setLastMessageStatus(room.getLastMessage().getStatus().toString());
+        realmRoom.setLastMessage(RealmRoomMessage.put(room.getLastMessage()));
 
         RealmRoomDraft realmRoomDraft = realmRoom.getDraft();
         if (realmRoomDraft == null) {
@@ -194,22 +200,6 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
-    public long getLastMessageTime() {
-        return lastMessageTime;
-    }
-
-    public void setLastMessageTime(int lastMessageTime) {
-        this.lastMessageTime = lastMessageTime * DateUtils.SECOND_IN_MILLIS;
-    }
-
-    public long getLastMessageId() {
-        return lastMessageId;
-    }
-
-    public void setLastMessageId(long lastMessageId) {
-        this.lastMessageId = lastMessageId;
-    }
-
     public long getId() {
         return id;
     }
@@ -296,22 +286,6 @@ public class RealmRoom extends RealmObject {
 
     public void setChannelRoom(RealmChannelRoom channel_room) {
         this.channel_room = channel_room;
-    }
-
-    public String getLastMessage() {
-        return lastMessage;
-    }
-
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
-    }
-
-    public String getLastMessageStatus() {
-        return lastMessageStatus;
-    }
-
-    public void setLastMessageStatus(String lastMessageStatus) {
-        this.lastMessageStatus = lastMessageStatus;
     }
 
     public RealmRoomDraft getDraft() {

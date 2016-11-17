@@ -55,6 +55,7 @@ import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.SUID;
 import com.iGap.module.StructListOfContact;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
@@ -1168,9 +1169,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                        if (realmRoom.getLastMessageId() != -1) {
-                            element.setClearId(realmRoom.getLastMessageId());
-                            G.clearMessagesUtil.clearMessages(roomId, realmRoom.getLastMessageId());
+                        if (realmRoom.getLastMessage() != null) {
+                            element.setClearId(realmRoom.getLastMessage().getMessageId());
+                            G.clearMessagesUtil.clearMessages(roomId, realmRoom.getLastMessage().getMessageId());
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages =
@@ -1185,11 +1186,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(0);
-                            room.setLastMessageId(0);
-                            room.setLastMessageTime(0);
-                            room.setLastMessage("");
-
-                            realm.copyToRealmOrUpdate(room);
+                            room.setLastMessage(null);
                         }
                         // finally delete whole chat history
                         realmRoomMessages.deleteAllFromRealm();
@@ -1350,7 +1347,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     public void execute(final Realm realm) {
                         if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, roomId).findFirst() == null) {
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
-                            realmOfflineDelete.setId(System.nanoTime());
+                            realmOfflineDelete.setId(SUID.id().get());
                             realmOfflineDelete.setOfflineDelete(userId);
 
                             element.getOfflineDeleted().add(realmOfflineDelete);

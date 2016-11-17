@@ -46,7 +46,7 @@ public class UploadService extends Service {
     private void sendVoice(final String savedPath, final Long mRoomId) {
 
         Realm realm = Realm.getDefaultInstance();
-        final long messageId = System.nanoTime();
+        final long messageId = SUID.id().get();
         final long updateTime = System.currentTimeMillis();
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
         final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
@@ -56,7 +56,7 @@ public class UploadService extends Service {
             public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
 
-                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE.toString());
+                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
                 //  roomMessage.setMessage(getWrittenMessage());
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());

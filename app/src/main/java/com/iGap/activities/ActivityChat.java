@@ -334,7 +334,7 @@ public class ActivityChat extends ActivityEnhanced
 
                         final ArrayList<Long> offlineSeenId = new ArrayList<>();
 
-                        long id = System.nanoTime();
+                        long id = SUID.id().get();
 
                         for (RealmRoomMessage roomMessage : element) {
                             if (roomMessage != null) {
@@ -487,9 +487,9 @@ public class ActivityChat extends ActivityEnhanced
 
                         RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
                         roomMessage.setLocation(messageLocation);
-                        roomMessage.setUpdateTime(System.nanoTime());
-                        roomMessage.setCreateTime(System.nanoTime());
-                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION.toString());
+                        roomMessage.setUpdateTime(SUID.id().get());
+                        roomMessage.setCreateTime(SUID.id().get());
+                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
                         roomMessage.setRoomId(mRoomId);
                         roomMessage.setUserId(userId);
                         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
@@ -498,10 +498,7 @@ public class ActivityChat extends ActivityEnhanced
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
                         if (realmRoom != null) {
-                            realmRoom.setLastMessage(getString(R.string.location_message));
-                            realmRoom.setLastMessageId(roomMessage.getMessageId());
-                            realmRoom.setLastMessageStatus(roomMessage.getStatus());
-                            realmRoom.setLastMessageTime(roomMessage.getUpdateTimeAsSeconds());
+                            realmRoom.setLastMessage(roomMessage);
                         }
                     }
                 });
@@ -706,7 +703,7 @@ public class ActivityChat extends ActivityEnhanced
                     forwardedMessage.setMessageId(messageId);
                     forwardedMessage.setForwardMessage(roomMessage);
                     forwardedMessage.setCreateTime(System.currentTimeMillis());
-                    forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                    forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                     forwardedMessage.setRoomId(mRoomId);
                     forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                     forwardedMessage.setUserId(userId);
@@ -937,7 +934,7 @@ public class ActivityChat extends ActivityEnhanced
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
             if (!messageInfo.isTimeMessage()) {
-                switch (messageInfo.forwardedFrom != null ? ProtoGlobal.RoomMessageType.valueOf(messageInfo.forwardedFrom.getMessageType()) : messageInfo.messageType) {
+                switch (messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType) {
                     case TEXT:
                         if (chatType != CHANNEL) {
                             if (!addTop) {
@@ -1477,7 +1474,7 @@ public class ActivityChat extends ActivityEnhanced
                                 RealmClientCondition realmClientCondition = realm1.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                                 RealmOfflineEdited realmOfflineEdited = realm.createObject(RealmOfflineEdited.class);
-                                realmOfflineEdited.setId(System.nanoTime());
+                                realmOfflineEdited.setId(SUID.id().get());
                                 realmOfflineEdited.setMessageId(parseLong(messageInfo.messageID));
                                 realmOfflineEdited.setMessage(message);
                                 realmOfflineEdited = realm.copyToRealm(realmOfflineEdited);
@@ -1526,7 +1523,7 @@ public class ActivityChat extends ActivityEnhanced
                             public void execute(Realm realm) {
                                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
 
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                                 roomMessage.setRoomId(mRoomId);
                                 roomMessage.setMessage(message);
                                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
@@ -1552,15 +1549,14 @@ public class ActivityChat extends ActivityEnhanced
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
-                                    room.setLastMessageId(roomMessage.getMessageId());
-                                    room.setLastMessageTime(roomMessage.getUpdateTimeAsSeconds());
+                                    if (room != null) {
+                                        room.setLastMessage(roomMessage);
+                                    }
                                 }
                             });
                         }
 
-                        realm.copyToRealmOrUpdate(room);
-
-                        mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(System.nanoTime()));
+                        mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(SUID.id().get()));
 
                         realm.close();
 
@@ -2248,22 +2244,13 @@ public class ActivityChat extends ActivityEnhanced
 
     long latestMessageId = 0;
 
-    private long getCorrectMessageId() {
-        if (latestMessageId == 0) {
-            latestMessageId = System.nanoTime();
-        } else {
-            latestMessageId++;
-        }
-        return latestMessageId;
-    }
-
     //TODO [Saeed Mozaffari] [2016-10-29 10:45 AM] - work on gps
     private void sendMessage(int requestCode, String filePath) {
         // TODO: 10/30/2016 [Alireza]  test
         Realm realm = Realm.getDefaultInstance();
         //RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
-        long messageId = getCorrectMessageId();
+        long messageId = SUID.id().get();
 //        String filePath;
 //        if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
 //            filePath = AttachFile.imagePath;
@@ -2453,7 +2440,7 @@ public class ActivityChat extends ActivityEnhanced
             public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
 
-                roomMessage.setMessageType(finalMessageType.toString());
+                roomMessage.setMessageType(finalMessageType);
                 roomMessage.setMessage(getWrittenMessage());
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setRoomId(mRoomId);
@@ -2464,7 +2451,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (finalMessageType == ProtoGlobal.RoomMessageType.CONTACT) {
                     RealmRoomMessageContact realmRoomMessageContact = realm.createObject(RealmRoomMessageContact.class);
-                    realmRoomMessageContact.setId(System.nanoTime());
+                    realmRoomMessageContact.setId(SUID.id().get());
                     realmRoomMessageContact.setFirstName(finalMessageInfo.userInfo.firstName);
                     realmRoomMessageContact.setLastName(finalMessageInfo.userInfo.lastName);
                     realmRoomMessageContact.addPhone(finalMessageInfo.userInfo.phone);
@@ -2681,7 +2668,7 @@ public class ActivityChat extends ActivityEnhanced
                             }
 
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
-                            realmOfflineDelete.setId(System.nanoTime());
+                            realmOfflineDelete.setId(SUID.id().get());
                             realmOfflineDelete.setOfflineDelete(parseLong(messageID.mMessage.messageID));
 
                             realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
@@ -2854,7 +2841,7 @@ public class ActivityChat extends ActivityEnhanced
                 timeMessage.setUserId(-1);
                 timeMessage.setUpdateTime(message.getUpdateTime() - 1L);
                 timeMessage.setMessage(timeString);
-                timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                 lastResultMessages.add(timeMessage);
             }
 
@@ -2869,7 +2856,7 @@ public class ActivityChat extends ActivityEnhanced
                 List<RealmRoomMessage> roomMessages = listener.loadMore(page);
                 for (RealmRoomMessage roomMessage : roomMessages) {
                     StructMessageInfo messageInfo = StructMessageInfo.convert(roomMessage);
-                    switchAddItem(new ArrayList<>(Arrays.asList(messageInfo)), true);
+                    switchAddItem(new ArrayList<>(Collections.singletonList(messageInfo)), true);
                 }
             }
 
@@ -3033,10 +3020,7 @@ public class ActivityChat extends ActivityEnhanced
 
                     AbstractMessage lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
                     if (lastMessageBeforeDeleted != null) {
-                        realmRoom.setLastMessageId(parseLong(lastMessageBeforeDeleted.mMessage.messageID));
-                        realmRoom.setLastMessageTime((int) (lastMessageBeforeDeleted.mMessage.time / DateUtils.SECOND_IN_MILLIS));
-
-                        realm.copyToRealmOrUpdate(realmRoom);
+                        realmRoom.setLastMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, lastMessageBeforeDeleted.mMessage.messageID).findFirst());
                     }
                 }
             }, new Realm.Transaction.OnSuccess() {
@@ -3063,7 +3047,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onMessageReceive(final long roomId, String message, String messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
+    public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
         Log.i(ActivityChat.class.getSimpleName(), "onMessageReceive called for group");
 
         final Realm realm = Realm.getDefaultInstance();
@@ -3102,7 +3086,7 @@ public class ActivityChat extends ActivityEnhanced
                                     realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
                                     RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class);
-                                    realmOfflineSeen.setId(System.nanoTime());
+                                    realmOfflineSeen.setId(SUID.id().get());
                                     realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
                                     realm.copyToRealmOrUpdate(realmOfflineSeen);
                                     realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
@@ -3321,7 +3305,7 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onVoiceRecordDone(final String savedPath) {
         Realm realm = Realm.getDefaultInstance();
-        final long messageId = System.nanoTime();
+        final long messageId = SUID.id().get();
         final long updateTime = System.currentTimeMillis();
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
         final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
@@ -3346,7 +3330,7 @@ public class ActivityChat extends ActivityEnhanced
             public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
 
-                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE.toString());
+                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
                 roomMessage.setMessage(getWrittenMessage());
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
@@ -3428,7 +3412,7 @@ public class ActivityChat extends ActivityEnhanced
                             timeMessage.setUserId(-1);
                             timeMessage.setUpdateTime(message.getUpdateTime() - 1L);
                             timeMessage.setMessage(timeString);
-                            timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT.toString());
+                            timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                             lastResultMessages.add(timeMessage);
                         }
 
@@ -3589,11 +3573,11 @@ public class ActivityChat extends ActivityEnhanced
                     public void execute(Realm realm) {
                         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
-                        if (realmRoom.getLastMessageId() != -1) {
-                            Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessageId());
-                            element.setClearId(realmRoom.getLastMessageId());
+                        if (realmRoom.getLastMessage() != null) {
+                            Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessage().getMessageId());
+                            element.setClearId(realmRoom.getLastMessage().getMessageId());
 
-                            G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessageId());
+                            G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessage().getMessageId());
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
@@ -3607,9 +3591,7 @@ public class ActivityChat extends ActivityEnhanced
                         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(0);
-                            room.setLastMessageId(0);
-                            room.setLastMessageTime(0);
-                            room.setLastMessage("");
+                            room.setLastMessage(null);
 
                             realm.copyToRealmOrUpdate(room);
                         }
@@ -3699,7 +3681,7 @@ public class ActivityChat extends ActivityEnhanced
                     public void execute(final Realm realm) {
                         if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, item).findFirst() == null) {
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
-                            realmOfflineDelete.setId(System.nanoTime());
+                            realmOfflineDelete.setId(SUID.id().get());
                             realmOfflineDelete.setOfflineDelete(item);
 
                             element.getOfflineDeleted().add(realmOfflineDelete);
@@ -4050,7 +4032,7 @@ public class ActivityChat extends ActivityEnhanced
                                             }
 
                                             RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class);
-                                            realmOfflineDelete.setId(System.nanoTime());
+                                            realmOfflineDelete.setId(SUID.id().get());
                                             realmOfflineDelete.setOfflineDelete(parseLong(message.messageID));
                                             element.getOfflineDeleted().add(realmOfflineDelete);
 

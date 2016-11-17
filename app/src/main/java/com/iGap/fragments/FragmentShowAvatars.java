@@ -26,6 +26,7 @@ import com.iGap.adapter.AvatarsAdapter;
 import com.iGap.adapter.items.AvatarItem;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.SUID;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -132,7 +133,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             // user exists in DB
             final RealmList<RealmAvatar> userAvatars = user.getAvatars();
 
-            long identifier = System.nanoTime();
+            long identifier = SUID.id().get();
             for (RealmAvatar avatar : userAvatars) {
                 mAdapter.add(
                         new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));

@@ -30,6 +30,7 @@ import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.SUID;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
@@ -514,7 +515,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                                     Environment.DIRECTORY_PICTURES)
                                     + "/"
                                     + media.downloadAttachment.token
-                                    + System.nanoTime()
+                                    + SUID.id().get()
                                     + media.attachment.name);
                 }
 
@@ -700,9 +701,9 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             }
             ProtoFileDownload.FileDownload.Selector selector =
                     ProtoFileDownload.FileDownload.Selector.FILE;
-            //            final String localFilePath = G.DIR_IMAGES + "/" + media.downloadAttachment.token + System.nanoTime() + media.attachment.name;
+            //            final String localFilePath = G.DIR_IMAGES + "/" + media.downloadAttachment.token + SUID.id().get() + media.attachment.name;
             final String localFilePath =
-                    media.downloadAttachment.token + System.nanoTime() + media.attachment.name;
+                    media.downloadAttachment.token + SUID.id().get() + media.attachment.name;
             Log.i("GGG", "localFilePath : " + localFilePath);
             if (media.attachment.getLocalFilePath() == null || media.attachment.getLocalFilePath()
                     .isEmpty()) {
