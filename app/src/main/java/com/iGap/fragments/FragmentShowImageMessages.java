@@ -1,6 +1,7 @@
 package com.iGap.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activities.ActivityShearedMedia;
 import com.iGap.adapter.ImageMessagesAdapter;
 import com.iGap.adapter.items.ImageMessageItem;
 import com.iGap.interfaces.OnFileDownloadResponse;
@@ -39,6 +41,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 import static com.iGap.R.id.recyclerView;
+import static com.iGap.module.MusicPlayer.roomId;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/26/2016.
@@ -137,8 +140,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmRoomMessage> roomMessages =
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-                        .findAll();
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll();
         if (!roomMessages.isEmpty()) {
             // there is at least on history in DB
             long identifier = System.nanoTime();
@@ -225,16 +227,20 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
 
     private void showPopupMenu() {
         MaterialDialog dialog =
-                new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image)
+                new MaterialDialog.Builder(getActivity())
+                        .items(R.array.pop_up_menu_show_image)
                         .contentColor(Color.BLACK)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which,
                                                     CharSequence text) {
                                 if (which == 0) {
-                                    showAllMedia();
+                                    Intent intent = new Intent(getActivity(), ActivityShearedMedia.class);
+                                    intent.putExtra("RoomID", roomId);
+                                    startActivity(intent);
+                                    getActivity().getSupportFragmentManager().popBackStack();
                                 } else if (which == 1) {
-                                    saveToGallery();
+//                                    HelperSaveFile.savePicToGallary();
                                 }
                                 // TODO: 10/26/2016 [Alireza] implement delete
                         /*else if (which == 2) {

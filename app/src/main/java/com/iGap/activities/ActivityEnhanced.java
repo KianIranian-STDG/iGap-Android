@@ -1,5 +1,6 @@
 package com.iGap.activities;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,7 +14,15 @@ import com.iGap.module.AttachFile;
 import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.request.RequestUserUpdateStatus;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class ActivityEnhanced extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

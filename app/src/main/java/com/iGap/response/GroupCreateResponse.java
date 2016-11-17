@@ -39,4 +39,10 @@ public class GroupCreateResponse extends MessageHandler {
 
         G.onGroupCreate.onError(majorCode, minorCode);
     }
+
+    @Override
+    public void timeOut() {
+        super.timeOut();
+        G.onGroupCreate.onTimeOut();
+    }
 }

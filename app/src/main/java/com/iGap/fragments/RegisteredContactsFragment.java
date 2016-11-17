@@ -255,6 +255,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final long roomId) {
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     getUserInfo(peerId, roomId);
                 }
 

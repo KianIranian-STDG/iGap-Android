@@ -1029,5 +1029,16 @@
         app:layout_anchor="@+id/st_appbar"
         app:layout_anchorGravity="bottom|right|end"/>
 
+
+    <ProgressBar
+        android:id="@+id/st_prgWaiting_addContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/pu_circle_dialog_give_image_gallery"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
 </android.support.design.widget.CoordinatorLayout>
 

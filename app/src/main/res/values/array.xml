@@ -179,8 +179,10 @@
     <string-array name="pop_up_menu_show_image">
         <item>@string/show_all_media</item>
         <item>@string/save_to_gallery</item>
-        <item>@string/share_item_dialog</item>
-        <item>@string/delete_from_gallery</item>
+    </string-array>
+
+    <string-array name="pop_up_menu_show_avatar">
+        <item>@string/save_to_gallery</item>
     </string-array>
 
     <string-array name="account_self_destruct">

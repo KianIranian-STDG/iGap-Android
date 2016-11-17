@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -27,12 +26,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityChatBackground extends ActivityEnhanced {
 
-    public static Uri uriIntent;
     public static String savePath;
     public MaterialDesignTextView txtSet;
     private MaterialDesignTextView txtBack;
-    private int myResultCodeCamera = 1;
-    private int myResultCodeGallery = 0;
     private File addFile;
     private int spanCount = 3;
     private RippleView rippleBack;
@@ -94,18 +90,18 @@ public class ActivityChatBackground extends ActivityEnhanced {
             if (i == 0) {
                 item.setId(i);
                 items.add(item);
-                Log.i("CCCC", "a0: " + i);
+
             } else {
                 if (i == 1 && (G.chatBackground.exists())) {
                     item.setId(i);
                     item.setPathImage(G.chatBackground.toString());
                     items.add(item);
-                    Log.i("CCCC", "a1: " + i);
+
                 } else if (!file[i].getPath().equals(G.chatBackground.toString())) {
                     item.setId(i);
                     item.setPathImage(file[i].toString());
                     items.add(item);
-                    Log.i("CCCC", "a2: " + i);
+
 
                 }
             }
@@ -116,7 +112,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("CCCC", "0000000000: ");
+
         if (requestCode == IntentRequests.REQ_CAMERA && resultCode == RESULT_OK) {// result for camera
 
             items.clear();
@@ -124,14 +120,14 @@ public class ActivityChatBackground extends ActivityEnhanced {
             AdapterChatBackground.imageLoader.clearMemoryCache();
             setItem();
         } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == RESULT_OK) {// result for gallery
-            Log.i("CCCC", "a44444444: ");
+
             String pathImageUser = getRealPathFromURI(data.getData());
             HelperCopyFile.copyFile(pathImageUser, G.chatBackground.toString());
             items.clear();
             AdapterChatBackground.imageLoader.clearDiskCache();
             AdapterChatBackground.imageLoader.clearMemoryCache();
             setItem();
-            Log.i("CCCC", "a4: " + data.getData().toString());
+
         }
     }
 

@@ -26,6 +26,7 @@ public class ChatConvertToGroupResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        G.onChatConvertToGroup.timeOut();
     }
 
     @Override

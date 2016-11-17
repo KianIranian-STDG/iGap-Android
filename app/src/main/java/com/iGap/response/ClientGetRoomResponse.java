@@ -75,7 +75,9 @@ public class ClientGetRoomResponse extends MessageHandler {
     @Override
     public void timeOut() {
         Log.i("SOC", "ClientGetRoomResponse timeout");
+        G.onClientGetRoomResponse.onTimeOut();
     }
+
 
     @Override
     public void error() {

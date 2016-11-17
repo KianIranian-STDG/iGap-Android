@@ -1,5 +1,6 @@
 package com.iGap.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,10 +25,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -135,6 +138,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private long lastUploadedAvatarId;
     private IncomingSms smsReceiver;
     private String regex;
+    public ProgressBar prgWait;
 
     public static long getFolderSize(File dir) {
         long size = 0;
@@ -283,7 +287,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtNickName = (TextView) findViewById(R.id.st_txt_nikName);
         txtUserName = (TextView) findViewById(R.id.st_txt_userName);
         txtPhoneNumber = (TextView) findViewById(R.id.st_txt_phoneNumber);
-
+        prgWait = (ProgressBar) findViewById(R.id.st_prgWaiting_addContact);
+        prgWait.getIndeterminateDrawable()
+                .setColorFilter(getResources().getColor(R.color.toolbar_background),
+                        android.graphics.PorterDuff.Mode.MULTIPLY);
         final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
             userId = realmUserInfo.getUserId();
@@ -1737,7 +1744,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             lastUploadedAvatarId = idAvatar + 1L;
 
-            new UploadTask().execute(pathSaveImage, lastUploadedAvatarId);
+            new UploadTask(prgWait, ActivitySetting.this).execute(pathSaveImage, lastUploadedAvatarId);
         }
     }
 
@@ -1845,6 +1852,22 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+
+        private ProgressBar prg;
+        private Activity myActivityReference;
+
+        public UploadTask(ProgressBar prg, Activity myActivityReference) {
+            this.prg = prg;
+            this.myActivityReference = myActivityReference;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            myActivityReference.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            prg.setVisibility(View.VISIBLE);
+        }
+
         @Override
         protected FileUploadStructure doInBackground(Object... params) {
             try {
@@ -1871,6 +1894,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         @Override
         protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
+            myActivityReference.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            prg.setVisibility(View.GONE);
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
         }
     }

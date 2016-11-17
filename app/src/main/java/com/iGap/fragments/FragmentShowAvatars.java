@@ -178,16 +178,16 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
     private void showPopupMenu() {
         MaterialDialog dialog =
-                new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image)
+                new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_avatar)
                         .contentColor(Color.BLACK)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which,
                                                     CharSequence text) {
                                 if (which == 0) {
-                                    showAllMedia();
+//                                    HelperSaveFile.savePicToGallary();
                                 } else if (which == 1) {
-                                    saveToGallery();
+//
                                 }
                                 // TODO: 10/26/2016 [Alireza] implement delete
                         /*else if (which == 2) {

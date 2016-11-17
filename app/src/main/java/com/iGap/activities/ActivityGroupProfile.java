@@ -26,8 +26,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -160,6 +162,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
     private long startMessageId = 0;
 
     private PopupWindow popupWindow;
+    private ProgressBar prgWait;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -183,7 +186,19 @@ public class ActivityGroupProfile extends ActivityEnhanced
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
         role = realmGroupRoom.getRole();
-        noLastMessage = realmRoom.getLastMessageId();
+
+
+        try {
+            RealmResults<RealmRoomMessage> realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
+            if (realmRoomMessage != null) {
+                RealmRoomMessage rms = realmRoomMessage.sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).first();
+                noLastMessage = rms.getMessageId();
+            } else {
+                noLastMessage = 0;
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
 
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
         members = realmGroupRoom.getMembers();
@@ -350,7 +365,9 @@ public class ActivityGroupProfile extends ActivityEnhanced
         layoutMemberCanAddMember = (LinearLayout) findViewById(R.id.agp_ll_member_can_add_member);
         layoutNotificatin = (LinearLayout) findViewById(R.id.agp_ll_notification);
         layoutDeleteAndLeftGroup = (LinearLayout) findViewById(R.id.agp_ll_delete_and_left_group);
-
+        prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting_addContact);
+        prgWait.getIndeterminateDrawable()
+                .setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
         imvGroupAvatar = (CircleImageView) findViewById(R.id.agp_imv_group_avatar);
 
         txtGroupNameTitle = (TextView) findViewById(R.id.agp_txt_group_name_title);
@@ -913,7 +930,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     break;
             }
 
-            new UploadTask().execute(filePath, avatarId);
+            new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
         }
     }
 
@@ -1206,6 +1223,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
             }
         });
+
 
         Bundle bundle = new Bundle();
         bundle.putBoolean("DIALOG_SHOWING", true);
@@ -2431,8 +2449,23 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 .commit();
     }
 
-    private static class UploadTask
-            extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+
+        private ProgressBar prg;
+        private Activity myActivityReference;
+
+        public UploadTask(ProgressBar prg, Activity myActivityReference) {
+            this.prg = prg;
+            this.myActivityReference = myActivityReference;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            myActivityReference.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            prg.setVisibility(View.VISIBLE);
+        }
+
         @Override
         protected FileUploadStructure doInBackground(Object... params) {
             try {
@@ -2460,6 +2493,8 @@ public class ActivityGroupProfile extends ActivityEnhanced
         @Override
         protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
+            myActivityReference.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            prg.setVisibility(View.GONE);
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
         }
     }

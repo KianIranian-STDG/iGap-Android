@@ -195,7 +195,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
@@ -410,10 +409,7 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
+
 
     boolean firstTimeGetHistory = false; //TODO [Saeed Mozaffari] [2016-11-10 12:47 PM] - hataman firstTimeGetHistory estefade nashavad chon eshtebah ast in ravesh
 
@@ -2594,6 +2590,8 @@ public class ActivityChat extends ActivityEnhanced
 
     private void initAppbarSelected() {
 
+        ll_AppBarSelected = (LinearLayout) findViewById(R.id.chl_ll_appbar_selelected);
+
         btnCloseAppBarSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_close_layout);
         RippleView rippleCloseAppBarSelected = (RippleView) findViewById(R.id.chl_ripple_close_layout);
         rippleCloseAppBarSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -2630,6 +2628,15 @@ public class ActivityChat extends ActivityEnhanced
                     ClipData clip = ClipData.newPlainText("Copied Text", messageID.mMessage.messageText);
                     clipboard.setPrimaryClip(clip);
                     Toast.makeText(G.context, "Text Copied", Toast.LENGTH_SHORT).show();
+
+                    mAdapter.deselect();
+                    toolbar.setVisibility(View.VISIBLE);
+                    ll_AppBarSelected.setVisibility(View.GONE);
+                    // gone replay layout
+                    if (mReplayLayout != null) {
+                        mReplayLayout.setVisibility(View.GONE);
+                    }
+
                 }
             }
         });
@@ -2699,7 +2706,7 @@ public class ActivityChat extends ActivityEnhanced
         txtNumberOfSelected = (TextView) findViewById(R.id.chl_txt_number_of_selected);
         txtNumberOfSelected.setTypeface(G.fontawesome);
 
-        ll_AppBarSelected = (LinearLayout) findViewById(R.id.chl_ll_appbar_selelected);
+
     }
 
     private ArrayList<Parcelable> getMessageStructFromSelectedItems() {

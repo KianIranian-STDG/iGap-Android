@@ -163,28 +163,35 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                if (text.toString().equals("From Camera")) {
-
-                                    if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-
-                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        if (prefix.equals("NewChanel")) {
-                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
-                                        } else {
-                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
-                                        }
-
-                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                        startActivityForResult(intent, IntentRequests.REQ_CAMERA);
+                                switch (which) {
+                                    case 0: {
+                                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
                                         dialog.dismiss();
-                                    } else {
-                                        Toast.makeText(G.context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                                        break;
+
                                     }
-                                } else {
-                                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                    startActivityForResult(intent, IntentRequests.REQ_GALLERY);
-                                    dialog.dismiss();
+                                    case 1: {
+
+                                        if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+
+                                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                            if (prefix.equals("NewChanel")) {
+                                                uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
+                                            } else {
+                                                uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
+                                            }
+
+                                            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                                            startActivityForResult(intent, IntentRequests.REQ_CAMERA);
+                                            dialog.dismiss();
+                                        } else {
+                                            Toast.makeText(G.context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                                        }
+                                        break;
+                                    }
                                 }
+
                             }
                         })
                         .show();
@@ -280,6 +287,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                     if (prefix.equals("NewChanel")) {
                         success = G.IMAGE_NEW_CHANEL.renameTo(file2);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
                         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                     } else if (prefix.equals("ConvertToGroup")) {
@@ -342,6 +350,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     }
                 });
                 realm.close();
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 getRoom(roomId);
             }
 
@@ -370,6 +379,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         G.onGroupCreate = new OnGroupCreate() {
             @Override
             public void onGroupCreate(long roomId) {
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 getRoom(roomId);
             }
 

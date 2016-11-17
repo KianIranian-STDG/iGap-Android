@@ -18,6 +18,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -138,9 +139,8 @@ public class ActivityProfile extends ActivityEnhanced
                         final String nickName = edtNikName.getText().toString();
 
                         if (!nickName.equals("")) {
-                            btnLetsGo.setEnabled(false);
-                            btnSetImage.setEnabled(false);
-                            edtNikName.setEnabled(false);
+
+                            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
@@ -183,9 +183,7 @@ public class ActivityProfile extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        btnLetsGo.setEnabled(true);
-                        btnSetImage.setEnabled(true);
-                        edtNikName.setEnabled(true);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     }
                 });
 
@@ -302,30 +300,33 @@ public class ActivityProfile extends ActivityEnhanced
                     public void onSelection(MaterialDialog dialog, View view, int which,
                                             CharSequence text) {
 
-                        if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) {
-
-                            if (getPackageManager().hasSystemFeature(
-                                    PackageManager.FEATURE_CAMERA_ANY)) {
-                                useCamera();
+                        switch (which) {
+                            case 0: {
+                                useGallery();
                                 dialog.dismiss();
-                            } else {
-                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                        getResources().getString(R.string.please_check_your_camera),
-                                        Snackbar.LENGTH_LONG);
+                                break;
 
-                                snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
                             }
-                        } else {
-                            useGallery();
-                            dialog.dismiss();
-                        }
+                            case 1: {
+                                if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                    useCamera();
+                                    dialog.dismiss();
+                                } else {
+                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.please_check_your_camera),
+                                            Snackbar.LENGTH_LONG);
 
+                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                                break;
+                            }
+                        }
                     }
                 })
                 .show();
