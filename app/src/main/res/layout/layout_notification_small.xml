@@ -12,7 +12,7 @@
         android:layout_width="@dimen/dp48"
         android:layout_height="@dimen/dp48"
         android:layout_margin="@dimen/dp4"
-        android:src="@mipmap/b" />
+        android:src="@mipmap/empty"/>
 
 
     <LinearLayout

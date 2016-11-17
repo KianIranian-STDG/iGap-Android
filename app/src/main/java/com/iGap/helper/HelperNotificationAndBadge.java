@@ -265,6 +265,11 @@ public class HelperNotificationAndBadge {
     //*****************************************************************************************
     // notification ***********************
 
+    private int getNotificationIcon() {
+        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        return useWhiteIcon ? R.mipmap.iconsmal : R.mipmap.iconsmal;
+    }
+
     private void setNotification() {
 
         PendingIntent pi;
@@ -285,7 +290,7 @@ public class HelperNotificationAndBadge {
         }
 
         notification = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.iconsmal)
+                .setSmallIcon(getNotificationIcon())
                 .setContentTitle(context.getString(R.string.new_message_recicve))
                 .setContent(remoteViews)
                 .setContentIntent(pi)

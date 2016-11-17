@@ -23,7 +23,7 @@
         android:layout_height="@dimen/dp40"
         android:layout_marginLeft="@dimen/dp8"
         android:adjustViewBounds="true"
-        android:src="@mipmap/d"
+        android:src="@mipmap/empty"
         android:visibility="gone"/>
 
     <LinearLayout

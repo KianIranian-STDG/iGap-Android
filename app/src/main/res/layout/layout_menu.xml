@@ -47,7 +47,7 @@
                             android:layout_width="@dimen/dp68"
                             android:layout_height="@dimen/dp68"
                             android:layout_marginTop="@dimen/dp16"
-                            android:src="@mipmap/c" />
+                            android:src="@mipmap/empty"/>
 
                         <TextView
                             android:id="@+id/lm_txt_user_name"

@@ -39,7 +39,7 @@
                 android:layout_marginRight="@dimen/dp16"
                 android:layout_marginTop="@dimen/dp12"
 
-                android:src="@mipmap/c" />
+                android:src="@mipmap/empty"/>
 
 
             <TextView

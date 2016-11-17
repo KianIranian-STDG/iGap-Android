@@ -133,7 +133,7 @@
                     android:layout_width="@dimen/dp88"
                     android:layout_height="@dimen/dp88"
                     android:layout_gravity="center"
-                    android:src="@mipmap/b" />
+                    android:src="@mipmap/empty"/>
 
                 <TextView
                     android:id="@+id/chi_txt_lastSeen_title"

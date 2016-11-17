@@ -87,7 +87,7 @@ public class ActivityComment extends ActivityEnhanced {
         info.senderName = "ali";
         info.senderID = " ali@kjfkd.com";
         info.time = "10:25";
-        info.senderPicturePath = R.mipmap.a + "";
+        info.senderPicturePath = R.mipmap.difaultimage + "";
 
         info.replayMessageList = new ArrayList<>();
         info.replayMessageList.add(info);
@@ -105,7 +105,7 @@ public class ActivityComment extends ActivityEnhanced {
         info2.senderName = "hasan";
         info2.senderID = " hasan@kjfkd.com";
         info2.time = "10:25";
-        info2.senderPicturePath = R.mipmap.b + "";
+        info2.senderPicturePath = R.mipmap.empty + "";
 
         list.add(info2);
         list.add(info2);

@@ -49,7 +49,7 @@
                         android:adjustViewBounds="true"
                         android:maxHeight="@dimen/dp360"
                         android:scaleType="centerCrop"
-                        android:src="@mipmap/c" />
+                        android:src="@mipmap/empty"/>
                 </LinearLayout>
 
                 <TextView

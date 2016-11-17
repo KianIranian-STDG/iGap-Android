@@ -125,7 +125,7 @@
                     android:paddingLeft="@dimen/dp4"
                     android:paddingRight="0dp"
                     android:paddingTop="@dimen/dp4"
-                    android:src="@mipmap/h" />
+                    android:src="@mipmap/empty"/>
 
                 <com.iGap.libs.rippleeffect.RippleView
                     android:id="@+id/chl_ripple_menu_button"

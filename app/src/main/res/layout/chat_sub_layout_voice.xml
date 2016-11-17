@@ -21,7 +21,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/b" />
+            android:src="@mipmap/empty"/>
 
         <LinearLayout
             android:id="@+id/contentContainer"
