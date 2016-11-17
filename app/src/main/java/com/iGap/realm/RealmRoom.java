@@ -1,7 +1,6 @@
 package com.iGap.realm;
 
 import com.iGap.G;
-import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
 
@@ -9,9 +8,6 @@ import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-// note: realm doesn't support enum
-// as a workaround, we save its toString() value
-// https://github.com/realm/realm-java/issues/776
 public class RealmRoom extends RealmObject {
     @PrimaryKey
     private long id;
@@ -111,58 +107,6 @@ public class RealmRoom extends RealmObject {
         return realmRoom;
     }
 
-
-    private static String getLastMessageInternal(ProtoGlobal.Room protoRoom) {
-
-        String result = "";
-
-        if (protoRoom.getLastMessage() == null)
-            return "";
-
-        if (protoRoom.getLastMessage().getForwardFrom() != null)
-            result = protoRoom.getLastMessage().getForwardFrom().getMessage();
-
-        if (result != null)
-            if (result.length() > 0)
-                return result;
-
-
-        if (protoRoom.getLastMessage().getReplyTo() != null)
-            result = protoRoom.getLastMessage().getReplyTo().getMessage();
-
-        if (result != null)
-            if (result.length() > 0)
-                return result;
-
-        String type = "";
-
-        if (protoRoom.getLastMessage().getMessageType() != null) {
-            type = protoRoom.getLastMessage().getMessageType().toString();
-        } else {
-            return "";
-        }
-
-        if (type.contains(ProtoGlobal.RoomMessageType.VOICE.toString())) {
-            result = G.context.getString(R.string.voice_message);
-        } else if (type.contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-            result = G.context.getString(R.string.video_message);
-        } else if (type.contains(ProtoGlobal.RoomMessageType.FILE.toString())) {
-            result = G.context.getString(R.string.file_message);
-        } else if (type.contains(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
-            result = G.context.getString(R.string.audio_message);
-        } else if (type.contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-            result = G.context.getString(R.string.image_message);
-        } else if (type.contains(ProtoGlobal.RoomMessageType.CONTACT.toString())) {
-            result = G.context.getString(R.string.contact_message);
-        } else if (type.contains(ProtoGlobal.RoomMessageType.GIF.toString())) {
-            result = G.context.getString(R.string.gif_message);
-        } else if (type.contains(ProtoGlobal.RoomMessageType.LOCATION.toString())) {
-            result = G.context.getString(R.string.location_message);
-        }
-
-
-        return result;
-    }
 
     private static void putChatToClientCondition(final ProtoGlobal.Room room, Realm realm) {
 
