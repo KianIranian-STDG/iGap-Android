@@ -36,11 +36,11 @@
 
             <include
                 android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
+                layout="@layout/chat_sub_layout_replay"/>
 
             <include
                 android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward" />
+                layout="@layout/chat_sub_layout_forward"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -64,65 +64,15 @@
                         layout="@layout/msg_progress_item"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center"/>
                 </FrameLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp8"
-                    android:orientation="vertical">
+                <FrameLayout
+                    android:id="@+id/audioPlayerViewContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/elapsedTime"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="2:33"
-                                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:textSize="@dimen/sp12" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:layout_marginRight="2dp"
-                                android:text="/" />
-
-                            <TextView
-                                android:id="@+id/duration"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="5:21"
-                                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/sp12" />
-                        </LinearLayout>
-
-                        <!--TODO [Alireza] following view is the mask-->
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp" />
-
-                        <MediaController
-                            android:id="@+id/mediaController"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                        </MediaController>
-                    </LinearLayout>
-
-                </LinearLayout>
+                </FrameLayout>
 
             </LinearLayout>
 
@@ -132,7 +82,7 @@
                 android:layout_marginTop="@dimen/dp20"
                 android:text="SAMPLE TEXT"/>
 
-            <include layout="@layout/chat_sub_layout_messages_time" />
+            <include layout="@layout/chat_sub_layout_messages_time"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

@@ -417,7 +417,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_open);
                                 break;
                             case VOICE:
-                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+                                holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
                                 break;
                         }
                     }

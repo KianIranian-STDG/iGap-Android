@@ -1,6 +1,5 @@
 package com.iGap.adapter.items.chat;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
@@ -60,7 +59,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         //ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.thumbnail);
     }
 
-    private MediaPlayer makeMediaPlayer(Context context, String filePath) {
+    private MediaPlayer makeMediaPlayer(String filePath) {
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
@@ -100,7 +99,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 });
                 holder.playerView.setEnabled(mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal());
                 if (mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
-                    holder.playerView.setMediaPlayer(makeMediaPlayer(holder.itemView.getContext(), AndroidUtils.suitablePath(mMessage.forwardedFrom.getAttachment().getLocalFilePath())));
+                    holder.playerView.setMediaPlayer(makeMediaPlayer(AndroidUtils.suitablePath(mMessage.forwardedFrom.getAttachment().getLocalFilePath())));
                     String artistName = AndroidUtils.getAudioArtistName(mMessage.forwardedFrom.getAttachment().getLocalFilePath());
                     if (!TextUtils.isEmpty(artistName)) {
                         holder.songArtist.setText(artistName);
@@ -135,7 +134,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 });
                 holder.playerView.setEnabled(mMessage.attachment.isFileExistsOnLocal());
                 if (mMessage.attachment.isFileExistsOnLocal()) {
-                    holder.playerView.setMediaPlayer(makeMediaPlayer(holder.itemView.getContext(), AndroidUtils.suitablePath(mMessage.attachment.getLocalFilePath())));
+                    holder.playerView.setMediaPlayer(makeMediaPlayer(AndroidUtils.suitablePath(mMessage.attachment.getLocalFilePath())));
                 }
             }
             if (!TextUtils.isEmpty(mMessage.songArtist)) {
