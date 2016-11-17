@@ -103,6 +103,7 @@ import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.interfaces.OnVoiceRecord;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ContactUtils;
@@ -410,7 +411,6 @@ public class ActivityChat extends ActivityEnhanced
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
     }
-
 
 
     boolean firstTimeGetHistory = false; //TODO [Saeed Mozaffari] [2016-11-10 12:47 PM] - hataman firstTimeGetHistory estefade nashavad chon eshtebah ast in ravesh
@@ -2860,14 +2860,7 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void onNoMore(EndlessRecyclerOnScrollListener listener) {
-                // find last item from adapter (not database for better performance!)
-                for (AbstractMessage item : mAdapter.getAdapterItems()) {
-                    // not time message
-                    if (!item.mMessage.isTimeMessage()) {
-                        new RequestClientGetRoomHistory().getRoomHistory(mRoomId, Long.parseLong(item.mMessage.messageID), Long.toString(mRoomId));
-                        break;
-                    }
-                }
+                new RequestClientGetRoomHistory().getRoomHistory(mRoomId, AppUtils.findLastMessageId(mRoomId), Long.toString(mRoomId));
             }
         };
 

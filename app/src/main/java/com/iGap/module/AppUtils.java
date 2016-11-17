@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/22/2016.
@@ -102,6 +104,16 @@ public final class AppUtils {
                 view.setTextSize(12F);
                 break;
         }
+    }
+
+    public static long findLastMessageId(long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+        realm.close();
+        if (!roomMessages.isEmpty()) {
+            return roomMessages.first().getMessageId();
+        }
+        return 0;
     }
 
     public static String rightLastMessage(Resources resources, RoomType roomType, long messageId) {
