@@ -180,21 +180,23 @@ public class Contacts {
             //*****************************************************************************************************
 
             final RealmResults<RealmContacts> results = realm.where(RealmContacts.class).findAll();
-            if (results != null) {
+            if (!results.isEmpty()) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         for (int i = 0; i < results.size(); i++) {
-                            long phone = results.get(i).getPhone();
-                            String str = Long.toString(phone).replaceAll(" ", "");
-                            if (str.length() > 10) {
-                                str = str.substring(str.length() - 10, str.length());
-                            }
+                            if (results.get(i).isValid()) {
+                                long phone = results.get(i).getPhone();
+                                String str = Long.toString(phone).replaceAll(" ", "");
+                                if (str.length() > 10) {
+                                    str = str.substring(str.length() - 10, str.length());
+                                }
 
-                            realm.where(RealmInviteFriend.class)
-                                    .contains(RealmInviteFriendFields.PHONE, str)
-                                    .findAll()
-                                    .deleteAllFromRealm();
+                                realm.where(RealmInviteFriend.class)
+                                        .contains(RealmInviteFriendFields.PHONE, str)
+                                        .findAll()
+                                        .deleteAllFromRealm();
+                            }
                         }
                     }
                 });
