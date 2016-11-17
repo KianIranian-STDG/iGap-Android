@@ -463,10 +463,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else {
             String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
             if (progress == 100) {
-                mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), AndroidUtils.suitableAppFilePath(mMessage.forwardedFrom != null ? ProtoGlobal.RoomMessageType.valueOf(mMessage.forwardedFrom.getMessageType()) : mMessage.messageType) + "/" + fileName);
+                mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
 
                 try {
-                    AndroidUtils.cutFromTemp(mMessage.forwardedFrom != null ? ProtoGlobal.RoomMessageType.valueOf(mMessage.forwardedFrom.getMessageType()) : mMessage.messageType, fileName);
+                    AndroidUtils.cutFromTemp(mMessage.messageType, fileName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

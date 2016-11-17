@@ -189,10 +189,21 @@ public class RealmAttachment extends RealmObject {
 
     public boolean isFileExistsOnLocalAndIsThumbnail() {
         assert localFilePath != null;
-        return isFileExistsOnLocal() && localFilePath.endsWith(".jpg");
+        return isFileExistsOnLocal() && isFileImage();
     }
 
     public boolean isThumbnailExistsOnLocal() {
         return localThumbnailPath != null && new File(localThumbnailPath).exists();
+    }
+
+    private boolean isFileImage() {
+        String[] exts = {".jpg", ".jpeg", ".gif", ".png", ".tif"};
+        for (String ext : exts) {
+            if (localFilePath.endsWith(ext)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
