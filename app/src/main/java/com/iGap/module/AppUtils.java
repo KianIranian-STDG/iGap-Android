@@ -36,16 +36,15 @@ public final class AppUtils {
     public static void rightFileThumbnailIcon(ImageView view, ProtoGlobal.RoomMessageType messageType, @Nullable RealmAttachment attachment) {
         switch (messageType) {
             case VOICE:
-                view.setImageResource(R.drawable.microphone);
+                view.setImageResource(R.drawable.mic);
                 break;
+            case AUDIO:
+            case AUDIO_TEXT:
+                view.setImageResource(R.drawable.music);
             case FILE:
             case FILE_TEXT:
                 if (attachment.getName().toLowerCase().endsWith(".pdf")) {
                     view.setImageResource(R.drawable.pdf);
-                } else if (attachment.getName().toLowerCase().endsWith(".docx")) {
-                    view.setImageResource(R.drawable.docx);
-                } else if (attachment.getName().toLowerCase().endsWith(".rar")) {
-                    view.setImageResource(R.drawable.rar);
                 } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
                     view.setImageResource(R.drawable.txt);
                 } else {
