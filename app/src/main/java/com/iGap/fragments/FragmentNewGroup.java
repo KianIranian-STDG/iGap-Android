@@ -350,7 +350,12 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                     }
                 });
                 realm.close();
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
                 getRoom(roomId);
             }
 
@@ -367,8 +372,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
             @Override
             public void timeOut() {
-                prgWaiting.setVisibility(View.GONE);
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWaiting.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
             }
         };
 
@@ -385,8 +395,14 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
             @Override
             public void onTimeOut() {
-                prgWaiting.setVisibility(View.GONE);
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWaiting.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+
             }
 
             @Override
@@ -469,9 +485,14 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
                         .addToBackStack(null)
                         .replace(fragmentContainer, fragment)
                         .commit();
-                ActivityMain.mLeftDrawerLayout.closeDrawer();
-                prgWaiting.setVisibility(View.GONE);
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ActivityMain.mLeftDrawerLayout.closeDrawer();
+                        prgWaiting.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
             }
 
@@ -557,8 +578,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
 
             @Override
             public void onTimeOut() {
-                prgWaiting.setVisibility(View.GONE);
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWaiting.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
             }
         };
 

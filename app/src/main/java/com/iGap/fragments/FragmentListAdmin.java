@@ -159,7 +159,12 @@ public class FragmentListAdmin extends Fragment {
                                                 @Override
                                                 public void run() {
                                                     prgWait.setVisibility(View.GONE);
-                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                    getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                        }
+                                                    });
 
                                                     updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER, position);
                                                     G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
