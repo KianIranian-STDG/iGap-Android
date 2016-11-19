@@ -38,7 +38,6 @@ import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
-import com.iGap.realm.RealmAvatarPath;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
@@ -407,13 +406,14 @@ public class ActivityProfile extends ActivityEnhanced
 
     private void delete() {
         Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmAvatarPath> realmAvatarPaths =
-                realm.where(RealmAvatarPath.class).findAll();
-        if (realmAvatarPaths.size() > 0) {
+        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        final RealmResults<RealmAvatar> realmAvatars =
+                realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll();
+        if (!realmAvatars.isEmpty()) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    realmAvatarPaths.deleteAllFromRealm();
+                    realmAvatars.deleteAllFromRealm();
                 }
             });
         }

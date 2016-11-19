@@ -70,13 +70,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         Realm realm = Realm.getDefaultInstance();
 
-        //        realm.executeTransaction(new Realm.Transaction() {
-        //            @Override
-        //            public void execute(Realm realm) {
-        //                realm.where(RealmAvatarToken.class).findAll().deleteAllFromRealm();
-        //            }
-        //        });
-
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
         Log.i("AAA", "handler 2 userInfo : " + userInfo);
         if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before

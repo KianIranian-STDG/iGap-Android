@@ -30,8 +30,8 @@ import com.iGap.module.AttachFile;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmAvatarPath;
-import com.iGap.realm.RealmAvatarPathFields;
+import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
@@ -123,8 +123,14 @@ public class HelperNotificationAndBadge {
 
         if (isFromOnRoom) {
             Realm realm = Realm.getDefaultInstance();
-            RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class).equalTo(RealmAvatarPathFields.ID, senderId).findFirst();
-            if (realmAvatarPath != null) avatarPath = realmAvatarPath.getPathImage();
+            RealmAvatar realmAvatarPath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, senderId).findFirst();
+            if (realmAvatarPath != null) {
+                if (realmAvatarPath.getFile().isFileExistsOnLocal()) {
+                    avatarPath = realmAvatarPath.getFile().getLocalFilePath();
+                } else if (realmAvatarPath.getFile().isThumbnailExistsOnLocal()) {
+                    avatarPath = realmAvatarPath.getFile().getLocalThumbnailPath();
+                }
+            }
             if (avatarPath != null) {
                 Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
                 if (bitmap != null) {
@@ -807,7 +813,6 @@ public class HelperNotificationAndBadge {
             return pm.isScreenOn();
         }
     }
-
 
 
     public static class RemoteActionReciver extends BroadcastReceiver {

@@ -38,8 +38,6 @@ import com.iGap.module.TouchImageView;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatar;
-import com.iGap.realm.RealmAvatarPath;
-import com.iGap.realm.RealmAvatarPathFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.enums.RoomType;
@@ -428,18 +426,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                                     intent.setType("image/*");
                                     startActivity(Intent.createChooser(intent, "Share image from iGap"));
 
-                                } else if (which == 3) {
-
-                                    int pageIndex = mAdapter.removeView(viewPager, getCurrentPage());
-                                    if (list.size() == 0) {
-                                        getActivity().getFragmentManager()
-                                                .beginTransaction()
-                                                .remove(FragmentShowImage.this)
-                                                .commit();
-                                    } else if (pageIndex == mAdapter.getCount()) {
-                                        pageIndex--;
-                                    }
-                                    viewPager.setCurrentItem(pageIndex);
                                 }
                             }
                         })
@@ -767,34 +753,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             }
         }
 
-        public int removeView(ViewPager pager, StructMessageInfo v) {
-            return removeView(pager, list.indexOf(v));
-        }
-
         //-----------------------------------------------------------------------------
-
-        public int removeView(ViewPager pager, int position) {
-
-            Realm realm = Realm.getDefaultInstance();
-            final RealmAvatarPath realmAvatarPath = realm.where(RealmAvatarPath.class)
-                    .equalTo(RealmAvatarPathFields.ID, list.get(position).messageID)
-                    .findFirst();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realmAvatarPath.deleteFromRealm();
-                }
-            });
-            realm.close();
-            pager.setAdapter(null);
-            list.remove(position);
-            pager.setAdapter(this);
-            notifyDataSetChanged();
-            if (list.size() > 0) {
-                initViewPager();
-            }
-            return position;
-        }
 
         public StructMessageInfo getView(int position) {
             return list.get(position);
