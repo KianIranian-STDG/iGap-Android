@@ -48,6 +48,7 @@ import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.FragmentSticker;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
+import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarResponse;
@@ -1720,6 +1721,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
             if (uriIntent != null) {
+
+                ImageHelper.correctRotateImage(pathSaveImage);
 
                 intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
                 intent.putExtra("TYPE", "camera");

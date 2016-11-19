@@ -96,18 +96,20 @@ public class VoiceRecord {
             mediaRecorder.release();
             mediaRecorder = null;
         }
-
-        mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        mediaRecorder.setOutputFile(outputFile);
         try {
+            mediaRecorder = new MediaRecorder();
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+            mediaRecorder.setOutputFile(outputFile);
+
             mediaRecorder.prepare();
             mediaRecorder.start();
         } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
     }

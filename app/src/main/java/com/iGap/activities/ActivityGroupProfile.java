@@ -44,6 +44,7 @@ import com.iGap.fragments.FragmentListAdmin;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.ShowCustomList;
+import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGroupAddAdmin;
 import com.iGap.interfaces.OnGroupAddMember;
@@ -925,6 +926,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
             long avatarId = SUID.id().get();
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
+                    ImageHelper.correctRotateImage(AttachFile.imagePath);
                     filePath = AttachFile.imagePath;
                     Log.e("ddd", filePath + "     image path");
                     break;

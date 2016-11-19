@@ -201,14 +201,20 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
 
     private void preSelect() {
         for (ImageMessageItem item : mAdapter.getAdapterItems()) {
-            if (item.message.getAttachment().getToken().equalsIgnoreCase(mSelectedToken)) {
-                int position = mAdapter.getPosition(item);
-                mRecyclerView.scrollToPosition(position);
 
-                mCount.setText(String.format(getString(R.string.d_of_d), position + 1, mAdapter.getAdapterItemCount()));
+            try {
+                if (item.message.getAttachment().getToken().equalsIgnoreCase(mSelectedToken)) {
+                    int position = mAdapter.getPosition(item);
+                    mRecyclerView.scrollToPosition(position);
 
-                break;
+                    mCount.setText(String.format(getString(R.string.d_of_d), position + 1, mAdapter.getAdapterItemCount()));
+
+                    break;
+                }
+            } catch (NullPointerException e) {
+
             }
+
         }
     }
 
@@ -219,9 +225,14 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
 
     private ImageMessageItem findByToken(String token) {
         for (ImageMessageItem item : mAdapter.getAdapterItems()) {
-            if (item.message.getAttachment().getToken().equalsIgnoreCase(token)) {
-                return item;
+            try {
+                if (item.message.getAttachment().getToken().equalsIgnoreCase(token)) {
+                    return item;
+                }
+            } catch (NullPointerException e) {
+
             }
+
         }
         return null;
     }

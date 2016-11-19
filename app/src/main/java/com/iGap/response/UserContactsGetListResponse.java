@@ -1,10 +1,11 @@
 package com.iGap.response;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 
 import com.iGap.G;
-import com.iGap.helper.HelperPermision;
-import com.iGap.interfaces.OnGetPermision;
 import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserContactsGetList;
@@ -71,12 +72,10 @@ public class UserContactsGetListResponse extends MessageHandler {
 
         realm.close();
 
-        HelperPermision.getContactPermision(context, new OnGetPermision() {
-            @Override
-            public void Allow() {
-                Contacts.FillRealmInviteFriend();
-            }
-        });
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            Contacts.FillRealmInviteFriend();
+        }
+
     }
 
     @Override

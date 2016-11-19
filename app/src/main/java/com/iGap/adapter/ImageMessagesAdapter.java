@@ -41,19 +41,26 @@ public class ImageMessagesAdapter<Item extends ImageMessageItem> extends FastIte
 
     public void downloadingAvatarFile(String token, int progress, long offset) {
         for (Item item : getAdapterItems()) {
-            if (item.message.getAttachment().getToken().equalsIgnoreCase(token)) {
-                int pos = getAdapterItems().indexOf(item);
-                if (requestsProgress.containsKey(token)) {
-                    requestsProgress.put(token, progress);
-                }
-                if (requestsOffset.containsKey(token)) {
-                    requestsOffset.put(token, offset);
-                }
 
-                item.onRequestDownloadAvatar(offset, progress);
-                notifyItemChanged(pos);
-                break;
+            try {
+                if (item.message.getAttachment().getToken().equalsIgnoreCase(token)) {
+                    int pos = getAdapterItems().indexOf(item);
+                    if (requestsProgress.containsKey(token)) {
+                        requestsProgress.put(token, progress);
+                    }
+                    if (requestsOffset.containsKey(token)) {
+                        requestsOffset.put(token, offset);
+                    }
+
+                    item.onRequestDownloadAvatar(offset, progress);
+                    notifyItemChanged(pos);
+                    break;
+                }
+            } catch (NullPointerException e) {
+
             }
+
+
         }
     }
 

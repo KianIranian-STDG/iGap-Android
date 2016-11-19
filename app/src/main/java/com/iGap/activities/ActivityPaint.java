@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnColorChangedListenerSelect;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ColorPiker;
@@ -330,6 +331,7 @@ public class ActivityPaint extends ActivityEnhanced {
 
                     break;
                 case AttachFile.request_code_TAKE_PICTURE:
+                    ImageHelper.correctRotateImage(AttachFile.imagePath);
 
                     try {
                         setImageToBitmap1();

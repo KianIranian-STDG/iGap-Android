@@ -97,7 +97,7 @@ import static com.iGap.G.context;
 public class ActivityContactsProfile extends ActivityEnhanced implements OnUserUpdateStatus, OnLastSeenUpdateTiming {
     private long userId = 0;
     private long roomId;
-    private String phone = "";
+    private String phone = "0";
     private String displayName = "";
     private String username = "";
     private String firstName;
@@ -155,6 +155,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         enterFrom = extras.getString("enterFrom");
 
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+
+        if (realmRegisteredInfo != null)
         if (realmRegisteredInfo.getLastAvatar() != null) {
 
             String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
@@ -180,7 +182,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             color = realmRegisteredInfo.getColor();
             initials = realmRegisteredInfo.getInitials();
             userStatus = realmRegisteredInfo.getStatus();
-        } else {
+        } else if (realmUser != null) {
             phone = Long.toString(realmUser.getPhone());
             displayName = realmUser.getDisplay_name();
             firstName = realmUser.getFirst_name();

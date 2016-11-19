@@ -273,7 +273,7 @@ public class HelperNotificationAndBadge {
 
     private int getNotificationIcon() {
         boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.mipmap.iconsmal : R.mipmap.iconsmal;
+        return useWhiteIcon ? R.mipmap.white_icon : R.mipmap.iconsmal;
     }
 
     private void setNotification() {

@@ -314,7 +314,7 @@ public class G extends Application {
 
     }
 
-    public static void getContactListFromServer() {
+    private static void getContactListFromServer() {
         G.onUserContactGetList = new OnUserContactGetList() {
             @Override
             public void onContactGetList() {
@@ -322,7 +322,11 @@ public class G extends Application {
             }
         };
 
-        new RequestUserContactsGetList().userContactGetList();
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            new RequestUserContactsGetList().userContactGetList();
+        }
+
+
     }
 
     public static void getUserInfo() {

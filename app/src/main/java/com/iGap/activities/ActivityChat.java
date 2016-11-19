@@ -80,6 +80,7 @@ import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperSetAction;
+import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.IResendMessage;
 import com.iGap.interfaces.OnChatClearMessageResponse;
@@ -432,7 +433,7 @@ public class ActivityChat extends ActivityEnhanced
         Log.i("TTT", "onCreate");
         checkIfOrientationChanged(getResources().getConfiguration());
 
-        //call from ActivityGroupProfile
+        //call from ActivityGroupProfile for update group member number
         onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
@@ -1434,9 +1435,12 @@ public class ActivityChat extends ActivityEnhanced
                     intent.putExtra("enterFrom", CHAT.toString());
                     startActivity(intent);
                 } else if (chatType == GROUP) {
-                    Intent intent = new Intent(G.context, ActivityGroupProfile.class);
-                    intent.putExtra("RoomId", mRoomId);
-                    startActivity(intent);
+
+                    if (!isChatReadOnly) {
+                        Intent intent = new Intent(G.context, ActivityGroupProfile.class);
+                        intent.putExtra("RoomId", mRoomId);
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -2127,6 +2131,9 @@ public class ActivityChat extends ActivityEnhanced
 
             listPathString = null;
             if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
+
+                ImageHelper.correctRotateImage(AttachFile.imagePath);
+
                 listPathString = new ArrayList<>();
                 listPathString.add(AttachFile.imagePath);
                 // latestFilePath = AttachFile.imagePath;
