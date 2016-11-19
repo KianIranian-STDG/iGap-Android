@@ -1645,7 +1645,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         realm.close();
 
-        //setImage(0);
         setImage();
     }
 
@@ -1827,7 +1826,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void run() {
                 G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
-                //setImage(0);
                 setImage();
             }
         }, 500);

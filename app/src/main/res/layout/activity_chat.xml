@@ -7,6 +7,7 @@
                                                android:layout_height="match_parent"
                                                android:fitsSystemWindows="true"
                                                android:layoutDirection="ltr"
+                                               android:textDirection="firstStrong"
                                                tools:ignore="MissingPrefix">
 
     <com.iGap.module.MyAppBarLayout

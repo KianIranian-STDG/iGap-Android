@@ -1,12 +1,12 @@
 package com.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -35,33 +35,45 @@ import com.iGap.R;
 import com.iGap.activities.ActivityCrop;
 import com.iGap.activities.ActivityMain;
 import com.iGap.activities.ActivityNewChanelFinish;
+import com.iGap.helper.HelperImageBackColor;
 import com.iGap.interfaces.OnChatConvertToGroup;
 import com.iGap.interfaces.OnClientGetRoomResponse;
+import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupCreate;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
+import com.iGap.module.FileUploadStructure;
 import com.iGap.module.LinedEditText;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatConvertToGroup;
 import com.iGap.request.RequestClientGetRoom;
+import com.iGap.request.RequestGroupAvatarAdd;
 import com.iGap.request.RequestGroupCreate;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import io.realm.Realm;
 
 import static com.iGap.R.id.fragmentContainer;
 
-public class FragmentNewGroup extends android.support.v4.app.Fragment {
+public class FragmentNewGroup extends android.support.v4.app.Fragment implements OnFileUploadForActivities, OnGroupAvatarResponse {
 
-    public static Bitmap decodeBitmapProfile = null;
     private MaterialDesignTextView txtBack;
     private CircleImageView imgCircleImageView;
     private Uri uriIntent;
@@ -108,7 +120,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
     }
 
     public void initComponent(View view) {
-
+        G.uploaderUtil.setActivityCallbacks(this);
+        G.onGroupAvatarResponse = this;
 
         Log.i("ZZZZZZCCC", "initComponent: " + roomId);
 
@@ -389,8 +402,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         G.onGroupCreate = new OnGroupCreate() {
             @Override
             public void onGroupCreate(long roomId) {
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                getRoom(roomId);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+                new RequestGroupAvatarAdd().groupAvatarAdd(roomId, (String) imgCircleImageView.getTag());
             }
 
             @Override
@@ -591,6 +609,139 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         new RequestClientGetRoom().clientGetRoom(roomId);
     }
 
+    private void showInitials() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        imgCircleImageView.setImageBitmap(
+                HelperImageBackColor.drawAlphabetOnPicture(
+                        (int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp100)
+                        , realmUserInfo.getUserInfo().getInitials()
+                        , realmUserInfo.getUserInfo().getColor()));
+        realm.close();
+    }
+
+    private void setImage(long roomId) {
+        final Realm realm = Realm.getDefaultInstance();
+
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();
+        if (realmAvatar != null) {
+            if (realmAvatar.getFile().isFileExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imgCircleImageView);
+            } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imgCircleImageView);
+            } else {
+                showInitials();
+            }
+        } else {
+            showInitials();
+        }
+    }
+
+    @Override
+    public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                imgCircleImageView.setTag(uploadStructure.token);
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(pathSaveImage), imgCircleImageView);
+
+                txtNextStep.setEnabled(true);
+            }
+        });
+    }
+
+    @Override
+    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
+        // TODO: 10/20/2016 [Alireza] update view something like updating progress
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtNextStep.setEnabled(false);
+            }
+        });
+    }
+
+    @Override
+    public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class);
+                realmAvatar.setOwnerId(roomId);
+                realmAvatar.setId(avatar.getId());
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+
+                try {
+                    AndroidUtils.copyFile(new File(pathSaveImage), new File(G.DIR_IMAGE_USER + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        // have to be inside a delayed handler
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setImage(roomId);
+            }
+        }, 500);
+
+        realm.close();
+
+        getRoom(roomId);
+    }
+
+    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+
+        private ProgressBar prg;
+        private Activity myActivityReference;
+
+        public UploadTask(ProgressBar prg, Activity myActivityReference) {
+            this.prg = prg;
+            this.myActivityReference = myActivityReference;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            myActivityReference.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            prg.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected FileUploadStructure doInBackground(Object... params) {
+            try {
+                String filePath = (String) params[0];
+                long avatarId = (long) params[1];
+                File file = new File(filePath);
+                String fileName = file.getName();
+                long fileSize = file.length();
+                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
+                fileUploadStructure.openFile(filePath);
+
+                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                fileUploadStructure.setFileHash(fileHash);
+
+                return fileUploadStructure;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(FileUploadStructure result) {
+            super.onPostExecute(result);
+            myActivityReference.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            prg.setVisibility(View.GONE);
+            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+        }
+    }
+
     //=======================result for picture
 
     @Override
@@ -619,14 +770,13 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment {
         } else if (requestCode == IntentRequests.REQ_CROP) {
 
             if (data != null) {
-                data.getData().toString();
-                Bitmap bitmap = BitmapFactory.decodeFile(data.getData().toString());
-                imgCircleImageView.setImageBitmap(bitmap);
-                imgCircleImageView.setPadding(0, 0, 0, 0);
-                imgCircleImageView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                pathSaveImage = data.getData().toString();
+                new UploadTask(prgWaiting, getActivity()).execute(pathSaveImage, System.nanoTime());
             }
         }
     }
+
+    private String pathSaveImage;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

@@ -221,7 +221,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
         }
 
-        replayMessageIfNeeded(holder);
+        replyMessageIfNeeded(holder);
         forwardMessageIfNeeded(holder);
 
         Realm realm = Realm.getDefaultInstance();
@@ -272,7 +272,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @CallSuper
-    protected void replayMessageIfNeeded(VH holder) {
+    protected void replyMessageIfNeeded(VH holder) {
         // set replay container visible if message was replayed, otherwise, gone it
         LinearLayout replayContainer = (LinearLayout) holder.itemView.findViewById(R.id.replayLayout);
         if (replayContainer != null) {
