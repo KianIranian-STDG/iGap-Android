@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoClientGetRoomList;
 import com.iGap.proto.ProtoError;
@@ -28,6 +29,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
     @Override public void timeOut() {
         super.timeOut();
         Log.i("TTT", "ClientGetRoomListResponse timeOut : " + message);
+        G.onClientGetRoomListResponse.onTimeout();
     }
 
     @Override public void error() {

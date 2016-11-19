@@ -208,6 +208,11 @@ public class ActivityMain extends ActivityEnhanced
             }
 
             @Override
+            public void onTimeout() {
+                getChatsList(false);
+            }
+
+            @Override
             public void onError(int majorCode, int minorCode) {
                 if (majorCode == 610) {
                     runOnUiThread(new Runnable() {
@@ -625,7 +630,7 @@ public class ActivityMain extends ActivityEnhanced
             }
         });
 
-        getChatsList();
+        getChatsList(true);
     }
 
     /**
@@ -922,8 +927,8 @@ public class ActivityMain extends ActivityEnhanced
 
     private ContentLoadingProgressBar contentLoading;
 
-    private void getChatsList() {
-        if (G.socketConnection) {
+    private void getChatsList(boolean fromServer) {
+        if (fromServer && G.socketConnection) {
             contentLoading.show();
             testIsSecure();
         } else {
