@@ -196,10 +196,10 @@ public class ActivityMain extends ActivityEnhanced
                         for (final ProtoGlobal.Room room : roomList) {
                             Log.i("PPP", "getTitle : " + room.getTitle() + "  ||  getMessage : " + room.getLastMessage().getMessage() + "  ||  getStatus : " + room.getLastMessage().getStatus());
                             if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                Log.i("UUU", "" + room.getGroupRoom().getParticipantsCount());
-                                Log.i("UUU", "" + room.getGroupRoom().getParticipantsCountLabel());
-                                Log.i("UUU", "" + room.getGroupRoom().getParticipantsCountLimit());
-                                Log.i("UUU", "" + room.getGroupRoom().getParticipantsCountLimitLabel());
+                                Log.i("UUU", "" + room.getGroupRoomExtra().getParticipantsCount());
+                                Log.i("UUU", "" + room.getGroupRoomExtra().getParticipantsCountLabel());
+                                Log.i("UUU", "" + room.getGroupRoomExtra().getParticipantsCountLimit());
+                                Log.i("UUU", "" + room.getGroupRoomExtra().getParticipantsCountLimitLabel());
                             }
                             putChatToDatabase(room);
                         }

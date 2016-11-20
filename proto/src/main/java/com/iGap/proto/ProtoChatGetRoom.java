@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoChatGetRoom {
   private ProtoChatGetRoom() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoChatGetRoom {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface ChatGetRoomOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.ChatGetRoom)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoChatGetRoom {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -41,7 +37,6 @@ public final class ProtoChatGetRoom {
      */
     long getPeerId();
   }
-
   /**
    * Protobuf type {@code proto.ChatGetRoom}
    */
@@ -53,7 +48,6 @@ public final class ProtoChatGetRoom {
     private ChatGetRoom(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ChatGetRoom() {
       peerId_ = 0L;
     }
@@ -63,7 +57,6 @@ public final class ProtoChatGetRoom {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private ChatGetRoom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -113,7 +106,6 @@ public final class ProtoChatGetRoom {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoChatGetRoom.internal_static_proto_ChatGetRoom_descriptor;
@@ -128,21 +120,18 @@ public final class ProtoChatGetRoom {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -160,7 +149,6 @@ public final class ProtoChatGetRoom {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -198,7 +186,6 @@ public final class ProtoChatGetRoom {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -244,32 +231,27 @@ public final class ProtoChatGetRoom {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -277,13 +259,11 @@ public final class ProtoChatGetRoom {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -291,14 +271,12 @@ public final class ProtoChatGetRoom {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -310,15 +288,12 @@ public final class ProtoChatGetRoom {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoChatGetRoom.ChatGetRoom prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -330,7 +305,6 @@ public final class ProtoChatGetRoom {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChatGetRoom}
      */
@@ -360,13 +334,11 @@ public final class ProtoChatGetRoom {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -412,35 +384,29 @@ public final class ProtoChatGetRoom {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChatGetRoom.ChatGetRoom) {
           return mergeFrom((com.iGap.proto.ProtoChatGetRoom.ChatGetRoom) other);
@@ -487,14 +453,12 @@ public final class ProtoChatGetRoom {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -505,7 +469,6 @@ public final class ProtoChatGetRoom {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -522,7 +485,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -537,7 +499,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -556,7 +517,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -571,7 +531,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -580,7 +539,6 @@ public final class ProtoChatGetRoom {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -592,7 +550,6 @@ public final class ProtoChatGetRoom {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -611,14 +568,12 @@ public final class ProtoChatGetRoom {
       }
 
       private long peerId_;
-
       /**
        * <code>optional uint64 peer_id = 2;</code>
        */
       public long getPeerId() {
         return peerId_;
       }
-
       /**
        * <code>optional uint64 peer_id = 2;</code>
        */
@@ -628,7 +583,6 @@ public final class ProtoChatGetRoom {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 peer_id = 2;</code>
        */
@@ -638,7 +592,6 @@ public final class ProtoChatGetRoom {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -655,7 +608,6 @@ public final class ProtoChatGetRoom {
 
     // @@protoc_insertion_point(class_scope:proto.ChatGetRoom)
     private static final com.iGap.proto.ProtoChatGetRoom.ChatGetRoom DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoChatGetRoom.ChatGetRoom();
     }
@@ -697,12 +649,10 @@ public final class ProtoChatGetRoom {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -712,18 +662,15 @@ public final class ProtoChatGetRoom {
      * <code>optional .proto.Room room = 2;</code>
      */
     boolean hasRoom();
-
     /**
      * <code>optional .proto.Room room = 2;</code>
      */
     com.iGap.proto.ProtoGlobal.Room getRoom();
-
     /**
      * <code>optional .proto.Room room = 2;</code>
      */
     com.iGap.proto.ProtoGlobal.RoomOrBuilder getRoomOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.ChatGetRoomResponse}
    */
@@ -735,7 +682,6 @@ public final class ProtoChatGetRoom {
     private ChatGetRoomResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ChatGetRoomResponse() {
     }
 
@@ -744,7 +690,6 @@ public final class ProtoChatGetRoom {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private ChatGetRoomResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -802,7 +747,6 @@ public final class ProtoChatGetRoom {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoChatGetRoom.internal_static_proto_ChatGetRoomResponse_descriptor;
@@ -817,21 +761,18 @@ public final class ProtoChatGetRoom {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -841,21 +782,18 @@ public final class ProtoChatGetRoom {
 
     public static final int ROOM_FIELD_NUMBER = 2;
     private com.iGap.proto.ProtoGlobal.Room room_;
-
     /**
      * <code>optional .proto.Room room = 2;</code>
      */
     public boolean hasRoom() {
       return room_ != null;
     }
-
     /**
      * <code>optional .proto.Room room = 2;</code>
      */
     public com.iGap.proto.ProtoGlobal.Room getRoom() {
       return room_ == null ? com.iGap.proto.ProtoGlobal.Room.getDefaultInstance() : room_;
     }
-
     /**
      * <code>optional .proto.Room room = 2;</code>
      */
@@ -864,7 +802,6 @@ public final class ProtoChatGetRoom {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -902,7 +839,6 @@ public final class ProtoChatGetRoom {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -952,32 +888,27 @@ public final class ProtoChatGetRoom {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -985,13 +916,11 @@ public final class ProtoChatGetRoom {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -999,14 +928,12 @@ public final class ProtoChatGetRoom {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1018,15 +945,12 @@ public final class ProtoChatGetRoom {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -1038,7 +962,6 @@ public final class ProtoChatGetRoom {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChatGetRoomResponse}
      */
@@ -1068,13 +991,11 @@ public final class ProtoChatGetRoom {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1128,35 +1049,29 @@ public final class ProtoChatGetRoom {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse) {
           return mergeFrom((com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse) other);
@@ -1204,14 +1119,12 @@ public final class ProtoChatGetRoom {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1222,7 +1135,6 @@ public final class ProtoChatGetRoom {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1239,7 +1151,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1254,7 +1165,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1273,7 +1183,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1288,7 +1197,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1297,7 +1205,6 @@ public final class ProtoChatGetRoom {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1309,7 +1216,6 @@ public final class ProtoChatGetRoom {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1330,14 +1236,12 @@ public final class ProtoChatGetRoom {
       private com.iGap.proto.ProtoGlobal.Room room_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoGlobal.Room, com.iGap.proto.ProtoGlobal.Room.Builder, com.iGap.proto.ProtoGlobal.RoomOrBuilder> roomBuilder_;
-
       /**
        * <code>optional .proto.Room room = 2;</code>
        */
       public boolean hasRoom() {
         return roomBuilder_ != null || room_ != null;
       }
-
       /**
        * <code>optional .proto.Room room = 2;</code>
        */
@@ -1348,7 +1252,6 @@ public final class ProtoChatGetRoom {
           return roomBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Room room = 2;</code>
        */
@@ -1365,7 +1268,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Room room = 2;</code>
        */
@@ -1380,7 +1282,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Room room = 2;</code>
        */
@@ -1399,7 +1300,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Room room = 2;</code>
        */
@@ -1414,7 +1314,6 @@ public final class ProtoChatGetRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Room room = 2;</code>
        */
@@ -1423,7 +1322,6 @@ public final class ProtoChatGetRoom {
         onChanged();
         return getRoomFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Room room = 2;</code>
        */
@@ -1435,7 +1333,6 @@ public final class ProtoChatGetRoom {
                   com.iGap.proto.ProtoGlobal.Room.getDefaultInstance() : room_;
         }
       }
-
       /**
        * <code>optional .proto.Room room = 2;</code>
        */
@@ -1452,7 +1349,6 @@ public final class ProtoChatGetRoom {
         }
         return roomBuilder_;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1469,7 +1365,6 @@ public final class ProtoChatGetRoom {
 
     // @@protoc_insertion_point(class_scope:proto.ChatGetRoomResponse)
     private static final com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse();
     }
@@ -1521,7 +1416,6 @@ public final class ProtoChatGetRoom {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\021ChatGetRoom.proto\022\005proto\032\rRequest.prot" +

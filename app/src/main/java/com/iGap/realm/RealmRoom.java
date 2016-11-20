@@ -72,15 +72,15 @@ public class RealmRoom extends RealmObject {
             case CHANNEL:
                 realmRoom.setType(RoomType.CHANNEL);
                 realmRoom.setChannelRoom(
-                        RealmChannelRoom.convert(room.getChannelRoom(), realmRoom.getChannelRoom(),
+                        RealmChannelRoom.convert(room.getChannelRoomExtra(), realmRoom.getChannelRoom(),
                                 realm));
-                realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getChannelRoom().getAvatar()));
+                realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getChannelRoomExtra().getAvatar()));
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
-                realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoom()));
+                realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoomExtra()));
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                        .equalTo(RealmRegisteredInfoFields.ID, room.getChatRoom().getPeer().getId())
+                        .equalTo(RealmRegisteredInfoFields.ID, room.getChatRoomExtra().getPeer().getId())
                         .findFirst();
                 realmRoom.setAvatar(
                         realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
@@ -88,9 +88,9 @@ public class RealmRoom extends RealmObject {
             case GROUP:
                 realmRoom.setType(RoomType.GROUP);
                 realmRoom.setGroupRoom(
-                        RealmGroupRoom.convert(room.getGroupRoom(), realmRoom.getGroupRoom(), realm));
-                realmRoom.getGroupRoom().setDescription(room.getGroupRoom().getDescription());
-                realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getGroupRoom().getAvatar()));
+                        RealmGroupRoom.convert(room.getGroupRoomExtra(), realmRoom.getGroupRoom(), realm));
+                realmRoom.getGroupRoom().setDescription(room.getGroupRoomExtra().getDescription());
+                realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getGroupRoomExtra().getAvatar()));
                 break;
         }
         realmRoom.setLastMessage(RealmRoomMessage.put(room.getLastMessage()));

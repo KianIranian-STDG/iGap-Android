@@ -8,7 +8,7 @@ import static com.iGap.proto.ProtoGlobal.ClientAction.CAPTURING_IMAGE;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CAPTURING_VIDEO;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.PAINTING;
-import static com.iGap.proto.ProtoGlobal.ClientAction.RECORING_VOICE;
+import static com.iGap.proto.ProtoGlobal.ClientAction.RECORDING_VOICE;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_DOCUMENT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_FILE;
@@ -50,7 +50,7 @@ public class HelperConvertEnumToString {
             finalActionName = G.context.getResources().getString(R.string.capturing_video);
         } else if (currentAction.equals(SENDING_AUDIO.toString())) {
             finalActionName = G.context.getResources().getString(R.string.sending_audio);
-        } else if (currentAction.equals(RECORING_VOICE.toString())) {
+        } else if (currentAction.equals(RECORDING_VOICE.toString())) {
             finalActionName = G.context.getResources().getString(R.string.recording_voice);
         } else if (currentAction.equals(SENDING_VOICE.toString())) {
             finalActionName = G.context.getResources().getString(R.string.sending_voice);

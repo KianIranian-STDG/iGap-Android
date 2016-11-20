@@ -55,15 +55,16 @@ public class RealmAvatar extends RealmObject {
      * avatar exist in channel info)
      */
 
+
     public static RealmAvatar convert(final ProtoGlobal.Room room) {
         ProtoGlobal.Avatar avatar = null;
         switch (room.getType()) {
             case GROUP:
-                ProtoGlobal.GroupRoom groupRoom = room.getGroupRoom();
+                ProtoGlobal.GroupRoom groupRoom = room.getGroupRoomExtra();
                 avatar = groupRoom.getAvatar();
                 break;
             case CHANNEL:
-                ProtoGlobal.ChannelRoom channelRoom = room.getChannelRoom();
+                ProtoGlobal.ChannelRoom channelRoom = room.getChannelRoomExtra();
                 avatar = channelRoom.getAvatar();
                 break;
         }

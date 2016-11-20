@@ -4,1233 +4,1423 @@
 package com.iGap.proto;
 
 public final class ProtoGroupDelete {
-    private ProtoGroupDelete() {
+  private ProtoGroupDelete() {
+  }
+
+  public static void registerAllExtensions(
+          com.google.protobuf.ExtensionRegistryLite registry) {
+  }
+
+  public static void registerAllExtensions(
+          com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions(
+            (com.google.protobuf.ExtensionRegistryLite) registry);
+  }
+
+  public interface GroupDeleteOrBuilder extends
+          // @@protoc_insertion_point(interface_extends:proto.GroupDelete)
+          com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    boolean hasRequest();
+
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    com.iGap.proto.ProtoRequest.Request getRequest();
+
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    com.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder();
+
+    /**
+     * <code>optional uint64 room_id = 2;</code>
+     */
+    long getRoomId();
+  }
+
+  /**
+   * Protobuf type {@code proto.GroupDelete}
+   */
+  public static final class GroupDelete extends
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:proto.GroupDelete)
+          GroupDeleteOrBuilder {
+    // Use GroupDelete.newBuilder() to construct.
+    private GroupDelete(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
     }
 
-    public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
+    private GroupDelete() {
+      roomId_ = 0L;
     }
 
-    public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
-        registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
 
-    public interface GroupDeleteOrBuilder extends
-        // @@protoc_insertion_point(interface_extends:proto.GroupDelete)
-        com.google.protobuf.MessageOrBuilder {
+    private GroupDelete(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
+              if (request_ != null) {
+                subBuilder = request_.toBuilder();
+              }
+              request_ = input.readMessage(com.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(request_);
+                request_ = subBuilder.buildPartial();
+              }
 
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        boolean hasRequest();
+              break;
+            }
+            case 16: {
 
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        ProtoRequest.Request getRequest();
+              roomId_ = input.readUInt64();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+                e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
 
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        ProtoRequest.RequestOrBuilder getRequestOrBuilder();
+    public static final com.google.protobuf.Descriptors.Descriptor
+    getDescriptor() {
+      return com.iGap.proto.ProtoGroupDelete.internal_static_proto_GroupDelete_descriptor;
+    }
 
-        /**
-         * <code>optional uint64 room_id = 2;</code>
-         */
-        long getRoomId();
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    internalGetFieldAccessorTable() {
+      return com.iGap.proto.ProtoGroupDelete.internal_static_proto_GroupDelete_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                      com.iGap.proto.ProtoGroupDelete.GroupDelete.class, com.iGap.proto.ProtoGroupDelete.GroupDelete.Builder.class);
+    }
+
+    public static final int REQUEST_FIELD_NUMBER = 1;
+    private com.iGap.proto.ProtoRequest.Request request_;
+
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    public boolean hasRequest() {
+      return request_ != null;
+    }
+
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    public com.iGap.proto.ProtoRequest.Request getRequest() {
+      return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+    }
+
+    /**
+     * <code>optional .proto.Request request = 1;</code>
+     */
+    public com.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
+      return getRequest();
+    }
+
+    public static final int ROOM_ID_FIELD_NUMBER = 2;
+    private long roomId_;
+    /**
+     * <code>optional uint64 room_id = 2;</code>
+     */
+    public long getRoomId() {
+      return roomId_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+            throws java.io.IOException {
+      if (request_ != null) {
+        output.writeMessage(1, getRequest());
+      }
+      if (roomId_ != 0L) {
+        output.writeUInt64(2, roomId_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (request_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeMessageSize(1, getRequest());
+      }
+      if (roomId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeUInt64Size(2, roomId_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof com.iGap.proto.ProtoGroupDelete.GroupDelete)) {
+        return super.equals(obj);
+      }
+      com.iGap.proto.ProtoGroupDelete.GroupDelete other = (com.iGap.proto.ProtoGroupDelete.GroupDelete) obj;
+
+      boolean result = true;
+      result = result && (hasRequest() == other.hasRequest());
+      if (hasRequest()) {
+        result = result && getRequest()
+                .equals(other.getRequest());
+      }
+      result = result && (getRoomId()
+              == other.getRoomId());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasRequest()) {
+        hash = (37 * hash) + REQUEST_FIELD_NUMBER;
+        hash = (53 * hash) + getRequest().hashCode();
+      }
+      hash = (37 * hash) + ROOM_ID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+              getRoomId());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete parseFrom(
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete parseFrom(
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete parseFrom(byte[] data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete parseFrom(
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete parseFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete parseFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete parseDelimitedFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete parseDelimitedFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete parseFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(com.iGap.proto.ProtoGroupDelete.GroupDelete prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+              ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
     }
 
     /**
      * Protobuf type {@code proto.GroupDelete}
      */
-    public static final class GroupDelete extends com.google.protobuf.GeneratedMessageV3 implements
-        // @@protoc_insertion_point(message_implements:proto.GroupDelete)
-        GroupDeleteOrBuilder {
-        // Use GroupDelete.newBuilder() to construct.
-        private GroupDelete(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-            super(builder);
-        }
-
-        private GroupDelete() {
-            roomId_ = 0L;
-        }
-
-        @Override public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
-
-        private GroupDelete(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
-            this();
-            int mutable_bitField0_ = 0;
-            try {
-                boolean done = false;
-                while (!done) {
-                    int tag = input.readTag();
-                    switch (tag) {
-                        case 0:
-                            done = true;
-                            break;
-                        default: {
-                            if (!input.skipField(tag)) {
-                                done = true;
-                            }
-                            break;
-                        }
-                        case 10: {
-                            ProtoRequest.Request.Builder subBuilder = null;
-                            if (request_ != null) {
-                                subBuilder = request_.toBuilder();
-                            }
-                            request_ = input.readMessage(ProtoRequest.Request.parser(), extensionRegistry);
-                            if (subBuilder != null) {
-                                subBuilder.mergeFrom(request_);
-                                request_ = subBuilder.buildPartial();
-                            }
-
-                            break;
-                        }
-                        case 16: {
-
-                            roomId_ = input.readUInt64();
-                            break;
-                        }
-                    }
-                }
-            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                throw e.setUnfinishedMessage(this);
-            } catch (java.io.IOException e) {
-                throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-            } finally {
-                makeExtensionsImmutable();
-            }
-        }
-
-        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-            return ProtoGroupDelete.internal_static_proto_GroupDelete_descriptor;
-        }
-
-        protected FieldAccessorTable internalGetFieldAccessorTable() {
-            return ProtoGroupDelete.internal_static_proto_GroupDelete_fieldAccessorTable.ensureFieldAccessorsInitialized(GroupDelete.class, Builder.class);
-        }
-
-        public static final int REQUEST_FIELD_NUMBER = 1;
-        private ProtoRequest.Request request_;
-
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        public boolean hasRequest() {
-            return request_ != null;
-        }
-
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        public ProtoRequest.Request getRequest() {
-            return request_ == null ? ProtoRequest.Request.getDefaultInstance() : request_;
-        }
-
-        /**
-         * <code>optional .proto.Request request = 1;</code>
-         */
-        public ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
-            return getRequest();
-        }
-
-        public static final int ROOM_ID_FIELD_NUMBER = 2;
-        private long roomId_;
-
-        /**
-         * <code>optional uint64 room_id = 2;</code>
-         */
-        public long getRoomId() {
-            return roomId_;
-        }
-
-        private byte memoizedIsInitialized = -1;
-
-        public final boolean isInitialized() {
-            byte isInitialized = memoizedIsInitialized;
-            if (isInitialized == 1) return true;
-            if (isInitialized == 0) return false;
-
-            memoizedIsInitialized = 1;
-            return true;
-        }
-
-        public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-            if (request_ != null) {
-                output.writeMessage(1, getRequest());
-            }
-            if (roomId_ != 0L) {
-                output.writeUInt64(2, roomId_);
-            }
-        }
-
-        public int getSerializedSize() {
-            int size = memoizedSize;
-            if (size != -1) return size;
-
-            size = 0;
-            if (request_ != null) {
-                size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getRequest());
-            }
-            if (roomId_ != 0L) {
-                size += com.google.protobuf.CodedOutputStream.computeUInt64Size(2, roomId_);
-            }
-            memoizedSize = size;
-            return size;
-        }
-
-        private static final long serialVersionUID = 0L;
-
-        @Override public boolean equals(final Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (!(obj instanceof GroupDelete)) {
-                return super.equals(obj);
-            }
-            GroupDelete other = (GroupDelete) obj;
-
-            boolean result = true;
-            result = result && (hasRequest() == other.hasRequest());
-            if (hasRequest()) {
-                result = result && getRequest().equals(other.getRequest());
-            }
-            result = result && (getRoomId() == other.getRoomId());
-            return result;
-        }
-
-        @Override public int hashCode() {
-            if (memoizedHashCode != 0) {
-                return memoizedHashCode;
-            }
-            int hash = 41;
-            hash = (19 * hash) + getDescriptorForType().hashCode();
-            if (hasRequest()) {
-                hash = (37 * hash) + REQUEST_FIELD_NUMBER;
-                hash = (53 * hash) + getRequest().hashCode();
-            }
-            hash = (37 * hash) + ROOM_ID_FIELD_NUMBER;
-            hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getRoomId());
-            hash = (29 * hash) + unknownFields.hashCode();
-            memoizedHashCode = hash;
-            return hash;
-        }
-
-        public static GroupDelete parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-
-        public static GroupDelete parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-
-        public static GroupDelete parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-
-        public static GroupDelete parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-
-        public static GroupDelete parseFrom(java.io.InputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-        }
-
-        public static GroupDelete parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
-        }
-
-        public static GroupDelete parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
-        }
-
-        public static GroupDelete parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-
-        public static GroupDelete parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-        }
-
-        public static GroupDelete parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
-        }
-
-        public Builder newBuilderForType() {
-            return newBuilder();
-        }
-
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-
-        public static Builder newBuilder(GroupDelete prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
-
-        public Builder toBuilder() {
-            return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
-        }
-
-        @Override protected Builder newBuilderForType(BuilderParent parent) {
-            Builder builder = new Builder(parent);
-            return builder;
-        }
-
-        /**
-         * Protobuf type {@code proto.GroupDelete}
-         */
-        public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.GroupDelete)
-            GroupDeleteOrBuilder {
-            public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-                return ProtoGroupDelete.internal_static_proto_GroupDelete_descriptor;
-            }
+            com.iGap.proto.ProtoGroupDelete.GroupDeleteOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+      getDescriptor() {
+        return com.iGap.proto.ProtoGroupDelete.internal_static_proto_GroupDelete_descriptor;
+      }
 
-            protected FieldAccessorTable internalGetFieldAccessorTable() {
-                return ProtoGroupDelete.internal_static_proto_GroupDelete_fieldAccessorTable.ensureFieldAccessorsInitialized(GroupDelete.class, Builder.class);
-            }
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internalGetFieldAccessorTable() {
+        return com.iGap.proto.ProtoGroupDelete.internal_static_proto_GroupDelete_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                        com.iGap.proto.ProtoGroupDelete.GroupDelete.class, com.iGap.proto.ProtoGroupDelete.GroupDelete.Builder.class);
+      }
 
-            // Construct using com.iGap.proto.ProtoGroupDelete.GroupDelete.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
+      // Construct using com.iGap.proto.ProtoGroupDelete.GroupDelete.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
 
-            private Builder(BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
+      private Builder(
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
 
-            private void maybeForceBuilderInitialization() {
-                if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
-                }
-            }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
 
-            public Builder clear() {
-                super.clear();
-                if (requestBuilder_ == null) {
-                    request_ = null;
-                } else {
-                    request_ = null;
-                    requestBuilder_ = null;
-                }
-                roomId_ = 0L;
+      public Builder clear() {
+        super.clear();
+        if (requestBuilder_ == null) {
+          request_ = null;
+        } else {
+          request_ = null;
+          requestBuilder_ = null;
+        }
+        roomId_ = 0L;
 
-                return this;
-            }
+        return this;
+      }
 
-            public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-                return ProtoGroupDelete.internal_static_proto_GroupDelete_descriptor;
-            }
+      public com.google.protobuf.Descriptors.Descriptor
+      getDescriptorForType() {
+        return com.iGap.proto.ProtoGroupDelete.internal_static_proto_GroupDelete_descriptor;
+      }
 
-            public GroupDelete getDefaultInstanceForType() {
-                return GroupDelete.getDefaultInstance();
-            }
+      public com.iGap.proto.ProtoGroupDelete.GroupDelete getDefaultInstanceForType() {
+        return com.iGap.proto.ProtoGroupDelete.GroupDelete.getDefaultInstance();
+      }
 
-            public GroupDelete build() {
-                GroupDelete result = buildPartial();
-                if (!result.isInitialized()) {
-                    throw newUninitializedMessageException(result);
-                }
-                return result;
-            }
+      public com.iGap.proto.ProtoGroupDelete.GroupDelete build() {
+        com.iGap.proto.ProtoGroupDelete.GroupDelete result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
 
-            public GroupDelete buildPartial() {
-                GroupDelete result = new GroupDelete(this);
-                if (requestBuilder_ == null) {
-                    result.request_ = request_;
-                } else {
-                    result.request_ = requestBuilder_.build();
-                }
-                result.roomId_ = roomId_;
-                onBuilt();
-                return result;
-            }
+      public com.iGap.proto.ProtoGroupDelete.GroupDelete buildPartial() {
+        com.iGap.proto.ProtoGroupDelete.GroupDelete result = new com.iGap.proto.ProtoGroupDelete.GroupDelete(this);
+        if (requestBuilder_ == null) {
+          result.request_ = request_;
+        } else {
+          result.request_ = requestBuilder_.build();
+        }
+        result.roomId_ = roomId_;
+        onBuilt();
+        return result;
+      }
 
-            public Builder clone() {
-                return (Builder) super.clone();
-            }
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
 
-            public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
-                return (Builder) super.setField(field, value);
-            }
+      public Builder setField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return (Builder) super.setField(field, value);
+      }
 
-            public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
-                return (Builder) super.clearField(field);
-            }
+      public Builder clearField(
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
 
-            public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-                return (Builder) super.clearOneof(oneof);
-            }
+      public Builder clearOneof(
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
 
-            public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
-                return (Builder) super.setRepeatedField(field, index, value);
-            }
+      public Builder setRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
 
-            public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
-                return (Builder) super.addRepeatedField(field, value);
-            }
+      public Builder addRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
 
-            public Builder mergeFrom(com.google.protobuf.Message other) {
-                if (other instanceof GroupDelete) {
-                    return mergeFrom((GroupDelete) other);
-                } else {
-                    super.mergeFrom(other);
-                    return this;
-                }
-            }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.iGap.proto.ProtoGroupDelete.GroupDelete) {
+          return mergeFrom((com.iGap.proto.ProtoGroupDelete.GroupDelete) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
 
-            public Builder mergeFrom(GroupDelete other) {
-                if (other == GroupDelete.getDefaultInstance()) return this;
-                if (other.hasRequest()) {
-                    mergeRequest(other.getRequest());
-                }
-                if (other.getRoomId() != 0L) {
-                    setRoomId(other.getRoomId());
-                }
-                onChanged();
-                return this;
-            }
+      public Builder mergeFrom(com.iGap.proto.ProtoGroupDelete.GroupDelete other) {
+        if (other == com.iGap.proto.ProtoGroupDelete.GroupDelete.getDefaultInstance()) return this;
+        if (other.hasRequest()) {
+          mergeRequest(other.getRequest());
+        }
+        if (other.getRoomId() != 0L) {
+          setRoomId(other.getRoomId());
+        }
+        onChanged();
+        return this;
+      }
 
-            public final boolean isInitialized() {
-                return true;
-            }
+      public final boolean isInitialized() {
+        return true;
+      }
 
-            public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-                GroupDelete parsedMessage = null;
-                try {
-                    parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-                } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                    parsedMessage = (GroupDelete) e.getUnfinishedMessage();
-                    throw e.unwrapIOException();
-                } finally {
-                    if (parsedMessage != null) {
-                        mergeFrom(parsedMessage);
-                    }
-                }
-                return this;
-            }
+      public Builder mergeFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+        com.iGap.proto.ProtoGroupDelete.GroupDelete parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.iGap.proto.ProtoGroupDelete.GroupDelete) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
 
-            private ProtoRequest.Request request_ = null;
-            private com.google.protobuf.SingleFieldBuilderV3<ProtoRequest.Request, ProtoRequest.Request.Builder, ProtoRequest.RequestOrBuilder> requestBuilder_;
+      private com.iGap.proto.ProtoRequest.Request request_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
 
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public boolean hasRequest() {
-                return requestBuilder_ != null || request_ != null;
-            }
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public boolean hasRequest() {
+        return requestBuilder_ != null || request_ != null;
+      }
 
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public ProtoRequest.Request getRequest() {
-                if (requestBuilder_ == null) {
-                    return request_ == null ? ProtoRequest.Request.getDefaultInstance() : request_;
-                } else {
-                    return requestBuilder_.getMessage();
-                }
-            }
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public com.iGap.proto.ProtoRequest.Request getRequest() {
+        if (requestBuilder_ == null) {
+          return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+        } else {
+          return requestBuilder_.getMessage();
+        }
+      }
 
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public Builder setRequest(ProtoRequest.Request value) {
-                if (requestBuilder_ == null) {
-                    if (value == null) {
-                        throw new NullPointerException();
-                    }
-                    request_ = value;
-                    onChanged();
-                } else {
-                    requestBuilder_.setMessage(value);
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public Builder setRequest(ProtoRequest.Request.Builder builderForValue) {
-                if (requestBuilder_ == null) {
-                    request_ = builderForValue.build();
-                    onChanged();
-                } else {
-                    requestBuilder_.setMessage(builderForValue.build());
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public Builder mergeRequest(ProtoRequest.Request value) {
-                if (requestBuilder_ == null) {
-                    if (request_ != null) {
-                        request_ = ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
-                    } else {
-                        request_ = value;
-                    }
-                    onChanged();
-                } else {
-                    requestBuilder_.mergeFrom(value);
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public Builder clearRequest() {
-                if (requestBuilder_ == null) {
-                    request_ = null;
-                    onChanged();
-                } else {
-                    request_ = null;
-                    requestBuilder_ = null;
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public ProtoRequest.Request.Builder getRequestBuilder() {
-
-                onChanged();
-                return getRequestFieldBuilder().getBuilder();
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            public ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
-                if (requestBuilder_ != null) {
-                    return requestBuilder_.getMessageOrBuilder();
-                } else {
-                    return request_ == null ? ProtoRequest.Request.getDefaultInstance() : request_;
-                }
-            }
-
-            /**
-             * <code>optional .proto.Request request = 1;</code>
-             */
-            private com.google.protobuf.SingleFieldBuilderV3<ProtoRequest.Request, ProtoRequest.Request.Builder, ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
-                if (requestBuilder_ == null) {
-                    requestBuilder_ =
-                        new com.google.protobuf.SingleFieldBuilderV3<ProtoRequest.Request, ProtoRequest.Request.Builder, ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(),
-                            isClean());
-                    request_ = null;
-                }
-                return requestBuilder_;
-            }
-
-            private long roomId_;
-
-            /**
-             * <code>optional uint64 room_id = 2;</code>
-             */
-            public long getRoomId() {
-                return roomId_;
-            }
-
-            /**
-             * <code>optional uint64 room_id = 2;</code>
-             */
-            public Builder setRoomId(long value) {
-
-                roomId_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional uint64 room_id = 2;</code>
-             */
-            public Builder clearRoomId() {
-
-                roomId_ = 0L;
-                onChanged();
-                return this;
-            }
-
-            public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-            public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-            // @@protoc_insertion_point(builder_scope:proto.GroupDelete)
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public Builder setRequest(com.iGap.proto.ProtoRequest.Request value) {
+        if (requestBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          request_ = value;
+          onChanged();
+        } else {
+          requestBuilder_.setMessage(value);
         }
 
-        // @@protoc_insertion_point(class_scope:proto.GroupDelete)
-        private static final GroupDelete DEFAULT_INSTANCE;
+        return this;
+      }
 
-        static {
-            DEFAULT_INSTANCE = new GroupDelete();
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public Builder setRequest(
+              com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
+        if (requestBuilder_ == null) {
+          request_ = builderForValue.build();
+          onChanged();
+        } else {
+          requestBuilder_.setMessage(builderForValue.build());
         }
 
-        public static GroupDelete getDefaultInstance() {
-            return DEFAULT_INSTANCE;
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public Builder mergeRequest(com.iGap.proto.ProtoRequest.Request value) {
+        if (requestBuilder_ == null) {
+          if (request_ != null) {
+            request_ =
+                    com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+          } else {
+            request_ = value;
+          }
+          onChanged();
+        } else {
+          requestBuilder_.mergeFrom(value);
         }
 
-        private static final com.google.protobuf.Parser<GroupDelete> PARSER = new com.google.protobuf.AbstractParser<GroupDelete>() {
-            public GroupDelete parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-                return new GroupDelete(input, extensionRegistry);
-            }
-        };
+        return this;
+      }
 
-        public static com.google.protobuf.Parser<GroupDelete> parser() {
-            return PARSER;
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public Builder clearRequest() {
+        if (requestBuilder_ == null) {
+          request_ = null;
+          onChanged();
+        } else {
+          request_ = null;
+          requestBuilder_ = null;
         }
 
-        @Override public com.google.protobuf.Parser<GroupDelete> getParserForType() {
-            return PARSER;
-        }
+        return this;
+      }
 
-        public GroupDelete getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public com.iGap.proto.ProtoRequest.Request.Builder getRequestBuilder() {
+
+        onChanged();
+        return getRequestFieldBuilder().getBuilder();
+      }
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      public com.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
+        if (requestBuilder_ != null) {
+          return requestBuilder_.getMessageOrBuilder();
+        } else {
+          return request_ == null ?
+                  com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
+      }
+
+      /**
+       * <code>optional .proto.Request request = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>
+      getRequestFieldBuilder() {
+        if (requestBuilder_ == null) {
+          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+                  com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
+                  getRequest(),
+                  getParentForChildren(),
+                  isClean());
+          request_ = null;
+        }
+        return requestBuilder_;
+      }
+
+      private long roomId_;
+
+      /**
+       * <code>optional uint64 room_id = 2;</code>
+       */
+      public long getRoomId() {
+        return roomId_;
+      }
+
+      /**
+       * <code>optional uint64 room_id = 2;</code>
+       */
+      public Builder setRoomId(long value) {
+
+        roomId_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional uint64 room_id = 2;</code>
+       */
+      public Builder clearRoomId() {
+
+        roomId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      public final Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:proto.GroupDelete)
     }
 
-    public interface GroupDeleteResponseOrBuilder extends
-        // @@protoc_insertion_point(interface_extends:proto.GroupDeleteResponse)
-        com.google.protobuf.MessageOrBuilder {
+    // @@protoc_insertion_point(class_scope:proto.GroupDelete)
+    private static final com.iGap.proto.ProtoGroupDelete.GroupDelete DEFAULT_INSTANCE;
 
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        boolean hasResponse();
+    static {
+      DEFAULT_INSTANCE = new com.iGap.proto.ProtoGroupDelete.GroupDelete();
+    }
 
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        ProtoResponse.Response getResponse();
+    public static com.iGap.proto.ProtoGroupDelete.GroupDelete getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
 
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
+    private static final com.google.protobuf.Parser<GroupDelete>
+            PARSER = new com.google.protobuf.AbstractParser<GroupDelete>() {
+      public GroupDelete parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GroupDelete(input, extensionRegistry);
+      }
+    };
 
-        /**
-         * <code>optional uint64 room_id = 2;</code>
-         */
-        long getRoomId();
+    public static com.google.protobuf.Parser<GroupDelete> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GroupDelete> getParserForType() {
+      return PARSER;
+    }
+
+    public com.iGap.proto.ProtoGroupDelete.GroupDelete getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GroupDeleteResponseOrBuilder extends
+          // @@protoc_insertion_point(interface_extends:proto.GroupDeleteResponse)
+          com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    boolean hasResponse();
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    com.iGap.proto.ProtoResponse.Response getResponse();
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
+
+    /**
+     * <code>optional uint64 room_id = 2;</code>
+     */
+    long getRoomId();
+  }
+
+  /**
+   * Protobuf type {@code proto.GroupDeleteResponse}
+   */
+  public static final class GroupDeleteResponse extends
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:proto.GroupDeleteResponse)
+          GroupDeleteResponseOrBuilder {
+    // Use GroupDeleteResponse.newBuilder() to construct.
+    private GroupDeleteResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+
+    private GroupDeleteResponse() {
+      roomId_ = 0L;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+
+    private GroupDeleteResponse(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
+              if (response_ != null) {
+                subBuilder = response_.toBuilder();
+              }
+              response_ = input.readMessage(com.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(response_);
+                response_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 16: {
+
+              roomId_ = input.readUInt64();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+                e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+    getDescriptor() {
+      return com.iGap.proto.ProtoGroupDelete.internal_static_proto_GroupDeleteResponse_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    internalGetFieldAccessorTable() {
+      return com.iGap.proto.ProtoGroupDelete.internal_static_proto_GroupDeleteResponse_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                      com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse.class, com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse.Builder.class);
+    }
+
+    public static final int RESPONSE_FIELD_NUMBER = 1;
+    private com.iGap.proto.ProtoResponse.Response response_;
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    public boolean hasResponse() {
+      return response_ != null;
+    }
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    public com.iGap.proto.ProtoResponse.Response getResponse() {
+      return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+    }
+
+    /**
+     * <code>optional .proto.Response response = 1;</code>
+     */
+    public com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
+      return getResponse();
+    }
+
+    public static final int ROOM_ID_FIELD_NUMBER = 2;
+    private long roomId_;
+
+    /**
+     * <code>optional uint64 room_id = 2;</code>
+     */
+    public long getRoomId() {
+      return roomId_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+            throws java.io.IOException {
+      if (response_ != null) {
+        output.writeMessage(1, getResponse());
+      }
+      if (roomId_ != 0L) {
+        output.writeUInt64(2, roomId_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (response_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeMessageSize(1, getResponse());
+      }
+      if (roomId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeUInt64Size(2, roomId_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse)) {
+        return super.equals(obj);
+      }
+      com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse other = (com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse) obj;
+
+      boolean result = true;
+      result = result && (hasResponse() == other.hasResponse());
+      if (hasResponse()) {
+        result = result && getResponse()
+                .equals(other.getResponse());
+      }
+      result = result && (getRoomId()
+              == other.getRoomId());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasResponse()) {
+        hash = (37 * hash) + RESPONSE_FIELD_NUMBER;
+        hash = (53 * hash) + getResponse().hashCode();
+      }
+      hash = (37 * hash) + ROOM_ID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+              getRoomId());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parseFrom(
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parseFrom(
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parseFrom(byte[] data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parseFrom(
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parseFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parseFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parseDelimitedFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parseDelimitedFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parseFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+              ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
     }
 
     /**
      * Protobuf type {@code proto.GroupDeleteResponse}
      */
-    public static final class GroupDeleteResponse extends com.google.protobuf.GeneratedMessageV3 implements
-        // @@protoc_insertion_point(message_implements:proto.GroupDeleteResponse)
-        GroupDeleteResponseOrBuilder {
-        // Use GroupDeleteResponse.newBuilder() to construct.
-        private GroupDeleteResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-            super(builder);
-        }
-
-        private GroupDeleteResponse() {
-            roomId_ = 0L;
-        }
-
-        @Override public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
-
-        private GroupDeleteResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
-            this();
-            int mutable_bitField0_ = 0;
-            try {
-                boolean done = false;
-                while (!done) {
-                    int tag = input.readTag();
-                    switch (tag) {
-                        case 0:
-                            done = true;
-                            break;
-                        default: {
-                            if (!input.skipField(tag)) {
-                                done = true;
-                            }
-                            break;
-                        }
-                        case 10: {
-                            ProtoResponse.Response.Builder subBuilder = null;
-                            if (response_ != null) {
-                                subBuilder = response_.toBuilder();
-                            }
-                            response_ = input.readMessage(ProtoResponse.Response.parser(), extensionRegistry);
-                            if (subBuilder != null) {
-                                subBuilder.mergeFrom(response_);
-                                response_ = subBuilder.buildPartial();
-                            }
-
-                            break;
-                        }
-                        case 16: {
-
-                            roomId_ = input.readUInt64();
-                            break;
-                        }
-                    }
-                }
-            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                throw e.setUnfinishedMessage(this);
-            } catch (java.io.IOException e) {
-                throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
-            } finally {
-                makeExtensionsImmutable();
-            }
-        }
-
-        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-            return ProtoGroupDelete.internal_static_proto_GroupDeleteResponse_descriptor;
-        }
-
-        protected FieldAccessorTable internalGetFieldAccessorTable() {
-            return ProtoGroupDelete.internal_static_proto_GroupDeleteResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(GroupDeleteResponse.class, Builder.class);
-        }
-
-        public static final int RESPONSE_FIELD_NUMBER = 1;
-        private ProtoResponse.Response response_;
-
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        public boolean hasResponse() {
-            return response_ != null;
-        }
-
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        public ProtoResponse.Response getResponse() {
-            return response_ == null ? ProtoResponse.Response.getDefaultInstance() : response_;
-        }
-
-        /**
-         * <code>optional .proto.Response response = 1;</code>
-         */
-        public ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
-            return getResponse();
-        }
-
-        public static final int ROOM_ID_FIELD_NUMBER = 2;
-        private long roomId_;
-
-        /**
-         * <code>optional uint64 room_id = 2;</code>
-         */
-        public long getRoomId() {
-            return roomId_;
-        }
-
-        private byte memoizedIsInitialized = -1;
-
-        public final boolean isInitialized() {
-            byte isInitialized = memoizedIsInitialized;
-            if (isInitialized == 1) return true;
-            if (isInitialized == 0) return false;
-
-            memoizedIsInitialized = 1;
-            return true;
-        }
-
-        public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-            if (response_ != null) {
-                output.writeMessage(1, getResponse());
-            }
-            if (roomId_ != 0L) {
-                output.writeUInt64(2, roomId_);
-            }
-        }
-
-        public int getSerializedSize() {
-            int size = memoizedSize;
-            if (size != -1) return size;
-
-            size = 0;
-            if (response_ != null) {
-                size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getResponse());
-            }
-            if (roomId_ != 0L) {
-                size += com.google.protobuf.CodedOutputStream.computeUInt64Size(2, roomId_);
-            }
-            memoizedSize = size;
-            return size;
-        }
-
-        private static final long serialVersionUID = 0L;
-
-        @Override public boolean equals(final Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (!(obj instanceof GroupDeleteResponse)) {
-                return super.equals(obj);
-            }
-            GroupDeleteResponse other = (GroupDeleteResponse) obj;
-
-            boolean result = true;
-            result = result && (hasResponse() == other.hasResponse());
-            if (hasResponse()) {
-                result = result && getResponse().equals(other.getResponse());
-            }
-            result = result && (getRoomId() == other.getRoomId());
-            return result;
-        }
-
-        @Override public int hashCode() {
-            if (memoizedHashCode != 0) {
-                return memoizedHashCode;
-            }
-            int hash = 41;
-            hash = (19 * hash) + getDescriptorForType().hashCode();
-            if (hasResponse()) {
-                hash = (37 * hash) + RESPONSE_FIELD_NUMBER;
-                hash = (53 * hash) + getResponse().hashCode();
-            }
-            hash = (37 * hash) + ROOM_ID_FIELD_NUMBER;
-            hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getRoomId());
-            hash = (29 * hash) + unknownFields.hashCode();
-            memoizedHashCode = hash;
-            return hash;
-        }
-
-        public static GroupDeleteResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-
-        public static GroupDeleteResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-
-        public static GroupDeleteResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-
-        public static GroupDeleteResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-
-        public static GroupDeleteResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-        }
-
-        public static GroupDeleteResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
-        }
-
-        public static GroupDeleteResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
-        }
-
-        public static GroupDeleteResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-
-        public static GroupDeleteResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
-        }
-
-        public static GroupDeleteResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
-        }
-
-        public Builder newBuilderForType() {
-            return newBuilder();
-        }
-
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-
-        public static Builder newBuilder(GroupDeleteResponse prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
-
-        public Builder toBuilder() {
-            return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
-        }
-
-        @Override protected Builder newBuilderForType(BuilderParent parent) {
-            Builder builder = new Builder(parent);
-            return builder;
-        }
-
-        /**
-         * Protobuf type {@code proto.GroupDeleteResponse}
-         */
-        public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.GroupDeleteResponse)
-            GroupDeleteResponseOrBuilder {
-            public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-                return ProtoGroupDelete.internal_static_proto_GroupDeleteResponse_descriptor;
-            }
+            com.iGap.proto.ProtoGroupDelete.GroupDeleteResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+      getDescriptor() {
+        return com.iGap.proto.ProtoGroupDelete.internal_static_proto_GroupDeleteResponse_descriptor;
+      }
 
-            protected FieldAccessorTable internalGetFieldAccessorTable() {
-                return ProtoGroupDelete.internal_static_proto_GroupDeleteResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(GroupDeleteResponse.class, Builder.class);
-            }
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internalGetFieldAccessorTable() {
+        return com.iGap.proto.ProtoGroupDelete.internal_static_proto_GroupDeleteResponse_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                        com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse.class, com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse.Builder.class);
+      }
 
-            // Construct using com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
+      // Construct using com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
 
-            private Builder(BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
+      private Builder(
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
 
-            private void maybeForceBuilderInitialization() {
-                if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
-                }
-            }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
 
-            public Builder clear() {
-                super.clear();
-                if (responseBuilder_ == null) {
-                    response_ = null;
-                } else {
-                    response_ = null;
-                    responseBuilder_ = null;
-                }
-                roomId_ = 0L;
+      public Builder clear() {
+        super.clear();
+        if (responseBuilder_ == null) {
+          response_ = null;
+        } else {
+          response_ = null;
+          responseBuilder_ = null;
+        }
+        roomId_ = 0L;
 
-                return this;
-            }
+        return this;
+      }
 
-            public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-                return ProtoGroupDelete.internal_static_proto_GroupDeleteResponse_descriptor;
-            }
+      public com.google.protobuf.Descriptors.Descriptor
+      getDescriptorForType() {
+        return com.iGap.proto.ProtoGroupDelete.internal_static_proto_GroupDeleteResponse_descriptor;
+      }
 
-            public GroupDeleteResponse getDefaultInstanceForType() {
-                return GroupDeleteResponse.getDefaultInstance();
-            }
+      public com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse getDefaultInstanceForType() {
+        return com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse.getDefaultInstance();
+      }
 
-            public GroupDeleteResponse build() {
-                GroupDeleteResponse result = buildPartial();
-                if (!result.isInitialized()) {
-                    throw newUninitializedMessageException(result);
-                }
-                return result;
-            }
+      public com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse build() {
+        com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
 
-            public GroupDeleteResponse buildPartial() {
-                GroupDeleteResponse result = new GroupDeleteResponse(this);
-                if (responseBuilder_ == null) {
-                    result.response_ = response_;
-                } else {
-                    result.response_ = responseBuilder_.build();
-                }
-                result.roomId_ = roomId_;
-                onBuilt();
-                return result;
-            }
+      public com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse buildPartial() {
+        com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse result = new com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse(this);
+        if (responseBuilder_ == null) {
+          result.response_ = response_;
+        } else {
+          result.response_ = responseBuilder_.build();
+        }
+        result.roomId_ = roomId_;
+        onBuilt();
+        return result;
+      }
 
-            public Builder clone() {
-                return (Builder) super.clone();
-            }
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
 
-            public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
-                return (Builder) super.setField(field, value);
-            }
+      public Builder setField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return (Builder) super.setField(field, value);
+      }
 
-            public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
-                return (Builder) super.clearField(field);
-            }
+      public Builder clearField(
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
 
-            public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-                return (Builder) super.clearOneof(oneof);
-            }
+      public Builder clearOneof(
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
 
-            public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
-                return (Builder) super.setRepeatedField(field, index, value);
-            }
+      public Builder setRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
 
-            public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
-                return (Builder) super.addRepeatedField(field, value);
-            }
+      public Builder addRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
 
-            public Builder mergeFrom(com.google.protobuf.Message other) {
-                if (other instanceof GroupDeleteResponse) {
-                    return mergeFrom((GroupDeleteResponse) other);
-                } else {
-                    super.mergeFrom(other);
-                    return this;
-                }
-            }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse) {
+          return mergeFrom((com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
 
-            public Builder mergeFrom(GroupDeleteResponse other) {
-                if (other == GroupDeleteResponse.getDefaultInstance()) return this;
-                if (other.hasResponse()) {
-                    mergeResponse(other.getResponse());
-                }
-                if (other.getRoomId() != 0L) {
-                    setRoomId(other.getRoomId());
-                }
-                onChanged();
-                return this;
-            }
+      public Builder mergeFrom(com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse other) {
+        if (other == com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse.getDefaultInstance())
+          return this;
+        if (other.hasResponse()) {
+          mergeResponse(other.getResponse());
+        }
+        if (other.getRoomId() != 0L) {
+          setRoomId(other.getRoomId());
+        }
+        onChanged();
+        return this;
+      }
 
-            public final boolean isInitialized() {
-                return true;
-            }
+      public final boolean isInitialized() {
+        return true;
+      }
 
-            public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-                GroupDeleteResponse parsedMessage = null;
-                try {
-                    parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-                } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                    parsedMessage = (GroupDeleteResponse) e.getUnfinishedMessage();
-                    throw e.unwrapIOException();
-                } finally {
-                    if (parsedMessage != null) {
-                        mergeFrom(parsedMessage);
-                    }
-                }
-                return this;
-            }
+      public Builder mergeFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+        com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
 
-            private ProtoResponse.Response response_ = null;
-            private com.google.protobuf.SingleFieldBuilderV3<ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder> responseBuilder_;
+      private com.iGap.proto.ProtoResponse.Response response_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
 
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public boolean hasResponse() {
-                return responseBuilder_ != null || response_ != null;
-            }
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public boolean hasResponse() {
+        return responseBuilder_ != null || response_ != null;
+      }
 
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public ProtoResponse.Response getResponse() {
-                if (responseBuilder_ == null) {
-                    return response_ == null ? ProtoResponse.Response.getDefaultInstance() : response_;
-                } else {
-                    return responseBuilder_.getMessage();
-                }
-            }
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public com.iGap.proto.ProtoResponse.Response getResponse() {
+        if (responseBuilder_ == null) {
+          return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+        } else {
+          return responseBuilder_.getMessage();
+        }
+      }
 
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public Builder setResponse(ProtoResponse.Response value) {
-                if (responseBuilder_ == null) {
-                    if (value == null) {
-                        throw new NullPointerException();
-                    }
-                    response_ = value;
-                    onChanged();
-                } else {
-                    responseBuilder_.setMessage(value);
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public Builder setResponse(ProtoResponse.Response.Builder builderForValue) {
-                if (responseBuilder_ == null) {
-                    response_ = builderForValue.build();
-                    onChanged();
-                } else {
-                    responseBuilder_.setMessage(builderForValue.build());
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public Builder mergeResponse(ProtoResponse.Response value) {
-                if (responseBuilder_ == null) {
-                    if (response_ != null) {
-                        response_ = ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
-                    } else {
-                        response_ = value;
-                    }
-                    onChanged();
-                } else {
-                    responseBuilder_.mergeFrom(value);
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public Builder clearResponse() {
-                if (responseBuilder_ == null) {
-                    response_ = null;
-                    onChanged();
-                } else {
-                    response_ = null;
-                    responseBuilder_ = null;
-                }
-
-                return this;
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public ProtoResponse.Response.Builder getResponseBuilder() {
-
-                onChanged();
-                return getResponseFieldBuilder().getBuilder();
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            public ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
-                if (responseBuilder_ != null) {
-                    return responseBuilder_.getMessageOrBuilder();
-                } else {
-                    return response_ == null ? ProtoResponse.Response.getDefaultInstance() : response_;
-                }
-            }
-
-            /**
-             * <code>optional .proto.Response response = 1;</code>
-             */
-            private com.google.protobuf.SingleFieldBuilderV3<ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
-                if (responseBuilder_ == null) {
-                    responseBuilder_ =
-                        new com.google.protobuf.SingleFieldBuilderV3<ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(),
-                            isClean());
-                    response_ = null;
-                }
-                return responseBuilder_;
-            }
-
-            private long roomId_;
-
-            /**
-             * <code>optional uint64 room_id = 2;</code>
-             */
-            public long getRoomId() {
-                return roomId_;
-            }
-
-            /**
-             * <code>optional uint64 room_id = 2;</code>
-             */
-            public Builder setRoomId(long value) {
-
-                roomId_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <code>optional uint64 room_id = 2;</code>
-             */
-            public Builder clearRoomId() {
-
-                roomId_ = 0L;
-                onChanged();
-                return this;
-            }
-
-            public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-            public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-            // @@protoc_insertion_point(builder_scope:proto.GroupDeleteResponse)
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public Builder setResponse(com.iGap.proto.ProtoResponse.Response value) {
+        if (responseBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          response_ = value;
+          onChanged();
+        } else {
+          responseBuilder_.setMessage(value);
         }
 
-        // @@protoc_insertion_point(class_scope:proto.GroupDeleteResponse)
-        private static final GroupDeleteResponse DEFAULT_INSTANCE;
+        return this;
+      }
 
-        static {
-            DEFAULT_INSTANCE = new GroupDeleteResponse();
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public Builder setResponse(
+              com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
+        if (responseBuilder_ == null) {
+          response_ = builderForValue.build();
+          onChanged();
+        } else {
+          responseBuilder_.setMessage(builderForValue.build());
         }
 
-        public static GroupDeleteResponse getDefaultInstance() {
-            return DEFAULT_INSTANCE;
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public Builder mergeResponse(com.iGap.proto.ProtoResponse.Response value) {
+        if (responseBuilder_ == null) {
+          if (response_ != null) {
+            response_ =
+                    com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+          } else {
+            response_ = value;
+          }
+          onChanged();
+        } else {
+          responseBuilder_.mergeFrom(value);
         }
 
-        private static final com.google.protobuf.Parser<GroupDeleteResponse> PARSER = new com.google.protobuf.AbstractParser<GroupDeleteResponse>() {
-            public GroupDeleteResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-                return new GroupDeleteResponse(input, extensionRegistry);
-            }
-        };
+        return this;
+      }
 
-        public static com.google.protobuf.Parser<GroupDeleteResponse> parser() {
-            return PARSER;
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public Builder clearResponse() {
+        if (responseBuilder_ == null) {
+          response_ = null;
+          onChanged();
+        } else {
+          response_ = null;
+          responseBuilder_ = null;
         }
 
-        @Override public com.google.protobuf.Parser<GroupDeleteResponse> getParserForType() {
-            return PARSER;
-        }
+        return this;
+      }
 
-        public GroupDeleteResponse getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public com.iGap.proto.ProtoResponse.Response.Builder getResponseBuilder() {
+
+        onChanged();
+        return getResponseFieldBuilder().getBuilder();
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      public com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
+        if (responseBuilder_ != null) {
+          return responseBuilder_.getMessageOrBuilder();
+        } else {
+          return response_ == null ?
+                  com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
+      }
+
+      /**
+       * <code>optional .proto.Response response = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>
+      getResponseFieldBuilder() {
+        if (responseBuilder_ == null) {
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+                  com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+                  getResponse(),
+                  getParentForChildren(),
+                  isClean());
+          response_ = null;
+        }
+        return responseBuilder_;
+      }
+
+      private long roomId_;
+
+      /**
+       * <code>optional uint64 room_id = 2;</code>
+       */
+      public long getRoomId() {
+        return roomId_;
+      }
+
+      /**
+       * <code>optional uint64 room_id = 2;</code>
+       */
+      public Builder setRoomId(long value) {
+
+        roomId_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional uint64 room_id = 2;</code>
+       */
+      public Builder clearRoomId() {
+
+        roomId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      public final Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:proto.GroupDeleteResponse)
     }
 
-    private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_GroupDelete_descriptor;
-    private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_GroupDelete_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_GroupDeleteResponse_descriptor;
-    private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_GroupDeleteResponse_fieldAccessorTable;
-
-    public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
-        return descriptor;
-    }
-
-    private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+    // @@protoc_insertion_point(class_scope:proto.GroupDeleteResponse)
+    private static final com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse DEFAULT_INSTANCE;
 
     static {
-        String[] descriptorData = {
-            "\n\021GroupDelete.proto\022\005proto\032\rRequest.prot" +
-                "o\032\016Response.proto\"?\n\013GroupDelete\022\037\n\007requ" +
-                "est\030\001 \001(\0132\016.proto.Request\022\017\n\007room_id\030\002 \001" +
-                "(\004\"I\n\023GroupDeleteResponse\022!\n\010response\030\001 " +
-                "\001(\0132\017.proto.Response\022\017\n\007room_id\030\002 \001(\004B\"\n" +
-                "\016com.iGap.protoB\020ProtoGroupDeleteb\006proto" +
-                "3"
-        };
-        com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-            public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
-                descriptor = root;
-                return null;
-            }
-        };
-        com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[] {
-            ProtoRequest.getDescriptor(), ProtoResponse.getDescriptor(),
-        }, assigner);
-        internal_static_proto_GroupDelete_descriptor = getDescriptor().getMessageTypes().get(0);
-        internal_static_proto_GroupDelete_fieldAccessorTable =
-            new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_GroupDelete_descriptor, new String[] { "Request", "RoomId", });
-        internal_static_proto_GroupDeleteResponse_descriptor = getDescriptor().getMessageTypes().get(1);
-        internal_static_proto_GroupDeleteResponse_fieldAccessorTable =
-            new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_GroupDeleteResponse_descriptor, new String[] { "Response", "RoomId", });
-        ProtoRequest.getDescriptor();
-        ProtoResponse.getDescriptor();
+      DEFAULT_INSTANCE = new com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse();
     }
 
-    // @@protoc_insertion_point(outer_class_scope)
+    public static com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GroupDeleteResponse>
+            PARSER = new com.google.protobuf.AbstractParser<GroupDeleteResponse>() {
+      public GroupDeleteResponse parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GroupDeleteResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GroupDeleteResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GroupDeleteResponse> getParserForType() {
+      return PARSER;
+    }
+
+    public com.iGap.proto.ProtoGroupDelete.GroupDeleteResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  private static final com.google.protobuf.Descriptors.Descriptor
+          internal_static_proto_GroupDelete_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_proto_GroupDelete_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+          internal_static_proto_GroupDeleteResponse_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_proto_GroupDeleteResponse_fieldAccessorTable;
+
+  public static com.google.protobuf.Descriptors.FileDescriptor
+  getDescriptor() {
+    return descriptor;
+  }
+
+  private static com.google.protobuf.Descriptors.FileDescriptor
+          descriptor;
+
+  static {
+    java.lang.String[] descriptorData = {
+            "\n\021GroupDelete.proto\022\005proto\032\rRequest.prot" +
+                    "o\032\016Response.proto\"?\n\013GroupDelete\022\037\n\007requ" +
+                    "est\030\001 \001(\0132\016.proto.Request\022\017\n\007room_id\030\002 \001" +
+                    "(\004\"I\n\023GroupDeleteResponse\022!\n\010response\030\001 " +
+                    "\001(\0132\017.proto.Response\022\017\n\007room_id\030\002 \001(\004B\"\n" +
+                    "\016com.iGap.protoB\020ProtoGroupDeleteb\006proto" +
+                    "3"
+    };
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
+            new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+              public com.google.protobuf.ExtensionRegistry assignDescriptors(
+                      com.google.protobuf.Descriptors.FileDescriptor root) {
+                descriptor = root;
+                return null;
+              }
+            };
+    com.google.protobuf.Descriptors.FileDescriptor
+            .internalBuildGeneratedFileFrom(descriptorData,
+                    new com.google.protobuf.Descriptors.FileDescriptor[]{
+                            com.iGap.proto.ProtoRequest.getDescriptor(),
+                            com.iGap.proto.ProtoResponse.getDescriptor(),
+                    }, assigner);
+    internal_static_proto_GroupDelete_descriptor =
+            getDescriptor().getMessageTypes().get(0);
+    internal_static_proto_GroupDelete_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_proto_GroupDelete_descriptor,
+            new java.lang.String[]{"Request", "RoomId",});
+    internal_static_proto_GroupDeleteResponse_descriptor =
+            getDescriptor().getMessageTypes().get(1);
+    internal_static_proto_GroupDeleteResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_GroupDeleteResponse_descriptor,
+        new java.lang.String[] { "Response", "RoomId", });
+    com.iGap.proto.ProtoRequest.getDescriptor();
+    com.iGap.proto.ProtoResponse.getDescriptor();
+  }
+
+  // @@protoc_insertion_point(outer_class_scope)
 }

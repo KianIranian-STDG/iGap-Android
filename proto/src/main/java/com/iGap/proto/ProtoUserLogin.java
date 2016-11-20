@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoUserLogin {
   private ProtoUserLogin() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoUserLogin {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface UserLoginOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.UserLogin)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoUserLogin {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -40,7 +36,6 @@ public final class ProtoUserLogin {
      * <code>optional string token = 2;</code>
      */
     java.lang.String getToken();
-
     /**
      * <code>optional string token = 2;</code>
      */
@@ -51,7 +46,6 @@ public final class ProtoUserLogin {
      * <code>optional string app_name = 3;</code>
      */
     java.lang.String getAppName();
-
     /**
      * <code>optional string app_name = 3;</code>
      */
@@ -72,7 +66,6 @@ public final class ProtoUserLogin {
      * <code>optional string app_version = 6;</code>
      */
     java.lang.String getAppVersion();
-
     /**
      * <code>optional string app_version = 6;</code>
      */
@@ -83,7 +76,6 @@ public final class ProtoUserLogin {
      * <code>optional .proto.Platform platform = 7;</code>
      */
     int getPlatformValue();
-
     /**
      * <code>optional .proto.Platform platform = 7;</code>
      */
@@ -93,7 +85,6 @@ public final class ProtoUserLogin {
      * <code>optional string platform_version = 8;</code>
      */
     java.lang.String getPlatformVersion();
-
     /**
      * <code>optional string platform_version = 8;</code>
      */
@@ -104,7 +95,6 @@ public final class ProtoUserLogin {
      * <code>optional .proto.Device device = 9;</code>
      */
     int getDeviceValue();
-
     /**
      * <code>optional .proto.Device device = 9;</code>
      */
@@ -114,7 +104,6 @@ public final class ProtoUserLogin {
      * <code>optional string device_name = 10;</code>
      */
     java.lang.String getDeviceName();
-
     /**
      * <code>optional string device_name = 10;</code>
      */
@@ -125,13 +114,11 @@ public final class ProtoUserLogin {
      * <code>optional .proto.Language language = 11;</code>
      */
     int getLanguageValue();
-
     /**
      * <code>optional .proto.Language language = 11;</code>
      */
     com.iGap.proto.ProtoGlobal.Language getLanguage();
   }
-
   /**
    * Protobuf type {@code proto.UserLogin}
    */
@@ -143,7 +130,6 @@ public final class ProtoUserLogin {
     private UserLogin(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserLogin() {
       token_ = "";
       appName_ = "";
@@ -162,7 +148,6 @@ public final class ProtoUserLogin {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserLogin(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -265,7 +250,6 @@ public final class ProtoUserLogin {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserLogin.internal_static_proto_UserLogin_descriptor;
@@ -280,21 +264,18 @@ public final class ProtoUserLogin {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -304,7 +285,6 @@ public final class ProtoUserLogin {
 
     public static final int TOKEN_FIELD_NUMBER = 2;
     private volatile java.lang.Object token_;
-
     /**
      * <code>optional string token = 2;</code>
      */
@@ -320,7 +300,6 @@ public final class ProtoUserLogin {
         return s;
       }
     }
-
     /**
      * <code>optional string token = 2;</code>
      */
@@ -340,7 +319,6 @@ public final class ProtoUserLogin {
 
     public static final int APP_NAME_FIELD_NUMBER = 3;
     private volatile java.lang.Object appName_;
-
     /**
      * <code>optional string app_name = 3;</code>
      */
@@ -356,7 +334,6 @@ public final class ProtoUserLogin {
         return s;
       }
     }
-
     /**
      * <code>optional string app_name = 3;</code>
      */
@@ -376,7 +353,6 @@ public final class ProtoUserLogin {
 
     public static final int APP_ID_FIELD_NUMBER = 4;
     private int appId_;
-
     /**
      * <code>optional uint32 app_id = 4;</code>
      */
@@ -386,7 +362,6 @@ public final class ProtoUserLogin {
 
     public static final int APP_BUILD_VERSION_FIELD_NUMBER = 5;
     private int appBuildVersion_;
-
     /**
      * <code>optional uint32 app_build_version = 5;</code>
      */
@@ -396,7 +371,6 @@ public final class ProtoUserLogin {
 
     public static final int APP_VERSION_FIELD_NUMBER = 6;
     private volatile java.lang.Object appVersion_;
-
     /**
      * <code>optional string app_version = 6;</code>
      */
@@ -412,7 +386,6 @@ public final class ProtoUserLogin {
         return s;
       }
     }
-
     /**
      * <code>optional string app_version = 6;</code>
      */
@@ -432,14 +405,12 @@ public final class ProtoUserLogin {
 
     public static final int PLATFORM_FIELD_NUMBER = 7;
     private int platform_;
-
     /**
      * <code>optional .proto.Platform platform = 7;</code>
      */
     public int getPlatformValue() {
       return platform_;
     }
-
     /**
      * <code>optional .proto.Platform platform = 7;</code>
      */
@@ -450,7 +421,6 @@ public final class ProtoUserLogin {
 
     public static final int PLATFORM_VERSION_FIELD_NUMBER = 8;
     private volatile java.lang.Object platformVersion_;
-
     /**
      * <code>optional string platform_version = 8;</code>
      */
@@ -466,7 +436,6 @@ public final class ProtoUserLogin {
         return s;
       }
     }
-
     /**
      * <code>optional string platform_version = 8;</code>
      */
@@ -486,14 +455,12 @@ public final class ProtoUserLogin {
 
     public static final int DEVICE_FIELD_NUMBER = 9;
     private int device_;
-
     /**
      * <code>optional .proto.Device device = 9;</code>
      */
     public int getDeviceValue() {
       return device_;
     }
-
     /**
      * <code>optional .proto.Device device = 9;</code>
      */
@@ -504,7 +471,6 @@ public final class ProtoUserLogin {
 
     public static final int DEVICE_NAME_FIELD_NUMBER = 10;
     private volatile java.lang.Object deviceName_;
-
     /**
      * <code>optional string device_name = 10;</code>
      */
@@ -520,7 +486,6 @@ public final class ProtoUserLogin {
         return s;
       }
     }
-
     /**
      * <code>optional string device_name = 10;</code>
      */
@@ -540,14 +505,12 @@ public final class ProtoUserLogin {
 
     public static final int LANGUAGE_FIELD_NUMBER = 11;
     private int language_;
-
     /**
      * <code>optional .proto.Language language = 11;</code>
      */
     public int getLanguageValue() {
       return language_;
     }
-
     /**
      * <code>optional .proto.Language language = 11;</code>
      */
@@ -557,7 +520,6 @@ public final class ProtoUserLogin {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -653,7 +615,6 @@ public final class ProtoUserLogin {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -731,32 +692,27 @@ public final class ProtoUserLogin {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -764,13 +720,11 @@ public final class ProtoUserLogin {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -778,14 +732,12 @@ public final class ProtoUserLogin {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -797,15 +749,12 @@ public final class ProtoUserLogin {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserLogin.UserLogin prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -817,7 +766,6 @@ public final class ProtoUserLogin {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserLogin}
      */
@@ -847,13 +795,11 @@ public final class ProtoUserLogin {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -926,35 +872,29 @@ public final class ProtoUserLogin {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserLogin.UserLogin) {
           return mergeFrom((com.iGap.proto.ProtoUserLogin.UserLogin) other);
@@ -1033,14 +973,12 @@ public final class ProtoUserLogin {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1051,7 +989,6 @@ public final class ProtoUserLogin {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1068,7 +1005,6 @@ public final class ProtoUserLogin {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1083,7 +1019,6 @@ public final class ProtoUserLogin {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1102,7 +1037,6 @@ public final class ProtoUserLogin {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1117,7 +1051,6 @@ public final class ProtoUserLogin {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1126,7 +1059,6 @@ public final class ProtoUserLogin {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1138,7 +1070,6 @@ public final class ProtoUserLogin {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -1157,7 +1088,6 @@ public final class ProtoUserLogin {
       }
 
       private java.lang.Object token_ = "";
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -1173,7 +1103,6 @@ public final class ProtoUserLogin {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -1190,7 +1119,6 @@ public final class ProtoUserLogin {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -1199,12 +1127,11 @@ public final class ProtoUserLogin {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         token_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -1214,7 +1141,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -1224,14 +1150,13 @@ public final class ProtoUserLogin {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         token_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object appName_ = "";
-
       /**
        * <code>optional string app_name = 3;</code>
        */
@@ -1247,7 +1172,6 @@ public final class ProtoUserLogin {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string app_name = 3;</code>
        */
@@ -1264,7 +1188,6 @@ public final class ProtoUserLogin {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string app_name = 3;</code>
        */
@@ -1273,12 +1196,11 @@ public final class ProtoUserLogin {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         appName_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string app_name = 3;</code>
        */
@@ -1288,7 +1210,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string app_name = 3;</code>
        */
@@ -1298,21 +1219,19 @@ public final class ProtoUserLogin {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         appName_ = value;
         onChanged();
         return this;
       }
 
       private int appId_;
-
       /**
        * <code>optional uint32 app_id = 4;</code>
        */
       public int getAppId() {
         return appId_;
       }
-
       /**
        * <code>optional uint32 app_id = 4;</code>
        */
@@ -1322,7 +1241,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint32 app_id = 4;</code>
        */
@@ -1334,14 +1252,12 @@ public final class ProtoUserLogin {
       }
 
       private int appBuildVersion_;
-
       /**
        * <code>optional uint32 app_build_version = 5;</code>
        */
       public int getAppBuildVersion() {
         return appBuildVersion_;
       }
-
       /**
        * <code>optional uint32 app_build_version = 5;</code>
        */
@@ -1351,7 +1267,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint32 app_build_version = 5;</code>
        */
@@ -1363,7 +1278,6 @@ public final class ProtoUserLogin {
       }
 
       private java.lang.Object appVersion_ = "";
-
       /**
        * <code>optional string app_version = 6;</code>
        */
@@ -1379,7 +1293,6 @@ public final class ProtoUserLogin {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string app_version = 6;</code>
        */
@@ -1396,7 +1309,6 @@ public final class ProtoUserLogin {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string app_version = 6;</code>
        */
@@ -1405,12 +1317,11 @@ public final class ProtoUserLogin {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         appVersion_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string app_version = 6;</code>
        */
@@ -1420,7 +1331,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string app_version = 6;</code>
        */
@@ -1430,21 +1340,19 @@ public final class ProtoUserLogin {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         appVersion_ = value;
         onChanged();
         return this;
       }
 
       private int platform_ = 0;
-
       /**
        * <code>optional .proto.Platform platform = 7;</code>
        */
       public int getPlatformValue() {
         return platform_;
       }
-
       /**
        * <code>optional .proto.Platform platform = 7;</code>
        */
@@ -1453,7 +1361,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.Platform platform = 7;</code>
        */
@@ -1461,7 +1368,6 @@ public final class ProtoUserLogin {
         com.iGap.proto.ProtoGlobal.Platform result = com.iGap.proto.ProtoGlobal.Platform.valueOf(platform_);
         return result == null ? com.iGap.proto.ProtoGlobal.Platform.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.Platform platform = 7;</code>
        */
@@ -1474,7 +1380,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.Platform platform = 7;</code>
        */
@@ -1486,7 +1391,6 @@ public final class ProtoUserLogin {
       }
 
       private java.lang.Object platformVersion_ = "";
-
       /**
        * <code>optional string platform_version = 8;</code>
        */
@@ -1502,7 +1406,6 @@ public final class ProtoUserLogin {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string platform_version = 8;</code>
        */
@@ -1519,7 +1422,6 @@ public final class ProtoUserLogin {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string platform_version = 8;</code>
        */
@@ -1528,12 +1430,11 @@ public final class ProtoUserLogin {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         platformVersion_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string platform_version = 8;</code>
        */
@@ -1543,7 +1444,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string platform_version = 8;</code>
        */
@@ -1553,21 +1453,19 @@ public final class ProtoUserLogin {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         platformVersion_ = value;
         onChanged();
         return this;
       }
 
       private int device_ = 0;
-
       /**
        * <code>optional .proto.Device device = 9;</code>
        */
       public int getDeviceValue() {
         return device_;
       }
-
       /**
        * <code>optional .proto.Device device = 9;</code>
        */
@@ -1576,7 +1474,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.Device device = 9;</code>
        */
@@ -1584,7 +1481,6 @@ public final class ProtoUserLogin {
         com.iGap.proto.ProtoGlobal.Device result = com.iGap.proto.ProtoGlobal.Device.valueOf(device_);
         return result == null ? com.iGap.proto.ProtoGlobal.Device.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.Device device = 9;</code>
        */
@@ -1597,7 +1493,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.Device device = 9;</code>
        */
@@ -1609,7 +1504,6 @@ public final class ProtoUserLogin {
       }
 
       private java.lang.Object deviceName_ = "";
-
       /**
        * <code>optional string device_name = 10;</code>
        */
@@ -1625,7 +1519,6 @@ public final class ProtoUserLogin {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string device_name = 10;</code>
        */
@@ -1642,7 +1535,6 @@ public final class ProtoUserLogin {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string device_name = 10;</code>
        */
@@ -1651,12 +1543,11 @@ public final class ProtoUserLogin {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         deviceName_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string device_name = 10;</code>
        */
@@ -1666,7 +1557,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string device_name = 10;</code>
        */
@@ -1676,21 +1566,19 @@ public final class ProtoUserLogin {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         deviceName_ = value;
         onChanged();
         return this;
       }
 
       private int language_ = 0;
-
       /**
        * <code>optional .proto.Language language = 11;</code>
        */
       public int getLanguageValue() {
         return language_;
       }
-
       /**
        * <code>optional .proto.Language language = 11;</code>
        */
@@ -1699,7 +1587,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.Language language = 11;</code>
        */
@@ -1707,7 +1594,6 @@ public final class ProtoUserLogin {
         com.iGap.proto.ProtoGlobal.Language result = com.iGap.proto.ProtoGlobal.Language.valueOf(language_);
         return result == null ? com.iGap.proto.ProtoGlobal.Language.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.Language language = 11;</code>
        */
@@ -1720,7 +1606,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.Language language = 11;</code>
        */
@@ -1730,7 +1615,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1747,7 +1631,6 @@ public final class ProtoUserLogin {
 
     // @@protoc_insertion_point(class_scope:proto.UserLogin)
     private static final com.iGap.proto.ProtoUserLogin.UserLogin DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserLogin.UserLogin();
     }
@@ -1789,12 +1672,10 @@ public final class ProtoUserLogin {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1805,7 +1686,6 @@ public final class ProtoUserLogin {
      */
     boolean getDeprecatedClient();
   }
-
   /**
    * Protobuf type {@code proto.UserLoginResponse}
    */
@@ -1817,7 +1697,6 @@ public final class ProtoUserLogin {
     private UserLoginResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserLoginResponse() {
       deprecatedClient_ = false;
     }
@@ -1827,7 +1706,6 @@ public final class ProtoUserLogin {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserLoginResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1877,7 +1755,6 @@ public final class ProtoUserLogin {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserLogin.internal_static_proto_UserLoginResponse_descriptor;
@@ -1892,21 +1769,18 @@ public final class ProtoUserLogin {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1916,7 +1790,6 @@ public final class ProtoUserLogin {
 
     public static final int DEPRECATED_CLIENT_FIELD_NUMBER = 2;
     private boolean deprecatedClient_;
-
     /**
      * <code>optional bool deprecated_client = 2;</code>
      */
@@ -1925,7 +1798,6 @@ public final class ProtoUserLogin {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1963,7 +1835,6 @@ public final class ProtoUserLogin {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -2009,32 +1880,27 @@ public final class ProtoUserLogin {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2042,13 +1908,11 @@ public final class ProtoUserLogin {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2056,14 +1920,12 @@ public final class ProtoUserLogin {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2075,15 +1937,12 @@ public final class ProtoUserLogin {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserLogin.UserLoginResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -2095,7 +1954,6 @@ public final class ProtoUserLogin {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserLoginResponse}
      */
@@ -2125,13 +1983,11 @@ public final class ProtoUserLogin {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -2177,35 +2033,29 @@ public final class ProtoUserLogin {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserLogin.UserLoginResponse) {
           return mergeFrom((com.iGap.proto.ProtoUserLogin.UserLoginResponse) other);
@@ -2253,14 +2103,12 @@ public final class ProtoUserLogin {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2271,7 +2119,6 @@ public final class ProtoUserLogin {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2288,7 +2135,6 @@ public final class ProtoUserLogin {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2303,7 +2149,6 @@ public final class ProtoUserLogin {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2322,7 +2167,6 @@ public final class ProtoUserLogin {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2337,7 +2181,6 @@ public final class ProtoUserLogin {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2346,7 +2189,6 @@ public final class ProtoUserLogin {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2358,7 +2200,6 @@ public final class ProtoUserLogin {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2377,14 +2218,12 @@ public final class ProtoUserLogin {
       }
 
       private boolean deprecatedClient_;
-
       /**
        * <code>optional bool deprecated_client = 2;</code>
        */
       public boolean getDeprecatedClient() {
         return deprecatedClient_;
       }
-
       /**
        * <code>optional bool deprecated_client = 2;</code>
        */
@@ -2394,7 +2233,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional bool deprecated_client = 2;</code>
        */
@@ -2404,7 +2242,6 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -2421,7 +2258,6 @@ public final class ProtoUserLogin {
 
     // @@protoc_insertion_point(class_scope:proto.UserLoginResponse)
     private static final com.iGap.proto.ProtoUserLogin.UserLoginResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserLogin.UserLoginResponse();
     }
@@ -2473,7 +2309,6 @@ public final class ProtoUserLogin {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\017UserLogin.proto\022\005proto\032\rRequest.proto\032" +

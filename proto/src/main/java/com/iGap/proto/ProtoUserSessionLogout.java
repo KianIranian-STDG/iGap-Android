@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoUserSessionLogout {
   private ProtoUserSessionLogout() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoUserSessionLogout {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface UserSessionLogoutOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.UserSessionLogout)
           com.google.protobuf.MessageOrBuilder {
@@ -25,18 +23,15 @@ public final class ProtoUserSessionLogout {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
-    ProtoRequest.Request getRequest();
-
+    com.iGap.proto.ProtoRequest.Request getRequest();
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
-    ProtoRequest.RequestOrBuilder getRequestOrBuilder();
+    com.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.UserSessionLogout}
    */
@@ -48,16 +43,14 @@ public final class ProtoUserSessionLogout {
     private UserSessionLogout(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserSessionLogout() {
     }
 
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserSessionLogout(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -79,11 +72,11 @@ public final class ProtoUserSessionLogout {
               break;
             }
             case 10: {
-              ProtoRequest.Request.Builder subBuilder = null;
+              com.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
               if (request_ != null) {
                 subBuilder = request_.toBuilder();
               }
-              request_ = input.readMessage(ProtoRequest.Request.parser(), extensionRegistry);
+              request_ = input.readMessage(com.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(request_);
                 request_ = subBuilder.buildPartial();
@@ -102,45 +95,40 @@ public final class ProtoUserSessionLogout {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
-      return ProtoUserSessionLogout.internal_static_proto_UserSessionLogout_descriptor;
+      return com.iGap.proto.ProtoUserSessionLogout.internal_static_proto_UserSessionLogout_descriptor;
     }
 
-    protected FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
     internalGetFieldAccessorTable() {
-      return ProtoUserSessionLogout.internal_static_proto_UserSessionLogout_fieldAccessorTable
+      return com.iGap.proto.ProtoUserSessionLogout.internal_static_proto_UserSessionLogout_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                      UserSessionLogout.class, Builder.class);
+                      com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout.class, com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
-    private ProtoRequest.Request request_;
-
+    private com.iGap.proto.ProtoRequest.Request request_;
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
-    public ProtoRequest.Request getRequest() {
-      return request_ == null ? ProtoRequest.Request.getDefaultInstance() : request_;
+    public com.iGap.proto.ProtoRequest.Request getRequest() {
+      return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
-    public ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
+    public com.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
       return getRequest();
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -172,15 +160,15 @@ public final class ProtoUserSessionLogout {
 
     private static final long serialVersionUID = 0L;
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof UserSessionLogout)) {
+      if (!(obj instanceof com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout)) {
         return super.equals(obj);
       }
-      UserSessionLogout other = (UserSessionLogout) obj;
+      com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout other = (com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout) obj;
 
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
@@ -191,7 +179,7 @@ public final class ProtoUserSessionLogout {
       return result;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -207,38 +195,38 @@ public final class ProtoUserSessionLogout {
       return hash;
     }
 
-    public static UserSessionLogout parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parseFrom(
             com.google.protobuf.ByteString data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static UserSessionLogout parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static UserSessionLogout parseFrom(byte[] data)
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static UserSessionLogout parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static UserSessionLogout parseFrom(java.io.InputStream input)
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
 
-    public static UserSessionLogout parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
@@ -246,13 +234,13 @@ public final class ProtoUserSessionLogout {
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static UserSessionLogout parseDelimitedFrom(java.io.InputStream input)
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static UserSessionLogout parseDelimitedFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
@@ -260,14 +248,14 @@ public final class ProtoUserSessionLogout {
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static UserSessionLogout parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
 
-    public static UserSessionLogout parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
@@ -278,44 +266,41 @@ public final class ProtoUserSessionLogout {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(UserSessionLogout prototype) {
+    public static Builder newBuilder(com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-            BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserSessionLogout}
      */
     public static final class Builder extends
             com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.UserSessionLogout)
-            UserSessionLogoutOrBuilder {
+            com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-        return ProtoUserSessionLogout.internal_static_proto_UserSessionLogout_descriptor;
+        return com.iGap.proto.ProtoUserSessionLogout.internal_static_proto_UserSessionLogout_descriptor;
       }
 
-      protected FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-        return ProtoUserSessionLogout.internal_static_proto_UserSessionLogout_fieldAccessorTable
+        return com.iGap.proto.ProtoUserSessionLogout.internal_static_proto_UserSessionLogout_fieldAccessorTable
                 .ensureFieldAccessorsInitialized(
-                        UserSessionLogout.class, Builder.class);
+                        com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout.class, com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout.newBuilder()
@@ -324,17 +309,15 @@ public final class ProtoUserSessionLogout {
       }
 
       private Builder(
-              BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -348,23 +331,23 @@ public final class ProtoUserSessionLogout {
 
       public com.google.protobuf.Descriptors.Descriptor
       getDescriptorForType() {
-        return ProtoUserSessionLogout.internal_static_proto_UserSessionLogout_descriptor;
+        return com.iGap.proto.ProtoUserSessionLogout.internal_static_proto_UserSessionLogout_descriptor;
       }
 
-      public UserSessionLogout getDefaultInstanceForType() {
-        return UserSessionLogout.getDefaultInstance();
+      public com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout getDefaultInstanceForType() {
+        return com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout.getDefaultInstance();
       }
 
-      public UserSessionLogout build() {
-        UserSessionLogout result = buildPartial();
+      public com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout build() {
+        com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public UserSessionLogout buildPartial() {
-        UserSessionLogout result = new UserSessionLogout(this);
+      public com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout buildPartial() {
+        com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout result = new com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout(this);
         if (requestBuilder_ == null) {
           result.request_ = request_;
         } else {
@@ -377,46 +360,41 @@ public final class ProtoUserSessionLogout {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof UserSessionLogout) {
-          return mergeFrom((UserSessionLogout) other);
+        if (other instanceof com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout) {
+          return mergeFrom((com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(UserSessionLogout other) {
-        if (other == UserSessionLogout.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout other) {
+        if (other == com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout.getDefaultInstance())
+          return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -432,11 +410,11 @@ public final class ProtoUserSessionLogout {
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws java.io.IOException {
-        UserSessionLogout parsedMessage = null;
+        com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (UserSessionLogout) e.getUnfinishedMessage();
+          parsedMessage = (com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -446,32 +424,29 @@ public final class ProtoUserSessionLogout {
         return this;
       }
 
-      private ProtoRequest.Request request_ = null;
+      private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-              ProtoRequest.Request, ProtoRequest.Request.Builder, ProtoRequest.RequestOrBuilder> requestBuilder_;
-
+              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      public ProtoRequest.Request getRequest() {
+      public com.iGap.proto.ProtoRequest.Request getRequest() {
         if (requestBuilder_ == null) {
-          return request_ == null ? ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         } else {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      public Builder setRequest(ProtoRequest.Request value) {
+      public Builder setRequest(com.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -484,12 +459,11 @@ public final class ProtoUserSessionLogout {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public Builder setRequest(
-              ProtoRequest.Request.Builder builderForValue) {
+              com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
         if (requestBuilder_ == null) {
           request_ = builderForValue.build();
           onChanged();
@@ -499,15 +473,14 @@ public final class ProtoUserSessionLogout {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      public Builder mergeRequest(ProtoRequest.Request value) {
+      public Builder mergeRequest(com.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
             request_ =
-                    ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+                    com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -518,7 +491,6 @@ public final class ProtoUserSessionLogout {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -533,37 +505,34 @@ public final class ProtoUserSessionLogout {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      public ProtoRequest.Request.Builder getRequestBuilder() {
-
+      public com.iGap.proto.ProtoRequest.Request.Builder getRequestBuilder() {
+        
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      public ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
+      public com.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder() {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
           return request_ == null ?
-                  ProtoRequest.Request.getDefaultInstance() : request_;
+                  com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              ProtoRequest.Request, ProtoRequest.Request.Builder, ProtoRequest.RequestOrBuilder>
+              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>
       getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
           requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  ProtoRequest.Request, ProtoRequest.Request.Builder, ProtoRequest.RequestOrBuilder>(
+                  com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -571,7 +540,6 @@ public final class ProtoUserSessionLogout {
         }
         return requestBuilder_;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -587,13 +555,12 @@ public final class ProtoUserSessionLogout {
     }
 
     // @@protoc_insertion_point(class_scope:proto.UserSessionLogout)
-    private static final UserSessionLogout DEFAULT_INSTANCE;
-
+    private static final com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new UserSessionLogout();
+      DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout();
     }
 
-    public static UserSessionLogout getDefaultInstance() {
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -611,12 +578,12 @@ public final class ProtoUserSessionLogout {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<UserSessionLogout> getParserForType() {
       return PARSER;
     }
 
-    public UserSessionLogout getDefaultInstanceForType() {
+    public com.iGap.proto.ProtoUserSessionLogout.UserSessionLogout getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -630,18 +597,15 @@ public final class ProtoUserSessionLogout {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
-    ProtoResponse.Response getResponse();
-
+    com.iGap.proto.ProtoResponse.Response getResponse();
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
-    ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
+    com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.UserSessionLogoutResponse}
    */
@@ -653,16 +617,14 @@ public final class ProtoUserSessionLogout {
     private UserSessionLogoutResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserSessionLogoutResponse() {
     }
 
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserSessionLogoutResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -684,11 +646,11 @@ public final class ProtoUserSessionLogout {
               break;
             }
             case 10: {
-              ProtoResponse.Response.Builder subBuilder = null;
+              com.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
               if (response_ != null) {
                 subBuilder = response_.toBuilder();
               }
-              response_ = input.readMessage(ProtoResponse.Response.parser(), extensionRegistry);
+              response_ = input.readMessage(com.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(response_);
                 response_ = subBuilder.buildPartial();
@@ -707,45 +669,40 @@ public final class ProtoUserSessionLogout {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
-      return ProtoUserSessionLogout.internal_static_proto_UserSessionLogoutResponse_descriptor;
+      return com.iGap.proto.ProtoUserSessionLogout.internal_static_proto_UserSessionLogoutResponse_descriptor;
     }
 
-    protected FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
     internalGetFieldAccessorTable() {
-      return ProtoUserSessionLogout.internal_static_proto_UserSessionLogoutResponse_fieldAccessorTable
+      return com.iGap.proto.ProtoUserSessionLogout.internal_static_proto_UserSessionLogoutResponse_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                      UserSessionLogoutResponse.class, Builder.class);
+                      com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse.class, com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
-    private ProtoResponse.Response response_;
-
+    private com.iGap.proto.ProtoResponse.Response response_;
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
-    public ProtoResponse.Response getResponse() {
-      return response_ == null ? ProtoResponse.Response.getDefaultInstance() : response_;
+    public com.iGap.proto.ProtoResponse.Response getResponse() {
+      return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
-    public ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
+    public com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
       return getResponse();
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -777,15 +734,15 @@ public final class ProtoUserSessionLogout {
 
     private static final long serialVersionUID = 0L;
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof UserSessionLogoutResponse)) {
+      if (!(obj instanceof com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse)) {
         return super.equals(obj);
       }
-      UserSessionLogoutResponse other = (UserSessionLogoutResponse) obj;
+      com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse other = (com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse) obj;
 
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
@@ -796,7 +753,7 @@ public final class ProtoUserSessionLogout {
       return result;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -812,38 +769,38 @@ public final class ProtoUserSessionLogout {
       return hash;
     }
 
-    public static UserSessionLogoutResponse parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parseFrom(
             com.google.protobuf.ByteString data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static UserSessionLogoutResponse parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static UserSessionLogoutResponse parseFrom(byte[] data)
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static UserSessionLogoutResponse parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static UserSessionLogoutResponse parseFrom(java.io.InputStream input)
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
 
-    public static UserSessionLogoutResponse parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
@@ -851,13 +808,13 @@ public final class ProtoUserSessionLogout {
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static UserSessionLogoutResponse parseDelimitedFrom(java.io.InputStream input)
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static UserSessionLogoutResponse parseDelimitedFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
@@ -865,14 +822,14 @@ public final class ProtoUserSessionLogout {
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static UserSessionLogoutResponse parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
 
-    public static UserSessionLogoutResponse parseFrom(
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
@@ -883,44 +840,41 @@ public final class ProtoUserSessionLogout {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(UserSessionLogoutResponse prototype) {
+    public static Builder newBuilder(com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-            BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserSessionLogoutResponse}
      */
     public static final class Builder extends
             com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.UserSessionLogoutResponse)
-            UserSessionLogoutResponseOrBuilder {
+            com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-        return ProtoUserSessionLogout.internal_static_proto_UserSessionLogoutResponse_descriptor;
+        return com.iGap.proto.ProtoUserSessionLogout.internal_static_proto_UserSessionLogoutResponse_descriptor;
       }
 
-      protected FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-        return ProtoUserSessionLogout.internal_static_proto_UserSessionLogoutResponse_fieldAccessorTable
+        return com.iGap.proto.ProtoUserSessionLogout.internal_static_proto_UserSessionLogoutResponse_fieldAccessorTable
                 .ensureFieldAccessorsInitialized(
-                        UserSessionLogoutResponse.class, Builder.class);
+                        com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse.class, com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse.newBuilder()
@@ -929,17 +883,15 @@ public final class ProtoUserSessionLogout {
       }
 
       private Builder(
-              BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -953,23 +905,23 @@ public final class ProtoUserSessionLogout {
 
       public com.google.protobuf.Descriptors.Descriptor
       getDescriptorForType() {
-        return ProtoUserSessionLogout.internal_static_proto_UserSessionLogoutResponse_descriptor;
+        return com.iGap.proto.ProtoUserSessionLogout.internal_static_proto_UserSessionLogoutResponse_descriptor;
       }
 
-      public UserSessionLogoutResponse getDefaultInstanceForType() {
-        return UserSessionLogoutResponse.getDefaultInstance();
+      public com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse getDefaultInstanceForType() {
+        return com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse.getDefaultInstance();
       }
 
-      public UserSessionLogoutResponse build() {
-        UserSessionLogoutResponse result = buildPartial();
+      public com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse build() {
+        com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public UserSessionLogoutResponse buildPartial() {
-        UserSessionLogoutResponse result = new UserSessionLogoutResponse(this);
+      public com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse buildPartial() {
+        com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse result = new com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse(this);
         if (responseBuilder_ == null) {
           result.response_ = response_;
         } else {
@@ -982,46 +934,41 @@ public final class ProtoUserSessionLogout {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof UserSessionLogoutResponse) {
-          return mergeFrom((UserSessionLogoutResponse) other);
+        if (other instanceof com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse) {
+          return mergeFrom((com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(UserSessionLogoutResponse other) {
-        if (other == UserSessionLogoutResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse other) {
+        if (other == com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse.getDefaultInstance())
+          return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1037,11 +984,11 @@ public final class ProtoUserSessionLogout {
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws java.io.IOException {
-        UserSessionLogoutResponse parsedMessage = null;
+        com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (UserSessionLogoutResponse) e.getUnfinishedMessage();
+          parsedMessage = (com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1051,32 +998,29 @@ public final class ProtoUserSessionLogout {
         return this;
       }
 
-      private ProtoResponse.Response response_ = null;
+      private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-              ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
+              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      public ProtoResponse.Response getResponse() {
+      public com.iGap.proto.ProtoResponse.Response getResponse() {
         if (responseBuilder_ == null) {
-          return response_ == null ? ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         } else {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      public Builder setResponse(ProtoResponse.Response value) {
+      public Builder setResponse(com.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1089,12 +1033,11 @@ public final class ProtoUserSessionLogout {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public Builder setResponse(
-              ProtoResponse.Response.Builder builderForValue) {
+              com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
         if (responseBuilder_ == null) {
           response_ = builderForValue.build();
           onChanged();
@@ -1104,15 +1047,14 @@ public final class ProtoUserSessionLogout {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      public Builder mergeResponse(ProtoResponse.Response value) {
+      public Builder mergeResponse(com.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
             response_ =
-                    ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+                    com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1123,7 +1065,6 @@ public final class ProtoUserSessionLogout {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1138,37 +1079,34 @@ public final class ProtoUserSessionLogout {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      public ProtoResponse.Response.Builder getResponseBuilder() {
-
+      public com.iGap.proto.ProtoResponse.Response.Builder getResponseBuilder() {
+        
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      public ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
+      public com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
           return response_ == null ?
-                  ProtoResponse.Response.getDefaultInstance() : response_;
+                  com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-              ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder>
+              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>
       getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
           responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder>(
+                  com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1176,7 +1114,6 @@ public final class ProtoUserSessionLogout {
         }
         return responseBuilder_;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1192,13 +1129,12 @@ public final class ProtoUserSessionLogout {
     }
 
     // @@protoc_insertion_point(class_scope:proto.UserSessionLogoutResponse)
-    private static final UserSessionLogoutResponse DEFAULT_INSTANCE;
-
+    private static final com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new UserSessionLogoutResponse();
+      DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse();
     }
 
-    public static UserSessionLogoutResponse getDefaultInstance() {
+    public static com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1216,12 +1152,12 @@ public final class ProtoUserSessionLogout {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<UserSessionLogoutResponse> getParserForType() {
       return PARSER;
     }
 
-    public UserSessionLogoutResponse getDefaultInstanceForType() {
+    public com.iGap.proto.ProtoUserSessionLogout.UserSessionLogoutResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1245,9 +1181,8 @@ public final class ProtoUserSessionLogout {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
             "\n\027UserSessionLogout.proto\022\005proto\032\rReques" +
                     "t.proto\032\016Response.proto\"4\n\021UserSessionLo" +
                     "gout\022\037\n\007request\030\001 \001(\0132\016.proto.Request\">\n" +
@@ -1266,23 +1201,23 @@ public final class ProtoUserSessionLogout {
     com.google.protobuf.Descriptors.FileDescriptor
             .internalBuildGeneratedFileFrom(descriptorData,
                     new com.google.protobuf.Descriptors.FileDescriptor[]{
-                            ProtoRequest.getDescriptor(),
-                            ProtoResponse.getDescriptor(),
+                            com.iGap.proto.ProtoRequest.getDescriptor(),
+                            com.iGap.proto.ProtoResponse.getDescriptor(),
                     }, assigner);
     internal_static_proto_UserSessionLogout_descriptor =
             getDescriptor().getMessageTypes().get(0);
     internal_static_proto_UserSessionLogout_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_proto_UserSessionLogout_descriptor,
-            new String[]{"Request",});
+            new java.lang.String[]{"Request",});
     internal_static_proto_UserSessionLogoutResponse_descriptor =
             getDescriptor().getMessageTypes().get(1);
     internal_static_proto_UserSessionLogoutResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserSessionLogoutResponse_descriptor,
-        new String[] { "Response", });
-    ProtoRequest.getDescriptor();
-    ProtoResponse.getDescriptor();
+            new java.lang.String[]{"Response",});
+    com.iGap.proto.ProtoRequest.getDescriptor();
+    com.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
