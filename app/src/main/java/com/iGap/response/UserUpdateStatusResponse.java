@@ -31,23 +31,25 @@ public class UserUpdateStatusResponse extends MessageHandler {
 
         Realm realm = Realm.getDefaultInstance();
         final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUserId()).findFirst();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+        if (realmRegisteredInfo != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
 
-                realmRegisteredInfo.setStatus(builder.getStatus().toString());
+                    realmRegisteredInfo.setStatus(builder.getStatus().toString());
 
-                if (builder.getUserId() == realm.where(RealmUserInfo.class).findFirst().getUserId()) {
-                    if (builder.getStatus() == ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE) {
-                        G.isUserStatusOnline = true;
-                    } else {
-                        G.isUserStatusOnline = false;
+                    if (builder.getUserId() == realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                        if (builder.getStatus() == ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE) {
+                            G.isUserStatusOnline = true;
+                        } else {
+                            G.isUserStatusOnline = false;
+                        }
                     }
                 }
+            });
+            if (G.onUserUpdateStatus != null) {
+                G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), response.getTimestamp(), realmRegisteredInfo.setStatsForUser(builder.getStatus().toString()));
             }
-        });
-        if (G.onUserUpdateStatus != null) {
-            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), response.getTimestamp(), realmRegisteredInfo.setStatsForUser(builder.getStatus().toString()));
         }
         realm.close();
     }
