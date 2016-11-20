@@ -738,23 +738,22 @@ public class ActivityMain extends ActivityEnhanced
         G.onChatDelete = new OnChatDelete() {
             @Override
             public void onChatDelete(long roomId) {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void execute(final Realm realm) {
-
-                        runOnUiThread(new Runnable() {
+                    public void run() {
+                        final Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
                             @Override
-                            public void run() {
-                                mAdapter.remove(mAdapter.getPosition(item));
+                            public void execute(final Realm realm) {
+                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getInfo().getId()).findAll().deleteAllFromRealm();
+                                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getInfo().getId()).findFirst().deleteFromRealm();
                             }
                         });
+                        realm.close();
 
-                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getInfo().getId()).findFirst().deleteFromRealm();
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getInfo().getId()).findAll().deleteAllFromRealm();
+                        mAdapter.remove(mAdapter.getPosition(item));
                     }
                 });
-                realm.close();
             }
 
             @Override

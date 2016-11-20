@@ -78,7 +78,6 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
 
     public void notifyDraft(long chatId, final String draftMessage) {
         List<Item> items = getAdapterItems();
-        Realm realm = Realm.getDefaultInstance();
         for (final Item chat : items) {
             if (chat.mInfo.getId() == chatId) {
 
@@ -86,18 +85,11 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
                 Log.i("BBB", "chat.mInfo.chatTitle : " + chat.mInfo.getTitle());
                 Log.i("BBB", "position : " + position);
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        chat.mInfo.getDraft().setMessage(draftMessage);
-
-                        //notifyAdapterItemChanged(position);
-                        notifyItemChanged(position);
-                    }
-                });
+                // because of nested transactions, following lines should not be into a transaction method
+                chat.mInfo.getDraft().setMessage(draftMessage);
+                notifyItemChanged(position);
             }
         }
-        realm.close();
     }
 
 }

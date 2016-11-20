@@ -36,6 +36,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -488,8 +489,7 @@ public class ActivityChat extends ActivityEnhanced
 
                         RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, id);
                         roomMessage.setLocation(messageLocation);
-                        roomMessage.setUpdateTime(SUID.id().get());
-                        roomMessage.setCreateTime(SUID.id().get());
+                        roomMessage.setCreateTime(System.currentTimeMillis());
                         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
                         roomMessage.setRoomId(mRoomId);
                         roomMessage.setUserId(userId);
@@ -1047,6 +1047,9 @@ public class ActivityChat extends ActivityEnhanced
                     mAdapter.add(0, new TimeItem(this).setMessage(messageInfo).withIdentifier(identifier));
                 }
             }
+
+            // super necessary
+            identifier++;
         }
     }
 
@@ -1527,7 +1530,7 @@ public class ActivityChat extends ActivityEnhanced
                                 roomMessage.setRoomId(mRoomId);
 
                                 roomMessage.setUserId(senderId);
-                                roomMessage.setUpdateTime(System.currentTimeMillis());
+                                roomMessage.setCreateTime(System.currentTimeMillis());
 
                                 // user wants to replay to a message
                                 if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
@@ -2445,7 +2448,7 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.THUMBNAIL);
                 roomMessage.setUserId(senderID);
-                roomMessage.setUpdateTime(updateTime);
+                roomMessage.setCreateTime(updateTime);
 
                 if (finalMessageType == ProtoGlobal.RoomMessageType.CONTACT) {
                     RealmRoomMessageContact realmRoomMessageContact = realm.createObject(RealmRoomMessageContact.class, SUID.id().get());
@@ -2829,13 +2832,12 @@ public class ActivityChat extends ActivityEnhanced
         List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
 
         for (RealmRoomMessage message : realmRoomMessages) {
-            String timeString = getTimeSettingMessage(message.getUpdateTime());
-            if (timeString != null) {
+            String timeString = getTimeSettingMessage(message.getCreateTime());
+            if (!TextUtils.isEmpty(timeString)) {
                 RealmRoomMessage timeMessage = new RealmRoomMessage();
-                timeMessage.setMessageId(SUID.id().get());
+                timeMessage.setMessageId(message.getMessageId() - 1L);
                 // -1 means time message
                 timeMessage.setUserId(-1);
-                timeMessage.setUpdateTime(message.getUpdateTime() - 1L);
                 timeMessage.setMessage(timeString);
                 timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                 lastResultMessages.add(timeMessage);
@@ -2858,7 +2860,8 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void onNoMore(EndlessRecyclerOnScrollListener listener) {
-                new RequestClientGetRoomHistory().getRoomHistory(mRoomId, AppUtils.findLastMessageId(mRoomId), Long.toString(mRoomId));
+                long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
+                new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
             }
         };
 
@@ -3324,7 +3327,7 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setAttachment(messageId, savedPath, 0, 0, 0, null, duration, LocalFileType.FILE);
                 roomMessage.setUserId(senderID);
-                roomMessage.setUpdateTime(updateTime);
+                roomMessage.setCreateTime(updateTime);
 
                 // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
                 // in response to a message as replay, so after server done creating replay and
@@ -3372,7 +3375,7 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages) {
         // I'm in the room
-        if (roomId == mRoomId) {
+        if (roomId == mRoomId && firstTimeGetHistory) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -3391,13 +3394,12 @@ public class ActivityChat extends ActivityEnhanced
                     final List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
 
                     for (RealmRoomMessage message : realmRoomMessages) {
-                        String timeString = getTimeSettingMessage(message.getUpdateTime());
+                        String timeString = getTimeSettingMessage(message.getCreateTime());
                         if (timeString != null) {
                             RealmRoomMessage timeMessage = new RealmRoomMessage();
-                            timeMessage.setMessageId(SUID.id().get());
+                            timeMessage.setMessageId(message.getMessageId() - 1L);
                             // -1 means time message
                             timeMessage.setUserId(-1);
-                            timeMessage.setUpdateTime(message.getUpdateTime() - 1L);
                             timeMessage.setMessage(timeString);
                             timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                             lastResultMessages.add(timeMessage);
@@ -3409,17 +3411,14 @@ public class ActivityChat extends ActivityEnhanced
                     Collections.sort(lastResultMessages, SortMessages.DESC);
 
                     for (RealmRoomMessage roomMessage : lastResultMessages) {
-                        if (firstTimeGetHistory) {
-                            firstTimeGetHistory = false;
-                            switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
-                        } else {
-                            switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), true);
-                        }
+                        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), true);
                     }
 
                     realm.close();
                 }
             });
+
+            firstTimeGetHistory = false;
         }
     }
 
@@ -3564,7 +3563,7 @@ public class ActivityChat extends ActivityEnhanced
                             Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessage().getMessageId());
                             element.setClearId(realmRoom.getLastMessage().getMessageId());
 
-                            G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessage().getMessageId());
+                            //G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessage().getMessageId());
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();

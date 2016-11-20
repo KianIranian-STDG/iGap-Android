@@ -70,6 +70,7 @@ public class RealmRoomMessage extends RealmObject {
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
             message.setStatusVersion(input.getStatusVersion());
             message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
         } else {
             message = realm.createObject(RealmRoomMessage.class, input.getMessageId());
             message.setMessage(input.getMessage());
@@ -95,6 +96,7 @@ public class RealmRoomMessage extends RealmObject {
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
             message.setStatusVersion(input.getStatusVersion());
             message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
         }
         realm.close();
 
@@ -279,8 +281,8 @@ public class RealmRoomMessage extends RealmObject {
                 long largeMessageThumbnail = SUID.id().get();
                 RealmThumbnail.create(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
-                realmAttachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo("id", smallMessageThumbnail).findFirst());
-                realmAttachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo("id", largeMessageThumbnail).findFirst());
+                realmAttachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, smallMessageThumbnail).findFirst());
+                realmAttachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, largeMessageThumbnail).findFirst());
 
                 this.attachment = realmAttachment;
             } else {
@@ -299,8 +301,8 @@ public class RealmRoomMessage extends RealmObject {
                     long largeMessageThumbnail = SUID.id().get();
                     RealmThumbnail.create(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
-                    this.attachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo("id", smallMessageThumbnail).findFirst());
-                    this.attachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo("id", largeMessageThumbnail).findFirst());
+                    this.attachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, smallMessageThumbnail).findFirst());
+                    this.attachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, largeMessageThumbnail).findFirst());
                 }
             }
             realm.close();

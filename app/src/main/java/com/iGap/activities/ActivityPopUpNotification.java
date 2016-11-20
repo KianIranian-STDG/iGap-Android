@@ -19,7 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -370,7 +369,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 roomMessage.setMessage(message);
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setUserId(senderId);
-                roomMessage.setUpdateTime((int) (System.currentTimeMillis() / DateUtils.SECOND_IN_MILLIS));
+                roomMessage.setCreateTime(System.currentTimeMillis());
             }
         });
 

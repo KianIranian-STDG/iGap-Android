@@ -138,21 +138,13 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
                         AndroidUtils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset,
                                 nextLimit);
 
-                fileUploadStructure.getNBytesTime +=
-                        System.currentTimeMillis() - startGetNBytesTime;
-
                 Log.i("BreakPoint", identity + " > after bytes");
                 // make request till uploading has finished
                 final long startSendReqTime = System.currentTimeMillis();
 
                 new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes,
                         identity);
-                fileUploadStructure.sendRequestsTime +=
-                        System.currentTimeMillis() - startSendReqTime;
                 Log.i("BreakPoint", identity + " > after fileUpload request");
-
-                fileUploadStructure.elapsedInOnFileUpload +=
-                        System.currentTimeMillis() - startOnFileUploadTime;
             } else {
                 if (isFileExistInList(Long.parseLong(identity))) {
                     // handle when the file has already uploaded

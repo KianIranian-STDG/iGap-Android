@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.iGap.activities.ActivityChat;
@@ -62,7 +61,7 @@ public class UploadService extends Service {
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setAttachment(messageId, savedPath, 0, 0, 0, null, duration, LocalFileType.FILE);
                 roomMessage.setUserId(senderID);
-                roomMessage.setUpdateTime((int) (updateTime / DateUtils.SECOND_IN_MILLIS));
+                roomMessage.setCreateTime(updateTime);
             }
         });
 

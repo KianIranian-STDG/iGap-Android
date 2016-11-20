@@ -1,7 +1,6 @@
 package com.iGap.module;
 
 import android.os.Build;
-import android.util.Log;
 
 import com.iGap.realm.RealmRoomMessage;
 
@@ -15,13 +14,9 @@ public enum SortMessages implements Comparator<RealmRoomMessage> {
         @Override
         public int compare(RealmRoomMessage o1, RealmRoomMessage o2) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                Log.i("LLL", "o1 : " + o1);
-                Log.i("LLL", "o2 : " + o2);
-                Log.i("LLL", "o2 getUpdateTime : " + o2.getUpdateTime());
-                Log.i("LLL", "o1 getUpdateTime : " + o1.getUpdateTime());
-                return Long.compare(o1.getUpdateTime(), o2.getUpdateTime());
+                return Long.compare(o1.getMessageId(), o2.getMessageId());
             } else {
-                return Long.valueOf(o1.getUpdateTime()).compareTo(Long.valueOf(o2.getUpdateTime()));
+                return Long.valueOf(o1.getMessageId()).compareTo(Long.valueOf(o2.getMessageId()));
             }
         }
     },
@@ -29,13 +24,9 @@ public enum SortMessages implements Comparator<RealmRoomMessage> {
         @Override
         public int compare(RealmRoomMessage o1, RealmRoomMessage o2) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                Log.i("LLL", "o1 : " + o1);
-                Log.i("LLL", "o2 : " + o2);
-                Log.i("LLL", "o2 getUpdateTime : " + o2.getUpdateTime());
-                Log.i("LLL", "o1 getUpdateTime : " + o1.getUpdateTime());
-                return Long.compare(o2.getUpdateTime(), o1.getUpdateTime());
+                return Long.compare(o2.getMessageId(), o1.getMessageId());
             } else {
-                return Long.valueOf(o2.getUpdateTime()).compareTo(Long.valueOf(o1.getUpdateTime()));
+                return Long.valueOf(o2.getMessageId()).compareTo(Long.valueOf(o1.getMessageId()));
             }
         }
     }

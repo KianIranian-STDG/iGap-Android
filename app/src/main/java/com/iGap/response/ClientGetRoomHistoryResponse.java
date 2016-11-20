@@ -87,6 +87,8 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                     realmRoomMessage.setEdited(roomMessage.getEdited());
                     realmRoomMessage.setUpdateTime(
                             roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+                    realmRoomMessage.setCreateTime(
+                            roomMessage.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
 
                     if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
                         if (!G.isAppInFg) {

@@ -127,8 +127,10 @@ public class GroupSendMessageResponse extends MessageHandler {
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
                         // find the message using identity and update it
                         if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
+                            if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).count() == 0) {
+                                realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                            }
                             fillRoomMessage(realmRoomMessage, roomMessage);
-                            realmRoomMessage.setMessageId(roomMessage.getMessageId());
 
                             if (roomMessage.hasForwardFrom()) { // forward message
                                 RealmRoomMessage forwardMessage = realmRoomMessage.getForwardMessage();
@@ -188,6 +190,7 @@ public class GroupSendMessageResponse extends MessageHandler {
         }
         realmRoomMessage.setEdited(roomMessage.getEdited());
         realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+        realmRoomMessage.setCreateTime(roomMessage.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
 
         return realmRoomMessage;
     }

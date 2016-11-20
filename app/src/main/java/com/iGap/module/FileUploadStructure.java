@@ -28,24 +28,6 @@ public class FileUploadStructure {
     public ProtoGlobal.RoomMessageType messageType;
     public long roomId;
     public String text;
-    // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] for test purposes
-    public long uploadStartTime;
-    public long getNBytesTime;
-    public long sendRequestsTime;
-    public long elapsedInOnFileUpload;
-
-    public FileUploadStructure(String fileName, long fileSize, String filePath, byte[] fileHash) {
-        this.fileName = fileName;
-        this.fileSize = fileSize;
-        this.filePath = filePath;
-        this.fileHash = fileHash;
-    }
-
-    public FileUploadStructure(String fileName, long fileSize, String filePath) {
-        this.fileName = fileName;
-        this.fileSize = fileSize;
-        this.filePath = filePath;
-    }
 
     public FileUploadStructure(String fileName, long fileSize, String filePath, long messageId) {
         this.fileName = fileName;

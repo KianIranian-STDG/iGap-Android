@@ -150,7 +150,9 @@ public class ChatSendMessageResponse extends MessageHandler {
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                         // find the message using identity and update it
                         if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
-                            realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                            if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).count() == 0) {
+                                realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                            }
 
                             realmRoomMessage = fillRoomMessage(realmRoomMessage, roomMessage);
 
@@ -220,6 +222,7 @@ public class ChatSendMessageResponse extends MessageHandler {
         }
         realmRoomMessage.setEdited(roomMessage.getEdited());
         realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+        realmRoomMessage.setCreateTime(roomMessage.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
 
         return realmRoomMessage;
     }
