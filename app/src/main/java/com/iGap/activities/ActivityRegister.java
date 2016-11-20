@@ -971,8 +971,7 @@ public class ActivityRegister extends ActivityEnhanced {
                                 RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, userId).findFirst();
                                 if (userInfo == null) {
                                     userInfo = realm.createObject(RealmUserInfo.class);
-                                    RealmRegisteredInfo registeredInfo = realm.createObject(RealmRegisteredInfo.class);
-                                    registeredInfo.setId(userId);
+                                    RealmRegisteredInfo registeredInfo = realm.createObject(RealmRegisteredInfo.class, userId);
                                     userInfo.setUserInfo(registeredInfo);
                                 }
                                 userInfo.getUserInfo().setUsername(userName);

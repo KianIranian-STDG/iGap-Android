@@ -38,8 +38,7 @@ public class UserInfoResponse extends MessageHandler {
                         .findFirst();
 
                 if (realmRegisteredInfo == null) {
-                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
-                    realmRegisteredInfo.setId(builder.getUser().getId());
+                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, builder.getUser().getId());
                 }
 
                 RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar());

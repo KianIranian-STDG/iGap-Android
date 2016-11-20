@@ -147,9 +147,8 @@ public class StructMessageAttachment implements Parcelable {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class);
+                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
                     messageAttachment.setLocalFilePath(path);
-                    messageAttachment.setId(messageId);
                 }
             });
         } else {
@@ -180,9 +179,8 @@ public class StructMessageAttachment implements Parcelable {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class);
+                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
                     messageAttachment.setLocalThumbnailPath(localPath);
-                    messageAttachment.setId(messageId);
                 }
             });
         } else {

@@ -950,8 +950,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                         .equalTo(RealmAvatarFields.OWNER_ID, roomId)
                         .findFirst();
                 if (realmAvatar == null) {
-                    realmAvatar = realm.createObject(RealmAvatar.class);
-                    realmAvatar.setId(avatar.getId());
+                    realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
                     realmAvatar.setOwnerId(roomId);
                 }
 

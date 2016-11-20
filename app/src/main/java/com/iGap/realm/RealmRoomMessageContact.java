@@ -28,8 +28,7 @@ public class RealmRoomMessageContact extends RealmObject {
 
     public static RealmRoomMessageContact build(final ProtoGlobal.RoomMessageContact input) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessageContact messageContact = realm.createObject(RealmRoomMessageContact.class);
-        messageContact.setId(SUID.id().get());
+        RealmRoomMessageContact messageContact = realm.createObject(RealmRoomMessageContact.class, SUID.id().get());
         for (String phone : input.getPhoneList()) {
             messageContact.addPhone(phone);
         }

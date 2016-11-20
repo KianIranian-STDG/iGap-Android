@@ -363,13 +363,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
+                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, Long.parseLong(identity));
 
                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setMessage(message);
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                roomMessage.setMessageId(Long.parseLong(identity));
                 roomMessage.setUserId(senderId);
                 roomMessage.setUpdateTime((int) (System.currentTimeMillis() / DateUtils.SECOND_IN_MILLIS));
             }

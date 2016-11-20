@@ -667,9 +667,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class);
+                RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
                 realmAvatar.setOwnerId(roomId);
-                realmAvatar.setId(avatar.getId());
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
 
                 try {

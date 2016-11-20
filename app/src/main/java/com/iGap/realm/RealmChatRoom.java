@@ -23,8 +23,7 @@ public class RealmChatRoom extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
         RealmChatRoom realmChatRoom = realm.where(RealmChatRoom.class).equalTo(RealmChatRoomFields.PEER_ID, room.getPeer().getId()).findFirst();
         if (realmChatRoom == null) {
-            realmChatRoom = realm.createObject(RealmChatRoom.class);
-            realmChatRoom.setPeerId(room.getPeer().getId());
+            realmChatRoom = realm.createObject(RealmChatRoom.class, room.getPeer().getId());
         }
         realm.close();
         return realmChatRoom;

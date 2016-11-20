@@ -81,6 +81,7 @@ import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -193,16 +194,7 @@ public class ActivityMain extends ActivityEnhanced
                             }
                         });
 
-                        for (final ProtoGlobal.Room room : roomList) {
-                            Log.i("PPP", "getTitle : " + room.getTitle() + "  ||  getMessage : " + room.getLastMessage().getMessage() + "  ||  getStatus : " + room.getLastMessage().getStatus());
-                            if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                Log.i("UUU", "" + room.getGroupRoomExtra().getParticipantsCount());
-                                Log.i("UUU", "" + room.getGroupRoomExtra().getParticipantsCountLabel());
-                                Log.i("UUU", "" + room.getGroupRoomExtra().getParticipantsCountLimit());
-                                Log.i("UUU", "" + room.getGroupRoomExtra().getParticipantsCountLimitLabel());
-                            }
-                            putChatToDatabase(room);
-                        }
+                        putChatToDatabase(roomList);
                     }
                 });
             }
@@ -636,14 +628,16 @@ public class ActivityMain extends ActivityEnhanced
     /**
      * put fetched chat to database
      *
-     * @param room ProtoGlobal.Room
+     * @param rooms ProtoGlobal.Room
      */
-    private void putChatToDatabase(final ProtoGlobal.Room room) {
+    private void putChatToDatabase(final List<ProtoGlobal.Room> rooms) {
         final Realm realm = Realm.getDefaultInstance();
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(RealmRoom.convert(room, realm));
+                for (ProtoGlobal.Room room : rooms) {
+                    RealmRoom.putOrUpdate(room);
+                }
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -651,7 +645,11 @@ public class ActivityMain extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.add(new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
+                        List<RoomItem> roomItems = new ArrayList<>();
+                        for (ProtoGlobal.Room room : rooms) {
+                            roomItems.add(new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
+                        }
+                        mAdapter.add(roomItems);
                     }
                 });
 
@@ -935,9 +933,12 @@ public class ActivityMain extends ActivityEnhanced
             contentLoading.hide();
             // FIXME: 11/17/2016 [Alireza] sort rooms by their last message
             Realm realm = Realm.getDefaultInstance();
+            List<RoomItem> roomItems = new ArrayList<>();
             for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.ID, Sort.DESCENDING)) {
-                mAdapter.add(new RoomItem().setInfo(realmRoom).setComplete(ActivityMain.this).withIdentifier(SUID.id().get()));
+                roomItems.add(new RoomItem().setInfo(realmRoom).setComplete(ActivityMain.this).withIdentifier(SUID.id().get()));
             }
+
+            mAdapter.add(roomItems);
             realm.close();
         }
     }

@@ -1811,9 +1811,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class);
+                RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
                 realmAvatar.setOwnerId(userId);
-                realmAvatar.setId(avatar.getId());
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
 
                 try {

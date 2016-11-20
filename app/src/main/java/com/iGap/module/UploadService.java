@@ -54,14 +54,13 @@ public class UploadService extends Service {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class);
+                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
 
                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
                 //  roomMessage.setMessage(getWrittenMessage());
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setAttachment(messageId, savedPath, 0, 0, 0, null, duration, LocalFileType.FILE);
-                roomMessage.setMessageId(messageId);
                 roomMessage.setUserId(senderID);
                 roomMessage.setUpdateTime((int) (updateTime / DateUtils.SECOND_IN_MILLIS));
             }

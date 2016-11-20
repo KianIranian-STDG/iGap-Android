@@ -264,8 +264,7 @@ public class RealmRoomMessage extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
         if (!attachment.getToken().isEmpty()) {
             if (this.attachment == null) {
-                final RealmAttachment realmAttachment = realm.createObject(RealmAttachment.class);
-                realmAttachment.setId(messageId);
+                final RealmAttachment realmAttachment = realm.createObject(RealmAttachment.class, messageId);
                 realmAttachment.setCacheId(attachment.getCacheId());
                 realmAttachment.setDuration(attachment.getDuration());
                 realmAttachment.setHeight(attachment.getHeight());
@@ -317,8 +316,7 @@ public class RealmRoomMessage extends RealmObject {
         if (attachment == null) {
             RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
             if (realmAttachment == null) {
-                realmAttachment = realm.createObject(RealmAttachment.class);
-                realmAttachment.setId(messageId);
+                realmAttachment = realm.createObject(RealmAttachment.class, messageId);
             }
             if (type == LocalFileType.THUMBNAIL) {
                 realmAttachment.setLocalThumbnailPath(path);

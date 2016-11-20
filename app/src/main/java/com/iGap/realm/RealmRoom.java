@@ -50,24 +50,23 @@ public class RealmRoom extends RealmObject {
      * @param room ProtoGlobal.Room
      * @return RealmRoom
      */
-    public static RealmRoom convert(ProtoGlobal.Room room, Realm realm) {
-        putChatToClientCondition(room, realm);
+    public static RealmRoom putOrUpdate(ProtoGlobal.Room room) {
+        Realm realm = Realm.getDefaultInstance();
+        putChatToClientCondition(room);
 
-        RealmRoom realmRoom =
-                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+
         if (realmRoom == null) {
-            realmRoom = new RealmRoom();
+            realmRoom = realm.createObject(RealmRoom.class, room.getId());
         }
+
         realmRoom.setColor(room.getColor());
-        realmRoom.setId(room.getId());
         realmRoom.setInitials(room.getInitials());
         realmRoom.setTitle(room.getTitle());
         realmRoom.setType(RoomType.convert(room.getType()));
         realmRoom.setUnreadCount(room.getUnreadCount());
         realmRoom.setReadOnly(room.getReadOnly());
-        realmRoom.setMute(
-                false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server
-        // gereftim be jaye false sabt mikonim
+        realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
         switch (room.getType()) {
             case CHANNEL:
                 realmRoom.setType(RoomType.CHANNEL);
@@ -104,19 +103,21 @@ public class RealmRoom extends RealmObject {
 
         realmRoom.setDraft(realmRoomDraft);
 
+        realm.close();
+
         return realmRoom;
     }
 
 
-    private static void putChatToClientCondition(final ProtoGlobal.Room room, Realm realm) {
-
+    private static void putChatToClientCondition(final ProtoGlobal.Room room) {
+        Realm realm = Realm.getDefaultInstance();
         if (realm.where(RealmClientCondition.class)
                 .equalTo(RealmClientConditionFields.ROOM_ID, room.getId())
                 .findFirst() == null) {
-            RealmClientCondition realmClientCondition =
-                    realm.createObject(RealmClientCondition.class);
-            realmClientCondition.setRoomId(room.getId());
+            realm.createObject(RealmClientCondition.class, room.getId());
         }
+
+        realm.close();
     }
 
     public static void convertAndSetDraft(final long roomId, final String message,

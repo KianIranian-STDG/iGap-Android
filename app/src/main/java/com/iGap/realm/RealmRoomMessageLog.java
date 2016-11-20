@@ -20,8 +20,7 @@ public class RealmRoomMessageLog extends RealmObject {
 
     public static RealmRoomMessageLog build(final ProtoGlobal.RoomMessageLog input) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessageLog messageLocation = realm.createObject(RealmRoomMessageLog.class);
-        messageLocation.setId(SUID.id().get());
+        RealmRoomMessageLog messageLocation = realm.createObject(RealmRoomMessageLog.class, SUID.id().get());
         messageLocation.setType(input.getType());
         realm.close();
 

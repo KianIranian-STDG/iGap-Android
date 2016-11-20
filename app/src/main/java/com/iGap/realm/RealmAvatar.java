@@ -37,10 +37,9 @@ public class RealmAvatar extends RealmObject {
             }
         }
 
-        RealmAvatar avatar = null;
+        RealmAvatar avatar;
         if (!exists) {
-            avatar = realm.createObject(RealmAvatar.class);
-            avatar.setId(input.getId());
+            avatar = realm.createObject(RealmAvatar.class, input.getId());
             avatar.setOwnerId(ownerId);
             avatar.setFile(RealmAttachment.build(input.getFile()));
         } else {
@@ -78,8 +77,7 @@ public class RealmAvatar extends RealmObject {
         // don't put it into transaction
         RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
         if (realmAvatar == null) {
-            realmAvatar = realm.createObject(RealmAvatar.class);
-            realmAvatar.setId(attachment.getId());
+            realmAvatar = realm.createObject(RealmAvatar.class, attachment.getId());
             realmAvatar.setOwnerId(userId);
         }
         realmAvatar.setFile(attachment);

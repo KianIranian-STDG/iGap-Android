@@ -1348,8 +1348,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     @Override
                     public void execute(final Realm realm) {
                         if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, roomId).findFirst() == null) {
-                            RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class);
-                            realmOfflineDelete.setId(SUID.id().get());
+                            RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
                             realmOfflineDelete.setOfflineDelete(userId);
 
                             element.getOfflineDeleted().add(realmOfflineDelete);

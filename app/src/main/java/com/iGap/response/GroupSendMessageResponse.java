@@ -101,22 +101,19 @@ public class GroupSendMessageResponse extends MessageHandler {
                             realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
                     if (realmRoomMessage == null) {
-                        realmRoomMessage = realm.createObject(RealmRoomMessage.class);
-                        realmRoomMessage.setMessageId(roomMessage.getMessageId());
+                        realmRoomMessage = realm.createObject(RealmRoomMessage.class, roomMessage.getMessageId());
                         realmRoomMessage.setRoomId(builder.getRoomId());
                     }
 
                     fillRoomMessage(realmRoomMessage, roomMessage);
 
                     if (roomMessage.hasForwardFrom()) {
-                        RealmRoomMessage forward = realm.createObject(RealmRoomMessage.class);
-                        forward.setMessageId(SUID.id().get());
+                        RealmRoomMessage forward = realm.createObject(RealmRoomMessage.class, SUID.id().get());
 
                         realmRoomMessage.setForwardMessage(fillRoomMessage(forward, roomMessage));
                     } else if (roomMessage.hasReplyTo()) { // reply message
 
-                        RealmRoomMessage reply = realm.createObject(RealmRoomMessage.class);
-                        reply.setMessageId(System.currentTimeMillis());
+                        RealmRoomMessage reply = realm.createObject(RealmRoomMessage.class, SUID.id().get());
 
                         realmRoomMessage.setReplyTo(fillRoomMessage(reply, roomMessage));
                     }
@@ -137,16 +134,14 @@ public class GroupSendMessageResponse extends MessageHandler {
                                 RealmRoomMessage forwardMessage = realmRoomMessage.getForwardMessage();
                                 // forwardMessage shouldn't be null but client check it for insuring
                                 if (forwardMessage == null) {
-                                    forwardMessage = realm.createObject(RealmRoomMessage.class);
-                                    forwardMessage.setMessageId(SUID.id().get());
+                                    forwardMessage = realm.createObject(RealmRoomMessage.class, SUID.id().get());
                                 }
                                 realmRoomMessage.setForwardMessage(fillRoomMessage(forwardMessage, roomMessage));
                             } else if (roomMessage.hasReplyTo()) { // reply message
                                 RealmRoomMessage replyMessage = realmRoomMessage.getForwardMessage();
                                 // replyMessage shouldn't be null but client check it for insuring
                                 if (replyMessage == null) {
-                                    replyMessage = realm.createObject(RealmRoomMessage.class);
-                                    replyMessage.setMessageId(SUID.id().get());
+                                    replyMessage = realm.createObject(RealmRoomMessage.class, SUID.id().get());
                                 }
                                 realmRoomMessage.setReplyTo(fillRoomMessage(replyMessage, roomMessage));
                             }

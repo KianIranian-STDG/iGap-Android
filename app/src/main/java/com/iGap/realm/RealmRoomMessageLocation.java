@@ -21,8 +21,7 @@ public class RealmRoomMessageLocation extends RealmObject {
 
     public static RealmRoomMessageLocation build(final ProtoGlobal.RoomMessageLocation input) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class);
-        messageLocation.setId(SUID.id().get());
+        RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
         messageLocation.setLocationLat(input.getLat());
         messageLocation.setLocationLong(input.getLon());
         realm.close();

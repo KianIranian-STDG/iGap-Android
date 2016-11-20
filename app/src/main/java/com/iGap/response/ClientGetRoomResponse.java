@@ -6,7 +6,6 @@ import com.iGap.G;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmRoom;
-import com.iGap.realm.RealmRoomFields;
 
 import io.realm.Realm;
 
@@ -36,40 +35,18 @@ public class ClientGetRoomResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                // check if room doesn't exist, add room to database
-                RealmRoom room = realm.where(RealmRoom.class)
-                        .equalTo(RealmRoomFields.ID, clientGetRoom.getRoom().getId())
-                        .findFirst();
-                if (room == null) {
-                    realm.copyToRealmOrUpdate(RealmRoom.convert(clientGetRoom.getRoom(), realm));
-                }
+                RealmRoom.putOrUpdate(clientGetRoom.getRoom());
             }
         });
 
-        // FIXME: 11/6/2016 [Alireza] commented, chon ehsas mikonam ezafie
-        /*realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class)
-                    .equalTo(RealmRoomFields.ID, clientGetRoom.getRoom().getId())
-                    .findFirst();
-                // update last message sent/received in room table
-                RealmRoomMessage roomMessage = HelperRealm.getLastMessage(room.getId());
-                if (room.getLastMessageTime()
-                    != 0) { //TODO [Saeed Mozaffari] [2016-09-19 12:50 PM] - clear this if
-                    if (room.getLastMessageTime() < roomMessage.getUpdateTime()) {
-                        room.setUnreadCount(room.getUnreadCount() + 1);
-                        room.setLastMessageId(roomMessage.getMessageId());
-                        room.setLastMessageTime(roomMessage.getUpdateTimeAsSeconds());
-
-                        realm.copyToRealmOrUpdate(room);
-                    }
-                }
-            }
-        });*/
-
         realm.close();
 
-        G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
+            }
+        }, 300);
     }
 
     @Override

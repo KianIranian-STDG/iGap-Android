@@ -26,12 +26,11 @@ public class RealmThumbnail extends RealmObject {
 
     public static void create(long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
         Realm realm = Realm.getDefaultInstance();
-        RealmThumbnail realmThumbnail = realm.createObject(RealmThumbnail.class);
+        RealmThumbnail realmThumbnail = realm.createObject(RealmThumbnail.class, id);
         realmThumbnail.setCacheId(thumbnail.getCacheId());
         realmThumbnail.setWidth(thumbnail.getWidth());
         realmThumbnail.setSize(thumbnail.getSize());
         realmThumbnail.setHeight(thumbnail.getHeight());
-        realmThumbnail.setId(id);
         realmThumbnail.setMessageId(messageId);
 
         realm.close();
