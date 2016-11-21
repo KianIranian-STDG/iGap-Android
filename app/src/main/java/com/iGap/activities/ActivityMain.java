@@ -1261,8 +1261,13 @@ public class ActivityMain extends ActivityEnhanced
     }
 
     @Override
-    public void onChatUpdateStatus(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
-        mAdapter.updateChatStatus(roomId, status.toString());
+    public void onChatUpdateStatus(final long roomId, long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.updateChatStatus(roomId, status.toString());
+            }
+        });
     }
 
     @Override
