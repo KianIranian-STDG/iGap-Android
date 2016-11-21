@@ -191,6 +191,7 @@ public class ActivityMain extends ActivityEnhanced
                             @Override
                             public void run() {
                                 contentLoading.hide();
+                                mAdapter.clear();
                             }
                         });
 
@@ -929,6 +930,7 @@ public class ActivityMain extends ActivityEnhanced
             testIsSecure();
         } else {
             contentLoading.hide();
+            mAdapter.clear();
             // FIXME: 11/17/2016 [Alireza] sort rooms by their last message
             Realm realm = Realm.getDefaultInstance();
             List<RoomItem> roomItems = new ArrayList<>();
