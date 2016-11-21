@@ -106,10 +106,15 @@ public class FragmentDrawerMenu extends MenuFragment {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(G.context, ActivitySetting.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                G.context.startActivity(intent);
-                ActivityMain.mLeftDrawerLayout.closeDrawer();
+                HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                    @Override
+                    public void Allow() {
+                        Intent intent = new Intent(G.context, ActivitySetting.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        G.context.startActivity(intent);
+                        ActivityMain.mLeftDrawerLayout.closeDrawer();
+                    }
+                });
             }
         });
 
@@ -263,11 +268,22 @@ public class FragmentDrawerMenu extends MenuFragment {
         if (realmAvatar != null) {
             if (realmAvatar.getFile().getLocalFilePath() != null) {
 
-                File imgFile = new File(realmAvatar.getFile().getLocalFilePath());
+                final File imgFile = new File(realmAvatar.getFile().getLocalFilePath());
 
                 if (imgFile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    imgUserPhoto.setImageBitmap(myBitmap);
+
+                    showInitials();
+
+                    HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                        @Override
+                        public void Allow() {
+                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                            imgUserPhoto.setImageBitmap(myBitmap);
+                        }
+                    });
+
+
+
                 } else {
                     showInitials();
                 }

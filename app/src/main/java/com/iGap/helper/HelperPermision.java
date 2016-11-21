@@ -43,7 +43,8 @@ public class HelperPermision {
     public static void getCamarePermision(Context context, OnGetPermision onGetPermision) {
 
         if (checkApi()) {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
             return;
         }
 
@@ -56,7 +57,8 @@ public class HelperPermision {
             getPremision(context, new String[]{Manifest.permission.CAMERA},
                     MY_PERMISSIONS_CAMERA);
         } else {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
         }
     }
 
@@ -64,7 +66,8 @@ public class HelperPermision {
     public static void getStoragePermision(Context context, OnGetPermision onGetPermision) {
 
         if (checkApi()) {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
             return;
         }
 
@@ -94,7 +97,8 @@ public class HelperPermision {
             mStringArray = needPermosion.toArray(mStringArray);
             getPremision(context, mStringArray, MY_PERMISSIONS_STORAGE);
         } else {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
         }
     }
 
@@ -102,7 +106,8 @@ public class HelperPermision {
     public static void getContactPermision(Context context, OnGetPermision onGetPermision) {
 
         if (checkApi()) {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
             return;
         }
 
@@ -141,7 +146,8 @@ public class HelperPermision {
             mStringArray = needPermosion.toArray(mStringArray);
             getPremision(context, mStringArray, MY_PERMISSIONS_CONTACTS);
         } else {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
         }
     }
 
@@ -149,7 +155,8 @@ public class HelperPermision {
     public static void getCalendarPermision(Context context, OnGetPermision onGetPermision) {
 
         if (checkApi()) {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
             return;
         }
 
@@ -179,7 +186,8 @@ public class HelperPermision {
             mStringArray = needPermosion.toArray(mStringArray);
             getPremision(context, mStringArray, MY_PERMISSIONS_CALENDAR);
         } else {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
         }
     }
 
@@ -187,7 +195,8 @@ public class HelperPermision {
     public static void getLocationPermision(Context context, OnGetPermision onGetPermision) {
 
         if (checkApi()) {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
             return;
         }
 
@@ -217,7 +226,8 @@ public class HelperPermision {
             mStringArray = needPermosion.toArray(mStringArray);
             getPremision(context, mStringArray, MY_PERMISSIONS_LOCATION);
         } else {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
         }
     }
 
@@ -225,7 +235,8 @@ public class HelperPermision {
     public static void getMicroPhonePermision(Context context, OnGetPermision onGetPermision) {
 
         if (checkApi()) {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
             return;
         }
 
@@ -238,7 +249,8 @@ public class HelperPermision {
             getPremision(context, new String[]{Manifest.permission.RECORD_AUDIO},
                     MY_PERMISSIONS_RECORD_AUDIO);
         } else {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
         }
     }
 
@@ -246,7 +258,8 @@ public class HelperPermision {
     public static void getPhonePermision(Context context, OnGetPermision onGetPermision) {
 
         if (checkApi()) {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
             return;
         }
 
@@ -282,7 +295,8 @@ public class HelperPermision {
             mStringArray = needPermosion.toArray(mStringArray);
             getPremision(context, mStringArray, MY_PERMISSIONS_Phone);
         } else {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
         }
     }
 
@@ -290,7 +304,8 @@ public class HelperPermision {
     public static void getSmsPermision(Context context, OnGetPermision onGetPermision) {
 
         if (checkApi()) {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
             return;
         }
 
@@ -324,7 +339,8 @@ public class HelperPermision {
             mStringArray = needPermosion.toArray(mStringArray);
             getPremision(context, mStringArray, MY_PERMISSIONS_Sms);
         } else {
-            onGetPermision.Allow();
+            if (onGetPermision != null)
+                onGetPermision.Allow();
         }
     }
 

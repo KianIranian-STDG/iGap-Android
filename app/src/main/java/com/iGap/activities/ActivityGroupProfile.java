@@ -44,8 +44,10 @@ import com.iGap.fragments.FragmentListAdmin;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.ShowCustomList;
+import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnGroupAddAdmin;
 import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.interfaces.OnGroupAddModerator;
@@ -747,24 +749,31 @@ public class ActivityGroupProfile extends ActivityEnhanced
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroupProfile>() {
             @Override
-            public boolean onClick(View v, IAdapter adapter, ContactItemGroupProfile item, final int position) {
+            public boolean onClick(View v, IAdapter adapter, final ContactItemGroupProfile item, final int position) {
 
-                ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
-                Intent intent = null;
+                HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermision() {
+                    @Override
+                    public void Allow() {
+                        ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
+                        Intent intent = null;
 
-                if (contactItemGroupProfile.mContact.peerId == userID) {
-                    intent = new Intent(ActivityGroupProfile.this, ActivitySetting.class);
-                } else {
-                    intent = new Intent(ActivityGroupProfile.this, ActivityContactsProfile.class);
-                    intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
-                    intent.putExtra("RoomId", roomId);
-                    intent.putExtra("enterFrom", GROUP.toString());
-                }
+                        if (contactItemGroupProfile.mContact.peerId == userID) {
+                            intent = new Intent(ActivityGroupProfile.this, ActivitySetting.class);
+                        } else {
+                            intent = new Intent(ActivityGroupProfile.this, ActivityContactsProfile.class);
+                            intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
+                            intent.putExtra("RoomId", roomId);
+                            intent.putExtra("enterFrom", GROUP.toString());
+                        }
 
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
 
-                finish();
+                        finish();
+                    }
+                });
+
+
 
                 return false;
             }
