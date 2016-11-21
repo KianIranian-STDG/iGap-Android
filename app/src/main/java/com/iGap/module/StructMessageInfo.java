@@ -256,9 +256,11 @@ public class StructMessageInfo implements Parcelable {
         info.attachment.setLocalFilePath(messageID, localFilePath);
         info.time = time;
         info.messageText = messageText;
-        info.replayTo = realm.where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId)
-                .findFirst();
+        if (replayToMessageId != -1) {
+            info.replayTo = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId)
+                    .findFirst();
+        }
         realm.close();
         // audio exclusive
         info.songArtist = songArtist;
@@ -284,7 +286,7 @@ public class StructMessageInfo implements Parcelable {
         info.messageType = ProtoGlobal.RoomMessageType.CONTACT;
         info.sendType = sendType;
         info.time = time;
-        if (replayToMessageId != -1) {
+        if (replayToMessageId != 0) {
             info.replayTo = realm.where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId)
                     .findFirst();

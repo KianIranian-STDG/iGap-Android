@@ -309,9 +309,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         // set forward container visible if message was forwarded, otherwise, gone it
         LinearLayout forwardContainer = (LinearLayout) holder.itemView.findViewById(R.id.cslr_ll_forward);
         if (forwardContainer != null) {
-            if (mMessage.forwardMessageFrom != null) {
+            if (mMessage.forwardedFrom != null) {
                 forwardContainer.setVisibility(View.VISIBLE);
-                ((TextView) forwardContainer.findViewById(R.id.cslr_txt_forward_from)).setText(mMessage.forwardMessageFrom);
+                ((TextView) forwardContainer.findViewById(R.id.cslr_txt_forward_from)).setText(mMessage.forwardedFrom.getMessage());
             } else {
                 forwardContainer.setVisibility(View.GONE);
             }
@@ -400,7 +400,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
                     @Override
                     public void onProgressFinished() {
-                        // TODO: 10/15/2016 [Alireza] onClick babate har kodom age niaz bood, masalan vase play, bayad video ro play kone
                         switch (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType) {
                             case IMAGE:
                             case IMAGE_TEXT:

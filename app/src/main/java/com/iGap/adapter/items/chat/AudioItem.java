@@ -12,11 +12,8 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
-import com.iGap.module.AppUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageFields;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -26,7 +23,6 @@ import java.util.List;
 import io.github.meness.audioplayerview.AudioPlayerView;
 import io.github.meness.audioplayerview.listeners.OnAudioPlayerViewControllerClick;
 import io.github.meness.emoji.EmojiTextView;
-import io.realm.Realm;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
@@ -145,13 +141,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
             setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(mMessage.messageID)).findFirst();
-        if (roomMessage != null) {
-            AppUtils.rightFileThumbnailIcon(holder.thumbnail, mMessage.messageType, roomMessage.getAttachment());
-        }
-        realm.close();
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

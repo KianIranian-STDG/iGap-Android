@@ -132,6 +132,8 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmChannelRoom;
@@ -2371,7 +2373,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 messageInfo =
                         StructMessageInfo.buildForAudio(messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath,
-                                songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : 0);
+                                songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_pic_file:
             case AttachFile.request_code_open_document:
@@ -2644,6 +2646,7 @@ public class ActivityChat extends ActivityEnhanced
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
                     startActivity(makeIntentForForwardMessages(getMessageStructFromSelectedItems()));
+                    finish();
                 }
             }
         });
@@ -3940,6 +3943,7 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
+        Realm realm = Realm.getDefaultInstance();
         if (message.messageType == ProtoGlobal.RoomMessageType.VOICE || message.messageType == ProtoGlobal.RoomMessageType.AUDIO ||
                 message.messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
             MusicPlayer.startPlayer(message.getAttachment().getLocalFilePath(), title, mRoomId, true);
@@ -3947,9 +3951,10 @@ public class ActivityChat extends ActivityEnhanced
             showImage(message);
         } else if (message.messageType == ProtoGlobal.RoomMessageType.FILE || message.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT ||
                 message.messageType == ProtoGlobal.RoomMessageType.VIDEO || message.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-            Intent intent = HelperMimeType.appropriateProgram(message.getAttachment().getLocalFilePath());
+            Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, message.attachment.token).findFirst().getLocalFilePath());
             if (intent != null) startActivity(intent);
         }
+        realm.close();
     }
 
     @Override

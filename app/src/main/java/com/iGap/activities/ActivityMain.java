@@ -186,14 +186,8 @@ public class ActivityMain extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                contentLoading.hide();
-                                mAdapter.clear();
-                            }
-                        });
+                        contentLoading.hide();
+                        mAdapter.clear();
 
                         putChatToDatabase(roomList);
                     }
@@ -202,7 +196,12 @@ public class ActivityMain extends ActivityEnhanced
 
             @Override
             public void onTimeout() {
-                getChatsList(false);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getChatsList(false);
+                    }
+                });
             }
 
             @Override
@@ -642,16 +641,11 @@ public class ActivityMain extends ActivityEnhanced
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<RoomItem> roomItems = new ArrayList<>();
-                        for (ProtoGlobal.Room room : rooms) {
-                            roomItems.add(new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
-                        }
-                        mAdapter.add(roomItems);
-                    }
-                });
+                List<RoomItem> roomItems = new ArrayList<>();
+                for (ProtoGlobal.Room room : rooms) {
+                    roomItems.add(new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
+                }
+                mAdapter.add(roomItems);
 
                 realm.close();
             }

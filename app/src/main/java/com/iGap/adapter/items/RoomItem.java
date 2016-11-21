@@ -151,11 +151,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        // to fix 'This Realm instance has already been closed, making it unusable.'
-        if (!mInfo.isValid()) {
-            return;
-        }
-
         if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
             holder.messageStatus.setVisibility(GONE);
             holder.lastMessage.setVisibility(View.VISIBLE);
