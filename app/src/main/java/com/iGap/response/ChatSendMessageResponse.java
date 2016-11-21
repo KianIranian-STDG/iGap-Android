@@ -186,14 +186,14 @@ public class ChatSendMessageResponse extends MessageHandler {
             // Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
             // invoke following callback when i'm not the sender, because I already done
             // everything after sending message
-            if (!messageId.contains(roomMessage.getMessageId())) {
-                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
-                    G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(),
-                            roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHAT);
-                }
-            } else {
-                messageId.remove(messageId.indexOf(roomMessage.getMessageId()));
+            // if (!messageId.contains(roomMessage.getMessageId())) {
+            if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
+                G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(),
+                        roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHAT);
             }
+//            } else {
+//                messageId.remove(messageId.indexOf(roomMessage.getMessageId()));
+//            }
         } else {
             // invoke following callback when I'm the sender and the message has updated
             G.chatSendMessageUtil.onMessageUpdate(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), roomMessage.getStatus(), identity,

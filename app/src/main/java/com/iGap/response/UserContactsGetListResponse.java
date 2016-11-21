@@ -1,7 +1,6 @@
 package com.iGap.response;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 
@@ -21,7 +20,6 @@ public class UserContactsGetListResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public String identity;
-    public Context context;
 
     public UserContactsGetListResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -72,7 +70,7 @@ public class UserContactsGetListResponse extends MessageHandler {
 
         realm.close();
 
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             Contacts.FillRealmInviteFriend();
         }
 
