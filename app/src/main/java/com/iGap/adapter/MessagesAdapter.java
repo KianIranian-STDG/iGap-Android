@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
+import com.iGap.adapter.items.chat.TimeItem;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
@@ -44,10 +45,15 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
+
+            if (item instanceof TimeItem)
+                if (item.isSelected())
+                    v.performLongClick();
+
             if (onChatMessageSelectionChanged != null) {
                 onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
             }
-            return false;
+            return true;
         }
     };
 
@@ -78,8 +84,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                             iMessageItem.onContainerClick(v, item.mMessage, position);
                         }
                     }
+                } else {
+                    if (!(item instanceof TimeItem))
+                        v.performLongClick();
                 }
-                return true;
+                return false;
             }
         });
     }

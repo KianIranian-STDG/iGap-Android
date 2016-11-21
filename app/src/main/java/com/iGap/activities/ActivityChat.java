@@ -2698,6 +2698,23 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
                 realm.close();
+
+
+                int size = mAdapter.getItemCount();
+                for (int i = 0; i < size; i++) {
+
+                    if (mAdapter.getItem(i) instanceof TimeItem) {
+                        if (i < size - 1) {
+                            if (mAdapter.getItem(i + 1) instanceof TimeItem) {
+                                mAdapter.remove(i);
+                            }
+
+                        } else {
+                            mAdapter.remove(i);
+                        }
+                    }
+                }
+
             }
         });
         txtNumberOfSelected = (TextView) findViewById(R.id.chl_txt_number_of_selected);
@@ -3014,9 +3031,11 @@ public class ActivityChat extends ActivityEnhanced
                 public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
-                    AbstractMessage lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
-                    if (lastMessageBeforeDeleted != null) {
-                        realmRoom.setLastMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID)).findFirst());
+                    if (mAdapter.getAdapterItemCount() > 0) {
+                        AbstractMessage lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
+                        if (lastMessageBeforeDeleted != null) {
+                            realmRoom.setLastMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID)).findFirst());
+                        }
                     }
                 }
             }, new Realm.Transaction.OnSuccess() {

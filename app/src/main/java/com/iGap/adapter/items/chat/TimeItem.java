@@ -36,7 +36,10 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.text, mMessage.messageText);
+
+
     }
+
 
     @Override
     public ViewHolderFactory<? extends ViewHolder> getFactory() {

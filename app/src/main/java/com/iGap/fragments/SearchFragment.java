@@ -324,6 +324,12 @@ public class SearchFragment extends Fragment {
 
         for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class).findAll()) {
             if (roomMessage != null) {
+
+                if (roomMessage.getMessage() == null)
+                    continue;
+                if (roomMessage.getMessage().length() < 1)
+                    continue;
+
                 StructSearch item = new StructSearch();
 
                 item.time = roomMessage.getUpdateTime();
