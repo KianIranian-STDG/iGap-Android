@@ -193,7 +193,13 @@ public class ActivityGroupProfile extends ActivityEnhanced
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
         role = realmGroupRoom.getRole();
-        noLastMessage = realmRoom.getLastMessage().getMessageId();
+        try {
+            if (realmRoom.getLastMessage() != null) {
+                noLastMessage = realmRoom.getLastMessage().getMessageId();
+            }
+        } catch (NullPointerException e) {
+            e.getStackTrace();
+        }
 
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
         members = realmGroupRoom.getMembers();

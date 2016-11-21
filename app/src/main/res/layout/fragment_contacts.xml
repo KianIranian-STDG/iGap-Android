@@ -50,7 +50,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:theme="@style/SearchViewToolbar"
+                android:layoutDirection="ltr"
                 android:visibility="visible" />
 
             <TextView
@@ -64,7 +66,8 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp18"
-                android:layout_alignParentTop="true"
+                android:layout_alignBaseline="@+id/menu_ripple_txtBack"
+                android:layout_alignBottom="@+id/menu_ripple_txtBack"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>
 

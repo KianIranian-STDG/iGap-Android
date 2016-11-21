@@ -149,7 +149,7 @@ public class FragmentDeleteAccount extends Fragment {
                     new MaterialDialog.Builder(getActivity())
                             .title(getResources().getString(R.string.delete_account))
                             .titleColor(getResources().getColor(android.R.color.black))
-                            .items(R.array.language)
+                            .items(R.array.delete_account)
                             .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
                                 @Override
                                 public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
