@@ -26,7 +26,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
+import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
@@ -97,7 +99,15 @@ public class ActivityProfile extends ActivityEnhanced
         btnSetImage.setOnClickListener(new View.OnClickListener() { // button for set image
             @Override
             public void onClick(View view) {
-                startDialog(); // this dialog show 2 way for choose image : gallery and camera
+
+                HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
+                    @Override
+                    public void Allow() {
+                        startDialog(); // this dialog show 2 way for choose image : gallery and camera
+                    }
+                });
+
+
             }
         });
 

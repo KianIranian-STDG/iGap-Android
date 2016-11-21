@@ -7,8 +7,13 @@ import com.iGap.proto.ProtoChatDelete;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ChatDeleteResponse extends MessageHandler {
 
@@ -28,21 +33,34 @@ public class ChatDeleteResponse extends MessageHandler {
     public void handler() {
         super.handler();
         Log.i("RRR", "ChatDeleteResponse delete 1");
-        ProtoChatDelete.ChatDeleteResponse.Builder builder =
-                (ProtoChatDelete.ChatDeleteResponse.Builder) message;
+        ProtoChatDelete.ChatDeleteResponse.Builder builder = (ProtoChatDelete.ChatDeleteResponse.Builder) message;
         Log.i("RRR", "ChatDeleteResponse delete 2");
+
+        final Long roomId = builder.getRoomId();
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class)
-                        .equalTo(RealmClientConditionFields.ROOM_ID,
-                                ((ProtoChatDelete.ChatDeleteResponse.Builder) message).getRoomId())
-                        .findFirst();
+                        .equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.deleteFromRealm();
                 }
+
+
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    realmRoom.deleteFromRealm();
+                }
+                RealmResults<RealmRoomMessage> realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
+                if (realmRoomMessage != null) {
+                    realmRoomMessage.deleteAllFromRealm();
+                }
+
+
+
+
             }
         });
 

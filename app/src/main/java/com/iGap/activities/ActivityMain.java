@@ -741,15 +741,6 @@ public class ActivityMain extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(final Realm realm) {
-                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getInfo().getId()).findAll().deleteAllFromRealm();
-                                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getInfo().getId()).findFirst().deleteFromRealm();
-                            }
-                        });
-                        realm.close();
 
                         mAdapter.remove(mAdapter.getPosition(item));
                     }

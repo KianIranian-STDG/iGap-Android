@@ -36,9 +36,11 @@ import com.iGap.activities.ActivityCrop;
 import com.iGap.activities.ActivityMain;
 import com.iGap.activities.ActivityNewChanelFinish;
 import com.iGap.helper.HelperImageBackColor;
+import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChatConvertToGroup;
 import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupCreate;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -119,6 +121,48 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         }
     }
 
+    private void showDialogSelectGallary() {
+        new MaterialDialog.Builder(getActivity()).title(getString(R.string.choose_picture))
+                .negativeText(getString(R.string.cancel))
+                .items(R.array.profile)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        switch (which) {
+                            case 0: {
+                                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                startActivityForResult(intent, IntentRequests.REQ_GALLERY);
+                                dialog.dismiss();
+                                break;
+
+                            }
+                            case 1: {
+
+                                if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+
+                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    if (prefix.equals("NewChanel")) {
+                                        uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
+                                    } else {
+                                        uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
+                                    }
+
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                                    startActivityForResult(intent, IntentRequests.REQ_CAMERA);
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(G.context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+                            }
+                        }
+
+                    }
+                })
+                .show();
+    }
+
     public void initComponent(View view) {
         G.uploaderUtil.setActivityCallbacks(this);
         G.onGroupAvatarResponse = this;
@@ -169,45 +213,14 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                new MaterialDialog.Builder(getActivity()).title(getString(R.string.choose_picture))
-                        .negativeText(getString(R.string.cancel))
-                        .items(R.array.profile)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                switch (which) {
-                                    case 0: {
-                                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
-                                        dialog.dismiss();
-                                        break;
+                HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                    @Override
+                    public void Allow() {
+                        showDialogSelectGallary();
+                    }
+                });
 
-                                    }
-                                    case 1: {
-
-                                        if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-
-                                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                            if (prefix.equals("NewChanel")) {
-                                                uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
-                                            } else {
-                                                uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
-                                            }
-
-                                            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                            startActivityForResult(intent, IntentRequests.REQ_CAMERA);
-                                            dialog.dismiss();
-                                        } else {
-                                            Toast.makeText(G.context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
-                                        }
-                                        break;
-                                    }
-                                }
-
-                            }
-                        })
-                        .show();
             }
         });
 

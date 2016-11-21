@@ -220,32 +220,50 @@ public class AttachFile {
         //Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
         //((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
 
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
-        isInAttach = true;
+
+        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
+                isInAttach = true;
+            }
+        });
     }
 
     //*************************************************************************************************************
     public void requestOpenGalleryForVideoMultipleSelect() {
 
-        Intent intent = new Intent();
-        intent.setType("video/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        ((Activity) context).startActivityForResult(intent, requestOpenGalleryForVideoMultipleSelect);
-        isInAttach = true;
+        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent();
+                intent.setType("video/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                ((Activity) context).startActivityForResult(intent, requestOpenGalleryForVideoMultipleSelect);
+                isInAttach = true;
+            }
+        });
+
+
     }
 
     //*************************************************************************************************************
     public void requestOpenGalleryForImageSingleSelect() {
 
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
-        isInAttach = true;
+        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                isInAttach = true;
+            }
+        });
     }
 
     //*************************************************************************************************************
@@ -359,12 +377,18 @@ public class AttachFile {
         //intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
         //((Activity) context).startActivityForResult(intent, request_code_pic_audi);
 
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("audio/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
 
-        isInAttach = true;
+        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("audio/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
+
+                isInAttach = true;
+            }
+        });
     }
 
     public void requestPickFile() {
@@ -378,11 +402,18 @@ public class AttachFile {
     }
 
     public void requestPickContact() {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
-        isInAttach = true;
+
+        HelperPermision.getContactPermision(context, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
+                isInAttach = true;
+            }
+        });
+
     }
 
     public void requestGetPosition(OnComplete complete) {
