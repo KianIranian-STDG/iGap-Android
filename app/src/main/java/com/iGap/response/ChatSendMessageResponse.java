@@ -72,29 +72,14 @@ public class ChatSendMessageResponse extends MessageHandler {
                 Log.i("CLI", "send message StatusVersion : " + roomMessage.getStatusVersion());
                 Log.i("CLI", "send message MessageId : " + roomMessage.getMessageId());
 
-                // if first message received but the room doesn't exist, create new room
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst();
-                if (room == null) {
-                    // make get room request
-                    new RequestClientGetRoom().clientGetRoom(chatSendMessageResponse.getRoomId());
-                } else {
-                    // update last message sent/received in room table
-                    if (room.getLastMessage() != null) {
-                        if (room.getLastMessage().getUpdateTime() < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
-                            room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId()));
-                        }
-                    } else {
-                        room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId()));
-                    }
-                }
-
                 // because user may have more than one device, his another device should not be
                 // recipient
                 // but sender. so I check current userId with room message user id, and if not
                 // equals
                 // and response is null, so we sure recipient is another user
 
-                if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this
+                if (chatSendMessageResponse.getResponse().getId().isEmpty()) { //TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this
+
                     // comment Alireza added and removed with saeed ==> //userId != roomMessage
                     // .getUserId() &&
                     // i'm the recipient
@@ -179,6 +164,21 @@ public class ChatSendMessageResponse extends MessageHandler {
                             realm.copyToRealmOrUpdate(realmRoomMessage);
                             break;
                         }
+                    }
+                }
+                // if first message received but the room doesn't exist, create new room
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst();
+                if (room == null) {
+                    // make get room request
+                    new RequestClientGetRoom().clientGetRoom(chatSendMessageResponse.getRoomId());
+                } else {
+                    // update last message sent/received in room table
+                    if (room.getLastMessage() != null) {
+                        if (room.getLastMessage().getUpdateTime() < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
+                            room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId()));
+                        }
+                    } else {
+                        room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId()));
                     }
                 }
             }
