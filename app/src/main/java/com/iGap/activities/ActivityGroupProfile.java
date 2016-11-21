@@ -1224,6 +1224,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 for (int i = 0; i < list.size(); i++) {
 
                     new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, startMessageId);
+                    Log.i("VVVVBBBB", "list.get(i).peerId: " + list.get(i).peerId);
                 }
 
             }

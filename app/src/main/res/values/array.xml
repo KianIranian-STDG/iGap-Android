@@ -198,7 +198,10 @@
     </string-array>
 
     <string-array name="delete_account">
-
+        <item>@string/delete_account_text1</item>
+        <item>@string/delete_account_text2</item>
+        <item>@string/delete_account_text3</item>
+        <item>@string/delete_account_text4</item>
     </string-array>
 
     <string-array name="numberCountGroup">

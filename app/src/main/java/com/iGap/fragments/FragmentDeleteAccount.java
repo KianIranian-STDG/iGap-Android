@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,14 +35,13 @@ import com.iGap.proto.ProtoUserDelete;
 import com.iGap.request.RequestUserDelete;
 import com.iGap.request.RequestUserGetDeleteToken;
 
-import static com.iGap.helper.HelperGetDataFromOtherApp.message;
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentDeleteAccount extends Fragment {
 
     private String regex;
+    private String smsMessage;
     private IncomingSms smsReceiver;
     private EditTextAdjustPan edtDeleteAccount;
     private RippleView txtSet;
@@ -60,11 +60,17 @@ public class FragmentDeleteAccount extends Fragment {
         smsReceiver = new IncomingSms(new OnSmsReceive() {
 
             @Override
-            public void onSmsReceive(String message) {
+            public void onSmsReceive(final String message) {
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
-                        getSms(message);
-                        Log.i("XXXAA", "onSmsReceive: " + message);
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.i("XXXAA", "onSmsReceive: " + message);
+                                getSms(message);
+                            }
+                        }, 500);
+
                     }
                 } catch (Exception e1) {
                     e1.getStackTrace();
@@ -137,60 +143,81 @@ public class FragmentDeleteAccount extends Fragment {
         txtSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(getActivity())
-                        .title(getResources().getString(R.string.delete_account))
-                        .titleColor(getResources().getColor(android.R.color.black))
-                        .items(R.array.language)
-                        .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                switch (which) {
-                                    case 0:
-                                        Toast.makeText(G.context, "1", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case 1:
-                                        Toast.makeText(G.context, "2", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case 2:
-                                        Toast.makeText(G.context, "3", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case 3:
-                                        Toast.makeText(G.context, "4", Toast.LENGTH_SHORT).show();
-                                        break;
+                if (edtDeleteAccount.getText().length() > 0) {
+
+                    new MaterialDialog.Builder(getActivity())
+                            .title(getResources().getString(R.string.delete_account))
+                            .titleColor(getResources().getColor(android.R.color.black))
+                            .items(R.array.language)
+                            .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
+                                @Override
+                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                    switch (which) {
+                                        case 0:
+                                            Toast.makeText(G.context, "1", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        case 1:
+                                            Toast.makeText(G.context, "2", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        case 2:
+                                            Toast.makeText(G.context, "3", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        case 3:
+                                            Toast.makeText(G.context, "4", Toast.LENGTH_SHORT).show();
+                                            break;
+                                    }
+
+                                    return false;
                                 }
+                            })
+                            .positiveText(getResources().getString(R.string.B_ok))
+                            .negativeText(getResources().getString(R.string.B_cancel))
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                return false;
-                            }
-                        })
-                        .positiveText(getResources().getString(R.string.B_ok))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                String verificationCode = HelperString.regexExtractValue(message, regex);
-                                if (verificationCode != null && !verificationCode.isEmpty()) {
+//                                    String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
+                                    String verificationCode = edtDeleteAccount.getText().toString();
+                                    if (verificationCode != null && !verificationCode.isEmpty()) {
 
-                                    G.onUserDelete = new OnUserDelete() {
-                                        @Override
-                                        public void onUserDeleteResponse() {
-                                            Log.i("UUU", "onUserDeleteResponse");
-                                            HelperLogout.logout();
-                                        }
-                                    };
+                                        G.onUserDelete = new OnUserDelete() {
+                                            @Override
+                                            public void onUserDeleteResponse() {
+                                                Log.i("UUU", "onUserDeleteResponse");
+                                                HelperLogout.logout();
+                                            }
+                                        };
 
-                                    Log.i("UUU", "RequestUserDelete verificationCode : " + verificationCode);
-                                    new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
+                                        Log.i("UUU", "RequestUserDelete verificationCode : " + verificationCode);
+                                        new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
+                                    }
                                 }
-                            }
-                        })
-                        .show();
+                            })
+                            .show();
+                } else {
+
+                    final Snackbar snack =
+                            Snackbar.make(getActivity().findViewById(android.R.id.content), "Please enter code for verify ",
+                                    Snackbar.LENGTH_LONG);
+
+                    snack.setAction("CANCEL", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
+
+                }
             }
         });
 
         edtDeleteAccount = (EditTextAdjustPan) view.findViewById(R.id.stda_edt_dleteAccount);
         edtDeleteAccount.setEnabled(false);
+
 
         final View viewLineBottom = view.findViewById(R.id.stda_line_below_editText);
         txtSet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -210,7 +237,7 @@ public class FragmentDeleteAccount extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                countDownTimer = new CountDownTimer(1000 * 61, 1000) {
+                countDownTimer = new CountDownTimer(1000 * 60, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         int seconds = (int) ((millisUntilFinished) / 1000);
@@ -222,6 +249,7 @@ public class FragmentDeleteAccount extends Fragment {
                     @Override
                     public void onFinish() {
                         edtDeleteAccount.setEnabled(true);
+                        txtSet.setEnabled(true);
                     }
                 };
                 countDownTimer.start();
@@ -233,10 +261,14 @@ public class FragmentDeleteAccount extends Fragment {
 
     private void getSms(String message) {
 
-        edtDeleteAccount.setText("" + message);
-        txtSet.setEnabled(true);
-        countDownTimer.onFinish();
-        Log.i("XXXAA", "getSms: " + message);
+        countDownTimer.cancel();
+        String verificationCode = HelperString.regexExtractValue(message, regex);
+        if (verificationCode.length() > 0) {
+            edtDeleteAccount.setEnabled(true);
+            txtSet.setEnabled(true);
+            edtDeleteAccount.setText("" + verificationCode);
+        }
+
 //
     }
 

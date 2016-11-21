@@ -120,7 +120,6 @@
             android:layout_height="match_parent"
             android:hint="@string/Enter_Code"
             android:gravity="center"
-            android:inputType="number"
             android:background="@android:color/transparent"
             android:singleLine="true"
             android:maxLength="10"

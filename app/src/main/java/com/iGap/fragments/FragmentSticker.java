@@ -59,9 +59,9 @@ public class FragmentSticker extends Fragment {
         });
         sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         layoutCrop = (ViewGroup) view.findViewById(R.id.stsp_layout_crop);
-        int checkeCrop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0);
+        int checkCrop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0);
         toggleCrop = (ToggleButton) view.findViewById(R.id.stsp_toggle_crop);
-        if (checkeCrop == 1) {
+        if (checkCrop == 1) {
             toggleCrop.setChecked(true);
         } else {
             toggleCrop.setChecked(false);

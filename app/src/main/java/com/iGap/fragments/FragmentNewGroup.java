@@ -60,7 +60,6 @@ import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatConvertToGroup;
 import com.iGap.request.RequestClientGetRoom;
-import com.iGap.request.RequestGroupAvatarAdd;
 import com.iGap.request.RequestGroupCreate;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -344,32 +343,32 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             @Override
             public void onChatConvertToGroup(final long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
 
-                Realm realm = Realm.getDefaultInstance();
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        realmRoom.setType(RoomType.GROUP);
-                        realmRoom.setTitle(name);
-
-                        RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
-
-                        realmGroupRoom.setRole(GroupChatRole.OWNER);
-                        realmGroupRoom.setDescription(description);
-                        realmGroupRoom.setParticipantsCountLabel("2");
-                        realmRoom.setGroupRoom(realmGroupRoom);
-
-                    }
-                });
-                realm.close();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Realm realm = Realm.getDefaultInstance();
+
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                realmRoom.setType(RoomType.GROUP);
+                                realmRoom.setTitle(name);
+
+                                RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
+
+                                realmGroupRoom.setRole(GroupChatRole.OWNER);
+                                realmGroupRoom.setDescription(description);
+                                realmGroupRoom.setParticipantsCountLabel("2");
+                                realmRoom.setGroupRoom(realmGroupRoom);
+
+                            }
+                        });
+                        realm.close();
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        getRoom(roomId);
                     }
                 });
-                getRoom(roomId);
             }
 
             @Override
@@ -385,6 +384,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
             @Override
             public void timeOut() {
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -392,6 +392,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     }
                 });
+
             }
         };
 
@@ -401,14 +402,16 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
     private void createGroup() {
         G.onGroupCreate = new OnGroupCreate() {
             @Override
-            public void onGroupCreate(long roomId) {
+            public void onGroupCreate(final long roomId) {
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        getRoom(roomId);
                     }
                 });
-                new RequestGroupAvatarAdd().groupAvatarAdd(roomId, (String) imgCircleImageView.getTag());
+
             }
 
             @Override
@@ -491,31 +494,42 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
             @Override
             public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
-                getFragmentManager().popBackStack();
-                android.support.v4.app.Fragment fragment = ContactGroupFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putLong("RoomId", roomId);
-                bundle.putBoolean("NewRoom", true);
-                fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(fragmentContainer, fragment)
-                        .commit();
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        getFragmentManager().popBackStack();
+                        android.support.v4.app.Fragment fragment = ContactGroupFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("RoomId", roomId);
+                        bundle.putBoolean("NewRoom", true);
+                        fragment.setArguments(bundle);
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .addToBackStack(null)
+                                .replace(fragmentContainer, fragment)
+                                .commit();
                         ActivityMain.mLeftDrawerLayout.closeDrawer();
                         prgWaiting.setVisibility(View.GONE);
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                     }
                 });
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWaiting.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+
                 if (majorCode == 610) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -596,6 +610,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
             @Override
             public void onTimeOut() {
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -603,6 +618,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     }
                 });
+
             }
         };
 

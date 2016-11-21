@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -240,7 +239,6 @@ public class ShowCustomList extends Fragment {
                                 count = (int) lastId;
                                 if (onSelectedList != null) {
 
-                                    Log.i("CCCCCVV", "onSelection: " + count);
                                     onSelectedList.getSelectedList(true, "", count, getSelectedList());
                                 }
                                 getActivity().getSupportFragmentManager().popBackStack();

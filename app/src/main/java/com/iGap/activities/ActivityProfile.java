@@ -187,6 +187,13 @@ public class ActivityProfile extends ActivityEnhanced
                 });
 
                 if (majorCode == 112 && minorCode == 1) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        }
+                    });
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -224,42 +231,60 @@ public class ActivityProfile extends ActivityEnhanced
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void execute(Realm realm) {
-                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                        realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
-                        realmUserInfo.getUserInfo().setInitials(user.getInitials());
-                        realmUserInfo.getUserInfo().setColor(user.getColor());
-                        realmUserInfo.setUserRegistrationState(true);
+                    public void run() {
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                        final long userId = realmUserInfo.getUserId();
-
-                        runOnUiThread(new Runnable() {
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
                             @Override
-                            public void run() {
-                                Intent intent = new Intent(G.context, ActivityMain.class);
-                                intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
-                                startActivity(intent);
-                                finish();
+                            public void execute(Realm realm) {
+                                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                                realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
+                                realmUserInfo.getUserInfo().setInitials(user.getInitials());
+                                realmUserInfo.getUserInfo().setColor(user.getColor());
+                                realmUserInfo.setUserRegistrationState(true);
+
+                                final long userId = realmUserInfo.getUserId();
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(G.context, ActivityMain.class);
+                                        intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
                             }
                         });
+                        realm.close();
                     }
                 });
-                realm.close();
 
             }
 
             @Override
             public void onUserInfoTimeOut() {
 
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+
             }
 
             @Override
             public void onUserInfoError(int majorCode, int minorCode) {
-
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
             }
         };
 

@@ -175,15 +175,21 @@ public class FragmentListAdmin extends Fragment {
 
                                         @Override
                                         public void onError(int majorCode, final int minorCode) {
+
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    prgWait.setVisibility(View.GONE);
+                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                }
+                                            });
+
                                             if (majorCode == 327) {
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
 
                                                         if (minorCode == 1) {
-
-                                                            prgWait.setVisibility(View.GONE);
-                                                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                                             final Snackbar snack =
                                                                     Snackbar.make(getActivity().findViewById(android.R.id.content),
@@ -199,8 +205,6 @@ public class FragmentListAdmin extends Fragment {
                                                             snack.show();
                                                         } else {
 
-                                                            prgWait.setVisibility(View.GONE);
-                                                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                                             getResources().getString(R.string.E_327_B),
@@ -222,9 +226,6 @@ public class FragmentListAdmin extends Fragment {
                                                     @Override
                                                     public void run() {
 
-                                                        prgWait.setVisibility(View.GONE);
-                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
                                                         final Snackbar snack =
                                                                 Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                                         getResources().getString(R.string.E_328),
@@ -245,10 +246,6 @@ public class FragmentListAdmin extends Fragment {
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-
-
-                                                        prgWait.setVisibility(View.GONE);
-                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                                         final Snackbar snack =
                                                                 Snackbar.make(getActivity().findViewById(android.R.id.content),
