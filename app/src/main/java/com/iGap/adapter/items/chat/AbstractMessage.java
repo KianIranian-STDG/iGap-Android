@@ -500,6 +500,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
+        if (onFileDownload != null) {
+            onFileDownload.onFileDownloaded();
+        }
+
     }
 
     @Override
