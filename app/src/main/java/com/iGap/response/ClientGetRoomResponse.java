@@ -46,7 +46,7 @@ public class ClientGetRoomResponse extends MessageHandler {
             public void run() {
                 G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
             }
-        }, 300);
+        }, 500);
     }
 
     @Override

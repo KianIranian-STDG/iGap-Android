@@ -255,7 +255,8 @@ public class ActivityMain extends ActivityEnhanced
                             @Override
                             public void run() {
                                 Realm realm = Realm.getDefaultInstance();
-                                mAdapter.add(0, new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+                                mAdapter.add(0, new RoomItem().setInfo(realmRoom).withIdentifier(SUID.id().get()));
                                 scrollToTop();
                                 realm.close();
                             }
@@ -967,7 +968,7 @@ public class ActivityMain extends ActivityEnhanced
 
         // adapter may be null because it's initializing async
         // FIXME: 11/17/2016 [Alireza] commented and not to be commented because adapter would not be updated
-        /*if (mAdapter != null) {
+        if (mAdapter != null) {
             mAdapter.clear();
             // check if new rooms exist, add to adapter
             // loadChatsFromLocal();
@@ -984,7 +985,7 @@ public class ActivityMain extends ActivityEnhanced
             });
 
             realm.close();
-        }*/
+        }
 
         startService(new Intent(this, ServiceContact.class));
     }
