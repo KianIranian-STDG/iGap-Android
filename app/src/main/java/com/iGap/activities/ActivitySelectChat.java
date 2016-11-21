@@ -47,6 +47,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
         mForwardMessages = getIntent().getExtras().getParcelableArrayList(ARG_FORWARD_MESSAGE);
 
+        findViewById(R.id.loadingContent).setVisibility(View.GONE);
+
         initRecycleView();
         initComponent();
     }
