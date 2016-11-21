@@ -72,6 +72,7 @@ import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
+import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupGetMemberList;
 import com.iGap.realm.RealmAttachment;
@@ -969,7 +970,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     realmAvatar.setOwnerId(roomId);
                 }
 
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
 
                 RealmRoom realmRoom =
                         realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();

@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.util.Log;
 
+import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserAvatarGetList;
 import com.iGap.realm.RealmAttachment;
@@ -44,7 +45,7 @@ public class UserAvatarGetListResponse extends MessageHandler {
                 for (ProtoGlobal.Avatar avatar : userAvatarGetListResponse.getAvatarList()) {
                     Log.i("VVV", "avatar : " + avatar);
                     RealmAvatar realmAvatar = RealmAvatar.convert(Long.parseLong(identity),
-                            RealmAttachment.build(avatar.getFile()));
+                            RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
                     Log.i("VVV", "realmAvatar : " + realmAvatar);
                     if (!realmAvatars.contains(realmAvatar)) {
                         realmAvatars.add(realmAvatar);

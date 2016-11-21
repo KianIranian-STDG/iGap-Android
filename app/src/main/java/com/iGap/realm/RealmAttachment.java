@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.iGap.G;
 import com.iGap.module.SUID;
+import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 
 import org.parceler.Parcel;
@@ -39,7 +40,7 @@ public class RealmAttachment extends RealmObject {
     @Nullable
     private String localFilePath;
 
-    public static RealmAttachment build(ProtoGlobal.File file) {
+    public static RealmAttachment build(ProtoGlobal.File file, AttachmentFor attachmentFor) {
         Realm realm = Realm.getDefaultInstance();
 
         RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, file.getToken()).findFirst();
@@ -61,8 +62,18 @@ public class RealmAttachment extends RealmObject {
             RealmThumbnail smallThumbnail = realm.where(RealmThumbnail.class).equalTo("id", smallId).findFirst();
             realmAttachment.setSmallThumbnail(smallThumbnail);
 
-            String filePath = G.DIR_IMAGE_USER + "/" + file.getToken() + "_" + file.getName();
+
             String tempFilePath = G.DIR_TEMP + "/" + "thumb_" + file.getToken() + "_" + file.getName();
+            String filePath = "";
+            switch (attachmentFor) {
+                case MESSAGE_ATTACHMENT:
+                    filePath = G.DIR_IMAGES;
+                    break;
+                case AVATAR:
+                    filePath = G.DIR_IMAGE_USER;
+                    break;
+            }
+            filePath += "/" + file.getToken() + "_" + file.getName();
 
             realmAttachment.setLocalFilePath(new File(filePath).exists() ? filePath : null);
             realmAttachment.setLocalThumbnailPath(new File(tempFilePath).exists() ? tempFilePath : null);

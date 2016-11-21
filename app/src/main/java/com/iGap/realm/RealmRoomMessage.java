@@ -3,6 +3,7 @@ package com.iGap.realm;
 import android.text.format.DateUtils;
 
 import com.iGap.module.SUID;
+import com.iGap.module.enums.AttachmentFor;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 
@@ -20,10 +21,8 @@ import io.realm.annotations.PrimaryKey;
 public class RealmRoomMessage extends RealmObject {
     @PrimaryKey
     private long messageId;
-
     @Index
     private long roomId;
-
     private long messageVersion;
     private String status;
     private long statusVersion;
@@ -41,64 +40,38 @@ public class RealmRoomMessage extends RealmObject {
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
 
-    public static RealmRoomMessage put(ProtoGlobal.RoomMessage input, long roomId) {
+    public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage message;
-        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, input.getMessageId()).count() > 0) {
-            message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, input.getMessageId()).findFirst();
-            message.setMessageId(input.getMessageId());
-            message.setMessage(input.getMessage());
-            message.setStatus(input.getStatus().toString());
-            message.setUserId(input.getAuthor().getUser().getUserId());
-//            message.setRoomId(input.getAuthor().getRoom().getRoomId());
-            message.setRoomId(roomId);
-            if (input.hasAttachment()) {
-                message.setAttachment(RealmAttachment.build(input.getAttachment()));
-            }
-            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
-            message.setDeleted(input.getDeleted());
-            message.setEdited(input.getEdited());
-            if (input.hasForwardFrom()) {
-                message.setForwardMessage(RealmRoomMessage.put(input.getForwardFrom(), roomId));
-            }
-            message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
-            message.setLog(RealmRoomMessageLog.build(input.getLog()));
-            message.setMessageType(input.getMessageType());
-            message.setMessageVersion(input.getMessageVersion());
-            if (input.hasReplyTo()) {
-                message.setReplyTo(RealmRoomMessage.put(input.getReplyTo(), roomId));
-            }
-            message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
-            message.setStatusVersion(input.getStatusVersion());
-            message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
-            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
-        } else {
+
+        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, input.getMessageId()).findFirst();
+
+        if (message == null) {
             message = realm.createObject(RealmRoomMessage.class, input.getMessageId());
-            message.setMessage(input.getMessage());
-            message.setStatus(input.getStatus().toString());
-            message.setUserId(input.getAuthor().getUser().getUserId());
-            message.setRoomId(roomId);
-            if (input.hasAttachment()) {
-                message.setAttachment(RealmAttachment.build(input.getAttachment()));
-            }
-            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
-            message.setDeleted(input.getDeleted());
-            message.setEdited(input.getEdited());
-            if (input.hasForwardFrom()) {
-                message.setForwardMessage(RealmRoomMessage.put(input.getForwardFrom(), roomId));
-            }
-            message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
-            message.setLog(RealmRoomMessageLog.build(input.getLog()));
-            message.setMessageType(input.getMessageType());
-            message.setMessageVersion(input.getMessageVersion());
-            if (input.hasReplyTo()) {
-                message.setReplyTo(RealmRoomMessage.put(input.getReplyTo(), roomId));
-            }
-            message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
-            message.setStatusVersion(input.getStatusVersion());
-            message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
-            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
         }
+        message.setMessage(input.getMessage());
+        message.setStatus(input.getStatus().toString());
+        message.setUserId(input.getAuthor().getUser().getUserId());
+        message.setRoomId(roomId);
+        if (input.hasAttachment()) {
+            message.setAttachment(RealmAttachment.build(input.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT));
+        }
+        message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
+        message.setDeleted(input.getDeleted());
+        message.setEdited(input.getEdited());
+        if (input.hasForwardFrom()) {
+            message.setForwardMessage(RealmRoomMessage.putOrUpdate(input.getForwardFrom(), roomId));
+        }
+        message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
+        message.setLog(RealmRoomMessageLog.build(input.getLog()));
+        message.setMessageType(input.getMessageType());
+        message.setMessageVersion(input.getMessageVersion());
+        if (input.hasReplyTo()) {
+            message.setReplyTo(RealmRoomMessage.putOrUpdate(input.getReplyTo(), roomId));
+        }
+        message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
+        message.setStatusVersion(input.getStatusVersion());
+        message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+        message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
         realm.close();
 
         return message;
@@ -214,10 +187,6 @@ public class RealmRoomMessage extends RealmObject {
 
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public int getUpdateTimeAsSeconds() {
-        return (int) (updateTime / DateUtils.SECOND_IN_MILLIS);
     }
 
     public boolean isDeleted() {

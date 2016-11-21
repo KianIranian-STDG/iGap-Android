@@ -1,5 +1,6 @@
 package com.iGap.realm;
 
+import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 
 import io.realm.Realm;
@@ -41,7 +42,7 @@ public class RealmAvatar extends RealmObject {
         if (!exists) {
             avatar = realm.createObject(RealmAvatar.class, input.getId());
             avatar.setOwnerId(ownerId);
-            avatar.setFile(RealmAttachment.build(input.getFile()));
+            avatar.setFile(RealmAttachment.build(input.getFile(), AttachmentFor.AVATAR));
         } else {
             avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, input.getId()).findFirst();
         }

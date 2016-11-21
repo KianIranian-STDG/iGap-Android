@@ -63,6 +63,7 @@ import com.iGap.module.FileUploadStructure;
 import com.iGap.module.IncomingSms;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
+import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
@@ -1813,10 +1814,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void execute(Realm realm) {
                 RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
                 realmAvatar.setOwnerId(userId);
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
+                String newFilePath = G.DIR_IMAGE_USER + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName();
+                realmAvatar.getFile().setLocalFilePath(newFilePath);
 
                 try {
-                    AndroidUtils.copyFile(new File(pathSaveImage), new File(G.DIR_IMAGE_USER + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName()));
+                    AndroidUtils.copyFile(new File(pathSaveImage), new File(newFilePath));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

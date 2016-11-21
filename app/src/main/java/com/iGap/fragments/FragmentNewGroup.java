@@ -47,6 +47,7 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.LinedEditText;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
@@ -685,7 +686,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             public void execute(Realm realm) {
                 RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
                 realmAvatar.setOwnerId(roomId);
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
 
                 try {
                     AndroidUtils.copyFile(new File(pathSaveImage), new File(G.DIR_IMAGE_USER + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName()));

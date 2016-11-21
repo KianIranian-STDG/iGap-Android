@@ -33,6 +33,7 @@ import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.EditTextAdjustPan;
 import com.iGap.module.FileUploadStructure;
+import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAttachment;
@@ -454,7 +455,7 @@ public class ActivityProfile extends ActivityEnhanced
                 long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                 RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
                 realmAvatar.setOwnerId(userId);
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile()));
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
                 realmAvatar.setId(avatar.getId());
             }
         });

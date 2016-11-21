@@ -622,8 +622,6 @@ public class ActivityMain extends ActivityEnhanced
                 return !item.mInfo.getTitle().toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
-
-        getChatsList(true);
     }
 
     /**
@@ -955,6 +953,8 @@ public class ActivityMain extends ActivityEnhanced
         }
     }
 
+    private static boolean mFirstRun = true;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -966,28 +966,11 @@ public class ActivityMain extends ActivityEnhanced
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
-        // adapter may be null because it's initializing async
-        // FIXME: 11/17/2016 [Alireza] commented and not to be commented because adapter would not be updated
-        if (mAdapter != null) {
-            mAdapter.clear();
-            // check if new rooms exist, add to adapter
-            // loadChatsFromLocal();
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    // FIXME: 11/17/2016 [Alireza] sort by last message
-                    RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.ID, Sort.DESCENDING);
-                    for (final RealmRoom room : rooms) {
-                        mAdapter.add(convertToChatItem(room.getId()));
-                    }
-                }
-            });
-
-            realm.close();
-        }
+        getChatsList(mFirstRun);
 
         startService(new Intent(this, ServiceContact.class));
+
+        mFirstRun = false;
     }
 
     /**
