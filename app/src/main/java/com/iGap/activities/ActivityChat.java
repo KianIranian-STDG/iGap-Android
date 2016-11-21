@@ -3563,7 +3563,7 @@ public class ActivityChat extends ActivityEnhanced
                             Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessage().getMessageId());
                             element.setClearId(realmRoom.getLastMessage().getMessageId());
 
-                            //G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessage().getMessageId());
+                            G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessage().getMessageId());
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
