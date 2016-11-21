@@ -19,8 +19,6 @@ import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
 
-import java.util.ArrayList;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -29,7 +27,7 @@ public class ChatSendMessageResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public String identity;
-    private ArrayList<Long> messageId = new ArrayList<>();
+    // private ArrayList<Long> messageId = new ArrayList<>();
 
     public ChatSendMessageResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -60,7 +58,8 @@ public class ChatSendMessageResponse extends MessageHandler {
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
                 }
 
-                Log.i("CLI_XX", "Chat getRoomId : " + chatSendMessageResponse.getRoomId());
+                Log.i("CLI_XX", "Chat getRoomId 1: " + chatSendMessageResponse.getRoomId());
+                Log.i("CLI_XX", "Chat getRoomId 2: " + chatSendMessageResponse.getRoomMessage().getAuthor().getRoom().getRoomId());
                 Log.i("CLI_XX", "Chat getMessageVersion : " + roomMessage.getMessageVersion());
                 Log.i("CLI_XX", "Chat getStatusVersion : " + roomMessage.getStatusVersion());
                 Log.i("CLI_XX", "Chat getMessageId : " + roomMessage.getMessageId());
@@ -82,10 +81,10 @@ public class ChatSendMessageResponse extends MessageHandler {
                     // update last message sent/received in room table
                     if (room.getLastMessage() != null) {
                         if (room.getLastMessage().getUpdateTime() < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
-                            room.setLastMessage(RealmRoomMessage.put(roomMessage));
+                            room.setLastMessage(RealmRoomMessage.put(roomMessage, chatSendMessageResponse.getRoomId()));
                         }
                     } else {
-                        room.setLastMessage(RealmRoomMessage.put(roomMessage));
+                        room.setLastMessage(RealmRoomMessage.put(roomMessage, chatSendMessageResponse.getRoomId()));
                     }
                 }
 
@@ -100,8 +99,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                     // .getUserId() &&
                     // i'm the recipient
 
-                    RealmRoomMessage realmRoomMessage =
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
                     /*
                      *  if this is new message and not exist this messageId createObject from
@@ -110,11 +108,14 @@ public class ChatSendMessageResponse extends MessageHandler {
                      *  messageId and update it
                      *  client check this because maybe receive repetitious message from server
                      */
+                    Log.i("OOO", "chatSendMessageResponse.getRoomId() : " + chatSendMessageResponse.getRoomId());
+                    Log.i("OOO", "*********roomMessage.getMessageId() : " + roomMessage.getMessageId());
                     if (realmRoomMessage == null) {
                         realmRoomMessage = realm.createObject(RealmRoomMessage.class, roomMessage.getMessageId());
                         realmRoomMessage.setRoomId(chatSendMessageResponse.getRoomId());
+                        Log.i("OOO", "*********");
                     } else {
-
+                        Log.i("OOO", "Exist");
                         /*
                         * message exist in chat room so don't calling onMessageReceive callback ,
                         * just
@@ -122,10 +123,10 @@ public class ChatSendMessageResponse extends MessageHandler {
                         * repetitious message
                         * from server so client should handle this subject
                         */
-                        messageId.add(roomMessage.getMessageId());
+                        // messageId.add(roomMessage.getMessageId());
                     }
 
-                    fillRoomMessage(realmRoomMessage, roomMessage);
+                    realmRoomMessage = fillRoomMessage(realmRoomMessage, roomMessage);
                     if (roomMessage.hasForwardFrom()) { // forward message
 
                         RealmRoomMessage forward = realm.createObject(RealmRoomMessage.class, SUID.id().get());
@@ -138,6 +139,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                         realmRoomMessage.setReplyTo(fillRoomMessage(reply, roomMessage));
                     }
 
+                    //realm.copyToRealmOrUpdate(realmRoomMessage);
                     //TODO [Saeed Mozaffari] [2016-11-13 7:24 PM] - AUTHOR_CHECK . niaz hast inja check beshe ke author user bud ya room? chon inja vase chat hast va faghat user darim.
                     if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
                         G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, chatSendMessageResponse.getRoomId());
@@ -186,6 +188,7 @@ public class ChatSendMessageResponse extends MessageHandler {
             // Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
             // invoke following callback when i'm not the sender, because I already done
             // everything after sending message
+            //TODO [Saeed Mozaffari] [2016-11-21 10:13 AM] - CHECK IT,
             // if (!messageId.contains(roomMessage.getMessageId())) {
             if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
                 G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(),

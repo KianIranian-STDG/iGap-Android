@@ -41,7 +41,7 @@ public class RealmRoomMessage extends RealmObject {
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
 
-    public static RealmRoomMessage put(ProtoGlobal.RoomMessage input) {
+    public static RealmRoomMessage put(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage message;
         if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, input.getMessageId()).count() > 0) {
@@ -50,7 +50,8 @@ public class RealmRoomMessage extends RealmObject {
             message.setMessage(input.getMessage());
             message.setStatus(input.getStatus().toString());
             message.setUserId(input.getAuthor().getUser().getUserId());
-            message.setRoomId(input.getAuthor().getRoom().getRoomId());
+//            message.setRoomId(input.getAuthor().getRoom().getRoomId());
+            message.setRoomId(roomId);
             if (input.hasAttachment()) {
                 message.setAttachment(RealmAttachment.build(input.getAttachment()));
             }
@@ -58,14 +59,14 @@ public class RealmRoomMessage extends RealmObject {
             message.setDeleted(input.getDeleted());
             message.setEdited(input.getEdited());
             if (input.hasForwardFrom()) {
-                message.setForwardMessage(RealmRoomMessage.put(input.getForwardFrom()));
+                message.setForwardMessage(RealmRoomMessage.put(input.getForwardFrom(), roomId));
             }
             message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
             message.setMessageType(input.getMessageType());
             message.setMessageVersion(input.getMessageVersion());
             if (input.hasReplyTo()) {
-                message.setReplyTo(RealmRoomMessage.put(input.getReplyTo()));
+                message.setReplyTo(RealmRoomMessage.put(input.getReplyTo(), roomId));
             }
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
             message.setStatusVersion(input.getStatusVersion());
@@ -76,7 +77,7 @@ public class RealmRoomMessage extends RealmObject {
             message.setMessage(input.getMessage());
             message.setStatus(input.getStatus().toString());
             message.setUserId(input.getAuthor().getUser().getUserId());
-            message.setRoomId(input.getAuthor().getRoom().getRoomId());
+            message.setRoomId(roomId);
             if (input.hasAttachment()) {
                 message.setAttachment(RealmAttachment.build(input.getAttachment()));
             }
@@ -84,14 +85,14 @@ public class RealmRoomMessage extends RealmObject {
             message.setDeleted(input.getDeleted());
             message.setEdited(input.getEdited());
             if (input.hasForwardFrom()) {
-                message.setForwardMessage(RealmRoomMessage.put(input.getForwardFrom()));
+                message.setForwardMessage(RealmRoomMessage.put(input.getForwardFrom(), roomId));
             }
             message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
             message.setMessageType(input.getMessageType());
             message.setMessageVersion(input.getMessageVersion());
             if (input.hasReplyTo()) {
-                message.setReplyTo(RealmRoomMessage.put(input.getReplyTo()));
+                message.setReplyTo(RealmRoomMessage.put(input.getReplyTo(), roomId));
             }
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
             message.setStatusVersion(input.getStatusVersion());
