@@ -3,6 +3,7 @@ package com.iGap.realm;
 import android.support.annotation.Nullable;
 
 import com.iGap.G;
+import com.iGap.module.AppUtils;
 import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
@@ -63,7 +64,7 @@ public class RealmAttachment extends RealmObject {
             realmAttachment.setSmallThumbnail(smallThumbnail);
 
 
-            String tempFilePath = G.DIR_TEMP + "/" + "thumb_" + file.getToken() + "_" + file.getName();
+            String tempFilePath = G.DIR_TEMP + "/" + "thumb_" + file.getToken() + "_" + AppUtils.suitableThumbFileName(file.getName());
             String filePath = "";
             switch (attachmentFor) {
                 case MESSAGE_ATTACHMENT:
@@ -206,8 +207,7 @@ public class RealmAttachment extends RealmObject {
     }
 
     private boolean isFileImage() {
-        String[] exts = {".jpg", ".jpeg", ".gif", ".png", ".tif"};
-        for (String ext : exts) {
+        for (String ext : AppUtils.exts) {
             if (localFilePath.endsWith(ext)) {
                 return true;
             }

@@ -11,6 +11,7 @@ import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
+import com.iGap.interfaces.OnFileDownload;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoFileDownload;
@@ -162,13 +163,16 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
         for (Item item : getAdapterItems()) {
             if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
-                int pos = getAdapterItems().indexOf(item);
+                final int pos = getAdapterItems().indexOf(item);
                 item.mMessage.downloadAttachment.offset = offset;
                 item.mMessage.downloadAttachment.progress = progress;
 
-                item.onRequestDownloadFile(offset, progress);
-
-                notifyItemChanged(pos);
+                item.onRequestDownloadFile(offset, progress, new OnFileDownload() {
+                    @Override
+                    public void onFileDownloaded() {
+                        notifyItemChanged(pos);
+                    }
+                });
             }
         }
     }
@@ -176,9 +180,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public void updateThumbnail(String token) {
         for (Item item : getAdapterItems()) {
             if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
-                int pos = getAdapterItems().indexOf(item);
-                item.onRequestDownloadThumbnail(token, true);
-                notifyItemChanged(pos);
+                final int pos = getAdapterItems().indexOf(item);
+                item.onRequestDownloadThumbnail(token, true, new OnFileDownload() {
+                    @Override
+                    public void onFileDownloaded() {
+                        notifyItemChanged(pos);
+                    }
+                });
             }
         }
     }

@@ -38,9 +38,9 @@ public class StructMessageAttachment implements Parcelable {
     public StructMessageThumbnail largeThumbnail;
     public StructMessageThumbnail smallThumbnail;
     @Nullable
-    private String localThumbnailPath;
+    public String localThumbnailPath;
     @Nullable
-    private String localFilePath;
+    public String localFilePath;
 
     public StructMessageAttachment(String token, String name, long size, int width, int height,
                                    double duration, @Nullable String localThumbnailPath, @Nullable String localFilePath,

@@ -286,18 +286,20 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
     @Override
     public void onFileDownload(final String token, final long offset,
                                final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
-                    // requested thumbnail
-                    mAdapter.downloadingAvatarThumbnail(token);
-                } else {
-                    // requested file
-                    mAdapter.downloadingAvatarFile(token, progress, offset);
+        if (isVisible()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
+                        // requested thumbnail
+                        mAdapter.downloadingAvatarThumbnail(token);
+                    } else {
+                        // requested file
+                        mAdapter.downloadingAvatarFile(token, progress, offset);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override

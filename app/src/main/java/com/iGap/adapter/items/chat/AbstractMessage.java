@@ -18,6 +18,7 @@ import com.iGap.helper.HelperStringAnalayser;
 import com.iGap.interfaces.IChatItemAttachment;
 import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.interfaces.IMessageItem;
+import com.iGap.interfaces.OnFileDownload;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MyType;
@@ -28,6 +29,7 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -385,7 +387,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                                 // make sure to not request multiple times by checking last offset with the new one
                                 if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
-                                    onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress);
+                                    onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress, null);
                                     mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
                                 }
 
@@ -436,23 +438,30 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @Override
     @CallSuper
-    public void onRequestDownloadFile(long offset, int progress) {
+    public void onRequestDownloadFile(long offset, int progress, final OnFileDownload onFileDownload) {
         if (mMessage.forwardedFrom != null) {
             final String fileName = mMessage.forwardedFrom.getAttachment().getToken() + "_" + mMessage.forwardedFrom.getAttachment().getName();
             if (progress == 100) {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst().getAttachment().setLocalFilePath(AndroidUtils.suitableAppFilePath(mMessage.forwardedFrom.getMessageType()) + "/" + fileName);
                     }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        try {
+                            AndroidUtils.cutFromTemp(mMessage.forwardedFrom.getMessageType(), fileName);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        onFileDownload.onFileDownloaded();
+
+                        realm.close();
+                    }
                 });
-                realm.close();
-                try {
-                    AndroidUtils.cutFromTemp(mMessage.forwardedFrom.getMessageType(), fileName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
                 return; // necessary
             }
@@ -461,15 +470,28 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 MessagesAdapter.requestDownload(mMessage.forwardedFrom.getAttachment().getToken(), progress, offset);
             }
         } else {
-            String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
+            final String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
             if (progress == 100) {
-                mMessage.attachment.setLocalFilePath(Long.parseLong(mMessage.messageID), AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst().getAttachment().setLocalFilePath(AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        try {
+                            AndroidUtils.cutFromTemp(mMessage.messageType, fileName);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-                try {
-                    AndroidUtils.cutFromTemp(mMessage.messageType, fileName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                        onFileDownload.onFileDownloaded();
+
+                        realm.close();
+                    }
+                });
 
                 return; // necessary
             }
@@ -482,13 +504,28 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @Override
-    public void onRequestDownloadThumbnail(String token, boolean done) {
+    public void onRequestDownloadThumbnail(final String token, boolean done, final OnFileDownload onFileDownload) {
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize() != 0) {
 
-                final String fileName = "thumb_" + token + "_" + mMessage.forwardedFrom.getAttachment().getName();
+                final String fileName = "thumb_" + token + "_" + AppUtils.suitableThumbFileName(mMessage.forwardedFrom.getAttachment().getName());
                 if (done) {
-                    mMessage.attachment.setLocalThumbnailPath(Long.parseLong(mMessage.messageID), G.DIR_TEMP + "/" + fileName);
+                    final Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
+                            if (attachment != null) {
+                                attachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
+                            }
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            onFileDownload.onFileDownloaded();
+                            realm.close();
+                        }
+                    });
 
                     return; // necessary
                 }
@@ -501,9 +538,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else {
             if (mMessage.attachment.smallThumbnail != null && mMessage.attachment.smallThumbnail.size != 0) {
 
-                final String fileName = "thumb_" + token + "_" + mMessage.attachment.name;
+                final String fileName = "thumb_" + token + "_" + AppUtils.suitableThumbFileName(mMessage.attachment.name);
                 if (done) {
-                    mMessage.attachment.setLocalThumbnailPath(Long.parseLong(mMessage.messageID), G.DIR_TEMP + "/" + fileName);
+                    final Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
+                            if (attachment != null) {
+                                attachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
+                            }
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            mMessage.attachment.localThumbnailPath = G.DIR_TEMP + "/" + fileName;
+                            onFileDownload.onFileDownloaded();
+                            realm.close();
+                        }
+                    });
 
                     return; // necessary
                 }
@@ -528,7 +581,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         // request thumbnail
         if (!mMessage.downloadAttachment.thumbnailRequested) {
-            onRequestDownloadThumbnail(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token, false);
+            onRequestDownloadThumbnail(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token, false, null);
             // prevent from multiple requesting thumbnail
             mMessage.downloadAttachment.thumbnailRequested = true;
         }

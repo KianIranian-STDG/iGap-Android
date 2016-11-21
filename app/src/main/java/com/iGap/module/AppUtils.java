@@ -35,6 +35,24 @@ public final class AppUtils {
         throw new InstantiationException("This class is not for instantiation.");
     }
 
+    public static String[] exts = {".jpg", ".jpeg", ".gif", ".png", ".tif"};
+
+    public static String suitableThumbFileName(String name) {
+        boolean isImage = false;
+        for (String ext : exts) {
+            if (name.endsWith(ext)) {
+                isImage = true;
+                break;
+            }
+        }
+
+        if (isImage) {
+            return name;
+        } else {
+            return name.replaceFirst("([\\w\\W]+)(\\.(\\w+))$", "$1.jpg");
+        }
+    }
+
     public static void rightFileThumbnailIcon(ImageView view, ProtoGlobal.RoomMessageType messageType, @Nullable RealmAttachment attachment) {
         switch (messageType) {
             case VOICE:
