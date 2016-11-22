@@ -2,7 +2,6 @@ package com.iGap;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -130,7 +130,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-public class G extends Application {
+public class G extends MultiDexApplication {
 
     public static final String FAQ = "http://www.digikala.com";
     public static final String POLICY = "http://www.digikala.com";
@@ -190,6 +190,13 @@ public class G extends Application {
     public static LayoutInflater inflater;
     public static Typeface FONT_IGAP;
     public static Typeface HELETICBLK_TITR;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
     public static Typeface ARIAL_TEXT;
     public static Typeface YEKAN_FARSI;
     public static Typeface YEKAN_BOLD;
@@ -394,9 +401,8 @@ public class G extends Application {
 
     @Override
     public void onCreate() {
-        MultiDex.install(getApplicationContext());
         super.onCreate();
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(com.iGap.BuildConfig.DEBUG).build()).build());//com.iGap.BuildConfig.DEBUG
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
         SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);

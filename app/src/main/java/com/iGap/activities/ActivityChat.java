@@ -1477,7 +1477,9 @@ public class ActivityChat extends ActivityEnhanced
 
                 clearDraftRequest();
 
-                updatePopup.update();
+                if (updatePopup != null) {
+                    updatePopup.update();
+                }
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
                     sendMessage(latestRequestCode, listPathString.get(0));

@@ -11,13 +11,13 @@ public class StructSessionsGetActiveList {
     private int buildVersion;
     private String appVersion;
     private ProtoGlobal.Platform platform;
-    private String patformVersion;
+    private String platformVersion;
     private ProtoGlobal.Device device;
     private String deviceName;
     private ProtoGlobal.Language language;
-    private String Country;
+    private String country;
     private boolean current;
-    private int creatTime;
+    private int createTime;
     private int activeTime;
     private String ip;
 
@@ -69,12 +69,12 @@ public class StructSessionsGetActiveList {
         this.platform = platform;
     }
 
-    public String getPatformVersion() {
-        return patformVersion;
+    public String getPlatformVersion() {
+        return platformVersion;
     }
 
     public void setPlatformVersion(String patformVersion) {
-        this.patformVersion = patformVersion;
+        this.platformVersion = patformVersion;
     }
 
     public ProtoGlobal.Device getDevice() {
@@ -102,11 +102,11 @@ public class StructSessionsGetActiveList {
     }
 
     public String getCountry() {
-        return Country;
+        return country;
     }
 
     public void setCountry(String country) {
-        Country = country;
+        this.country = country;
     }
 
     public boolean isCurrent() {
@@ -117,12 +117,12 @@ public class StructSessionsGetActiveList {
         this.current = current;
     }
 
-    public int getCreatTime() {
-        return creatTime;
+    public int getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatTime(int creatTime) {
-        this.creatTime = creatTime;
+    public void setCreateTime(int createTime) {
+        this.createTime = createTime;
     }
 
     public int getActiveTime() {

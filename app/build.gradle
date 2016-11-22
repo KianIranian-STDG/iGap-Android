@@ -26,7 +26,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
-        versionName "1.0.6"
+        versionName "1.0.7"
 
         multiDexEnabled true
     }
@@ -40,6 +40,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:multidex:1.0.1'
 
     compile('com.mikepenz:fastadapter:1.8.2@aar') {
         transitive = true

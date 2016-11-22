@@ -102,7 +102,7 @@ public class FragmentActiveSessions extends Fragment {
                     item.setLanguage(session.get(i).getLanguage());
                     item.setCountry(session.get(i).getCountry());
                     item.setCurrent(session.get(i).getCurrent());
-                    item.setCreatTime(session.get(i).getCreateTime());
+                    item.setCreateTime(session.get(i).getCreateTime());
                     item.setActiveTime(session.get(i).getActiveTime());
                     item.setIp(session.get(i).getIp());
 
