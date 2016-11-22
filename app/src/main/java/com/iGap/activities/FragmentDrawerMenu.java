@@ -323,7 +323,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (imagePath == null) {
+                        if (imagePath == null || !new File(imagePath).exists()) {
                             Realm realm1 = Realm.getDefaultInstance();
                             RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
                             imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
@@ -331,7 +331,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                                             .getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
-                            ImageLoader.getInstance().displayImage(imagePath, imgUserPhoto);
+                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgUserPhoto);
                         }
                     }
                 });

@@ -121,7 +121,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private RelativeLayout ltClearCache;
     private PopupWindow popupWindow;
     private int poRbDialogLangouage = -1;
-    private int poRbDialoggander = -1;
     private String textLanguage = "English";
     private int poRbDialogTextSize = -1;
     private ViewGroup ltMessageTextSize, ltLanguage;
@@ -136,7 +135,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private String nickName;
     private String userName;
     private String phoneName;
-    private String gander;
+    private ProtoGlobal.Gender gander;
     private String email;
     private long userId;
     private long lastUploadedAvatarId;
@@ -192,10 +191,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (realmAvatar != null) {
             if (realmAvatar.getFile().isFileExistsOnLocal()) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), circleImageView);
-                G.onChangeUserPhotoListener.onChangePhoto(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()));
+                G.onChangeUserPhotoListener.onChangePhoto(realmAvatar.getFile().getLocalFilePath());
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), circleImageView);
-                G.onChangeUserPhotoListener.onChangePhoto(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()));
+                G.onChangeUserPhotoListener.onChangePhoto(realmAvatar.getFile().getLocalThumbnailPath());
             } else {
                 showInitials();
                 requestDownloadAvatar(false, realmAvatar.getFile().getToken(), realmAvatar.getFile().getName(), (int) realmAvatar.getFile().getSmallThumbnail().getSize());
@@ -218,7 +217,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 @Override
                 public void onSuccess() {
                     String filePath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().getLocalThumbnailPath();
-                    G.onChangeUserPhotoListener.onChangePhoto(AndroidUtils.suitablePath(filePath));
+                    G.onChangeUserPhotoListener.onChangePhoto(filePath);
                     realm.close();
                 }
             });
@@ -319,8 +318,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             nickName = realmUserInfo.getUserInfo().getDisplayName();
             userName = realmUserInfo.getUserInfo().getUsername();
             phoneName = realmUserInfo.getUserInfo().getPhoneNumber();
-            email = realmUserInfo.getEmail();
             gander = realmUserInfo.getGender();
+            email = realmUserInfo.getEmail();
         }
         if (nickName != null) {
             txtNickName.setText(nickName);
@@ -555,45 +554,33 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         final TextView txtGander = (TextView) findViewById(R.id.st_txt_gander);
-        if (gander == null) {
+        if (gander == null || gander.getNumber() == -1) {
             txtGander.setText(getResources().getString(R.string.set_gender));
         } else {
-            txtGander.setText(gander);
+            txtGander.setText(gander == ProtoGlobal.Gender.MALE ? "Male" : "Female");
         }
 
-        poRbDialoggander = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_GANDER, -1);
         ViewGroup layoutGander = (ViewGroup) findViewById(R.id.st_layout_gander);
         layoutGander.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Realm realm1 = Realm.getDefaultInstance();
                 new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Gander))
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black))
                         .items(R.array.array_gander)
-                        .itemsCallbackSingleChoice(poRbDialoggander, new MaterialDialog.ListCallbackSingleChoice() {
+                        .itemsCallbackSingleChoice((realm1.where(RealmUserInfo.class).findFirst().getGender().getNumber() == 1 ? 0 : 1), new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
                                 if (text != null) txtGander.setText(text.toString());
+
                                 switch (which) {
                                     case 0: {
                                         new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
-                                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putInt(SHP_SETTING.KEY_POSITION_GANDER, 0);
-                                        editor.apply();
-                                        poRbDialoggander = 0;
                                         break;
                                     }
                                     case 1: {
                                         new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
-                                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putInt(SHP_SETTING.KEY_POSITION_GANDER, 1);
-                                        editor.apply();
-                                        poRbDialoggander = 1;
-
                                         break;
                                     }
                                 }
@@ -604,22 +591,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
                     @Override
-                    public void onUserProfileEmailResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
-                        Log.i("XXX", "111***onUserProfileEmailResponse gender : " + gender);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                Realm realm1 = Realm.getDefaultInstance();
-                                realm1.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        realm.where(RealmUserInfo.class).findFirst().setGender(gender.toString());
-                                    }
-                                });
-                                realm1.close();
-                            }
-                        });
+                    public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
+                        // empty
                     }
 
                     @Override
@@ -657,6 +630,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         }
                     }
                 };
+
+                realm1.close();
             }
         });
 
@@ -1840,7 +1815,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                G.onChangeUserPhotoListener.onChangePhoto(AndroidUtils.suitablePath(pathSaveImage));
+                G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
                 setImage();
             }
         }, 500);

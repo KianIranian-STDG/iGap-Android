@@ -1,5 +1,7 @@
 package com.iGap.realm;
 
+import com.iGap.proto.ProtoGlobal;
+
 import io.realm.RealmObject;
 
 public class RealmUserInfo extends RealmObject {
@@ -7,7 +9,7 @@ public class RealmUserInfo extends RealmObject {
     private RealmRegisteredInfo userInfo;
     private boolean registrationStatus;
     private String email;
-    private String gender;
+    private int gender;
     private int selfRemove;
     private String token;
 
@@ -35,12 +37,12 @@ public class RealmUserInfo extends RealmObject {
         this.email = value;
     }
 
-    public String getGender() {
-        return this.gender;
+    public ProtoGlobal.Gender getGender() {
+        return ProtoGlobal.Gender.valueOf(this.gender);
     }
 
-    public void setGender(String value) {
-        this.gender = value;
+    public void setGender(ProtoGlobal.Gender value) {
+        this.gender = value.getNumber();
     }
 
     public String getToken() {

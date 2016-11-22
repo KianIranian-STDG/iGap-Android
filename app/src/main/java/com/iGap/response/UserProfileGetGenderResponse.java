@@ -18,9 +18,8 @@ public class UserProfileGetGenderResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder builder =
+        final ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder builder =
                 (ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder) message;
-        builder.getGender();
     }
 
     @Override
