@@ -32,8 +32,8 @@ public class GroupClearMessageResponse extends MessageHandler {
         builder.getRoomId();
         builder.getClearId();
 
+        Realm realm = Realm.getDefaultInstance();
         if (builder.getResponse().getId().isEmpty()) { // another account cleared message
-            Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -43,17 +43,18 @@ public class GroupClearMessageResponse extends MessageHandler {
                                             builder.getRoomId())
                                     .findFirst();
                     realmClientCondition.setClearId(builder.getClearId());
-
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                    if (realmRoom != null) {
-                        realmRoom.setUpdatedTime(builder.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
-                    }
                 }
             });
-            realm.close();
             G.clearMessagesUtil.onChatClearMessage(builder.getRoomId(),
                     builder.getClearId(), builder.getResponse());
         }
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+        if (realmRoom != null) {
+            realmRoom.setUpdatedTime(builder.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
+        }
+
+        realm.close();
     }
 
     @Override

@@ -32,8 +32,8 @@ public class ChatClearMessageResponse extends MessageHandler {
         final ProtoChatClearMessage.ChatClearMessageResponse.Builder chatClearMessage =
                 (ProtoChatClearMessage.ChatClearMessageResponse.Builder) message;
 
+        Realm realm = Realm.getDefaultInstance();
         if (chatClearMessage.getResponse().getId().isEmpty()) { // another account cleared message
-            Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -43,17 +43,17 @@ public class ChatClearMessageResponse extends MessageHandler {
                                             chatClearMessage.getRoomId())
                                     .findFirst();
                     realmClientCondition.setClearId(chatClearMessage.getClearId());
-
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatClearMessage.getRoomId()).findFirst();
-                    if (realmRoom != null) {
-                        realmRoom.setUpdatedTime(chatClearMessage.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
-                    }
                 }
             });
-            realm.close();
             G.clearMessagesUtil.onChatClearMessage(chatClearMessage.getRoomId(),
                     chatClearMessage.getClearId(), chatClearMessage.getResponse());
         }
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatClearMessage.getRoomId()).findFirst();
+        if (realmRoom != null) {
+            realmRoom.setUpdatedTime(chatClearMessage.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
+        }
+        realm.close();
     }
 
     @Override
