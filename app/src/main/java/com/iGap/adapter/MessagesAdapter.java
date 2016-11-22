@@ -13,6 +13,7 @@ import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
 import com.iGap.interfaces.OnFileDownload;
+import com.iGap.interfaces.OnProgressUpdate;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoFileDownload;
@@ -137,12 +138,17 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             uploading.setValueAt(pos2, progress);
         }
 
-        Item item = getItemByFileIdentity(messageId);
-        if (item != null && uploading.get(messageId) < progress) {
-            int pos = getAdapterItems().indexOf(item);
-            item.mMessage.uploadProgress = progress;
+        final Item item = getItemByFileIdentity(messageId);
+        if (item != null) {
+            final int pos = getAdapterItems().indexOf(item);
 
-            set(pos, item);
+            item.updateProgress(progress, new OnProgressUpdate() {
+                @Override
+                public void onProgressUpdate() {
+                    notifyAdapterItemChanged(pos);
+                    //set(pos, item);
+                }
+            });
         }
     }
 

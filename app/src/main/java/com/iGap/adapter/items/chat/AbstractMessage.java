@@ -19,6 +19,7 @@ import com.iGap.interfaces.IChatItemAttachment;
 import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnFileDownload;
+import com.iGap.interfaces.OnProgressUpdate;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MyType;
@@ -590,6 +591,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
+    public void updateProgress(int progress, OnProgressUpdate onProgressUpdate) {
+        mMessage.uploadProgress = progress;
+        onProgressUpdate.onProgressUpdate();
+    }
+
     /**
      * automatically update progress if layout has one
      *
@@ -601,9 +607,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
+            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
             // update progress when user trying to upload or download
             if (MessagesAdapter.uploading.containsKey(Long.parseLong(mMessage.messageID))) {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)));
                 if (MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)) == 100) {
