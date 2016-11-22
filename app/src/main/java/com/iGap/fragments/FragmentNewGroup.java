@@ -368,9 +368,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                 realmRoom.setType(RoomType.GROUP);
                                 realmRoom.setTitle(name);
-
                                 RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
-
                                 realmGroupRoom.setRole(GroupChatRole.OWNER);
                                 realmGroupRoom.setDescription(description);
                                 realmGroupRoom.setParticipantsCountLabel("2");
@@ -379,7 +377,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                             }
                         });
                         realm.close();
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         getRoom(roomId);
                     }
                 });
@@ -513,6 +510,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                     @Override
                     public void run() {
 
+                        prgWaiting.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                         getFragmentManager().popBackStack();
                         android.support.v4.app.Fragment fragment = ContactGroupFragment.newInstance();
                         Bundle bundle = new Bundle();
@@ -526,8 +526,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                                 .replace(fragmentContainer, fragment)
                                 .commit();
                         ActivityMain.mLeftDrawerLayout.closeDrawer();
-                        prgWaiting.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                     }
                 });
@@ -647,6 +645,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         (int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp100)
                         , realmUserInfo.getUserInfo().getInitials()
                         , realmUserInfo.getUserInfo().getColor()));
+
         realm.close();
     }
 
@@ -655,6 +654,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
         RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();
         if (realmAvatar != null) {
+            imgCircleImageView.setPadding(0, 0, 0, 0);
             if (realmAvatar.getFile().isFileExistsOnLocal()) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imgCircleImageView);
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
@@ -664,6 +664,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             }
         } else {
             showInitials();
+            imgCircleImageView.setPadding(0, 0, 0, 0);
         }
     }
 
@@ -674,7 +675,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             public void run() {
                 imgCircleImageView.setTag(uploadStructure.token);
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(pathSaveImage), imgCircleImageView);
-
+                imgCircleImageView.setPadding(0, 0, 0, 0);
                 txtNextStep.setEnabled(true);
             }
         });
@@ -768,6 +769,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             myActivityReference.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             prg.setVisibility(View.GONE);
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+
         }
     }
 

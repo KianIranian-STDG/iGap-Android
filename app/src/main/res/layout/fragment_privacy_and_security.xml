@@ -245,6 +245,7 @@
                     android:background="@color/background_editText"/>
 
                 <TextView
+                    android:id="@+id/stps_activitySessions"
                     android:paddingTop="@dimen/dp4"
                     fontPath="fonts/IRANSansMobile.ttf"
                     android:textSize="@dimen/sp16"

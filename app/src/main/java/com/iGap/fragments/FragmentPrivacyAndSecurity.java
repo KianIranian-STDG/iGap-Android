@@ -17,12 +17,16 @@ import com.iGap.R;
 import com.iGap.interfaces.OnUserProfileSetSelfRemove;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.SHP_SETTING;
+import com.iGap.module.StructSessionsGetActiveList;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileSetSelfRemove;
+
+import java.util.ArrayList;
 
 import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.iGap.R.id.st_layoutParent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +37,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     private SharedPreferences sharedPreferences;
     private int poRbDialogSelfDestruction = 0;
     private int selfRemove;
+    private ArrayList<StructSessionsGetActiveList> itemSessionsgetActivelist = new ArrayList<StructSessionsGetActiveList>();
 
     public FragmentPrivacyAndSecurity() {
     }
@@ -50,7 +55,6 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         selfRemove = realm.where(RealmUserInfo.class).findFirst().getSelfRemove();
 
         RelativeLayout parentPrivacySecurity = (RelativeLayout) view.findViewById(R.id.parentPrivacySecurity);
-
         parentPrivacySecurity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,11 +63,27 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         });
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.stps_ripple_back);
-
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentPrivacyAndSecurity.this).commit();
+            }
+        });
+
+        TextView txtActiveSessions = (TextView) view.findViewById(R.id.stps_activitySessions);
+        txtActiveSessions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                FragmentActiveSessions fragmentActiveSessions = new FragmentActiveSessions();
+
+                getActivity()
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(st_layoutParent, fragmentActiveSessions)
+                        .commit();
+
+
             }
         });
 

@@ -1,7 +1,12 @@
 package com.iGap.response;
 
+import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoUserSessionGetActiveList;
+import com.iGap.realm.RealmSessionGetActiveList;
+
+import io.realm.Realm;
 
 public class UserSessionGetActiveListResponse extends MessageHandler {
 
@@ -19,17 +24,52 @@ public class UserSessionGetActiveListResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Builder builder = (ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Builder) message;
+        final ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Builder builder = (ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Builder) message;
+        Log.i("CCCVVVBBB", "0 handler: ");
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                RealmSessionGetActiveList realmSessionGetActiveList = realm.createObject(RealmSessionGetActiveList.class);
+
+                for (ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Session b : builder.getSessionList()) {
+
+                    realmSessionGetActiveList.setSessionId(b.getSessionId());
+                    realmSessionGetActiveList.setName(b.getAppName());
+                    realmSessionGetActiveList.setAppId(b.getAppId());
+                    realmSessionGetActiveList.setBuildVersion(b.getAppBuildVersion());
+                    realmSessionGetActiveList.setAppVersion(b.getAppVersion());
+                    realmSessionGetActiveList.setPlatform(b.getPlatform().toString());
+                    realmSessionGetActiveList.setPlatformVersion(b.getPlatformVersion());
+                    realmSessionGetActiveList.setDevice(b.getDevice().toString());
+                    realmSessionGetActiveList.setDeviceName(b.getDeviceName());
+                    realmSessionGetActiveList.setLanguage(b.getLanguage().toString());
+                    realmSessionGetActiveList.setCountry(b.getCountry());
+                    realmSessionGetActiveList.setCurrent(b.getCurrent());
+                    realmSessionGetActiveList.setCreatTime(b.getCreateTime());
+                    realmSessionGetActiveList.setActiveTime(b.getActiveTime());
+                    realmSessionGetActiveList.setIp(b.getIp());
+
+                }
+            }
+        });
+
+        realm.close();
+
         G.onUserSessionGetActiveList.onUserSessionGetActiveList(builder.getSessionList());
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        Log.i("CCCVVVBBB", "1 timeOut: ");
     }
 
     @Override
     public void error() {
         super.error();
+
+        Log.i("CCCVVVBBB", "1 error: ");
     }
 }

@@ -258,7 +258,7 @@
                             android:maxLength="25"
                             android:paddingEnd="@dimen/dp4"
                             android:paddingStart="@dimen/dp4"
-                            android:text="unknown"
+                            android:text="@string/set_gender"
                             android:textColor="@color/gray_5c"
                             android:textSize="@dimen/sp14"
                             android:theme="@style/Setting_editText"/>
@@ -341,7 +341,7 @@
                             android:paddingEnd="@dimen/dp4"
                             android:paddingStart="@dimen/dp4"
                             android:singleLine="true"
-                            android:text="example@Gmail.com"
+                            android:text="@string/set_email"
                             android:textColor="@color/gray_5c"
                             android:textSize="@dimen/sp14"
                             android:theme="@style/Setting_editText"/>
@@ -1025,7 +1025,7 @@
         android:src="@mipmap/pu_camera"
         android:theme="@style/FabButton"
         android:tint="@color/gray"
-        app:fabSize="mini"
+        app:fabSize="normal"
         app:layout_anchor="@+id/st_appbar"
         app:layout_anchorGravity="bottom|right|end"/>
 

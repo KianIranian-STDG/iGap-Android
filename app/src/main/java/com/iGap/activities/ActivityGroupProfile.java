@@ -260,30 +260,30 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
                 //TextView text1 = new TextView(ActivityGroupProfile.this);
                 TextView text2 = new TextView(ActivityGroupProfile.this);
-                TextView text3 = new TextView(ActivityGroupProfile.this);
+//                TextView text3 = new TextView(ActivityGroupProfile.this);
 
                 //text1.setTextColor(getResources().getColor(android.R.color.black));
                 text2.setTextColor(getResources().getColor(android.R.color.black));
-                text3.setTextColor(getResources().getColor(android.R.color.black));
+//                text3.setTextColor(getResources().getColor(android.R.color.black));
 
                 //text1.setText(getResources().getString(R.string.Search));
                 text2.setText(getResources().getString(R.string.clear_history));
-                text3.setText(getResources().getString(R.string.delete_chat));
+//                text3.setText(getResources().getString(R.string.to_delete_chat));
 
                 int dim20 = (int) getResources().getDimension(R.dimen.dp20);
                 int dim12 = (int) getResources().getDimension(R.dimen.dp12);
 
                 //text1.setTextSize(16);
                 text2.setTextSize(16);
-                text3.setTextSize(16);
+//                text3.setTextSize(16);
 
                 //text1.setPadding(dim20, dim12, dim12, dim20);
                 text2.setPadding(dim20, dim12, dim12, dim20);
-                text3.setPadding(dim20, 0, dim12, dim20);
+//                text3.setPadding(dim20, 0, dim12, dim20);
 
                 //layoutDialog.addView(text1, params);
                 layoutDialog.addView(text2, params);
-                layoutDialog.addView(text3, params);
+//                layoutDialog.addView(text3, params);
 
                 popupWindow =
                         new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -340,24 +340,24 @@ public class ActivityGroupProfile extends ActivityEnhanced
                         popupWindow.dismiss();
                     }
                 });
-                text3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        new MaterialDialog.Builder(ActivityGroupProfile.this).title(
-                                R.string.delete_chat)
-                                .content(R.string.delete_chat_content)
-                                .positiveText(R.string.B_ok)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog,
-                                                        @NonNull DialogAction which) {
-                                    }
-                                })
-                                .negativeText(R.string.B_cancel)
-                                .show();
-                        popupWindow.dismiss();
-                    }
-                });
+//                text3.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        new MaterialDialog.Builder(ActivityGroupProfile.this).title(
+//                                R.string.to_delete_chat)
+//                                .content(R.string.delete_chat_content)
+//                                .positiveText(R.string.B_ok)
+//                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                                    @Override
+//                                    public void onClick(@NonNull MaterialDialog dialog,
+//                                                        @NonNull DialogAction which) {
+//                                    }
+//                                })
+//                                .negativeText(R.string.B_cancel)
+//                                .show();
+//                        popupWindow.dismiss();
+//                    }
+//                });
             }
         });
         //        btnMenu.setOnClickListener(new View.OnClickListener() {

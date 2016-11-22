@@ -84,8 +84,7 @@ public class ShowCustomList extends Fragment {
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
 
-        MaterialDesignTextView btnBack =
-                (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override

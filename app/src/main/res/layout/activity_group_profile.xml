@@ -618,7 +618,7 @@
             android:theme="@style/FabButton"
             android:tint="@color/gray"
             android:visibility="gone"
-            app:fabSize="mini"
+            app:fabSize="normal"
             app:layout_anchor="@+id/agp_appbar"
             app:layout_anchorGravity="bottom|right|end"/>
 

@@ -103,6 +103,7 @@ import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.interfaces.OnVoiceRecord;
+import com.iGap.interfaces.UpdatePopup;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
@@ -202,6 +203,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static com.iGap.G.context;
+import static com.iGap.G.updatePopup;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
@@ -1164,11 +1166,11 @@ public class ActivityChat extends ActivityEnhanced
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutDialog.setOrientation(LinearLayout.VERTICAL);
                 layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
-                TextView text1 = new TextView(ActivityChat.this);
-                TextView text2 = new TextView(ActivityChat.this);
-                TextView text3 = new TextView(ActivityChat.this);
+                final TextView text1 = new TextView(ActivityChat.this);
+                final TextView text2 = new TextView(ActivityChat.this);
+                final TextView text3 = new TextView(ActivityChat.this);
                 final TextView text4 = new TextView(ActivityChat.this);
-                TextView text5 = new TextView(ActivityChat.this);
+                final TextView text5 = new TextView(ActivityChat.this);
 
                 text1.setTextColor(getResources().getColor(android.R.color.black));
                 text2.setTextColor(getResources().getColor(android.R.color.black));
@@ -1176,15 +1178,16 @@ public class ActivityChat extends ActivityEnhanced
                 text4.setTextColor(getResources().getColor(android.R.color.black));
                 text5.setTextColor(getResources().getColor(android.R.color.black));
 
+
                 text1.setText(getResources().getString(R.string.Search));
                 text2.setText(getResources().getString(R.string.clear_history));
                 text3.setText(getResources().getString(R.string.delete_chat));
                 text4.setText(getResources().getString(R.string.mute_notification));
                 text5.setText(getResources().getString(R.string.chat_to_group));
 
-                int dim20 = (int) getResources().getDimension(R.dimen.dp20);
+                final int dim20 = (int) getResources().getDimension(R.dimen.dp20);
                 int dim16 = (int) getResources().getDimension(R.dimen.dp16);
-                int dim12 = (int) getResources().getDimension(R.dimen.dp12);
+                final int dim12 = (int) getResources().getDimension(R.dimen.dp12);
                 int sp16 = (int) getResources().getDimension(R.dimen.sp12);
 
                 text1.setTextSize(14);
@@ -1205,6 +1208,15 @@ public class ActivityChat extends ActivityEnhanced
                 layoutDialog.addView(text4, params);
                 layoutDialog.addView(text5, params);
 
+
+                if (chatType == CHAT) {
+                    text3.setVisibility(View.VISIBLE);
+                    text5.setVisibility(View.VISIBLE);
+                } else {
+                    text3.setVisibility(View.GONE);
+                    text5.setVisibility(View.GONE);
+                }
+
                 final Realm realm = Realm.getDefaultInstance();
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
@@ -1216,14 +1228,26 @@ public class ActivityChat extends ActivityEnhanced
                         iconMute.setVisibility(View.GONE);
                         text4.setText(getResources().getString(R.string.mute_notification));
                     }
+                } else {
+                    text1.setPadding(dim20, dim20, dim12, dim20);
+                    text2.setVisibility(View.GONE);
+                    text3.setVisibility(View.GONE);
+                    text4.setVisibility(View.GONE);
+                    text5.setVisibility(View.GONE);
                 }
                 realm.close();
 
-                if (chatType == CHAT) {
-                    text5.setVisibility(View.VISIBLE);
-                } else {
-                    text5.setVisibility(View.GONE);
-                }
+
+                G.updatePopup = new UpdatePopup() {
+                    @Override
+                    public void update() {
+                        text1.setPadding(dim20, dim12, dim12, dim20);
+                        text2.setVisibility(View.VISIBLE);
+                        text3.setVisibility(View.VISIBLE);
+                        text4.setVisibility(View.VISIBLE);
+                        text5.setVisibility(View.VISIBLE);
+                    }
+                };
 
                 popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -1281,7 +1305,7 @@ public class ActivityChat extends ActivityEnhanced
                     @Override
                     public void onClick(View view) {
 
-                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.delete_chat)
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.to_delete_chat)
                                 .content(R.string.delete_chat_content)
                                 .positiveText(R.string.B_ok)
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1337,6 +1361,7 @@ public class ActivityChat extends ActivityEnhanced
                         G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
                         finish();
                         popupWindow.dismiss();
+
                     }
                 });
 
@@ -1451,6 +1476,8 @@ public class ActivityChat extends ActivityEnhanced
             public void onClick(View view) {
 
                 clearDraftRequest();
+
+                updatePopup.update();
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
                     sendMessage(latestRequestCode, listPathString.get(0));

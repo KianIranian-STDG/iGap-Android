@@ -586,10 +586,10 @@ public class ActivityRegister extends ActivityEnhanced {
                                     int portrait_landscape = getResources().getConfiguration().orientation;
                                     if (portrait_landscape == 1) {//portrait
                                         txtTimer.setText("00:00");
-                                        txtTimer.setVisibility(View.VISIBLE);
+                                        txtTimer.setVisibility(View.GONE);
                                     } else {
                                         txtTimerLand.setText("00:00");
-                                        txtTimer.setVisibility(View.VISIBLE);
+                                        txtTimerLand.setVisibility(View.GONE);
                                     }
                                     errorVerifySms(); // open rg_dialog for enter sms code
                                 }

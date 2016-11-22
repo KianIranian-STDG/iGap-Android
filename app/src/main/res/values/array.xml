@@ -211,4 +211,9 @@
         <item>@string/customs</item>
     </string-array>
 
+    <string-array name="capture">
+        <item>@string/capture_image</item>
+        <item>@string/capture_video</item>
+    </string-array>
+
 </resources>

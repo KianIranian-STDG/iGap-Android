@@ -537,7 +537,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         final TextView txtGander = (TextView) findViewById(R.id.st_txt_gander);
         if (gander == null) {
-            txtGander.setText(getResources().getString(R.string.unknown));
+            txtGander.setText(getResources().getString(R.string.set_gender));
         } else {
             txtGander.setText(gander);
         }
@@ -650,7 +650,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         final TextView txtEmail = (TextView) findViewById(R.id.st_txt_email);
         if (email == null) {
-            txtEmail.setText("example@gmail.com");
+            txtEmail.setText(getResources().getString(R.string.set_email));
         } else {
             txtEmail.setText(email);
         }
@@ -667,8 +667,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 final TextInputLayout inputEmail = new TextInputLayout(ActivitySetting.this);
                 final EditText edtEmail = new EditText(ActivitySetting.this);
-                edtEmail.setHint(getResources().getString(R.string.st_email));
-                edtEmail.setText(txtEmail.getText().toString());
+                edtEmail.setHint(getResources().getString(R.string.set_email));
+//                edtEmail.setText(txtEmail.getText().toString());
                 edtEmail.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtEmail.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtEmail.setPadding(0, 8, 0, 8);
@@ -1234,8 +1234,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        TextView txtprivacySecurity = (TextView) findViewById(R.id.st_txt_privacySecurity);
-        txtprivacySecurity.setOnClickListener(new View.OnClickListener() {
+        TextView txtPrivacySecurity = (TextView) findViewById(R.id.st_txt_privacySecurity);
+        txtPrivacySecurity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity = new FragmentPrivacyAndSecurity();

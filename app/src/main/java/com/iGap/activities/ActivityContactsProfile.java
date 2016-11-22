@@ -988,30 +988,30 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutDialog.setOrientation(LinearLayout.VERTICAL);
         layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
-        TextView text1 = new TextView(ActivityContactsProfile.this);
+//        TextView text1 = new TextView(ActivityContactsProfile.this);
         TextView text2 = new TextView(ActivityContactsProfile.this);
         TextView text3 = new TextView(ActivityContactsProfile.this);
 
-        text1.setTextColor(getResources().getColor(android.R.color.black));
+//        text1.setTextColor(getResources().getColor(android.R.color.black));
         text2.setTextColor(getResources().getColor(android.R.color.black));
         text3.setTextColor(getResources().getColor(android.R.color.black));
 
-        text1.setText(getResources().getString(R.string.Search));
+//        text1.setText(getResources().getString(R.string.Search));
         text2.setText(getResources().getString(R.string.clear_history));
         text3.setText(getResources().getString(R.string.delete_contact));
 
         int dim20 = (int) getResources().getDimension(R.dimen.dp20);
         int dim12 = (int) getResources().getDimension(R.dimen.dp12);
 
-        text1.setTextSize(14);
+//        text1.setTextSize(14);
         text2.setTextSize(14);
         text3.setTextSize(14);
 
-        text1.setPadding(dim20, dim12, dim12, dim20);
-        text2.setPadding(dim20, 0, dim12, dim20);
+//        text1.setPadding(dim20, dim12, dim12, dim20);
+        text2.setPadding(dim20, dim12, dim12, dim20);
         text3.setPadding(dim20, 0, dim12, dim20);
 
-        layoutDialog.addView(text1, params);
+//        layoutDialog.addView(text1, params);
         layoutDialog.addView(text2, params);
         layoutDialog.addView(text3, params);
 
@@ -1038,12 +1038,12 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 (int) getResources().getDimension(R.dimen.dp32));
         //                popupWindow.showAsDropDown(v);
 
-        text1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-            }
-        });
+//        text1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                popupWindow.dismiss();
+//            }
+//        });
         text2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

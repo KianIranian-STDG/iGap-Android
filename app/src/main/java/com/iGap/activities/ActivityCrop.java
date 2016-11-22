@@ -125,13 +125,18 @@ public class ActivityCrop extends ActivityEnhanced {
                     pathImageUser = getRealPathFromURI(uri);
                     switch (page) {
                         case "NewGroup":
-                            result = G.IMAGE_NEW_GROUP.toString();
+                            String timeStampGroup =
+                                    new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+                                            new Date());
+                            result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
                             HelperCopyFile.copyFile(pathImageUser, result);
 
                             break;
                         case "NewChanel":
-
-                            result = G.IMAGE_NEW_CHANEL.toString();
+                            String timeStampChannel =
+                                    new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+                                            new Date());
+                            result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
                             HelperCopyFile.copyFile(pathImageUser, result);
 
                             break;

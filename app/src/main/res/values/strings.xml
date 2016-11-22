@@ -11,7 +11,8 @@
     <string name="igapChanel">iGap /</string>
     <string name="clear_history">Clear History</string>
     <string name="clear_history_content">Are you sure that you want to clear the history?</string>
-    <string name="delete_chat">to delete a chat</string>
+    <string name="to_delete_chat">to delete a chat</string>
+    <string name="delete_chat">Delete Chat</string>
     <string name="delete_chat_content">Are you sure that you want to delete this chat?</string>
     <string name="delete_contact">to delete a contact</string>
     <string name="delete_text">Are you sure that you want to delete this contact?</string>
@@ -497,5 +498,9 @@
     <string name="delete_account_text2">Other</string>
     <string name="delete_account_text3">Other</string>
     <string name="delete_account_text4">Other</string>
+    <string name="capture_image">Capture Image</string>
+    <string name="capture_video">Capture Video</string>
+    <string name="set_gender">Set Gender</string>
+    <string name="set_email">Set Email</string>
 
 </resources>

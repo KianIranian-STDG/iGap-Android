@@ -119,12 +119,10 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItem>() {
             @Override
             public boolean onClick(View v, IAdapter adapter, ContactItem item, int position) {
-                chatGetRoom(item.mContact.peerId);
 
                 getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 prgWaiting.setVisibility(View.VISIBLE);
-
-
+                chatGetRoom(item.mContact.peerId);
                 return false;
             }
         });
@@ -246,6 +244,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 .findFirst();
 
         if (realmRoom != null) {
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            prgWaiting.setVisibility(View.GONE);
             Intent intent = new Intent(context, ActivityChat.class);
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -259,6 +259,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                         @Override
                         public void run() {
                             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            prgWaiting.setVisibility(View.GONE);
                         }
                     });
                     getUserInfo(peerId, roomId);
@@ -388,7 +389,6 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                     }
 
                                     RealmAvatar.put(user.getId(), user.getAvatar());
-
                                     realmRegisteredInfo.setUsername(user.getUsername());
                                     realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
                                     realmRegisteredInfo.setFirstName(user.getFirstName());
