@@ -647,7 +647,41 @@ public class ActivityMain extends ActivityEnhanced
                 }
                 mAdapter.add(roomItems);
 
-                realm.close();
+
+                final List<ProtoGlobal.Room> newRooms = new ArrayList<>();
+                for (ProtoGlobal.Room room : rooms) {
+                    if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).count() == 0) {
+                        newRooms.add(room);
+                        break;
+                    }
+                }
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        // remove deleted rooms
+                        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+                            boolean existed = false;
+                            for (ProtoGlobal.Room room : rooms) {
+                                if (room.getId() == realmRoom.getId()) {
+                                    existed = true;
+                                    break;
+                                }
+                            }
+                            if (!existed) {
+                                realmRoom.deleteFromRealm();
+                            }
+                        }
+
+                        for (ProtoGlobal.Room room : newRooms) {
+                            RealmRoom.putOrUpdate(room);
+                        }
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        realm.close();
+                    }
+                });
             }
         });
     }

@@ -21,7 +21,9 @@ public final class HelperLogout {
                 Intent intent = new Intent(G.context, ActivityIntroduce.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 G.context.startActivity(intent);
-                G.currentActivity.finish();
+                if (G.currentActivity != null) {
+                    G.currentActivity.finish();
+                }
             }
         });
     }
