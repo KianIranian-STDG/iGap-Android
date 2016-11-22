@@ -280,6 +280,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout replayContainer = (LinearLayout) holder.itemView.findViewById(R.id.replayLayout);
         if (replayContainer != null) {
             if (mMessage.replayTo != null) {
+                replayContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        messageClickListener.onReplyClick(mMessage.replayTo);
+                    }
+                });
                 holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
 
                 AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getMessageType(), mMessage.replayTo.getAttachment());

@@ -58,6 +58,15 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     };
 
+    public int findPositionByMessageId(long messageId) {
+        for (Item item : getAdapterItems()) {
+            if (Long.parseLong(item.mMessage.messageID) == messageId) {
+                return getAdapterPosition(item);
+            }
+        }
+        return -1;
+    }
+
     public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
         iMessageItem = iMessageItemListener;

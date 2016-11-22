@@ -4138,6 +4138,11 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
+    public void onReplyClick(RealmRoomMessage replyMessage) {
+        recyclerView.scrollToPosition(mAdapter.findPositionByMessageId(replyMessage.getMessageId()));
+    }
+
+    @Override
     public void onSetAction(long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
         if (mRoomId == roomId && this.userId != userId) {
             if (chatType == ProtoGlobal.Room.Type.CHAT) {
