@@ -142,7 +142,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         if (item != null) {
             final int pos = getAdapterItems().indexOf(item);
 
-            item.updateProgress(progress, new OnProgressUpdate() {
+            item.updateProgress(new OnProgressUpdate() {
                 @Override
                 public void onProgressUpdate() {
                     notifyAdapterItemChanged(pos);
