@@ -203,7 +203,15 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                                                         realmRoomMessage.getUserId())
                                                 .findFirst();
                                 if (realmRegisteredInfo != null) {
-                                    lastMessageSender = realmRegisteredInfo.getDisplayName() + " : ";
+
+                                    if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                                        lastMessageSender = " : " + realmRegisteredInfo.getDisplayName();
+                                    } else {
+                                        lastMessageSender = realmRegisteredInfo.getDisplayName() + " : ";
+                                    }
+
+
+
                                 }
                             }
                         }
