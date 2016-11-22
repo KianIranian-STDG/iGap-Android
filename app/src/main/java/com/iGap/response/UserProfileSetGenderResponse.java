@@ -22,14 +22,15 @@ public class UserProfileSetGenderResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        ProtoUserProfileGender.UserProfileSetGenderResponse.Builder userProfileGenderResponse =
-                ProtoUserProfileGender.UserProfileSetGenderResponse.newBuilder();
-        G.onUserProfileSetGenderResponse.onUserProfileEmailResponse(
-                userProfileGenderResponse.getGender(), userProfileGenderResponse.getResponse());
+        super.handler();
+        Log.i("XXX", "UserProfileSetGenderResponse message : " + message);
+        ProtoUserProfileGender.UserProfileSetGenderResponse.Builder builder = (ProtoUserProfileGender.UserProfileSetGenderResponse.Builder) message;
+        G.onUserProfileSetGenderResponse.onUserProfileEmailResponse(builder.getGender(), builder.getResponse());
     }
 
     @Override
     public void timeOut() {
+        super.timeOut();
     }
 
     @Override

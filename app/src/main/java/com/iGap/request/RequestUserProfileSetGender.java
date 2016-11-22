@@ -1,5 +1,7 @@
 package com.iGap.request;
 
+import android.util.Log;
+
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserProfileGender;
 
@@ -10,6 +12,8 @@ public class RequestUserProfileSetGender {
         ProtoUserProfileGender.UserProfileSetGender.Builder userProfileGender =
                 ProtoUserProfileGender.UserProfileSetGender.newBuilder();
         userProfileGender.setGender(gender);
+
+        Log.i("XXX", "RequestUserProfileSetGender gender : " + gender);
 
         RequestWrapper requestWrapper = new RequestWrapper(104, userProfileGender);
         try {

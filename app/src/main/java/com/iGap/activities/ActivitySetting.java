@@ -605,7 +605,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
                     @Override
                     public void onUserProfileEmailResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
-
+                        Log.i("XXX", "111***onUserProfileEmailResponse gender : " + gender);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -614,14 +614,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 realm1.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
-
-                                        if (gender == ProtoGlobal.Gender.MALE) {
-
-                                            realm.where(RealmUserInfo.class).findFirst().setGender(getResources().getString(R.string.Male));
-                                        } else {
-
-                                            realm.where(RealmUserInfo.class).findFirst().setGender(getResources().getString(R.string.Female));
-                                        }
+                                        realm.where(RealmUserInfo.class).findFirst().setGender(gender.toString());
                                     }
                                 });
                                 realm1.close();

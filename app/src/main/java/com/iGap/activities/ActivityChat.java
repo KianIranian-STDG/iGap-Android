@@ -203,7 +203,6 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static com.iGap.G.context;
-import static com.iGap.G.updatePopup;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
@@ -1305,7 +1304,7 @@ public class ActivityChat extends ActivityEnhanced
                     @Override
                     public void onClick(View view) {
 
-                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.to_delete_chat)
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.delete_chat)
                                 .content(R.string.delete_chat_content)
                                 .positiveText(R.string.B_ok)
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1476,10 +1475,6 @@ public class ActivityChat extends ActivityEnhanced
             public void onClick(View view) {
 
                 clearDraftRequest();
-
-                if (updatePopup != null) {
-                    updatePopup.update();
-                }
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
                     sendMessage(latestRequestCode, listPathString.get(0));
@@ -2884,8 +2879,10 @@ public class ActivityChat extends ActivityEnhanced
         // get all RealmRoomMessages
         Log.i("OOO", "realmRoomMessage : " + realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll());
         for (RealmRoomMessage realmRoomMessage : realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll()) {
-            if (realmRoomMessage != null && realmRoomMessage.getMessageId() != 0) {
-                realmRoomMessages.add(realmRoomMessage);
+            if (realmRoomMessage != null) {
+                if (realmRoomMessage.getMessageId() != 0) {
+                    realmRoomMessages.add(realmRoomMessage);
+                }
             }
         }
 
