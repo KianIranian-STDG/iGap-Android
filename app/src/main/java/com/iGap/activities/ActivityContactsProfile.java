@@ -1011,8 +1011,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         text3.setTextSize(14);
 
 //        text1.setPadding(dim20, dim12, dim12, dim20);
-        text2.setPadding(dim20, dim12, dim12, dim20);
-        text3.setPadding(dim20, 0, dim12, dim20);
+        text2.setPadding(dim20, dim12, dim20, dim12);
+        text3.setPadding(dim20, 0, dim20, dim12);
 
 //        layoutDialog.addView(text1, params);
         layoutDialog.addView(text2, params);
@@ -1070,7 +1070,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.delete_contact)
+                new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.to_delete_contact)
                         .content(R.string.delete_text)
                         .positiveText(R.string.B_ok)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {

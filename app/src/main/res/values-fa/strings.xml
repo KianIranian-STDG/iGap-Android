@@ -13,7 +13,7 @@
     <string name="clear_history_content">"آیا مطمئنید که می‌خواهید تاریخچهٔ گفتگو را پاک کنید؟"</string>
     <string name="to_delete_chat">"حذف گفتگو"</string>
     <string name="delete_chat_content">"آیا مطمئنید که می‌خواهید گفتگو را حذف کنید؟"</string>
-    <string name="delete_contact">"حذف مخاطب"</string>
+    <string name="to_delete_contact">"حذف مخاطب"</string>
     <string name="delete_text">"آیا مطمئنید که می خواهید این مخاطب را حذف کنید؟"</string>
     <string name="cancel">"لغو"</string>
     <string name="B_cancel">"لغو"</string>

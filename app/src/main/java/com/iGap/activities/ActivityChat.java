@@ -1241,7 +1241,7 @@ public class ActivityChat extends ActivityEnhanced
                 G.updatePopup = new UpdatePopup() {
                     @Override
                     public void update() {
-                        text1.setPadding(dim20, dim12, dim12, dim20);
+                        text1.setPadding(dim20, dim12, dim20, dim12);
                         text2.setVisibility(View.VISIBLE);
                         text3.setVisibility(View.VISIBLE);
                         text4.setVisibility(View.VISIBLE);
