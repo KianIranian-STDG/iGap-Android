@@ -331,7 +331,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                                             .getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgUserPhoto);
+                            ImageLoader.getInstance().displayImage(imagePath, imgUserPhoto);
                         }
                     }
                 });
