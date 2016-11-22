@@ -128,7 +128,7 @@
                             android:id="@+id/agp_imv_group_avatar"
                             android:layout_width="@dimen/dp88"
                             android:layout_height="@dimen/dp88"
-                            android:src="@mipmap/back_chat3"/>
+                            android:src="@mipmap/empty"/>
                     </com.iGap.libs.rippleeffect.RippleView>
 
                     <TextView

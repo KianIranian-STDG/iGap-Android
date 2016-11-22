@@ -2524,6 +2524,17 @@ public class ActivityChat extends ActivityEnhanced
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
             TextView replayFrom = (TextView) mReplayLayout.findViewById(R.id.replyFrom);
             ImageView thumbnail = (ImageView) mReplayLayout.findViewById(R.id.thumbnail);
+            ImageView closeReplay = (ImageView) mReplayLayout.findViewById(R.id.cancelIcon);
+            closeReplay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mReplayLayout != null) {
+                        mReplayLayout.setTag(null);
+                        mReplayLayout.setVisibility(View.GONE);
+                    }
+                }
+            });
+
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
                 if (chatItem.forwardedFrom.getAttachment() != null) {

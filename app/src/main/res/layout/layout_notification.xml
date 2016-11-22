@@ -12,7 +12,8 @@
         android:layout_gravity="left|top"
         android:layout_marginLeft="@dimen/dp4"
         android:layout_marginTop="@dimen/dp12"
-        android:src="@mipmap/logo" />
+        android:padding="@dimen/dp4"
+        android:src="@mipmap/icon"/>
 
     <LinearLayout
         android:layout_width="0dp"

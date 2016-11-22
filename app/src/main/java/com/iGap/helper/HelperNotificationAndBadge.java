@@ -136,13 +136,13 @@ public class HelperNotificationAndBadge {
                 if (bitmap != null) {
                     remoteViews.setImageViewBitmap(R.id.ln_imv_avatar_notification, bitmap);
                 } else {
-                    remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.logo);
+                    remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
                 }
             } else {
-                remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.logo);
+                remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
             }
         } else {
-            remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.logo);
+            remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
         }
     }
 
@@ -284,6 +284,7 @@ public class HelperNotificationAndBadge {
             Intent intent = new Intent(context, ActivityChat.class);
             intent.putExtra("RoomId", roomId);
             pi = PendingIntent.getActivity(context, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            ActivityPopUpNotification.isGoingToChatFromPopUp = true;
         } else {
             pi = PendingIntent.getActivity(context, 10, new Intent(context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
         }

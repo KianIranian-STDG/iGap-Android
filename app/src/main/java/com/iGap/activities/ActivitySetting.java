@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -194,8 +192,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 File imgFile = new File(realmAvatar.getFile().getLocalFilePath());
 
                 if (imgFile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    circleImageView.setImageBitmap(myBitmap);
+//                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//                    circleImageView.setImageBitmap(myBitmap);
+
+                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imgFile.getAbsolutePath()), circleImageView);
+
                     G.onChangeUserPhotoListener.onChangePhoto(imgFile.getAbsolutePath());
                 } else {
                     showInitials();
@@ -205,8 +206,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 File imgFile = new File(realmAvatar.getFile().getLocalThumbnailPath());
 
                 if (imgFile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    circleImageView.setImageBitmap(myBitmap);
+//                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//                    circleImageView.setImageBitmap(myBitmap);
+
+                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imgFile.getAbsolutePath()), circleImageView);
+
                     G.onChangeUserPhotoListener.onChangePhoto(imgFile.getAbsolutePath());
                 } else {
                     showInitials();

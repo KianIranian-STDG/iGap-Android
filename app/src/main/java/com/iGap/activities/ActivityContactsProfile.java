@@ -9,8 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -54,6 +52,7 @@ import com.iGap.interfaces.OnUserContactEdit;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
 import com.iGap.module.StructListOfContact;
@@ -81,6 +80,7 @@ import com.iGap.request.RequestUserContactImport;
 import com.iGap.request.RequestUserContactsDelete;
 import com.iGap.request.RequestUserContactsEdit;
 import com.iGap.request.RequestUserInfo;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -207,8 +207,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         if (avatarPath != null) {
             File imgFile = new File(avatarPath);
             if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                imgUser.setImageBitmap(myBitmap);
+//                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//                imgUser.setImageBitmap(myBitmap);
+
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imgFile.getAbsolutePath()), imgUser);
+
             } else {
                 imgUser.setImageBitmap(
                         com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100),
