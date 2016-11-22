@@ -258,6 +258,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 holder.lastMessage.setVisibility(GONE);
                 holder.lastSeen.setVisibility(GONE);
                 holder.messageStatus.setVisibility(GONE);
+                holder.lastMessageSender.setVisibility(GONE);
             }
         }
 

@@ -70,21 +70,6 @@ public class GroupSendMessageResponse extends MessageHandler {
                 Log.i("CLI", "send message StatusVersion : " + roomMessage.getStatusVersion());
                 Log.i("CLI", "send message MessageId : " + roomMessage.getMessageId());
 
-                // if first message received but the room doesn't exist, create new room
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                if (room == null) {
-                    // make get room request
-                    new RequestClientGetRoom().clientGetRoom(builder.getRoomId());
-                } else {
-                    // update last message sent/received in room table
-                    if (room.getLastMessage() != null) {
-                        if (room.getLastMessage().getUpdateTime() < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
-                            room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId()));
-                        }
-                    } else {
-                        room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId()));
-                    }
-                }
 
                 // because user may have more than one device, his another device should not be
                 // recipient
@@ -151,6 +136,22 @@ public class GroupSendMessageResponse extends MessageHandler {
                             realm.copyToRealmOrUpdate(realmRoomMessage);
                             break;
                         }
+                    }
+                }
+
+                // if first message received but the room doesn't exist, create new room
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+                if (room == null) {
+                    // make get room request
+                    new RequestClientGetRoom().clientGetRoom(builder.getRoomId());
+                } else {
+                    // update last message sent/received in room table
+                    if (room.getLastMessage() != null) {
+                        if (room.getLastMessage().getUpdateTime() < roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS) {
+                            room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId()));
+                        }
+                    } else {
+                        room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId()));
                     }
                 }
             }
