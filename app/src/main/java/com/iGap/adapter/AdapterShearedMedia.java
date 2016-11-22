@@ -53,8 +53,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     private MusicPlayer musicPlayer;
     private long roomId = 0;
 
-    public AdapterShearedMedia(Context context, ArrayList<RealmRoomMessage> list, String mediaType,
-                               OnComplete complete, MusicPlayer musicPlayer, long roomId) {
+    public AdapterShearedMedia(Context context, ArrayList<RealmRoomMessage> list, String mediaType, OnComplete complete, MusicPlayer musicPlayer, long roomId) {
         this.context = context;
         this.list = list;
         this.mediaType = mediaType;
@@ -106,32 +105,25 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         RecyclerView.ViewHolder viewHolder = null;
         boolean isHeader = false;
 
-        if (list.get(position)
-                .getMessageType()
-                .equals(ProtoGlobal.RoomMessageType.TEXT)) {
+        if (list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.TEXT)) {
             isHeader = true;
         }
 
         if (mediaType.equals(context.getString(R.string.shared_media))) {// picture and video
 
             if (isHeader) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.shared_media_sub_layout_time, null);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
                 viewHolder = new MyHoldersTime(view, position);
             } else {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.shared_media_sub_layout_image, null);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_image, null);
                 viewHolder = new MyHoldersImage(view, position);
             }
         } else if (mediaType.equals(context.getString(R.string.shared_files))) {// file
             if (isHeader) {
                 viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
             } else {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.shared_media_sub_layout_file, null);
-                RecyclerView.LayoutParams lp =
-                        new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_file, null);
+                RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 view.setLayoutParams(lp);
                 viewHolder = new MyHoldersFile(view, position);
             }
@@ -139,7 +131,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             if (isHeader) {
                 viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
             } else {
-
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.share_media_sub_layout_link, null);
+                viewHolder = new MyHolderLink(view, position);
             }
         } else if (mediaType.equals(context.getString(R.string.shared_music))) {
             if (isHeader) {
@@ -172,13 +165,10 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if (!list.get(position)
-                .getMessageType()
-                .equals(ProtoGlobal.RoomMessageType.TEXT)) {
+        if (!list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.TEXT)) {
 
             // set blue back ground for selected file
-            FrameLayout layout =
-                    (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
+            FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
             if (options.get(position).isSelected) {
                 layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
@@ -535,6 +525,19 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             txtTime = (TextView) itemView.findViewById(R.id.smslt_txt_time);
             txtTime.setText(list.get(position).getMessage());
+        }
+    }
+
+    public class MyHolderLink extends MyHolder {
+
+        public TextView txtLink;
+
+        public MyHolderLink(View itemView, int position) {
+            super(itemView);
+
+            txtLink = (TextView) itemView.findViewById(R.id.smsll_txt_shared_link);
+
+            txtLink.setText(list.get(position).getMessage());
         }
     }
 }

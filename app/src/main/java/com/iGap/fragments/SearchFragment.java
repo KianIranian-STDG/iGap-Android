@@ -28,12 +28,12 @@ import com.iGap.adapter.items.SearchItemHeader;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatGetRoom;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -475,7 +475,7 @@ public class SearchFragment extends Fragment {
         public long id = 0;
         public long messageId = 0;
         public RealmAvatar avatar;
-        public RoomType roomType;
+        public ProtoGlobal.Room.Type roomType;
         public SearchType type = SearchType.header;
     }
 }

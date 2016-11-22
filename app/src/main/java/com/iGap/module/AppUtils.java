@@ -16,7 +16,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import com.iGap.realm.enums.RoomType;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -134,7 +133,7 @@ public final class AppUtils {
         return 0;
     }
 
-    public static String rightLastMessage(Resources resources, RoomType roomType, long messageId) {
+    public static String rightLastMessage(Resources resources, ProtoGlobal.Room.Type roomType, long messageId) {
         Realm realm = Realm.getDefaultInstance();
         String messageText;
         RealmRoomMessage message = realm.where(RealmRoomMessage.class)

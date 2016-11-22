@@ -1,8 +1,10 @@
 package com.iGap.module;
 
 import com.iGap.interfaces.OnChatClearMessageResponse;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.request.RequestChatClearMessage;
+import com.iGap.request.RequestGroupClearMessage;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/5/2016.
@@ -19,8 +21,12 @@ public class ClearMessagesUtil implements OnChatClearMessageResponse {
         this.mOnChatClearMessageResponse = response;
     }
 
-    public void clearMessages(long roomId, long lastMessageId) {
-        new RequestChatClearMessage().chatClearMessage(roomId, lastMessageId);
+    public void clearMessages(ProtoGlobal.Room.Type roomType, long roomId, long lastMessageId) {
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            new RequestChatClearMessage().chatClearMessage(roomId, lastMessageId);
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            new RequestGroupClearMessage().groupClearMessage(roomId, lastMessageId);
+        }
     }
 
     @Override

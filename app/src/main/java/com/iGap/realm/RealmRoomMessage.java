@@ -40,6 +40,10 @@ public class RealmRoomMessage extends RealmObject {
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
 
+    public long getUpdateOrCreateTime() {
+        return updateTime != 0L ? updateTime : createTime;
+    }
+
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
 

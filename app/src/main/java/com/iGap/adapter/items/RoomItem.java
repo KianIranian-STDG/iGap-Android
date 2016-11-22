@@ -18,6 +18,7 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -87,7 +88,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     private String getStringChatIcon(RoomType chatType) {
         switch (chatType) {
             case CHAT:
-                return "";//G.context.getString(R.string.md_user_shape);
+                return "";
             case CHANNEL:
                 return G.context.getString(R.string.fa_bullhorn);
             case GROUP:
@@ -155,7 +156,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             holder.messageStatus.setVisibility(GONE);
             holder.lastMessage.setVisibility(View.VISIBLE);
             holder.lastMessageSender.setVisibility(View.VISIBLE);
-            holder.lastMessageSender.setText("Draft : ");
+            holder.lastMessageSender.setText("Draft: ");
             holder.lastMessageSender.setTextColor(Color.parseColor("#ff4644"));
             holder.lastMessage.setText(mInfo.getDraft().getMessage());
         } else {
@@ -209,7 +210,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                         realm1.close();
                     }
 
-                    if (mInfo.getType() == RoomType.GROUP) {
+                    if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
                         holder.lastMessageSender.setText(lastMessageSender);
                         holder.lastMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
                         holder.lastMessageSender.setVisibility(View.VISIBLE);
@@ -257,6 +258,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 holder.lastMessage.setVisibility(GONE);
                 holder.lastSeen.setVisibility(GONE);
                 holder.messageStatus.setVisibility(GONE);
+                holder.lastMessageSender.setVisibility(GONE);
             }
         }
 
@@ -273,7 +275,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                         .getResources()
                         .getDimension(R.dimen.dp60), mInfo.getInitials(), mInfo.getColor()));
 
-                if (mInfo.getType() != RoomType.CHAT) {
+                if (mInfo.getType() != ProtoGlobal.Room.Type.CHAT) {
                     if (mInfo.getAvatar().getFile().getToken() != null && !mInfo.getAvatar().getFile().getToken().isEmpty()) {
                         requestForAvatarThumbnail(mInfo.getAvatar().getFile().getToken());
                     }
@@ -290,13 +292,13 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             requestForUserInfo();
         }
 
-        if (mInfo.getType() == RoomType.CHAT) {
+        if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
             holder.chatIcon.setVisibility(GONE);
-        } else if (mInfo.getType() == RoomType.GROUP) {
+        } else if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
             holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.GROUP));
             holder.chatIcon.setTypeface(G.flaticon);
-        } else if (mInfo.getType() == RoomType.CHANNEL) {
+        } else if (mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
             holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
             holder.chatIcon.setTypeface(G.fontawesome);

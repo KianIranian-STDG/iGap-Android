@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.iGap.G;
@@ -7,6 +8,8 @@ import com.iGap.proto.ProtoChatClearMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 
 import io.realm.Realm;
 
@@ -29,8 +32,8 @@ public class ChatClearMessageResponse extends MessageHandler {
         final ProtoChatClearMessage.ChatClearMessageResponse.Builder chatClearMessage =
                 (ProtoChatClearMessage.ChatClearMessageResponse.Builder) message;
 
+        Realm realm = Realm.getDefaultInstance();
         if (chatClearMessage.getResponse().getId().isEmpty()) { // another account cleared message
-            Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -42,10 +45,15 @@ public class ChatClearMessageResponse extends MessageHandler {
                     realmClientCondition.setClearId(chatClearMessage.getClearId());
                 }
             });
-            realm.close();
             G.clearMessagesUtil.onChatClearMessage(chatClearMessage.getRoomId(),
                     chatClearMessage.getClearId(), chatClearMessage.getResponse());
         }
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatClearMessage.getRoomId()).findFirst();
+        if (realmRoom != null) {
+            realmRoom.setUpdatedTime(chatClearMessage.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
+        }
+        realm.close();
     }
 
     @Override

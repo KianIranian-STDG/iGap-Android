@@ -297,14 +297,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private void showLink() {
         txtSharedMedia.setText(R.string.shared_links);
+        fillListLink();
     }
 
     private void showMusic() {
         txtSharedMedia.setText(R.string.shared_music);
         fillListMusic();
 
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList,
-                txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
+        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -319,9 +319,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mList = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
 
         String firstItmeTime = "";
         String secendItemTime = "";
@@ -333,10 +331,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 type = realmRoomMessage.getMessageType();
             } catch (NullPointerException e) {
             }
-            if (type.equals(ProtoGlobal.RoomMessageType.VIDEO) || type.equals(
-                    ProtoGlobal.RoomMessageType.VIDEO_TEXT) ||
-                    type.equals(ProtoGlobal.RoomMessageType.IMAGE) || type.equals(
-                    ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
+            if (type.equals(ProtoGlobal.RoomMessageType.VIDEO) || type.equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT) ||
+                    type.equals(ProtoGlobal.RoomMessageType.IMAGE) || type.equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
 
                 secendItemTime = month_date.format(realmRoomMessage.getUpdateTime());
 
@@ -438,6 +434,34 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         realm.close();
     }
 
+    private void fillListLink() {
+
+        getURLListFromServer(new OnFillList() {
+            @Override
+            public void getList(List<ProtoGlobal.RoomMessage> resultList) {
+
+                mList = convertProtoToList(resultList);
+
+                mList.size();
+
+                mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
+                final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(mAdapter);
+                    }
+                });
+
+            }
+        });
+
+
+    }
 
     //********************************************************************************************
 
@@ -467,7 +491,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
+                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode " + majorCode + "   " + minorCode);
             }
 
             @Override
@@ -635,7 +659,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     }
 
-    private void getURLListFromServer() {
+    private void getURLListFromServer(final OnFillList onFillList) {
 
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
@@ -646,8 +670,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     Log.e("ddd", message + "      eeee");
 
+
                 }
 
+                onFillList.getList(resultList);
 
             }
 
@@ -666,5 +692,53 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     }
 
+    //********************************************************************************************
+
+    public interface OnFillList {
+
+        void getList(List<ProtoGlobal.RoomMessage> resultList);
+
+    }
+
+    private ArrayList<RealmRoomMessage> convertProtoToList(List<ProtoGlobal.RoomMessage> inputs) {
+
+        ArrayList<RealmRoomMessage> list = new ArrayList<>();
+
+        for (ProtoGlobal.RoomMessage input : inputs) {
+
+
+            RealmRoomMessage message = new RealmRoomMessage();
+
+            message.setMessage(input.getMessage());
+//            message.setStatus(input.getStatus().toString());
+//            message.setUserId(input.getAuthor().getUser().getUserId());
+//            message.setRoomId(roomId);
+//            if (input.hasAttachment()) {
+//                message.setAttachment(RealmAttachment.build(input.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT));
+//            }
+//            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
+//            message.setDeleted(input.getDeleted());
+//            message.setEdited(input.getEdited());
+//            if (input.hasForwardFrom()) {
+//                message.setForwardMessage(RealmRoomMessage.putOrUpdate(input.getForwardFrom(), roomId));
+//            }
+//            message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
+//            message.setLog(RealmRoomMessageLog.build(input.getLog()));
+            message.setMessageType(ProtoGlobal.RoomMessageType.UNRECOGNIZED);
+//            message.setMessageVersion(input.getMessageVersion());
+//            if (input.hasReplyTo()) {
+//                message.setReplyTo(RealmRoomMessage.putOrUpdate(input.getReplyTo(), roomId));
+//            }
+//            message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
+//            message.setStatusVersion(input.getStatusVersion());
+//            message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+//            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
+
+            list.add(message);
+        }
+
+
+        return list;
+    }
 
 }

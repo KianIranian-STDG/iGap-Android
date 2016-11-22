@@ -554,7 +554,7 @@ public class ActivityChat extends ActivityEnhanced
                     ((RecyclerView) findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
                 }
 
-                if (realmRoom.getType() == RoomType.CHAT) {
+                if (realmRoom.getType() == CHAT) {
 
                     chatType = CHAT;
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
@@ -576,12 +576,12 @@ public class ActivityChat extends ActivityEnhanced
                         color = realmRoom.getColor();
                         userStatus = "Last Seen Recently";
                     }
-                } else if (realmRoom.getType() == RoomType.GROUP) {
+                } else if (realmRoom.getType() == GROUP) {
                     chatType = GROUP;
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     groupRole = realmGroupRoom.getRole();
                     groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
-                } else if (realmRoom.getType() == RoomType.CHANNEL) {
+                } else if (realmRoom.getType() == CHANNEL) {
 
                     chatType = CHANNEL;
                     RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
@@ -1715,6 +1715,7 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setUserStatus(String status, long time) {
         Log.i("CCC", "2 status : " + status);
+        userStatus = status;
         if (status != null) {
             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                 String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
@@ -2550,6 +2551,17 @@ public class ActivityChat extends ActivityEnhanced
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
             TextView replayFrom = (TextView) mReplayLayout.findViewById(R.id.replyFrom);
             ImageView thumbnail = (ImageView) mReplayLayout.findViewById(R.id.thumbnail);
+            ImageView closeReplay = (ImageView) mReplayLayout.findViewById(R.id.cancelIcon);
+            closeReplay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mReplayLayout != null) {
+                        mReplayLayout.setTag(null);
+                        mReplayLayout.setVisibility(View.GONE);
+                    }
+                }
+            });
+
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
                 if (chatItem.forwardedFrom.getAttachment() != null) {
@@ -3613,7 +3625,7 @@ public class ActivityChat extends ActivityEnhanced
                             Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessage().getMessageId());
                             element.setClearId(realmRoom.getLastMessage().getMessageId());
 
-                            G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessage().getMessageId());
+                            G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();

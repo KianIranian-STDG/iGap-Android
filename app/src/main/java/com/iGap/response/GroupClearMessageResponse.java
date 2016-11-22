@@ -1,6 +1,15 @@
 package com.iGap.response;
 
+import android.text.format.DateUtils;
+
+import com.iGap.G;
 import com.iGap.proto.ProtoGroupClearMessage;
+import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
+
+import io.realm.Realm;
 
 public class GroupClearMessageResponse extends MessageHandler {
 
@@ -18,11 +27,34 @@ public class GroupClearMessageResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
-        ProtoGroupClearMessage.GroupClearMessageResponse.Builder builder =
+        final ProtoGroupClearMessage.GroupClearMessageResponse.Builder builder =
                 (ProtoGroupClearMessage.GroupClearMessageResponse.Builder) message;
         builder.getRoomId();
         builder.getClearId();
+
+        Realm realm = Realm.getDefaultInstance();
+        if (builder.getResponse().getId().isEmpty()) { // another account cleared message
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    final RealmClientCondition realmClientCondition =
+                            realm.where(RealmClientCondition.class)
+                                    .equalTo(RealmClientConditionFields.ROOM_ID,
+                                            builder.getRoomId())
+                                    .findFirst();
+                    realmClientCondition.setClearId(builder.getClearId());
+                }
+            });
+            G.clearMessagesUtil.onChatClearMessage(builder.getRoomId(),
+                    builder.getClearId(), builder.getResponse());
+        }
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+        if (realmRoom != null) {
+            realmRoom.setUpdatedTime(builder.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
+        }
+
+        realm.close();
     }
 
     @Override

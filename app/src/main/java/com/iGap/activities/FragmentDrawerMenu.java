@@ -3,7 +3,6 @@ package com.iGap.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -266,24 +265,20 @@ public class FragmentDrawerMenu extends MenuFragment {
 
         RealmAvatar realmAvatar = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getLastAvatar();
         if (realmAvatar != null) {
+
             if (realmAvatar.getFile().getLocalFilePath() != null) {
-
                 final File imgFile = new File(realmAvatar.getFile().getLocalFilePath());
-
                 if (imgFile.exists()) {
-
                     showInitials();
-
                     HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
                         @Override
                         public void Allow() {
-                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                            imgUserPhoto.setImageBitmap(myBitmap);
+//                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//                            imgUserPhoto.setImageBitmap(myBitmap);
+
+                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imgFile.getAbsolutePath()), imgUserPhoto);
                         }
                     });
-
-
-
                 } else {
                     showInitials();
                 }
@@ -292,8 +287,11 @@ public class FragmentDrawerMenu extends MenuFragment {
                 File imgFile = new File(realmAvatar.getFile().getLocalThumbnailPath());
 
                 if (imgFile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    imgUserPhoto.setImageBitmap(myBitmap);
+//                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//                    imgUserPhoto.setImageBitmap(myBitmap);
+
+                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imgFile.getAbsolutePath()), imgUserPhoto);
+
                 } else {
                     showInitials();
                 }
