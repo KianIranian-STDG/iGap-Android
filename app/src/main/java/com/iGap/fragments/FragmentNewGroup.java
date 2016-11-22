@@ -81,7 +81,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
     private Uri uriIntent;
     private TextView txtNextStep, txtCancel, txtTitleToolbar;
     private String prefix = "NewGroup";
-    private long roomId = 0;
+    private long groomId = 0;
     private String path;
     private RelativeLayout parent;
 
@@ -116,7 +116,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         if (bundle != null) { // get a list of image
             prefix = bundle.getString("TYPE");
             if (bundle.getLong("ROOMID") != 0) {
-                roomId = bundle.getLong("ROOMID");
+                groomId = bundle.getLong("ROOMID");
             }
         }
     }
@@ -167,7 +167,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         G.uploaderUtil.setActivityCallbacks(this);
         G.onGroupAvatarResponse = this;
 
-        Log.i("ZZZZZZCCC", "initComponent: " + roomId);
+        Log.i("ZZZZZZCCC", "initComponent: " + groomId);
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting);
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
@@ -352,7 +352,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
     private void chatToGroup() {
 
-
+        Log.i("ZZZZZZCCC", "groomId: " + groomId);
         G.onChatConvertToGroup = new OnChatConvertToGroup() {
             @Override
             public void onChatConvertToGroup(final long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
@@ -365,7 +365,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, groomId).findFirst();
+                                realmRoom.setId(roomId);
                                 realmRoom.setType(RoomType.GROUP);
                                 realmRoom.setTitle(name);
                                 RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
@@ -373,6 +374,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                                 realmGroupRoom.setDescription(description);
                                 realmGroupRoom.setParticipantsCountLabel("2");
                                 realmRoom.setGroupRoom(realmGroupRoom);
+                                Log.i("ZZZZZZCCC", "roomId: " + roomId);
+
 
                             }
                         });
@@ -407,7 +410,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             }
         };
 
-        new RequestChatConvertToGroup().chatConvertToGroup(roomId, edtGroupName.getText().toString(), edtDescription.getText().toString());
+        new RequestChatConvertToGroup().chatConvertToGroup(groomId, edtGroupName.getText().toString(), edtDescription.getText().toString());
     }
 
     private void createGroup() {

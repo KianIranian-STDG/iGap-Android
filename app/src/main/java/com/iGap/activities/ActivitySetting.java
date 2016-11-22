@@ -655,7 +655,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final TextInputLayout inputEmail = new TextInputLayout(ActivitySetting.this);
                 final EditText edtEmail = new EditText(ActivitySetting.this);
                 edtEmail.setHint(getResources().getString(R.string.set_email));
-//                edtEmail.setText(txtEmail.getText().toString());
+
+                if (email == null) {
+                    edtEmail.setText("");
+                } else {
+                    edtEmail.setText(txtEmail.getText().toString());
+                }
+
                 edtEmail.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtEmail.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtEmail.setPadding(0, 8, 0, 8);
@@ -699,6 +705,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         } else {
                             positive.setEnabled(false);
                         }
+                        inputEmail.setErrorEnabled(true);
+                        inputEmail.setError("");
                     }
                 });
 
@@ -724,8 +732,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 G.onUserProfileSetEmailResponse = new OnUserProfileSetEmailResponse() {
                     @Override
                     public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
-                        inputEmail.setErrorEnabled(true);
-                        inputEmail.setError("");
+
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -739,6 +746,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         realm.where(RealmUserInfo.class).findFirst().setEmail(email);
                                         txtEmail.setText(email);
                                         dialog.dismiss();
+
                                     }
                                 });
                                 realm1.close();
@@ -753,7 +761,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 @Override
                                 public void run() {
                                     inputEmail.setErrorEnabled(true);
-                                    inputEmail.setError("" + R.string.E_114);
+                                    positive.setEnabled(false);
+                                    inputEmail.setError("" + getResources().getString(R.string.error_email));
                                 }
                             });
                         } else if (majorCode == 115) {
@@ -761,7 +770,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 @Override
                                 public void run() {
                                     inputEmail.setErrorEnabled(true);
-                                    inputEmail.setError("" + R.string.E_115);
+                                    positive.setEnabled(false);
+                                    inputEmail.setError("" + getResources().getString(R.string.error_email));
                                 }
                             });
                         }

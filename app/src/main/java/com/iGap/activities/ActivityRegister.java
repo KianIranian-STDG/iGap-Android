@@ -528,14 +528,6 @@ public class ActivityRegister extends ActivityEnhanced {
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btnChoseCountry.getLayoutParams();
                 params.setMargins(marginLeft, marginTopChooseCountry, marginRight, marginBottomChooseCountry); //left, top, right, bottom
                 btnChoseCountry.setLayoutParams(params);
-                //
-                //                ViewGroup li = (ViewGroup) findViewById(R.id.rg_layout_center);
-                //                RelativeLayout.LayoutParams params3 = (RelativeLayout
-                // .LayoutParams) li.getLayoutParams();
-                //                params3.setMargins(marginLeft, marginTopChooseCountry,
-                // marginRight, 400); //left, top, right, bottom
-                //                li.setLayoutParams(params3);
-
                 RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) btnStart.getLayoutParams();
                 params2.setMargins(marginLeft, marginTopStart, marginRight, marginBottomStart); //left, top, right, bottom
                 btnStart.setLayoutParams(params2);
@@ -691,6 +683,7 @@ public class ActivityRegister extends ActivityEnhanced {
             public void onClick(View v) {
                 userRegister();
                 dialog.dismiss();
+                txtTimer.setVisibility(View.GONE);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }

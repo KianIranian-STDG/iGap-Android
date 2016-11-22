@@ -503,5 +503,5 @@
     <string name="set_gender">Set Gender</string>
     <string name="set_email">Set Email</string>
     <string name="delete_contact">Delete Contact</string>
-
+    <string name="error_email">Email is Wrong</string>
 </resources>
