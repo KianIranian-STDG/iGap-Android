@@ -2884,7 +2884,7 @@ public class ActivityChat extends ActivityEnhanced
         // get all RealmRoomMessages
         Log.i("OOO", "realmRoomMessage : " + realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll());
         for (RealmRoomMessage realmRoomMessage : realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll()) {
-            if (realmRoomMessage != null) {
+            if (realmRoomMessage != null && realmRoomMessage.getMessageId() != 0) {
                 realmRoomMessages.add(realmRoomMessage);
             }
         }
