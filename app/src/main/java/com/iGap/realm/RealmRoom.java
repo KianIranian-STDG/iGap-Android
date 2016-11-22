@@ -15,14 +15,23 @@ public class RealmRoom extends RealmObject {
     private String title;
     private String initials;
     private String color;
-    private int unread_count;
+    private int unreadCount;
     private boolean readOnly;
-    private RealmChatRoom chat_room;
+    private RealmChatRoom chatRoom;
     private boolean mute;
-    private RealmGroupRoom group_room;
-    private RealmChannelRoom channel_room;
+    private RealmGroupRoom groupRoom;
+    private RealmChannelRoom channelRoom;
     private RealmRoomMessage lastMessage;
     private RealmRoomDraft draft;
+    private long updatedTime;
+
+    public long getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(long updatedTime) {
+        this.updatedTime = updatedTime;
+    }
 
     public RealmRoomMessage getLastMessage() {
         return lastMessage;
@@ -58,6 +67,7 @@ public class RealmRoom extends RealmObject {
 
         if (realmRoom == null) {
             realmRoom = realm.createObject(RealmRoom.class, room.getId());
+            realmRoom.setUpdatedTime(System.currentTimeMillis());
         }
 
         realmRoom.setColor(room.getColor());
@@ -153,8 +163,8 @@ public class RealmRoom extends RealmObject {
         this.id = id;
     }
 
-    public RoomType getType() {
-        return (type != null) ? RoomType.valueOf(type) : null;
+    public ProtoGlobal.Room.Type getType() {
+        return (type != null) ? ProtoGlobal.Room.Type.valueOf(type) : null;
     }
 
     public void setType(RoomType type) {
@@ -186,11 +196,11 @@ public class RealmRoom extends RealmObject {
     }
 
     public int getUnreadCount() {
-        return unread_count;
+        return unreadCount;
     }
 
     public void setUnreadCount(int unread_count) {
-        this.unread_count = unread_count;
+        this.unreadCount = unread_count;
     }
 
     public boolean getReadOnly() {
@@ -210,27 +220,27 @@ public class RealmRoom extends RealmObject {
     }
 
     public RealmChatRoom getChatRoom() {
-        return chat_room;
+        return chatRoom;
     }
 
     public void setChatRoom(RealmChatRoom chat_room) {
-        this.chat_room = chat_room;
+        this.chatRoom = chat_room;
     }
 
     public RealmGroupRoom getGroupRoom() {
-        return group_room;
+        return groupRoom;
     }
 
     public void setGroupRoom(RealmGroupRoom group_room) {
-        this.group_room = group_room;
+        this.groupRoom = group_room;
     }
 
     public RealmChannelRoom getChannelRoom() {
-        return channel_room;
+        return channelRoom;
     }
 
     public void setChannelRoom(RealmChannelRoom channel_room) {
-        this.channel_room = channel_room;
+        this.channelRoom = channel_room;
     }
 
     public RealmRoomDraft getDraft() {

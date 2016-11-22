@@ -49,7 +49,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.realm.enums.RoomType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -253,7 +252,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         String lastSeen = "";
 
-        if (realmRoom.getType() == RoomType.CHAT) {
+        if (realmRoom.getType() == CHAT) {
 
             RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
             chatPeerId = realmChatRoom.getPeerId();

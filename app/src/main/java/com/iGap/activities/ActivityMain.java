@@ -60,6 +60,7 @@ import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.ShouldScrolledBehavior;
+import com.iGap.module.SortRooms;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
@@ -82,6 +83,7 @@ import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.realm.Realm;
@@ -139,7 +141,7 @@ public class ActivityMain extends ActivityEnhanced
                         return;
                     }
 
-                    G.chatUpdateStatusUtil.sendUpdateStatus(RoomType.convert(realmRoom.getType()), roomMessage.getRoomId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                    G.chatUpdateStatusUtil.sendUpdateStatus(realmRoom.getType(), roomMessage.getRoomId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
                 }
             }
         });
@@ -552,9 +554,9 @@ public class ActivityMain extends ActivityEnhanced
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
                     String role = null;
-                    if (item.mInfo.getType() == RoomType.GROUP) {
+                    if (item.mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
                         role = item.mInfo.getGroupRoom().getRole().toString();
-                    } else if (item.mInfo.getType() == RoomType.CHANNEL) {
+                    } else if (item.mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                         role = item.mInfo.getChannelRoom().getRole().toString();
                     }
 
@@ -645,6 +647,7 @@ public class ActivityMain extends ActivityEnhanced
                 for (ProtoGlobal.Room room : rooms) {
                     roomItems.add(new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
                 }
+                Collections.sort(roomItems, SortRooms.DESC);
                 mAdapter.add(roomItems);
 
 
@@ -726,7 +729,7 @@ public class ActivityMain extends ActivityEnhanced
                             Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessage().getMessageId());
                             element.setClearId(realmRoom.getLastMessage().getMessageId());
 
-                            G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessage().getMessageId());
+                            G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
@@ -905,10 +908,10 @@ public class ActivityMain extends ActivityEnhanced
                 break;
             case "txtDeleteChat":
 
-                if (item.mInfo.getType() == RoomType.CHAT) {
+                if (item.mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
 
                     deleteChat(item);
-                } else if (item.mInfo.getType() == RoomType.GROUP) {
+                } else if (item.mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
                     if (item.mInfo.getGroupRoom().getRole() == GroupChatRole.OWNER) {
 
                         deleteGroup(item);
@@ -916,8 +919,8 @@ public class ActivityMain extends ActivityEnhanced
 
                         lefGroup(item);
                     }
-                } else if (item.mInfo.getType() == RoomType.CHANNEL) {
-                    //delete channel
+                } else if (item.mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                    // TODO: 11/22/2016 [Alireza] delete channel room
                 }
 
                 break;
@@ -956,6 +959,8 @@ public class ActivityMain extends ActivityEnhanced
             for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.ID, Sort.DESCENDING)) {
                 roomItems.add(new RoomItem().setInfo(realmRoom).setComplete(ActivityMain.this).withIdentifier(SUID.id().get()));
             }
+
+            Collections.sort(roomItems, SortRooms.DESC);
 
             mAdapter.add(roomItems);
             realm.close();

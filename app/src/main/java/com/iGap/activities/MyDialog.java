@@ -12,14 +12,14 @@ import android.widget.TextView;
 
 import com.iGap.R;
 import com.iGap.module.OnComplete;
-import com.iGap.realm.enums.RoomType;
+import com.iGap.proto.ProtoGlobal;
 
 /**
  * Created by android3 on 8/3/2016.
  */
 public class MyDialog {
 
-    public static void showDialogMenuItemRooms(final Context context, final RoomType mType, boolean isMute, final String role, final OnComplete complete) {
+    public static void showDialogMenuItemRooms(final Context context, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, final OnComplete complete) {
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -59,9 +59,9 @@ public class MyDialog {
             }
         });
 
-        if (mType == RoomType.CHAT) {
+        if (mType == ProtoGlobal.Room.Type.CHAT) {
             txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.chat));
-        } else if (mType == RoomType.GROUP) {
+        } else if (mType == ProtoGlobal.Room.Type.GROUP) {
             if (role.equals("OWNER")) {
                 Log.i("ZZZZZZ", "showDialogMenuItemRooms: " + role);
                 txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.group));
@@ -70,7 +70,7 @@ public class MyDialog {
 
                 txtDeleteChat.setText(context.getString(R.string.left) + " " + context.getString(R.string.group));
             }
-        } else if (mType == RoomType.CHANNEL) {
+        } else if (mType == ProtoGlobal.Room.Type.CHANNEL) {
             txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.channel));
         }
 
@@ -79,11 +79,11 @@ public class MyDialog {
             public void onClick(View view) {
                 String str0 = "";
                 String str = "";
-                if (mType == RoomType.CHAT) {
+                if (mType == ProtoGlobal.Room.Type.CHAT) {
                     ;
                     str0 = context.getString(R.string.do_you_want_delete_this);
                     str = context.getString(R.string.chat);
-                } else if (mType == RoomType.GROUP) {
+                } else if (mType == ProtoGlobal.Room.Type.GROUP) {
                     str = context.getString(R.string.group);
                     if (role.equals("OWNER")) {
                         str0 = context.getString(R.string.do_you_want_delete_this);
@@ -91,7 +91,7 @@ public class MyDialog {
                         str0 = context.getString(R.string.do_you_want_left_this);
                     }
 
-                } else if (mType == RoomType.CHANNEL) {
+                } else if (mType == ProtoGlobal.Room.Type.CHANNEL) {
                     str0 = context.getString(R.string.do_you_want_delete_this);
                     str = context.getString(R.string.channel);
                 }

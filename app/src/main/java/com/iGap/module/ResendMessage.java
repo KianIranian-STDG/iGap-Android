@@ -9,7 +9,6 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import com.iGap.realm.enums.RoomType;
 
 import java.util.List;
 
@@ -101,11 +100,11 @@ public class ResendMessage implements IResendMessage {
                         .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID))
                         .findFirst();
                 if (roomMessage != null) {
-                    RoomType roomType = realm.where(RealmRoom.class)
+                    ProtoGlobal.Room.Type roomType = realm.where(RealmRoom.class)
                             .equalTo(RealmRoomFields.ID, roomMessage.getRoomId())
                             .findFirst()
                             .getType();
-                    G.chatSendMessageUtil.build(RoomType.convert(roomType), roomMessage.getRoomId(),
+                    G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(),
                             roomMessage);
                 }
             } else {
@@ -115,11 +114,11 @@ public class ResendMessage implements IResendMessage {
                                     Long.parseLong(message.messageID))
                             .findFirst();
                     if (roomMessage != null) {
-                        RoomType roomType = realm.where(RealmRoom.class)
+                        ProtoGlobal.Room.Type roomType = realm.where(RealmRoom.class)
                                 .equalTo(RealmRoomFields.ID, roomMessage.getRoomId())
                                 .findFirst()
                                 .getType();
-                        G.chatSendMessageUtil.build(RoomType.convert(roomType),
+                        G.chatSendMessageUtil.build(roomType,
                                 roomMessage.getRoomId(), roomMessage);
                     }
                     break;

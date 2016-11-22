@@ -13,7 +13,7 @@ import com.iGap.helper.HelperImageBackColor;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.TimeUtils;
-import com.iGap.realm.enums.RoomType;
+import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -54,13 +54,13 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
 
         holder.txtIcon.setVisibility(View.GONE);
 
-        if (item.roomType == RoomType.CHAT) {
+        if (item.roomType == ProtoGlobal.Room.Type.CHAT) {
             //holder.txtIcon.setVisibility(View.VISIBLE);
             //holder.txtIcon.setText(G.context.getString(R.string.md_user_shape));
-        } else if (item.roomType == RoomType.GROUP) {
+        } else if (item.roomType == ProtoGlobal.Room.Type.GROUP) {
             holder.txtIcon.setVisibility(View.VISIBLE);
             holder.txtIcon.setText(G.context.getString(R.string.md_users_social_symbol));
-        } else if (item.roomType == RoomType.CHANNEL) {
+        } else if (item.roomType == ProtoGlobal.Room.Type.CHANNEL) {
             holder.txtIcon.setVisibility(View.VISIBLE);
             holder.txtIcon.setText(G.context.getString(R.string.fa_bullhorn));
         }

@@ -1173,7 +1173,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                         if (realmRoom.getLastMessage() != null) {
                             element.setClearId(realmRoom.getLastMessage().getMessageId());
-                            G.clearMessagesUtil.clearMessages(roomId, realmRoom.getLastMessage().getMessageId());
+                            G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, realmRoom.getLastMessage().getMessageId());
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages =

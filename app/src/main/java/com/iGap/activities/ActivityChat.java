@@ -552,7 +552,7 @@ public class ActivityChat extends ActivityEnhanced
                     ((RecyclerView) findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
                 }
 
-                if (realmRoom.getType() == RoomType.CHAT) {
+                if (realmRoom.getType() == CHAT) {
 
                     chatType = CHAT;
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
@@ -574,12 +574,12 @@ public class ActivityChat extends ActivityEnhanced
                         color = realmRoom.getColor();
                         userStatus = "Last Seen Recently";
                     }
-                } else if (realmRoom.getType() == RoomType.GROUP) {
+                } else if (realmRoom.getType() == GROUP) {
                     chatType = GROUP;
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     groupRole = realmGroupRoom.getRole();
                     groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
-                } else if (realmRoom.getType() == RoomType.CHANNEL) {
+                } else if (realmRoom.getType() == CHANNEL) {
 
                     chatType = CHANNEL;
                     RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
@@ -3586,7 +3586,7 @@ public class ActivityChat extends ActivityEnhanced
                             Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessage().getMessageId());
                             element.setClearId(realmRoom.getLastMessage().getMessageId());
 
-                            G.clearMessagesUtil.clearMessages(chatId, realmRoom.getLastMessage().getMessageId());
+                            G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
                         }
 
                         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();

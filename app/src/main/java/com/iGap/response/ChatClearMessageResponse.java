@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.iGap.G;
@@ -7,6 +8,8 @@ import com.iGap.proto.ProtoChatClearMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 
 import io.realm.Realm;
 
@@ -40,6 +43,11 @@ public class ChatClearMessageResponse extends MessageHandler {
                                             chatClearMessage.getRoomId())
                                     .findFirst();
                     realmClientCondition.setClearId(chatClearMessage.getClearId());
+
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatClearMessage.getRoomId()).findFirst();
+                    if (realmRoom != null) {
+                        realmRoom.setUpdatedTime(chatClearMessage.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
+                    }
                 }
             });
             realm.close();
