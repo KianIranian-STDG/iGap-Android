@@ -177,10 +177,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         requestDownload(token, progress, offset);
 
         for (Item item : getAdapterItems()) {
-            if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
+            if (item.mMessage.attachment != null && item.mMessage.attachment.token.equalsIgnoreCase(token)) {
                 final int pos = getAdapterItems().indexOf(item);
-                item.mMessage.downloadAttachment.offset = offset;
-                item.mMessage.downloadAttachment.progress = progress;
 
                 item.onRequestDownloadFile(offset, progress, new OnFileDownload() {
                     @Override
