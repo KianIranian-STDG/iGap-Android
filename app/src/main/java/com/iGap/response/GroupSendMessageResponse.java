@@ -75,17 +75,21 @@ public class GroupSendMessageResponse extends MessageHandler {
                 } else {
                     // i'm the sender
                     // update message fields into database
-                    RealmResults<RealmRoomMessage> realmRoomMessageRealmResults =
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
-                    for (RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
-                        // find the message using identity and update it
-                        if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
-                            if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).count() == 0) {
-                                RealmRoomMessage.updateId(Long.parseLong(identity), roomMessage.getMessageId());
-                            }
+                    if (builder.getResponse().getId().isEmpty()) {
+                        RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId());
+                    } else {
+                        RealmResults<RealmRoomMessage> realmRoomMessageRealmResults =
+                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
+                        for (RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
+                            // find the message using identity and update it
+                            if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
+                                if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).count() == 0) {
+                                    RealmRoomMessage.updateId(Long.parseLong(identity), roomMessage.getMessageId());
+                                }
 
-                            RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId());
-                            break;
+                                RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId());
+                                break;
+                            }
                         }
                     }
                 }
@@ -108,7 +112,7 @@ public class GroupSendMessageResponse extends MessageHandler {
             }
         });
 
-        if (userId != roomMessage.getAuthor().getUser().getUserId() && builder.getResponse().getId().isEmpty()) {
+        if (builder.getResponse().getId().isEmpty()) {
             // invoke following callback when i'm not the sender, because I already done
             // everything after sending message
             if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst() != null) {
