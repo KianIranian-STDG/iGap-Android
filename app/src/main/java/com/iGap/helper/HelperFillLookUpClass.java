@@ -144,6 +144,44 @@ public class HelperFillLookUpClass {
         lookupMap.put(320, "GroupDeleteMessage");
         lookupMap.put(30320, "ProtoGroupDeleteMessage.GroupDeleteMessageResponse");
 
+        // Channel 4xx , 304xx
+        lookupMap.put(400, "ChannelCreate");
+        lookupMap.put(30400, "ProtoChannelCreate.ChannelCreateResponse");
+        lookupMap.put(401, "ChannelAddMember");
+        lookupMap.put(30401, "ProtoChannelAddMember.ChannelAddMemberResponse");
+        lookupMap.put(402, "ChannelAddAdmin");
+        lookupMap.put(30402, "ProtoChannelAddAdmin.ChannelAddAdminResponse");
+        lookupMap.put(403, "ChannelAddModerator");
+        lookupMap.put(30403, "ProtoChannelAddModerator.ChannelAddModeratorResponse");
+        lookupMap.put(404, "ChannelDelete");
+        lookupMap.put(30404, "ProtoChannelDelete.ChannelDeleteResponse");
+        lookupMap.put(405, "ChannelEdit");
+        lookupMap.put(30405, "ProtoChannelEdit.ChannelEditResponse");
+        lookupMap.put(406, "ChannelKickAdmin");
+        lookupMap.put(30406, "ProtoChannelKickAdmin.ChannelKickAdminResponse");
+        lookupMap.put(407, "ChannelKickMember");
+        lookupMap.put(30407, "ProtoChannelKickMember.ChannelKickMemberResponse");
+        lookupMap.put(408, "ChannelKickModerator");
+        lookupMap.put(30408, "ProtoChannelKickModerator.ChannelKickModeratorResponse");
+        lookupMap.put(409, "ChannelLeft");
+        lookupMap.put(30409, "ProtoChannelLeft.ChannelLeftResponse");
+        lookupMap.put(410, "ChannelSendMessage");
+        lookupMap.put(30410, "ProtoChannelSendMessage.ChannelSendMessageResponse");
+        lookupMap.put(411, "ChannelDeleteMessage");
+        lookupMap.put(30411, "ProtoChannelDeleteMessage.ChannelDeleteMessageResponse");
+        lookupMap.put(412, "ChannelAvatarAdd");
+        lookupMap.put(30412, "ProtoChannelAvatarAdd.ChannelAvatarAddResponse");
+        lookupMap.put(413, "ChannelAvatarDelete");
+        lookupMap.put(30413, "ProtoChannelAvatarDelete.ChannelAvatarDeleteResponse");
+        lookupMap.put(414, "ChannelAvatarGetList");
+        lookupMap.put(30414, "ProtoChannelAvatarGetList.ChannelAvatarGetListResponse");
+        lookupMap.put(415, "ChannelUpdateDraft");
+        lookupMap.put(30415, "ProtoChannelUpdateDraft.ChannelUpdateDraftResponse");
+        lookupMap.put(416, "ChannelGetDraft");
+        lookupMap.put(30416, "ProtoChannelGetDraft.ChannelGetDraftResponse");
+        lookupMap.put(417, "ChannelGetMemberList");
+        lookupMap.put(30417, "ProtoChannelGetMemberList.ChannelGetMemberListResponse");
+
         // Info 5xx , 305xx
         lookupMap.put(500, "Info.Location");
         lookupMap.put(30500, "ProtoInfoLocation.InfoLocationResponse");
