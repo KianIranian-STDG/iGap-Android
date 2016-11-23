@@ -3,6 +3,7 @@ package com.iGap.response;
 import android.util.Log;
 
 import com.iGap.G;
+import com.iGap.module.SUID;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupAddMember;
 import com.iGap.realm.RealmGroupRoom;
@@ -45,11 +46,7 @@ public class GroupAddMemberResponse extends MessageHandler {
                 final RealmList<RealmMember> members = realmGroupRoom.getMembers();
 
                 final RealmMember realmMember = new RealmMember();
-                int autoIncrement = 0;
-                if (realm.where(RealmMember.class).max("id") != null) {
-                    autoIncrement = realm.where(RealmMember.class).max("id").intValue() + 1;
-                }
-                realmMember.setId(autoIncrement);
+                realmMember.setId(SUID.id().get());
                 realmMember.setPeerId(userId);
                 realmMember.setRole(response.getRole().toString());
                 // realmMember = realm.copyToRealm(realmMember);

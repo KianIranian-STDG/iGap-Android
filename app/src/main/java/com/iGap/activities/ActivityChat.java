@@ -3662,7 +3662,10 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    private void deleteChat(final int item) {
+    private void deleteChat(final int itemff) {
+
+        final long chatId = itemff;
+
         G.onChatDelete = new OnChatDelete() {
             @Override
             public void onChatDelete(long roomId) {
@@ -3719,23 +3722,23 @@ public class ActivityChat extends ActivityEnhanced
         };
         Log.i("RRR", "onChatDelete 0 start delete");
         final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, item).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override
             public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(final Realm realm) {
-                        if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, item).findFirst() == null) {
+                        if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, chatId).findFirst() == null) {
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
-                            realmOfflineDelete.setOfflineDelete(item);
+                            realmOfflineDelete.setOfflineDelete(chatId);
 
                             element.getOfflineDeleted().add(realmOfflineDelete);
 
-                            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item).findFirst().deleteFromRealm();
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item).findAll().deleteAllFromRealm();
+                            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst().deleteFromRealm();
+                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll().deleteAllFromRealm();
 
-                            new RequestChatDelete().chatDelete(item);
+                            new RequestChatDelete().chatDelete(chatId);
                         }
                     }
                 });

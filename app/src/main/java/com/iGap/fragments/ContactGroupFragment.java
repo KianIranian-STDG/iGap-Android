@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,7 +108,7 @@ public class ContactGroupFragment extends Fragment {
                     @Override
                     public void onGroupAddMember(Long Roomid, Long UserId) {
                         countAddMemberResponse++;
-                        if (countAddMemberResponse >= countAddMemberRequest) {
+                        if (countAddMemberResponse == countAddMemberRequest) {
 
                             addOwnerToDatabase(roomId);
 
@@ -385,7 +386,7 @@ public class ContactGroupFragment extends Fragment {
 
 
         Realm realm = Realm.getDefaultInstance();
-        Long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        final Long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
 
@@ -404,6 +405,8 @@ public class ContactGroupFragment extends Fragment {
                     @Override
                     public void execute(Realm realm) {
                         members.add(realmMember);
+
+                        Log.e("ddd", "add owener to database       userid = " + userId);
                     }
                 });
 
