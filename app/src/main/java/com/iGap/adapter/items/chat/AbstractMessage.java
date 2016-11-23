@@ -355,8 +355,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         ViewGroup view = (ViewGroup) holder.itemView.findViewById(R.id.thumbnail).getParent();
                         if (view != null) {
                             int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(), attachment.getWidth(), attachment.getHeight());
-                            view.setLayoutParams(new LinearLayout.LayoutParams(dimens[0], dimens[1]));
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
+                            view.setLayoutParams(layoutParams);
+                            ((ViewGroup) view.getParent()).setLayoutParams(layoutParams);
                             view.requestLayout();
+                            view.getParent().getParent().requestLayout();
                         }
                     }
 

@@ -53,23 +53,23 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        int[] dimens = new int[2];
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
-                int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
+                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
                         mMessage.forwardedFrom.getAttachment().getWidth(), mMessage.forwardedFrom.getAttachment().getHeight());
-                ((ViewGroup) holder.image.getParent()).setLayoutParams(
-                        new LinearLayout.LayoutParams(dimens[0], dimens[1]));
-                holder.image.getParent().requestLayout();
             }
         } else {
             if (mMessage.attachment != null) {
-                int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
+                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
                         mMessage.attachment.width, mMessage.attachment.height);
-                ((ViewGroup) holder.image.getParent()).setLayoutParams(
-                        new LinearLayout.LayoutParams(dimens[0], dimens[1]));
-                holder.image.getParent().requestLayout();
             }
         }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
+        ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
+        ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParams);
+        holder.image.getParent().requestLayout();
+        holder.image.getParent().getParent().requestLayout();
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override

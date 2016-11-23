@@ -55,12 +55,11 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        int[] dimens = new int[2];
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
-                int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
+                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
                         mMessage.forwardedFrom.getAttachment().getWidth(), mMessage.forwardedFrom.getAttachment().getHeight());
-                ((ViewGroup) holder.image.getParent()).setLayoutParams(
-                        new LinearLayout.LayoutParams(dimens[0], dimens[1]));
                 holder.image.getParent().requestLayout();
                 holder.duration.setText(
                         String.format(holder.itemView.getResources().getString(R.string.video_duration),
@@ -69,17 +68,17 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
             }
         } else {
             if (mMessage.attachment != null) {
-                int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
+                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
                         mMessage.attachment.width, mMessage.attachment.height);
-                ((ViewGroup) holder.image.getParent()).setLayoutParams(
-                        new LinearLayout.LayoutParams(dimens[0], dimens[1]));
-                holder.image.getParent().requestLayout();
                 holder.duration.setText(
                         String.format(holder.itemView.getResources().getString(R.string.video_duration),
                                 AppUtils.humanReadableDuration(mMessage.attachment.duration).replace(".", ":"),
                                 AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true)));
             }
         }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
+        ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
+        holder.image.getParent().requestLayout();
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
