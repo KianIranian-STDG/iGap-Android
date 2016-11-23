@@ -148,10 +148,21 @@ public class ActivityMain extends ActivityEnhanced
         realm.close();
     }
 
+    /**
+     * this is a bad workaround for Realm bug but works well
+     */
+    private void fixRealmBAADD() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.where(RealmUserInfo.class).findFirst();
+        realm.close();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fixRealmBAADD();
 
         HelperGetDataFromOtherApp getShearedData = new HelperGetDataFromOtherApp(getIntent());
 
