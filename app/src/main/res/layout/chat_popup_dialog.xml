@@ -16,7 +16,7 @@
         android:padding="@dimen/dp12"
         android:text="@string/mute_notification"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/sp15"/>
+        android:textSize="@dimen/sp14"/>
 
     <TextView
         android:id="@+id/cm_txt_clear_history"
@@ -25,7 +25,7 @@
         android:padding="@dimen/dp12"
         android:text="@string/clear_history"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/sp15"/>
+        android:textSize="@dimen/sp14"/>
 
     <TextView
         android:id="@+id/cm_txt_delete_chat"
@@ -34,7 +34,7 @@
         android:padding="@dimen/dp12"
         android:text="@string/to_delete_chat"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/sp15"/>
+        android:textSize="@dimen/sp14"/>
 
     <TextView
         android:id="@+id/cm_txt_cancle"
@@ -44,7 +44,7 @@
         android:padding="@dimen/dp12"
         android:text="@string/cancel"
         android:textColor="@color/green"
-        android:textSize="@dimen/sp15"/>
+        android:textSize="@dimen/sp14"/>
 
 
 </LinearLayout>

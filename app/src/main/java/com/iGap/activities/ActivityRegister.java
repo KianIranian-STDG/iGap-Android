@@ -745,6 +745,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             // TODO: 9/25/2016  Error 100 - USER_REGISTER_BAD_PAYLOAD
                             //Invalid countryCode
+                            requestRegister();
                         }
                     });
                 } else if (majorCode == 100 && minorCode == 2) {
@@ -770,6 +771,10 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override
                         public void run() {
                             // TODO: 9/25/2016  Error 135 - USER_REGISTER_BLOCKED_USER
+                            new MaterialDialog.Builder(ActivityRegister.this)
+                                    .title(R.string.USER_VERIFY_BLOCKED_USER)
+                                    .content(R.string.Toast_Number_Block)
+                                    .positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 136) {
@@ -777,6 +782,10 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override
                         public void run() {
                             // TODO: 9/25/2016  Error 136 - USER_REGISTER_MAX_TRY_LOCK
+                            new MaterialDialog.Builder(ActivityRegister.this)
+                                    .title(R.string.USER_VERIFY_MANY_TRIES)
+                                    .content(R.string.Toast_Number_Block)
+                                    .positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 137) {
@@ -784,6 +793,10 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override
                         public void run() {
                             // TODO: 9/25/2016  Error 137 - USER_REGISTER_MAX_SEND_LOCK
+                            new MaterialDialog.Builder(ActivityRegister.this)
+                                    .title(R.string.USER_VERIFY_MANY_TRIES_SEND)
+                                    .content(R.string.Toast_Number_Block)
+                                    .positiveText(R.string.B_ok).show();
                         }
                     });
                 }
@@ -859,7 +872,6 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override
                         public void run() {
                             errorVerifySms();
-                            countDownTimer.cancel();
                         }
                     });
                 } else if (majorCode == 102 && minorCode == 2) {
@@ -869,32 +881,12 @@ public class ActivityRegister extends ActivityEnhanced {
                             // TODO: 9/25/2016 Invalid username
                         }
                     });
-                } else if (majorCode == 102 && minorCode == 3) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: 9/25/2016 Invalid device
-                        }
-                    });
-                } else if (majorCode == 102 && minorCode == 4) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: 9/25/2016 Invalid osName
-                        }
-                    });
-                } else if (majorCode == 102 && minorCode == 5) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: 9/25/2016 Invalid osVersion
-                        }
-                    });
                 } else if (majorCode == 103) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             // TODO: 9/25/2016 Error 103 - USER_VERIFY_INTERNAL_SERVER_ERROR
+
                         }
                     });
                 } else if (majorCode == 104) {
@@ -903,6 +895,10 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             // There is no registered user with given username
                             // TODO: 9/25/2016 Error 104 - USER_VERIFY_USER_NOT_FOUND
+                            new MaterialDialog.Builder(ActivityRegister.this)
+                                    .title(R.string.USER_VERIFY_GIVEN_USERNAME)
+                                    .content(R.string.Toast_Number_Block)
+                                    .positiveText(R.string.B_ok).show();
 
                         }
                     });
@@ -913,7 +909,11 @@ public class ActivityRegister extends ActivityEnhanced {
                             // User is blocked , You cannot verify the user
                             // TODO: 9/25/2016 Error 105 - USER_VERIFY_BLOCKED_USER
 
-                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityRegister.this)
+                                    .title(R.string.USER_VERIFY_BLOCKED_USER)
+                                    .content(R.string.Toast_Number_Block)
+                                    .positiveText(R.string.B_ok)
+                                    .show();
                         }
                     });
                 } else if (majorCode == 106) {
@@ -929,9 +929,12 @@ public class ActivityRegister extends ActivityEnhanced {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // There is no registered user with given username
+                            // Verification code is expired
                             // TODO: 9/25/2016 Error 107 - USER_VERIFY_EXPIRED_CODE
-
+                            new MaterialDialog.Builder(ActivityRegister.this)
+                                    .title(R.string.USER_VERIFY_EXPIRED)
+                                    .content(R.string.Toast_Number_Block)
+                                    .positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 108) {
@@ -940,6 +943,10 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             // Verification code is locked for a while due to too many tries
                             // TODO: 9/25/2016 Error 108 - USER_VERIFY_MAX_TRY_LOCK
+                            new MaterialDialog.Builder(ActivityRegister.this)
+                                    .title(R.string.USER_VERIFY_MANY_TRIES)
+                                    .content(R.string.Toast_Number_Block)
+                                    .positiveText(R.string.B_ok).show();
 
                         }
                     });

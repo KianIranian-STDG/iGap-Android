@@ -1,14 +1,15 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical"
-              android:id="@+id/stas_rootActiveSession"
-              tools:context="com.iGap.fragments.FragmentActiveSessions">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:id="@+id/stas_rootActiveSession"
+                tools:context="com.iGap.fragments.FragmentActiveSessions">
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/acs_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="@color/toolbar_background"
@@ -59,8 +60,18 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/stas_rcvContent"
+        android:layout_below="@+id/acs_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <ProgressBar
+        android:id="@+id/stas_prgWaiting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/pu_circle_dialog_give_image_gallery"
+        android:indeterminate="true"
+        android:visibility="visible"/>
 
-</LinearLayout>
+
+</RelativeLayout>

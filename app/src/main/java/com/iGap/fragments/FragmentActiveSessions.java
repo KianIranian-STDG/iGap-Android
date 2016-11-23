@@ -2,7 +2,9 @@ package com.iGap.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,17 +13,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.AdapterActiveSessions;
 import com.iGap.interfaces.OnUserSessionGetActiveList;
+import com.iGap.interfaces.OnUserSessionTerminate;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructSessionsGetActiveList;
 import com.iGap.proto.ProtoUserSessionGetActiveList;
 import com.iGap.request.RequestUserSessionGetActiveList;
+import com.iGap.request.RequestUserSessionTerminate;
 import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
@@ -35,8 +43,9 @@ public class FragmentActiveSessions extends Fragment {
 
     private FastAdapter fastAdapter;
     private RecyclerView rcvContent;
-    private List<StructSessionsGetActiveList> itemSessionsGetActiveList = new ArrayList<>();
+    private List<StructSessionsGetActiveList> structItems = new ArrayList<>();
     private List<IItem> items = new ArrayList<>();
+    private ProgressBar prgWaiting;
 
     public FragmentActiveSessions() {
         // Required empty public constructor
@@ -54,13 +63,15 @@ public class FragmentActiveSessions extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        prgWaiting = (ProgressBar) view.findViewById(R.id.stas_prgWaiting);
+        prgWaiting.setVisibility(View.VISIBLE);
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.stas_txt_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.stas_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentActiveSessions.this).commit();
             }
         });
 
@@ -71,51 +82,132 @@ public class FragmentActiveSessions extends Fragment {
 
             }
         });
-        fastAdapter = new FastAdapter();
-        fastAdapter.withSelectable(true);
+
         final FastItemAdapter fastItemAdapter = new FastItemAdapter();
-
-        new RequestUserSessionGetActiveList().userSessionGetActiveList();
-
         rcvContent = (RecyclerView) view.findViewById(R.id.stas_rcvContent);
         rcvContent.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvContent.setItemAnimator(new DefaultItemAnimator());
         rcvContent.setAdapter(fastItemAdapter);
 
+        new RequestUserSessionGetActiveList().userSessionGetActiveList();
         G.onUserSessionGetActiveList = new OnUserSessionGetActiveList() {
             @Override
-            public void onUserSessionGetActiveList(List<ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Session> session) {
+            public void onUserSessionGetActiveList(final List<ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Session> session) {
 
-                for (int i = 0; i < session.size(); i++) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                    StructSessionsGetActiveList item = new StructSessionsGetActiveList();
+                        for (int i = 0; i < session.size(); i++) {
 
-                    item.setSessionId(session.get(i).getSessionId());
-                    item.setName(session.get(i).getAppName());
-                    item.setAppId(session.get(i).getAppId());
-                    item.setBuildVersion(session.get(i).getAppBuildVersion());
-                    item.setAppVersion(session.get(i).getAppVersion());
-                    item.setPlatform(session.get(i).getPlatform());
-                    item.setPlatformVersion(session.get(i).getPlatformVersion());
-                    item.setDevice(session.get(i).getDevice());
-                    item.setDeviceName(session.get(i).getDeviceName());
-                    item.setLanguage(session.get(i).getLanguage());
-                    item.setCountry(session.get(i).getCountry());
-                    item.setCurrent(session.get(i).getCurrent());
-                    item.setCreateTime(session.get(i).getCreateTime());
-                    item.setActiveTime(session.get(i).getActiveTime());
-                    item.setIp(session.get(i).getIp());
+                            StructSessionsGetActiveList item = new StructSessionsGetActiveList();
+                            item.setSessionId(session.get(i).getSessionId());
+                            item.setName(session.get(i).getAppName());
+                            item.setAppId(session.get(i).getAppId());
+                            item.setBuildVersion(session.get(i).getAppBuildVersion());
+                            item.setAppVersion(session.get(i).getAppVersion());
+                            item.setPlatform(session.get(i).getPlatform());
+                            item.setPlatformVersion(session.get(i).getPlatformVersion());
+                            item.setDevice(session.get(i).getDevice());
+                            item.setDeviceName(session.get(i).getDeviceName());
+                            item.setLanguage(session.get(i).getLanguage());
+                            item.setCountry(session.get(i).getCountry());
+                            item.setCurrent(session.get(i).getCurrent());
+                            item.setCreateTime(session.get(i).getCreateTime());
+                            item.setActiveTime(session.get(i).getActiveTime());
+                            item.setIp(session.get(i).getIp());
 
-                    items.add(new AdapterActiveSessions(item).withIdentifier(100 + items.indexOf(item)));
+                            structItems.add(item);
+                            items.add(new AdapterActiveSessions(item).withIdentifier(100 + i));
+                        }
+                        prgWaiting.setVisibility(View.GONE);
+                        fastItemAdapter.add(items);
 
-                    Log.i("CCCCCCC", "onUserSessionGetActiveList: " + item.getAppId());
-
-
-                }
-
+                    }
+                });
             }
         };
-        fastItemAdapter.notifyAdapterDataSetChanged();
-        fastItemAdapter.add(items);
+
+
+        fastItemAdapter.withSelectable(true);
+        fastItemAdapter.withOnClickListener(new FastAdapter.OnClickListener() {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, final IItem item, final int position) {
+
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.active_session_title)
+                        .content(R.string.active_session_content)
+                        .positiveText(R.string.B_ok)
+                        .negativeText(R.string.B_cancel)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                new RequestUserSessionTerminate().userSessionTerminate(structItems.get(position).getSessionId());
+                                Log.e("dddd", " invite click  " + structItems.get(position).getSessionId());
+                                G.onUserSessionTerminate = new OnUserSessionTerminate() {
+                                    @Override
+                                    public void onUserSessionTerminate() {
+
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                fastItemAdapter.remove(position);
+                                            }
+                                        });
+
+
+                                    }
+
+                                    @Override
+                                    public void onTimeOut() {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                        "Error",
+                                                        Snackbar.LENGTH_LONG);
+                                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                        "Error",
+                                                        Snackbar.LENGTH_LONG);
+                                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
+                                };
+
+
+                            }
+                        }).show();
+
+                return false;
+            }
+        });
+
+
+
     }
 }

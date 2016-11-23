@@ -2,7 +2,6 @@ package com.iGap.activities;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -63,10 +62,9 @@ public class MyDialog {
             txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.chat));
         } else if (mType == ProtoGlobal.Room.Type.GROUP) {
             if (role.equals("OWNER")) {
-                Log.i("ZZZZZZ", "showDialogMenuItemRooms: " + role);
+
                 txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.group));
             } else {
-                Log.i("ZZZZZZ", "showDialogMenuItemRooms222: " + role);
 
                 txtDeleteChat.setText(context.getString(R.string.left) + " " + context.getString(R.string.group));
             }
@@ -80,7 +78,6 @@ public class MyDialog {
                 String str0 = "";
                 String str = "";
                 if (mType == ProtoGlobal.Room.Type.CHAT) {
-                    ;
                     str0 = context.getString(R.string.do_you_want_delete_this);
                     str = context.getString(R.string.chat);
                 } else if (mType == ProtoGlobal.Room.Type.GROUP) {
@@ -96,7 +93,7 @@ public class MyDialog {
                     str = context.getString(R.string.channel);
                 }
 
-                showDialogNotification(context, str0 + str + " ?", complete, "txtDeleteChat");
+                showDialogNotification(context, str0 + " " + str + " ?", complete, "txtDeleteChat");
 
                 dialog.cancel();
             }

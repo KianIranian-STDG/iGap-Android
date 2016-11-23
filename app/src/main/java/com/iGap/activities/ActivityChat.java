@@ -1183,6 +1183,7 @@ public class ActivityChat extends ActivityEnhanced
                 final int dim20 = (int) getResources().getDimension(R.dimen.dp20);
                 int dim16 = (int) getResources().getDimension(R.dimen.dp16);
                 final int dim12 = (int) getResources().getDimension(R.dimen.dp12);
+                final int dim8 = (int) getResources().getDimension(R.dimen.dp8);
                 int sp16 = (int) getResources().getDimension(R.dimen.sp12);
 
                 text1.setTextSize(14);
@@ -1341,9 +1342,19 @@ public class ActivityChat extends ActivityEnhanced
                     @Override
                     public void onClick(View view) {
 
-                        G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
-                        finish();
-                        popupWindow.dismiss();
+                        new MaterialDialog.Builder(ActivityChat.this)
+                                .title(R.string.convert_chat_to_group_title)
+                                .content(R.string.convert_chat_to_group_content)
+                                .positiveText(R.string.B_ok)
+                                .negativeText(R.string.B_cancel)
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        finish();
+                                        G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
+                                    }
+                                })
+                                .show();
 
                     }
                 });

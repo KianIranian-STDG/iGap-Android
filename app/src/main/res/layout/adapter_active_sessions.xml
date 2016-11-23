@@ -1,129 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
               android:id="@+id/aas_rootLayout"
-              android:padding="@dimen/dp16">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="@dimen/dp8">
 
-    <TextView
+    <android.support.v7.widget.CardView
+        android:id="@+id/adp_cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Current session"
-        android:textColor="@color/toolbar_background"
-        android:textSize="@dimen/sp16"
-        />
+        >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp20"
-        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".7"
-            android:text="iGap Android 1.0.0.1"
-            android:textColor="@color/am_iconFab_black"
-            android:textSize="@dimen/sp16"
-            android:textStyle="bold"
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".3"
-            android:gravity="end|right"
-            android:text="online"
-            android:textColor="@color/gray_4c"
-            android:textSize="@dimen/sp16"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp4"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="HUAWEIH30-L02"
-            android:textColor="@color/rg_text_dark_verify"
-            android:textSize="@dimen/sp16"
-            android:gravity="center"
-
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp12"
-            android:text=" , "
-            android:textColor="@color/rg_text_dark_verify"
-            android:textSize="@dimen/sp16"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Android SDK 19"
-            android:textColor="@color/gray_4c"
-            android:textSize="@dimen/sp16"
-            />
-
-    </LinearLayout>
+            android:orientation="vertical"
+            android:padding="@dimen/dp12">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp4"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/adp_currentSession"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Current session"
+                android:textColor="@color/toolbar_background"
+                android:textSize="@dimen/sp16"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="5.196.196.97"
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="@dimen/sp16"
-            android:gravity="center"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp20"
+                android:orientation="horizontal">
 
-            />
+                <TextView
+                    android:id="@+id/adp_versionIgap"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".7"
+                    android:text="iGap Android 1.0.0.1"
+                    android:textColor="@color/am_iconFab_black"
+                    android:textSize="@dimen/sp16"
+                    android:textStyle="bold"
+                    />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text=" - "
-            android:gravity="center"
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="@dimen/sp16"
-            />
+                <TextView
+                    android:id="@+id/adp_online"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:gravity="end|right"
+                    android:text="online"
+                    android:textColor="@color/gray_4c"
+                    android:textSize="@dimen/sp16"
+                    />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="FR"
-            android:textColor="@color/gray_4c"
-            android:textSize="@dimen/sp16"
-            />
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp4"
+                android:orientation="horizontal">
 
-    <TextView
-        android:layout_marginTop="@dimen/dp12"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp16"
-        android:textColor="@color/gray_4c"
-        />
+                <TextView
+                    android:id="@+id/adp_deviceModel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="HUAWEIH30-L02"
+                    android:textColor="@color/rg_text_dark_verify"
+                    android:textSize="@dimen/sp16"
 
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp12"
+                    android:text=" , "
+                    android:textColor="@color/rg_text_dark_verify"
+                    android:textSize="@dimen/sp16"
+                    />
+
+                <TextView
+                    android:id="@+id/adp_androidSDK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Android SDK 19"
+                    android:textColor="@color/gray_4c"
+                    android:textSize="@dimen/sp16"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp4"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/adp_ip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="5.196.196.97"
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="@dimen/sp16"
+
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text=" - "
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="@dimen/sp16"
+                    />
+
+                <TextView
+                    android:id="@+id/adp_language"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="FR"
+                    android:textColor="@color/gray_4c"
+                    android:textSize="@dimen/sp16"
+                    />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

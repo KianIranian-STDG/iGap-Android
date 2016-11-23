@@ -73,8 +73,8 @@ public class StructSessionsGetActiveList {
         return platformVersion;
     }
 
-    public void setPlatformVersion(String patformVersion) {
-        this.platformVersion = patformVersion;
+    public void setPlatformVersion(String platformVersion) {
+        this.platformVersion = platformVersion;
     }
 
     public ProtoGlobal.Device getDevice() {

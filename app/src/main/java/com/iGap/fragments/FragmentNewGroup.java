@@ -169,7 +169,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
         Log.i("ZZZZZZCCC", "initComponent: " + groomId);
 
-        prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting);
+        prgWaiting = (ProgressBar) view.findViewById(R.id.ng_prgWaiting);
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         prgWaiting.setVisibility(View.GONE);
@@ -512,7 +512,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         prgWaiting.setVisibility(View.GONE);
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                        getFragmentManager().popBackStack();
                         android.support.v4.app.Fragment fragment = ContactGroupFragment.newInstance();
                         Bundle bundle = new Bundle();
                         bundle.putLong("RoomId", roomId);

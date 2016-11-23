@@ -107,8 +107,10 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingBottom="1dp"
+                        android:gravity="left"
                         android:singleLine="true"
                         android:text="LAST MESSAGE"
+                        android:layoutDirection="ltr"
                         android:textColor="#FF616161"
                         android:textSize="@dimen/sp13"/>
                 </LinearLayout>

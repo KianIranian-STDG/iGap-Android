@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoUserSessionTerminate;
 
 public class UserSessionTerminateResponse extends MessageHandler {
@@ -20,16 +21,19 @@ public class UserSessionTerminateResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserSessionTerminate.UserSessionTerminateResponse.Builder builder = (ProtoUserSessionTerminate.UserSessionTerminateResponse.Builder) message;
+        G.onUserSessionTerminate.onUserSessionTerminate();
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        G.onUserSessionTerminate.onTimeOut();
     }
 
     @Override
     public void error() {
         super.error();
+        G.onUserSessionTerminate.onError();
     }
 }
 
