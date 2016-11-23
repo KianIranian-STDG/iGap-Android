@@ -1,12 +1,7 @@
 package com.iGap.realm;
 
-import android.util.Log;
-
-import com.iGap.G;
-import com.iGap.R;
-import com.iGap.module.TimeUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoUserUpdateStatus;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -29,6 +24,33 @@ public class RealmRegisteredInfo extends RealmObject {
     private int lastSeen;
     private int avatarCount;
     private boolean mutual;
+
+    public static RealmRegisteredInfo putOrUpdate(ProtoGlobal.RegisteredUser input) {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, input.getId()).findFirst();
+        if (registeredInfo == null) {
+            registeredInfo = realm.createObject(RealmRegisteredInfo.class, input.getId());
+        }
+
+        registeredInfo.setUsername(input.getUsername());
+        registeredInfo.setDisplayName(input.getDisplayName());
+        registeredInfo.setStatus(input.getStatus().toString());
+        registeredInfo.setAvatarCount(input.getAvatarCount());
+        registeredInfo.setCacheId(input.getCacheId());
+        registeredInfo.setColor(input.getColor());
+        registeredInfo.setColor(input.getColor());
+        registeredInfo.setFirstName(input.getFirstName());
+        registeredInfo.setInitials(input.getInitials());
+        registeredInfo.setLastName(input.getLastName());
+        registeredInfo.setLastSeen(input.getLastSeen());
+        registeredInfo.setMutual(input.getMutual());
+        registeredInfo.setPhoneNumber(Long.toString(input.getPhone()));
+        registeredInfo.setUsername(input.getUsername());
+
+        realm.close();
+        return registeredInfo;
+    }
 
     public long getId() {
         return id;
@@ -95,17 +117,11 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public String getStatus() {
-      /*  if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-            String time = TimeUtils.toLocal(lastSeen, G.ROOM_LAST_MESSAGE_TIME);
-            return G.context.getResources().getString(R.string.last_seen_at) + " " + time;
-        } else {
-            return status;
-        }*/
         return status;
     }
 
     public void setStatus(String status) {
-        this.status = setStatsForUser(status);
+        this.status = AppUtils.setStatsForUser(status);
     }
 
     public String getCacheId() {
@@ -163,66 +179,6 @@ public class RealmRegisteredInfo extends RealmObject {
             }
         }
         return null;
-    }
-
-    /**
-     * change enum to string for simple showing in toolbar when get status
-     *
-     * @param status UserUpdateStatus
-     * @return
-     */
-
-    public String setStatsForUser(String status) {
-
-        String userStatus = "Online";
-        Log.i("CCCV", "status : " + status);
-        if (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString())) {
-            userStatus = G.context.getResources().getString(R.string.last_seen_recently);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
-            userStatus = G.context.getResources().getString(R.string.long_time_ago);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_MONTH.toString())) {
-            userStatus = G.context.getResources().getString(R.string.last_month);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_WEEK.toString())) {
-            userStatus = G.context.getResources().getString(R.string.last_week);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.RECENTLY.toString())) {
-            userStatus = G.context.getResources().getString(R.string.recently);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SUPPORT.toString())) {
-            userStatus = G.context.getResources().getString(R.string.support);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SERVICE_NOTIFICATIONS.toString())) {
-            userStatus = G.context.getResources().getString(R.string.service_notification);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
-            userStatus = G.context.getResources().getString(R.string.online);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-            userStatus = ProtoGlobal.RegisteredUser.Status.EXACTLY.toString();
-        }
-        return userStatus;
-    }
-
-    public static String getStateForUser(String status, long lastSeen) {
-
-        String userStatus = "Online";
-        Log.i("CCCV", "getStateForUser : " + status);
-        if (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString())) {
-            userStatus = G.context.getResources().getString(R.string.last_seen_recently);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
-            userStatus = G.context.getResources().getString(R.string.long_time_ago);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_MONTH.toString())) {
-            userStatus = G.context.getResources().getString(R.string.last_month);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_WEEK.toString())) {
-            userStatus = G.context.getResources().getString(R.string.last_week);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.RECENTLY.toString())) {
-            userStatus = G.context.getResources().getString(R.string.recently);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SUPPORT.toString())) {
-            userStatus = G.context.getResources().getString(R.string.support);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SERVICE_NOTIFICATIONS.toString())) {
-            userStatus = G.context.getResources().getString(R.string.service_notification);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
-            userStatus = G.context.getResources().getString(R.string.online);
-        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-            String time = TimeUtils.toLocal(lastSeen, G.ROOM_LAST_MESSAGE_TIME);
-            return G.context.getResources().getString(R.string.last_seen_at) + " " + time;
-        }
-        return userStatus;
     }
 
     /**

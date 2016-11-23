@@ -1551,7 +1551,7 @@ public class ActivityChat extends ActivityEnhanced
                                 roomMessage.setRoomId(mRoomId);
 
                                 roomMessage.setUserId(senderId);
-                                roomMessage.setCreateTime(System.currentTimeMillis());
+                                roomMessage.setCreateTime(TimeUtils.currentLocalTime());
 
                                 // user wants to replay to a message
                                 if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
@@ -2282,7 +2282,7 @@ public class ActivityChat extends ActivityEnhanced
 //            filePath = uri.toString();
 //            Log.i("YYY", "filePath uri: " + filePath);
 //        }
-        final long updateTime = System.currentTimeMillis();
+        final long updateTime = TimeUtils.currentLocalTime();
         ProtoGlobal.RoomMessageType messageType = null;
         String fileName = null;
         long duration = 0;
@@ -3099,7 +3099,7 @@ public class ActivityChat extends ActivityEnhanced
         Log.i(ActivityChat.class.getSimpleName(), "onMessageReceive called for group");
 
         final Realm realm = Realm.getDefaultInstance();
-
+        final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
         if (roomMessage.getAuthor().getUser() != null) {
             if (roomMessage.getAuthor().getUser().getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
                 // I'm in the room
@@ -3122,7 +3122,6 @@ public class ActivityChat extends ActivityEnhanced
                     // when came back to the room with new messages, I make new update status request
                     // as SEEN to
                     // the message sender
-                    final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
                     //Start ClientCondition OfflineSeen
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -3153,7 +3152,7 @@ public class ActivityChat extends ActivityEnhanced
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
+                            switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(realmRoomMessage))), false);
                             scrollToEnd();
                         }
                     });
@@ -3183,7 +3182,7 @@ public class ActivityChat extends ActivityEnhanced
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(roomMessage))), false);
+                            switchAddItem(new ArrayList<>(Arrays.asList(StructMessageInfo.convert(realmRoomMessage))), false);
                             scrollToEnd();
                         }
                     });
@@ -3353,7 +3352,7 @@ public class ActivityChat extends ActivityEnhanced
     public void onVoiceRecordDone(final String savedPath) {
         Realm realm = Realm.getDefaultInstance();
         final long messageId = SUID.id().get();
-        final long updateTime = System.currentTimeMillis();
+        final long updateTime = TimeUtils.currentLocalTime();
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
         final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
         if (userTriesReplay()) {

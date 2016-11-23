@@ -41,7 +41,7 @@ public class RealmRoomMessage extends RealmObject {
     private RealmRoomMessage replyTo;
 
     public long getUpdateOrCreateTime() {
-        return updateTime != 0L ? updateTime : createTime;
+        return updateTime >= createTime ? updateTime : createTime;
     }
 
     public static RealmRoomMessage updateId(long fakeMessageId, long newMessageId) {
@@ -75,7 +75,6 @@ public class RealmRoomMessage extends RealmObject {
         message.setMessage(input.getMessage());
         message.setStatus(input.getStatus().toString());
         message.setUserId(input.getAuthor().getUser().getUserId());
-        message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
         message.setDeleted(input.getDeleted());
         message.setEdited(input.getEdited());
         if (input.hasAttachment()) {

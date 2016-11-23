@@ -823,13 +823,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         }
     }
 
-    /*private void setUserStatus(String userStatus, long time) {
-        this.userStatus = userStatus;
-        String status = RealmRegisteredInfo.getStateForUser(userStatus, time);
-        titleLastSeen.setText(status);
-        txtLastSeen.setText(status);
-    }*/
-
     private void showPopupPhoneNumber(View v, String number) {
 
         boolean isExist;

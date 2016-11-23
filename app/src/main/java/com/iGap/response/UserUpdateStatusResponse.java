@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -48,7 +49,7 @@ public class UserUpdateStatusResponse extends MessageHandler {
                 }
             });
             if (G.onUserUpdateStatus != null) {
-                G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), realmRegisteredInfo.getLastSeen(), realmRegisteredInfo.setStatsForUser(builder.getStatus().toString()));
+                G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), realmRegisteredInfo.getLastSeen(), AppUtils.setStatsForUser(builder.getStatus().toString()));
             }
         }
         realm.close();

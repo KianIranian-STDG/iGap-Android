@@ -14,6 +14,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IResendMessage;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
@@ -53,22 +54,58 @@ public final class AppUtils {
         }
     }
 
+    /**
+     * change enum to string for simple showing in toolbar when get status
+     *
+     * @param status UserUpdateStatus
+     * @return
+     */
+
+    public static String setStatsForUser(String status) {
+
+        String userStatus = "Online";
+        if (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString())) {
+            userStatus = G.context.getResources().getString(R.string.last_seen_recently);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
+            userStatus = G.context.getResources().getString(R.string.long_time_ago);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_MONTH.toString())) {
+            userStatus = G.context.getResources().getString(R.string.last_month);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_WEEK.toString())) {
+            userStatus = G.context.getResources().getString(R.string.last_week);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.RECENTLY.toString())) {
+            userStatus = G.context.getResources().getString(R.string.recently);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SUPPORT.toString())) {
+            userStatus = G.context.getResources().getString(R.string.support);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SERVICE_NOTIFICATIONS.toString())) {
+            userStatus = G.context.getResources().getString(R.string.service_notification);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
+            userStatus = G.context.getResources().getString(R.string.online);
+        } else if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+            userStatus = ProtoGlobal.RegisteredUser.Status.EXACTLY.toString();
+        }
+        return userStatus;
+    }
+
     public static void rightFileThumbnailIcon(ImageView view, ProtoGlobal.RoomMessageType messageType, @Nullable RealmAttachment attachment) {
         switch (messageType) {
             case VOICE:
-                view.setImageResource(R.drawable.mic);
+                view.setImageResource(R.drawable.microphone_icon);
                 break;
             case AUDIO:
             case AUDIO_TEXT:
-                view.setImageResource(R.drawable.music);
+                view.setImageResource(R.drawable.green_music_note);
             case FILE:
             case FILE_TEXT:
                 if (attachment.getName().toLowerCase().endsWith(".pdf")) {
-                    view.setImageResource(R.drawable.pdf);
+                    view.setImageResource(R.drawable.pdf_icon);
                 } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
-                    view.setImageResource(R.drawable.txt);
+                    view.setImageResource(R.drawable.txt_icon);
+                } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
+                    view.setImageResource(R.drawable.exe_icon);
+                } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
+                    view.setImageResource(R.drawable.docx_icon);
                 } else {
-                    view.setImageResource(R.drawable.file);
+                    view.setImageResource(R.drawable.file_icon);
                 }
                 break;
             default:

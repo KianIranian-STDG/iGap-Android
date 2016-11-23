@@ -43,6 +43,15 @@ public final class TimeUtils {
         return new SimpleDateFormat(format, Locale.US).format(unixTime);
     }
 
+    /**
+     * get current local time in milliseconds
+     *
+     * @return Long local time in milliseconds
+     */
+    public static long currentLocalTime() {
+        return Calendar.getInstance().getTimeInMillis();
+    }
+
     private static Calendar getYesterdayCalendar() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);

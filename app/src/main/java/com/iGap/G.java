@@ -100,6 +100,7 @@ import com.iGap.module.UploaderUtil;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmMigrationClass;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestQueue;
@@ -359,9 +360,7 @@ public class G extends MultiDexApplication {
                         public void execute(Realm realm) {
                             RealmAvatar.put(user.getId(), user.getAvatar());
 
-                            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                            realmUserInfo.getUserInfo().setColor(user.getColor());
-                            realmUserInfo.getUserInfo().setInitials(user.getInitials());
+                            RealmRegisteredInfo.putOrUpdate(user);
                         }
                     });
 

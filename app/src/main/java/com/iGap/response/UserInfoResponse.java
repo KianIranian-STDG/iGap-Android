@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserInfo;
@@ -55,7 +56,7 @@ public class UserInfoResponse extends MessageHandler {
                 realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
                 if (G.onUserUpdateStatus != null) {
-                    G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), realmRegisteredInfo.setStatsForUser(builder.getUser().getStatus().toString()));
+                    G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), AppUtils.setStatsForUser(builder.getUser().getStatus().toString()));
                 }
 
             }
