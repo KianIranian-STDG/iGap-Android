@@ -22,7 +22,7 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        super.handler();
         Log.i("XXX", "UserProfileSetNicknameResponse handler : " + message);
         ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder
                 userProfileNickNameResponse =
@@ -33,11 +33,12 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
-        Log.i("XXX", "UserProfileSetNicknameResponse timeOut");
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         final int majorCode = errorResponse.getMajorCode();
         final int minorCode = errorResponse.getMinorCode();

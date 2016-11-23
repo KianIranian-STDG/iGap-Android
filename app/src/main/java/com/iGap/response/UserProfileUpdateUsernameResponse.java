@@ -21,7 +21,7 @@ public class UserProfileUpdateUsernameResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        super.handler();
         ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder builder =
                 (ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder) message;
 

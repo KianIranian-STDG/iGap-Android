@@ -72,6 +72,12 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        if (mMessage.isSenderMe()) {
+            holder.thumbnail.setImageResource(R.drawable.green_music_note);
+        } else {
+            holder.thumbnail.setImageResource(R.drawable.white_music_note);
+        }
+
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
                 holder.fileSize.setText(

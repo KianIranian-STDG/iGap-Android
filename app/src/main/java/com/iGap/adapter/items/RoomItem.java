@@ -188,7 +188,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
 
                     String lastMessageSender = "";
                     if (mInfo.getLastMessage().isSenderMe()) {
-                        lastMessageSender = "You : ";
+                        lastMessageSender = "You: ";
                     } else {
                         Realm realm1 = Realm.getDefaultInstance();
                         RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class)
@@ -207,7 +207,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                                     if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
                                         lastMessageSender = " : " + realmRegisteredInfo.getDisplayName();
                                     } else {
-                                        lastMessageSender = realmRegisteredInfo.getDisplayName() + " : ";
+                                        lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
                                     }
 
 

@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import android.support.annotation.CallSuper;
 import android.util.Log;
 
 public abstract class MessageHandler {
@@ -9,21 +10,23 @@ public abstract class MessageHandler {
     String identity;
 
     public MessageHandler(int actionId, Object protoClass, String identity) {
-
         this.actionId = actionId;
         this.message = protoClass;
         this.identity = identity;
     }
 
+    @CallSuper
     public void handler() throws NullPointerException {
         Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + message);
     }
 
+    @CallSuper
     public void timeOut() {
         Log.i("MSGT", "MessageHandler timeOut : " + actionId + " || " + message);
         error();
     }
 
+    @CallSuper
     public void error() {
         Log.i("MSGE", "MessageHandler error : " + actionId + " || " + message);
     }

@@ -21,7 +21,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
     }
 
     @Override public void handler() {
-        Log.i("TTT", "ClientGetRoomListResponse message : " + message);
+        super.handler();
         ProtoClientGetRoomList.ClientGetRoomListResponse.Builder clientGetRoomListResponse = (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
         G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse());
     }

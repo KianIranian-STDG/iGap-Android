@@ -25,6 +25,7 @@ public class UserProfileSetGenderResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         final ProtoUserProfileGender.UserProfileSetGenderResponse.Builder userProfileGenderResponse = (ProtoUserProfileGender.UserProfileSetGenderResponse.Builder) message;
 
         final Realm realm = Realm.getDefaultInstance();
@@ -44,12 +45,8 @@ public class UserProfileSetGenderResponse extends MessageHandler {
     }
 
     @Override
-    public void timeOut() {
-    }
-
-    @Override
     public void error() {
-
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

@@ -22,6 +22,7 @@ public class UserProfileSetEmailResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder userProfileEmail =
                 (ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder) message;
         G.onUserProfileSetEmailResponse.onUserProfileEmailResponse(userProfileEmail.getEmail(),
@@ -29,11 +30,8 @@ public class UserProfileSetEmailResponse extends MessageHandler {
     }
 
     @Override
-    public void timeOut() {
-    }
-
-    @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

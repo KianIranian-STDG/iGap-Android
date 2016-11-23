@@ -24,6 +24,7 @@ public class UserSessionGetActiveListResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         final ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Builder builder = (ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Builder) message;
         Log.i("CCCVVVBBB", "0 handler: ");
         Realm realm = Realm.getDefaultInstance();
@@ -58,18 +59,5 @@ public class UserSessionGetActiveListResponse extends MessageHandler {
         realm.close();
 
         G.onUserSessionGetActiveList.onUserSessionGetActiveList(builder.getSessionList());
-    }
-
-    @Override
-    public void timeOut() {
-        super.timeOut();
-        Log.i("CCCVVVBBB", "1 timeOut: ");
-    }
-
-    @Override
-    public void error() {
-        super.error();
-
-        Log.i("CCCVVVBBB", "1 error: ");
     }
 }

@@ -22,6 +22,7 @@ public class UserRegisterResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         Log.i("SOC_RES", "UserRegisterResponse handler message : " + message);
         ProtoUserRegister.UserRegisterResponse.Builder builder =
                 (ProtoUserRegister.UserRegisterResponse.Builder) message;
@@ -33,6 +34,7 @@ public class UserRegisterResponse extends MessageHandler {
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         final int majorCode = errorResponse.getMajorCode();
         final int minorCode = errorResponse.getMinorCode();

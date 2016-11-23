@@ -18,6 +18,7 @@ public class UserUsernameToIdResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         ProtoUserUsernameToId.UserUsernameToIdResponse.Builder builder =
                 (ProtoUserUsernameToId.UserUsernameToIdResponse.Builder) message;
         builder.getUserId();
@@ -25,10 +26,12 @@ public class UserUsernameToIdResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
     }
 }
 

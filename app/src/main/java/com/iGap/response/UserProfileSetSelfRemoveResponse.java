@@ -22,6 +22,7 @@ public class UserProfileSetSelfRemoveResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder builder = (ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder) message;
 
         builder.getSelfRemove();

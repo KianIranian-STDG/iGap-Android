@@ -318,7 +318,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (forwardContainer != null) {
             if (mMessage.forwardedFrom != null) {
                 forwardContainer.setVisibility(View.VISIBLE);
-                ((TextView) forwardContainer.findViewById(R.id.cslr_txt_forward_from)).setText(mMessage.forwardedFrom.getMessage());
+                Realm realm = Realm.getDefaultInstance();
+                RealmRegisteredInfo info = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom.getUserId()).findFirst();
+                if (info != null) {
+                    ((TextView) forwardContainer.findViewById(R.id.cslr_txt_forward_from)).setText(info.getDisplayName());
+                }
+                realm.close();
             } else {
                 forwardContainer.setVisibility(View.GONE);
             }
@@ -630,21 +635,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void checkForDownloading(VH holder) {
         if (MessagesAdapter.downloading.containsKey(mMessage.attachment.token)) {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
-                holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
+            holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
             ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.downloading.get(mMessage.attachment.token));
 
             if (MessagesAdapter.downloading.get(mMessage.attachment.token) == 100) {
                 MessagesAdapter.downloading.remove(mMessage.attachment.token);
-                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
-                }
-            } else {
-                if (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal() : mMessage.attachment.isFileExistsOnLocal()) {
-                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
-                } else {
-                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
-                    holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                }
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
             }
+        } else {
+            if (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal() : mMessage.attachment.isFileExistsOnLocal()) {
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+            } else {
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
+                holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+            }
+        }
     }
 }
