@@ -246,6 +246,7 @@ public class RealmRegisteredInfo extends RealmObject {
         info.setLastName(registeredUser.getLastName());
         info.setAvatarCount(registeredUser.getAvatarCount());
         info.setMutual(registeredUser.getMutual());
+        info.setLastSeen(registeredUser.getLastSeen());
         info.setCacheId(registeredUser.getCacheId());
     }
 }
