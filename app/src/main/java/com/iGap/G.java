@@ -90,7 +90,6 @@ import com.iGap.interfaces.OnUserUsernameToId;
 import com.iGap.interfaces.OnUserVerification;
 import com.iGap.interfaces.OpenFragment;
 import com.iGap.interfaces.UpdateListAfterKick;
-import com.iGap.interfaces.UpdatePopup;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ChatUpdateStatusUtil;
 import com.iGap.module.ClearMessagesUtil;
@@ -273,7 +272,6 @@ public class G extends MultiDexApplication {
     public static OnUserSessionGetActiveList onUserSessionGetActiveList;
     public static OnUserSessionLogout onUserSessionLogout;
     public static UpdateListAfterKick updateListAfterKick;
-    public static UpdatePopup updatePopup;
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;

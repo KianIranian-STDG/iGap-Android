@@ -103,7 +103,6 @@ import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.interfaces.OnVoiceRecord;
-import com.iGap.interfaces.UpdatePopup;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
@@ -596,6 +595,7 @@ public class ActivityChat extends ActivityEnhanced
                     initialize = realmRegisteredInfo.getInitials();
                     color = realmRegisteredInfo.getColor();
                     lastSeen = realmRegisteredInfo.getLastSeen();
+                    userStatus = realmRegisteredInfo.getStatus();
                 }
             }
             realm.close();
@@ -1128,10 +1128,8 @@ public class ActivityChat extends ActivityEnhanced
 
         if (chatType == CHAT) {
 
-            if (lastSeen != 0) {
-                Log.i("CCC", "setUserStatus 1 userStatus : " + userStatus);
-                setUserStatus(userStatus, lastSeen);
-            }
+            setUserStatus(userStatus, lastSeen);
+
         } else if (chatType == GROUP) {
 
             if (groupParticipantsCountLabel != null) {
@@ -1236,19 +1234,6 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 realm.close();
 
-
-                G.updatePopup = new UpdatePopup() {
-                    @Override
-                    public void update() {
-                        text1.setPadding(dim20, dim12, dim20, dim12);
-                        text2.setVisibility(View.VISIBLE);
-                        text3.setVisibility(View.VISIBLE);
-                        text4.setVisibility(View.VISIBLE);
-                        text5.setVisibility(View.VISIBLE);
-                    }
-                };
-
-                popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

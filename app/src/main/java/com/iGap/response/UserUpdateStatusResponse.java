@@ -48,7 +48,7 @@ public class UserUpdateStatusResponse extends MessageHandler {
                 }
             });
             if (G.onUserUpdateStatus != null) {
-                G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), response.getTimestamp(), realmRegisteredInfo.setStatsForUser(builder.getStatus().toString()));
+                G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), realmRegisteredInfo.getLastSeen(), realmRegisteredInfo.setStatsForUser(builder.getStatus().toString()));
             }
         }
         realm.close();

@@ -55,7 +55,7 @@ public class UserInfoResponse extends MessageHandler {
                 realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
                 if (G.onUserUpdateStatus != null) {
-                    G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), response.getTimestamp(), realmRegisteredInfo.setStatsForUser(builder.getUser().getStatus().toString()));
+                    G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), realmRegisteredInfo.setStatsForUser(builder.getUser().getStatus().toString()));
                 }
 
             }
