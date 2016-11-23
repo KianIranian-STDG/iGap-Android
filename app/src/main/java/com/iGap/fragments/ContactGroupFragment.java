@@ -26,9 +26,14 @@ import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmGroupRoom;
+import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestGroupAddMember;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -42,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 public class ContactGroupFragment extends Fragment {
     private FastAdapter fastAdapter;
@@ -102,6 +108,8 @@ public class ContactGroupFragment extends Fragment {
                     public void onGroupAddMember(Long Roomid, Long UserId) {
                         countAddMemberResponse++;
                         if (countAddMemberResponse >= countAddMemberRequest) {
+
+                            addOwnerToDatabase(roomId);
 
                             Realm realm = Realm.getDefaultInstance();
                             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -262,6 +270,7 @@ public class ContactGroupFragment extends Fragment {
                     new RequestGroupAddMember().groupAddMember(roomId, peerId, 0);
                 }
 
+
             }
         });
 
@@ -370,6 +379,39 @@ public class ContactGroupFragment extends Fragment {
 
         //restore selections (this has to be done after the items were added
         fastAdapter.withSavedInstanceState(savedInstanceState);
+    }
+
+    private void addOwnerToDatabase(Long roomId) {
+
+
+        Realm realm = Realm.getDefaultInstance();
+        Long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+
+        if (realmRoom != null) {
+            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+            if (realmGroupRoom != null) {
+                final RealmList<RealmMember> members = realmGroupRoom.getMembers();
+
+                final RealmMember realmMember = new RealmMember();
+
+                realmMember.setId(SUID.id().get());
+                realmMember.setPeerId(userId);
+                realmMember.setRole(ProtoGlobal.GroupRoom.Role.OWNER.toString());
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        members.add(realmMember);
+                    }
+                });
+
+
+            }
+        }
+
+
     }
 
     private void refreshView() {

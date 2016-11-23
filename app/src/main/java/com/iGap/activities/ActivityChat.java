@@ -4122,6 +4122,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else if (text.toString().equalsIgnoreCase(getString(R.string.forward_item_dialog))) {
                     // forward selected messages to room list for selecting room
                     if (mAdapter != null) {
+                        finish();
                         startActivity(makeIntentForForwardMessages(message));
                     }
                 } else if (text.toString().equalsIgnoreCase(getString(R.string.share_item_dialog))) {

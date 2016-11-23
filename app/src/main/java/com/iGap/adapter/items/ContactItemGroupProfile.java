@@ -89,21 +89,22 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
 
     private void setRoleStarColor(MaterialDesignTextView view) {
 
-        int color = Color.BLACK;
-        view.setVisibility(View.VISIBLE);
+        view.setVisibility(View.GONE);
 
-        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-            color = Color.WHITE;
-            view.setVisibility(View.GONE);
-        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-            color = Color.GRAY;
+//        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+//
+//        } else
+        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+            view.setVisibility(View.VISIBLE);
+            view.setTextColor(Color.CYAN);
         } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-            color = Color.RED;
+            view.setVisibility(View.VISIBLE);
+            view.setTextColor(Color.GREEN);
         } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
-            color = Color.BLUE;
+            view.setVisibility(View.VISIBLE);
+            view.setTextColor(Color.BLUE);
         }
 
-        view.setTextColor(color);
 
     }
 

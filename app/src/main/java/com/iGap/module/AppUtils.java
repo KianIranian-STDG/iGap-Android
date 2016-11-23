@@ -180,6 +180,8 @@ public final class AppUtils {
             return message.getMessage();
         } else if (message.getForwardMessage() != null && !TextUtils.isEmpty(message.getForwardMessage().getMessage())) {
             return message.getForwardMessage().getMessage();
+        } else if (message.getReplyTo() != null && !TextUtils.isEmpty(message.getReplyTo().getMessage())) {
+            return message.getReplyTo().getMessage();
         } else {
             switch (message.getForwardMessage() == null ? message.getMessageType() : message.getForwardMessage().getMessageType()) {
                 case AUDIO:
@@ -190,9 +192,6 @@ public final class AppUtils {
                             message.getAttachment().getName());
                     break;
                 case CONTACT:
-                    if (message.getAttachment() == null) {
-                        return null;
-                    }
                     messageText = resources.getString(R.string.last_msg_format_chat,
                             message.getRoomMessageContact().getFirstName());
                     break;

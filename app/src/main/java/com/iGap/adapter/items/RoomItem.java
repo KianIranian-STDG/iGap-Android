@@ -226,10 +226,31 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                         holder.lastMessageSender.setVisibility(GONE);
                     }
 
+
                     holder.lastMessage.setVisibility(View.VISIBLE);
 
                     if (mInfo.getLastMessage() != null) {
-                        switch (mInfo.getLastMessage().getMessageType()) {
+                        ProtoGlobal.RoomMessageType _type, tmp;
+
+                        _type = mInfo.getLastMessage().getMessageType();
+
+                        try {
+                            tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
+                            if (tmp != null)
+                                _type = tmp;
+                        } catch (NullPointerException e) {
+                        }
+
+
+                        try {
+                            tmp = mInfo.getLastMessage().getForwardMessage().getMessageType();
+                            if (tmp != null)
+                                _type = tmp;
+                        } catch (NullPointerException e) {
+                        }
+
+
+                        switch (_type) {
                             case VOICE:
                                 holder.lastMessage.setText(R.string.voice_message);
                                 break;
