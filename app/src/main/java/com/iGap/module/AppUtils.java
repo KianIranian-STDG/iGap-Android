@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -133,19 +134,17 @@ public final class AppUtils {
         return 0;
     }
 
-    public static String rightLastMessage(Resources resources, ProtoGlobal.Room.Type roomType, long messageId) {
-        Realm realm = Realm.getDefaultInstance();
+    public static String rightLastMessage(Resources resources, ProtoGlobal.Room.Type roomType, RealmRoomMessage message) {
         String messageText;
-        RealmRoomMessage message = realm.where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
-                .findFirst();
         if (message == null) {
             return null;
         }
-        if (message.getMessage() != null && !message.getMessage().isEmpty()) {
+        if (!TextUtils.isEmpty(message.getMessage())) {
             return message.getMessage();
+        } else if (message.getForwardMessage() != null && !TextUtils.isEmpty(message.getForwardMessage().getMessage())) {
+            return message.getForwardMessage().getMessage();
         } else {
-            switch (message.getMessageType()) {
+            switch (message.getForwardMessage() == null ? message.getMessageType() : message.getForwardMessage().getMessageType()) {
                 case AUDIO:
                     if (message.getAttachment() == null) {
                         return null;
@@ -203,7 +202,6 @@ public final class AppUtils {
             }
         }
 
-        realm.close();
         return messageText;
     }
 

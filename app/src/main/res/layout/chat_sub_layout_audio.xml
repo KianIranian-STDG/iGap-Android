@@ -62,7 +62,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:adjustViewBounds="true"
-                            android:src="@drawable/music"
+                            android:src="@drawable/music_note"
                             android:scaleType="fitXY"
                             app:riv_corner_radius="@dimen/chatMessageImageCorner"/>
 

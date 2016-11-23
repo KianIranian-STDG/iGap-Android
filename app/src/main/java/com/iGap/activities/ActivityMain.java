@@ -953,7 +953,6 @@ public class ActivityMain extends ActivityEnhanced
         } else {
             contentLoading.hide();
             mAdapter.clear();
-            // FIXME: 11/17/2016 [Alireza] sort rooms by their last message
             Realm realm = Realm.getDefaultInstance();
             List<RoomItem> roomItems = new ArrayList<>();
             for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.ID, Sort.DESCENDING)) {

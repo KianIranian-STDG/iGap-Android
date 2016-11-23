@@ -161,7 +161,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             holder.lastMessage.setText(mInfo.getDraft().getMessage());
         } else {
             if (mInfo.getLastMessage() != null) {
-                String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage().getMessageId());
+                String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage());
                 if (lastMessage == null) {
                     lastMessage = mInfo.getLastMessage().getMessage();
                 }

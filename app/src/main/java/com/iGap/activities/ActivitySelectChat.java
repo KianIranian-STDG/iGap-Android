@@ -15,7 +15,9 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.SUID;
 import com.iGap.module.ShouldScrolledBehavior;
+import com.iGap.module.SortRooms;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -23,6 +25,8 @@ import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.Sort;
@@ -103,21 +107,15 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
     private void loadLocalChatList() {
         mAdapter.clear();
-
         Realm realm = Realm.getDefaultInstance();
-        // FIXME: 11/17/2016 [Alireza] sort by last messa
-        for (RealmRoom realmRoom : realm.where(RealmRoom.class)
-                .findAllSorted(RealmRoomFields.ID, Sort.DESCENDING)) {
-            final RoomItem roomItem = new RoomItem();
-            roomItem.setInfo(realmRoom);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.add(roomItem);
-                }
-            });
+        List<RoomItem> roomItems = new ArrayList<>();
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.ID, Sort.DESCENDING)) {
+            roomItems.add(new RoomItem().setInfo(realmRoom).withIdentifier(SUID.id().get()));
         }
 
+        Collections.sort(roomItems, SortRooms.DESC);
+
+        mAdapter.add(roomItems);
         realm.close();
     }
 }

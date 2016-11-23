@@ -27,7 +27,6 @@ public class ChatSendMessageResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public String identity;
-    // private ArrayList<Long> messageId = new ArrayList<>();
 
     public ChatSendMessageResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
