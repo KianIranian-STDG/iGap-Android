@@ -247,45 +247,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         G.onChangeUserPhotoListener.onChangePhoto(null);
     }
 
-    private void setImage(final long avatarId) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                if (avatarId == 0) {
-                    final RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                    final RealmAvatar lastAvatar = userInfo.getUserInfo().getLastAvatar();
-                    if (lastAvatar == null) {
-                        circleImageView.setImageBitmap(
-                                com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60), userInfo.getUserInfo().getInitials(),
-                                        userInfo.getUserInfo().getColor()));
-                    } else {
-                        if (lastAvatar.getFile().isFileExistsOnLocal()) {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(lastAvatar.getFile().getLocalFilePath()), circleImageView);
-                        } else if (lastAvatar.getFile().isThumbnailExistsOnLocal()) {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(lastAvatar.getFile().getLocalThumbnailPath()), circleImageView);
-                        } else {
-                            circleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60),
-                                    userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
-                        }
-                    }
-                } else {
-                    final RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                    RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
-                    if (avatar.getFile().isFileExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatar.getFile().getLocalFilePath()), circleImageView);
-                    } else if (avatar.getFile().isThumbnailExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatar.getFile().getLocalThumbnailPath()), circleImageView);
-                    } else {
-                        circleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp60),
-                                userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
-                    }
-                }
-                realm.close();
-            }
-        });
-    }
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
