@@ -538,10 +538,12 @@ public class ActivityMain extends ActivityEnhanced
                 if (ActivityMain.isMenuButtonAddShown) {
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
-                    Intent intent = new Intent(ActivityMain.this, ActivityChat.class);
-                    intent.putExtra("RoomId", item.mInfo.getId());
-                    intent.putExtra("MUT", item.mInfo.getMute());
-                    startActivity(intent);
+                    if (item.mInfo.isValid()) {
+                        Intent intent = new Intent(ActivityMain.this, ActivityChat.class);
+                        intent.putExtra("RoomId", item.mInfo.getId());
+                        intent.putExtra("MUT", item.mInfo.getMute());
+                        startActivity(intent);
+                    }
                 }
                 return false;
             }
@@ -553,19 +555,21 @@ public class ActivityMain extends ActivityEnhanced
                 if (ActivityMain.isMenuButtonAddShown) {
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
-                    String role = null;
-                    if (item.mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
-                        role = item.mInfo.getGroupRoom().getRole().toString();
-                    } else if (item.mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                        role = item.mInfo.getChannelRoom().getRole().toString();
-                    }
-
-                    MyDialog.showDialogMenuItemRooms(ActivityMain.this, item.mInfo.getType(), item.mInfo.getMute(), role, new OnComplete() {
-                        @Override
-                        public void complete(boolean result, String messageOne, String MessageTow) {
-                            onSelectRoomMenu(messageOne, position, item);
+                    if (item.mInfo.isValid()) {
+                        String role = null;
+                        if (item.mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
+                            role = item.mInfo.getGroupRoom().getRole().toString();
+                        } else if (item.mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                            role = item.mInfo.getChannelRoom().getRole().toString();
                         }
-                    });
+
+                        MyDialog.showDialogMenuItemRooms(ActivityMain.this, item.mInfo.getType(), item.mInfo.getMute(), role, new OnComplete() {
+                            @Override
+                            public void complete(boolean result, String messageOne, String MessageTow) {
+                                onSelectRoomMenu(messageOne, position, item);
+                            }
+                        });
+                    }
                 }
                 return true;
             }
@@ -643,14 +647,6 @@ public class ActivityMain extends ActivityEnhanced
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                List<RoomItem> roomItems = new ArrayList<>();
-                for (ProtoGlobal.Room room : rooms) {
-                    roomItems.add(new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
-                }
-                Collections.sort(roomItems, SortRooms.DESC);
-                mAdapter.add(roomItems);
-
-
                 final List<ProtoGlobal.Room> newRooms = new ArrayList<>();
                 for (ProtoGlobal.Room room : rooms) {
                     if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).count() == 0) {
@@ -682,6 +678,13 @@ public class ActivityMain extends ActivityEnhanced
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
+                        List<RoomItem> roomItems = new ArrayList<>();
+                        for (ProtoGlobal.Room room : rooms) {
+                            roomItems.add(new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
+                        }
+                        Collections.sort(roomItems, SortRooms.DESC);
+                        mAdapter.add(roomItems);
+
                         realm.close();
                     }
                 });
