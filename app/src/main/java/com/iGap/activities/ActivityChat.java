@@ -3103,7 +3103,9 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
         Log.i(ActivityChat.class.getSimpleName(), "onMessageReceive called for group");
-
+G.handler.postDelayed(new Runnable() {
+    @Override
+    public void run() {
         final Realm realm = Realm.getDefaultInstance();
         final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
         if (roomMessage.getAuthor().getUser() != null) {
@@ -3199,6 +3201,8 @@ public class ActivityChat extends ActivityEnhanced
 
 
         realm.close();
+    }
+},400);
     }
 
     @Override
