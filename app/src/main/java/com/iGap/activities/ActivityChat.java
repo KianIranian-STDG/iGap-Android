@@ -413,6 +413,8 @@ public class ActivityChat extends ActivityEnhanced
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
+
+        requestMessageHistory();
     }
 
 
@@ -2914,8 +2916,7 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void onNoMore(EndlessRecyclerOnScrollListener listener) {
-                long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
-                new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
+                requestMessageHistory();
             }
         };
 
@@ -2929,6 +2930,11 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
 
         return messageInfos;
+    }
+
+    private void requestMessageHistory() {
+        long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
+        new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
     }
 
     private String getTimeSettingMessage(long comingDate) {
