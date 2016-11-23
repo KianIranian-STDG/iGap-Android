@@ -19,6 +19,7 @@ public class ChatConvertToGroupResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         ProtoChatConvertToGroup.ChatConvertToGroupResponse.Builder builder = (ProtoChatConvertToGroup.ChatConvertToGroupResponse.Builder) message;
         G.onChatConvertToGroup.onChatConvertToGroup(builder.getRoomId(), builder.getName(), builder.getDescription(), builder.getRole());
     }

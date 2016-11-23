@@ -566,8 +566,6 @@ public class ActivityChat extends ActivityEnhanced
                         color = realmRegisteredInfo.getColor();
                         lastSeen = realmRegisteredInfo.getLastSeen();
                         userStatus = realmRegisteredInfo.getStatus();
-                        Log.i("CCC", "1 userStatus : " + userStatus);
-                        Log.i("CCC", "lastSeen : " + lastSeen);
                     } else {
                         title = realmRoom.getTitle();
                         initialize = realmRoom.getInitials();
@@ -1234,6 +1232,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 realm.close();
 
+                popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

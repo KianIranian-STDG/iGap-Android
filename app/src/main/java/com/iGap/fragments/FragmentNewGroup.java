@@ -351,8 +351,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
     }
 
     private void chatToGroup() {
-
-        Log.i("ZZZZZZCCC", "groomId: " + groomId);
         G.onChatConvertToGroup = new OnChatConvertToGroup() {
             @Override
             public void onChatConvertToGroup(final long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
@@ -374,9 +372,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                                 realmGroupRoom.setDescription(description);
                                 realmGroupRoom.setParticipantsCountLabel("2");
                                 realmRoom.setGroupRoom(realmGroupRoom);
-                                Log.i("ZZZZZZCCC", "roomId: " + roomId);
-
-
+                                realmRoom.setChatRoom(null);
                             }
                         });
                         realm.close();
