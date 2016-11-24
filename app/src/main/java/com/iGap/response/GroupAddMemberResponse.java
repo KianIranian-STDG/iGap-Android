@@ -58,9 +58,9 @@ public class GroupAddMemberResponse extends MessageHandler {
                     }
                 });
 
-                G.onGroupAddMember.onGroupAddMember(roomId, userId);
-
-
+                if (G.onGroupAddMember != null) {
+                    G.onGroupAddMember.onGroupAddMember(roomId, userId);
+                }
             }
         }
 
