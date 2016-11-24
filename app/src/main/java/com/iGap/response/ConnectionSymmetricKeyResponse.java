@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.WebSocketClient;
@@ -24,9 +22,8 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
-        ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Builder builder =
-                (ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Builder) message;
+        super.handler();
+        ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Builder builder = (ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Builder) message;
         ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Status status = builder.getStatus();
         int statusNumber = status.getNumber();
 
@@ -35,17 +32,14 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
             G.allowForConnect = false;
             WebSocketClient.getInstance().disconnect();
             //TODO [Saeed Mozaffari] [2016-09-06 12:30 PM] - go to upgrade page
-            //TODO [Saeed Mozaffari] [2016-09-06 2:11 PM] - ijade methode joda baraye in halat . chon ye jaye dige ham bud
 
         } else if (statusNumber == Config.ACCEPT) {
             HelperConnectionState.connectionState(Config.ConnectionState.IGAP);
             G.isSecure = true;
 
             G.ivSize = builder.getSymmetricIvSize();
-            Log.i("SOC", "ConnectionSymmetricKeyResponse handler ivSize : " + G.ivSize);
             String sm = builder.getSymmetricMethod();
             G.symmetricMethod = sm.split("-")[2];
-            Log.i("SOC", "ConnectionSymmetricKeyResponse handler mode : " + G.symmetricMethod);
             if (G.onSecuring != null) {
                 G.onSecuring.onSecure();
             }
@@ -53,7 +47,16 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
     }
 
     @Override
-    public void error() {
+    public void timeOut() {
+        // disconnect socket for do securing action again
+        WebSocketClient.getInstance().disconnect();
+        super.timeOut();
+    }
 
+    @Override
+    public void error() {
+        // disconnect socket for do securing action again
+        WebSocketClient.getInstance().disconnect();
+        super.error();
     }
 }

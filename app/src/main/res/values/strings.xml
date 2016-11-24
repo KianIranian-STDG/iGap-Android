@@ -250,7 +250,7 @@
     <string name="edit_item_dialog">Edit</string>
     <string name="Search">Search</string>
     <string name="Delete_and_leave_Group">Delete and Leave Group</string>
-    <string name="New_Chanel">New Chanel</string>
+    <string name="New_Chanel">New Channel</string>
     <string name="New_Group">New Group</string>
 
     <!-- tarjome nashavad -->
@@ -513,4 +513,5 @@
     <string name="convert_chat_to_group_content">Do you want convert this chat to group?</string>
     <string name="convert_chat_to_group_title">Convert chat to group</string>
     <string name="minute_ago">minute ago</string>
+    <string name="future_done">will be offered in the future</string>
 </resources>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              xmlns:tools="http://schemas.android.com/tools"
+              android:background="@color/white"
               android:layoutDirection="ltr"
               android:orientation="vertical"
-              tools:ignore="MissingPrefix"
-              android:background="@color/white">
+              tools:ignore="MissingPrefix">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -52,8 +52,8 @@
                             android:src="@mipmap/empty"/>
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile_Bold.ttf"
                             android:id="@+id/lm_txt_user_name"
+                            fontPath="fonts/IRANSansMobile_Bold.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/lm_imv_user_picture"
@@ -61,7 +61,7 @@
                             android:singleLine="true"
                             android:text="Domenika faniz"
                             android:textColor="@android:color/black"
-                            android:textSize="@dimen/sp18" />
+                            android:textSize="@dimen/sp18"/>
 
                         <TextView
                             android:id="@+id/lm_txt_phone_number"
@@ -73,7 +73,7 @@
                             android:singleLine="true"
                             android:text="+98 9125544669"
                             android:textColor="@color/gray_5c"
-                            android:textSize="@dimen/sp14" />
+                            android:textSize="@dimen/sp14"/>
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -83,8 +83,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:background="@color/white"
+                android:gravity="left"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/dp8">
 
@@ -109,9 +109,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp8"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
+                        android:padding="@dimen/dp8"
                         android:text="@string/New_Chat"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
@@ -138,9 +138,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp8"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
+                        android:padding="@dimen/dp8"
                         android:text="@string/New_Group"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
@@ -164,15 +164,15 @@
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
                         android:text="@string/fa_bullhorn"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp18"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp8"
-                        android:text="@string/New_Chanel"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
+                        android:padding="@dimen/dp8"
+                        android:text="@string/New_Chanel"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
 
@@ -182,7 +182,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_margin="@dimen/dp8"
-                    android:background="@color/gray" />
+                    android:background="@color/gray"/>
 
 
                 <LinearLayout
@@ -201,14 +201,14 @@
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
                         android:text="@string/md_user_account_box"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp18"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp8"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
+                        android:padding="@dimen/dp8"
                         android:text="@string/contacts"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
@@ -232,14 +232,14 @@
                         android:minWidth="@dimen/dp32"
                         android:paddingRight="@dimen/dp4"
                         android:text="@string/md_add_user_button"
-                        android:textSize="@dimen/sp20" />
+                        android:textSize="@dimen/sp20"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp8"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
+                        android:padding="@dimen/dp8"
                         android:text="@string/Invite_Friends"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
@@ -262,15 +262,15 @@
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
                         android:text="@string/md_settings_cogwheel_button"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp18"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp8"
-                        android:text="@string/chi_title_setting"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
+                        android:padding="@dimen/dp8"
+                        android:text="@string/chi_title_setting"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
 
@@ -292,14 +292,14 @@
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
                         android:text="@string/md_help_round_button"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp18"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp8"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
+                        android:padding="@dimen/dp8"
                         android:text="@string/iGap_FAQ"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
