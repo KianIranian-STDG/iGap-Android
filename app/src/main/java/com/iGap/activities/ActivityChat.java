@@ -2472,7 +2472,7 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setMessage(getWrittenMessage());
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setRoomId(mRoomId);
-                roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.THUMBNAIL);
+                roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.FILE);
                 roomMessage.setUserId(senderID);
                 roomMessage.setCreateTime(updateTime);
 
@@ -3553,18 +3553,27 @@ public class ActivityChat extends ActivityEnhanced
 
         HelperSetAction.sendCancel(uploadStructure.messageId);
 
-        new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId)
-                .attachment(uploadStructure.token)
-                .message(uploadStructure.text)
-                .sendMessage(Long.toString(uploadStructure.messageId));
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmAttachment.updateToken(uploadStructure.messageId, uploadStructure.token);
+                    }
+                });
+                realm.close();
                 mAdapter.updateProgress(parseLong(identity), 100);
                 mAdapter.updateToken(uploadStructure.messageId, uploadStructure.token);
             }
         });
+
+        // please bezar paeen bemoone :D
+        new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId)
+                .attachment(uploadStructure.token)
+                .message(uploadStructure.text)
+                .sendMessage(Long.toString(uploadStructure.messageId));
     }
 
     @Override

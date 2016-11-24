@@ -65,7 +65,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
                         mMessage.attachment.width, mMessage.attachment.height);
             }
         }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], dimens[1]);
         ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
         ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParams);
         holder.image.getParent().requestLayout();

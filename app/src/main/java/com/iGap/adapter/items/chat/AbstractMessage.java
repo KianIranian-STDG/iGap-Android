@@ -647,7 +647,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
             }
         } else {
-            if (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal() : attachment.isFileExistsOnLocal()) {
+            if (attachment.isFileExistsOnLocal()) {
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
             } else {
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);

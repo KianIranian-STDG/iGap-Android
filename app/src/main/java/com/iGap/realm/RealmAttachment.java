@@ -41,6 +41,15 @@ public class RealmAttachment extends RealmObject {
     @Nullable
     private String localFilePath;
 
+    public static void updateToken(long fakeId, String token) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, fakeId).findFirst();
+        if (attachment != null) {
+            attachment.setToken(token);
+        }
+        realm.close();
+    }
+
     public static RealmAttachment build(ProtoGlobal.File file, AttachmentFor attachmentFor) {
         Realm realm = Realm.getDefaultInstance();
 

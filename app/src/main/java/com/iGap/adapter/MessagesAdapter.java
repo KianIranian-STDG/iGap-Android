@@ -6,6 +6,7 @@ import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.adapter.items.chat.TimeItem;
@@ -151,13 +152,19 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         if (item != null) {
             final int pos = getAdapterItems().indexOf(item);
 
-            item.updateProgress(new OnProgressUpdate() {
+            G.handler.postDelayed(new Runnable() {
                 @Override
-                public void onProgressUpdate() {
-                    notifyAdapterItemChanged(pos);
-                    //set(pos, item);
+                public void run() {
+                    item.updateProgress(new OnProgressUpdate() {
+                        @Override
+                        public void onProgressUpdate() {
+                            notifyAdapterItemChanged(pos);
+                            //set(pos, item);
+                        }
+                    });
                 }
-            });
+            }, 500);
+
         }
     }
 
@@ -201,7 +208,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public void updateThumbnail(String token) {
         for (Item item : getAdapterItems()) {
-            if (item.mMessage.downloadAttachment != null && item.mMessage.downloadAttachment.token != null && item.mMessage.downloadAttachment.token.equalsIgnoreCase(token)) {
+            if (item.mMessage.attachment != null && item.mMessage.attachment.token != null && item.mMessage.attachment.token.equalsIgnoreCase(token)) {
                 final int pos = getAdapterItems().indexOf(item);
                 item.onRequestDownloadThumbnail(token, true, new OnFileDownload() {
                     @Override

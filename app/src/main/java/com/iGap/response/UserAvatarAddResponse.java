@@ -22,6 +22,7 @@ public class UserAvatarAddResponse extends MessageHandler {
 
         ProtoUserAvatarAdd.UserAvatarAddResponse.Builder userAvatarAddResponse =
                 (ProtoUserAvatarAdd.UserAvatarAddResponse.Builder) message;
+
         G.onUserAvatarResponse.onAvatarAdd(userAvatarAddResponse.getAvatar());
     }
 
