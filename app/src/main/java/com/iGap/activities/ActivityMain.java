@@ -66,8 +66,11 @@ import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
+import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -77,6 +80,7 @@ import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestClientGetRoomList;
+import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupLeft;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -1023,12 +1027,24 @@ public class ActivityMain extends ActivityEnhanced
 
     @Override
     public void onFileDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.downloadingAvatarThumbnail(token);
-            }
-        });
+        if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
+            // requested thumbnail
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Realm realm = Realm.getDefaultInstance();
+                    RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst();
+                    if (avatar != null) {
+                        requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
+                    }
+                    realm.close();
+
+                    mAdapter.downloadingAvatarThumbnail(token);
+                }
+            });
+        } else {
+            // TODO: 11/22/2016 [Alireza] implement
+        }
     }
 
     @Override
@@ -1284,9 +1300,68 @@ public class ActivityMain extends ActivityEnhanced
         });
     }
 
+    private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
+        final String fileName = "thumb_" + token + "_" + name;
+        if (done) {
+            final Realm realm = Realm.getDefaultInstance();
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    String filePath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().getLocalThumbnailPath();
+                    G.onChangeUserPhotoListener.onChangePhoto(filePath);
+                    realm.close();
+                }
+            });
+
+            return; // necessary
+        }
+
+        ProtoFileDownload.FileDownload.Selector selector =
+                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        String identity =
+                token + '*' + selector.toString() + '*' + smallSize + '*' + fileName + '*' + 0;
+
+        new RequestFileDownload().download(token, 0, smallSize,
+                selector, identity);
+    }
+
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-        // TODO: 11/17/2016 [Alireza] implement
+        Realm realm1 = Realm.getDefaultInstance();
+        final long userId = realm1.where(RealmUserInfo.class).findFirst().getUserId();
+        realm1.close();
+        if (userId == user.getId()) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmAvatar avatar = RealmAvatar.put(user.getId(), user.getAvatar());
+
+                    RealmRegisteredInfo.putOrUpdate(user);
+
+                    G.onChangeUserPhotoListener.onChangeInitials(user.getInitials(), user.getColor());
+
+                    if (avatar != null && avatar.isValid()) {
+                        if (!avatar.getFile().isFileExistsOnLocal() && !avatar.getFile().isThumbnailExistsOnLocal()) {
+                            requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
+                        } else {
+                            if (avatar.getFile().isFileExistsOnLocal()) {
+                                G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalFilePath());
+                            } else if (avatar.getFile().isThumbnailExistsOnLocal()) {
+                                G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalThumbnailPath());
+                            }
+                        }
+                    }
+                }
+            });
+
+            realm.close();
+        }
     }
 
     @Override
