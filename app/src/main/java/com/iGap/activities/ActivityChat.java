@@ -2582,6 +2582,7 @@ public class ActivityChat extends ActivityEnhanced
                 } else {
                     thumbnail.setVisibility(View.GONE);
                 }
+                replayTo.setText(chatItem.forwardedFrom.getMessage());
             } else {
                 if (chatItem.attachment != null) {
                     if (chatItem.attachment.isFileExistsOnLocalAndIsThumbnail()) {
@@ -2594,8 +2595,8 @@ public class ActivityChat extends ActivityEnhanced
                 } else {
                     thumbnail.setVisibility(View.GONE);
                 }
+                replayTo.setText(chatItem.messageText);
             }
-            replayTo.setText(chatItem.messageText);
             Realm realm = Realm.getDefaultInstance();
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(chatItem.senderID)).findFirst();
             if (userInfo != null) {
