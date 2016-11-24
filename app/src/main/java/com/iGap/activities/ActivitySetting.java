@@ -514,23 +514,40 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+
         final TextView txtGander = (TextView) findViewById(R.id.st_txt_gander);
-        if (gander == null || gander.getNumber() == -1) {
+        if (gander == null || gander.getNumber() == -1 || gander == ProtoGlobal.Gender.UNKNOWN) {
             txtGander.setText(getResources().getString(R.string.set_gender));
+            Log.i("TTTTT", "000onCreate: " + gander);
+            Log.i("TTTTT", "000gander.getNumber(): " + gander.getNumber());
         } else {
             txtGander.setText(gander == ProtoGlobal.Gender.MALE ? "Male" : "Female");
+            Log.i("TTTTT", "1111onCreate: " + gander);
+            Log.i("TTTTT", "1111gander.getNumber(): " + gander.getNumber());
         }
 
         ViewGroup layoutGander = (ViewGroup) findViewById(R.id.st_layout_gander);
         layoutGander.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int position = -1;
                 Realm realm1 = Realm.getDefaultInstance();
+
+                try {
+                    if (realm1.where(RealmUserInfo.class).findFirst().getGender().getNumber() == 1) {
+                        position = 0;
+                    } else if (realm1.where(RealmUserInfo.class).findFirst().getGender().getNumber() == 2) {
+                        position = 1;
+                    }
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+
                 new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Gander))
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black))
                         .items(R.array.array_gander)
-                        .itemsCallbackSingleChoice((realm1.where(RealmUserInfo.class).findFirst().getGender().getNumber() == 1 ? 0 : 1), new MaterialDialog.ListCallbackSingleChoice() {
+                        .itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                 if (text != null) txtGander.setText(text.toString());

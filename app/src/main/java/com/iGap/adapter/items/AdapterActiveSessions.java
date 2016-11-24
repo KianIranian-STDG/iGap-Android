@@ -1,21 +1,30 @@
 package com.iGap.adapter.items;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.format.DateUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.StructSessionsGetActiveList;
+import com.iGap.module.TimeUtils;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import java.util.List;
+
+import static com.iGap.R.id.adp_currentSession;
+import static com.iGap.R.id.adp_rootLayout;
 
 
 public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, AdapterActiveSessions.ViewHolder> {
 
     public StructSessionsGetActiveList item;
+
+    public StructSessionsGetActiveList getItem() {
+        return item;
+    }
 
     public AdapterActiveSessions(StructSessionsGetActiveList item) {
         this.item = item;
@@ -28,7 +37,7 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
     //The unique ID for this type of item
     @Override
     public int getType() {
-        return R.id.aas_rootLayout;
+        return adp_rootLayout;
     }
 
     //The layout to be used for this type of item
@@ -43,58 +52,66 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.txtCurrentSession.setText("current session");
-        holder.txtVersionIgap.setText("iGap Android " + item.getAppVersion());
-        holder.txtDeviceModel.setText("" + item.getDeviceName());
-        Log.i("CCCCCCCDD", "getBuildVersion: " + item.getBuildVersion());
-        holder.txtIp.setText("" + item.getIp());
-        holder.txtAndroidSDK.setText(item.getPlatform() + " SDK " + item.getPlatformVersion());
-        holder.txtLanguage.setText("" + item.getLanguage().toString());
-        Log.i("CCCCCCCDD", "isCurrent: " + item.isCurrent());
+
         if (item.isCurrent()) {
-            holder.txtOnline.setText("online");
+            holder.txtCurrentSession.setText(G.context.getResources().getString(R.string.current_session));
+            holder.vgRootLayout.setBackgroundColor(G.context.getResources().getColor(android.R.color.white));
+            holder.line.setVisibility(View.GONE);
+            holder.txtTerminate.setVisibility(View.GONE);
+
         } else {
-            holder.txtOnline.setText("offline");
+            holder.txtCurrentSession.setText(G.context.getResources().getString(R.string.Active_session));
+            holder.vgRootLayout.setBackgroundColor(G.context.getResources().getColor(R.color.st_background2));
+            holder.line.setVisibility(View.VISIBLE);
+            holder.txtTerminate.setVisibility(View.VISIBLE);
         }
-//        Log.i("CCCCCCCDD", "getSessionId: " + item.getSessionId());
-//        Log.i("CCCCCCCDD", "getName: " + item.getName());
-//        Log.i("CCCCCCCDD", "getAppId: " + item.getAppId());
-//        Log.i("CCCCCCCDD", "getBuildVersion: " + item.getBuildVersion());
-//        Log.i("CCCCCCCDD", "getAppVersion: " + item.getAppVersion());
-//        Log.i("CCCCCCCDD", "getPlatform: " + item.getPlatform());
-//        Log.i("CCCCCCCDD", "getPlatformVersion: " + item.getPlatformVersion());
-//        Log.i("CCCCCCCDD", "getDevice: " + item.getDevice());
-//        Log.i("CCCCCCCDD", "getDeviceName: " + item.getDeviceName());
-//        Log.i("CCCCCCCDD", "getLanguage: " + item.getLanguage());
-//        Log.i("CCCCCCCDD", "getCountry: " + item.getCountry());
-//        Log.i("CCCCCCCDD", "getCreateTime: " + item.getCreateTime());
-//        Log.i("CCCCCCCDD", "getActiveTime: " + item.getActiveTime());
-//        Log.i("CCCCCCCDD", "getIp: " + item.getIp());
+
+        holder.txtDevice.setText("" + item.getDeviceName());
+        holder.txtPlatform.setText("" + item.getPlatform());
+        holder.txtCountry.setText("" + item.getCountry());
+        holder.txtIp.setText("" + item.getIp());
+
+        String changeTime = TimeUtils.toLocal(item.getActiveTime() * DateUtils.SECOND_IN_MILLIS, "dd MMM yyyy");
+        holder.txtCreateTime.setText("" + changeTime);
 
 
+//        holder.vgRootLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (item.isCurrent()){
+//
+//                }else {
+//                    Toast.makeText(G.context, "active", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
     }
 
     //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        private CardView cardView;
-        TextView txtCurrentSession;
-        TextView txtVersionIgap;
-        TextView txtDeviceModel;
-        TextView txtAndroidSDK;
-        TextView txtIp;
-        TextView txtLanguage;
-        TextView txtOnline;
+        private ViewGroup vgRootLayout;
+        private TextView txtCurrentSession;
+        private TextView txtDevice;
+        private TextView txtPlatform;
+        private TextView txtCountry;
+        private TextView txtIp;
+        private TextView txtCreateTime;
+        private TextView txtTerminate;
+        private View line;
 
         public ViewHolder(View view) {
             super(view);
-            cardView = (CardView) view.findViewById(R.id.adp_cardView);
-            txtCurrentSession = (TextView) view.findViewById(R.id.adp_currentSession);
-            txtVersionIgap = (TextView) view.findViewById(R.id.adp_versionIgap);
-            txtDeviceModel = (TextView) view.findViewById(R.id.adp_deviceModel);
-            txtAndroidSDK = (TextView) view.findViewById(R.id.adp_androidSDK);
+            vgRootLayout = (ViewGroup) view.findViewById(adp_rootLayout);
+            txtCurrentSession = (TextView) view.findViewById(adp_currentSession);
+            txtDevice = (TextView) view.findViewById(R.id.adp_device);
+            txtPlatform = (TextView) view.findViewById(R.id.adp_platform);
+            txtCountry = (TextView) view.findViewById(R.id.adp_country);
             txtIp = (TextView) view.findViewById(R.id.adp_ip);
-            txtLanguage = (TextView) view.findViewById(R.id.adp_language);
-            txtOnline = (TextView) view.findViewById(R.id.adp_online);
+            txtCreateTime = (TextView) view.findViewById(R.id.adp_create_time);
+            txtTerminate = (TextView) view.findViewById(R.id.adp_terminate);
+            line = view.findViewById(R.id.adp_line);
+
         }
     }
 }

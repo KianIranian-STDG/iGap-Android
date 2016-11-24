@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/aas_rootLayout"
+              android:id="@+id/adp_rootLayout"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:padding="@dimen/dp8">
+              android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/adp_cardView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:orientation="horizontal"
+        android:padding="@dimen/dp8">
 
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:layout_weight="1"
             android:padding="@dimen/dp12">
 
 
@@ -29,117 +29,159 @@
                 android:textSize="@dimen/sp16"
                 />
 
+
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp20"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/adp_versionIgap"
-                    android:layout_width="0dp"
+
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".7"
-                    android:text="iGap Android 1.0.0.1"
-                    android:textColor="@color/am_iconFab_black"
+                    android:text="@string/device"
+                    android:textColor="@color/black_register"
                     android:textSize="@dimen/sp16"
-                    android:textStyle="bold"
                     />
 
                 <TextView
-                    android:id="@+id/adp_online"
-                    android:layout_width="0dp"
+                    android:id="@+id/adp_device"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".3"
-                    android:gravity="end|right"
-                    android:text="online"
-                    android:textColor="@color/gray_4c"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:text="pc"
+                    android:textColor="@color/black_register"
                     android:textSize="@dimen/sp16"
                     />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp4"
-                android:orientation="horizontal">
-
                 <TextView
-                    android:id="@+id/adp_deviceModel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="HUAWEIH30-L02"
-                    android:textColor="@color/rg_text_dark_verify"
-                    android:textSize="@dimen/sp16"
-
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/dp12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text=" , "
-                    android:textColor="@color/rg_text_dark_verify"
+                    android:textColor="@color/black_register"
                     android:textSize="@dimen/sp16"
                     />
 
                 <TextView
-                    android:id="@+id/adp_androidSDK"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Android SDK 19"
-                    android:textColor="@color/gray_4c"
+                    android:id="@+id/adp_platform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="windows"
+                    android:textColor="@color/black_register"
                     android:textSize="@dimen/sp16"
                     />
 
             </LinearLayout>
 
-
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp4"
                 android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/country"
+                    android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp16"
+                    />
+
+                <TextView
+                    android:id="@+id/adp_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:text="Iran"
+                    android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp16"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_time"
+                    android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp16"
+                    />
+
+                <TextView
+                    android:id="@+id/adp_create_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:text=" 17 Nov 2016"
+                    android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp16"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ip"
+                    android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp16"
+                    />
 
                 <TextView
                     android:id="@+id/adp_ip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="5.196.196.97"
-                    android:textColor="@color/cardview_dark_background"
-                    android:textSize="@dimen/sp16"
-
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text=" - "
-                    android:textColor="@color/cardview_dark_background"
-                    android:textSize="@dimen/sp16"
-                    />
-
-                <TextView
-                    android:id="@+id/adp_language"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="FR"
-                    android:textColor="@color/gray_4c"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:text=" 192.168.1.1"
+                    android:textColor="@color/black_register"
                     android:textSize="@dimen/sp16"
                     />
 
             </LinearLayout>
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight=".1"
+            android:layout_marginTop="@dimen/dp12">
+
+            <TextView
+                android:id="@+id/adp_terminate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp4"
+                android:text="TERMINATE"
+                android:gravity="center"
+                android:textColor="@color/red"
+                android:textSize="@dimen/sp16"
+                />
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/adp_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black_register"/>
+
 
 </LinearLayout>

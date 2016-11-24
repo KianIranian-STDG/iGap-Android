@@ -1227,7 +1227,7 @@ public class ActivityChat extends ActivityEnhanced
                         text4.setText(getResources().getString(R.string.mute_notification));
                     }
                 } else {
-                    text1.setPadding(dim20, dim20, dim12, dim20);
+                    text1.setPadding(dim20, dim12, dim12, dim12);
                     text2.setVisibility(View.GONE);
                     text3.setVisibility(View.GONE);
                     text4.setVisibility(View.GONE);
@@ -1344,6 +1344,7 @@ public class ActivityChat extends ActivityEnhanced
                     @Override
                     public void onClick(View view) {
 
+                        popupWindow.dismiss();
                         new MaterialDialog.Builder(ActivityChat.this)
                                 .title(R.string.convert_chat_to_group_title)
                                 .content(R.string.convert_chat_to_group_content)
@@ -1354,6 +1355,7 @@ public class ActivityChat extends ActivityEnhanced
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                         finish();
                                         G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
+                                        dialog.dismiss();
                                     }
                                 })
                                 .show();

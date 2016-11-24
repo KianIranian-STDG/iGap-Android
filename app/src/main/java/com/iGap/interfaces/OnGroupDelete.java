@@ -5,4 +5,6 @@ public interface OnGroupDelete {
 
     void Error(int majorCode, int minorCode);
 
+    void onTimeOut();
+
 }

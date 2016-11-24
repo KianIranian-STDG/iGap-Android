@@ -52,6 +52,7 @@ import com.iGap.interfaces.OnGroupAddAdmin;
 import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.interfaces.OnGroupAddModerator;
 import com.iGap.interfaces.OnGroupAvatarResponse;
+import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupEdit;
 import com.iGap.interfaces.OnGroupGetMemberList;
 import com.iGap.interfaces.OnGroupKickAdmin;
@@ -91,6 +92,7 @@ import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
 import com.iGap.request.RequestGroupAddModerator;
 import com.iGap.request.RequestGroupAvatarAdd;
+import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupEdit;
 import com.iGap.request.RequestGroupGetMemberList;
 import com.iGap.request.RequestGroupKickAdmin;
@@ -1966,15 +1968,32 @@ public class ActivityGroupProfile extends ActivityEnhanced
                             @Override
                             public void onGroupLeft(final long roomId, long memberId) {
 
-                                ActivityGroupProfile.this.finish();
 
-                                if (ActivityChat.activityChat != null) {
-                                    ActivityChat.activityChat.finish();
-                                }
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ActivityGroupProfile.this.finish();
+                                        if (ActivityChat.activityChat != null) {
+                                            ActivityChat.activityChat.finish();
+                                        }
+                                        Log.i("VVVFFFDD", "onGroupLeft: ");
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        prgWait.setVisibility(View.GONE);
+                                    }
+                                });
                             }
 
                             @Override
                             public void onError(int majorCode, int minorCode) {
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        prgWait.setVisibility(View.GONE);
+                                    }
+                                });
+
                                 if (majorCode == 335) {
                                     runOnUiThread(new Runnable() {
                                         @Override
@@ -2032,9 +2051,83 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                     });
                                 }
                             }
+
+                            @Override
+                            public void onTimeOut() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        prgWait.setVisibility(View.GONE);
+                                    }
+                                });
+                            }
                         };
 
-                        new RequestGroupLeft().groupLeft(roomId);
+                        G.onGroupDelete = new OnGroupDelete() {
+                            @Override
+                            public void onGroupDelete(final long roomId) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ActivityGroupProfile.this.finish();
+                                        if (ActivityChat.activityChat != null) {
+                                            ActivityChat.activityChat.finish();
+                                        }
+
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        prgWait.setVisibility(View.GONE);
+                                        Log.i("VVVFFFDD", "onGroupDelete: ");
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void Error(int majorCode, int minorCode) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        prgWait.setVisibility(View.GONE);
+                                    }
+                                });
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                                        snack.setAction("CANCEL", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                snack.dismiss();
+                                            }
+                                        });
+                                        snack.show();
+                                    }
+                                });
+
+                            }
+
+                            @Override
+                            public void onTimeOut() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        prgWait.setVisibility(View.GONE);
+                                    }
+                                });
+                            }
+                        };
+
+                        if (role.equals(GroupChatRole.OWNER)) {
+                            new RequestGroupDelete().groupDelete(roomId);
+                        } else {
+                            new RequestGroupLeft().groupLeft(roomId);
+                        }
+                        prgWait.setVisibility(View.VISIBLE);
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                     }
                 })
                 .show();

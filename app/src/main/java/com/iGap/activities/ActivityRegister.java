@@ -666,10 +666,11 @@ public class ActivityRegister extends ActivityEnhanced {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                txtTimer.setVisibility(View.GONE);
                 if (!edtEnterCodeVerify.getText().toString().equals("")) {
                     userVerify(userName, edtEnterCodeVerify.getText().toString());
                     dialog.dismiss();
+
                 } else {
 
                     new MaterialDialog.Builder(ActivityRegister.this).title(R.string.Enter_Code).content(R.string.Toast_Enter_Code).positiveText(R.string.B_ok).show();
@@ -683,7 +684,6 @@ public class ActivityRegister extends ActivityEnhanced {
             public void onClick(View v) {
                 userRegister();
                 dialog.dismiss();
-                txtTimer.setVisibility(View.GONE);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }

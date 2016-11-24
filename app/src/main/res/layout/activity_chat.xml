@@ -84,6 +84,7 @@
                             android:visibility="gone" />
 
                         <TextView
+                            fontPath="fonts/IRANSansMobile_Medium.ttf"
                             android:id="@+id/chl_txt_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -92,7 +93,7 @@
                             android:singleLine="true"
                             android:text="New Text"
                             android:textColor="@android:color/white"
-                            android:textSize="@dimen/sp16" />
+                            android:textSize="@dimen/sp14"/>
 
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/imgMutedRoom"

@@ -6,6 +6,7 @@
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:id="@+id/stas_rootActiveSession"
+                android:elevation="999dp"
                 tools:context="com.iGap.fragments.FragmentActiveSessions">
 
     <android.support.v7.widget.Toolbar

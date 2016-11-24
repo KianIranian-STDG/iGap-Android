@@ -30,7 +30,7 @@ public class GroupLeftResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        super.handler();
         ProtoGroupLeft.GroupLeftResponse.Builder builder =
                 (ProtoGroupLeft.GroupLeftResponse.Builder) message;
         final long roomId = builder.getRoomId();
@@ -70,7 +70,15 @@ public class GroupLeftResponse extends MessageHandler {
     }
 
     @Override
+    public void timeOut() {
+        super.timeOut();
+
+        G.onGroupLeft.onTimeOut();
+    }
+
+    @Override
     public void error() {
+        super.error();
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

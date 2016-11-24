@@ -29,8 +29,8 @@ public class GroupDeleteResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         ProtoGroupDelete.GroupDeleteResponse.Builder builder = (ProtoGroupDelete.GroupDeleteResponse.Builder) message;
-
         final long id = builder.getRoomId();
 
         Log.i("XXXC", "re1: " + id);
@@ -57,6 +57,7 @@ public class GroupDeleteResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        G.onGroupDelete.onTimeOut();
     }
 
     @Override

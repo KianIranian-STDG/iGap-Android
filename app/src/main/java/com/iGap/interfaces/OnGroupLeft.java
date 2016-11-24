@@ -10,4 +10,6 @@ public interface OnGroupLeft {
     void onGroupLeft(long roomId, long memberId);
 
     void onError(int majorCode, int minorCode);
+
+    void onTimeOut();
 }

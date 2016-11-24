@@ -126,6 +126,7 @@ public class ContactGroupFragment extends Fragment {
                             Intent intent = new Intent(G.context, ActivityChat.class);
                             intent.putExtra("RoomId", roomId);
                             startActivity(intent);
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                             getActivity().getSupportFragmentManager().popBackStack();
                         }
                     }

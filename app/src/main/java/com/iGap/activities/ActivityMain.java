@@ -858,14 +858,25 @@ public class ActivityMain extends ActivityEnhanced
             @Override
             public void Error(int majorCode, int minorCode) {
 
-                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
-                snack.setAction("CANCEL", new View.OnClickListener() {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        snack.setAction("CANCEL", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
                     }
                 });
-                snack.show();
+
+            }
+
+            @Override
+            public void onTimeOut() {
+
             }
         };
 
@@ -888,14 +899,25 @@ public class ActivityMain extends ActivityEnhanced
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "lefGroup", Snackbar.LENGTH_LONG);
-                snack.setAction("CANCEL", new View.OnClickListener() {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "lefGroup", Snackbar.LENGTH_LONG);
+                        snack.setAction("CANCEL", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
                     }
                 });
-                snack.show();
+
+            }
+
+            @Override
+            public void onTimeOut() {
+
             }
         };
 
