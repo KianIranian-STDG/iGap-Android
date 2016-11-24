@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoUserSessionGetActiveList;
 import com.iGap.realm.RealmSessionGetActiveList;
@@ -26,7 +24,7 @@ public class UserSessionGetActiveListResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Builder builder = (ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Builder) message;
-        Log.i("CCCVVVBBB", "0 handler: ");
+
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override

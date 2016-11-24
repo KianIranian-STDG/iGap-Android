@@ -145,7 +145,7 @@
                 android:layout_weight="1"
                 app:emojiSize="26sp"
                 android:background="@null"
-                android:hint="Type Message"
+                android:hint="@string/type_message"
                 android:maxLines="4"
                 android:paddingRight="@dimen/dp4"
                 android:textColor="@color/gray"

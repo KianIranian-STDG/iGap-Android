@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -229,7 +228,6 @@ public class ActivityExplorer extends ActivityEnhanced {
     void fill(String nextnod, int position) {
 
         try {
-            Log.e("ddd", nextnod);
             File fileDir = new File(nextnod);
 
             if (fileDir.isDirectory()) {

@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileSetSelfRemove;
@@ -43,8 +41,6 @@ public class UserProfileSetSelfRemoveResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        Log.i("XXX", "UserProfileSetSelfRemoveResponse response.majorCode() : " + majorCode);
-        Log.i("XXX", "UserProfileSetSelfRemoveResponse response.minorCode() : " + minorCode);
         G.onUserProfileSetSelfRemove.Error(majorCode, minorCode);
     }
 }

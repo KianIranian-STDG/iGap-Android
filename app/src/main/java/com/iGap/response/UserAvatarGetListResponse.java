@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserAvatarGetList;
@@ -35,26 +33,22 @@ public class UserAvatarGetListResponse extends MessageHandler {
                 .equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(identity))
                 .findFirst();
         final RealmList<RealmAvatar> realmAvatars = realmRegisteredInfo.getAvatars();
-        Log.i("VVV", "message : " + message);
-        Log.i("VVV", "realmAvatars : " + realmAvatars);
+
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder userAvatarGetListResponse =
                         (ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder) message;
                 for (ProtoGlobal.Avatar avatar : userAvatarGetListResponse.getAvatarList()) {
-                    Log.i("VVV", "avatar : " + avatar);
+
                     RealmAvatar realmAvatar = RealmAvatar.convert(Long.parseLong(identity),
                             RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
-                    Log.i("VVV", "realmAvatar : " + realmAvatar);
+
                     if (!realmAvatars.contains(realmAvatar)) {
                         realmAvatars.add(realmAvatar);
-                        Log.i("VVV", "Add realmAvatars.size() : " + realmAvatars.size());
+
                     }
 
-                    Log.i("VVV", "*****");
-                    Log.i("VVV", "**********");
-                    Log.i("VVV", "*****");
                 }
             }
         });
@@ -65,13 +59,12 @@ public class UserAvatarGetListResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-        Log.i("VVV", "timeOut*****");
+
     }
 
     @Override
     public void error() {
         super.error();
-        Log.i("VVV", "error*****");
     }
 }
 

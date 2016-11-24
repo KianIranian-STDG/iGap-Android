@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 public class ClientConditionResponse extends MessageHandler {
 
     public int actionId;
@@ -18,17 +16,17 @@ public class ClientConditionResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        Log.i("CLI", "handler : " + message);
+        super.handler();
     }
 
     @Override
     public void timeOut() {
-        Log.i("CLI", "timeOut : " + message);
+        super.timeOut();
     }
 
     @Override
     public void error() {
-        Log.i("CLI", "error : " + message);
+        super.error();
     }
 }
 

@@ -8,7 +8,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,6 @@ public class NotRegisteredContactsFragment extends Fragment {
             public boolean onClick(View v, IAdapter adapter, ContactItemNotRegister item,
                                    int position) {
 
-                Log.e("dddd", " invite click  " + position);
                 // TODO: 9/14/2016 nejati     send sms for invite friend
 
                 return false;

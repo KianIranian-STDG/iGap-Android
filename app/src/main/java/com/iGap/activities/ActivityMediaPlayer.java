@@ -288,7 +288,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("audio/*");
         share.putExtra(Intent.EXTRA_STREAM, uri);
-        startActivity(Intent.createChooser(share, "Share audio File"));
+        startActivity(Intent.createChooser(share, getString(R.string.shate_audio_file)));
     }
 
     private void updateUi() {

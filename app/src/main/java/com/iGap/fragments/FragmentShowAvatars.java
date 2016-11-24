@@ -252,7 +252,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -269,7 +269,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -286,7 +286,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -303,7 +303,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -320,7 +320,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -337,7 +337,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -354,7 +354,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();

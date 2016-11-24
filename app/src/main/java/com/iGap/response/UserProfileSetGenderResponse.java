@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileGender;
@@ -51,8 +49,6 @@ public class UserProfileSetGenderResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        Log.i("XXX", "UserProfileSetGenderResponse response.majorCode() : " + majorCode);
-        Log.i("XXX", "UserProfileSetGenderResponse response.minorCode() : " + minorCode);
         G.onUserProfileSetGenderResponse.Error(majorCode, minorCode);
 
     }

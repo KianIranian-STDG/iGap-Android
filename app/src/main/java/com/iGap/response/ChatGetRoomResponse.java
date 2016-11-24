@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoChatGetRoom;
 import com.iGap.proto.ProtoError;
@@ -49,8 +47,6 @@ public class ChatGetRoomResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        Log.i("SOC", "ClientGetRoomResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "ClientGetRoomResponse response.minorCode() : " + minorCode);
         G.onChatGetRoom.onChatGetRoomError(majorCode, minorCode);
     }
 }

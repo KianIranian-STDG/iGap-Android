@@ -74,7 +74,7 @@
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
                             android:gravity="center"
-                            android:text="Group Profile"
+                            android:text="@string/group_profile"
                             android:textColor="@color/whit_background"
                             android:textSize="@dimen/sp22"
                             android:textStyle="bold"
@@ -177,7 +177,7 @@
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp12"
-                        android:text="INFO"
+                        android:text="@string/info"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold"/>
@@ -370,7 +370,7 @@
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp12"
-                        android:text="Members"
+                        android:text="@string/members"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold"/>
@@ -418,7 +418,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="@dimen/dp12"
-                        android:text="more..."
+                        android:text="@string/more"
                         android:textSize="@dimen/sp16"/>
 
 
@@ -442,7 +442,7 @@
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp12"
-                        android:text="Settings"
+                        android:text="@string/settings"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
                         android:textStyle="bold"

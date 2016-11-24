@@ -113,23 +113,22 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new MaterialDialog.Builder(G.currentActivity).title("Choose Picture")
-                            .negativeText("CANCEL")
+                    new MaterialDialog.Builder(G.currentActivity).title(G.context.getString(R.string.choose_picture))
+                            .negativeText(G.context.getString(R.string.cancel))
                             .items(R.array.profile)
                             .itemsCallback(new MaterialDialog.ListCallback() {
                                 @Override
                                 public void onSelection(MaterialDialog dialog, View view, int which,
                                                         CharSequence text) {
 
-                                    if (text.toString().equals("From Camera")) {
+                                    if (text.toString().equals(G.context.getString(R.string.from_camera))) {
                                         if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(G.chatBackground));
                                             G.currentActivity.startActivityForResult(intent, IntentRequests.REQ_CAMERA);
                                             dialog.dismiss();
                                         } else {
-                                            Toast.makeText(G.currentActivity,
-                                                    "Please check your Camera", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(G.currentActivity, G.context.getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
                                         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

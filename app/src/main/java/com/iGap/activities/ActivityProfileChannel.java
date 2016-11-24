@@ -14,7 +14,6 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,7 +96,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
 
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();
-                    Log.i("CCVVBB", "rr: ");
+
                 }
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
@@ -113,7 +112,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
                 remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(ActivityProfileChannel.this, "Remove", Toast.LENGTH_SHORT)
+                        Toast.makeText(ActivityProfileChannel.this, R.string.remove, Toast.LENGTH_SHORT)
                                 .show();
                     }
                 });
@@ -131,7 +130,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ActivityProfileChannel.this, "fab", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -140,8 +139,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
         imgCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ActivityProfileChannel.this, "imgCircleImageView",
-                        Toast.LENGTH_SHORT).show();
+
             }
         });
         txtDescription = (TextView) findViewById(R.id.pch_txt_description);
@@ -170,7 +168,7 @@ public class ActivityProfileChannel extends AppCompatActivity {
                         }
                         new MaterialDialog.Builder(ActivityProfileChannel.this).items(
                                 R.array.phone_profile_chanel)
-                                .negativeText("CANCEL")
+                                .negativeText(getString(R.string.cancel))
                                 .itemsCallback(new MaterialDialog.ListCallback() {
                                     @Override
                                     public void onSelection(MaterialDialog dialog, View view, int which,
@@ -228,39 +226,35 @@ public class ActivityProfileChannel extends AppCompatActivity {
         txtPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ActivityProfileChannel.this, "txtPhoneNumber", Toast.LENGTH_SHORT)
-                        .show();
+
             }
         });
         txtNotifyAndSound = (TextView) findViewById(R.id.pch_txt_notifyAndSound);
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ActivityProfileChannel.this, "txtNotifyAndSound", Toast.LENGTH_SHORT)
-                        .show();
+
             }
         });
         txtDeleteCache = (TextView) findViewById(R.id.pch_txt_deleteCache);
         txtDeleteCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ActivityProfileChannel.this, "txtDeleteCache", Toast.LENGTH_SHORT)
-                        .show();
+
             }
         });
         txtLeaveChannel = (TextView) findViewById(R.id.pch_txt_leaveChannel);
         txtLeaveChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ActivityProfileChannel.this, "txtLeaveChannel", Toast.LENGTH_SHORT)
-                        .show();
+
             }
         });
         txtReport = (TextView) findViewById(R.id.pch_txt_Report);
         txtReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ActivityProfileChannel.this, "txtReport", Toast.LENGTH_SHORT).show();
+
             }
         });
     }

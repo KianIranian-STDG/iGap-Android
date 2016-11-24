@@ -89,7 +89,7 @@
                                         android:layout_height="wrap_content"
                                         android:maxWidth="@dimen/dp200"
                                         android:singleLine="true"
-                                        android:text="music golha "
+                                        android:text="music "
                                         android:textColor="@android:color/black"
                                         android:textSize="@dimen/sp16" />
 
@@ -171,7 +171,7 @@
                     android:gravity="center"
                     android:paddingTop="@dimen/dp8"
                     android:singleLine="true"
-                    android:text="today"
+                    android:text="@string/today"
                     android:textColor="@android:color/black" />
 
                 <TextView

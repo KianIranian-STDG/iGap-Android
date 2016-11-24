@@ -8,7 +8,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,8 +147,6 @@ public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder
     //************************************************************************************************
 
     private void updateSomething(int position, View holder) {
-
-        Log.e("ddd", "update something " + position + "   " + replayCommentNumber);
 
         for (int i = 0; i < list.get(position).allChanges.size(); i++) {
 

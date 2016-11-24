@@ -389,7 +389,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/dp4"
         android:layout_marginRight="@dimen/dp8"
-        android:text="SKIP"
+        android:text="@string/skip"
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/sp16" />
 

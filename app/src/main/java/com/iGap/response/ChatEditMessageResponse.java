@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoChatEditMessage;
 import com.iGap.proto.ProtoError;
@@ -29,13 +27,11 @@ public class ChatEditMessageResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
-        final ProtoChatEditMessage.ChatEditMessageResponse.Builder chatEditMessageResponse =
-                (ProtoChatEditMessage.ChatEditMessageResponse.Builder) message;
+        super.handler();
+        final ProtoChatEditMessage.ChatEditMessageResponse.Builder chatEditMessageResponse = (ProtoChatEditMessage.ChatEditMessageResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
         String nickname = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName();
-        Log.i("CLI_EDIT", "ChatEditMessageResponse for " + nickname + " : " + message);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -50,21 +46,15 @@ public class ChatEditMessageResponse extends MessageHandler {
                 }
 
                 if (!chatEditMessageResponse.getResponse().getId().isEmpty()) {
-                    Log.i("CLI_EDIT",
-                            "Edit message version : " + chatEditMessageResponse.getMessageVersion());
-                    Log.i("CLI_EDIT",
-                            "Edit message ID : " + chatEditMessageResponse.getMessageId());
 
                     for (RealmOfflineEdited realmOfflineEdited : realmClientCondition.getOfflineEdited()) {
                         if (realmOfflineEdited.getMessageId()
                                 == chatEditMessageResponse.getMessageId()) {
                             realmOfflineEdited.deleteFromRealm();
-                            Log.i("SOC_CONDITION", "Edit deleteFromRealm  : " + realmOfflineEdited);
                             break;
                         }
                     }
                 } else {
-                    Log.i("SOC_CONDITION", "I'm Recipient 1");
                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
                             .equalTo(RealmRoomMessageFields.MESSAGE_ID,
                                     chatEditMessageResponse.getMessageId())
@@ -74,7 +64,7 @@ public class ChatEditMessageResponse extends MessageHandler {
                         roomMessage.setMessage(chatEditMessageResponse.getMessage());
                         roomMessage.setMessageVersion(chatEditMessageResponse.getMessageVersion());
                         roomMessage.setEdited(true);
-                        Log.i("CLI_EDIT", "I'm Recipient 2 roomMessage : " + roomMessage);
+
                         G.onChatEditMessageResponse.onChatEditMessage(
                                 chatEditMessageResponse.getRoomId(),
                                 chatEditMessageResponse.getMessageId(),
@@ -90,17 +80,15 @@ public class ChatEditMessageResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "ChatEditMessageResponse timeout");
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        Log.i("SOC", "ChatEditMessageResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "ChatEditMessageResponse response.minorCode() : " + minorCode);
 
         G.onChatEditMessageResponse.onError(majorCode, minorCode);
     }

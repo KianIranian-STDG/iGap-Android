@@ -10,7 +10,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.ExifInterface;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,8 +47,6 @@ public class ImageHelper {
      */
     public static Bitmap correctRotateImage(String filepath) {
 
-        Log.e("dddddddddddddddddddd", "filepath   :  " + filepath);
-
         Bitmap bitmap = null;
 
         try {
@@ -69,19 +66,16 @@ public class ImageHelper {
                     bitmap = rotateImage(bitmap, 90);
                     if (filepath.length() > 0)
                         SaveBitmapToFile(filepath, bitmap);
-                    Log.e("dddddddddddddddddddd", "90");
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_180:
                     bitmap = rotateImage(bitmap, 180);
                     if (filepath.length() > 0)
                         SaveBitmapToFile(filepath, bitmap);
-                    Log.e("dddddddddddddddddddd", "180");
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     bitmap = rotateImage(bitmap, 270);
                     if (filepath.length() > 0)
                         SaveBitmapToFile(filepath, bitmap);
-                    Log.e("dddddddddddddddddddd", "270");
                     break;
             }
         } catch (IOException e) {

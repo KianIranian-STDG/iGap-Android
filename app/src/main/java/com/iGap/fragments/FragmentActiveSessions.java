@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,22 +120,6 @@ public class FragmentActiveSessions extends Fragment {
                             item.setIp(session.get(i).getIp());
 
 
-                            Log.i("CCCCCCCDD", "getSessionId: " + item.getSessionId());
-                            Log.i("CCCCCCCDD", "getName: " + item.getName());
-                            Log.i("CCCCCCCDD", "getAppId: " + item.getAppId());
-                            Log.i("CCCCCCCDD", "getBuildVersion: " + item.getBuildVersion());
-                            Log.i("CCCCCCCDD", "getAppVersion: " + item.getAppVersion());
-                            Log.i("CCCCCCCDD", "getPlatform: " + item.getPlatform());
-                            Log.i("CCCCCCCDD", "getPlatformVersion: " + item.getPlatformVersion());
-                            Log.i("CCCCCCCDD", "getDevice: " + item.getDevice());
-                            Log.i("CCCCCCCDD", "getDeviceName: " + item.getDeviceName());
-                            Log.i("CCCCCCCDD", "getLanguage: " + item.getLanguage());
-                            Log.i("CCCCCCCDD", "getCountry: " + item.getCountry());
-                            Log.i("CCCCCCCDD", "getCreateTime: " + item.getCreateTime());
-                            Log.i("CCCCCCCDD", "getActiveTime: " + item.getActiveTime());
-                            Log.i("CCCCCCCDD", "getIp: " + item.getIp());
-
-
                             if (item.isCurrent()) {
                                 structItems.add(0, item);
 //                                items.add(0,new AdapterActiveSessions(item).withIdentifier(100 + i));
@@ -188,9 +171,9 @@ public class FragmentActiveSessions extends Fragment {
                                                 public void run() {
 
                                                     final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                                            "Error",
+                                                            R.string.error,
                                                             Snackbar.LENGTH_LONG);
-                                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             snack.dismiss();
@@ -207,9 +190,9 @@ public class FragmentActiveSessions extends Fragment {
                                                 @Override
                                                 public void run() {
                                                     final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                                            "Error",
+                                                            getString(R.string.error),
                                                             Snackbar.LENGTH_LONG);
-                                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             snack.dismiss();

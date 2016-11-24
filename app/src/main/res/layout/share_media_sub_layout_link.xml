@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:text="how are you"
+            android:text="h"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp16"

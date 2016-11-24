@@ -15,7 +15,6 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -130,10 +129,8 @@ public class ActivityRegister extends ActivityEnhanced {
 
             @Override
             public void onSmsReceive(String message) {
-                Log.i("UUU", "onSmsReceive 1 message : " + message);
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
-                        Log.i("UUU", "onSmsReceive 2");
                         rg_txt_verify_sms.setText(message);
                         receiveVerifySms(message);
                     }
@@ -142,8 +139,6 @@ public class ActivityRegister extends ActivityEnhanced {
                 }
             }
         });
-
-        Log.e("dddd", "ddddddddddddddddddddddddddddddddddddddd");
 
         HelperPermision.getSmsPermision(ActivityRegister.this, new OnGetPermision() {
             @Override
@@ -189,7 +184,6 @@ public class ActivityRegister extends ActivityEnhanced {
         }
 
         int getHeight = G.context.getResources().getDisplayMetrics().heightPixels;
-        Log.i("AZAZ", "onCreate: " + getHeight);
 
         txtTitleRegister = (TextView) findViewById(R.id.rg_txt_title_register);
         txtDesc = (TextView) findViewById(R.id.rg_txt_text_descRegister);
@@ -399,9 +393,7 @@ public class ActivityRegister extends ActivityEnhanced {
                                         edtCodeNumber.setText("+" + callingCode);
                                         edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
                                         regex = regexR;
-                                        Log.i("SOC_INFO", "onInfoCountryResponse regex : " + regex);
                                         btnStart.setEnabled(true);
-                                        Toast.makeText(G.context, "info country received", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -598,7 +590,7 @@ public class ActivityRegister extends ActivityEnhanced {
                             rg_img_verify_connect.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
                             rg_img_verify_connect.setVisibility(View.VISIBLE);
                             rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_error_red));
-                            rg_txt_verify_connect.setText("Please check your connection");
+                            rg_txt_verify_connect.setText(R.string.please_check_your_connenction);
                         }
                     });
                 }
@@ -652,7 +644,7 @@ public class ActivityRegister extends ActivityEnhanced {
         rg_img_verify_sms.setImageResource(R.mipmap.alert);
         rg_img_verify_sms.setVisibility(View.VISIBLE);
         rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
-        rg_txt_verify_sms.setText("Error verification SMS");
+        rg_txt_verify_sms.setText(R.string.errore_verification_sms);
         rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_error_red));
 
         dialog = new Dialog(ActivityRegister.this);

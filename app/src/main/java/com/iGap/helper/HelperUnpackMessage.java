@@ -1,7 +1,5 @@
 package com.iGap.helper;
 
-import android.util.Log;
-
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
@@ -31,11 +29,8 @@ public class HelperUnpackMessage {
 
     public static synchronized boolean unpack(byte[] message) {
 
-        Log.i("SOC", "HelperUnpackMessage 1 unpack");
-
         Object[] objects = fetchMessage(message);
         if (objects == null) {
-            Log.i("SOC", "HelperUnpackMessage 1A fetchMessage objects == null");
             return false;
         }
 
@@ -44,11 +39,8 @@ public class HelperUnpackMessage {
         String className = (String) objects[2];
 
         String protoClassName = HelperClassNamePreparation.preparationProtoClassName(className);
-        Log.i("SOC", "HelperUnpackMessage protoClassName : " + protoClassName);
         Object protoObject = fillProtoClassData(protoClassName, payload);
         String responseId = getResponseId(protoObject);
-        Log.i("SOC",
-                "HelperUnpackMessage responseId : " + responseId + "  ||  actionId : " + actionId);
 
         if (responseId == null) {
             if (actionId == 0) {
@@ -58,7 +50,6 @@ public class HelperUnpackMessage {
             }
         } else {
             if (!G.requestQueueMap.containsKey(responseId)) {
-                Log.i("SOC", "HelperUnpackMessage responseId is not exist in requestQueueMap ");
                 return false;
             }
 
@@ -158,7 +149,7 @@ public class HelperUnpackMessage {
                     }
                 }
             } catch (Exception e) {
-                Log.i("SOC", "Exception : " + e);
+
             }
         }
 
@@ -166,7 +157,6 @@ public class HelperUnpackMessage {
     }
 
     public static synchronized String getResponseId(Object protoObject) {
-        Log.i("SOC", "HelperUnpackMessage 3 getResponseId");
 
         String responseId = null;
         try {
@@ -177,10 +167,7 @@ public class HelperUnpackMessage {
             }
             responseId = response.getId();
         } catch (SecurityException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            Log.i("SOC", "Exception getResponseId 6 : " + e);
-            e.printStackTrace();
         }
-        Log.i("SOC", "HelperUnpackMessage 4 responseId : " + responseId);
         return responseId;
     }
 
@@ -245,7 +232,6 @@ public class HelperUnpackMessage {
 
     public static synchronized Object fillProtoClassData(String protoClassName,
                                                          byte[] protoMessage) {
-        Log.i("SOC", "HelperUnpackMessage 2 fillProtoClassData");
         Object object3 = null;
         try {
 
@@ -260,20 +246,14 @@ public class HelperUnpackMessage {
             Method method3 = object3.getClass().getMethod("build");
             method3.invoke(object3);
         } catch (InstantiationException e) {
-            e.printStackTrace();
-            Log.i("SOC_ERROR", "Exception 1 : " + e);
+
         } catch (IllegalAccessException e) {
-            Log.i("SOC_ERROR", "Exception 2 : " + e);
-            e.printStackTrace();
+
         } catch (ClassNotFoundException e) {
-            Log.i("SOC_ERROR", "Exception 3 : " + e);
-            e.printStackTrace();
+
         } catch (NoSuchMethodException e) {
-            Log.i("SOC_ERROR", "Exception 4 : " + e);
-            e.printStackTrace();
+
         } catch (InvocationTargetException e) {
-            Log.i("SOC_ERROR", "Exception 5 : " + e);
-            e.printStackTrace();
         }
 
         return object3;
@@ -281,13 +261,11 @@ public class HelperUnpackMessage {
 
     public static synchronized Object instanceResponseClass(int actionId, Object protoObject,
                                                             String identity, String optionalMethod) {
-        Log.i("SOC", "HelperUnpackMessage 5 instanceResponseClass");
         Object object = null;
         try {
             String className = getClassName(actionId);
             String responseClassName =
                     HelperClassNamePreparation.preparationResponseClassName(className);
-            Log.i("SOC", "HelperUnpackMessage 5 responseClassName : " + responseClassName);
             Class<?> responseClass = Class.forName(responseClassName);
             Constructor<?> constructor =
                     responseClass.getDeclaredConstructor(int.class, Object.class, String.class);
@@ -296,22 +274,16 @@ public class HelperUnpackMessage {
             if (optionalMethod != null) {
                 responseClass.getMethod(optionalMethod).invoke(object);
             }
-            Log.i("SOC", "HelperUnpackMessage 6 unpack message successful");
         } catch (InstantiationException e) {
-            Log.i("SOC_ERROR", "Exception instanceResponseClass 7 : " + e);
-            e.printStackTrace();
+
         } catch (IllegalAccessException e) {
-            Log.i("SOC_ERROR", "Exception instanceResponseClass 8 : " + e);
-            e.printStackTrace();
+
         } catch (ClassNotFoundException e) {
-            Log.i("SOC_ERROR", "Exception instanceResponseClass 9 : " + e);
-            e.printStackTrace();
+
         } catch (NoSuchMethodException e) {
-            Log.i("SOC_ERROR", "Exception instanceResponseClass 10 : " + e);
-            e.printStackTrace();
+
         } catch (InvocationTargetException e) {
-            Log.i("SOC_ERROR", "Exception instanceResponseClass 11 : " + e);
-            e.printStackTrace();
+
         }
         return object;
     }

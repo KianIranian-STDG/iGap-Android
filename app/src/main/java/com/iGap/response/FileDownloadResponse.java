@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.module.AndroidUtils;
 import com.iGap.proto.ProtoError;
@@ -44,17 +42,12 @@ public class FileDownloadResponse extends MessageHandler {
         long nextOffset = previousOffset + builder.getBytes().size();
         long progress = (nextOffset * 100) / fileSize;
 
-        Log.i("Injaro", "INJARO> filesize: " + fileSize);
-        Log.i("Injaro", "INJARO> Progress: " + progress);
-        Log.i("Injaro", "INJARO> builder.getBytes().size(): " + builder.getBytes().size());
-        Log.i("Injaro", "INJARO> Previous offset: " + previousOffset);
-        Log.i("Injaro", "INJARO> Next offset: " + nextOffset);
 
         AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
         if (!avatarRequested) {
             G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, (int) progress);
         } else {
-            Log.i("NNN", "setAvatar onFileDownloadResponse");
+
             G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, (int) progress, userId,
                     roomType);
         }
@@ -62,16 +55,16 @@ public class FileDownloadResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "FileDownloadResponse timeout");
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
+
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("SOC", "FileDownloadResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "FileDownloadResponse response.minorCode() : " + minorCode);
 
         G.onFileDownloadResponse.onError(majorCode, minorCode);
 

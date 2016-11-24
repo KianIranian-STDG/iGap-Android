@@ -309,11 +309,10 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     }
 
     public static void importContact() {
-        Log.i("WWW", "importContact");
+
         G.onContactImport = new OnUserContactImport() {
             @Override
             public void onContactImport() {
-                Log.i("WWW", "getContactListFromServer");
                 getContactListFromServer();
             }
 
@@ -653,7 +652,6 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
                 if (G.isSecure) {
                     Realm realm = Realm.getDefaultInstance();
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                    Log.i("FFF", "Login 3 userInfo : " + userInfo);
                     if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
                         new RequestUserLogin().userLogin(userInfo.getToken());
                     }

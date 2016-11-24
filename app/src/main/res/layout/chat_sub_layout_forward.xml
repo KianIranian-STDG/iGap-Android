@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp4"
-        android:text="Forwarded from"
+        android:text="@string/forwarded_from"
         android:textColor="@color/newBlack"
         android:textSize="@dimen/sp12"
         android:textStyle="bold"/>

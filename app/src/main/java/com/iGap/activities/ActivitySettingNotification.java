@@ -429,8 +429,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                     }
                                 }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
                         .show();
-                Toast.makeText(ActivitySettingNotification.this, "ltSoundMessage",
-                        Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -798,8 +797,6 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                 }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
                         .show();
 
-                Toast.makeText(ActivitySettingNotification.this, "ltSoundMessage",
-                        Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -28,7 +28,7 @@
             android:layout_marginLeft="12dp"
             android:gravity="left"
             android:singleLine="true"
-            android:text="music name"
+            android:text="@string/music_name"
             android:textColor="@color/white"
             android:textSize="16sp" />
 

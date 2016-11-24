@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:padding="@dimen/dp4"
-        android:text="contacts"
+        android:text="@string/contacts"
         android:textSize="@dimen/sp18"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 </LinearLayout>

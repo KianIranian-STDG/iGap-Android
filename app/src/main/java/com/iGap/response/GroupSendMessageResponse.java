@@ -1,7 +1,6 @@
 package com.iGap.response;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.helper.HelperCheckUserInfoExist;
@@ -157,9 +156,6 @@ public class GroupSendMessageResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        Log.i("SOC", "GroupSendMessageResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "GroupSendMessageResponse response.minorCode() : " + minorCode);
     }
 
     @Override

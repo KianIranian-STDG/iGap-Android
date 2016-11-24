@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,7 +101,7 @@ public class ActivityWebView extends ActivityEnhanced {
                 String shareBody = "Here is the share content body";
                 sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Title");
                 sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_via)));
             }
         });
 
@@ -277,7 +276,6 @@ public class ActivityWebView extends ActivityEnhanced {
 
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();
-                    Log.i("CCVVBB", "rr: ");
                 }
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override

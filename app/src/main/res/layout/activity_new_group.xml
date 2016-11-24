@@ -168,7 +168,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:text="New Group"
+                android:text="@string/new_group"
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/sp18"
                 android:textStyle="bold"

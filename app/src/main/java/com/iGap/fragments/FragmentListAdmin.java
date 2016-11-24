@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -231,7 +230,7 @@ public class FragmentListAdmin extends Fragment {
 
                     items.add(item);
 
-                    Log.i("GGGGGGG", "getSelectedList2: ");
+
                 }
             } else {
                 if (contacts.get(i).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
@@ -239,7 +238,7 @@ public class FragmentListAdmin extends Fragment {
                     IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i))).withIdentifier(100 + contacts.indexOf(contacts.get(i)));
                     items.add(item);
 
-                    Log.i("GGGGGGG", "getSelectedList2: ");
+
                 }
             }
 
@@ -386,7 +385,7 @@ public class FragmentListAdmin extends Fragment {
 
                         final Snackbar snack =
                                 Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        "Server don't respase",
+                                        R.string.server_do_not_response,
                                         Snackbar.LENGTH_LONG);
 
                         snack.setAction(getResources().getString(R.string.cancel), new View.OnClickListener() {
@@ -415,12 +414,12 @@ public class FragmentListAdmin extends Fragment {
                                         @Override
                                         public void run() {
                                             List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                                            Log.i("CCVV", "items.size: " + items.size());
+
 
                                             for (int i = 0; i < items.size(); i++) {
                                                 if (items.get(i).mContact.peerId == memberId) {
                                                     itemAdapter.remove(i);
-                                                    Log.i("CCVV", "remove: " + items.size());
+
                                                     if (items.size() == 0) {
                                                         getActivity().getSupportFragmentManager().popBackStack();
                                                         return;

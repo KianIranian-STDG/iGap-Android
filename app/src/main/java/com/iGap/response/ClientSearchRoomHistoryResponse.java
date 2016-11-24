@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoClientSearchRoomHistory;
 import com.iGap.proto.ProtoError;
@@ -21,7 +19,7 @@ public class ClientSearchRoomHistoryResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        super.handler();
         ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.Builder builder = (ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.Builder) message;
 //        builder.getTotalCount();
 //        builder.getNotDeletedCount();
@@ -45,8 +43,6 @@ public class ClientSearchRoomHistoryResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("XXX", "GroupEditResponse majorCode : " + majorCode);
-        Log.i("XXX", "GroupEditResponse minorCode : " + minorCode);
 
         G.onClientSearchRoomHistory.onError(majorCode, minorCode);
     }

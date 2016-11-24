@@ -407,7 +407,7 @@ public class ActivityChat extends ActivityEnhanced
         G.onSetAction = this;
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
-        Log.i("TTT", "onResume");
+
         HelperNotificationAndBadge.isChatRoomNow = true;
 
         if (MusicPlayer.mp != null) {
@@ -434,14 +434,14 @@ public class ActivityChat extends ActivityEnhanced
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         activityChatForFinish = this;
-        Log.i("TTT", "onCreate");
+
         checkIfOrientationChanged(getResources().getConfiguration());
 
         //call from ActivityGroupProfile for update group member number
         onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
-                txtLastSeen.setText(messageOne + " member");
+                txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member));
             }
         };
 
@@ -572,7 +572,7 @@ public class ActivityChat extends ActivityEnhanced
                         title = realmRoom.getTitle();
                         initialize = realmRoom.getInitials();
                         color = realmRoom.getColor();
-                        userStatus = "Last Seen Recently";
+                        userStatus = getResources().getString(R.string.last_seen_recently);
                     }
                 } else if (realmRoom.getType() == GROUP) {
                     chatType = GROUP;
@@ -1133,12 +1133,12 @@ public class ActivityChat extends ActivityEnhanced
         } else if (chatType == GROUP) {
 
             if (groupParticipantsCountLabel != null) {
-                txtLastSeen.setText(groupParticipantsCountLabel + " member");
+                txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member));
             }
         } else if (chatType == CHANNEL) {
 
             if (channelParticipantsCountLabel != null) {
-                txtLastSeen.setText(channelParticipantsCountLabel + " member");
+                txtLastSeen.setText(channelParticipantsCountLabel + " " + getResources().getString(R.string.member));
             }
         }
 
@@ -1441,6 +1441,7 @@ public class ActivityChat extends ActivityEnhanced
                 if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
                     ActivityPopUpNotification.isGoingToChatFromPopUp = false;
                     Intent intent = new Intent(context, ActivityMain.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
                 finish();
@@ -1598,7 +1599,7 @@ public class ActivityChat extends ActivityEnhanced
                             mReplayLayout.setVisibility(View.GONE);
                         }
                     } else {
-                        Toast.makeText(G.context, "Please Write Your message!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(G.context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -1925,7 +1926,6 @@ public class ActivityChat extends ActivityEnhanced
         Intent intent = new Intent(Intent.ACTION_SEND);
         String choserDialogText = "";
 
-        Log.e("ddd", messageInfo.messageType.toString() + "   " + messageInfo.location + "   " + messageInfo);
 
         switch (messageInfo.messageType.toString()) {
 
@@ -1946,19 +1946,19 @@ public class ActivityChat extends ActivityEnhanced
             case "AUDIO_TEXT":
                 intent.setType("audio/*");
                 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
-                choserDialogText = "Share audio file";
+                choserDialogText = getString(R.string.share_audio_file);
                 break;
             case "IMAGE":
             case "IMAGE_TEXT":
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
-                choserDialogText = "Share image";
+                choserDialogText = getString(R.string.share_image);
                 break;
             case "VIDEO":
             case "VIDEO_TEXT":
                 intent.setType("video/*");
                 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
-                choserDialogText = "Share video file";
+                choserDialogText = getString(R.string.share_video_file);
                 break;
             case "FILE":
             case "FILE_TEXT":
@@ -1971,7 +1971,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 intent.setType(mimeType);
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
-                choserDialogText = "Share  file";
+                choserDialogText = getString(R.string.share_file);
                 break;
         }
 
@@ -2033,6 +2033,7 @@ public class ActivityChat extends ActivityEnhanced
             if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
                 ActivityPopUpNotification.isGoingToChatFromPopUp = false;
                 Intent intent = new Intent(context, ActivityMain.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
             super.onBackPressed();
@@ -2424,7 +2425,6 @@ public class ActivityChat extends ActivityEnhanced
                 break;
             case AttachFile.request_code_contact_phone:
                 if (latestUri == null) {
-                    Log.e("ddd", "can not get result pic contact");
                     break;
                 }
 
@@ -2646,7 +2646,6 @@ public class ActivityChat extends ActivityEnhanced
         rippleReplaySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                Log.e("ddd", "btnReplaySelected");
                 // FIXME: 10/31/2016 [Alireza] inja nabayad null bashe
                 replay(null);
             }
@@ -2661,7 +2660,7 @@ public class ActivityChat extends ActivityEnhanced
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("Copied Text", messageID.mMessage.messageText);
                     clipboard.setPrimaryClip(clip);
-                    Toast.makeText(G.context, "Text Copied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(G.context, R.string.text_copied, Toast.LENGTH_SHORT).show();
 
                     mAdapter.deselect();
                     toolbar.setVisibility(View.VISIBLE);
@@ -2679,7 +2678,6 @@ public class ActivityChat extends ActivityEnhanced
         rippleForwardSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                Log.e("ddd", "btnForwardSelected");
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
                     startActivity(makeIntentForForwardMessages(getMessageStructFromSelectedItems()));
@@ -2781,7 +2779,7 @@ public class ActivityChat extends ActivityEnhanced
         btnUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "up click");
+
                 int position = recyclerView.getAdapter().getItemCount();
                 if (position > 0) recyclerView.scrollToPosition(0);
             }
@@ -2791,7 +2789,7 @@ public class ActivityChat extends ActivityEnhanced
         btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "btnDown");
+
                 int position = recyclerView.getAdapter().getItemCount();
                 if (position > 0) recyclerView.scrollToPosition(position - 1);
             }
@@ -2803,19 +2801,19 @@ public class ActivityChat extends ActivityEnhanced
             public void onClick(View view) {
                 isMute = !isMute;
                 if (isMute) {
-                    txtChannelMute.setText("UnMute");
+                    txtChannelMute.setText(R.string.unmute);
                     txt_mute.setVisibility(View.VISIBLE);
                 } else {
-                    txtChannelMute.setText("Mute");
+                    txtChannelMute.setText(R.string.mute);
                     txt_mute.setVisibility(View.GONE);
                 }
             }
         });
 
         if (isMute) {
-            txtChannelMute.setText("UnMute");
+            txtChannelMute.setText(R.string.unmute);
         } else {
-            txtChannelMute.setText("Mute");
+            txtChannelMute.setText(R.string.mute);
         }
     }
 
@@ -2826,13 +2824,13 @@ public class ActivityChat extends ActivityEnhanced
                 .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
                     @Override
                     public void onEmojiBackspaceClicked(final View v) {
-                        Log.d("MainActivity", "Clicked on Backspace");
+
                     }
                 })
                 .setOnEmojiClickedListener(new OnEmojiClickedListener() {
                     @Override
                     public void onEmojiClicked(final Emoji emoji) {
-                        Log.d("MainActivity", "Clicked on emoji");
+
                     }
                 })
                 .setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
@@ -2844,7 +2842,7 @@ public class ActivityChat extends ActivityEnhanced
                 .setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
                     @Override
                     public void onKeyboardOpen(final int keyBoardHeight) {
-                        Log.d("MainActivity", "Opened soft keyboard");
+
                     }
                 })
                 .setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
@@ -2878,7 +2876,7 @@ public class ActivityChat extends ActivityEnhanced
         Realm realm = Realm.getDefaultInstance();
         ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
         // get all RealmRoomMessages
-        Log.i("OOO", "realmRoomMessage : " + realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll());
+
         for (RealmRoomMessage realmRoomMessage : realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll()) {
             if (realmRoomMessage != null) {
                 if (realmRoomMessage.getMessageId() != 0) {
@@ -3000,7 +2998,7 @@ public class ActivityChat extends ActivityEnhanced
                     @Override
                     public void run() {
                         // remove deleted message from adapter
-                        Log.i("CLEAR", "mAdapter.removeMessage");
+
                         mAdapter.removeMessage(messageId);
 
                         // remove tag from edtChat if the message has deleted
@@ -3027,7 +3025,6 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onChatUpdateStatus(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
-        Log.i(ActivityChat.class.getSimpleName(), "onChatUpdateStatus called");
 
         // I'm in the room
         if (mRoomId == roomId) {
@@ -3159,7 +3156,6 @@ public class ActivityChat extends ActivityEnhanced
                                             if (roomType == CHAT) {
                                                 G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                                             } else if (roomType == GROUP && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT || roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
-                                                Log.i("III", "roomMessage.getMessageId() : " + roomMessage.getMessageId());
                                                 G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                                             }
                                         }
@@ -3632,7 +3628,6 @@ public class ActivityChat extends ActivityEnhanced
                         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
                         if (realmRoom.getLastMessage() != null) {
-                            Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessage().getMessageId());
                             element.setClearId(realmRoom.getLastMessage().getMessageId());
 
                             G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
@@ -3680,7 +3675,7 @@ public class ActivityChat extends ActivityEnhanced
         G.onChatDelete = new OnChatDelete() {
             @Override
             public void onChatDelete(long roomId) {
-                Log.i(ActivityMain.class.getSimpleName(), "chat delete response > " + roomId);
+
             }
 
             @Override
@@ -3731,7 +3726,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         };
-        Log.i("RRR", "onChatDelete 0 start delete");
+
         final Realm realm = Realm.getDefaultInstance();
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
@@ -4233,7 +4228,7 @@ public class ActivityChat extends ActivityEnhanced
                                 txtLastSeen.setText(action);
                             }
                         } else {
-                            txtLastSeen.setText(groupParticipantsCountLabel + " member");
+                            txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
                         }
                     }
                 });

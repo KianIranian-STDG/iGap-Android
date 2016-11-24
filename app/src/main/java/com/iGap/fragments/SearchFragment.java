@@ -13,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,8 +126,6 @@ public class SearchFragment extends Fragment {
                             }
                         }
 
-                        Log.e("ddd", chatHeaderGone + "  " + contactHeaderGone + "  " + messageHeaderGone);
-
                         itemAdapter.filter(edtSearch.getText().toString());
                     }
                 }, 100);
@@ -212,8 +209,6 @@ public class SearchFragment extends Fragment {
                     InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(edtSearch.getWindowToken(), 0);
                 }
-
-                Log.e("ddd", position + "");
 
                 return false;
             }

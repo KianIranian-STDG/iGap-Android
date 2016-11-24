@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.iGap.R;
 import com.iGap.interfaces.OnGetPermision;
 
 import java.util.ArrayList;
@@ -359,7 +360,7 @@ public class HelperPermision {
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context,
                 needPermision[0])) {
-            showMessageOKCancel(context, "You need to allow " + needPermision[0],
+            showMessageOKCancel(context, context.getString(R.string.you_need_to_allow) + needPermision[0],
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -376,8 +377,8 @@ public class HelperPermision {
     private static void showMessageOKCancel(Context context, String message,
                                             DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(context).setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
+                .setPositiveButton(context.getString(R.string.ok), okListener)
+                .setNegativeButton(context.getString(R.string.cancel), null)
                 .create()
                 .show();
     }

@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileUpdateUsername;
@@ -41,8 +39,6 @@ public class UserProfileUpdateUsernameResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        Log.i("XXX", "UserProfileUpdateUsernameResponse response.majorCode() : " + majorCode);
-        Log.i("XXX", "UserProfileUpdateUsernameResponse response.minorCode() : " + minorCode);
         G.onUserProfileUpdateUsername.Error(majorCode, minorCode);
     }
 }

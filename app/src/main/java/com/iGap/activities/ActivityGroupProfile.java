@@ -187,7 +187,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
 
         Realm realm = Realm.getDefaultInstance();
-        Log.i("PPP", "********** roomId : " + roomId);
+
         //group info
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -205,8 +205,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
         members = realmGroupRoom.getMembers();
-        Log.i("PPP", "********** members : " + members);
-        Log.i("PPP", "********** role : " + role);
+
         description = realmGroupRoom.getDescription();
 
 
@@ -519,9 +518,8 @@ public class ActivityGroupProfile extends ActivityEnhanced
             @Override
             public void onClick(View view) {
                 if (toggleButton.isChecked()) {
-                    Log.e("ddd", "toggle button on");
                 } else {
-                    Log.e("ddd", "toggle button off");
+
                 }
             }
         });
@@ -530,7 +528,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
         txtNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "Notification clicked");
 
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
@@ -880,7 +877,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 s.lastSeen = realmRegisteredInfo.getLastSeen();
                 s.status = realmRegisteredInfo.getStatus();
 
-                Log.e("ddd", s.role + "");
                 if (s.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                     contacts.add(0, s);
 
@@ -938,11 +934,9 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 case AttachFile.request_code_TAKE_PICTURE:
                     ImageHelper.correctRotateImage(AttachFile.imagePath);
                     filePath = AttachFile.imagePath;
-                    Log.e("ddd", filePath + "     image path");
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     filePath = AttachFile.getFilePathFromUri(data.getData());
-                    Log.e("ddd", filePath + "    gallary file path");
                     break;
             }
 
@@ -1101,7 +1095,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                             getResources().getString(R.string.E_302_1),
                                             Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1119,7 +1113,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                             getResources().getString(R.string.E_302_2),
                                             Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1137,7 +1131,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                             getResources().getString(R.string.E_302_3),
                                             Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1155,7 +1149,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                             getResources().getString(R.string.E_302_4),
                                             Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1173,7 +1167,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                             getResources().getString(R.string.E_303),
                                             Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1191,7 +1185,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                             getResources().getString(R.string.E_304),
                                             Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1209,7 +1203,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                             getResources().getString(R.string.E_305),
                                             Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1253,9 +1247,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 //    memberRealmAndRequest(list, countForShowLastMessage);
 
                 for (int i = 0; i < list.size(); i++) {
-                    Log.i("TTT", "peerId : " + list.get(i).peerId);
-                    Log.i("TTT", "roomId : " + roomId);
-                    Log.i("TTT", "startMessageId : " + startMessageId);
                     new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, startMessageId);
                 }
 
@@ -1397,7 +1388,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                 getResources().getString(R.string.E_321),
                                                 Snackbar.LENGTH_LONG);
 
-                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -1415,7 +1406,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                 getResources().getString(R.string.E_322),
                                                 Snackbar.LENGTH_LONG);
 
-                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                snack.setAction(R.string.cancel, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -1433,7 +1424,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                 getResources().getString(R.string.E_323),
                                                 Snackbar.LENGTH_LONG);
 
-                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -1489,7 +1480,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                     getResources().getString(R.string.E_318_1),
                                                     Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -1502,7 +1493,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                     getResources().getString(R.string.E_318_2),
                                                     Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -1521,7 +1512,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                 getResources().getString(R.string.E_319),
                                                 Snackbar.LENGTH_LONG);
 
-                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -1539,7 +1530,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                 getResources().getString(R.string.E_320),
                                                 Snackbar.LENGTH_LONG);
 
-                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -1568,10 +1559,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         StructContactInfo item = null;
 
         for (int i = 0; i < list.size(); i++) {
-            Log.i("III", "list.get(i).peerId : " + list.get(i).peerId);
-            Log.i("III", "UserId : " + UserId);
             if (list.get(i).peerId == UserId) {
-                Log.i("III", "Equal");
                 item = list.get(i);
                 break;
             }
@@ -1586,7 +1574,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 int count = items.size();
                 final int listSize = contacts.size();
                 for (int i = count; i < listSize; i++) {
-                    Log.i("III", "Add");
                     items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
                 }
                 itemAdapter.clear();
@@ -1621,8 +1608,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
                     if (realmRoomMessage != null) {
                         startMessageId = realmRoomMessage.getMessageId();
-                        Log.i("HHH", "startMessageId1 : " + startMessageId);
-                        Log.i("HHH", "getMessage1 : " + realmRoomMessage.getMessage());
                         break;
                     }
                 }
@@ -1632,8 +1617,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     messageCount--;
                     if (messageCount == 0) {
                         startMessageId = realmRoomMessage.getMessageId();
-                        Log.i("HHH", "startMessageId2 : " + startMessageId);
-                        Log.i("HHH", "getMessage2 : " + realmRoomMessage.getMessage());
                     }
                 }
             }
@@ -1647,11 +1630,8 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     long peerId = list.get(i).peerId;
                     //add member to realm
                     RealmMember realmMember = new RealmMember();
-                    int autoIncrement = 0;
-                    if (realm.where(RealmMember.class).max("id") != null) {
-                        autoIncrement = realm.where(RealmMember.class).max("id").intValue() + 1;
-                    }
-                    realmMember.setId(autoIncrement);
+
+                    realmMember.setId(SUID.id().get());
                     realmMember.setPeerId(peerId);
                     realmMember.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
                     realmMember = realm.copyToRealm(realmMember);
@@ -1728,7 +1708,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                     getResources().getString(R.string.E_330_1),
                                                                     Snackbar.LENGTH_LONG);
 
-                                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             snack.dismiss();
@@ -1746,7 +1726,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                     getResources().getString(R.string.E_330_2),
                                                                     Snackbar.LENGTH_LONG);
 
-                                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             snack.dismiss();
@@ -1764,7 +1744,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                     getResources().getString(R.string.E_330_3),
                                                                     Snackbar.LENGTH_LONG);
 
-                                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             snack.dismiss();
@@ -1782,7 +1762,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                     getResources().getString(R.string.E_331),
                                                                     Snackbar.LENGTH_LONG);
 
-                                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             snack.dismiss();
@@ -1859,7 +1839,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                     getResources().getString(R.string.E_330_1),
                                                                     Snackbar.LENGTH_LONG);
 
-                                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             snack.dismiss();
@@ -1877,7 +1857,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                     getResources().getString(R.string.E_330_2),
                                                                     Snackbar.LENGTH_LONG);
 
-                                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             snack.dismiss();
@@ -1895,7 +1875,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                     getResources().getString(R.string.E_330_3),
                                                                     Snackbar.LENGTH_LONG);
 
-                                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             snack.dismiss();
@@ -1913,7 +1893,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                     getResources().getString(R.string.E_331),
                                                                     Snackbar.LENGTH_LONG);
 
-                                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             snack.dismiss();
@@ -2004,7 +1984,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_335),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -2022,7 +2002,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_336),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -2040,7 +2020,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_337),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -2140,15 +2120,12 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
 
                               List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                              Log.i("CCVV", "itemsgggg: " + role.toString());
                               for (int i = 0; i < items.size(); i++) {
                                   if (items.get(i).mContact.peerId == memberId) {
                                       items.get(i).mContact.role = role.toString();
-                                      Log.i("CCVV", "rolegggg: " + role.toString());
                                       if (i < itemAdapter.getAdapterItemCount()) {
                                           IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
                                           itemAdapter.set(i, item);
-                                          Log.i("CCVV", "ggggggg: " + i);
                                       }
                                   }
                               }
@@ -2195,7 +2172,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                 getResources().getString(R.string.E_327_A),
                                                                 Snackbar.LENGTH_LONG);
 
-                                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
                                                         snack.dismiss();
@@ -2209,7 +2186,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                 getResources().getString(R.string.E_327_B),
                                                                 Snackbar.LENGTH_LONG);
 
-                                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
                                                         snack.dismiss();
@@ -2228,7 +2205,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_328),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -2246,7 +2223,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_329),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -2294,7 +2271,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                       runOnUiThread(new Runnable() {
                                                           @Override
                                                           public void run() {
-                                                              Log.i("OOO", " 2 participantsCountLabel : " + participantsCountLabel);
                                                               txtMemberNumber.setText((items.size() - 1) + "");
                                                           }
                                                       });
@@ -2310,7 +2286,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                           if (realmMember.getPeerId() == memberId) {
                                                                               realmMember.deleteFromRealm();
                                                                               participantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
-                                                                              Log.i("OOO", " 1 participantsCountLabel : " + participantsCountLabel);
                                                                               participantsCountLabel = (Integer.parseInt(participantsCountLabel) - 1) + "";
                                                                               realmRoom.getGroupRoom().setParticipantsCountLabel(participantsCountLabel);
                                                                               break;
@@ -2355,7 +2330,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_332_1),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -2373,7 +2348,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_332_2),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -2391,7 +2366,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_333),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -2409,7 +2384,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_334),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -2487,7 +2462,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                 getResources().getString(R.string.E_324_1),
                                                                 Snackbar.LENGTH_LONG);
 
-                                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
                                                         snack.dismiss();
@@ -2500,7 +2475,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                                 getResources().getString(R.string.E_324_2),
                                                                 Snackbar.LENGTH_LONG);
 
-                                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
                                                         snack.dismiss();
@@ -2519,7 +2494,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_325),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -2537,7 +2512,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                                             getResources().getString(R.string.E_326),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();

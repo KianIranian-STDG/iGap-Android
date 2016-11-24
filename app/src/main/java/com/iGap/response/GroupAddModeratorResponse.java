@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
@@ -30,8 +28,7 @@ public class GroupAddModeratorResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
-        Log.e("ddd", "handler : " + message);
+        super.handler();
         final ProtoGroupAddModerator.GroupAddModeratorResponse.Builder builder =
                 (ProtoGroupAddModerator.GroupAddModeratorResponse.Builder) message;
         builder.getRoomId();
@@ -68,16 +65,15 @@ public class GroupAddModeratorResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
-        Log.e("ddd", "timeOut : " + message);
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("XXX", "GroupAddModeratorResponse majorCode : " + majorCode);
-        Log.i("XXX", "GroupAddModeratorResponse minorCode : " + minorCode);
 
         G.onGroupAddModerator.onError(majorCode, minorCode);
     }

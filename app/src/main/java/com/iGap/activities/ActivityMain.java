@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -219,7 +218,7 @@ public class ActivityMain extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_610), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -234,7 +233,7 @@ public class ActivityMain extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_611), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -280,7 +279,7 @@ public class ActivityMain extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_612), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -295,7 +294,7 @@ public class ActivityMain extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_613), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -310,7 +309,7 @@ public class ActivityMain extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_614), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -736,7 +735,6 @@ public class ActivityMain extends ActivityEnhanced
                         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
                         if (realmRoom.getLastMessage() != null) {
-                            Log.i("CLI1", "CLEAR RoomId : " + chatId + "  ||  realmRoom.getLastMessageId() : " + realmRoom.getLastMessage().getMessageId());
                             element.setClearId(realmRoom.getLastMessage().getMessageId());
 
                             G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
@@ -797,7 +795,7 @@ public class ActivityMain extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -811,7 +809,7 @@ public class ActivityMain extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -825,7 +823,7 @@ public class ActivityMain extends ActivityEnhanced
                         public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -836,12 +834,11 @@ public class ActivityMain extends ActivityEnhanced
                 }
             }
         };
-        Log.i("RRR", "onChatDelete 0 start delete");
+
         new RequestChatDelete().chatDelete(item.getInfo().getId());
     }
 
     public void deleteGroup(final RoomItem item) {
-        Log.i("XXXC", "onSelectRoomMenu2: " + item.getInfo().getId());
 
         G.onGroupDelete = new OnGroupDelete() {
             @Override
@@ -850,7 +847,6 @@ public class ActivityMain extends ActivityEnhanced
                     @Override
                     public void run() {
                         mAdapter.remove(mAdapter.getPosition(item));
-                        Log.i("LLLLLL", "deleteGroup: " + roomId);
                     }
                 });
             }
@@ -862,7 +858,7 @@ public class ActivityMain extends ActivityEnhanced
                     @Override
                     public void run() {
                         final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
-                        snack.setAction("CANCEL", new View.OnClickListener() {
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 snack.dismiss();
@@ -892,7 +888,6 @@ public class ActivityMain extends ActivityEnhanced
                     @Override
                     public void run() {
                         mAdapter.remove(position);
-                        Log.i("LLLLLL", "lefGroup1: " + roomId);
                     }
                 });
             }
@@ -903,7 +898,7 @@ public class ActivityMain extends ActivityEnhanced
                     @Override
                     public void run() {
                         final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "lefGroup", Snackbar.LENGTH_LONG);
-                        snack.setAction("CANCEL", new View.OnClickListener() {
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 snack.dismiss();

@@ -165,7 +165,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ddd", "btnForwardSelected");
+
             }
         });
 
@@ -174,7 +174,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                Log.e("ddd", "btnDeleteSelected");
+
             }
         });
 

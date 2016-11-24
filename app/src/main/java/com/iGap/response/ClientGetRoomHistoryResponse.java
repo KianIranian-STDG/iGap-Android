@@ -1,7 +1,6 @@
 package com.iGap.response;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoClientGetRoomHistory;
@@ -38,7 +37,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        Log.i("YYY", "ClientGetRoomHistoryResponse handler : " + message);
+
         Realm realm = Realm.getDefaultInstance();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
@@ -124,10 +123,6 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        Log.i("XXX", "ClientGetRoomHistoryResponse response.majorCode() : " + majorCode);
-        Log.i("XXX", "ClientGetRoomHistoryResponse response.minorCode() : " + minorCode);
-
         G.onClientGetRoomHistoryResponse.onGetRoomHistoryError(majorCode, minorCode);
     }
 }

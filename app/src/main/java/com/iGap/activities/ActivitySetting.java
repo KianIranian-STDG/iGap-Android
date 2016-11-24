@@ -19,7 +19,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -478,7 +477,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         public void run() {
                                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_112), Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -493,7 +492,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         public void run() {
                                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_113), Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -518,12 +517,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         final TextView txtGander = (TextView) findViewById(R.id.st_txt_gander);
         if (gander == null || gander.getNumber() == -1 || gander == ProtoGlobal.Gender.UNKNOWN) {
             txtGander.setText(getResources().getString(R.string.set_gender));
-            Log.i("TTTTT", "000onCreate: " + gander);
-            Log.i("TTTTT", "000gander.getNumber(): " + gander.getNumber());
         } else {
             txtGander.setText(gander == ProtoGlobal.Gender.MALE ? "Male" : "Female");
-            Log.i("TTTTT", "1111onCreate: " + gander);
-            Log.i("TTTTT", "1111gander.getNumber(): " + gander.getNumber());
         }
 
         ViewGroup layoutGander = (ViewGroup) findViewById(R.id.st_layout_gander);
@@ -581,7 +576,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 public void run() {
                                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_116), Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -596,7 +591,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 public void run() {
                                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_117), Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -1643,7 +1638,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 startActivityForResult(intent, IntentRequests.REQ_CAMERA);
                                 dialog.dismiss();
                             } else {
-                                Toast.makeText(ActivitySetting.this, "Please check your Camera", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ActivitySetting.this, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
                             }
                         } else if (text.toString().equals(getResources().getString(R.string.array_Delete_photo))) {
                             G.onUserAvatarDelete = new OnUserAvatarDelete() {
@@ -1656,7 +1651,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                             realm.executeTransaction(new Realm.Transaction() {
                                                 @Override
                                                 public void execute(Realm realm) {
-                                                    Log.i("XXX", "RealmAvatarPath 3");
                                                     RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
                                                     if (realmAvatar != null) {
                                                         realmAvatar.deleteFromRealm();

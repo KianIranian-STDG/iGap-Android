@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:paddingBottom="@dimen/dp20"
-                    android:text="Info"
+                    android:text="@string/info"
                     android:textColor="@color/green"
                     android:textSize="@dimen/sp18"
                     android:textStyle="bold" />
@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:text="Description"
+                    android:text="@string/description"
                     android:textColor="@color/st_title_s"
                     android:textSize="@dimen/sp15"
                     android:textStyle="bold" />
@@ -70,7 +70,7 @@
                     android:paddingStart="@dimen/dp4"
                     android:paddingRight="@dimen/dp4"
                     android:paddingEnd="@dimen/dp4"
-                    android:text="Channel Link"
+                    android:text="@string/channel_link"
                     android:textColor="@color/st_title_s"
                     android:textSize="@dimen/sp15"
                     android:textStyle="bold" />
@@ -85,7 +85,7 @@
                     android:paddingStart="@dimen/dp4"
                     android:paddingRight="@dimen/dp4"
                     android:paddingEnd="@dimen/dp4"
-                    android:text="NatureMagazine"
+                    android:text="@string/naturemagazine"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp14"
                     android:theme="@style/Setting_editText" />
@@ -175,7 +175,7 @@
                     android:paddingRight="@dimen/sp16"
                     android:paddingLeft="@dimen/sp16"
                     android:gravity="center_vertical"
-                    android:text="Delete From Cache"
+                    android:text="@string/delete_from_cache"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal" />
@@ -193,7 +193,7 @@
                     android:paddingRight="@dimen/sp16"
                     android:paddingLeft="@dimen/sp16"
                     android:gravity="center_vertical"
-                    android:text="Leave Channel"
+                    android:text="@string/leave_channel"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal" />
@@ -211,7 +211,7 @@
                     android:paddingRight="@dimen/sp16"
                     android:paddingLeft="@dimen/sp16"
                     android:gravity="center_vertical"
-                    android:text="Report"
+                    android:text="@string/report"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal" />

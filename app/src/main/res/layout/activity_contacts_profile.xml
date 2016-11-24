@@ -64,7 +64,7 @@
                             android:layout_height="0dp"
                             android:layout_weight=".5"
                             android:gravity="center|top"
-                            android:text="Last Seen at"
+                            android:text="@string/last_seen_at"
                             android:textColor="@color/whit_background"
                             android:textSize="@dimen/sp14"
                             android:textStyle="normal"

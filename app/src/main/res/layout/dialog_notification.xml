@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp52"
         android:gravity="center"
-        android:text="do you want to delet this chat"
+        android:text="@string/do_you_want_to_delet_this_chat"
         android:textColor="@android:color/black"
         android:textSize="@dimen/sp14"/>
 

@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileNickname;
@@ -23,7 +21,7 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        Log.i("XXX", "UserProfileSetNicknameResponse handler : " + message);
+
         ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder
                 userProfileNickNameResponse =
                 (ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder) message;
@@ -42,11 +40,6 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         final int majorCode = errorResponse.getMajorCode();
         final int minorCode = errorResponse.getMinorCode();
-
-        Log.i("XXX", "UserRegisterResponse majorCode : " + majorCode);
-        Log.i("XXX", "UserRegisterResponse minorCode : " + minorCode);
-
-        Log.i("XXX", "UserProfileSetNicknameResponse error");
 
         G.onUserProfileSetNickNameResponse.onUserProfileNickNameError(majorCode, minorCode);
     }

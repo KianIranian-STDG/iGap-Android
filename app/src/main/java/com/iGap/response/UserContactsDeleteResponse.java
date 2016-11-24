@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserContactsDelete;
@@ -27,6 +25,7 @@ public class UserContactsDeleteResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         ProtoUserContactsDelete.UserContactsDeleteResponse.Builder builder =
                 (ProtoUserContactsDelete.UserContactsDeleteResponse.Builder) message;
         final long phone = builder.getPhone();
@@ -55,23 +54,18 @@ public class UserContactsDeleteResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
-
-        Log.i("XXX", "UserContactsDeleteResponse timeOut");
+        super.timeOut();
     }
 
     @Override
     public void error() {
-
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int MajorCode = errorResponse.getMajorCode();
         int MinorCode = errorResponse.getMinorCode();
 
         G.onUserContactdelete.onError(MajorCode, MinorCode);
 
-        Log.i("XXX", "UserContactsGetListResponse errorReponse.getMajorCode() : "
-                + errorResponse.getMajorCode());
-        Log.i("XXX", "UserContactsGetListResponse errorReponse.getMinorCode() : "
-                + errorResponse.getMinorCode());
     }
 }
 

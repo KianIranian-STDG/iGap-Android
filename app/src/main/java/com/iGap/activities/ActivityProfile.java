@@ -15,7 +15,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -213,7 +212,7 @@ public class ActivityProfile extends ActivityEnhanced
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
                                     getResources().getString(R.string.Toast_Invalid_nickname),
                                     Snackbar.LENGTH_LONG);
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -351,7 +350,7 @@ public class ActivityProfile extends ActivityEnhanced
                                             getResources().getString(R.string.please_check_your_camera),
                                             Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -390,8 +389,6 @@ public class ActivityProfile extends ActivityEnhanced
             intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
             startActivityForResult(intent, IntentRequests.REQ_CROP);
         } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) {
-
-            Log.i("ZZZZ", "ActivityProfile crop: " + data.getData().toString());
 
             if (data != null) {
                 pathImageUser = data.getData().toString();

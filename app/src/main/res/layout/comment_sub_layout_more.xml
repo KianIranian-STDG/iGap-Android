@@ -12,7 +12,7 @@
         android:background="#f1f1f1"
         android:gravity="center"
         android:padding="@dimen/dp4"
-        android:text="more ..."
+        android:text="@string/more"
         android:textSize="@dimen/sp16" />
 
 </LinearLayout>

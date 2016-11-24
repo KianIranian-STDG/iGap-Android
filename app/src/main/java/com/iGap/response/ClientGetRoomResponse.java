@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoError;
@@ -25,8 +23,7 @@ public class ClientGetRoomResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
-        Log.i("SOC", "ClientGetRoomResponse handler : " + message);
+        super.handler();
 
         final ProtoClientGetRoom.ClientGetRoomResponse.Builder clientGetRoom =
                 (ProtoClientGetRoom.ClientGetRoomResponse.Builder) message;
@@ -51,19 +48,17 @@ public class ClientGetRoomResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "ClientGetRoomResponse timeout");
+        super.timeOut();
         G.onClientGetRoomResponse.onTimeOut();
     }
 
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        Log.i("SOC", "ClientGetRoomResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "ClientGetRoomResponse response.minorCode() : " + minorCode);
 
         G.onClientGetRoomResponse.onError(majorCode, minorCode);
     }

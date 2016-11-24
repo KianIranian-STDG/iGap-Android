@@ -70,7 +70,7 @@
                 android:layout_alignParentBottom="true"
                 android:gravity="bottom|left"
                 android:singleLine="true"
-                android:text="Last seen recently"
+                android:text="@string/last_seen_recently"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
                 android:textColor="#bbbbbb" />
         </RelativeLayout>

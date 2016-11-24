@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupEdit;
@@ -27,7 +25,7 @@ public class GroupEditResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        super.handler();
         ProtoGroupEdit.GroupEditResponse.Builder builder =
                 (ProtoGroupEdit.GroupEditResponse.Builder) message;
         long roomId = builder.getRoomId();
@@ -61,12 +59,10 @@ public class GroupEditResponse extends MessageHandler {
 
     @Override
     public void error() {
-
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("XXX", "GroupEditResponse majorCode : " + majorCode);
-        Log.i("XXX", "GroupEditResponse minorCode : " + minorCode);
 
         G.onGroupEdit.onError(majorCode, minorCode);
 

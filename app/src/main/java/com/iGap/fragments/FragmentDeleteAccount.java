@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +65,6 @@ public class FragmentDeleteAccount extends Fragment {
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Log.i("XXXAA", "onSmsReceive: " + message);
                                 getSms(message);
                             }
                         }, 500);
@@ -111,7 +109,6 @@ public class FragmentDeleteAccount extends Fragment {
             @Override
             public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {
                 regex = tokenRegex;
-                Log.i("XXXAA", "onUserGetDeleteToken: " + regex);
             }
         };
 
@@ -186,12 +183,10 @@ public class FragmentDeleteAccount extends Fragment {
                                         G.onUserDelete = new OnUserDelete() {
                                             @Override
                                             public void onUserDeleteResponse() {
-                                                Log.i("UUU", "onUserDeleteResponse");
                                                 HelperLogout.logout();
                                             }
                                         };
 
-                                        Log.i("UUU", "RequestUserDelete verificationCode : " + verificationCode);
                                         new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
                                     }
                                 }
@@ -200,10 +195,10 @@ public class FragmentDeleteAccount extends Fragment {
                 } else {
 
                     final Snackbar snack =
-                            Snackbar.make(getActivity().findViewById(android.R.id.content), "Please enter code for verify ",
+                            Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.please_enter_code_for_verify,
                                     Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();

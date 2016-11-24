@@ -261,7 +261,7 @@ public final class AppUtils {
         }
 
         return new MaterialDialog.Builder(context).title("Resend Messages")
-                .negativeText("CANCEL").items(items).itemsIds(newIds)
+                .negativeText(G.context.getString(R.string.cancel)).items(items).itemsIds(newIds)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View itemView, int position,

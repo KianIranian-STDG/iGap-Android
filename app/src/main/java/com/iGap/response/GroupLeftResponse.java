@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupLeft;
@@ -83,8 +81,6 @@ public class GroupLeftResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("SOC", "GroupLeftResponse majorCode : " + majorCode);
-        Log.i("SOC", "GroupLeftResponse minorCode : " + minorCode);
 
         G.onGroupLeft.onError(majorCode, minorCode);
 

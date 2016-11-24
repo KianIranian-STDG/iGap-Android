@@ -24,7 +24,7 @@
                 android:id="@+id/adp_currentSession"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Current session"
+                android:text="@string/current_session"
                 android:textColor="@color/toolbar_background"
                 android:textSize="@dimen/sp16"
                 />

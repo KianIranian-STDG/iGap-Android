@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:text="100"
+                    android:text="99"
                     android:textColor="@color/gray"
                     android:textSize="@dimen/sp14" />
             </LinearLayout>

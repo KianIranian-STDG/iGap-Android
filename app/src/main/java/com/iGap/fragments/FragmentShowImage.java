@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -206,7 +205,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             @Override
             public void onClick(View view) {
 
-                Log.i("ZZZZ", "setOnClickListener: ");
             }
         });
 
@@ -284,7 +282,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -301,7 +299,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -318,7 +316,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -335,7 +333,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -352,7 +350,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -369,7 +367,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -386,7 +384,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -424,7 +422,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
                                     intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
                                     intent.setType("image/*");
-                                    startActivity(Intent.createChooser(intent, "Share image from iGap"));
+                                    startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
 
                                 }
                             }
@@ -439,11 +437,11 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
     }
 
     private void showAllMedia() {
-        Log.e("ddd", "show all media");
+
     }
 
     private void saveToGalary() {
-        Log.e("ddd", "save to galarry");
+
     }
 
     public StructMessageInfo getCurrentPage() {
@@ -525,7 +523,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         }
 
         private void onLoadFromLocal(final ImageView imageView, String localPath, LocalFileType fileType) {
-            Log.i("VVV", "localPath : " + localPath);
             pathImage = localPath;
             ImageLoader.getInstance()
                     .displayImage(AndroidUtils.suitablePath(localPath), imageView,
@@ -648,7 +645,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                     if (layout.findViewById(R.id.progress) != null) {
                         layout.findViewById(R.id.progress).setVisibility(View.GONE);
                     }
-                    Log.i("VVV", "media.filePath : " + media.filePath);
+
                     onLoadFromLocal(touchImageView, media.filePath, LocalFileType.FILE);
                 }
             }
@@ -690,7 +687,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             //            final String localFilePath = G.DIR_IMAGES + "/" + media.downloadAttachment.token + SUID.id().get() + media.attachment.name;
             final String localFilePath =
                     media.downloadAttachment.token + SUID.id().get() + media.attachment.name;
-            Log.i("GGG", "localFilePath : " + localFilePath);
+
             if (media.attachment.getLocalFilePath() == null || media.attachment.getLocalFilePath()
                     .isEmpty()) {
                 media.attachment.setLocalFilePath(Long.parseLong(media.messageID), localFilePath);
@@ -722,8 +719,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 realm.close();
             }
 
-            Log.i("GGG",
-                    "media.attachment.getLocalFilePath() : " + media.attachment.getLocalFilePath());
             String identity = media.downloadAttachment.token
                     + '*'
                     + selector.toString()

@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="iGap"
+                android:text="@string/app_name"
                 android:textColor="@color/toolbar_title_register"
                 android:textSize="@dimen/sp26" />
 
@@ -84,7 +84,7 @@
                 android:drawableLeft="@mipmap/flesh"
                 android:paddingLeft="@dimen/dp12"
                 android:paddingRight="@dimen/dp52"
-                android:text="Iran" />
+                android:text="@string/iran"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

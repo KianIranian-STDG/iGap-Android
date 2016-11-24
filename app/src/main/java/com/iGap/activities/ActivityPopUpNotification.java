@@ -3,7 +3,9 @@ package com.iGap.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.KeyguardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,6 +53,7 @@ import com.iGap.realm.RealmUserInfo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.github.meness.emoji.EmojiEditText;
 import io.github.meness.emoji.emoji.Emoji;
@@ -155,7 +157,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                         WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                         WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-        Log.e("ddd", "how are you");
 
         setContentView(R.layout.activity_popup_notification);
 
@@ -163,7 +164,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.e("ddd", "delay");
 
                 fillList();
 
@@ -187,13 +187,13 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
                     @Override
                     public void onEmojiBackspaceClicked(final View v) {
-                        Log.d("MainActivity", "Clicked on Backspace");
+
                     }
                 })
                 .setOnEmojiClickedListener(new OnEmojiClickedListener() {
                     @Override
                     public void onEmojiClicked(final Emoji emoji) {
-                        Log.d("MainActivity", "Clicked on emoji");
+
                     }
                 })
                 .setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
@@ -205,7 +205,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 .setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
                     @Override
                     public void onKeyboardOpen(final int keyBoardHeight) {
-                        Log.d("MainActivity", "Opened soft keyboard");
+
                     }
                 })
                 .setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
@@ -264,7 +264,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             } else if (realmContacts != null) {
                 lastSeen = Long.toString(realmContacts.getLast_seen());
             } else {
-                lastSeen = "last seen";
+                lastSeen = getString(R.string.last_seen);
             }
         }
 
@@ -339,7 +339,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             overridePendingTransition(0, 0);
         }
 
-        Log.e("ddd", "size   " + unreadList.size());
     }
 
     @Override
@@ -698,5 +697,26 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
+    }
+
+
+    /**
+     * Checks if the application is being sent in the background (i.e behind
+     * another application's Activity).
+     *
+     * @param context the context
+     * @return <code>true</code> if another application will be above this one.
+     */
+    public static boolean isApplicationSentToBackground(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (!tasks.isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(context.getPackageName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

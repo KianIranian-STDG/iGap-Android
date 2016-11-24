@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupKickMember;
@@ -28,7 +26,7 @@ public class GroupKickMemberResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        super.handler();
         ProtoGroupKickMember.GroupKickMemberResponse.Builder builder =
                 (ProtoGroupKickMember.GroupKickMemberResponse.Builder) message;
         final long roomId = builder.getRoomId();
@@ -60,19 +58,16 @@ public class GroupKickMemberResponse extends MessageHandler {
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("XXX", "GroupKickMemberResponse majorCode : " + majorCode);
-        Log.i("XXX", "GroupKickMemberResponse minorCode : " + minorCode);
 
         G.onGroupKickMember.onError(majorCode, minorCode);
     }
 
     @Override
     public void timeOut() {
-
-        Log.e("XXX", "GroupKickMemberResponse      timout      " + message);
         super.timeOut();
 
         G.onGroupKickMember.onTimeOut();

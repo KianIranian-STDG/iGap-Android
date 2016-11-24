@@ -1,7 +1,6 @@
 package com.iGap.module;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -19,8 +18,6 @@ public class CountryReader {
         BufferedReader br = null;
         try {
             br = new BufferedReader(new InputStreamReader(context.getAssets().open(fileName)));
-
-            Log.i("LOG", "Read");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

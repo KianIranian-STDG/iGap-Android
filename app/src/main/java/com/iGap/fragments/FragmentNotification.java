@@ -83,7 +83,7 @@ public class FragmentNotification extends Fragment {
         roomId = getArguments().getLong("ID");
         callObject(view);
 
-        Log.i("CCCCVV", "onViewCreated: " + roomId);
+
         //=================================================Realm
 
         switch (page) {

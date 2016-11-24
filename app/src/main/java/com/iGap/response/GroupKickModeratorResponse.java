@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
@@ -29,7 +27,7 @@ public class GroupKickModeratorResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        super.handler();
         ProtoGroupKickModerator.GroupKickModeratorResponse.Builder builder =
                 (ProtoGroupKickModerator.GroupKickModeratorResponse.Builder) message;
         builder.getRoomId();
@@ -62,12 +60,10 @@ public class GroupKickModeratorResponse extends MessageHandler {
 
     @Override
     public void error() {
-
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("XXX", "GroupKickModeratorResponse majorCode : " + majorCode);
-        Log.i("XXX", "GroupKickModeratorResponse minorCode : " + minorCode);
 
         G.onGroupKickModerator.onError(majorCode, minorCode);
     }

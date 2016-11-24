@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Movie;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.iGap.R;
@@ -107,8 +106,6 @@ public class GifMovieView extends View {
 
     public void setMoviefilepath(String path) {
         this.path = path;
-
-        Log.e("ddd", path);
 
         if (path != null) {
 

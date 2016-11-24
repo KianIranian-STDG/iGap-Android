@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -320,11 +319,11 @@ public class HelperNotificationAndBadge {
             }
         }
         if (isMute) {
-            Log.i("CCCCC", "setNotification:1 " + isMute);
+
             Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
             notification.vibrate = new long[]{0, 0, 0};
         } else {
-            Log.i("CCCCC", "setNotification:2 " + isMute);
+
             //=======================================================
             if (inAppSound == 0 && G.isAppInFg) {
                 notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
@@ -716,8 +715,6 @@ public class HelperNotificationAndBadge {
                     mode = 3;
                 }
 
-
-                Log.e("ddd", mode + "");
                 break;
             case CHANNEL:
                 break;
@@ -744,8 +741,6 @@ public class HelperNotificationAndBadge {
                 break;
         }
 
-
-        Log.e("ddd", mode + "");
 
         if (!G.isAppInFg) {
             if (!AttachFile.isInAttach) {

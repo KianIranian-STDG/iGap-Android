@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
-import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.interfaces.OnSmsReceive;
@@ -34,7 +33,6 @@ public class IncomingSms extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.i("UUU", "Receive SMS");
         final Bundle bundle = intent.getExtras();
         try {
             if (bundle != null) {
@@ -45,11 +43,8 @@ public class IncomingSms extends BroadcastReceiver {
                     SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
                     String phoneNumber = currentMessage.getDisplayOriginatingAddress();
                     String message = currentMessage.getDisplayMessageBody();
-                    Log.i("UUU", "1 phoneNumber : " + phoneNumber + "  ||  message : " + message);
                     for (Long number : G.smsNumbers) {
-                        Log.i("UUU", "Server Number : " + number);
                         if (phoneNumber.contains(number.toString())) {
-                            Log.i("UUU", "onSmsReceive start");
                             listener.onSmsReceive(message);
                             break;
                         }

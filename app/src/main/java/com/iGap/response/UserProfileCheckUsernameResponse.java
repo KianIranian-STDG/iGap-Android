@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
@@ -22,7 +20,7 @@ public class UserProfileCheckUsernameResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        super.handler();
         ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Builder builder =
                 (ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Builder) message;
 
@@ -42,8 +40,6 @@ public class UserProfileCheckUsernameResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        Log.i("XXX", "UserProfileCheckUsernameResponse response.majorCode() : " + majorCode);
-        Log.i("XXX", "UserProfileCheckUsernameResponse response.minorCode() : " + minorCode);
         G.onUserProfileCheckUsername.Error(majorCode, minorCode);
 
     }

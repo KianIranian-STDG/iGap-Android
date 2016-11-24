@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="music name"
+                android:text="@string/music_name"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp16"/>
 
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="place"
+                android:text="@string/place"
                 android:textColor="@color/gray_4c"
                 android:textSize="@dimen/sp14"/>
         </LinearLayout>
@@ -160,7 +160,7 @@
             android:id="@+id/ml_txt_music_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="music time" />
+            android:text="@string/music_time"/>
     </LinearLayout>
 
 

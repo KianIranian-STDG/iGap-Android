@@ -62,7 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:singleLine="true"
-                        android:text="waiting for network"
+                        android:text="w"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp18"
@@ -132,7 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:autoText="false"
-            android:hint="Search "
+            android:hint="@string/search"
             android:maxLines="5"
             android:padding="@dimen/dp20"
             android:textSize="@dimen/sp15"/>

@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -85,7 +84,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         Realm realm = Realm.getDefaultInstance();
 
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-        Log.i("AAA", "handler 2 userInfo : " + userInfo);
+
         if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before
             Intent intent = new Intent(G.context, ActivityMain.class);
             startActivity(intent);
@@ -401,7 +400,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                                                         R.string.Toast_waiting_fot_get_info),
                                                 Snackbar.LENGTH_LONG);
 
-                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -421,7 +420,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                                     getResources().getString(R.string.Toast_waiting_fot_get_info),
                                     Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -477,7 +476,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                                     getResources().getString(R.string.Toast_Location_Not_Found),
                                     Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -513,7 +512,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                                     getResources().getString(R.string.Toast_Location_Not_Found),
                                     Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -530,7 +529,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                                     getResources().getString(R.string.Toast_Location_Not_Found),
                                     Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();

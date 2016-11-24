@@ -462,12 +462,8 @@ public class AttachFile {
 
             for (int i = 0; i < clipData.getItemCount(); i++) {
                 ClipData.Item item = clipData.getItemAt(i);
-
-                Log.e("ddd", item.getUri() + "");
                 String path = getFilePathFromUri(item.getUri());
                 list.add(path);
-
-                Log.e("ddd", path + "  " + i);
             }
 
             if (list.size() < 1) return null;

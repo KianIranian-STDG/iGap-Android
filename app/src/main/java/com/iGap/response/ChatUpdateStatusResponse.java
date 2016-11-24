@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoChatUpdateStatus;
 import com.iGap.proto.ProtoError;
@@ -29,23 +27,18 @@ public class ChatUpdateStatusResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         final ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder chatUpdateStatus =
                 (ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder) message;
 
         final ProtoResponse.Response.Builder response =
                 ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
-        Log.i("SOC_CONDITION", "ChatUpdateStatusResponse response.getId() : " + response.getId());
-        Log.i("SOC_CONDITION",
-                "ChatUpdateStatusResponse response.getTimestamp() : " + response.getTimestamp());
-        Log.i("SOC_CONDITION",
-                "ChatSendMessageResponse chatUpdateStatus : " + chatUpdateStatus.getStatus());
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 if (!response.getId().isEmpty()) { // I'm sender
-                    Log.i("CLI", "chatUpdateStatus getId : " + chatUpdateStatus.getMessageId());
                     RealmClientCondition realmClientCondition =
                             realm.where(RealmClientCondition.class)
                                     .equalTo(RealmClientConditionFields.ROOM_ID,
@@ -55,7 +48,6 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                     for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) {
                         if (realmOfflineSeen.getOfflineSeen() == chatUpdateStatus.getMessageId()) {
                             realmOfflineSeen.deleteFromRealm();
-                            Log.i("CLI", "chatUpdateStatus Delete Seen");
                             break;
                         }
                     }
@@ -70,13 +62,10 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
                             .equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId())
                             .findFirst();
-                    Log.i("SOC_CONDITION", "I'm recipient 1");
                     if (roomMessage != null) {
-                        Log.i(ChatUpdateStatusResponse.class.getSimpleName(),
-                                "oftad > " + chatUpdateStatus.getStatus().toString());
                         roomMessage.setStatus(chatUpdateStatus.getStatus().toString());
                         realm.copyToRealmOrUpdate(roomMessage);
-                        Log.i("SOC_CONDITION", "I'm recipient ");
+
                         G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(),
                                 chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(),
                                 chatUpdateStatus.getStatusVersion());
@@ -89,17 +78,15 @@ public class ChatUpdateStatusResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "ChatUpdateStatusResponse timeout");
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        Log.i("SOC", "ChatUpdateStatusResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "ChatUpdateStatusResponse response.minorCode() : " + minorCode);
     }
 }
 

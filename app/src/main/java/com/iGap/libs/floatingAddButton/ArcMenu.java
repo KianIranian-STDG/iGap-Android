@@ -15,7 +15,6 @@ import android.support.annotation.AttrRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -296,9 +295,7 @@ public class ArcMenu
             public void onAnimationStart(Animator animation) {
                 toggleVisibilityOfAllChildViews(mIsOpened);
 
-                Log.e("ddd", "open");
                 fabMenu.setRotation(45);
-
                 fabMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2caaa3")));
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -360,7 +357,6 @@ public class ArcMenu
         animatorSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                Log.e("ddd", "close");
 
                 fabMenu.setRotation(0);
                 fabMenu.setBackgroundTintList(

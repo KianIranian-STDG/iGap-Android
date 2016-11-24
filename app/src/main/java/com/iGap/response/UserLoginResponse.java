@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.WebSocketClient;
 import com.iGap.helper.HelperLogout;
@@ -47,8 +45,6 @@ public class UserLoginResponse extends MessageHandler {
             return;
         }
 
-        Log.i("FFF", "userLoginResponse response.majorCode() : " + majorCode);
-        Log.i("FFF", "userLoginResponse response.minorCode() : " + minorCode);
         G.onUserLogin.onLoginError(majorCode, minorCode);
     }
 }

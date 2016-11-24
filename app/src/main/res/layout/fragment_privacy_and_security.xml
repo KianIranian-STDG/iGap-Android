@@ -146,7 +146,7 @@
                     android:layout_height="match_parent"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:text="Everybody"
+                    android:text="@string/everybody"
                     android:textColor="@color/toolbar_background"
                     android:textStyle="normal"/>
             </LinearLayout>
@@ -183,7 +183,7 @@
                     android:layout_height="match_parent"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:text="Everybody"
+                    android:text="@string/everybody"
                     android:textColor="@color/toolbar_background"
                     android:textStyle="normal"/>
             </LinearLayout>

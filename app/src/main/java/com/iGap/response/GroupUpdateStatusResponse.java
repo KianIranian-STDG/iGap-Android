@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupUpdateStatus;
@@ -31,11 +29,9 @@ public class GroupUpdateStatusResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         final ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder builder = (ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder) message;
         final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
-        Log.i("SOC_CONDITION", "GroupUpdateStatusResponse response.getId() : " + response.getId());
-        Log.i("SOC_CONDITION", "GroupUpdateStatusResponse response.getTimestamp() : " + response.getTimestamp());
-        Log.i("SOC_CONDITION", "GroupUpdateStatusResponse chatUpdateStatus : " + builder.getStatus());
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -48,7 +44,6 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                     RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
                     for (int i = offlineSeen.size() - 1; i >= 0; i--) {
                         RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
-                        Log.i("SOC_CONDITION", "realmOfflineSeen 1 : " + realmOfflineSeen);
                         realmOfflineSeen.deleteFromRealm();
                     }
                 } else { // I'm recipient
@@ -56,13 +51,10 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                     // find message from database and update its status
                     RealmRoomMessage roomMessage =
                             realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).findFirst();
-                    Log.i("III", "I'm recipient 1 roomMessage : " + roomMessage);
-                    Log.i("III", "I'm recipient 1  builder.getMessageId() : " + builder.getMessageId());
                     if (roomMessage != null) {
-                        Log.i(ChatUpdateStatusResponse.class.getSimpleName(), "oftad > " + builder.getStatus().toString());
                         roomMessage.setStatus(builder.getStatus().toString());
                         realm.copyToRealmOrUpdate(roomMessage);
-                        Log.i("III", "I'm recipient ");
+
                         G.chatUpdateStatusUtil.onChatUpdateStatus(builder.getRoomId(), builder.getMessageId(), builder.getStatus(),
                                 builder.getStatusVersion());
                     }
@@ -74,16 +66,15 @@ public class GroupUpdateStatusResponse extends MessageHandler {
 
     @Override
     public void error() {
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        Log.i("SOC", "GroupUpdateStatusResponse response.majorCode() : " + majorCode);
-        Log.i("SOC", "GroupUpdateStatusResponse response.minorCode() : " + minorCode);
     }
 
     @Override
     public void timeOut() {
-        Log.i("SOC", "GroupUpdateStatusResponse timeout");
+        super.timeOut();
     }
 }

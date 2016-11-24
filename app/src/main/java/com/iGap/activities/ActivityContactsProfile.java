@@ -25,7 +25,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -294,7 +293,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                     Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_200),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -312,7 +311,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                     Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_201),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -330,7 +329,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                     Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_202),
                                                             Snackbar.LENGTH_LONG);
 
-                                            snack.setAction("CANCEL", new View.OnClickListener() {
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     snack.dismiss();
@@ -356,7 +355,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         if (displayName != null && !displayName.equals("")) {
             txtNickname.setText(displayName);
         } else {
-            txtNickname.setText("nick name not exist");
+            txtNickname.setText(R.string.nick_name_not_exist);
         }
 
         layoutNickname = (ViewGroup) findViewById(R.id.chi_layout_nickname);
@@ -391,7 +390,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                                                   TextInputLayout inputFirstName = new TextInputLayout(ActivityContactsProfile.this);
                                                   final EditText edtFirstName = new EditText(ActivityContactsProfile.this);
-                                                  edtFirstName.setHint("First Name");
+                edtFirstName.setHint(R.string.first_name);
                                                   edtFirstName.setText(firsName);
                                                   edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
                                                   edtFirstName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -408,7 +407,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                                                   TextInputLayout inputLastName = new TextInputLayout(ActivityContactsProfile.this);
                                                   final EditText edtLastName = new EditText(ActivityContactsProfile.this);
-                                                  edtLastName.setHint("Last Name");
+                edtLastName.setHint(R.string.last_name);
                                                   edtLastName.setText(lastName);
                                                   edtLastName.setTextColor(getResources().getColor(R.color.text_edit_text));
                                                   edtLastName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -563,7 +562,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                                       final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
                                                                               getResources().getString(R.string.E_124_1), Snackbar.LENGTH_LONG);
 
-                                                                      snack.setAction("CANCEL", new View.OnClickListener() {
+                                                                      snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                                           @Override
                                                                           public void onClick(View view) {
                                                                               snack.dismiss();
@@ -579,7 +578,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                                       final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
                                                                               getResources().getString(R.string.E_124_2), Snackbar.LENGTH_LONG);
 
-                                                                      snack.setAction("CANCEL", new View.OnClickListener() {
+                                                                      snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                                           @Override
                                                                           public void onClick(View view) {
                                                                               snack.dismiss();
@@ -595,7 +594,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                                       final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
                                                                               getResources().getString(R.string.E_124_3), Snackbar.LENGTH_LONG);
 
-                                                                      snack.setAction("CANCEL", new View.OnClickListener() {
+                                                                      snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                                           @Override
                                                                           public void onClick(View view) {
                                                                               snack.dismiss();
@@ -611,7 +610,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                                       final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
                                                                               getResources().getString(R.string.E_124_4), Snackbar.LENGTH_LONG);
 
-                                                                      snack.setAction("CANCEL", new View.OnClickListener() {
+                                                                      snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                                           @Override
                                                                           public void onClick(View view) {
                                                                               snack.dismiss();
@@ -627,7 +626,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                                       final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
                                                                               getResources().getString(R.string.E_125), Snackbar.LENGTH_LONG);
 
-                                                                      snack.setAction("CANCEL", new View.OnClickListener() {
+                                                                      snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                                           @Override
                                                                           public void onClick(View view) {
                                                                               snack.dismiss();
@@ -749,7 +748,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                            {
                                                @Override
                                                public void onClick(View view) {
-                                                   showAlertDialog("Block This Contact?", "BLOCK", "CANCEL");
+                                                   showAlertDialog(getString(R.string.block_this_contact), getString(R.string.block), getString(R.string.cancel));
                                                }
                                            }
 
@@ -764,7 +763,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                         {
                                             @Override
                                             public void onClick(View view) {
-                                                showAlertDialog("clear This chat?", "ClEAR", "CANCEL");
+                                                showAlertDialog(getString(R.string.clear_this_chat), getString(R.string.clear), getString(R.string.cancel));
                                             }
                                         }
 
@@ -806,17 +805,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private void setUserStatus(String userStatus, long time) {
         this.userStatus = userStatus;
         this.lastSeen = time;
-        Log.i("CCCV", "setUserStatus 1 userStatus : " + userStatus);
+
         if (userStatus != null) {
             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                Log.i("CCC", "setUserStatus 2 time : " + time);
                 String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
                 String status = G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser;
                 titleLastSeen.setText(status);
                 txtLastSeen.setText(status);
 
             } else {
-                Log.i("CCC", "setUserStatus 3");
                 titleLastSeen.setText(userStatus);
                 txtLastSeen.setText(userStatus);
             }
@@ -860,7 +857,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                     } catch (Exception ex) {
 
                                         ex.getStackTrace();
-                                        Log.i("TAG", "onMenuItemClick: " + ex.getMessage());
                                     }
                                     break;
                                 case 1:
@@ -943,7 +939,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                     } catch (Exception ex) {
 
                                         ex.getStackTrace();
-                                        Log.i("TAG", "onMenuItemClick: " + ex.getMessage());
+
                                     }
 
                                     break;
@@ -1218,7 +1214,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                             final Snackbar snack =
                                     Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_122), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1234,7 +1230,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                             final Snackbar snack =
                                     Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_123), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1273,7 +1269,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
             }
         };
-        Log.i("CCC", "RequestUserInfo 1");
+
         new RequestUserInfo().userInfo(userId);
     }
 
@@ -1293,7 +1289,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                             final Snackbar snack =
                                     Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1323,7 +1319,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                             final Snackbar snack =
                                     Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -1370,8 +1366,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     @Override
     public void onUserUpdateStatus(long userId, final long time, final String status) {
-        Log.i("CCC", "onUserUpdateStatus : " + userId);
-        Log.i("CCC", "onUserUpdateStatus this.userId : " + this.userId);
+
         if (this.userId == userId) {
             runOnUiThread(new Runnable() {
                 @Override

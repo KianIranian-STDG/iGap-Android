@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -276,11 +275,11 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
     }
 
     private void showAllMedia() {
-        Log.i(FragmentShowImageMessages.class.getSimpleName(), "Show all media");
+
     }
 
     private void saveToGallery() {
-        Log.i(FragmentShowImageMessages.class.getSimpleName(), "Save to gallery");
+
     }
 
     @Override
@@ -319,7 +318,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -336,7 +335,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -353,7 +352,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -370,7 +369,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -387,7 +386,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -404,7 +403,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();
@@ -421,7 +420,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                             Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
 
-                    snack.setAction("CANCEL", new View.OnClickListener() {
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();

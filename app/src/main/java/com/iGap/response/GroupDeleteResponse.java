@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupDelete;
@@ -33,7 +31,6 @@ public class GroupDeleteResponse extends MessageHandler {
         ProtoGroupDelete.GroupDeleteResponse.Builder builder = (ProtoGroupDelete.GroupDeleteResponse.Builder) message;
         final long id = builder.getRoomId();
 
-        Log.i("XXXC", "re1: " + id);
         final Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -47,7 +44,7 @@ public class GroupDeleteResponse extends MessageHandler {
                 if (realmRoomMessage != null) {
                     realmRoomMessage.deleteAllFromRealm();
                 }
-                Log.i("XXXC", "re2: " + id);
+
             }
         });
         realm.close();
@@ -67,9 +64,6 @@ public class GroupDeleteResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        Log.i("XXX", "GroupDeleteResponse response.majorCode() : " + majorCode);
-        Log.i("XXX", "GroupDeleteResponse response.minorCode() : " + minorCode);
 
         G.onGroupDelete.Error(majorCode, minorCode);
     }

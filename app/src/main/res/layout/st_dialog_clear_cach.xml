@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="photo"
+            android:text="@string/photo"
             android:textColor="@android:color/black"
             android:textSize="@dimen/sp16" />
     </RelativeLayout>
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="photo"
+            android:text="@string/photo"
             android:textColor="@android:color/black"
             android:textSize="@dimen/sp16" />
     </RelativeLayout>
@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="photo"
+            android:text="@string/photo"
             android:textColor="@android:color/black"
             android:textSize="@dimen/sp16" />
     </RelativeLayout>

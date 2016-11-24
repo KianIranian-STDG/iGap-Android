@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -146,7 +145,7 @@ public class ContactGroupFragment extends Fragment {
                                                     getResources().getString(R.string.E_302_1),
                                                     Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -164,7 +163,7 @@ public class ContactGroupFragment extends Fragment {
                                                     getResources().getString(R.string.E_302_2),
                                                     Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -182,7 +181,7 @@ public class ContactGroupFragment extends Fragment {
                                                     getResources().getString(R.string.E_302_3),
                                                     Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -200,7 +199,7 @@ public class ContactGroupFragment extends Fragment {
                                                     getResources().getString(R.string.E_302_4),
                                                     Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -218,7 +217,7 @@ public class ContactGroupFragment extends Fragment {
                                                     getResources().getString(R.string.E_303),
                                                     Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -236,7 +235,7 @@ public class ContactGroupFragment extends Fragment {
                                                     getResources().getString(R.string.E_304),
                                                     Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -254,7 +253,7 @@ public class ContactGroupFragment extends Fragment {
                                                     getResources().getString(R.string.E_305),
                                                     Snackbar.LENGTH_LONG);
 
-                                    snack.setAction("CANCEL", new View.OnClickListener() {
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -406,8 +405,6 @@ public class ContactGroupFragment extends Fragment {
                     @Override
                     public void execute(Realm realm) {
                         members.add(realmMember);
-
-                        Log.e("ddd", "add owener to database       userid = " + userId);
                     }
                 });
 

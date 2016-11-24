@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.iGap.G;
@@ -95,7 +94,6 @@ public class CustomCircleImage extends ImageView {
                 if (i == position + 1) {
                     fiiPain.setAlpha((int) (percent * 255));
                     fillCheck = true;
-                    Log.i("TAG", "i: " + i);
                 }
             }
 

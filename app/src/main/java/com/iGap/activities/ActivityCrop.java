@@ -192,7 +192,7 @@ public class ActivityCrop extends ActivityEnhanced {
                 Exception error = result.getError();
             }
         } else {
-            Toast.makeText(ActivityCrop.this, "can't save Image", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActivityCrop.this, R.string.can_not_save_image, Toast.LENGTH_SHORT).show();
         }
     }
 
