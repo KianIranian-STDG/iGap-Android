@@ -1,5 +1,7 @@
 package com.iGap.realm;
 
+import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
@@ -100,6 +102,8 @@ public class RealmRoom extends RealmObject {
                         realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
                 break;
             case GROUP:
+                Log.i("TTTX", "getRole : " + room.getGroupRoomExtra().getRole());
+                Log.i("TTTX", "getReadOnly : " + room.getReadOnly());
                 realmRoom.setType(RoomType.GROUP);
                 realmRoom.setGroupRoom(
                         RealmGroupRoom.convert(room.getGroupRoomExtra(), realmRoom.getGroupRoom(), realm));

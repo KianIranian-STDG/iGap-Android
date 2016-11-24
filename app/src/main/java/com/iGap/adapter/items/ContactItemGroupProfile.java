@@ -2,6 +2,7 @@ package com.iGap.adapter.items;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -66,14 +67,20 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), mContact.initials, mContact.color));
         }
 
+        Log.i("WWW", "mainRole : " + mainRole);
+        Log.i("WWW", "isShoMore : " + isShoMore);
+        Log.i("WWW", "mContact.role : " + mContact.role);
 
-        if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString()) || isShoMore) {
+        if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
 
             holder.btnMenu.setVisibility(View.GONE);
+
         } else {
 
             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
+
                 holder.btnMenu.setVisibility(View.GONE);
+
             } else {
 
                 holder.btnMenu.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +90,7 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
                             ActivityGroupProfile.onMenuClick.clicked(v, mContact);
                     }
                 });
+
             }
         }
     }

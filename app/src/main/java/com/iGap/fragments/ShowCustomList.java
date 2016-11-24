@@ -130,8 +130,9 @@ public class ShowCustomList extends Fragment {
             public boolean onClick(View v, IAdapter adapter, ContactItemGroup item, int position) {
 
                 item.mContact.isSelected = !item.mContact.isSelected;
+                fastAdapter.notifyItemChanged(position);
 
-                refreshView();
+//                refreshView();
 
                 return false;
             }
@@ -184,8 +185,7 @@ public class ShowCustomList extends Fragment {
         fastAdapter.setHasStableIds(true);
 
         //get our recyclerView and do basic setup
-        RecyclerView rv =
-                (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));

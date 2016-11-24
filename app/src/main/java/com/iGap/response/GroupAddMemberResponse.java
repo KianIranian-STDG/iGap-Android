@@ -30,7 +30,7 @@ public class GroupAddMemberResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
+        super.handler();
         final ProtoGroupAddMember.GroupAddMemberResponse.Builder response = (ProtoGroupAddMember.GroupAddMemberResponse.Builder) message;
 
         Long roomId = response.getRoomId();
@@ -73,7 +73,7 @@ public class GroupAddMemberResponse extends MessageHandler {
 
     @Override
     public void error() {
-
+        super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

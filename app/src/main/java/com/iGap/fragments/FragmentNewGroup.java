@@ -506,28 +506,34 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             @Override
             public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
 
-                        prgWaiting.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.i("EEE", "runOnUiThread");
+                            prgWaiting.setVisibility(View.GONE);
+                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                        Fragment fragment = ContactGroupFragment.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putLong("RoomId", roomId);
-                        bundle.putBoolean("NewRoom", true);
-                        fragment.setArguments(bundle);
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .addToBackStack(null)
-                                .replace(fragmentContainer, fragment)
-                                .commitAllowingStateLoss();
-                        ActivityMain.mLeftDrawerLayout.closeDrawer();
-                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                    }
-                });
+                            Fragment fragment = ContactGroupFragment.newInstance();
+                            Bundle bundle = new Bundle();
+                            bundle.putLong("RoomId", roomId);
+                            bundle.putBoolean("NewRoom", true);
+                            fragment.setArguments(bundle);
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .addToBackStack(null)
+                                    .replace(fragmentContainer, fragment)
+                                    .commitAllowingStateLoss();
+                            ActivityMain.mLeftDrawerLayout.closeDrawer();
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                        }
+                    });
+                } catch (IllegalStateException e) {
+                    Log.i("EEE", "IllegalStateException");
+                }
+
             }
 
             @Override
