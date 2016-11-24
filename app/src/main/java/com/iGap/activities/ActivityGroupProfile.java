@@ -629,8 +629,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                     }
                                 }
 
-                                realm.close();
-
 
                                 final StructContactInfo struct = new StructContactInfo(user.getId(), user.getDisplayName(), user.getStatus().toString(), false, false, user.getPhone() + "");
                                 if (realmGroupRoom != null) {
@@ -643,7 +641,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                 }
 
 
-                                IItem item = new ContactItemGroupProfile().setContact(struct).withIdentifier(realmRegisteredInfo.getId());
+                                IItem item = new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get());
 
 
                                 if (struct.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
@@ -653,6 +651,8 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                 }
 
                                 itemAdapter.notifyDataSetChanged();
+
+                                realm.close();
                             }
                         });
                     }

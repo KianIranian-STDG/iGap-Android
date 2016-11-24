@@ -14,9 +14,9 @@ public enum SortRooms implements Comparator<RoomItem> {
         @Override
         public int compare(RoomItem o1, RoomItem o2) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                return Long.compare(o1.getInfo().getLastMessage() != null ? o1.getInfo().getLastMessage().getUpdateOrCreateTime() : o1.getInfo().getUpdatedTime(), o2.getInfo().getLastMessage() != null ? o2.getInfo().getLastMessage().getUpdateOrCreateTime() : o2.getInfo().getUpdatedTime());
+                return Long.compare(o1.getInfo().getUpdatedTime(), o2.getInfo().getUpdatedTime());
             } else {
-                return Long.valueOf(o1.getInfo().getLastMessage() != null ? o1.getInfo().getLastMessage().getUpdateOrCreateTime() : o1.getInfo().getUpdatedTime()).compareTo(Long.valueOf(o2.getInfo().getLastMessage() != null ? o2.getInfo().getLastMessage().getUpdateOrCreateTime() : o2.getInfo().getUpdatedTime()));
+                return Long.valueOf(o1.getInfo().getUpdatedTime()).compareTo(Long.valueOf(o2.getInfo().getUpdatedTime()));
             }
         }
     },
@@ -24,9 +24,9 @@ public enum SortRooms implements Comparator<RoomItem> {
         @Override
         public int compare(RoomItem o1, RoomItem o2) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                return Long.compare(o2.getInfo().getLastMessage() != null ? o2.getInfo().getLastMessage().getUpdateOrCreateTime() : o2.getInfo().getUpdatedTime(), o1.getInfo().getLastMessage() != null ? o1.getInfo().getLastMessage().getUpdateOrCreateTime() : o1.getInfo().getUpdatedTime());
+                return Long.compare(o2.getInfo().getUpdatedTime(), o1.getInfo().getUpdatedTime());
             } else {
-                return Long.valueOf(o2.getInfo().getLastMessage() != null ? o2.getInfo().getLastMessage().getUpdateOrCreateTime() : o2.getInfo().getUpdatedTime()).compareTo(Long.valueOf(o1.getInfo().getLastMessage() != null ? o1.getInfo().getLastMessage().getUpdateOrCreateTime() : o1.getInfo().getUpdatedTime()));
+                return Long.valueOf(o2.getInfo().getUpdatedTime()).compareTo(Long.valueOf(o1.getInfo().getUpdatedTime()));
             }
         }
     }

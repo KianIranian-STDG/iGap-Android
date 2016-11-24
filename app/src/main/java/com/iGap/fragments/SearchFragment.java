@@ -262,7 +262,7 @@ public class SearchFragment extends Fragment {
 
             item.roomType = realmRoom.getType();
             item.name = realmRoom.getTitle();
-            item.time = realmRoom.getLastMessage().getUpdateTime();
+            item.time = realmRoom.getUpdatedTime();
             item.id = realmRoom.getId();
             item.type = SearchType.room;
             item.initials = realmRoom.getInitials();

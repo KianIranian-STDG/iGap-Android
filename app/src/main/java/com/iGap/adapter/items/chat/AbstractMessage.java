@@ -440,7 +440,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
             }
 
-            prepareProgress(holder);
+            prepareProgress(holder, attachment);
         }
     }
 
@@ -614,7 +614,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      *
      * @param holder VH
      */
-    private void prepareProgress(VH holder) {
+    private void prepareProgress(VH holder, RealmAttachment attachment) {
         if (!hasProgress(holder.itemView)) {
             return;
         }
@@ -629,25 +629,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
                 }
             } else {
-                checkForDownloading(holder);
+                checkForDownloading(holder, attachment);
             }
         } else {
-            checkForDownloading(holder);
+            checkForDownloading(holder, attachment);
         }
     }
 
-    private void checkForDownloading(VH holder) {
-        if (MessagesAdapter.downloading.containsKey(mMessage.attachment.token)) {
+    private void checkForDownloading(VH holder, RealmAttachment attachment) {
+        if (MessagesAdapter.downloading.containsKey(attachment.getToken())) {
             ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
             holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.downloading.get(mMessage.attachment.token));
+            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.downloading.get(attachment.getToken()));
 
-            if (MessagesAdapter.downloading.get(mMessage.attachment.token) == 100) {
-                MessagesAdapter.downloading.remove(mMessage.attachment.token);
+            if (MessagesAdapter.downloading.get(attachment.getToken()) == 100) {
+                MessagesAdapter.downloading.remove(attachment.getToken());
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
             }
         } else {
-            if (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal() : mMessage.attachment.isFileExistsOnLocal()) {
+            if (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal() : attachment.isFileExistsOnLocal()) {
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
             } else {
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);

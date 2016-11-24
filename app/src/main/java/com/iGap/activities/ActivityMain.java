@@ -149,21 +149,10 @@ public class ActivityMain extends ActivityEnhanced
         realm.close();
     }
 
-    /**
-     * this is a bad workaround for Realm bug but works well
-     */
-    private void fixRealmBAADD() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.where(RealmUserInfo.class).findFirst();
-        realm.close();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        fixRealmBAADD();
 
         HelperGetDataFromOtherApp getShearedData = new HelperGetDataFromOtherApp(getIntent());
 
@@ -699,7 +688,7 @@ public class ActivityMain extends ActivityEnhanced
                         Collections.sort(roomItems, SortRooms.DESC);
                         mAdapter.add(roomItems);
 
-                        realm.close();
+                        // realm.close();
                     }
                 });
             }
@@ -879,7 +868,7 @@ public class ActivityMain extends ActivityEnhanced
         new RequestGroupDelete().groupDelete(item.getInfo().getId());
     }
 
-    private void lefGroup(final RoomItem item) {
+    private void lefGroup(final RoomItem item, final int position) {
 
         G.onGroupLeft = new OnGroupLeft() {
             @Override
@@ -887,7 +876,7 @@ public class ActivityMain extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.remove(mAdapter.getPosition(item));
+                        mAdapter.remove(position);
                         Log.i("LLLLLL", "lefGroup1: " + roomId);
                     }
                 });
@@ -934,7 +923,7 @@ public class ActivityMain extends ActivityEnhanced
                         deleteGroup(item);
                     } else {
 
-                        lefGroup(item);
+                        lefGroup(item, position);
                     }
                 } else if (item.mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                     // TODO: 11/22/2016 [Alireza] delete channel room

@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -512,7 +513,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         prgWaiting.setVisibility(View.GONE);
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                        android.support.v4.app.Fragment fragment = ContactGroupFragment.newInstance();
+                        Fragment fragment = ContactGroupFragment.newInstance();
                         Bundle bundle = new Bundle();
                         bundle.putLong("RoomId", roomId);
                         bundle.putBoolean("NewRoom", true);
@@ -522,7 +523,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                                 .addToBackStack(null)
                                 .replace(fragmentContainer, fragment)
-                                .commit();
+                                .commitAllowingStateLoss();
                         ActivityMain.mLeftDrawerLayout.closeDrawer();
                         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                     }

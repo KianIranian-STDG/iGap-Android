@@ -26,6 +26,11 @@ public class RealmRoom extends RealmObject {
     private long updatedTime;
 
     public long getUpdatedTime() {
+        if (getLastMessage() != null && getLastMessage().isValid()) {
+            if (getLastMessage().getUpdateOrCreateTime() > updatedTime) {
+                return getLastMessage().getUpdateOrCreateTime();
+            }
+        }
         return updatedTime;
     }
 

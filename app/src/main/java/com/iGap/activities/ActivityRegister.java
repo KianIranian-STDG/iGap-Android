@@ -690,9 +690,14 @@ public class ActivityRegister extends ActivityEnhanced {
         });
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-        if (dialog.isShowing()) {
-            countDownTimer.cancel();
+        // Fatal Exception: android.view.WindowManager$BadTokenException
+        // a workaround is checking if the activity in finishing process
+        // if not, show dialog
+        if (!isFinishing()) {
+            dialog.show();
+            if (dialog.isShowing()) {
+                countDownTimer.cancel();
+            }
         }
     }
 
