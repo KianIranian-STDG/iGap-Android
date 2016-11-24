@@ -15,6 +15,10 @@ public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessi
 
     public StructSessionsGetActiveList item;
 
+    public StructSessionsGetActiveList getItem() {
+        return item;
+    }
+
     public AdapterActiveSessionsHeader() {
     }
 
@@ -43,7 +47,7 @@ public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessi
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+//                Toast.makeText(G.context, "tttttt", Toast.LENGTH_SHORT).show();
             }
         });
 
