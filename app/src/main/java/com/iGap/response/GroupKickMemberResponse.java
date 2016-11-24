@@ -27,11 +27,9 @@ public class GroupKickMemberResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoGroupKickMember.GroupKickMemberResponse.Builder builder =
-                (ProtoGroupKickMember.GroupKickMemberResponse.Builder) message;
+        ProtoGroupKickMember.GroupKickMemberResponse.Builder builder = (ProtoGroupKickMember.GroupKickMemberResponse.Builder) message;
         final long roomId = builder.getRoomId();
         final long memberId = builder.getMemberId();
-
 
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom =
@@ -69,7 +67,6 @@ public class GroupKickMemberResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-
         G.onGroupKickMember.onTimeOut();
     }
 }

@@ -317,6 +317,7 @@ public class ActivityChat extends ActivityEnhanced
     private long replyToMessageId = 0;
     private long userId;
     public static Activity activityChatForFinish;
+    private LinearLayout lyt_user;
 
     @Override
     protected void onStart() {
@@ -448,6 +449,7 @@ public class ActivityChat extends ActivityEnhanced
         appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
 
         mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
+        lyt_user = (LinearLayout) findViewById(R.id.lyt_user);
         musicPlayer = new MusicPlayer(mediaLayout);
 
 
@@ -1467,6 +1469,13 @@ public class ActivityChat extends ActivityEnhanced
                         startActivity(intent);
                     }
                 }
+            }
+        });
+
+        lyt_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imvUserPicture.performClick();
             }
         });
 

@@ -64,7 +64,8 @@
                     android:paddingEnd="0dp"
                     android:paddingLeft="@dimen/dp4"
                     android:paddingRight="0dp"
-                    android:paddingTop="@dimen/dp4">
+                    android:paddingTop="@dimen/dp4"
+                    android:id="@+id/lyt_user">
 
 
                     <LinearLayout
