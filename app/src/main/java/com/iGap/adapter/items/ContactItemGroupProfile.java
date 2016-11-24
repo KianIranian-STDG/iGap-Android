@@ -2,10 +2,12 @@ package com.iGap.adapter.items;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityGroupProfile;
 import com.iGap.module.AndroidUtils;
@@ -13,6 +15,7 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
+import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -54,8 +57,6 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
 
         holder.title.setText(mContact.displayName);
 
-        holder.subtitle.setText(R.string.last_seen_recently);
-
         setRoleStarColor(holder.roleStar);
 
 
@@ -65,6 +66,15 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mContact.avatar.getFile().getLocalThumbnailPath()), holder.image);
         } else {
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), mContact.initials, mContact.color));
+        }
+
+        if (mContact.status != null) {
+            if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                String timeUser = TimeUtils.toLocal(mContact.lastSeen * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                holder.subtitle.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
+            } else {
+                holder.subtitle.setText(mContact.status);
+            }
         }
 
         Log.i("WWW", "mainRole : " + mainRole);
@@ -99,9 +109,6 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
 
         view.setVisibility(View.GONE);
 
-//        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-//
-//        } else
         if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
             view.setVisibility(View.VISIBLE);
             view.setTextColor(Color.CYAN);

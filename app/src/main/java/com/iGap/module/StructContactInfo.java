@@ -5,6 +5,7 @@ import com.iGap.realm.RealmAvatar;
 
 public class StructContactInfo {
     public long peerId;
+    public long lastSeen;
     public boolean isHeader;
     public String displayName;
     public String status;

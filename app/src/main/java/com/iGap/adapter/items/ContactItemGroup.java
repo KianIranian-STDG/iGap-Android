@@ -3,14 +3,18 @@ package com.iGap.adapter.items;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.View;
 
 import com.hanks.library.AnimateCheckBox;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
+import com.iGap.module.TimeUtils;
+import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
@@ -59,7 +63,15 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
 
         holder.title.setText(mContact.displayName);
 
-        holder.subtitle.setText(mContact.status);
+
+        if (mContact.status != null) {
+            if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                String timeUser = TimeUtils.toLocal(mContact.lastSeen * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                holder.subtitle.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
+            } else {
+                holder.subtitle.setText(mContact.status);
+            }
+        }
 
         holder.image.setImageBitmap(setAvatar(holder.image.getLayoutParams().width));
     }

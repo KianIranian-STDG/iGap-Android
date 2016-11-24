@@ -102,6 +102,7 @@ public class RealmRoom extends RealmObject {
                         realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
                 break;
             case GROUP:
+                Log.i("TTTX", "getTitle : " + room.getTitle());
                 Log.i("TTTX", "getRole : " + room.getGroupRoomExtra().getRole());
                 Log.i("TTTX", "getReadOnly : " + room.getReadOnly());
                 realmRoom.setType(RoomType.GROUP);

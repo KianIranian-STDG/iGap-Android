@@ -25,6 +25,7 @@ import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.interfaces.OnGroupKickAdmin;
+import com.iGap.interfaces.UpdateListAfterKick;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
@@ -131,6 +132,26 @@ public class FragmentListAdmin extends Fragment {
 
         groupKickAdmin();
 
+        //===========
+
+        G.updateListAfterKick = new UpdateListAfterKick() {
+            @Override
+            public void updateList(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (role.toString().equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                            updateRoleToAdmin(memberId);
+                        } else {
+                            updateRole(memberId);
+                        }
+                    }
+                });
+            }
+        };
+
+        //===========
+
         //create our adapters
         final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
         final HeaderAdapter headerAdapter = new HeaderAdapter();
@@ -170,8 +191,6 @@ public class FragmentListAdmin extends Fragment {
                                     prgWait.setVisibility(View.VISIBLE);
                                     getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-
 
 
                                     new RequestGroupKickModerator().groupKickModerator(roomId, contactItemGroupProfile.mContact.peerId);
@@ -261,8 +280,6 @@ public class FragmentListAdmin extends Fragment {
                         });
 
                         updateRole(memberId);
-                        G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
-                        Log.i("CCVV", "updateListAfterKick: " + memberId);
                     }
                 });
             }
@@ -407,6 +424,27 @@ public class FragmentListAdmin extends Fragment {
                                                     if (items.size() == 0) {
                                                         getActivity().getSupportFragmentManager().popBackStack();
                                                         return;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+        );
+    }
+
+    private void updateRoleToAdmin(final long memberId) {
+        getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+
+                                            for (int i = 0; i < items.size(); i++) {
+                                                if (items.get(i).mContact.peerId == memberId) {
+                                                    items.get(i).mContact.role = ProtoGlobal.GroupRoom.Role.ADMIN.toString();
+                                                    if (i < itemAdapter.getAdapterItemCount()) {
+                                                        IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
+                                                        itemAdapter.set(i, item);
                                                     }
                                                 }
                                             }
