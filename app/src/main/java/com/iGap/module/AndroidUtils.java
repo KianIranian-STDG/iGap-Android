@@ -313,7 +313,7 @@ public final class AndroidUtils {
         float newWidth;
         int newHeight;
         float maxWidth =
-                context.getResources().getDimension(R.dimen.dp300) - (context.getResources()
+                context.getResources().getDimension(R.dimen.chatBoxMaxWidth) - (context.getResources()
                         .getDimension(R.dimen.messageContainerPadding) * 4);
 
         if (width < maxWidth) {
