@@ -93,6 +93,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
     private String specialRequests;
 
     private ProgressBar prgWaiting;
+    private static long avatarId = 0;
 
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
@@ -675,6 +676,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
     @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
+
+        // disable progress and show snack bar for retry upload avatar
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -695,6 +699,14 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                 txtNextStep.setEnabled(false);
             }
         });
+    }
+
+    @Override
+    public void onFileTimeOut(String identity) {
+
+        if (Long.parseLong(identity) == avatarId) {
+            // disable progress and show snack bar for retry upload avatar
+        }
     }
 
     @Override
@@ -773,6 +785,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             super.onPostExecute(result);
             myActivityReference.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             prg.setVisibility(View.GONE);
+            avatarId = result.messageId;
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
 
         }
@@ -807,7 +820,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
             if (data != null) {
                 pathSaveImage = data.getData().toString();
-                new UploadTask(prgWaiting, getActivity()).execute(pathSaveImage, System.nanoTime());
+                avatarId = System.nanoTime();
+                new UploadTask(prgWaiting, getActivity()).execute(pathSaveImage, avatarId);
             }
         }
     }

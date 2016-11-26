@@ -16,7 +16,7 @@ public class Config {
     public static final int ACTION_CHECKING = 500;
     public static int UPDATE_STATUS_TIME = 2000; // after this time check that program is in background
     public static final int ACTION_TIME_OUT = 2000;
-    public static final long LAST_SEEN_TIME_OUT = (10 * DateUtils.MINUTE_IN_MILLIS); // after this time show exactly time instead of minutes
+    public static final long LAST_SEEN_TIME_OUT = (60 * DateUtils.MINUTE_IN_MILLIS); // after this time show exactly time instead of minutes
     public static final long LAST_SEEN_DELAY_CHECKING = (DateUtils.MINUTE_IN_MILLIS);
     public static String urlWebsocket = "wss://secure.igap.im/connect/"; // wss://secure.igap.im/wss/ , ws://nano.igap.im:7755 // ws://10.10.10.102:6708
 

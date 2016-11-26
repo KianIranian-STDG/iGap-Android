@@ -60,6 +60,7 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmContacts;
@@ -156,18 +157,18 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
         if (realmRegisteredInfo != null)
-        if (realmRegisteredInfo.getLastAvatar() != null) {
+            if (realmRegisteredInfo.getLastAvatar() != null) {
 
-            String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
+                String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
 
-            if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
-                avatarPath = mainFilePath;
-            } else {
-                avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+                if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
+                    avatarPath = mainFilePath;
+                } else {
+                    avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+                }
+
+                avatarList = realmRegisteredInfo.getAvatars();
             }
-
-            avatarList = realmRegisteredInfo.getAvatars();
-        }
 
         RealmContacts realmUser = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
 
@@ -225,8 +226,12 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         imgUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentShowAvatars.appBarLayout = fab;
-                getSupportFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId)).commit();
+                Realm realm = Realm.getDefaultInstance();
+                if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
+                    FragmentShowAvatars.appBarLayout = fab;
+                    getSupportFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId)).commit();
+                }
+                realm.close();
             }
         });
 

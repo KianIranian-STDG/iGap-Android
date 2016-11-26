@@ -418,6 +418,11 @@ public class ActivityProfile extends ActivityEnhanced
         // TODO: 10/20/2016 [Alireza] update view something like updating progress
     }
 
+    @Override
+    public void onFileTimeOut(String identity) {
+
+    }
+
     private void setImage(String path) {
         if (pathImageUser != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(path);

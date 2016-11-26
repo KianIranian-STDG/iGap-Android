@@ -190,10 +190,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (realmAvatar != null) {
             if (realmAvatar.getFile().isFileExistsOnLocal()) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), circleImageView);
-                G.onChangeUserPhotoListener.onChangePhoto(realmAvatar.getFile().getLocalFilePath());
+                if (G.onChangeUserPhotoListener != null) {
+                    G.onChangeUserPhotoListener.onChangePhoto(realmAvatar.getFile().getLocalFilePath());
+                }
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), circleImageView);
-                G.onChangeUserPhotoListener.onChangePhoto(realmAvatar.getFile().getLocalThumbnailPath());
+                if (G.onChangeUserPhotoListener != null) {
+                    G.onChangeUserPhotoListener.onChangePhoto(realmAvatar.getFile().getLocalThumbnailPath());
+                }
             } else {
                 showInitials();
                 requestDownloadAvatar(false, realmAvatar.getFile().getToken(), realmAvatar.getFile().getName(), (int) realmAvatar.getFile().getSmallThumbnail().getSize());
@@ -216,7 +220,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 @Override
                 public void onSuccess() {
                     String filePath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().getLocalThumbnailPath();
-                    G.onChangeUserPhotoListener.onChangePhoto(filePath);
+                    if (G.onChangeUserPhotoListener != null) {
+                        G.onChangeUserPhotoListener.onChangePhoto(filePath);
+                    }
                     realm.close();
                 }
             });
@@ -243,7 +249,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         , realmUserInfo.getUserInfo().getColor()));
         realm.close();
 
-        G.onChangeUserPhotoListener.onChangePhoto(null);
+        if (G.onChangeUserPhotoListener != null) {
+            G.onChangeUserPhotoListener.onChangePhoto(null);
+        }
     }
 
     @Override
@@ -1797,7 +1805,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
+                if (G.onChangeUserPhotoListener != null) {
+                    G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
+                }
                 setImage();
             }
         }, 500);
@@ -1820,6 +1830,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     @Override
     public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
         // TODO: 10/20/2016 [Alireza] update view something like updating progress
+    }
+
+    @Override
+    public void onFileTimeOut(String identity) {
+
     }
 
     @Override

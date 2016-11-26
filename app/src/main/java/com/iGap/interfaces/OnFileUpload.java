@@ -20,4 +20,6 @@ public interface OnFileUpload {
                       ProtoResponse.Response response);
 
     void onFileUploadComplete(String fileHashAsIdentity, ProtoResponse.Response response);
+
+    void onFileUploadTimeOut(String identity);
 }

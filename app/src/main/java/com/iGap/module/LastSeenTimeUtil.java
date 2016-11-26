@@ -1,5 +1,7 @@
 package com.iGap.module;
 
+import android.text.format.DateUtils;
+
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class LastSeenTimeUtil {
     private LastSeenTimeUtil() throws InstantiationException {
@@ -25,15 +28,13 @@ public class LastSeenTimeUtil {
      * @return
      */
     public static String computeTime(long userId, long lastSeen) {
-        if (timeOut(lastSeen)) {
-            return TimeUtils.toLocal(lastSeen, G.ROOM_LAST_MESSAGE_TIME);
+        if (timeOut(lastSeen * DateUtils.SECOND_IN_MILLIS)) {
+            return TimeUtils.toLocal(lastSeen * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
         } else {
-            updateLastSeenTime();
             hashMapLastSeen.put(userId, lastSeen);
-
+            updateLastSeenTime();
             return getMinute(lastSeen);
         }
-
     }
 
     /**
@@ -50,14 +51,16 @@ public class LastSeenTimeUtil {
             long value = entry.getValue();
 
             String showLastSeen;
-            if (timeOut(value)) {
+            if (timeOut(value * DateUtils.SECOND_IN_MILLIS)) {
                 showLastSeen = TimeUtils.toLocal(value, G.ROOM_LAST_MESSAGE_TIME);
                 userIdList.add(userId);
             } else {
                 showLastSeen = getMinute(value);
             }
 
-            G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, G.context.getResources().getString(R.string.last_seen_at) + " " + showLastSeen);
+            if (G.onLastSeenUpdateTiming != null) {
+                G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
+            }
         }
 
         // i separate hashMap remove from iterator , because i guess remove in that iterator make bug in app , but i'm not insuring
@@ -66,7 +69,6 @@ public class LastSeenTimeUtil {
         }
 
         userIdList.clear();
-
         if (hashMapLastSeen.size() > 0) {
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -80,10 +82,8 @@ public class LastSeenTimeUtil {
     private static boolean timeOut(long lastSeen) {
 
         long difference;
-
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - lastSeen);
-
         if (difference >= Config.LAST_SEEN_TIME_OUT) {
             return true;
         }
@@ -92,6 +92,9 @@ public class LastSeenTimeUtil {
     }
 
     private static String getMinute(long time) {
-        return Integer.toString((int) ((time / (1000 * 60)) % 60)) + " " + G.context.getResources().getString(R.string.minute_ago);
+
+        long currentTime = System.currentTimeMillis();
+        long difference = (currentTime - (time * DateUtils.SECOND_IN_MILLIS));
+        return TimeUnit.MILLISECONDS.toMinutes(difference) + " " + G.context.getResources().getString(R.string.minute_ago);
     }
 }

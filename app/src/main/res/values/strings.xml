@@ -582,4 +582,5 @@
     <string name="server_do_not_response">Server don\'t respase</string>
     <string name="share_image_from_igap">Share image from iGap</string>
     <string name="you_need_to_allow">"You need to allow "</string>
+    <string name="waiting_for_connection">Waiting for Connect To Server</string>
 </resources>

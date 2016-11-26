@@ -417,7 +417,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                         public void run() {
 
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                    getResources().getString(R.string.Toast_waiting_fot_get_info),
+                                    getResources().getString(R.string.waiting_for_connection),
                                     Snackbar.LENGTH_LONG);
 
                             snack.setAction(getString(R.string.cancel), new View.OnClickListener() {

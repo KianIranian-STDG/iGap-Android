@@ -28,12 +28,14 @@ public class FileUploadResponse extends MessageHandler {
     @Override
     public void timeOut() {
         HelperSetAction.sendCancel(Long.parseLong(this.identity));
+        G.uploaderUtil.onFileUploadTimeOut(this.identity);
         super.timeOut();
     }
 
     @Override
     public void error() {
         HelperSetAction.sendCancel(Long.parseLong(this.identity));
+        G.uploaderUtil.onFileUploadTimeOut(this.identity);
         super.error();
     }
 }

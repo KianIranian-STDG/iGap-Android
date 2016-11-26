@@ -555,13 +555,17 @@ public class ActivityGroupProfile extends ActivityEnhanced
             @Override
             public void onComplete(RippleView rippleView) {
 
-                FragmentShowAvatars.appBarLayout = fab;
+                Realm realm = Realm.getDefaultInstance();
+                if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
+                    FragmentShowAvatars.appBarLayout = fab;
 
-                FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId);
-                ActivityGroupProfile.this.getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer_group_profile, fragment, null).commit();
+                    FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId);
+                    ActivityGroupProfile.this.getSupportFragmentManager()
+                            .beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                            .replace(R.id.fragmentContainer_group_profile, fragment, null).commit();
+                }
+                realm.close();
 
             }
         });
@@ -989,6 +993,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
     public void onFileUploading(FileUploadStructure uploadStructure, String identity,
                                 double progress) {
         // TODO: 10/20/2016 [Alireza] update view something like updating progress
+    }
+
+    @Override
+    public void onFileTimeOut(String identity) {
+
     }
 
     //dialog for choose pic from gallery or camera

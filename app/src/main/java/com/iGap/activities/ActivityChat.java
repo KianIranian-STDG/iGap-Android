@@ -113,6 +113,7 @@ import com.iGap.module.EndlessRecyclerOnScrollListener;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.FileUtils;
 import com.iGap.module.HelperDecodeFile;
+import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
@@ -1723,13 +1724,18 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setUserStatus(String status, long time) {
         Log.i("CCC", "2 status : " + status);
+        Log.i("QQQ", "setUserStatus 1");
         userStatus = status;
         if (status != null) {
             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
-                txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
+                Log.i("QQQ", "EXACTLY");
+                /*String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);*/
+
+                txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time));
                 //txtLastSeen.setText(LastSeenTimeUtil.computeTime(userId, time));
             } else {
+                Log.i("QQQ", "NOT EXACTLY");
                 txtLastSeen.setText(status);
             }
         }
@@ -3594,6 +3600,11 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
+    @Override
+    public void onFileTimeOut(String identity) {
+
+    }
+
     private void onSelectRoomMenu(String message, int item) {
         switch (message) {
             case "txtMuteNotification":
@@ -4249,6 +4260,7 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onUserUpdateStatus(long userId, final long time, final String status) {
+        Log.i("QQQ", "onUserUpdateStatus");
         if (chatType == CHAT && chatPeerId == userId) {
             runOnUiThread(new Runnable() {
                 @Override
@@ -4260,7 +4272,15 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onLastSeenUpdate(long userId, String time) {
+    public void onLastSeenUpdate(final long userId, final String time) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (chatType == CHAT && userId == chatPeerId) {
+                    txtLastSeen.setText(time);
+                }
+            }
+        });
 
     }
 

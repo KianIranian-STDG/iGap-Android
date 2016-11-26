@@ -10,4 +10,6 @@ public interface OnFileUploadForActivities {
     void onFileUploaded(FileUploadStructure uploadStructure, String identity);
 
     void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress);
+
+    void onFileTimeOut(String identity);
 }
