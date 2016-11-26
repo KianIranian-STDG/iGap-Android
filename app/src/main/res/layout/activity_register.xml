@@ -186,7 +186,7 @@
             android:layout_marginTop="@dimen/dp4"
             android:background="@drawable/rg_background_agreement2"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -24,6 +24,7 @@ import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.interfaces.OnGroupKickAdmin;
+import com.iGap.interfaces.OnGroupKickModerator;
 import com.iGap.interfaces.UpdateListAfterKick;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
@@ -199,8 +200,85 @@ public class FragmentListAdmin extends Fragment {
                             .show();
                 }
                 return false;
+
             }
         });
+
+        G.onGroupKickModerator = new OnGroupKickModerator() {
+            @Override
+            public void onGroupKickModerator(long roomId, long memberId) {
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWait.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWait.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+
+
+            }
+
+            @Override
+            public void timeOut() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWait.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+            }
+        };
+
+        G.onGroupKickAdmin = new OnGroupKickAdmin() {
+            @Override
+            public void onGroupKickAdmin(long roomId, long memberId) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWait.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWait.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWait.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+            }
+        };
+
+
 
         //configure our fastAdapter
         //as we provide id's for the items we want the hasStableIds enabled to speed up things

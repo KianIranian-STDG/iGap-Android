@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,7 @@ public class ContactGroupFragment extends Fragment {
     private TextView txtNumberOfMember;
     private EditText edtSearch;
     private String textString = "";
+    private String participantsLimit = "5000";
 
     private long roomId;
     private int countAddMemberResponse = 0;
@@ -81,10 +83,13 @@ public class ContactGroupFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             roomId = bundle.getLong("RoomId");
+            participantsLimit = bundle.getString("LIMIT");
+            Log.i("NNNNNNM", "onViewCreated: " + participantsLimit);
         }
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
+        txtNumberOfMember.setText("0" + "/" + participantsLimit + " " + getString(R.string.member));
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
 
         MaterialDesignTextView btnBack =
@@ -118,6 +123,7 @@ public class ContactGroupFragment extends Fragment {
                                 @Override
                                 public void execute(Realm realm) {
                                     realmRoom.getGroupRoom().setParticipantsCountLabel(realmRoom.getGroupRoom().getMembers().size() + "");
+                                    realmRoom.getGroupRoom().setParticipants_count_limit_label(participantsLimit);
                                 }
                             });
                             realm.close();
@@ -126,7 +132,7 @@ public class ContactGroupFragment extends Fragment {
                             intent.putExtra("RoomId", roomId);
                             startActivity(intent);
                             getActivity().getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
-                            getActivity().getSupportFragmentManager().popBackStack();
+//                            getActivity().getSupportFragmentManager().popBackStack();
                         }
                     }
 
@@ -427,10 +433,13 @@ public class ContactGroupFragment extends Fragment {
             }
         }
 
-        txtNumberOfMember.setText(
-                selectedNumber + " / " + contacts.size() + getString(R.string.member));
+        txtNumberOfMember.setText(selectedNumber + " / " + participantsLimit + " " + getString(R.string.member));
         sizeTextEditText = textString.length();
         edtSearch.setText(textString);
+
+        Log.i("NNNNNNM", "refreshView: " + participantsLimit);
+
+
     }
 
     private ArrayList<Long> getSelectedList() {

@@ -12,7 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -119,7 +121,6 @@ public class FragmentActiveSessions extends Fragment {
                             item.setActiveTime(session.get(i).getActiveTime());
                             item.setIp(session.get(i).getIp());
 
-
                             if (item.isCurrent()) {
                                 structItems.add(0, item);
 //                                items.add(0,new AdapterActiveSessions(item).withIdentifier(100 + i));
@@ -156,6 +157,8 @@ public class FragmentActiveSessions extends Fragment {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
+                                        prgWaiting.setVisibility(View.VISIBLE);
+                                        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessions) item).getItem().getSessionId());
                                         G.onUserSessionTerminate = new OnUserSessionTerminate() {
                                             @Override
@@ -164,6 +167,8 @@ public class FragmentActiveSessions extends Fragment {
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
+                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                        prgWaiting.setVisibility(View.GONE);
                                                         fastItemAdapter.remove(position);
                                                     }
                                                 });
@@ -175,6 +180,8 @@ public class FragmentActiveSessions extends Fragment {
                                                     @Override
                                                     public void run() {
 
+                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                        prgWaiting.setVisibility(View.GONE);
                                                         final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                                 R.string.error,
                                                                 Snackbar.LENGTH_LONG);
@@ -194,6 +201,8 @@ public class FragmentActiveSessions extends Fragment {
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
+                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                        prgWaiting.setVisibility(View.GONE);
                                                         final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
                                                                 getString(R.string.error),
                                                                 Snackbar.LENGTH_LONG);
@@ -211,7 +220,7 @@ public class FragmentActiveSessions extends Fragment {
                                     }
                                 }).show();
                     } else {
-//                        Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "test11111", Toast.LENGTH_SHORT).show();
                     }
 
 

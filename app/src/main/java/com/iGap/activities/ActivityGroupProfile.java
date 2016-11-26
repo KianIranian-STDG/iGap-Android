@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -365,7 +366,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         layoutDeleteAndLeftGroup = (LinearLayout) findViewById(R.id.agp_ll_delete_and_left_group);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting_addContact);
         prgWait.getIndeterminateDrawable()
-                .setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+                .setColorFilter(getResources().getColor(R.color.toolbar_background), PorterDuff.Mode.MULTIPLY);
         imvGroupAvatar = (CircleImageView) findViewById(R.id.agp_imv_group_avatar);
 
         txtGroupNameTitle = (TextView) findViewById(R.id.agp_txt_group_name_title);
@@ -543,6 +544,14 @@ public class ActivityGroupProfile extends ActivityEnhanced
         });
 
         TextView txtDeleteGroup = (TextView) findViewById(R.id.agp_txt_str_delete_and_leave_group);
+
+        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+            txtDeleteGroup.setText(getString(R.string.delete_group));
+        } else {
+            txtDeleteGroup.setText(getString(R.string.left_group));
+        }
+
+
         txtDeleteGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1550,6 +1559,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
                         });
                     }
                 }
+
+                @Override
+                public void onTimeOut() {
+
+                }
             };
 
 
@@ -1945,8 +1959,15 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
     private void groupLeft() {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(
-                R.string.do_you_want_to_delete_this_group)
+        String text = "";
+        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+            text = getString(R.string.do_you_want_to_delete_this_group);
+        } else {
+            text = getString(R.string.do_you_want_to_leave_this_group);
+        }
+
+        new MaterialDialog.Builder(ActivityGroupProfile.this)
+                .content(text)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -2109,7 +2130,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                             }
                         };
 
-                        if (role.equals(GroupChatRole.OWNER)) {
+                        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
                             new RequestGroupDelete().groupDelete(roomId);
                         } else {
                             new RequestGroupLeft().groupLeft(roomId);

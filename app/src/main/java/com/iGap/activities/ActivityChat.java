@@ -1243,9 +1243,9 @@ public class ActivityChat extends ActivityEnhanced
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
                 popupWindow.setOutsideTouchable(true);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow2, ActivityChat.this.getTheme()));
+                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityChat.this.getTheme()));
                 } else {
-                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow2)));
+                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
                 }
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();

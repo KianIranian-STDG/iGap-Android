@@ -11,4 +11,5 @@ public interface OnGroupAddModerator {
 
     void onError(int majorCode, int minorCode);
 
+    void onTimeOut();
 }

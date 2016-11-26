@@ -66,6 +66,7 @@ public class GroupAddModeratorResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        G.onGroupAddModerator.onTimeOut();
     }
 
     @Override

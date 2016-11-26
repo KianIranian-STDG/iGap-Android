@@ -271,7 +271,6 @@
     <string name="please_enter_group_name">Please Enter Group Name.</string>
     <string name="group_description">Group Description</string>
     <string name="please_enter_group_description">Please Enter Group Description</string>
-    <string name="do_you_want_to_delete_this_group">Are you sure that you want want to delete this chat?</string>
     <string name="do_you_want_to_set_admin_role_to_member">Are you sure that you want want to set admin role to the members?</string>
     <string name="do_you_want_to_kick_this_member">Are you sure that you want want to kick these members?</string>
     <string name="do_you_want_to_set_modereator_role_to_member">Are you sure that you want want to set moderator role to the members?</string>
@@ -453,7 +452,6 @@
     <string name="recently">recently</string>
     <string name="support">support</string>
     <string name="service_notification">service notification</string>
-    <string name="do_you_want_left_this">"Do you want to leave this?"</string>
     <string name="B_edit">Edit</string>
     <string name="left">Left</string>
     <string name="Channel_name">New Channel</string>
@@ -558,7 +556,6 @@
     <string name="mute">Mute</string>
     <string name="message">Message</string>
     <string name="future_done">will be offered in the future</string>
-
     <string name="nick_name_not_exist">nick name not exist</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
@@ -568,7 +565,7 @@
     <string name="clear">ClEAR</string>
     <string name="can_not_save_image">can\'t save Image</string>
     <string name="just_owner_can_delete">Just owner can delete</string>
-    <string name="left_group">lefGroup</string>
+    <string name="left_group">lef Group</string>
     <string name="shate_audio_file">Share audio File</string>
     <string name="last_seen">last seen</string>
     <string name="remove">Remove</string>
@@ -582,5 +579,11 @@
     <string name="server_do_not_response">Server don\'t respase</string>
     <string name="share_image_from_igap">Share image from iGap</string>
     <string name="you_need_to_allow">"You need to allow "</string>
+    <string name="TERMINATE">"TERMINATE"</string>
+    <string name="iGap_version">"iGap for Android "</string>
+    <string name="do_you_want_left_this">"Do you want to leave this"</string>
+    <string name="delete_group">Delete Group</string>
+    <string name="do_you_want_to_delete_this_group">Are you sure that you want to delete this Group?</string>
+    <string name="do_you_want_to_leave_this_group">Are you sure that you want to left this Group?</string>
     <string name="waiting_for_connection">Waiting for Connect To Server</string>
 </resources>

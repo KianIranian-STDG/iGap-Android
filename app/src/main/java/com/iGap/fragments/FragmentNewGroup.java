@@ -507,6 +507,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             @Override
             public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
 
+                final String limit = room.getGroupRoomExtra().getParticipantsCountLimitLabel();
+
 
                 try {
                     getActivity().runOnUiThread(new Runnable() {
@@ -519,6 +521,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                             Fragment fragment = ContactGroupFragment.newInstance();
                             Bundle bundle = new Bundle();
                             bundle.putLong("RoomId", roomId);
+                            bundle.putString("LIMIT", limit);
                             bundle.putBoolean("NewRoom", true);
                             fragment.setArguments(bundle);
                             getActivity().getSupportFragmentManager()
@@ -527,8 +530,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                                     .addToBackStack(null)
                                     .replace(fragmentContainer, fragment)
                                     .commitAllowingStateLoss();
-                            ActivityMain.mLeftDrawerLayout.closeDrawer();
                             getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                            ActivityMain.mLeftDrawerLayout.closeDrawer();
+//                            getActivity().getSupportFragmentManager().popBackStack();
                         }
                     });
                 } catch (IllegalStateException e) {

@@ -250,7 +250,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
-            getActivity().getSupportFragmentManager().popBackStack();
+            getActivity().getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
+//            getActivity().getSupportFragmentManager().popBackStack();
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override

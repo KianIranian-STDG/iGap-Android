@@ -10,6 +10,7 @@ import io.realm.RealmObject;
 public class RealmGroupRoom extends RealmObject {
     private String role;
     private String participants_count_label;
+    private String participants_count_limit_label;
     private String description;
     private int avatarCount;
     private RealmAvatar avatar;
@@ -47,6 +48,14 @@ public class RealmGroupRoom extends RealmObject {
 
     public void setParticipantsCountLabel(String participants_count_label) {
         this.participants_count_label = participants_count_label;
+    }
+
+    public String getParticipants_count_limit_label() {
+        return participants_count_limit_label;
+    }
+
+    public void setParticipants_count_limit_label(String participants_count_limit_label) {
+        this.participants_count_limit_label = participants_count_limit_label;
     }
 
     public String getDescription() {

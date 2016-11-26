@@ -47,12 +47,14 @@
 
             <android.support.v7.widget.SearchView
                 android:id="@+id/menu_edtSearch"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:theme="@style/SearchViewToolbar"
                 android:layoutDirection="ltr"
+                android:layout_marginLeft="@dimen/dp52"
+                android:layout_marginStart="@dimen/dp52"
                 android:visibility="visible" />
 
             <TextView

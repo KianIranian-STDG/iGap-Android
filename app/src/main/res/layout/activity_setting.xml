@@ -1011,6 +1011,26 @@
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal"
                     />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText"/>
+
+                <TextView
+                    android:id="@+id/st_txt_versionApp"
+                    fontPath="fonts/IRANSansMobile.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:text="@string/iGap_version"
+                    android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp13"
+                    android:textStyle="normal"
+                    />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

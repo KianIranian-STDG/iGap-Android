@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.BitmapDrawable;
@@ -92,6 +93,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.iGap.G.context;
 import static com.iGap.R.id.st_layoutParent;
 
 public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities, OnFileDownloadResponse {
@@ -1621,6 +1623,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+
+        TextView txtVersionApp = (TextView) findViewById(R.id.st_txt_versionApp);
+        txtVersionApp.setText(getString(R.string.iGap_version) + " v" + getAppVersion());
+
         realm.close();
 
         setImage();
@@ -1909,5 +1915,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             prg.setVisibility(View.GONE);
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
         }
+    }
+
+    private String getAppVersion() {
+
+        PackageManager manager = context.getPackageManager();
+        PackageInfo info = null;
+        try {
+            info = manager.getPackageInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return info.versionName;
     }
 }

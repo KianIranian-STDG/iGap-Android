@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/current_session"
                 android:textColor="@color/toolbar_background"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp14"
                 />
 
 
@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/device"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
                     />
 
                 <TextView
@@ -52,7 +52,7 @@
                     android:layout_marginLeft="@dimen/dp4"
                     android:text="pc"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
                     />
 
                 <TextView
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:text=" , "
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
                     />
 
                 <TextView
@@ -69,34 +69,45 @@
                     android:layout_height="wrap_content"
                     android:text="windows"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
                     />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp4"
                 android:orientation="horizontal">
 
                 <TextView
 
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/country"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
                     />
 
                 <TextView
                     android:id="@+id/adp_country"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp4"
                     android:text="Iran"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
+
+                    />
+
+                <TextView
+                    android:id="@+id/adp_terminate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/TERMINATE"
+                    android:gravity="right|end"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/sp14"
                     />
 
             </LinearLayout>
@@ -113,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/create_time"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
                     />
 
                 <TextView
@@ -123,7 +134,7 @@
                     android:layout_marginLeft="@dimen/dp4"
                     android:text=" 17 Nov 2016"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
                     />
 
             </LinearLayout>
@@ -140,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/ip"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
                     />
 
                 <TextView
@@ -150,29 +161,10 @@
                     android:layout_marginLeft="@dimen/dp4"
                     android:text=" 192.168.1.1"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
                     />
 
             </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight=".1"
-            android:layout_marginTop="@dimen/dp12">
-
-            <TextView
-                android:id="@+id/adp_terminate"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp4"
-                android:text="TERMINATE"
-                android:gravity="center"
-                android:textColor="@color/red"
-                android:textSize="@dimen/sp16"
-                />
-
         </LinearLayout>
 
     </LinearLayout>
