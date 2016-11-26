@@ -44,7 +44,6 @@ import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatGetRoom;
-import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnUserAvatarGetList;
 import com.iGap.interfaces.OnUserContactDelete;
 import com.iGap.interfaces.OnUserContactEdit;
@@ -94,7 +93,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
 
-public class ActivityContactsProfile extends ActivityEnhanced implements OnUserUpdateStatus, OnLastSeenUpdateTiming {
+public class ActivityContactsProfile extends ActivityEnhanced implements OnUserUpdateStatus {
     private long userId = 0;
     private long roomId;
     private String phone = "0";
@@ -147,7 +146,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         setContentView(R.layout.activity_contacts_profile);
         final Realm realm = Realm.getDefaultInstance();
         G.onUserUpdateStatus = this;
-        G.onLastSeenUpdateTiming = this;
 
         Bundle extras = getIntent().getExtras();
         userId = extras.getLong("peerId");
@@ -1380,11 +1378,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 }
             });
         }
-    }
-
-    @Override
-    public void onLastSeenUpdate(long userId, String time) {
-
     }
 }
 
