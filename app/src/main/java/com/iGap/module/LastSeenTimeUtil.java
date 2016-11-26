@@ -52,7 +52,7 @@ public class LastSeenTimeUtil {
 
             String showLastSeen;
             if (timeOut(value * DateUtils.SECOND_IN_MILLIS)) {
-                showLastSeen = TimeUtils.toLocal(value, G.ROOM_LAST_MESSAGE_TIME);
+                showLastSeen = TimeUtils.toLocal(value * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
                 userIdList.add(userId);
             } else {
                 showLastSeen = getMinute(value);
