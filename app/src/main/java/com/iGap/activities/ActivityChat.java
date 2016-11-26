@@ -202,6 +202,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
+import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
@@ -516,7 +517,7 @@ public class ActivityChat extends ActivityEnhanced
                         Realm realm1 = Realm.getDefaultInstance();
                         RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
-                        G.chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
+                        chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
                         scrollToEnd();
                         realm1.close();
                     }
@@ -726,7 +727,7 @@ public class ActivityChat extends ActivityEnhanced
                         Realm realm1 = Realm.getDefaultInstance();
                         RealmRoomMessage forwardedMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
-                        G.chatSendMessageUtil.build(chatType, forwardedMessage.getRoomId(), forwardedMessage);
+                        chatSendMessageUtil.build(chatType, forwardedMessage.getRoomId(), forwardedMessage);
                         realm1.close();
                     }
                 });
@@ -735,7 +736,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     public void initCallbacks() {
-        G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
+        chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
@@ -1599,7 +1600,7 @@ public class ActivityChat extends ActivityEnhanced
 
                         scrollToEnd();
 
-                        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(identity);
+                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
 
                         edtChat.setText("");
 
@@ -2884,7 +2885,7 @@ public class ActivityChat extends ActivityEnhanced
 
     private void checkIfOrientationChanged(Configuration configuration) {
         if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            getWindow().setBackgroundDrawableResource(R.mipmap.chat_background3);
+            getWindow().setBackgroundDrawableResource(R.drawable.newbg);
         }
     }
 

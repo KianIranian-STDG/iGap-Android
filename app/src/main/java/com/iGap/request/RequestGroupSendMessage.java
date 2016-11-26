@@ -44,6 +44,11 @@ public class RequestGroupSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02
         return this;
     }
 
+    public RequestGroupSendMessage replyMessage(long messageId) {
+        groupSendMessage.setReplyTo(messageId);
+        return this;
+    }
+
     public RequestGroupSendMessage sendMessage(String fakeMessageIdAsIdentity) {
         RequestWrapper requestWrapper =
                 new RequestWrapper(310, groupSendMessage, fakeMessageIdAsIdentity);

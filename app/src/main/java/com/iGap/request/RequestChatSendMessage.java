@@ -44,6 +44,11 @@ public class RequestChatSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02 
         return this;
     }
 
+    public RequestChatSendMessage replyMessage(long messageId) {
+        chatSendMessage.setReplyTo(messageId);
+        return this;
+    }
+
     public RequestChatSendMessage sendMessage(String fakeMessageIdAsIdentity) {
         RequestWrapper requestWrapper =
                 new RequestWrapper(201, chatSendMessage, fakeMessageIdAsIdentity);
