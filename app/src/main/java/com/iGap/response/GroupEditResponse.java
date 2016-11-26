@@ -1,5 +1,7 @@
 package com.iGap.response;
 
+import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupEdit;
@@ -31,6 +33,8 @@ public class GroupEditResponse extends MessageHandler {
         long roomId = builder.getRoomId();
         final String name = builder.getName();
         final String descriptions = builder.getDescription();
+
+        Log.e("ddd", message + "");
 
 
         Realm realm = Realm.getDefaultInstance();

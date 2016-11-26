@@ -1,8 +1,10 @@
 package com.iGap.activities;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +18,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -230,8 +233,36 @@ public class ActivityGroupProfile extends ActivityEnhanced
             ActivityChat.onComplete.complete(true, txtMemberNumber.getText().toString(), "");
         }
 
+        LocalBroadcastManager.getInstance(ActivityGroupProfile.this).unregisterReceiver(reciverOnGroupChangeName);
+
         super.onPause();
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
+    }
+
+    private BroadcastReceiver reciverOnGroupChangeName = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+
+            String name = intent.getExtras().getString("Name");
+            String description = intent.getExtras().getString("Description");
+
+            txtGroupName.setText(name);
+            txtGroupDescription.setText(description);
+            txtGroupNameTitle.setText(name);
+
+
+        }
+    };
+
 
     private void initComponent() {
 
@@ -384,21 +415,26 @@ public class ActivityGroupProfile extends ActivityEnhanced
         appBarLayout = (AppBarLayout) findViewById(R.id.agp_appbar);
 
         LinearLayout llGroupName = (LinearLayout) findViewById(R.id.agp_ll_group_name);
-        llGroupName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ChangeGroupName();
-            }
-        });
+        LinearLayout llGroupDescription = (LinearLayout) findViewById(R.id.agp_ll_group_description);
 
-        LinearLayout llGroupDescription =
-                (LinearLayout) findViewById(R.id.agp_ll_group_description);
-        llGroupDescription.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ChangeGroupDescription();
-            }
-        });
+        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+            llGroupName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ChangeGroupName();
+                }
+            });
+
+            llGroupDescription.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ChangeGroupDescription();
+                }
+            });
+        }
+
+
+
 
         LinearLayout llSharedMedia = (LinearLayout) findViewById(R.id.agp_ll_sheared_media);
         llSharedMedia.setOnClickListener(new View.OnClickListener() {

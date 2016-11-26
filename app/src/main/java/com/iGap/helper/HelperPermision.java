@@ -40,6 +40,8 @@ public class HelperPermision {
     private static OnGetPermision ResultPhone;
     private static OnGetPermision ResultSms;
 
+    public static OnGetPermision onDenyStorage;
+
     //************************************************************************************************************
     public static void getCamarePermision(Context context, OnGetPermision onGetPermision) {
 
@@ -358,14 +360,11 @@ public class HelperPermision {
     public static void getPremision(final Context context, final String[] needPermision,
                                     final int requestCode) {
 
-        if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context,
-                needPermision[0])) {
-            showMessageOKCancel(context, context.getString(R.string.you_need_to_allow) + needPermision[0],
-                    new DialogInterface.OnClickListener() {
+        if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermision[0])) {
+            showMessageOKCancel(context, context.getString(R.string.you_need_to_allow) + needPermision[0], new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions((Activity) context, needPermision,
-                                    requestCode);
+                            ActivityCompat.requestPermissions((Activity) context, needPermision, requestCode);
                         }
                     });
             return;
@@ -374,8 +373,7 @@ public class HelperPermision {
         ActivityCompat.requestPermissions((Activity) context, needPermision, requestCode);
     }
 
-    private static void showMessageOKCancel(Context context, String message,
-                                            DialogInterface.OnClickListener okListener) {
+    private static void showMessageOKCancel(Context context, String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(context).setMessage(message)
                 .setPositiveButton(context.getString(R.string.ok), okListener)
                 .setNegativeButton(context.getString(R.string.cancel), null)
@@ -426,6 +424,8 @@ public class HelperPermision {
 
         if (allOk) {
             if (onGetPermision != null) onGetPermision.Allow();
+        } else if (onDenyStorage != null) {
+            onDenyStorage.Allow();
         }
     }
 

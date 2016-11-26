@@ -49,7 +49,7 @@ public class ActivityWebView extends ActivityEnhanced {
             Bundle bundle = getIntent().getExtras();
             key = bundle.getString("PATH");
         } else {
-            key = "FAQ";
+            key = G.FAQ;
         }
 
         allLayoutToolbar = (ViewGroup) findViewById(R.id.stfaq_allLayout_toolbar);
@@ -106,11 +106,8 @@ public class ActivityWebView extends ActivityEnhanced {
         });
 
         webView = (WebView) findViewById(R.id.stfaq_webView);
-        if (key.equals("FAQ")) {
-            webView.loadUrl(G.FAQ);
-        } else {
-            webView.loadUrl(G.POLICY);
-        }
+        webView.loadUrl(key);
+
 
         webView.getSettings().getJavaScriptEnabled();
         webView.getSettings().getBuiltInZoomControls();
@@ -330,14 +327,8 @@ public class ActivityWebView extends ActivityEnhanced {
                 openChrome.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String urlString;
-                        if (key.equals("FAQ")) {
-                            urlString = G.FAQ;
-                        } else {
-                            urlString = G.POLICY;
-                        }
 
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(key));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.setPackage("com.android.chrome");
                         try {

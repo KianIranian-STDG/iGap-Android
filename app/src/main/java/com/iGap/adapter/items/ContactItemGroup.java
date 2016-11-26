@@ -102,8 +102,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         }
 
         String name = HelperImageBackColor.getFirstAlphabetName(mContact.displayName);
-        bitmap = HelperImageBackColor.drawAlphabetOnPicture(size, name,
-                HelperImageBackColor.getColor(name));
+        bitmap = HelperImageBackColor.drawAlphabetOnPicture(size, name, HelperImageBackColor.getColor(name));
 
         return bitmap;
     }

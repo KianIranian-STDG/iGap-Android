@@ -85,12 +85,12 @@ public class HelperImageBackColor {
         if (text == null || text.equals("")) {
             alphabetName = " ";
         } else {
-            alphabetName = text.replace(" ", "");
+            //  alphabetName = text.replace(" ", "");
         }
 
-        if (alphabetName.length() >= 2) {
-            alphabetName = alphabetName.substring(0, 1) + "\u200b" + alphabetName.substring(1, 2);
-        }
+//        if (alphabetName.length() >= 2) {
+//            alphabetName = alphabetName.substring(0, 1) + "\u200b" + alphabetName.substring(1, 2);
+//        }
 
         Bitmap bitmap = Bitmap.createBitmap(with, with, Bitmap.Config.ARGB_8888);
         //        bitmap.eraseColor(Color.parseColor(getColor(alphabetName)));

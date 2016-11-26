@@ -39,70 +39,44 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        String text = "";
+
         if (mMessage.forwardedFrom != null) {
-            setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
-
-            if (!TextUtils.isEmpty(mMessage.forwardedFrom.getMessage()) && !mMessage.forwardedFrom.getMessage().contains("#")) {
-                holder.messageText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!isSelected()) {
-                            if (mMessage.status.equalsIgnoreCase(
-                                    ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                                return;
-                            }
-                            if (mMessage.status.equalsIgnoreCase(
-                                    ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                                messageClickListener.onFailedMessageClick(v, mMessage,
-                                        holder.getAdapterPosition());
-                            } else {
-                                messageClickListener.onContainerClick(v, mMessage,
-                                        holder.getAdapterPosition());
-                            }
-                        }
-                    }
-                });
-
-                holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        holder.itemView.performLongClick();
-                        return false;
-                    }
-                });
-            }
+            text = mMessage.forwardedFrom.getMessage();
         } else {
-            setTextIfNeeded(holder.messageText, mMessage.messageText);
+            text = mMessage.messageText;
+        }
 
-            if (!TextUtils.isEmpty(mMessage.messageText) && !mMessage.messageText.contains("#")) {
-                holder.messageText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!isSelected()) {
-                            if (mMessage.status.equalsIgnoreCase(
-                                    ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                                return;
-                            }
-                            if (mMessage.status.equalsIgnoreCase(
-                                    ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                                messageClickListener.onFailedMessageClick(v, mMessage,
-                                        holder.getAdapterPosition());
-                            } else {
-                                messageClickListener.onContainerClick(v, mMessage,
-                                        holder.getAdapterPosition());
-                            }
+
+        setTextIfNeeded(holder.messageText, text);
+
+        if (!TextUtils.isEmpty(text) && !text.contains("#")) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!isSelected()) {
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            return;
+                        }
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                        } else {
+                            messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
                         }
                     }
-                });
+                }
+            });
 
-                holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        holder.itemView.performLongClick();
-                        return false;
-                    }
-                });
-            }
+            holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    holder.itemView.performLongClick();
+                    return false;
+                }
+            });
+
+
+
         }
     }
 

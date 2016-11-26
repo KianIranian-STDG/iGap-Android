@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -21,6 +23,8 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
+import com.iGap.helper.HelperPermision;
+import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnReceiveInfoLocation;
 import com.iGap.interfaces.OnReceivePageInfoTOS;
 import com.iGap.module.CustomCircleImage;
@@ -76,9 +80,55 @@ public class ActivityIntroduce extends ActivityEnhanced {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        HelperPermision.getStoragePermision(this, new OnGetPermision() {
+            @Override
+            public void Allow() {
+                HelperPermision.onDenyStorage = null;
+                goToProgram(savedInstanceState);
+            }
+        });
+
+
+        HelperPermision.onDenyStorage = new OnGetPermision() {
+            @Override
+            public void Allow() {
+
+                DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermision() {
+                            @Override
+                            public void Allow() {
+                                HelperPermision.onDenyStorage = null;
+                                goToProgram(savedInstanceState);
+                            }
+                        });
+                    }
+                };
+
+                DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        HelperPermision.onDenyStorage = null;
+                        finish();
+                    }
+                };
+
+
+                new AlertDialog.Builder(ActivityIntroduce.this).setMessage("you have to get storage permision for continue")
+                        .setPositiveButton(ActivityIntroduce.this.getString(R.string.ok), onOkListener)
+                        .setNegativeButton(ActivityIntroduce.this.getString(R.string.cancel), onCancelListener)
+                        .create()
+                        .show();
+            }
+        };
+
+    }
+
+    private void goToProgram(Bundle savedInstanceState) {
         setLocale("en");
 
         Realm realm = Realm.getDefaultInstance();

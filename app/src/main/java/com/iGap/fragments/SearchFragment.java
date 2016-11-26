@@ -128,7 +128,7 @@ public class SearchFragment extends Fragment {
 
                         itemAdapter.filter(edtSearch.getText().toString());
                     }
-                }, 100);
+                }, 200);
             }
         });
         edtSearch.requestFocus();
