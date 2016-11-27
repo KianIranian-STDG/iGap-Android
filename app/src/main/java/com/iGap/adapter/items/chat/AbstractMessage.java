@@ -288,7 +288,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
                 holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
 
-                AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getAttachment() : mMessage.replayTo.getForwardMessage().getAttachment());
+                try {
+                    AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getAttachment() : mMessage.replayTo.getForwardMessage().getAttachment());
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                }
 
                 Realm realm = Realm.getDefaultInstance();
                 RealmRegisteredInfo replayToInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.replayTo.getUserId()).findFirst();

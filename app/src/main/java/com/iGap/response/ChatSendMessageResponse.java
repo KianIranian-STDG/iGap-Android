@@ -57,10 +57,9 @@ public class ChatSendMessageResponse extends MessageHandler {
                 // equals
                 // and response is null, so we sure recipient is another user
 
-                if (chatSendMessageResponse.getResponse().getId().isEmpty()) { //TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this
+                if (chatSendMessageResponse.getResponse().getId().isEmpty()) {
                     RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId());
 
-                    //TODO [Saeed Mozaffari] [2016-11-13 7:24 PM] - AUTHOR_CHECK . niaz hast inja check beshe ke author user bud ya room? chon inja vase chat hast va faghat user darim.
                     if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
                         G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, chatSendMessageResponse.getRoomId());
                     }

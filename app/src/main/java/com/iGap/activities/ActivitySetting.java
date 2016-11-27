@@ -188,8 +188,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private void setImage() {
         final Realm realm = Realm.getDefaultInstance();
 
-        RealmAvatar realmAvatar = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getLastAvatar();
-        if (realmAvatar != null) {
+        RealmRegisteredInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst().getUserInfo();
+        if (realmUserInfo != null && realmUserInfo.getLastAvatar() != null) {
+            RealmAvatar realmAvatar = realmUserInfo.getLastAvatar();
             if (realmAvatar.getFile().isFileExistsOnLocal()) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), circleImageView);
                 if (G.onChangeUserPhotoListener != null) {
