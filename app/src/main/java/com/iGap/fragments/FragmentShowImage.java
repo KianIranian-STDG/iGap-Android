@@ -442,6 +442,14 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
 
     private void saveToGalary() {
 
+        StructMessageInfo media = list.get(viewPager.getCurrentItem());
+        if (media != null) {
+            if (media.attachment.isFileExistsOnLocal()) {
+                HelperSaveFile.savePicToGallary(media.attachment.getLocalFilePath());
+            }
+        }
+
+
     }
 
     public StructMessageInfo getCurrentPage() {

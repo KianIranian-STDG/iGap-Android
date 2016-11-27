@@ -1045,25 +1045,28 @@ public class ActivityMain extends ActivityEnhanced
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            final String name = intent.getExtras().getString("Name");
-            String description = intent.getExtras().getString("Description");
-            Long _roomid = intent.getExtras().getLong("RoomId");
+//            final String name = intent.getExtras().getString("Name");
+//            String description = intent.getExtras().getString("Description");
+//            Long _roomid = intent.getExtras().getLong("RoomId");
+//
+//            for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
+//                if (mAdapter.getItem(i).getInfo().getOwnerId() == _roomid) {
+//                    Realm realm = Realm.getDefaultInstance();
+//                    final int finalI = i;
+//
+//                         mAdapter.notifyAdapterItemChanged(i);
+//
+//                    break;
+//                }
+//            }
 
-            for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
-                if (mAdapter.getItem(i).getInfo().getOwnerId() == _roomid) {
-                    Realm realm = Realm.getDefaultInstance();
-                    final int finalI = i;
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            mAdapter.getItem(finalI).getInfo().setTitle(name);
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    });
-                    realm.close();
-                    break;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mAdapter != null)
+                        mAdapter.notifyDataSetChanged();
                 }
-            }
+            }, 500);
 
 
         }

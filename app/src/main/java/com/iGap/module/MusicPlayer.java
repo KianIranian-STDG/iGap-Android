@@ -14,6 +14,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityMediaPlayer;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 
@@ -75,10 +77,8 @@ public class MusicPlayer {
 
     public MusicPlayer(LinearLayout layoutTripMusic) {
 
-        remoteViews =
-                new RemoteViews(G.context.getPackageName(), R.layout.music_layout_notification);
-        notificationManager =
-                (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
+        remoteViews = new RemoteViews(G.context.getPackageName(), R.layout.music_layout_notification);
+        notificationManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
         handler = new Handler(G.context.getMainLooper());
 
         if (this.layoutTripMusic != null) this.layoutTripMusic.setVisibility(View.GONE);
@@ -101,8 +101,7 @@ public class MusicPlayer {
 
         repeatMode = str;
 
-        SharedPreferences sharedPreferences = sharedPreferences =
-                G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = sharedPreferences = G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("RepeatMode", str);
         editor.apply();
@@ -115,8 +114,7 @@ public class MusicPlayer {
     public static void shuffelClick() {
 
         isShuffelOn = !isShuffelOn;
-        SharedPreferences sharedPreferences = sharedPreferences =
-                G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = sharedPreferences = G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("Shuffel", isShuffelOn);
         editor.apply();
@@ -252,26 +250,21 @@ public class MusicPlayer {
     }
 
     public static void nextMusic() {
-        if (mediaList != null && !mediaList.isEmpty()) {
-            if (selectedMedia < mediaList.size()) {
-                startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName,
-                        roomId, false);
-                selectedMedia++;
-                if (onComplete != null) onComplete.complete(true, "update", "");
-            } else {
-                startPlayer(mediaList.get(0).getAttachment().getLocalFilePath(), roomName, roomId,
-                        false);
-                selectedMedia = 1;
-                if (onComplete != null) onComplete.complete(true, "update", "");
-            }
+        if (selectedMedia < mediaList.size()) {
+            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false);
+            selectedMedia++;
+            if (onComplete != null) onComplete.complete(true, "update", "");
+        } else {
+            startPlayer(mediaList.get(0).getAttachment().getLocalFilePath(), roomName, roomId, false);
+            selectedMedia = 1;
+            if (onComplete != null) onComplete.complete(true, "update", "");
         }
     }
 
     private static void nextRandomMusic() {
         Random r = new Random();
         selectedMedia = r.nextInt(mediaList.size());
-        startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName,
-                roomId, false);
+        startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false);
 
         if (onComplete != null) onComplete.complete(true, "update", "");
     }
@@ -280,15 +273,13 @@ public class MusicPlayer {
 
         if (selectedMedia > 1) {
             selectedMedia--;
-            startPlayer(mediaList.get(selectedMedia - 1).getAttachment().getLocalFilePath(),
-                    roomName, roomId, false);
+            startPlayer(mediaList.get(selectedMedia - 1).getAttachment().getLocalFilePath(), roomName, roomId, false);
 
             if (onComplete != null) onComplete.complete(true, "update", "");
         } else {
             int item = mediaList.size();
             if (item > 0) {
-                startPlayer(mediaList.get(item - 1).getAttachment().getLocalFilePath(), roomName,
-                        roomId, false);
+                startPlayer(mediaList.get(item - 1).getAttachment().getLocalFilePath(), roomName, roomId, false);
                 selectedMedia = item;
                 if (onComplete != null) onComplete.complete(true, "update", "");
             }
@@ -308,13 +299,14 @@ public class MusicPlayer {
         }
     }
 
-    public static void startPlayer(String musicPath, String roomName, long roomId,
-                                   boolean updateList) {
+    public static void startPlayer(String musicPath, String roomName, long roomId, boolean updateList) {
 
         MusicPlayer.musicPath = musicPath;
         MusicPlayer.roomName = roomName;
         mediaThumpnail = null;
         MusicPlayer.roomId = roomId;
+
+        Log.e("ddd", "roomId   " + roomId);
 
         if (layoutTripMusic.getVisibility() == View.GONE) {
             layoutTripMusic.setVisibility(View.VISIBLE);
@@ -470,20 +462,17 @@ public class MusicPlayer {
 
         Intent intentPrevious = new Intent(G.context, customButtonListener.class);
         intentPrevious.putExtra("mode", "previous");
-        PendingIntent pendingIntentPrevious =
-                PendingIntent.getBroadcast(G.context, 1, intentPrevious, 0);
+        PendingIntent pendingIntentPrevious = PendingIntent.getBroadcast(G.context, 1, intentPrevious, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_Previous_music, pendingIntentPrevious);
 
         Intent intentPlayPause = new Intent(G.context, customButtonListener.class);
         intentPlayPause.putExtra("mode", "play");
-        PendingIntent pendingIntentPlayPause =
-                PendingIntent.getBroadcast(G.context, 2, intentPlayPause, 0);
+        PendingIntent pendingIntentPlayPause = PendingIntent.getBroadcast(G.context, 2, intentPlayPause, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_play_music, pendingIntentPlayPause);
 
         Intent intentforward = new Intent(G.context, customButtonListener.class);
         intentforward.putExtra("mode", "forward");
-        PendingIntent pendingIntentforward =
-                PendingIntent.getBroadcast(G.context, 3, intentforward, 0);
+        PendingIntent pendingIntentforward = PendingIntent.getBroadcast(G.context, 3, intentforward, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_forward_music, pendingIntentforward);
 
         Intent intentClose = new Intent(G.context, customButtonListener.class);
@@ -491,8 +480,7 @@ public class MusicPlayer {
         PendingIntent pendingIntentClose = PendingIntent.getBroadcast(G.context, 4, intentClose, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
-        notification =
-                new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music")
+        notification = new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music")
                         .setSmallIcon(R.mipmap.j_audio)
                         .setContentTitle(musicName)
                         //  .setContentText(place)
@@ -520,15 +508,15 @@ public class MusicPlayer {
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmRoomMessage> roomMessages =
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                        .findAll();
+        RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage realmRoomMessage : roomMessages) {
-                if (realmRoomMessage.getMessageType().equals("VOICE")
-                        || realmRoomMessage.getMessageType().equals("AUDIO")
-                        || realmRoomMessage.getMessageType().equals("AUDIO_TEXT")) {
+
+                if (realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString())
+                        || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString())
+                        || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
+
                     mediaList.add(realmRoomMessage);
 
                     if (realmRoomMessage.getAttachment() != null) {
@@ -537,6 +525,7 @@ public class MusicPlayer {
                             if (tmpPath.equals(musicPath)) selectedMedia = mediaList.size();
                         }
                     }
+
                 }
             }
         }
@@ -676,8 +665,7 @@ public class MusicPlayer {
     }
 
     private void getAtribuits() {
-        SharedPreferences sharedPreferences = sharedPreferences =
-                G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = sharedPreferences = G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
         repeatMode = sharedPreferences.getString("RepeatMode", RepeatMode.noRepeat.toString());
         isShuffelOn = sharedPreferences.getBoolean("Shuffel", false);
     }

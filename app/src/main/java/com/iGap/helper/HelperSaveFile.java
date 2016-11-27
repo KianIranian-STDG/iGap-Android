@@ -50,8 +50,7 @@ public class HelperSaveFile {
 
     public static void savePicToGallary(Bitmap bitmap, String name) {
 
-        MediaStore.Images.Media.insertImage(G.context.getContentResolver(), bitmap, name,
-                "yourDescription");
+        MediaStore.Images.Media.insertImage(G.context.getContentResolver(), bitmap, name, "yourDescription");
     }
 
     public static void savePicToGallary(String filePath) {
@@ -63,6 +62,8 @@ public class HelperSaveFile {
         values.put(MediaStore.MediaColumns.DATA, filePath);
 
         G.context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        Toast.makeText(G.context, R.string.picture_save_to_galary, Toast.LENGTH_SHORT).show();
     }
 
     public static void saveToMusicFolder(String path, String name) {

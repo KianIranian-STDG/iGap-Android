@@ -29,12 +29,16 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.RoomType;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/26/2016.
@@ -42,6 +46,8 @@ import io.realm.RealmList;
 
 public class FragmentShowAvatars extends Fragment implements OnFileDownloadResponse {
     private static final String ARG_PEER_ID = "arg_peer_id";
+    private static final String ARG_Type = "arg_type";
+
     private long mPeerId = -1;
 
     private LinearLayout mToolbar;
@@ -51,9 +57,35 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
     public static View appBarLayout;
 
-    public static FragmentShowAvatars newInstance(long peerId) {
+
+    From from = From.chat;
+
+    public static final int mChatNumber = 1;
+    public static final int mGroupNumber = 2;
+    public static final int mChannelNumber = 3;
+
+
+    public enum From {
+        chat(mChatNumber),
+        group(mGroupNumber),
+        channel(mChannelNumber);
+
+        public int value;
+
+        From(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
+    public static FragmentShowAvatars newInstance(long peerId, From from) {
         Bundle args = new Bundle();
         args.putLong(ARG_PEER_ID, peerId);
+        args.putSerializable(ARG_Type, from);
+
 
         FragmentShowAvatars fragment = new FragmentShowAvatars();
         fragment.setArguments(args);
@@ -83,6 +115,12 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
         // init passed data through bundle
         mPeerId = getArguments().getLong(ARG_PEER_ID, -1);
+
+        From result = (From) getArguments().getSerializable(ARG_Type);
+
+        if (result != null)
+            from = result;
+
 
         // init callbacks
         G.onFileDownloadResponse = this;
@@ -125,20 +163,15 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                     }
                 });
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo user = realm.where(RealmRegisteredInfo.class)
-                .equalTo(RealmRegisteredInfoFields.ID, mPeerId)
-                .findFirst();
-        if (user != null) {
-            // user exists in DB
-            final RealmList<RealmAvatar> userAvatars = user.getAvatars();
 
-            long identifier = SUID.id().get();
-            for (RealmAvatar avatar : userAvatars) {
-                mAdapter.add(
-                        new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));
-                identifier++;
-            }
+        if (from == From.chat) {
+            fillListChatAvatar();
+        } else if (from == From.group) {
+            fillListGroupAvatar();
+        }
+
+
+        if (mAdapter.getAdapterItemCount() > 0) {
 
             mRecyclerView.setItemAnimator(null);
             // following lines make scrolling smoother
@@ -164,11 +197,49 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             SnapHelper helper = new LinearSnapHelper();
             helper.attachToRecyclerView(mRecyclerView);
 
-            mCount.setText(
-                    String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
+            mCount.setText(String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
         } else {
-            // user doesn't exist in DB
+            // no avatar exist
         }
+
+    }
+
+    private void fillListChatAvatar() {
+
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo user = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mPeerId).findFirst();
+        if (user != null) {
+            // user exists in DB
+            final RealmList<RealmAvatar> userAvatars = user.getAvatars();
+
+            long identifier = SUID.id().get();
+            for (RealmAvatar avatar : userAvatars) {
+                mAdapter.add(
+                        new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));
+                identifier++;
+            }
+        }
+
+        realm.close();
+    }
+
+    private void fillListGroupAvatar() {
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+        if (room != null) {
+            // user exists in DB
+
+            RealmResults<RealmAvatar> userAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll();
+
+            long identifier = SUID.id().get();
+            for (RealmAvatar avatar : userAvatars) {
+                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));
+                identifier++;
+            }
+        }
+
         realm.close();
     }
 
@@ -215,7 +286,12 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     }
 
     private void saveToGallery() {
-        Log.i(FragmentShowAvatars.class.getSimpleName(), "Save to gallery");
+//        String media =mAdapter.getItem(0).;
+//        if (media != null) {
+//            if (true) {
+//                HelperSaveFile.savePicToGallary(media);
+//            }
+//        }
     }
 
     @Override

@@ -586,4 +586,5 @@
     <string name="do_you_want_to_delete_this_group">Are you sure that you want to delete this Group?</string>
     <string name="do_you_want_to_leave_this_group">Are you sure that you want to left this Group?</string>
     <string name="waiting_for_connection">Waiting for Connect To Server</string>
+    <string name="picture_save_to_galary">"picture save to galary "</string>
 </resources>

@@ -46,9 +46,11 @@ import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.FragmentSticker;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
+import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
@@ -1060,15 +1062,35 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onClick(View view) {
 
-                Realm realm = Realm.getDefaultInstance();
 
-                if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
-                    startDialog(R.array.profile_delete);
-                } else {
-                    startDialog(R.array.profile);
-                }
+                HelperPermision.getStoragePermision(ActivitySetting.this, new OnGetPermision() {
+                    @Override
+                    public void Allow() {
 
-                realm.close();
+
+                        HelperPermision.getCamarePermision(ActivitySetting.this, new OnGetPermision() {
+                            @Override
+                            public void Allow() {
+
+                                Realm realm = Realm.getDefaultInstance();
+
+                                if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
+                                    startDialog(R.array.profile_delete);
+                                } else {
+                                    startDialog(R.array.profile);
+                                }
+
+                                realm.close();
+
+                            }
+                        });
+
+
+                    }
+                });
+
+
+
             }
         });
 
@@ -1083,7 +1105,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
                     FragmentShowAvatars.appBarLayout = fab;
 
-                    FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId);
+                    FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat);
                     ActivitySetting.this.getSupportFragmentManager()
                             .beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)

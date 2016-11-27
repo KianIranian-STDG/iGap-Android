@@ -604,7 +604,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
                     FragmentShowAvatars.appBarLayout = fab;
 
-                    FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId);
+                    FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.group);
                     ActivityGroupProfile.this.getSupportFragmentManager()
                             .beginTransaction()
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)

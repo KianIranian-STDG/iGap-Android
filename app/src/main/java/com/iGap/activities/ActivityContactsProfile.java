@@ -227,7 +227,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 Realm realm = Realm.getDefaultInstance();
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
                     FragmentShowAvatars.appBarLayout = fab;
-                    getSupportFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId)).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat)).commit();
                 }
                 realm.close();
             }
