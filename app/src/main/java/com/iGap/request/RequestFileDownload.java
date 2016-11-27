@@ -8,6 +8,10 @@ public class RequestFileDownload {
                          ProtoFileDownload.FileDownload.Selector selector, String identity) {
         ProtoFileDownload.FileDownload.Builder builder =
                 ProtoFileDownload.FileDownload.newBuilder();
+
+        if (token == null)
+            return;
+
         builder.setToken(token);
         builder.setOffset(offset);
         builder.setMaxLimit(maxLimit);

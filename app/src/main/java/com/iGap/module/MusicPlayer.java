@@ -252,16 +252,18 @@ public class MusicPlayer {
     }
 
     public static void nextMusic() {
-        if (selectedMedia < mediaList.size()) {
-            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName,
-                    roomId, false);
-            selectedMedia++;
-            if (onComplete != null) onComplete.complete(true, "update", "");
-        } else {
-            startPlayer(mediaList.get(0).getAttachment().getLocalFilePath(), roomName, roomId,
-                    false);
-            selectedMedia = 1;
-            if (onComplete != null) onComplete.complete(true, "update", "");
+        if (mediaList != null && !mediaList.isEmpty()) {
+            if (selectedMedia < mediaList.size()) {
+                startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName,
+                        roomId, false);
+                selectedMedia++;
+                if (onComplete != null) onComplete.complete(true, "update", "");
+            } else {
+                startPlayer(mediaList.get(0).getAttachment().getLocalFilePath(), roomName, roomId,
+                        false);
+                selectedMedia = 1;
+                if (onComplete != null) onComplete.complete(true, "update", "");
+            }
         }
     }
 

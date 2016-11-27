@@ -149,7 +149,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     }
 
     @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    public void bindView(ViewHolder holder, List payloads) throws IllegalStateException {
         super.bindView(holder, payloads);
 
         if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {

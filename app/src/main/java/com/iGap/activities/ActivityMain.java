@@ -267,7 +267,8 @@ public class ActivityMain extends ActivityEnhanced
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
                                 mAdapter.add(0, new RoomItem().setInfo(realmRoom).withIdentifier(SUID.id().get()));
                                 scrollToTop();
-                                realm.close();
+
+                                //realm.close(); //TODO [Saeed Mozaffari] [2016-11-27 1:43 PM] - Check Close Realm
                             }
                         });
                     }
@@ -992,7 +993,7 @@ public class ActivityMain extends ActivityEnhanced
             Collections.sort(roomItems, SortRooms.DESC);
 
             mAdapter.add(roomItems);
-            realm.close();
+            //realm.close(); //TODO [Saeed Mozaffari] [2016-11-27 1:43 PM] - Check Close Realm
         }
     }
 
@@ -1069,7 +1070,6 @@ public class ActivityMain extends ActivityEnhanced
     };
 
 
-
     /**
      * convert RealmRoom to RoomItem. needed for adding items to adapter.
      *
@@ -1082,7 +1082,7 @@ public class ActivityMain extends ActivityEnhanced
         roomItem.mInfo = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         roomItem.mComplete = ActivityMain.this;
         roomItem.withIdentifier(SUID.id().get());
-        realm.close();
+        //realm.close(); //TODO [Saeed Mozaffari] [2016-11-27 1:43 PM] - Check Close Realm
 
         return roomItem;
     }

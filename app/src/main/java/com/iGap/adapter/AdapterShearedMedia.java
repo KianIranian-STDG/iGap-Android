@@ -344,7 +344,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     private void showImage(String filePath) {
 
         ArrayList<StructMessageInfo> listPic = new ArrayList<>();
-        int selectedPicture = 0;
+        int selectedPicture = 1;
 
         for (RealmRoomMessage mMessage : list) {
             if (mMessage.getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE)
@@ -355,7 +355,10 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         for (int i = 0; i < listPic.size(); i++) { // determin selected image in list image
-            if (listPic.get(i).attachment.getLocalFilePath().equals(filePath)) {
+            if (listPic.get(i).attachment != null
+                    && listPic.get(i).attachment.getLocalFilePath() != null
+                    && filePath != null
+                    && listPic.get(i).attachment.getLocalFilePath().equals(filePath)) {
                 selectedPicture = i;
                 break;
             }
