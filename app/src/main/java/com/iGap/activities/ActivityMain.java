@@ -1,7 +1,9 @@
 package com.iGap.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -1011,6 +1014,8 @@ public class ActivityMain extends ActivityEnhanced
     protected void onResume() {
         super.onResume();
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
+
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
@@ -1024,6 +1029,46 @@ public class ActivityMain extends ActivityEnhanced
 
         mFirstRun = false;
     }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        LocalBroadcastManager.getInstance(ActivityMain.this).unregisterReceiver(reciverOnGroupChangeName);
+    }
+
+
+    private BroadcastReceiver reciverOnGroupChangeName = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            final String name = intent.getExtras().getString("Name");
+            String description = intent.getExtras().getString("Description");
+            Long _roomid = intent.getExtras().getLong("RoomId");
+
+            for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
+                if (mAdapter.getItem(i).getInfo().getOwnerId() == _roomid) {
+                    Realm realm = Realm.getDefaultInstance();
+                    final int finalI = i;
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            mAdapter.getItem(finalI).getInfo().setTitle(name);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    realm.close();
+                    break;
+                }
+            }
+
+
+        }
+    };
+
+
 
     /**
      * convert RealmRoom to RoomItem. needed for adding items to adapter.
