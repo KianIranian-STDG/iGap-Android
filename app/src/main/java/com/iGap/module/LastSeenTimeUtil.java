@@ -95,6 +95,11 @@ public class LastSeenTimeUtil {
 
         long currentTime = System.currentTimeMillis();
         long difference = (currentTime - (time * DateUtils.SECOND_IN_MILLIS));
+
+        if (TimeUnit.MILLISECONDS.toMinutes(difference) == 0) {
+            return G.context.getResources().getString(R.string.last_seen_recently);
+        }
+
         return TimeUnit.MILLISECONDS.toMinutes(difference) + " " + G.context.getResources().getString(R.string.minute_ago);
     }
 }

@@ -2338,6 +2338,15 @@ public class ActivityChat extends ActivityEnhanced
 
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
+                if (AndroidUtils.getImageDimens(filePath)[0] == 0 && AndroidUtils.getImageDimens(filePath)[1] == 0) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(G.context, "Picture Not Loaded", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return;
+                }
                 imageDimens = AndroidUtils.getImageDimens(filePath);
                 if (isMessageWrote()) {
                     messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;

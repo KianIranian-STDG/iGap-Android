@@ -54,9 +54,12 @@ public final class AndroidUtils {
 
     public static int[] getImageDimens(String filePath) {
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        return new int[]{width, height};
+        if (bitmap != null) {
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            return new int[]{width, height};
+        }
+        return new int[]{0, 0};
     }
 
     /**

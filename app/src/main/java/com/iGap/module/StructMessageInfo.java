@@ -283,6 +283,7 @@ public class StructMessageInfo implements Parcelable {
         info.messageType = ProtoGlobal.RoomMessageType.CONTACT;
         info.sendType = sendType;
         info.time = time;
+        info.messageText = firstName + " " + number;
         if (replayToMessageId != 0) {
             info.replayTo = realm.where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId)
