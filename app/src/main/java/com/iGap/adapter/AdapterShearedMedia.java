@@ -363,6 +363,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
             }
         }
+        //test comment
 
         Fragment fragment = FragmentShowImage.newInstance();
         Bundle bundle = new Bundle();
