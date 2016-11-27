@@ -40,7 +40,7 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
     public void startUploading(FileUploadStructure uploadStructure, String identity) {
         mSelectedFiles.add(uploadStructure);
         // make first request
-        new RequestFileUploadOption().fileUploadOption(uploadStructure.fileSize, identity);
+        new RequestFileUploadOption().fileUploadOption(uploadStructure, identity);
     }
 
     @Override

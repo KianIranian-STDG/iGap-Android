@@ -168,6 +168,7 @@ import com.iGap.request.RequestClientGetRoomHistory;
 import com.iGap.request.RequestGroupDeleteMessage;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.iGap.request.RequestUserInfo;
+import com.iGap.request.RequestWrapper;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
@@ -186,8 +187,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import io.github.meness.emoji.emoji.Emoji;
@@ -4179,8 +4182,63 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onUploadCancel(View view, StructMessageInfo message, int pos) {
+    public void onUploadCancel(View view, final StructMessageInfo message, int pos) {
         // TODO: 10/29/2016 [Alireza] implement
+
+        for (Iterator<Map.Entry<Long, RequestWrapper>> it = G.currentUploadAndDownloadFiles.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Long, RequestWrapper> entry = it.next();
+
+            if (message.messageID != null && !message.messageID.isEmpty() && Long.parseLong(message.messageID) == entry.getKey()) {
+
+                if (G.requestQueueMap.contains(entry.getValue())) {
+                    G.requestQueueMap.remove(entry.getValue());
+
+                    //TODO [Saeed Mozaffari] [2016-11-27 4:57 PM] - clear requestQueueMapRelation
+                }
+
+                G.currentUploadAndDownloadFiles.remove(entry.getKey());
+
+                //===================
+
+                Realm realm = Realm.getDefaultInstance();
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
+                        if (roomMessage != null) {
+                            // delete message from database
+                            roomMessage.deleteFromRealm();
+                        }
+                    }
+                });
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // remove deleted message from adapter
+                        mAdapter.removeMessage(Long.parseLong(message.messageID));
+
+                        // remove tag from edtChat if the
+                        // message has deleted
+                        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                            if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                edtChat.setTag(null);
+                            }
+                        }
+                    }
+                });
+
+                realm.close();
+
+                //===================
+
+                break;
+            }
+        }
+
+
     }
 
     @Override

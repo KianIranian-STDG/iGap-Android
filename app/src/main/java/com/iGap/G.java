@@ -286,6 +286,8 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static String connectionMode;
     public static boolean isNetworkRoaming;
 
+    public static HashMap<Long, RequestWrapper> currentUploadAndDownloadFiles = new HashMap<>();
+
     public static void setUserTextSize() {
 
         SharedPreferences sharedPreferencesSetting = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
