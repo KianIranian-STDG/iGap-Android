@@ -244,7 +244,10 @@ public class VoiceRecord {
     }
 
     private void startMoving(int x) {
-        leftPading = layout3.getPaddingRight();
+
+        if (layout3 != null)
+            leftPading = layout3.getPaddingRight();
+
         lastX = x;
         cansel = false;
     }

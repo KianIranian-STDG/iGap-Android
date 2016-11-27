@@ -2060,8 +2060,6 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
 
-
-        if (voiceRecord.getItemTag().equals("ivVoice"))
             voiceRecord.dispatchTouchEvent(event);
 
         return super.dispatchTouchEvent(event);
