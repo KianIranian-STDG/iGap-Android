@@ -308,7 +308,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 //                text3.setTextSize(16);
 
                 //text1.setPadding(dim20, dim12, dim12, dim20);
-                text2.setPadding(dim20, dim12, dim12, dim20);
+                text2.setPadding(dim20, dim12, dim12, dim12);
 //                text3.setPadding(dim20, 0, dim12, dim20);
 
                 //layoutDialog.addView(text1, params);

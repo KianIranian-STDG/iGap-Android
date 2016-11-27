@@ -115,10 +115,13 @@ public class ActivityChatBackground extends ActivityEnhanced {
 
         if (requestCode == IntentRequests.REQ_CAMERA && resultCode == RESULT_OK) {// result for camera
 
-            items.clear();
-            AdapterChatBackground.imageLoader.clearDiskCache();
-            AdapterChatBackground.imageLoader.clearMemoryCache();
-            setItem();
+            if (data != null) {
+
+                items.clear();
+                AdapterChatBackground.imageLoader.clearDiskCache();
+                AdapterChatBackground.imageLoader.clearMemoryCache();
+                setItem();
+            }
         } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == RESULT_OK) {// result for gallery
 
             String pathImageUser = getRealPathFromURI(data.getData());

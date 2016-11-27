@@ -4,10 +4,10 @@
                 android:id="@+id/parentPrivacySecurity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:elevation="999dp"
-                tools:ignore="MissingPrefix"
                 android:background="@color/white"
-                tools:context="com.iGap.fragments.FragmentPrivacyAndSecurity">
+                android:elevation="999dp"
+                tools:context="com.iGap.fragments.FragmentPrivacyAndSecurity"
+                tools:ignore="MissingPrefix">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/stps_backgroundToolbar"
@@ -17,10 +17,10 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@color/toolbar_background"
-        app:contentInsetLeft="0dp"
-        tools:ignore="MissingPrefix"
         android:layoutDirection="ltr"
-        app:contentInsetStart="0dp">
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        tools:ignore="MissingPrefix">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -65,8 +65,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#34a49f"
-        android:layout_below="@+id/stps_backgroundToolbar"/>
+        android:layout_below="@+id/stps_backgroundToolbar"
+        android:background="#34a49f"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -82,110 +82,199 @@
             android:background="@android:color/white"
             android:orientation="vertical">
 
-            <TextView
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingRight="@dimen/dp16"
-                android:paddingBottom="@dimen/dp16"
-                android:paddingTop="@dimen/dp12"
-                android:text="@string/privacy"
-                android:textColor="@color/green"
-                android:textSize="@dimen/sp18"
-                android:textStyle="normal"
-
-                />
-
-            <TextView
-                android:paddingTop="@dimen/dp4"
-                fontPath="fonts/IRANSansMobile.ttf"
-                android:textSize="@dimen/sp15"
-                android:gravity="center_vertical|start"
-                android:id="@+id/st_txt_notifyAndSound"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingRight="@dimen/dp16"
-                android:text="@string/Block_Users"
-                android:textColor="@color/black_register"
-                android:textStyle="normal"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/background_editText"/>
-
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:orientation="horizontal"
-                >
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
-                    android:paddingTop="@dimen/dp4"
-                    fontPath="fonts/IRANSansMobile.ttf"
-                    android:textSize="@dimen/sp16"
-                    android:gravity="center_vertical|start"
-                    android:layout_width="0dp"
+                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".5"
-                    android:text="@string/Last_Seen"
+                    android:paddingTop="@dimen/dp12"
+                    android:text="@string/privacy"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp18"
+                    android:textStyle="normal"
+
+
+                    />
+
+                <TextView
+                    android:id="@+id/st_txt_notifyAndSound"
+                    fontPath="fonts/IRANSansMobile.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical|start"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:text="@string/Block_Users"
                     android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp15"
                     android:textStyle="normal"/>
 
-                <TextView
-                    android:paddingTop="@dimen/dp4"
-                    fontPath="fonts/IRANSansMobile.ttf"
-                    android:textSize="@dimen/sp16"
-                    android:gravity="center_vertical|start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
-                    android:text="@string/everybody"
-                    android:textColor="@color/toolbar_background"
-                    android:textStyle="normal"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:gravity="center_vertical|start"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/Last_Seen"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp16"
+                        android:textStyle="normal"/>
+
+                    <TextView
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/everybody"
+                        android:textColor="@color/toolbar_background"
+                        android:textSize="@dimen/sp16"
+                        android:textStyle="normal"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:text="@string/Groups"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp16"
+                        android:textStyle="normal"/>
+
+                    <TextView
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:paddingLeft="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/everybody"
+                        android:textColor="@color/toolbar_background"
+                        android:textSize="@dimen/sp16"
+                        android:textStyle="normal"/>
+                </LinearLayout>
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/background_editText"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp12"
+                    android:text="@string/Security"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp18"
+                    android:textStyle="normal"/>
 
                 <TextView
                     fontPath="fonts/IRANSansMobile.ttf"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".5"
-                    android:text="@string/Groups"
-                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical|start"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:text="@string/Passcode_Lock"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp16"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal"
+                    android:visibility="gone"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
 
                 <TextView
-                    android:paddingTop="@dimen/dp4"
                     fontPath="fonts/IRANSansMobile.ttf"
-                    android:textSize="@dimen/sp16"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical|start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:text="@string/everybody"
-                    android:textColor="@color/toolbar_background"
+                    android:paddingTop="@dimen/dp4"
+                    android:text="@string/Two_Step_Verification"
+                    android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp16"
+                    android:textStyle="normal"
+                    android:visibility="gone"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/stps_activitySessions"
+                    fontPath="fonts/IRANSansMobile.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical|start"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:text="@string/Active_Sessions"
+                    android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp16"
                     android:textStyle="normal"/>
+
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/background_editText"-->
+                <!--/>-->
             </LinearLayout>
 
             <LinearLayout
@@ -199,85 +288,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
                     android:paddingBottom="@dimen/dp16"
-                    android:paddingTop="@dimen/dp12"
-                    android:text="@string/Security"
-                    android:textColor="@color/green"
-                    android:textSize="@dimen/sp18"
-                    android:textStyle="normal"/>
-
-                <TextView
-                    android:paddingTop="@dimen/dp4"
-                    fontPath="fonts/IRANSansMobile.ttf"
-                    android:textSize="@dimen/sp16"
-                    android:gravity="center_vertical|start"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:text="@string/Passcode_Lock"
-                    android:textColor="@color/black_register"
-                    android:textStyle="normal"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
-
-                <TextView
-                    android:paddingTop="@dimen/dp4"
-                    fontPath="fonts/IRANSansMobile.ttf"
-                    android:textSize="@dimen/sp16"
-                    android:gravity="center_vertical|start"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
-                    android:text="@string/Two_Step_Verification"
-                    android:textColor="@color/black_register"
-                    android:textStyle="normal"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
-
-                <TextView
-                    android:id="@+id/stps_activitySessions"
-                    android:paddingTop="@dimen/dp4"
-                    fontPath="fonts/IRANSansMobile.ttf"
-                    android:textSize="@dimen/sp16"
-                    android:gravity="center_vertical|start"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
-                    android:text="@string/Active_Sessions"
-                    android:textColor="@color/black_register"
-                    android:textStyle="normal"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:orientation="vertical">
-
-                <TextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
-                    android:paddingBottom="@dimen/dp16"
                     android:paddingTop="@dimen/dp12"
                     android:text="@string/Account_Self_destruction"
                     android:textColor="@color/green"
@@ -292,31 +305,31 @@
                     >
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
                         fontPath="fonts/IRANSansMobile.ttf"
-                        android:textSize="@dimen/sp16"
-                        android:gravity="center_vertical|start"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
+                        android:gravity="center_vertical|start"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/if_you_are_away_for"
                         android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp16"
                         android:textStyle="normal"/>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
-                        android:textSize="@dimen/sp16"
-                        android:gravity="center_vertical|start"
                         android:id="@+id/stps_txt_Self_destruction"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
                         android:text="1 year"
                         android:textColor="@color/toolbar_background"
+                        android:textSize="@dimen/sp16"
                         android:textStyle="normal"/>
                 </LinearLayout>
             </LinearLayout>

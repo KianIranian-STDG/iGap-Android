@@ -13,13 +13,16 @@
         android:padding="@dimen/dp20">
 
         <com.iGap.module.MaterialDesignTextView
+            fontPath="fonts/Flaticon.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginStart="@dimen/dp16"
             android:text="@string/md_right_arrow_button"
             android:textSize="@dimen/sp18"/>
 
         <com.iGap.module.MaterialDesignTextView
+            fontPath="fonts/Flaticon.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp40"
@@ -27,6 +30,7 @@
             android:textSize="@dimen/sp18"/>
 
         <com.iGap.module.MaterialDesignTextView
+            fontPath="fonts/Flaticon.ttf"
             android:id="@+id/popup_faq_reload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

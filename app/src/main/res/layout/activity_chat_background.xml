@@ -74,6 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="1dp"
+        android:layoutDirection="ltr"
         android:layout_below="@id/stcb_backgroundToolbar" />
 
 

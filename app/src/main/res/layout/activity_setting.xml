@@ -627,10 +627,12 @@
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal"/>
 
+                <!--this part is gone-->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -639,7 +641,8 @@
                     android:paddingEnd="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:paddingStart="@dimen/dp16">
+                    android:paddingStart="@dimen/dp16"
+                    android:visibility="gone">
 
                     <ToggleButton
                         android:id="@+id/st_toggle_inAppBrowser"
@@ -670,9 +673,10 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
 
-
+                <!--this part is Gone-->
                 <RelativeLayout
 
                     android:layout_width="match_parent"
@@ -681,7 +685,8 @@
                     android:paddingEnd="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:paddingStart="@dimen/dp16">
+                    android:paddingStart="@dimen/dp16"
+                    android:visibility="gone">
 
 
                     <ToggleButton
@@ -696,6 +701,7 @@
                         android:textOn=""/>
 
                     <TextView
+
                         android:id="@+id/st_txt_sendEnter"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
@@ -812,7 +818,7 @@
                     android:layout_height="1dp"
                     android:background="@color/background_editText"/>
 
-
+                <!--this part is Gone-->
                 <RelativeLayout
 
                     android:layout_width="match_parent"
@@ -821,7 +827,8 @@
                     android:paddingEnd="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:paddingStart="@dimen/dp16">
+                    android:paddingStart="@dimen/dp16"
+                    android:visibility="gone">
 
                     <ToggleButton
                         android:id="@+id/st_toggle_enableAnimation"
@@ -854,7 +861,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
 
                 <RelativeLayout
 
@@ -958,6 +966,7 @@
                     android:textSize="@dimen/sp18"
                     android:textStyle="normal"/>
 
+                <!--this part is Gone-->
                 <TextView
                     fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
@@ -970,12 +979,14 @@
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal"
+                    android:visibility="gone"
                     />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/st_txt_faq"

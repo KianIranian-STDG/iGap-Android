@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.iGap.R;
 import com.iGap.module.StructSessionsGetActiveList;
+import com.iGap.request.RequestUserSessionTerminate;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import java.util.List;
@@ -15,11 +16,14 @@ public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessi
 
     public StructSessionsGetActiveList item;
 
+    public List<StructSessionsGetActiveList> itemList;
+
     public StructSessionsGetActiveList getItem() {
         return item;
     }
 
-    public AdapterActiveSessionsHeader() {
+    public AdapterActiveSessionsHeader(List<StructSessionsGetActiveList> item) {
+        itemList = item;
     }
 
     public void setItem(StructSessionsGetActiveList item) {
@@ -47,7 +51,13 @@ public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessi
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(G.context, "tttttt", Toast.LENGTH_SHORT).show();
+//
+                for (int i = 0; i < itemList.size(); i++) {
+                    if (!itemList.get(i).isCurrent()) {
+
+                        new RequestUserSessionTerminate().userSessionTerminate(itemList.get(i).getSessionId());
+                    }
+                }
             }
         });
 

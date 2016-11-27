@@ -223,11 +223,68 @@ public class FragmentActiveSessions extends Fragment {
                         Toast.makeText(getActivity(), "test11111", Toast.LENGTH_SHORT).show();
                     }
 
-
                 }
                 return false;
             }
         });
+
+        G.onUserSessionTerminate = new OnUserSessionTerminate() {
+            @Override
+            public void onUserSessionTerminate() {
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        prgWaiting.setVisibility(View.GONE);
+                        fastItemAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        prgWaiting.setVisibility(View.GONE);
+                        final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                R.string.error,
+                                Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        prgWaiting.setVisibility(View.GONE);
+                        final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                getString(R.string.error),
+                                Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+        };
 
     }
 
@@ -239,7 +296,7 @@ public class FragmentActiveSessions extends Fragment {
             if (s.isCurrent()) {
                 fastItemAdapter.add(new AdapterActiveSessions(s).withIdentifier(SUID.id().get()));
             } else if (!s.isCurrent() && !b) {
-                fastItemAdapter.add(new AdapterActiveSessionsHeader().withIdentifier(SUID.id().get()));
+                fastItemAdapter.add(new AdapterActiveSessionsHeader(structItems).withIdentifier(SUID.id().get()));
                 fastItemAdapter.add(new AdapterActiveSessions(s).withIdentifier(SUID.id().get()));
                 b = true;
             } else if (!s.isCurrent() && b) {

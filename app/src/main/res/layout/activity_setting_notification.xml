@@ -729,7 +729,6 @@
                     android:background="@color/background_editText"/>
 
                 <RelativeLayout
-
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="horizontal"
@@ -766,6 +765,7 @@
                 </RelativeLayout>
             </LinearLayout>
 
+            <!--this part is Gone-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -773,7 +773,7 @@
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/dp4"
                 android:paddingTop="@dimen/dp8"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     fontPath="fonts/IRANSansMobile_Bold.ttf"
@@ -869,7 +869,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
+                android:background="@color/st_background2"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/dp4"
                 android:paddingTop="@dimen/dp8"
@@ -925,11 +925,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/stns_txt_title_keep_alive_service"
-
                         android:paddingTop="@dimen/dp4"
                         android:text="@string/st_text_keep_alive_service"
                         android:textColor="@color/cardview_dark_background"
                         android:textSize="@dimen/sp16"
+                        android:paddingEnd="@dimen/dp52"
+                        android:paddingRight="@dimen/dp52"
                         android:textStyle="normal"/>
 
 
@@ -938,8 +939,10 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
 
+                <!--this part is Gone-->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -948,7 +951,8 @@
                     android:paddingEnd="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:paddingStart="@dimen/dp16">
+                    android:paddingStart="@dimen/dp16"
+                    android:visibility="gone">
 
 
                     <ToggleButton
@@ -981,6 +985,8 @@
                         android:paddingTop="@dimen/dp4"
                         android:text="@string/st_text_background_connection"
                         android:textColor="@color/cardview_dark_background"
+                        android:paddingEnd="@dimen/dp52"
+                        android:paddingRight="@dimen/dp52"
                         android:textSize="@dimen/sp16"
                         android:textStyle="normal"/>
 
@@ -990,8 +996,10 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
 
+                <!--this part is Gone-->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
@@ -999,7 +1007,8 @@
                     android:paddingEnd="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
-                    android:paddingStart="@dimen/dp16">
+                    android:paddingStart="@dimen/dp16"
+                    android:visibility="gone">
 
                     <ToggleButton
                         android:id="@+id/stns_badge_counter"
@@ -1027,18 +1036,23 @@
 
                 </RelativeLayout>
 
+                <!--this part is Gone-->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
 
+
+                <!--this part is Gone-->
                 <LinearLayout
                     android:id="@+id/st_layout_Repeat_Notifications"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16">
+                    android:paddingRight="@dimen/dp16"
+                    android:visibility="gone">
 
                     <TextView
                         fontPath="fonts/IRANSansMobile.ttf"
@@ -1069,7 +1083,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/st_background2"
+                android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/dp16"
                 android:paddingTop="@dimen/dp8"

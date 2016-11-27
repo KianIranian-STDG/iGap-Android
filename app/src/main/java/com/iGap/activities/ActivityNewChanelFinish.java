@@ -51,7 +51,6 @@ public class ActivityNewChanelFinish extends ActivityEnhanced {
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 finish();
             }
         });

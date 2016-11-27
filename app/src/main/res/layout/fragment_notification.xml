@@ -58,6 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#34a49f"/>
+
     <LinearLayout
         android:id="@+id/ntg_layout_notifications"
         android:layout_width="match_parent"
@@ -68,7 +69,8 @@
         android:paddingLeft="@dimen/dp16"
         android:paddingEnd="@dimen/sp16"
         android:paddingStart="@dimen/sp16"
-        android:paddingRight="@dimen/sp16">
+        android:paddingRight="@dimen/sp16"
+        android:layout_marginTop="@dimen/dp8">
 
         <TextView
             android:layout_width="match_parent"
@@ -169,7 +171,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/background_editText" />
-
+    <!--this part is gone-->
     <LinearLayout
         android:id="@+id/ntg_layout_smartNotifications"
         android:layout_width="match_parent"
@@ -180,7 +182,8 @@
         android:paddingLeft="@dimen/dp16"
         android:paddingEnd="@dimen/sp16"
         android:paddingStart="@dimen/sp16"
-        android:paddingRight="@dimen/sp16">
+        android:paddingRight="@dimen/sp16"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="match_parent"
@@ -206,7 +209,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/background_editText" />
+        android:background="@color/background_editText"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/ntg_layout_ledColorMessage"

@@ -570,10 +570,10 @@ public class ActivityRegister extends ActivityEnhanced {
                                     int portrait_landscape = getResources().getConfiguration().orientation;
                                     if (portrait_landscape == 1) {//portrait
                                         txtTimer.setText("00:00");
-                                        txtTimer.setVisibility(View.GONE);
+                                        txtTimer.setVisibility(View.INVISIBLE);
                                     } else {
                                         txtTimerLand.setText("00:00");
-                                        txtTimerLand.setVisibility(View.GONE);
+                                        txtTimerLand.setVisibility(View.INVISIBLE);
                                     }
                                     errorVerifySms(); // open rg_dialog for enter sms code
                                 }
@@ -658,7 +658,7 @@ public class ActivityRegister extends ActivityEnhanced {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtTimer.setVisibility(View.GONE);
+                txtTimer.setVisibility(View.INVISIBLE);
                 if (!edtEnterCodeVerify.getText().toString().equals("")) {
                     userVerify(userName, edtEnterCodeVerify.getText().toString());
                     dialog.dismiss();

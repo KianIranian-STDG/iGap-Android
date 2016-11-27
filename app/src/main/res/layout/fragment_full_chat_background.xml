@@ -1,19 +1,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    tools:context="com.iGap.fragments.FragmentFullChatBackground">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical"
+              android:id="@+id/stcbf_root"
+              tools:context="com.iGap.fragments.FragmentFullChatBackground">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="@color/toolbar_background"
+        android:layoutDirection="ltr"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
-        android:layoutDirection="ltr"
         app:layout_collapseMode="pin">
 
         <RelativeLayout
@@ -29,7 +30,7 @@
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/sp18"
                 android:textStyle="bold"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
 
             <com.iGap.libs.rippleeffect.RippleView
@@ -51,7 +52,7 @@
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18" />
+                    android:textSize="@dimen/sp18"/>
 
             </com.iGap.libs.rippleeffect.RippleView>
 
@@ -74,7 +75,7 @@
                     android:gravity="center"
                     android:text="@string/md_check_symbol"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18" />
+                    android:textSize="@dimen/sp18"/>
 
             </com.iGap.libs.rippleeffect.RippleView>
         </RelativeLayout>

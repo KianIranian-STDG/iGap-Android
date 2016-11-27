@@ -44,6 +44,15 @@ public class FragmentFullChatBackground extends Fragment {
 
         final String fullImage = getArguments().getString("IMAGE");
 
+        ViewGroup viewGroup = (ViewGroup) view.findViewById(R.id.stcbf_root);
+        viewGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
         txtBack = (MaterialDesignTextView) view.findViewById(R.id.stcbf_txt_back);
         rippleBack = (RippleView) view.findViewById(R.id.stcbf_ripple_back);
         rippleSet = (RippleView) view.findViewById(R.id.stcbf_ripple_set);

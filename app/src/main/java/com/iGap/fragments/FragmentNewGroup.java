@@ -310,18 +310,15 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                     InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-                    boolean success;
                     String newName = edtGroupName.getText().toString().replace(" ", "_");
                     File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                     if (prefix.equals("NewChanel")) {
-                        success = G.IMAGE_NEW_CHANEL.renameTo(file2);
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
                         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                     } else if (prefix.equals("ConvertToGroup")) {
                         chatToGroup();
                     } else {
-                        success = G.IMAGE_NEW_GROUP.renameTo(file2);
                         createGroup();
                     }
                                                } else {
