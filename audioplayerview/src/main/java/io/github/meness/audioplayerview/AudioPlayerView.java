@@ -2,10 +2,12 @@ package io.github.meness.audioplayerview;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.ColorRes;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,6 +30,8 @@ import java.util.Locale;
 
 import io.github.meness.audioplayerview.listeners.OnAudioPlayerViewControllerClick;
 
+import static android.os.Build.VERSION_CODES.JELLY_BEAN;
+
 public class AudioPlayerView extends FrameLayout {
     private MediaPlayer mPlayer;
     private ViewGroup mAnchor;
@@ -37,16 +41,47 @@ public class AudioPlayerView extends FrameLayout {
     private boolean mShowing;
     private boolean mDragging;
     private static final int SHOW_PROGRESS = 2;
+    private static final int ACTION_CHANGED = 3;
     StringBuilder mFormatBuilder;
     Formatter mFormatter;
-    private ImageButton mPauseButton;
-    private ImageButton mPlayButton;
-    private ImageButton mStopButton;
+    private ImageButton mActionButton;
+    private TextView mRecordedBy;
     private Handler mHandler = new MessageHandler(this);
     private OnAudioPlayerViewControllerClick mOnClickListener;
 
+    public MediaPlayer getPlayer() {
+        return mPlayer;
+    }
+
+    public void setRecordedBy(String s) {
+        if (mRecordedBy != null) {
+            mRecordedBy.setText(String.format(getResources().getString(R.string.audioplayerview_recorded_by_s), s));
+        }
+    }
+
+    public void hideRecordedBy() {
+        if (mRecordedBy != null) {
+            mRecordedBy.setVisibility(GONE);
+        }
+    }
+
+    public void setTime(int total) {
+        if (mCurrentTime != null) {
+            mCurrentTime.setText(stringForTime(total, false));
+        }
+        if (mEndTime != null) {
+            mEndTime.setText(stringForTime(total, true));
+        }
+    }
+
+    private void init() {
+        mFormatBuilder = new StringBuilder();
+        mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
+    }
+
     public AudioPlayerView(Context context) {
         super(context);
+        init();
     }
 
     @SuppressWarnings("unused")
@@ -56,15 +91,18 @@ public class AudioPlayerView extends FrameLayout {
 
     public AudioPlayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public AudioPlayerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public AudioPlayerView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
     }
 
     @Override
@@ -107,20 +145,20 @@ public class AudioPlayerView extends FrameLayout {
         return mRoot;
     }
 
+    private void updateDrawables() {
+        if (!mPlayer.isPlaying()) {
+            mActionButton.setImageResource(R.drawable.audioplayerview_ic_media_play);
+        } else {
+            mActionButton.setImageResource(R.drawable.audioplayerview_ic_media_pause);
+        }
+    }
+
     private void initControllerView(View v) {
-        mPauseButton = (ImageButton) v.findViewById(R.id.pause);
-        if (mPauseButton != null) {
-            mPauseButton.setOnClickListener(mPauseListener);
-        }
+        mRecordedBy = (TextView) v.findViewById(R.id.recordedBy);
 
-        mPlayButton = (ImageButton) v.findViewById(R.id.play);
-        if (mPlayButton != null) {
-            mPlayButton.setOnClickListener(mPlayListener);
-        }
-
-        mStopButton = (ImageButton) v.findViewById(R.id.stop);
-        if (mStopButton != null) {
-            mStopButton.setOnClickListener(mStopListener);
+        mActionButton = (ImageButton) v.findViewById(R.id.action);
+        if (mActionButton != null) {
+            mActionButton.setOnClickListener(mActionListener);
         }
 
         mProgress = (SeekBar) v.findViewById(R.id.seekBar);
@@ -132,8 +170,6 @@ public class AudioPlayerView extends FrameLayout {
 
         mEndTime = (TextView) v.findViewById(R.id.totalTime);
         mCurrentTime = (TextView) v.findViewById(R.id.elapsedTime);
-        mFormatBuilder = new StringBuilder();
-        mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
     }
 
     /**
@@ -157,8 +193,8 @@ public class AudioPlayerView extends FrameLayout {
     public void show() {
         if (!mShowing && mAnchor != null) {
             setProgress();
-            if (mPlayButton != null) {
-                mPlayButton.requestFocus();
+            if (mActionButton != null) {
+                mActionButton.requestFocus();
             }
             disableUnsupportedButtons();
 
@@ -172,6 +208,51 @@ public class AudioPlayerView extends FrameLayout {
         // was already true.  This happens, for example, if we're
         // paused with the progress bar showing the user hits play.
         mHandler.sendEmptyMessage(SHOW_PROGRESS);
+    }
+
+    /**
+     * set new color for progress bar
+     *
+     * @param res color resource
+     */
+    public void setProgressColor(@ColorRes int res) {
+        if (mProgress != null) {
+            mProgress.getProgressDrawable().mutate().setColorFilter(
+                    getResources().getColor(res), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+    }
+
+    /**
+     * set progress bar thumb color
+     *
+     * @param res color res
+     */
+    @TargetApi(JELLY_BEAN)
+    public void setProgressThumb(@ColorRes int res) {
+        if (mProgress != null) {
+            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
+                mProgress.getThumb().mutate().setColorFilter(
+                        getResources().getColor(res), PorterDuff.Mode.SRC_IN);
+            }
+        }
+    }
+
+    /**
+     * set new color for drawables
+     *
+     * @param res color resource
+     */
+    public void setDrawablesColor(@ColorRes int res) {
+        if (mActionButton != null) {
+            mActionButton.setColorFilter(
+                    getResources().getColor(res), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+    }
+
+    public void setRecordedByColor(@ColorRes int res) {
+        if (mRecordedBy != null) {
+            mRecordedBy.setTextColor(getResources().getColor(res));
+        }
     }
 
     @SuppressWarnings("unused")
@@ -260,8 +341,8 @@ public class AudioPlayerView extends FrameLayout {
             if (uniqueDown) {
                 doPauseResume();
                 show();
-                if (mPauseButton != null) {
-                    mPauseButton.requestFocus();
+                if (mActionButton != null) {
+                    mActionButton.requestFocus();
                 }
             }
             return true;
@@ -291,34 +372,22 @@ public class AudioPlayerView extends FrameLayout {
         return super.dispatchKeyEvent(event);
     }
 
-    private View.OnClickListener mPauseListener = new View.OnClickListener() {
+    private View.OnClickListener mActionListener = new View.OnClickListener() {
         public void onClick(View v) {
-            doPause();
-            show();
+            if ("play".equalsIgnoreCase((String) mActionButton.getTag())) {
+                doPlay();
 
-            if (mOnClickListener != null) {
-                mOnClickListener.onPauseClick(AudioPlayerView.this);
-            }
-        }
-    };
-    private View.OnClickListener mPlayListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            doPlay();
-            show();
+                if (mOnClickListener != null) {
+                    mOnClickListener.onPlayClick(AudioPlayerView.this);
+                }
+            } else if ("pause".equalsIgnoreCase((String) mActionButton.getTag())) {
+                doPause();
 
-            if (mOnClickListener != null) {
-                mOnClickListener.onPlayClick(AudioPlayerView.this);
+                if (mOnClickListener != null) {
+                    mOnClickListener.onPauseClick(AudioPlayerView.this);
+                }
             }
-        }
-    };
-    private View.OnClickListener mStopListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            doStop();
             show();
-
-            if (mOnClickListener != null) {
-                mOnClickListener.onStopClick(AudioPlayerView.this);
-            }
         }
     };
 
@@ -337,6 +406,8 @@ public class AudioPlayerView extends FrameLayout {
 
         if (mPlayer.isPlaying()) {
             mPlayer.pause();
+            mActionButton.setTag("play");
+            mHandler.sendEmptyMessage(ACTION_CHANGED);
         }
     }
 
@@ -347,18 +418,8 @@ public class AudioPlayerView extends FrameLayout {
 
         if (!mPlayer.isPlaying()) {
             mPlayer.start();
-        }
-    }
-
-    private void doStop() {
-        if (mPlayer == null) {
-            return;
-        }
-
-        mPlayer.seekTo(0);
-
-        if (mPlayer.isPlaying()) {
-            mPlayer.pause();
+            mActionButton.setTag("pause");
+            mHandler.sendEmptyMessage(ACTION_CHANGED);
         }
     }
 
@@ -418,14 +479,8 @@ public class AudioPlayerView extends FrameLayout {
 
     @Override
     public void setEnabled(boolean enabled) {
-        if (mPauseButton != null) {
-            mPauseButton.setEnabled(enabled);
-        }
-        if (mPlayButton != null) {
-            mPlayButton.setEnabled(enabled);
-        }
-        if (mStopButton != null) {
-            mStopButton.setEnabled(enabled);
+        if (mActionButton != null) {
+            mActionButton.setEnabled(enabled);
         }
         if (mProgress != null) {
             mProgress.setEnabled(enabled);
@@ -467,6 +522,13 @@ public class AudioPlayerView extends FrameLayout {
                     if (!view.mDragging && view.mShowing && view.mPlayer.isPlaying()) {
                         msg = obtainMessage(SHOW_PROGRESS);
                         sendMessageDelayed(msg, 1000 - (pos % 1000));
+                    }
+                    break;
+                case ACTION_CHANGED:
+                    view.updateDrawables();
+                    if (!view.mDragging && view.mShowing) {
+                        msg = obtainMessage(ACTION_CHANGED);
+                        sendMessageDelayed(msg, 1000);
                     }
                     break;
             }
