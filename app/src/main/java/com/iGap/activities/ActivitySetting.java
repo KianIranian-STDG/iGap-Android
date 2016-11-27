@@ -144,15 +144,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private String regex;
     public ProgressBar prgWait;
 
-    public static long getFolderSize(File dir) {
+    public static long getFolderSize(File dir) throws RuntimeException {
         long size = 0;
         if (dir == null)
             return size;
 
         for (File file : dir.listFiles()) {
             if (file.isFile()) {
-                System.out.println(file.getName() + " " + file.length());
-                size += file.length();
+                if (file != null) {
+                    size += file.length();
+                } else {
+                    return size;
+                }
             } else {
                 size += getFolderSize(file);
             }

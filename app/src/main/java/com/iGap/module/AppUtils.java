@@ -192,8 +192,7 @@ public final class AppUtils {
                             message.getAttachment().getName());
                     break;
                 case CONTACT:
-                    messageText = resources.getString(R.string.last_msg_format_chat,
-                            message.getRoomMessageContact().getFirstName());
+                    messageText = "contact"; // need to fill messageText with a String because in return check null
                     break;
                 case FILE:
                     if (message.getAttachment() == null) {

@@ -2060,7 +2060,7 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
 
-            voiceRecord.dispatchTouchEvent(event);
+        voiceRecord.dispatchTouchEvent(event);
 
         return super.dispatchTouchEvent(event);
     }

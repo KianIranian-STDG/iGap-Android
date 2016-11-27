@@ -25,8 +25,7 @@ public class ClientGetRoomResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        final ProtoClientGetRoom.ClientGetRoomResponse.Builder clientGetRoom =
-                (ProtoClientGetRoom.ClientGetRoomResponse.Builder) message;
+        final ProtoClientGetRoom.ClientGetRoomResponse.Builder clientGetRoom = (ProtoClientGetRoom.ClientGetRoomResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -35,13 +34,14 @@ public class ClientGetRoomResponse extends MessageHandler {
                 RealmRoom.putOrUpdate(clientGetRoom.getRoom());
             }
         });
-
         realm.close();
 
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
+                if (G.onClientGetRoomResponse != null) {
+                    G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
+                }
             }
         }, 500);
     }
