@@ -390,6 +390,9 @@ public class ActivityMain extends ActivityEnhanced
     private void initComponent() {
 
         contentLoading = (ContentLoadingProgressBar) findViewById(R.id.loadingContent);
+        contentLoading.getIndeterminateDrawable()
+                .setColorFilter(getResources().getColor(R.color.toolbar_background),
+                        android.graphics.PorterDuff.Mode.MULTIPLY);
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.fragmentContainer);
 

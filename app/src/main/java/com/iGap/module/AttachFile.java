@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -29,6 +30,7 @@ import com.iGap.activities.ActivityExplorer;
 import com.iGap.activities.ActivityPaint;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnGetPermision;
+import com.iGap.proto.ProtoGlobal;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -141,6 +143,7 @@ public class AttachFile {
             public void Allow() {
                 Intent intent = new Intent(context, ActivityPaint.class);
                 ((Activity) context).startActivityForResult(intent, request_code_paint);
+                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.PAINTING);
             }
         });
     }
@@ -162,7 +165,8 @@ public class AttachFile {
                 Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
                 if (outPath != null) {
-                    imagePath = outPath.getPath();
+                    imagePath = outPath.toString();
+
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
                     ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
                     isInAttach = true;
@@ -224,6 +228,7 @@ public class AttachFile {
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
+                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
                 isInAttach = true;
             }
         });
@@ -240,6 +245,7 @@ public class AttachFile {
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 ((Activity) context).startActivityForResult(intent, requestOpenGalleryForVideoMultipleSelect);
+                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_VIDEO);
                 isInAttach = true;
             }
         });
@@ -284,7 +290,7 @@ public class AttachFile {
 
     }
 
-    public void showDialogOpenCamera(View view) {
+    public void showDialogOpenCamera(View view, final ProgressBar prgWaiting) {
 
         new MaterialDialog.Builder(context)
                 .items(R.array.capture)
@@ -295,11 +301,17 @@ public class AttachFile {
                             case 0:
 
                                 requestTakePicture();
+                                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_IMAGE);
                                 dialog.dismiss();
+
+                                if (prgWaiting != null) {
+                                    prgWaiting.setVisibility(View.VISIBLE);
+                                }
 
                                 break;
                             case 1:
                                 requestVideoCapture();
+                                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_VIDEO);
                                 dialog.dismiss();
                                 break;
                         }
@@ -326,6 +338,7 @@ public class AttachFile {
                 intent.setType("audio/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
+                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_AUDIO);
 
                 isInAttach = true;
             }
@@ -338,6 +351,7 @@ public class AttachFile {
             public void Allow() {
                 Intent intent = new Intent(context, ActivityExplorer.class);
                 ((Activity) context).startActivityForResult(intent, request_code_pic_file);
+                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
             }
         });
     }
@@ -351,6 +365,7 @@ public class AttachFile {
                 intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
+                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CHOOSING_CONTACT);
                 isInAttach = true;
             }
         });
@@ -365,6 +380,7 @@ public class AttachFile {
             @Override
             public void Allow() {
                 getPosition();
+
             }
         });
     }
@@ -386,6 +402,7 @@ public class AttachFile {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
+                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
@@ -425,6 +442,7 @@ public class AttachFile {
                 Intent intent = new Intent(context, ActivityExplorer.class);
                 intent.putExtra("Mode", "documnet");
                 ((Activity) context).startActivityForResult(intent, request_code_open_document);
+                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
             }
         });
 

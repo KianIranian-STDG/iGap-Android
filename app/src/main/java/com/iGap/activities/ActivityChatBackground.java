@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -19,10 +20,16 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructAdapterBackground;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.iGap.G.chatBackground;
 
 public class ActivityChatBackground extends ActivityEnhanced {
 
@@ -64,6 +71,12 @@ public class ActivityChatBackground extends ActivityEnhanced {
 
         int wdith = G.context.getResources().getDisplayMetrics().widthPixels;
 
+        try {
+            copyFromAsset();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if (wdith <= 720) {
             spanCount = 3;
         } else if (wdith <= 1280) {
@@ -92,12 +105,12 @@ public class ActivityChatBackground extends ActivityEnhanced {
                 items.add(item);
 
             } else {
-                if (i == 1 && (G.chatBackground.exists())) {
+                if (i == 1 && (chatBackground.exists())) {
                     item.setId(i);
-                    item.setPathImage(G.chatBackground.toString());
+                    item.setPathImage(chatBackground.toString());
                     items.add(item);
 
-                } else if (!file[i].getPath().equals(G.chatBackground.toString())) {
+                } else if (!file[i].getPath().equals(chatBackground.toString())) {
                     item.setId(i);
                     item.setPathImage(file[i].toString());
                     items.add(item);
@@ -125,7 +138,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
         } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == RESULT_OK) {// result for gallery
 
             String pathImageUser = getRealPathFromURI(data.getData());
-            HelperCopyFile.copyFile(pathImageUser, G.chatBackground.toString());
+            HelperCopyFile.copyFile(pathImageUser, chatBackground.toString());
             items.clear();
             AdapterChatBackground.imageLoader.clearDiskCache();
             AdapterChatBackground.imageLoader.clearMemoryCache();
@@ -146,5 +159,29 @@ public class ActivityChatBackground extends ActivityEnhanced {
             cursor.close();
         }
         return result;
+    }
+
+    private void copyFromAsset() throws IOException {
+        String[] files = null;
+        files = getAssets().list("back");
+
+        Log.i("CCCCVVV", " G.chatBackground.list().length: " + chatBackground.length());
+        if (chatBackground.length() == 0) {
+            for (String file : files) {
+
+                InputStream inputStream = getAssets().open("back/" + file);
+                String outFileName = chatBackground.toString() + file;
+                OutputStream outputStream = new FileOutputStream(outFileName);
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, len);
+                }
+                outputStream.flush();
+                outputStream.close();
+                inputStream.close();
+
+            }
+        }
     }
 }

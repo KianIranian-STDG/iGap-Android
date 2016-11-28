@@ -51,6 +51,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -97,6 +98,7 @@ import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnHelperSetAction;
 import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
@@ -323,6 +325,7 @@ public class ActivityChat extends ActivityEnhanced
     private long userId;
     public static Activity activityChatForFinish;
     private LinearLayout lyt_user;
+    private ProgressBar prgWaiting;
 
     @Override
     protected void onStart() {
@@ -480,6 +483,11 @@ public class ActivityChat extends ActivityEnhanced
         viewMicRecorder = findViewById(R.id.layout_mic_recorde);
         voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile, this);
 
+        prgWaiting = (ProgressBar) findViewById(R.id.chl_prgWaiting);
+        prgWaiting.getIndeterminateDrawable()
+                .setColorFilter(getResources().getColor(R.color.toolbar_background),
+                        android.graphics.PorterDuff.Mode.MULTIPLY);
+
         lastDateCalendar.clear();
 
         attachFile = new AttachFile(this);
@@ -631,6 +639,15 @@ public class ActivityChat extends ActivityEnhanced
         updateStatus();
         setUpEmojiPopup();
         checkAction();
+
+        G.onHelperSetAction = new OnHelperSetAction() {
+            @Override
+            public void onAction(ProtoGlobal.ClientAction ClientAction) {
+                HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
+
+            }
+        };
+
     }
 
     private void checkAction() {
@@ -2120,7 +2137,13 @@ public class ActivityChat extends ActivityEnhanced
                 switch (buttonIndex) {
 
                     case 0:
-                        attachFile.showDialogOpenCamera(toolbar);
+
+                        if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
+                            attachFile.showDialogOpenCamera(toolbar, prgWaiting);
+                        } else {
+                            attachFile.showDialogOpenCamera(toolbar, null);
+                        }
+
                         break;
                     case 1:
                         attachFile.requestOpenGalleryForImageMultipleSelect();
@@ -2161,7 +2184,19 @@ public class ActivityChat extends ActivityEnhanced
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
+        if (resultCode == RESULT_CANCELED) {
+            HelperSetAction.sendCancel(messageId);
+
+            if (prgWaiting != null) {
+                prgWaiting.setVisibility(View.GONE);
+            }
+        }
+
         if (resultCode == Activity.RESULT_OK) {
+
+
+            HelperSetAction.sendCancel(messageId);
             if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 attachFile.requestGetPosition(complete);
                 return;
@@ -2203,22 +2238,49 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && (listPathString.size() == 1)) {
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1 && requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && (listPathString.size() == 1)) {
 
                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                intent.putExtra("IMAGE_CAMERA", listPathString.get(0));
+                Log.i("BBBBBBNN", "listPathString.get(0): " + listPathString.get(0));
+                intent.putExtra("IMAGE_CAMERA", data.getData().toString());
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "chat");
+
+                if (prgWaiting != null) {
+                    prgWaiting.setVisibility(View.GONE);
+                }
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
 
-            } else if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0) == 1 && requestCode == AttachFile.request_code_TAKE_PICTURE) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (prgWaiting != null) {
+                            prgWaiting.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+
+            } else if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1 && requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+                Log.i("BBBBBBNN", "AttachFile.imagePath: " + AttachFile.imagePath);
                 intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "chat");
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (prgWaiting != null) {
+                            prgWaiting.setVisibility(View.GONE);
+                        }
+                    }
+                });
             }
+
         }
     }
 

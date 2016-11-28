@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -75,32 +76,35 @@ public class ActivityCrop extends ActivityEnhanced {
 
             imgPic.setImageURI(uri);
         }
-
+        RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);
         txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
 
-        RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);
-        rippleCrop.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        Log.i("VVBBBBBB", "onCreate: " + uri);
+        if (uri != null && !uri.toString().equals("")) {
+            rippleCrop.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
-                CropImage.activity(uri)
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setMinCropResultSize(120, 120)
-                        .setAutoZoomEnabled(false)
-                        .setInitialCropWindowPaddingRatio(.08f) // padding window from all
-                        .setBorderCornerLength(50)
-                        .setBorderCornerOffset(0)
-                        .setAllowCounterRotation(true)
-                        .setBorderCornerThickness(8.0f)
-                        .setShowCropOverlay(true)
-                        .setAspectRatio(1, 1)
-                        .setFixAspectRatio(true)
-                        .setBorderCornerColor(getResources().getColor(R.color.whit_background))
-                        .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
-                        .setScaleType(CropImageView.ScaleType.FIT_CENTER)
-                        .start(ActivityCrop.this);
-            }
-        });
+                @Override
+                public void onComplete(RippleView rippleView) {
+                    CropImage.activity(uri)
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            .setMinCropResultSize(120, 120)
+                            .setAutoZoomEnabled(false)
+                            .setInitialCropWindowPaddingRatio(.08f) // padding window from all
+                            .setBorderCornerLength(50)
+                            .setBorderCornerOffset(0)
+                            .setAllowCounterRotation(true)
+                            .setBorderCornerThickness(8.0f)
+                            .setShowCropOverlay(true)
+                            .setAspectRatio(1, 1)
+                            .setFixAspectRatio(true)
+                            .setBorderCornerColor(getResources().getColor(R.color.whit_background))
+                            .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
+                            .setScaleType(CropImageView.ScaleType.FIT_CENTER)
+                            .start(ActivityCrop.this);
+                }
+            });
+        }
+
 
         RippleView rippleBack = (RippleView) findViewById(R.id.pu_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

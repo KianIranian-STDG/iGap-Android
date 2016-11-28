@@ -53,6 +53,7 @@ import com.iGap.interfaces.OnGroupKickAdmin;
 import com.iGap.interfaces.OnGroupKickMember;
 import com.iGap.interfaces.OnGroupKickModerator;
 import com.iGap.interfaces.OnGroupLeft;
+import com.iGap.interfaces.OnHelperSetAction;
 import com.iGap.interfaces.OnInfoCountryResponse;
 import com.iGap.interfaces.OnInfoTime;
 import com.iGap.interfaces.OnLastSeenUpdateTiming;
@@ -279,6 +280,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static OnUserSessionTerminate onUserSessionTerminate;
     public static OnUserSessionLogout onUserSessionLogout;
     public static UpdateListAfterKick updateListAfterKick;
+    public static OnHelperSetAction onHelperSetAction;
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
