@@ -24,6 +24,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AvatarsAdapter;
 import com.iGap.adapter.items.AvatarItem;
+import com.iGap.helper.HelperSaveFile;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.SUID;
@@ -35,6 +36,8 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.RoomType;
+
+import java.io.File;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -49,6 +52,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     private static final String ARG_Type = "arg_type";
 
     private long mPeerId = -1;
+    private int curerntItemPosition = 0;
 
     private LinearLayout mToolbar;
     private TextView mCount;
@@ -187,9 +191,9 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-                    mCount.setText(String.format(getString(R.string.d_of_d),
-                            ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()
-                                    + 1, mAdapter.getAdapterItemCount()));
+
+                    curerntItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                    mCount.setText(String.format(getString(R.string.d_of_d), curerntItemPosition + 1, mAdapter.getAdapterItemCount()));
                 }
             });
 
@@ -215,8 +219,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
             long identifier = SUID.id().get();
             for (RealmAvatar avatar : userAvatars) {
-                mAdapter.add(
-                        new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));
+                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));
                 identifier++;
             }
         }
@@ -257,7 +260,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                             public void onSelection(MaterialDialog dialog, View view, int which,
                                                     CharSequence text) {
                                 if (which == 0) {
-//                                    HelperSaveFile.savePicToGallary();
+                                    saveToGallery();
                                 } else if (which == 1) {
 //
                                 }
@@ -286,12 +289,16 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     }
 
     private void saveToGallery() {
-//        String media =mAdapter.getItem(0).;
-//        if (media != null) {
-//            if (true) {
-//                HelperSaveFile.savePicToGallary(media);
-//            }
-//        }
+
+        if (mAdapter.getItem(curerntItemPosition) != null) {
+            String media = mAdapter.getItem(curerntItemPosition).avatar.getLocalFilePath();
+            if (media != null) {
+                File file = new File(media);
+                if (file.exists()) {
+                    HelperSaveFile.savePicToGallary(media);
+                }
+            }
+        }
     }
 
     @Override

@@ -448,8 +448,6 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                 HelperSaveFile.savePicToGallary(media.attachment.getLocalFilePath());
             }
         }
-
-
     }
 
     public StructMessageInfo getCurrentPage() {
