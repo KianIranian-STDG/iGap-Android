@@ -5,59 +5,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context="com.iGap.fragments.FragmentCreateChannel"
+                android:background="@color/whit_background"
                 tools:ignore="MissingPrefix">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/fch_backgroundToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
-        android:background="@color/toolbar_background"
-        android:layoutDirection="ltr"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        app:layout_collapseMode="pin">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:text="@string/new_chanel"
-                android:textColor="@color/whit_background"
-                android:textSize="@dimen/sp18"
-                android:textStyle="bold"
-                android:visibility="visible"/>
-
-            <com.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/fch_ripple_back"
-                rv_centered="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="150"
-                app:rv_ripplePadding="5dp">
-
-                <com.iGap.module.MaterialDesignTextView
-                    android:id="@+id/fch_txt_back"
-                    fontPath="fonts/Flaticon.ttf"
-                    android:layout_width="@dimen/dp52"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:gravity="center"
-                    android:text="@string/md_back_arrow"
-                    android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18"/>
-
-            </com.iGap.libs.rippleeffect.RippleView>
-
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
 
     <View
         android:layout_width="match_parent"
@@ -68,7 +17,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/fch_backgroundToolbar">
+        android:layout_below="@+id/fch_backgroundToolbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -215,5 +166,60 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/fch_backgroundToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:background="@color/toolbar_background"
+        android:layoutDirection="ltr"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/new_chanel"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp18"
+                android:textStyle="bold"
+                android:visibility="visible"/>
+
+            <com.iGap.libs.rippleeffect.RippleView
+                android:id="@+id/fch_ripple_back"
+                rv_centered="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:rv_alpha="200"
+                app:rv_centered="true"
+                app:rv_rippleDuration="150"
+                app:rv_ripplePadding="5dp">
+
+                <com.iGap.module.MaterialDesignTextView
+                    android:id="@+id/fch_txt_back"
+                    fontPath="fonts/Flaticon.ttf"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:text="@string/md_back_arrow"
+                    android:textColor="@color/whit_background"
+                    android:textSize="@dimen/sp18"/>
+
+            </com.iGap.libs.rippleeffect.RippleView>
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
 
 </RelativeLayout>

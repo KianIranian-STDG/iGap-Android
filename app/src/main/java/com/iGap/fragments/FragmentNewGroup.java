@@ -35,7 +35,6 @@ import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.activities.ActivityCrop;
 import com.iGap.activities.ActivityMain;
-import com.iGap.activities.ActivityNewChanelFinish;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChatConvertToGroup;
@@ -314,8 +313,17 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                     File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                     if (prefix.equals("NewChanel")) {
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
                         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+//                        startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
+
+                        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .addToBackStack(null)
+                                .replace(fragmentContainer, fragmentCreateChannel)
+                                .commitAllowingStateLoss();
+
                     } else if (prefix.equals("ConvertToGroup")) {
                         chatToGroup();
                     } else {
