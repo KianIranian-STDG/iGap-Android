@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.helper.HelperGetAction;
 import com.iGap.proto.ProtoGroupSetAction;
 
 public class GroupSetActionResponse extends MessageHandler {
@@ -21,6 +22,9 @@ public class GroupSetActionResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoGroupSetAction.GroupSetActionResponse.Builder builder = (ProtoGroupSetAction.GroupSetActionResponse.Builder) message;
+
+        HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+
         if (G.onSetAction != null) {
             G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
         }

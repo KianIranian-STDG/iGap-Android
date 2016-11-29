@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
     <LinearLayout
@@ -17,7 +17,7 @@
             android:id="@+id/replayLayoutStub"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"/>
 
         <View
             android:layout_width="match_parent"
@@ -38,12 +38,12 @@
                 fontPath="fonts/Flaticon.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="bottom"
                 android:layout_gravity="bottom"
+                android:gravity="bottom"
                 android:paddingBottom="@dimen/dp16"
                 android:paddingLeft="@dimen/dp4"
                 android:paddingRight="@dimen/dp4"
-                android:text="@string/md_emoticon_with_happy_face" />
+                android:text="@string/md_emoticon_with_happy_face"/>
 
             <io.github.meness.emoji.EmojiEditText
                 android:id="@+id/chl_edt_chat"
@@ -53,10 +53,10 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:gravity="bottom"
-                android:paddingBottom="@dimen/dp4"
                 android:hint="@string/type_message"
                 android:lineSpacingMultiplier=".8"
                 android:maxLines="4"
+                android:paddingBottom="@dimen/dp4"
                 android:paddingRight="@dimen/dp4"
                 android:textColorHint="@color/light_gray"
                 app:emojiSize="26sp"
@@ -68,14 +68,14 @@
                 fontPath="fonts/Flaticon.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:gravity="bottom"
                 android:paddingBottom="@dimen/dp16"
                 android:paddingLeft="@dimen/dp4"
                 android:paddingRight="@dimen/dp4"
-                android:textSize="@dimen/sp22"
                 android:text="@string/md_send_button"
-                android:visibility="visible"
-                android:layout_gravity="bottom"
-                android:gravity="bottom"/>
+                android:textSize="@dimen/sp22"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/layoutAttachBottom"
@@ -94,7 +94,7 @@
                     android:layout_weight="1"
                     android:padding="@dimen/dp8"
                     android:rotation="135"
-                    android:text="@string/md_attachment_clip" />
+                    android:text="@string/md_attachment_clip"/>
 
                 <com.nightonke.boommenu.BoomMenuButton
                     android:id="@+id/am_boom"
@@ -103,7 +103,7 @@
                     android:visibility="gone"
                     app:boom_button_color="@android:color/transparent"
                     app:boom_button_pressed_color="@android:color/transparent"
-                    app:boom_inActionBar="false" />
+                    app:boom_inActionBar="false"/>
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_mic_button"
@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="@dimen/dp8"
-                    android:text="@string/md_voice_message_microphone_button" />
+                    android:text="@string/md_voice_message_microphone_button"/>
 
 
             </LinearLayout>

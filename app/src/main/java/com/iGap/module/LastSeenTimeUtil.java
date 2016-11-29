@@ -5,12 +5,17 @@ import android.text.format.DateUtils;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import io.realm.Realm;
 
 public class LastSeenTimeUtil {
     private LastSeenTimeUtil() throws InstantiationException {
@@ -43,12 +48,16 @@ public class LastSeenTimeUtil {
 
     private static synchronized void updateLastSeenTime() {
 
-        ArrayList<Long> userIdList = new ArrayList<>();
+        Realm realm = Realm.getDefaultInstance();
 
+        ArrayList<Long> userIdList = new ArrayList<>();
         for (Iterator<Map.Entry<Long, Long>> it = hashMapLastSeen.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<Long, Long> entry = it.next();
             long userId = entry.getKey();
             long value = entry.getValue();
+
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+
 
             String showLastSeen;
             if (timeOut(value * DateUtils.SECOND_IN_MILLIS)) {
@@ -57,16 +66,20 @@ public class LastSeenTimeUtil {
             } else {
                 showLastSeen = getMinute(value);
             }
-
-            if (G.onLastSeenUpdateTiming != null) {
-                G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
+            if (realmRegisteredInfo != null && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
+                if (G.onLastSeenUpdateTiming != null) {
+                    G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
+                }
             }
+
         }
 
         // i separate hashMap remove from iterator , because i guess remove in that iterator make bug in app , but i'm not insuring
         for (long userId : userIdList) {
             hashMapLastSeen.remove(userId);
         }
+
+        realm.close();
 
         userIdList.clear();
         if (hashMapLastSeen.size() > 0) {

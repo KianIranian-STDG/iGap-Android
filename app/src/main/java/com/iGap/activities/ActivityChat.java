@@ -77,6 +77,7 @@ import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImageMessages;
 import com.iGap.helper.HelperConvertEnumToString;
+import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
@@ -1727,6 +1728,7 @@ public class ActivityChat extends ActivityEnhanced
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
+
                                 layoutAttachBottom.setVisibility(View.VISIBLE);
                             }
                         }).start();
@@ -4357,7 +4359,23 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
             } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
+
+                Log.i("WWW", "GroupSetActionResponse GROUP 3");
+                final String actionText = HelperGetAction.getAction(roomId);
+
                 runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (actionText != null) {
+                            txtLastSeen.setText(actionText);
+                        } else {
+                            txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
+                        }
+                    }
+                });
+
+
+                /*runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Realm realm = Realm.getDefaultInstance();
@@ -4380,7 +4398,7 @@ public class ActivityChat extends ActivityEnhanced
                             txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
                         }
                     }
-                });
+                });*/
             }
         }
     }
