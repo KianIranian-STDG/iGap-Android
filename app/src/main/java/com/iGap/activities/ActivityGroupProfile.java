@@ -434,8 +434,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
         }
 
 
-
-
         LinearLayout llSharedMedia = (LinearLayout) findViewById(R.id.agp_ll_sheared_media);
         llSharedMedia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -622,6 +620,13 @@ public class ActivityGroupProfile extends ActivityEnhanced
         initRecycleView();
         getMemberList();
 
+        //TODO [Saeed Mozaffari] [2016-11-29 3:12 PM] - please impalement this callbacks
+        onGroupAddMemberCallback();
+        onGroupKickMemberCallback();
+        onSetAdminCallback();
+        onGroupKickAdminCallback();
+        onGroupAddModeratorCallback();
+        onGroupKickModeratorCallback();
     }
 
     private void getMemberList() {
@@ -630,8 +635,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 if (Long.parseLong(identity) == roomId) {
-
-                    Log.i("EEE", "getMemberList user.getId() : " + user.getId());
 
                     if (!userExistInList(user.getId())) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
                         runOnUiThread(new Runnable() {
@@ -1081,195 +1084,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
     private void addMemberToGroup() {
 
-        G.onGroupAddMember = new OnGroupAddMember() {
-            @Override
-            public void onGroupAddMember(final Long roomIdUser, final Long UserId) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtMemberNumber.setText((items.size() + 1) + "");
-                    }
-                });
-                        /*runOnUiThread(new Runnable() {
-                                          @Override
-                                          public void run() {
-
-                                              List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-
-                                              for (int i = 0; i < items.size(); i++) {
-                                                  if (items.get(i).mContact.peerId == UserId) {
-                                                      items.get(i).mContact.role = role.toString();
-                                                      if (i < itemAdapter.getAdapterItemCount()) {
-                                                          IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
-                                                          itemAdapter.set(i, item);
-                                                      }
-                                                  }
-                                              }
-                                          }
-                                      }
-                        );*/
-
-                Log.i("TTT", "1");
-                runOnUiThread(new Runnable() { //TODO [Saeed Mozaffari] [2016-11-12 5:15 PM] - get member list from group and add new member . like get member list response
-                    @Override
-                    public void run() {
-                        Realm realm = Realm.getDefaultInstance();
-                        RealmRegisteredInfo realmRegistered = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, UserId).findFirst();
-                        if (realmRegistered != null) {
-                            StructContactInfo struct = new StructContactInfo(realmRegistered.getId(), realmRegistered.getDisplayName(), realmRegistered.getStatus(), false, false, realmRegistered.getPhoneNumber() + "");
-                            struct.avatar = realmRegistered.getLastAvatar();
-                            struct.initials = realmRegistered.getInitials();
-                            struct.color = realmRegistered.getColor();
-                            struct.lastSeen = realmRegistered.getLastSeen();
-                            struct.status = realmRegistered.getStatus();
-                            IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
-                            itemAdapter.add(item);
-                        } else {
-                            if (roomIdUser == roomId) {
-                                new RequestUserInfo().userInfo(UserId, roomId + "");
-                            }
-                        }
-
-                        realm.close();
-                    }
-                });
-
-
-//                        updateUi(list, UserId);
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                if (majorCode == 302 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_302_1),
-                                            Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 302 && minorCode == 2) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_302_2),
-                                            Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 302 && minorCode == 3) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_302_3),
-                                            Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 302 && minorCode == 4) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_302_4),
-                                            Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 303) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_303),
-                                            Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 304) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_304),
-                                            Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 305) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content),
-                                            getResources().getString(R.string.E_305),
-                                            Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                }
-            }
-        };
-
         List<StructContactInfo> userList = Contacts.retrieve(null);
 
         /*for (int i = 0; i < contacts.size(); i++) {
@@ -1420,192 +1234,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
         }
 
         private void setToAdmin(Long peerId) {
-
-            G.onGroupAddAdmin = new OnGroupAddAdmin() {
-                @Override
-                public void onGroupAddAdmin(long roomId, final long memberId) {
-                    updateRole(memberId, ProtoGlobal.GroupRoom.Role.ADMIN);
-
-                    if (G.updateListAfterKick != null) {
-                        G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.ADMIN);
-                    }
-                }
-
-                @Override
-                public void onError(int majorCode, int minorCode) {
-                    if (majorCode == 321) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                final Snackbar snack =
-                                        Snackbar.make(findViewById(android.R.id.content),
-                                                getResources().getString(R.string.E_321),
-                                                Snackbar.LENGTH_LONG);
-
-                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    } else if (majorCode == 322) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                final Snackbar snack =
-                                        Snackbar.make(findViewById(android.R.id.content),
-                                                getResources().getString(R.string.E_322),
-                                                Snackbar.LENGTH_LONG);
-
-                                snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    } else if (majorCode == 323) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                final Snackbar snack =
-                                        Snackbar.make(findViewById(android.R.id.content),
-                                                getResources().getString(R.string.E_323),
-                                                Snackbar.LENGTH_LONG);
-
-                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    }
-                }
-            };
-
             new RequestGroupAddAdmin().groupAddAdmin(roomId, peerId);
         }
 
         private void setToModerator(Long peerId) {
-
-            G.onGroupAddModerator = new OnGroupAddModerator() {
-                @Override
-                public void onGroupAddModerator(long roomId, final long memberId) {
-
-                    updateRole(memberId, ProtoGlobal.GroupRoom.Role.MODERATOR);
-
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            for (int i = 0; i < contacts.size(); i++) {
-//                                if (contacts.get(i).peerId == memberId) {
-//                                    contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
-//
-//                                    if (i < itemAdapter.getAdapterItemCount()) {
-//                                        IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier
-//                                                (100 + contacts.indexOf(contacts.get(i))));
-//                                        itemAdapter.set(i, item);
-//                                    }
-//                                    break;
-//                                }
-//                            }
-//                        }
-//                    });
-                }
-
-                @Override
-                public void onError(int majorCode, final int minorCode) {
-                    if (majorCode == 318) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                if (minorCode == 1) {
-                                    final Snackbar snack =
-                                            Snackbar.make(findViewById(android.R.id.content),
-                                                    getResources().getString(R.string.E_318_1),
-                                                    Snackbar.LENGTH_LONG);
-
-                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
-                                } else {
-                                    final Snackbar snack =
-                                            Snackbar.make(findViewById(android.R.id.content),
-                                                    getResources().getString(R.string.E_318_2),
-                                                    Snackbar.LENGTH_LONG);
-
-                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
-                                }
-                            }
-                        });
-                    } else if (majorCode == 319) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                final Snackbar snack =
-                                        Snackbar.make(findViewById(android.R.id.content),
-                                                getResources().getString(R.string.E_319),
-                                                Snackbar.LENGTH_LONG);
-
-                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    } else if (majorCode == 320) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                final Snackbar snack =
-                                        Snackbar.make(findViewById(android.R.id.content),
-                                                getResources().getString(R.string.E_320),
-                                                Snackbar.LENGTH_LONG);
-
-                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onTimeOut() {
-
-                }
-            };
-
-
             new RequestGroupAddModerator().groupAddModerator(roomId, peerId);
-
-
         }
 
     }
@@ -2213,100 +1846,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        G.onGroupKickAdmin = new OnGroupKickAdmin() {
-                            @Override
-                            public void onGroupKickAdmin(long roomId, long memberId) {
-
-                                updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
-
-                                if (G.updateListAfterKick != null) {
-                                    G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
-                                }
-                            }
-
-                            @Override
-                            public void onError(int majorCode, final int minorCode) {
-                                if (majorCode == 327) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            if (minorCode == 1) {
-
-                                                final Snackbar snack =
-                                                        Snackbar.make(findViewById(android.R.id.content),
-                                                                getResources().getString(R.string.E_327_A),
-                                                                Snackbar.LENGTH_LONG);
-
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
-                                            } else {
-
-                                                final Snackbar snack =
-                                                        Snackbar.make(findViewById(android.R.id.content),
-                                                                getResources().getString(R.string.E_327_B),
-                                                                Snackbar.LENGTH_LONG);
-
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
-                                            }
-                                        }
-                                    });
-                                } else if (majorCode == 328) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content),
-                                                            getResources().getString(R.string.E_328),
-                                                            Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                } else if (majorCode == 329) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content),
-                                                            getResources().getString(R.string.E_329),
-                                                            Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
-                            }
-
-                            @Override
-                            public void onTimeOut() {
-
-                            }
-                        };
-
                         new RequestGroupKickAdmin().groupKickAdmin(roomId, memberID);
                     }
                 })
@@ -2325,148 +1864,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        G.onGroupKickMember = new OnGroupKickMember() {
-                            @Override
-                            public void onGroupKickMember(final long roomId, final long memberId) {
 
-                                runOnUiThread(new Runnable() {
-                                                  @Override
-                                                  public void run() {
-
-                                                      final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                                                      runOnUiThread(new Runnable() {
-                                                          @Override
-                                                          public void run() {
-                                                              txtMemberNumber.setText((items.size() - 1) + "");
-                                                          }
-                                                      });
-                                                      for (int i = 0; i < items.size(); i++) {
-                                                          if (items.get(i).mContact.peerId == memberId) {
-                                                              itemAdapter.remove(i);
-                                                              Realm realm = Realm.getDefaultInstance();
-                                                              realm.executeTransaction(new Realm.Transaction() {
-                                                                  @Override
-                                                                  public void execute(Realm realm) {
-                                                                      RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                                                      for (RealmMember realmMember : realmRoom.getGroupRoom().getMembers()) {
-                                                                          if (realmMember.getPeerId() == memberId) {
-                                                                              realmMember.deleteFromRealm();
-                                                                              participantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
-                                                                              participantsCountLabel = (Integer.parseInt(participantsCountLabel) - 1) + "";
-                                                                              realmRoom.getGroupRoom().setParticipantsCountLabel(participantsCountLabel);
-                                                                              break;
-                                                                          }
-                                                                      }
-
-                                                                  }
-                                                              });
-                                                              realm.close();
-                                                          }
-                                                      }
-                                                  }
-                                              }
-                                );
-
-//                                runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        for (int j = 0; j < contacts.size(); j++) {
-//                                            if (contacts.get(j).peerId == memberId) {
-//                                                items.remove(j);
-//                                                contacts.remove(j);
-//                                                itemAdapter.remove(j);
-//
-//                                                break;
-//                                            }
-//                                        }
-//
-//                                        txtMemberNumber.setText(contacts.size() + "");
-//                                    }
-//                                });
-                            }
-
-                            @Override
-                            public void onError(int majorCode, int minorCode) {
-                                if (majorCode == 332 && minorCode == 1) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content),
-                                                            getResources().getString(R.string.E_332_1),
-                                                            Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                } else if (majorCode == 332 && minorCode == 2) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content),
-                                                            getResources().getString(R.string.E_332_2),
-                                                            Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                } else if (majorCode == 333) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content),
-                                                            getResources().getString(R.string.E_333),
-                                                            Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                } else if (majorCode == 334) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content),
-                                                            getResources().getString(R.string.E_334),
-                                                            Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
-                            }
-
-                            @Override
-                            public void onTimeOut() {
-
-                            }
-                        };
 
                         new RequestGroupKickMember().groupKickMember(roomId, memberID);
                     }
@@ -2474,25 +1872,340 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 .show();
     }
 
-    private void kickModerator(final long memberID) {
-
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(
-                R.string.do_you_want_to_set_modereator_role_to_member)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+    private void onGroupAddMemberCallback() {
+        G.onGroupAddMember = new OnGroupAddMember() {
+            @Override
+            public void onGroupAddMember(final Long roomIdUser, final Long UserId) {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    public void run() {
+                        txtMemberNumber.setText((items.size() + 1) + "");
+                    }
+                });
+                        /*runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
 
-                        G.onGroupKickModerator = new OnGroupKickModerator() {
-                            @Override
-                            public void onGroupKickModerator(long roomId, long memberId) {
+                                              List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
 
-                                updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+                                              for (int i = 0; i < items.size(); i++) {
+                                                  if (items.get(i).mContact.peerId == UserId) {
+                                                      items.get(i).mContact.role = role.toString();
+                                                      if (i < itemAdapter.getAdapterItemCount()) {
+                                                          IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
+                                                          itemAdapter.set(i, item);
+                                                      }
+                                                  }
+                                              }
+                                          }
+                                      }
+                        );*/
 
-                                if (G.updateListAfterKick != null) {
-                                    G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+                Log.i("TTT", "1 roomIdUser : " + roomIdUser);
+                Log.i("TTT", "1 roomId : " + roomId);
+                runOnUiThread(new Runnable() { //TODO [Saeed Mozaffari] [2016-11-12 5:15 PM] - get member list from group and add new member . like get member list response
+                    @Override
+                    public void run() {
+                        Realm realm = Realm.getDefaultInstance();
+                        RealmRegisteredInfo realmRegistered = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, UserId).findFirst();
+                        Log.i("TTT", "2 realmRegistered : " + realmRegistered);
+                        if (realmRegistered != null) {
+                            StructContactInfo struct = new StructContactInfo(realmRegistered.getId(), realmRegistered.getDisplayName(), realmRegistered.getStatus(), false, false, realmRegistered.getPhoneNumber() + "");
+                            struct.avatar = realmRegistered.getLastAvatar();
+                            struct.initials = realmRegistered.getInitials();
+                            struct.color = realmRegistered.getColor();
+                            struct.lastSeen = realmRegistered.getLastSeen();
+                            struct.status = realmRegistered.getStatus();
+                            IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
+                            itemAdapter.add(item);
+                            Log.i("TTT", "3  itemAdapter.add(item)");
+                        } else {
+
+                            if (roomIdUser == roomId) {
+                                new RequestUserInfo().userInfo(UserId, roomId + "");
+                            }
+                        }
+
+                        realm.close();
+                    }
+                });
+
+
+//                        updateUi(list, UserId);
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                if (majorCode == 302 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_302_1),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
                                 }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 302 && minorCode == 2) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_302_2),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 302 && minorCode == 3) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_302_3),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 302 && minorCode == 4) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_302_4),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 303) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_303),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 304) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_304),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 305) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_305),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                }
+            }
+        };
+    }
+
+    private void onGroupKickMemberCallback() {
+        G.onGroupKickMember = new OnGroupKickMember() {
+            @Override
+            public void onGroupKickMember(final long roomId, final long memberId) {
+
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+
+                                      final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+                                      runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                              txtMemberNumber.setText((items.size() - 1) + "");
+                                          }
+                                      });
+                                      for (int i = 0; i < items.size(); i++) {
+                                          if (items.get(i).mContact.peerId == memberId) {
+                                              itemAdapter.remove(i);
+                                              Realm realm = Realm.getDefaultInstance();
+                                              realm.executeTransaction(new Realm.Transaction() {
+                                                  @Override
+                                                  public void execute(Realm realm) {
+                                                      RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                                      for (RealmMember realmMember : realmRoom.getGroupRoom().getMembers()) {
+                                                          if (realmMember.getPeerId() == memberId) {
+                                                              realmMember.deleteFromRealm();
+                                                              participantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
+                                                              participantsCountLabel = (Integer.parseInt(participantsCountLabel) - 1) + "";
+                                                              realmRoom.getGroupRoom().setParticipantsCountLabel(participantsCountLabel);
+                                                              break;
+                                                          }
+                                                      }
+
+                                                  }
+                                              });
+                                              realm.close();
+                                          }
+                                      }
+                                  }
+                              }
+                );
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                if (majorCode == 332 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_332_1),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 332 && minorCode == 2) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_332_2),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 333) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_333),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 334) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_334),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onTimeOut() {
+
+            }
+        };
+    }
+
+    private void onGroupKickModeratorCallback() {
+        G.onGroupKickModerator = new OnGroupKickModerator() {
+            @Override
+            public void onGroupKickModerator(long roomId, long memberId) {
+
+                updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+
+                if (G.updateListAfterKick != null) {
+                    G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+                }
 
 //                                for (int i = 0; i < contacts.size(); i++) {
 //                                    if (contacts.get(i).peerId == memberId) {
@@ -2513,89 +2226,378 @@ public class ActivityGroupProfile extends ActivityEnhanced
 //                                        break;
 //                                    }
 //                                }
+            }
+
+            @Override
+            public void onError(int majorCode, final int minorCode) {
+                if (majorCode == 324) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (minorCode == 1) {
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_324_1),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            } else {
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_324_2),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
                             }
+                        }
+                    });
+                } else if (majorCode == 325) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_325),
+                                            Snackbar.LENGTH_LONG);
 
-                            @Override
-                            public void onError(int majorCode, final int minorCode) {
-                                if (majorCode == 324) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            if (minorCode == 1) {
-                                                final Snackbar snack =
-                                                        Snackbar.make(findViewById(android.R.id.content),
-                                                                getResources().getString(R.string.E_324_1),
-                                                                Snackbar.LENGTH_LONG);
-
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
-                                            } else {
-                                                final Snackbar snack =
-                                                        Snackbar.make(findViewById(android.R.id.content),
-                                                                getResources().getString(R.string.E_324_2),
-                                                                Snackbar.LENGTH_LONG);
-
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
-                                            }
-                                        }
-                                    });
-                                } else if (majorCode == 325) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content),
-                                                            getResources().getString(R.string.E_325),
-                                                            Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                } else if (majorCode == 326) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content),
-                                                            getResources().getString(R.string.E_326),
-                                                            Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
                                 }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 326) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_326),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void timeOut() {
+
+            }
+        };
+    }
+
+    private void onGroupAddModeratorCallback() {
+        G.onGroupAddModerator = new OnGroupAddModerator() {
+            @Override
+            public void onGroupAddModerator(long roomId, final long memberId) {
+
+                updateRole(memberId, ProtoGlobal.GroupRoom.Role.MODERATOR);
+
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            for (int i = 0; i < contacts.size(); i++) {
+//                                if (contacts.get(i).peerId == memberId) {
+//                                    contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
+//
+//                                    if (i < itemAdapter.getAdapterItemCount()) {
+//                                        IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier
+//                                                (100 + contacts.indexOf(contacts.get(i))));
+//                                        itemAdapter.set(i, item);
+//                                    }
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                    });
+            }
+
+            @Override
+            public void onError(int majorCode, final int minorCode) {
+                if (majorCode == 318) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (minorCode == 1) {
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_318_1),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            } else {
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_318_2),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
                             }
+                        }
+                    });
+                } else if (majorCode == 319) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_319),
+                                            Snackbar.LENGTH_LONG);
 
-                            @Override
-                            public void timeOut() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 320) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_320),
+                                            Snackbar.LENGTH_LONG);
 
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onTimeOut() {
+
+            }
+        };
+
+    }
+
+    private void onGroupKickAdminCallback() {
+        G.onGroupKickAdmin = new OnGroupKickAdmin() {
+            @Override
+            public void onGroupKickAdmin(long roomId, long memberId) {
+
+                updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+
+                if (G.updateListAfterKick != null) {
+                    G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+                }
+            }
+
+            @Override
+            public void onError(int majorCode, final int minorCode) {
+                if (majorCode == 327) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (minorCode == 1) {
+
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_327_A),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            } else {
+
+                                final Snackbar snack =
+                                        Snackbar.make(findViewById(android.R.id.content),
+                                                getResources().getString(R.string.E_327_B),
+                                                Snackbar.LENGTH_LONG);
+
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
                             }
-                        };
+                        }
+                    });
+                } else if (majorCode == 328) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_328),
+                                            Snackbar.LENGTH_LONG);
 
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 329) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_329),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onTimeOut() {
+
+            }
+        };
+    }
+
+    private void onSetAdminCallback() {
+        G.onGroupAddAdmin = new OnGroupAddAdmin() {
+            @Override
+            public void onGroupAddAdmin(long roomId, final long memberId) {
+
+                updateRole(memberId, ProtoGlobal.GroupRoom.Role.ADMIN);
+
+                if (G.updateListAfterKick != null) {
+                    G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.ADMIN);
+                }
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                if (majorCode == 321) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_321),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 322) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_322),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 323) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_323),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                }
+            }
+        };
+    }
+
+
+    private void kickModerator(final long memberID) {
+
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(
+                R.string.do_you_want_to_set_modereator_role_to_member)
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         new RequestGroupKickModerator().groupKickModerator(roomId, memberID);
                     }
                 })

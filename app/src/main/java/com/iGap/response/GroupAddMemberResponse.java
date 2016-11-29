@@ -39,7 +39,7 @@ public class GroupAddMemberResponse extends MessageHandler {
 
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
+        Log.i("TTT", "GroupAddMemberResponse 1 realmRoom : " + realmRoom);
         if (realmRoom != null) {
             RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
             if (realmGroupRoom != null) {
@@ -57,8 +57,9 @@ public class GroupAddMemberResponse extends MessageHandler {
                         members.add(realmMember);
                     }
                 });
-
+                Log.i("TTT", "onGroupAddMember 2 G.onGroupAddMember : " + G.onGroupAddMember);
                 if (G.onGroupAddMember != null) {
+                    Log.i("TTT", "onGroupAddMember 3");
                     G.onGroupAddMember.onGroupAddMember(roomId, userId);
                 }
             }

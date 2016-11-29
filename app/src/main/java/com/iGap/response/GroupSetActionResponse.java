@@ -3,6 +3,9 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.proto.ProtoGroupSetAction;
+import com.iGap.realm.RealmUserInfo;
+
+import io.realm.Realm;
 
 public class GroupSetActionResponse extends MessageHandler {
 
@@ -23,11 +26,16 @@ public class GroupSetActionResponse extends MessageHandler {
         super.handler();
         ProtoGroupSetAction.GroupSetActionResponse.Builder builder = (ProtoGroupSetAction.GroupSetActionResponse.Builder) message;
 
-        HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo.getUserInfo().getId() != builder.getUserId()) {
+            HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
 
-        if (G.onSetAction != null) {
-            G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+            if (G.onSetAction != null) {
+                G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+            }
         }
+        realm.close();
     }
 
     @Override
