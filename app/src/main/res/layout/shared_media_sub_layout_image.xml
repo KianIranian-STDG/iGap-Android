@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/smsl_imv_file_pic"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/dp120"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/difaultimage" />
@@ -34,20 +34,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp8"
-                android:padding="@dimen/dp4"
+                android:padding="2dp"
                 android:text="@string/fa_video_camera"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp14" />
+                android:textSize="@dimen/sp12"/>
 
             <TextView
                 android:id="@+id/smsl_txt_video_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dp4"
                 android:text="3:12"
+                android:padding="2dp"
+                android:singleLine="true"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp14" />
+                android:textSize="@dimen/sp12"/>
 
+
+            <TextView
+                android:id="@+id/smsl_txt_video_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6mb"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:padding="2dp"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp12"/>
 
         </LinearLayout>
 

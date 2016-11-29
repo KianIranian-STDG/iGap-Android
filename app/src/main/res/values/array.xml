@@ -165,10 +165,13 @@
     </string-array>
 
     <string-array name="pop_up_shared_media">
-        <item>@string/shared_media</item>
-        <item>@string/shared_files</item>
+        <item>@string/shared_image</item>
+        <item>@string/shared_video</item>
+        <item>@string/shared_audio</item>
+        <item>@string/shared_voice</item>
+        <item>@string/shared_gif</item>
+        <item>@string/shared_file</item>
         <item>@string/shared_links</item>
-        <item>@string/shared_music</item>
     </string-array>
 
     <string-array name="pop_up_media_player">

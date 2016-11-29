@@ -8,28 +8,34 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activities.ActivityShearedMedia;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.module.StructMessageInfo;
+import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,17 +48,19 @@ import io.realm.RealmResults;
  */
 public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    ArrayList<RealmRoomMessage> list;
+    ArrayList<ActivityShearedMedia.StructSharedMedia> list;
     ArrayList<option> options;
     Context context;
     private boolean isSelectedMode = false;    // for determine user select some file
     private int numberOfSelected = 0;
-    private String mediaType;
+
     private OnComplete complete;
     private MusicPlayer musicPlayer;
     private long roomId = 0;
 
-    public AdapterShearedMedia(Context context, ArrayList<RealmRoomMessage> list, String mediaType, OnComplete complete, MusicPlayer musicPlayer, long roomId) {
+    ActivityShearedMedia.SharedMediaType mediaType;
+
+    public AdapterShearedMedia(Context context, ArrayList<ActivityShearedMedia.StructSharedMedia> list, ActivityShearedMedia.SharedMediaType mediaType, OnComplete complete, MusicPlayer musicPlayer, long roomId) {
         this.context = context;
         this.list = list;
         this.mediaType = mediaType;
@@ -104,58 +112,73 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         RecyclerView.ViewHolder viewHolder = null;
         boolean isHeader = false;
 
-        if (list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.TEXT)) {
+        if (list.get(position).isItemTime) {
             isHeader = true;
         }
 
-        if (mediaType.equals(context.getString(R.string.shared_media))) {// picture and video
 
-            if (isHeader) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
-                viewHolder = new MyHoldersTime(view, position);
-            } else {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_image, null);
-                viewHolder = new MyHoldersImage(view, position);
-            }
-        } else if (mediaType.equals(context.getString(R.string.shared_files))) {// file
-            if (isHeader) {
-                viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
-            } else {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_file, null);
-                RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                view.setLayoutParams(lp);
-                viewHolder = new MyHoldersFile(view, position);
-            }
-        } else if (mediaType.equals(context.getString(R.string.shared_links))) {
-            if (isHeader) {
-                viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
-            } else {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.share_media_sub_layout_link, null);
-                viewHolder = new MyHolderLink(view, position);
-            }
-        } else if (mediaType.equals(context.getString(R.string.shared_music))) {
-            if (isHeader) {
-                viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
-            } else {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.shared_media_sub_layout_file, null);
-                RecyclerView.LayoutParams lp =
-                        new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT);
-                view.setLayoutParams(lp);
-                viewHolder = new MyHoldersMusic(view, position);
-            }
+        switch (mediaType) {
+
+            case image:
+                if (isHeader) {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
+                    viewHolder = new MyHoldersTime(view, position);
+                } else {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_image, null);
+                    viewHolder = new MyHoldersImage(view, position);
+                }
+                break;
+            case video:
+                if (isHeader) {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
+                    viewHolder = new MyHoldersTime(view, position);
+                } else {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_image, null);
+                    viewHolder = new MyHoldersVideo(view, position);
+                }
+                break;
+            case audio:
+            case voice:
+                if (isHeader) {
+                    viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
+                } else {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_file, null);
+                    RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    view.setLayoutParams(lp);
+                    viewHolder = new MyHoldersMusic(view, position);
+                }
+                break;
+
+            case gif:
+
+                break;
+            case file:
+                if (isHeader) {
+                    viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
+                } else {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_file, null);
+                    RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    view.setLayoutParams(lp);
+                    viewHolder = new MyHoldersFile(view, position);
+                }
+                break;
+            case link:
+                if (isHeader) {
+                    viewHolder = new MyHoldersTime(setLayoutHeaderTime(parent), position);
+                } else {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.share_media_sub_layout_link, null);
+                    viewHolder = new MyHolderLink(view, position);
+                }
+                break;
         }
+
 
         return viewHolder;
     }
 
     private View setLayoutHeaderTime(View parent) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.shared_media_sub_layout_time, null);
-        RecyclerView.LayoutParams lp =
-                new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shared_media_sub_layout_time, null);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         view.setBackgroundColor(Color.parseColor("#cccccc"));
         return view;
@@ -164,61 +187,97 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if (!list.get(position).getMessageType().equals(ProtoGlobal.RoomMessageType.TEXT)) {
+        if (!list.get(position).isItemTime) {
 
-            // set blue back ground for selected file
-            FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
+            setBackgroundColor(holder, position);
 
-            if (options.get(position).isSelected) {
-                layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
-            } else {
-                layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
+            switch (mediaType) {
+
+                case image:
+                    onBindImage(holder, position);
+                    break;
+                case video:
+                    onBindVideo(holder, position);
+                    break;
+                case audio:
+
+                    break;
+                case voice:
+
+                    break;
+                case gif:
+
+                    break;
+                case file:
+                    onBindFile(holder, position);
+                    break;
+                case link:
+
+                    break;
             }
 
-            if (mediaType.equals(context.getString(R.string.shared_media))) {
 
-                String path = "";
-
-                if (list.get(position)
-                        .getMessageType()
-                        .equals(ProtoGlobal.RoomMessageType.VIDEO) || list.get(position)
-                        .getMessageType()
-                        .equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT)) {
-                    path = list.get(position).getAttachment().getLocalThumbnailPath();
-                    if (path == null) path = "";
-
-                    if (path.length() < 1) {
-                        ((MyHoldersImage) holder).imvPicFile.setImageResource(R.mipmap.j_video);
-                    } else {
-                        new HelperMimeType().loadVideoThumbnail(
-                                ((MyHoldersImage) holder).imvPicFile, path);
-                        //  new LoadImageToImageView(((MyHoldersImage) holder).imvPicFile, path).execute();
-                    }
-                } else {
-                    path = list.get(position).getAttachment().getLocalFilePath();
-                    if (path == null) path = "";
-
-                    if (path.length() < 1) {
-                        path = list.get(position).getAttachment().getLocalThumbnailPath();
-                    }
-
-                    if (path == null) path = "";
-
-                    if (path.length() > 0) {
-                        new LoadImageToImageView(((MyHoldersImage) holder).imvPicFile,
-                                path).execute();
-                    }
-                }
-            } else if (mediaType.equals(context.getString(R.string.shared_files))) {
-                MyHoldersFile m = (MyHoldersFile) holder;
-                if (options.get(position).isDownloading) {
-                    m.btnFileState.setText(context.getString(R.string.fa_pause));
-                } else {
-                    m.btnFileState.setText(context.getString(R.string.fa_arrow_down));
-                }
-            }
         }
     }
+
+
+    private void setBackgroundColor(RecyclerView.ViewHolder holder, int position) {
+
+        // set blue back ground for selected file
+        FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
+
+        if (options.get(position).isSelected) {
+            layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
+        } else {
+            layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+    }
+
+    private void onBindImage(RecyclerView.ViewHolder holder, int position) {
+
+        String path = "";
+
+        path = ((MyHoldersImage) holder).attachment.getLocalFilePath();
+        if (path == null) path = "";
+
+        if (path.length() < 1) {
+            path = ((MyHoldersImage) holder).attachment.getLocalThumbnailPath();
+        }
+
+        if (path == null) path = "";
+
+        if (path.length() > 0) {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), ((MyHoldersImage) holder).imvPicFile);
+        }
+
+    }
+
+
+    private void onBindVideo(RecyclerView.ViewHolder holder, int position) {
+
+        String path = "";
+
+        path = ((MyHoldersVideo) holder).attachment.getLocalThumbnailPath();
+        if (path == null) path = "";
+
+        if (path.length() < 1) {
+            ((MyHoldersVideo) holder).imvPicFile.setImageResource(R.mipmap.j_video);
+        } else {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), ((MyHoldersVideo) holder).imvPicFile);
+
+            //  new LoadImageToImageView(((MyHoldersVideo) holder).imvPicFile, path).execute();
+        }
+
+    }
+
+
+    private void onBindFile(RecyclerView.ViewHolder holder, int position) {
+
+        MyHoldersFile m = (MyHoldersFile) holder;
+
+    }
+
 
     @Override
     public int getItemCount() {
@@ -241,48 +300,36 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyItemChanged(position);
     }
 
-    private void doSomething(int position) {
+    private void openSelectedFile(int position) {
 
         if (false) {
             // if need dowmload get file from server
             downloadFile(position);
         } else {
 
-            if (list.get(position)
-                    .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.IMAGE) || list.get(position)
-                    .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
-                selectImage(position);
-            } else if (list.get(position)
-                    .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.FILE.toString()) ||
-                    list.get(position)
-                            .getMessageType()
-                            .equals(ProtoGlobal.RoomMessageType.FILE_TEXT.toString()) ||
-                    list.get(position)
-                            .getMessageType()
-                            .equals(ProtoGlobal.RoomMessageType.VIDEO) ||
-                    list.get(position)
-                            .getMessageType()
-                            .equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT)) {
 
-                Intent intent = HelperMimeType.appropriateProgram(
-                        list.get(position).getAttachment().getLocalFilePath());
-                if (intent != null) context.startActivity(intent);
-            } else if (list.get(position)
-                    .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.VOICE) ||
-                    list.get(position)
-                            .getMessageType()
-                            .equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) ||
-                    list.get(position)
-                            .getMessageType()
-                            .equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
+            switch (mediaType) {
 
-                MusicPlayer.startPlayer(list.get(position).getAttachment().getLocalFilePath(),
-                        list.get(position).getAttachment().getName(), roomId, true);
+                case image:
+                    showImage(position);
+                    break;
+                case video:
+                case file:
+                    openFileOrVideo(position);
+                    break;
+                case audio:
+                case voice:
+                    playAudio(position);
+                    break;
+                case gif:
+
+                    break;
+                case link:
+
+                    break;
             }
+
+
         }
     }
 
@@ -336,34 +383,46 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         return result;
     }
 
-    public void selectImage(int position) {
-        String path = list.get(position).getAttachment().getLocalFilePath();
-        showImage(path);
+    //****************************************************************************************************************
+
+    private void openFileOrVideo(int position) {
+        RealmAttachment attachment = RealmAttachment.build(list.get(position).item.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT);
+
+        Intent intent = HelperMimeType.appropriateProgram(attachment.getLocalFilePath());
+        if (intent != null) context.startActivity(intent);
+
     }
 
-    private void showImage(String filePath) {
+    private void showImage(int position) {
+
+        RealmAttachment attachment = RealmAttachment.build(list.get(position).item.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT);
+        String filePath = attachment.getLocalFilePath();
+
 
         ArrayList<StructMessageInfo> listPic = new ArrayList<>();
         int selectedPicture = 1;
 
-        for (RealmRoomMessage mMessage : list) {
-            if (mMessage.getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE)
-                    || mMessage.getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
-                listPic.add(StructMessageInfo.convert(mMessage));
+
+        // TODO: 11/29/2016  nejati     obtimize image view for path parameter
+
+        for (ActivityShearedMedia.StructSharedMedia sharedMedia : list) {
+
+            if (sharedMedia.item != null) {
+                if (sharedMedia.item.getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE)
+                        || sharedMedia.item.getMessageType().equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
+                    listPic.add(StructMessageInfo.convert(putOrUpdate(sharedMedia.item)));
+                }
             }
         }
 
         for (int i = 0; i < listPic.size(); i++) { // determin selected image in list image
-            if (listPic.get(i).attachment != null
-                    && listPic.get(i).attachment.getLocalFilePath() != null
-                    && filePath != null
+            if (listPic.get(i).attachment != null && listPic.get(i).attachment.getLocalFilePath() != null && filePath != null
                     && listPic.get(i).attachment.getLocalFilePath().equals(filePath)) {
                 selectedPicture = i;
                 break;
             }
         }
-        //test comment
+
 
         Fragment fragment = FragmentShowImage.newInstance();
         Bundle bundle = new Bundle();
@@ -378,6 +437,12 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 .commit();
     }
 
+    private void playAudio(int position) {
+        RealmAttachment attachment = RealmAttachment.build(list.get(position).item.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT);
+
+        MusicPlayer.startPlayer(attachment.getLocalFilePath(), attachment.getName(), roomId, true);
+    }
+
     //****************************************************************************************************************
 
     private class option {
@@ -385,37 +450,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         public boolean isDownloading = false;
     }
 
-    class LoadImageToImageView extends AsyncTask<Object, Void, Bitmap> {
-
-        private ImageView imv;
-        private String path;
-
-        public LoadImageToImageView(ImageView imageView, String path) {
-            imv = imageView;
-            this.path = path;
-        }
-
-        @Override
-        protected Bitmap doInBackground(Object... params) {
-
-            Bitmap bitmap = null;
-            //            BitmapFactory.Options opts = new BitmapFactory.Options();
-            //            opts.inSampleSize = 8;
-
-            File file = new File(path);
-
-            if (file.exists()) bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if (result != null && imv != null) {
-                imv.setImageBitmap(result);
-            }
-        }
-    }
 
     public class MyHolder extends RecyclerView.ViewHolder {
 
@@ -428,7 +462,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                     if (isSelectedMode) {
                         setSelectedItem(getPosition());
                     } else {
-                        doSomething(getPosition());
+                        openSelectedFile(getPosition());
                     }
                 }
             });
@@ -448,73 +482,120 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public ImageView imvPicFile;
 
+        RealmAttachment attachment;
+
         public MyHoldersImage(View itemView, int position) {
             super(itemView);
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
 
-            if (list.get(position)
-                    .getMessageType()
-                    .equals(ProtoGlobal.RoomMessageType.VIDEO)) {
+            attachment = RealmAttachment.build(list.get(position).item.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT);
+        }
+    }
 
-                itemView.findViewById(R.id.smsl_ll_video).setVisibility(View.VISIBLE);
+    public class MyHoldersVideo extends MyHolder {
 
-                TextView txtVideoIcon = (TextView) itemView.findViewById(R.id.smsl_txt_video_icon);
-                txtVideoIcon.setTypeface(G.fontawesome);
+        public ImageView imvPicFile;
+        RealmAttachment attachment;
 
-                TextView txtVideoTime = (TextView) itemView.findViewById(R.id.smsl_txt_video_time);
-                txtVideoTime.setText(list.get(position).getAttachment().getSize() + " ");
-            }
+        public MyHoldersVideo(View itemView, int position) {
+            super(itemView);
+
+            imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
+
+
+            itemView.findViewById(R.id.smsl_ll_video).setVisibility(View.VISIBLE);
+
+            TextView txtVideoIcon = (TextView) itemView.findViewById(R.id.smsl_txt_video_icon);
+            txtVideoIcon.setTypeface(G.fontawesome);
+
+            TextView txtVideoTime = (TextView) itemView.findViewById(R.id.smsl_txt_video_time);
+            txtVideoTime.setText(AppUtils.humanReadableDuration(list.get(position).item.getAttachment().getDuration()));
+
+            TextView txtVideoSize = (TextView) itemView.findViewById(R.id.smsl_txt_video_size);
+            txtVideoSize.setText("(" + AndroidUtils.humanReadableByteCount(list.get(position).item.getAttachment().getSize(), true) + ")");
+
+            attachment = RealmAttachment.build(list.get(position).item.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT);
+
+
         }
     }
 
     public class MyHoldersFile extends MyHolder {
 
         public ImageView imvPicFile;
-        public Button btnFileState;
+
 
         public MyHoldersFile(View itemView, final int position) {
             super(itemView);
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
-            btnFileState = (Button) itemView.findViewById(R.id.smslf_btn_file_state);
-            btnFileState.setTypeface(G.fontawesome);
+
             TextView txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
             TextView txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
 
-            if (list.get(position).getAttachment() != null) {
-                imvPicFile.setImageBitmap(HelperMimeType.getMimePic(context,
-                        HelperMimeType.getMimeResource(
-                                list.get(position).getAttachment().getLocalFilePath())));
-                txtFileName.setText(list.get(position).getAttachment().getName());
-                txtFileInfo.setText(AndroidUtils.humanReadableByteCount(
-                        list.get(position).getAttachment().getSize(), true));
-            }
+
+//
+//
+//            if (list.get(position).getAttachment() != null) {
+//                imvPicFile.setImageBitmap(HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource
+//                        (list.get(position).getAttachment().getLocalFilePath())));
+//                txtFileName.setText(list.get(position).getAttachment().getName());
+//                txtFileInfo.setText(AndroidUtils.humanReadableByteCount(
+//                        list.get(position).getAttachment().getSize(), true));
+//            }
         }
     }
 
     public class MyHoldersMusic extends MyHolder {
 
         public ImageView imvPicFile;
-        public Button btnFileState;
+        public RealmAttachment attachment;
 
         public MyHoldersMusic(View itemView, final int position) {
             super(itemView);
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
-            imvPicFile.setImageResource(R.mipmap.j_audio);
+            imvPicFile.setImageResource(R.drawable.green_music_note);
 
-            btnFileState = (Button) itemView.findViewById(R.id.smslf_btn_file_state);
-            btnFileState.setTypeface(G.fontawesome);
+            attachment = RealmAttachment.build(list.get(position).item.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT);
+
 
             TextView txtFileName = (TextView) itemView.findViewById(R.id.smslf_txt_file_name);
+
+            if (attachment.getName() != null) {
+                txtFileName.setText(attachment.getName());
+            } else if (attachment.getLocalFilePath() != null) {
+                txtFileName.setText(attachment.getLocalFilePath().substring(attachment.getLocalFilePath().lastIndexOf("/") + 1));
+            }
+
+
+            TextView txtFileSize = (TextView) itemView.findViewById(R.id.smslf_txt_file_size);
+            txtFileSize.setText("(" + AndroidUtils.humanReadableByteCount(attachment.getSize(), true) + ")");
+
             TextView txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
 
-            if (list.get(position).getAttachment() != null) {
-                txtFileName.setText(list.get(position).getAttachment().getName());
-                txtFileInfo.setText(AndroidUtils.humanReadableByteCount(
-                        list.get(position).getAttachment().getSize(), true));
+            MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+            Uri uri = (Uri) Uri.fromFile(new File(attachment.getLocalFilePath()));
+            mediaMetadataRetriever.setDataSource(G.context, uri);
+            String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+
+            if (artist == null)
+                artist = G.context.getString(R.string.unknown_artist);
+
+            txtFileInfo.setText(artist);
+
+
+            try {
+                mediaMetadataRetriever.setDataSource(G.context, uri);
+                byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
+                if (data != null) {
+                    Bitmap mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    imvPicFile.setImageBitmap(mediaThumpnail);
+                }
+            } catch (Exception e) {
             }
+
         }
     }
 
@@ -526,7 +607,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             txtTime = (TextView) itemView.findViewById(R.id.smslt_txt_time);
-            txtTime.setText(list.get(position).getMessage());
+            txtTime.setText(list.get(position).time);
         }
     }
 
@@ -539,7 +620,95 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             txtLink = (TextView) itemView.findViewById(R.id.smsll_txt_shared_link);
 
-            txtLink.setText(list.get(position).getMessage());
+            txtLink.setText(list.get(position).item.getMessage());
         }
     }
+
+
+    private RealmRoomMessage isMessageExist(Long messageId) {
+
+        RealmRoomMessage realmRoomMessages = null;
+
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+
+        return realmRoomMessages;
+
+    }
+
+
+    private boolean isFileExist(RealmRoomMessage realmRoomMessage) {
+        boolean result = false;
+
+
+        if (realmRoomMessage == null)
+            return false;
+
+
+        if (realmRoomMessage.getAttachment() != null) {
+
+            if (realmRoomMessage.getAttachment().isFileExistsOnLocal())
+                return true;
+
+
+        }
+
+
+        return result;
+    }
+
+
+    public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input) {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, input.getMessageId()).findFirst();
+
+        realm.close();
+
+
+        if (message != null) {
+
+            return message;
+
+        } else {
+            message = new RealmRoomMessage();
+
+            message.setMessage(input.getMessage());
+            message.setStatus(input.getStatus().toString());
+            message.setUserId(input.getAuthor().getUser().getUserId());
+            message.setDeleted(input.getDeleted());
+            message.setEdited(input.getEdited());
+            if (input.hasAttachment()) {
+                message.setAttachment(RealmAttachment.build(input.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT));
+            }
+//        if (input.hasForwardFrom()) {
+//            message.setForwardMessage(RealmRoomMessage.putOrUpdate(input.getForwardFrom(), getRoomId(input.getForwardFrom().getAuthor())));
+//        }
+//        if (input.hasLocation()) {
+//            message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
+//        }
+//        if (input.hasLog()) {
+//            message.setLog(RealmRoomMessageLog.build(input.getLog()));
+//        }
+//        if (input.hasReplyTo()) {
+//            message.setReplyTo(RealmRoomMessage.putOrUpdate(input.getReplyTo(), getRoomId(input.getReplyTo().getAuthor())));
+//        }
+//        if (input.hasContact()) {
+//            message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
+//        }
+            message.setMessageType(input.getMessageType());
+            message.setMessageVersion(input.getMessageVersion());
+            message.setStatusVersion(input.getStatusVersion());
+            message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
+
+        }
+
+
+        return message;
+    }
+
+
 }

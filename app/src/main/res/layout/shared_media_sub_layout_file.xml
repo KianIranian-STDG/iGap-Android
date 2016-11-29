@@ -33,8 +33,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp12"
+                    android:ellipsize="middle"
                     android:singleLine="true"
-                    android:text="New Text"
+                    android:text="file name"
                     android:textSize="@dimen/sp14" />
 
                 <LinearLayout
@@ -44,23 +45,29 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/smslf_btn_file_state"
-                        android:layout_width="@dimen/sp22"
-                        android:layout_height="@dimen/sp22"
-                        android:background="@null"
-                        android:text="@string/fa_arrow_down"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/sp14" />
 
                     <TextView
                         android:id="@+id/smslf_txt_file_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxWidth="@dimen/dp300"
+                        android:text="file info"
+                        android:textSize="@dimen/sp14"/>
+
+
+                    <TextView
+                        android:id="@+id/smslf_txt_file_size"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/dp8"
+                        android:layout_weight="1"
+                        android:gravity="right"
                         android:singleLine="true"
-                        android:text="New Text"
+                        android:text="3mb"
                         android:textSize="@dimen/sp14" />
+
+
                 </LinearLayout>
 
                 <View

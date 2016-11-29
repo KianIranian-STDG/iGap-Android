@@ -575,4 +575,10 @@
     <string name="picture_save_to_galary">"picture save to galary "</string>
     <string name="my_location_title">My Location</string>
     <string name="to_delete_chat">Delete Chat</string>
+    <string name="shared_image">Shared Images</string>
+    <string name="shared_video">Shared Video</string>
+    <string name="shared_audio">Shared Audio</string>
+    <string name="shared_voice">Shared Voice</string>
+    <string name="shared_gif">Shared Gif</string>
+    <string name="shared_file">Shared File</string>
 </resources>

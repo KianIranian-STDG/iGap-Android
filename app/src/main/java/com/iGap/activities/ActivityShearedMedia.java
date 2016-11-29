@@ -8,6 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -29,16 +31,12 @@ import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoClientSearchRoomHistory;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestClientSearchRoomHistory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -54,12 +52,53 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private LinearLayout ll_AppBarSelected;
     private OnComplete complete;
     private long roomId = 0;
-    private ArrayList<RealmRoomMessage> mList;
+    private ArrayList<StructSharedMedia> mList;
 
     private LinearLayout mediaLayout;
     private MusicPlayer musicPlayer;
 
     private AppBarLayout appBarLayout;
+
+    boolean isSendRequestForLoading = false;
+    boolean isThereAnyMoreItemToLoad = false;
+
+    ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter mFilter;
+
+
+    private int offset = 0;
+
+    public class StructSharedMedia {
+
+        public ProtoGlobal.RoomMessage item = null;
+
+        public String time = "";
+
+        public boolean isItemTime = false;
+
+    }
+
+
+    public enum SharedMediaType {
+
+        image(1),
+        video(2),
+        audio(3),
+        voice(4),
+        gif(5),
+        file(6),
+        link(7);
+
+        private int value;
+
+        SharedMediaType(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -142,8 +181,31 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         recyclerView = (RecyclerView) findViewById(R.id.asm_recycler_view_sheared_media);
 
-        showMedia();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
 
+
+                Log.e("dddd", mAdapter.getItemCount() + "   " + ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition());
+
+                if (isThereAnyMoreItemToLoad) {
+                    if (!isSendRequestForLoading) {
+
+                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+
+                        if (mAdapter.getItemCount() <= lastVisiblePosition + 5) {
+
+                            loadMoreData();
+                        }
+                    }
+                }
+
+
+            }
+        });
+
+        fillListImage();
         initAppbarSelected();
     }
 
@@ -151,8 +213,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         Button btnCloseAppBarSelected = (Button) findViewById(R.id.asm_btn_close_layout);
 
-        RippleView rippleCloseAppBarSelected =
-                (RippleView) findViewById(R.id.asm_ripple_close_layout);
+        RippleView rippleCloseAppBarSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
         rippleCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,21 +268,31 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 .contentColor(Color.BLACK)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which,
-                                            CharSequence text) {
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        offset = 0;
 
                         switch (which) {
                             case 0:
-                                showMedia();
+                                fillListImage();
                                 break;
                             case 1:
-                                showFile();
+                                fillListVideo();
                                 break;
                             case 2:
-                                showLink();
+                                fillListAudio();
                                 break;
                             case 3:
-                                showMusic();
+                                fillListVoice();
+                                break;
+                            case 4:
+                                fillListGif();
+                                break;
+                            case 5:
+                                fillListFile();
+                                break;
+                            case 6:
+                                fillListLink();
                                 break;
                         }
                     }
@@ -230,29 +301,24 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        layoutParams.width = (int) getResources().getDimension(R.dimen.dp180);
+        layoutParams.width = (int) getResources().getDimension(R.dimen.dp220);
         layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
 
         dialog.getWindow().setAttributes(layoutParams);
     }
 
-    private void showMedia() {
-        fillListImage();
 
-        txtSharedMedia.setText(getString(R.string.shared_media));
+    //********************************************************************************************
 
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList,
-                txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
-        final GridLayoutManager gLayoutManager =
-                new GridLayoutManager(ActivityShearedMedia.this, spanItemCount);
+
+    private void initLayoutRecycleviewForImage() {
+
+        final GridLayoutManager gLayoutManager = new GridLayoutManager(ActivityShearedMedia.this, spanItemCount);
 
         gLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-
-                if (mList.get(position)
-                        .getMessageType()
-                        .equals(ProtoGlobal.RoomMessageType.TEXT)) {
+                if (mList.get(position).isItemTime) {
                     return spanItemCount;
                 } else {
                     return 1;
@@ -279,174 +345,196 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         gLayoutManager.requestLayout();
                     }
                 });
+
+
     }
-
-    private void showFile() {
-
-        txtSharedMedia.setText(getString(R.string.shared_files));
-
-        fillListFile();
-
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList,
-                txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
-    }
-
-    private void showLink() {
-        txtSharedMedia.setText(R.string.shared_links);
-        fillListLink();
-    }
-
-    private void showMusic() {
-        txtSharedMedia.setText(R.string.shared_music);
-        fillListMusic();
-
-        mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
-    }
-
-    //********************************************************************************************
 
     private void fillListImage() {
 
-        getImageListFromServer();
+        txtSharedMedia.setText(R.string.shared_image);
+        mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE;
 
-        mList = new ArrayList<>();
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
+        getDataFromServer(new OnFillList() {
+            @Override
+            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
-        String firstItmeTime = "";
-        String secendItemTime = "";
-        SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
-        ProtoGlobal.RoomMessageType type = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
-        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-            try {
-                type = realmRoomMessage.getMessageType();
-            } catch (NullPointerException e) {
+                mList = addTimeToList(resultList);
+                mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.image, complete, musicPlayer, roomId);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initLayoutRecycleviewForImage();
+                    }
+                });
+
+
+                offset = mList.size();
+
             }
-            if (type.equals(ProtoGlobal.RoomMessageType.VIDEO) || type.equals(ProtoGlobal.RoomMessageType.VIDEO_TEXT) ||
-                    type.equals(ProtoGlobal.RoomMessageType.IMAGE) || type.equals(ProtoGlobal.RoomMessageType.IMAGE_TEXT)) {
+        }, mFilter);
 
-                secendItemTime = month_date.format(realmRoomMessage.getUpdateTime());
+    }
 
-                if (secendItemTime.compareTo(firstItmeTime) > 0) {
+    private void fillListVideo() {
 
-                    RealmRoomMessage message = new RealmRoomMessage();
-                    message.setMessage(secendItemTime);
-                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                    mList.add(message);
 
-                    firstItmeTime = secendItemTime;
-                }
+        txtSharedMedia.setText(R.string.shared_video);
+        mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO;
+        getDataFromServer(new OnFillList() {
+            @Override
+            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
-                mList.add(realmRoomMessage);
+
+                mList = addTimeToList(resultList);
+                mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.video, complete, musicPlayer, roomId);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initLayoutRecycleviewForImage();
+                    }
+                });
+
+                offset = mList.size();
+
             }
-        }
+        }, mFilter);
 
-        realm.close();
+    }
+
+    private void fillListAudio() {
+
+        txtSharedMedia.setText(R.string.shared_audio);
+        mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO;
+        getDataFromServer(new OnFillList() {
+            @Override
+            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+
+                mList = addTimeToList(resultList);
+
+                mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.audio, complete, musicPlayer, roomId);
+                final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(mAdapter);
+                    }
+                });
+
+
+                offset = mList.size();
+
+            }
+        }, mFilter);
+    }
+
+    private void fillListVoice() {
+        txtSharedMedia.setText(R.string.shared_voice);
+        mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE;
+
+        getDataFromServer(new OnFillList() {
+            @Override
+            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+
+                mList = addTimeToList(resultList);
+                mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.voice, complete, musicPlayer, roomId);
+
+                final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(mAdapter);
+                    }
+                });
+
+
+                offset = mList.size();
+
+            }
+        }, mFilter);
+
+    }
+
+    private void fillListGif() {
+        txtSharedMedia.setText(R.string.shared_gif);
+        mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF;
+
+        getDataFromServer(new OnFillList() {
+            @Override
+            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+
+                mList = addTimeToList(resultList);
+
+                mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.gif, complete, musicPlayer, roomId);
+                final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(mAdapter);
+                    }
+                });
+
+
+                offset = mList.size();
+
+            }
+        }, mFilter);
+
     }
 
     private void fillListFile() {
+        txtSharedMedia.setText(R.string.shared_file);
+        mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE;
 
-        mList = new ArrayList<>();
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
+        getDataFromServer(new OnFillList() {
+            @Override
+            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
-        String firstItmeTime = "";
-        String secendItemTime = "";
-        SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
-        ProtoGlobal.RoomMessageType type = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
+                mList = addTimeToList(resultList);
+                mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.file, complete, musicPlayer, roomId);
 
-        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-            try {
-                type = realmRoomMessage.getMessageType();
-            } catch (NullPointerException e) {
+                final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(mAdapter);
+                    }
+                });
+
+
+                offset = mList.size();
+
+
             }
-            if (type.equals(ProtoGlobal.RoomMessageType.FILE.toString()) || type.equals(
-                    ProtoGlobal.RoomMessageType.FILE_TEXT.toString())) {
-
-                secendItemTime = month_date.format(realmRoomMessage.getUpdateTime());
-
-                if (secendItemTime.compareTo(firstItmeTime) > 0) {
-
-                    RealmRoomMessage message = new RealmRoomMessage();
-                    message.setMessage(secendItemTime);
-                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                    mList.add(message);
-
-                    firstItmeTime = secendItemTime;
-                }
-
-                mList.add(realmRoomMessage);
-            }
-        }
-
-        realm.close();
-    }
-
-    private void fillListMusic() {
-
-        mList = new ArrayList<>();
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
-
-        String firstItmeTime = "";
-        String secendItemTime = "";
-        SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
-        ProtoGlobal.RoomMessageType type = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
-
-        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-            try {
-                type = realmRoomMessage.getMessageType();
-            } catch (NullPointerException e) {
-            }
-            if (type.equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || type.equals(
-                    ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()) ||
-                    type.equals(ProtoGlobal.RoomMessageType.VOICE)) {
-
-                secendItemTime = month_date.format(realmRoomMessage.getUpdateTime());
-
-                if (secendItemTime.compareTo(firstItmeTime) > 0) {
-
-                    RealmRoomMessage message = new RealmRoomMessage();
-                    message.setMessage(secendItemTime);
-                    message.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                    mList.add(message);
-
-                    firstItmeTime = secendItemTime;
-                }
-
-                mList.add(realmRoomMessage);
-            }
-        }
-
-        realm.close();
+        }, mFilter);
     }
 
     private void fillListLink() {
 
-        getURLListFromServer(new OnFillList() {
+        txtSharedMedia.setText(R.string.shared_links);
+        mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL;
+
+        getDataFromServer(new OnFillList() {
             @Override
-            public void getList(List<ProtoGlobal.RoomMessage> resultList) {
+            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
-                mList = convertProtoToList(resultList);
+                mList = addTimeToList(resultList);
+                mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.link, complete, musicPlayer, roomId);
 
-                mList.size();
-
-                mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, txtSharedMedia.getText().toString(), complete, musicPlayer, roomId);
                 final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
-
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -457,238 +545,106 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     }
                 });
 
+                offset = mList.size();
+
             }
-        });
+        }, mFilter);
 
 
     }
+
 
     //********************************************************************************************
 
-    private int offsetIMAGE = 0;
-    private int offsetVIDEO = 0;
-    private int offsetAUDIO = 0;
-    private int offsetVOICE = 0;
-    private int offsetGIF = 0;
-    private int offsetFILE = 0;
-    private int offsetURL = 0;
 
-
-    private void getImageListFromServer() {
-
+    private void getDataFromServer(final OnFillList onFillList, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter) {
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
             @Override
             public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
+                isSendRequestForLoading = false;
                 for (ProtoGlobal.RoomMessage message : resultList) {
 
                     Log.e("ddd", message + "      eeee");
 
                 }
 
+                if (totalCount > 0) {
+                    onFillList.getList(totalCount, notDeletedCount, resultList);
+                } else {
+                    Toast.makeText(ActivityShearedMedia.this, "there is no Sheared media", Toast.LENGTH_LONG).show();
+                }
+
+                if (totalCount > mList.size()) {
+                    isThereAnyMoreItemToLoad = true;
+                } else {
+                    isThereAnyMoreItemToLoad = false;
+                }
+
+
+                Log.e("dddd", "isThereAnyMoreItemToLoad   " + isThereAnyMoreItemToLoad);
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode " + majorCode + "   " + minorCode);
+                isSendRequestForLoading = false;
+
+
+                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode  " + majorCode + "   " + minorCode);
+
+                switch (majorCode) {
+
+                    case 617:
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(ActivityShearedMedia.this, "there is no shared madia to show", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        break;
+                    case 620:
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(ActivityShearedMedia.this, "there is no shared madia to show", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        break;
+                }
+
+
             }
 
             @Override
             public void onTimeOut() {
+                isSendRequestForLoading = false;
                 Log.e("ddd", "timeOut  onClientSearchRoomHistory");
             }
         };
 
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetIMAGE, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE);
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, filter);
+        isSendRequestForLoading = true;
+
 
     }
 
-    private void getVIDEOListFromServer() {
+    private void loadMoreData() {
 
-        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
+        getDataFromServer(new OnFillList() {
             @Override
-            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
-                for (ProtoGlobal.RoomMessage message : resultList) {
+                mList.addAll(addTimeToList(resultList));
+                mAdapter.notifyDataSetChanged();
 
-                    Log.e("ddd", message + "      eeee");
 
-                }
-
+                offset = mList.size();
 
             }
+        }, mFilter);
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
-            }
-
-            @Override
-            public void onTimeOut() {
-                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
-            }
-        };
-
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetVIDEO, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO);
-
-    }
-
-    private void getAUDIOListFromServer() {
-
-
-        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override
-            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
-                for (ProtoGlobal.RoomMessage message : resultList) {
-
-                    Log.e("ddd", message + "      eeee");
-
-                }
-
-
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
-            }
-
-            @Override
-            public void onTimeOut() {
-                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
-            }
-        };
-
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetAUDIO, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
-
-    }
-
-    private void getVOICEListFromServer() {
-
-
-        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override
-            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
-                for (ProtoGlobal.RoomMessage message : resultList) {
-
-                    Log.e("ddd", message + "      eeee");
-
-                }
-
-
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
-            }
-
-            @Override
-            public void onTimeOut() {
-                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
-            }
-        };
-
-        ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter voiceFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE;
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetVOICE, voiceFilter);
-
-    }
-
-    private void getGIFListFromServer() {
-
-
-        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override
-            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
-                for (ProtoGlobal.RoomMessage message : resultList) {
-
-                    Log.e("ddd", message + "      eeee");
-
-                }
-
-
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
-            }
-
-            @Override
-            public void onTimeOut() {
-                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
-            }
-        };
-
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetGIF, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF);
-
-    }
-
-    private void getFILEListFromServer() {
-
-
-        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override
-            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
-                for (ProtoGlobal.RoomMessage message : resultList) {
-
-                    Log.e("ddd", message + "      eeee");
-
-                }
-
-
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
-            }
-
-            @Override
-            public void onTimeOut() {
-                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
-            }
-        };
-
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetFILE, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE);
-
-    }
-
-    private void getURLListFromServer(final OnFillList onFillList) {
-
-
-        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override
-            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
-                for (ProtoGlobal.RoomMessage message : resultList) {
-
-                    Log.e("ddd", message + "      eeee");
-
-
-                }
-
-                onFillList.getList(resultList);
-
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode" + majorCode + "   " + minorCode);
-            }
-
-            @Override
-            public void onTimeOut() {
-                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
-            }
-        };
-
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offsetURL, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL);
 
     }
 
@@ -696,49 +652,46 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     public interface OnFillList {
 
-        void getList(List<ProtoGlobal.RoomMessage> resultList);
+        void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList);
 
     }
 
-    private ArrayList<RealmRoomMessage> convertProtoToList(List<ProtoGlobal.RoomMessage> inputs) {
+    private ArrayList<StructSharedMedia> addTimeToList(List<ProtoGlobal.RoomMessage> uploadList) {
 
-        ArrayList<RealmRoomMessage> list = new ArrayList<>();
+        ArrayList<StructSharedMedia> result = new ArrayList<>();
 
-        for (ProtoGlobal.RoomMessage input : inputs) {
+        String firstItmeTime = "";
+        String secendItemTime = "";
+        SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
 
+        for (int i = uploadList.size(); i > 0; i--) {
 
-            RealmRoomMessage message = new RealmRoomMessage();
+            ProtoGlobal.RoomMessage message = uploadList.get(i - 1);
 
-            message.setMessage(input.getMessage());
-//            message.setStatus(input.getStatus().toString());
-//            message.setUserId(input.getAuthor().getUser().getUserId());
-//            message.setRoomId(roomId);
-//            if (input.hasAttachment()) {
-//                message.setAttachment(RealmAttachment.build(input.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT));
-//            }
-//            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
-//            message.setDeleted(input.getDeleted());
-//            message.setEdited(input.getEdited());
-//            if (input.hasForwardFrom()) {
-//                message.setForwardMessage(RealmRoomMessage.putOrUpdate(input.getForwardFrom(), roomId));
-//            }
-//            message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
-//            message.setLog(RealmRoomMessageLog.build(input.getLog()));
-            message.setMessageType(ProtoGlobal.RoomMessageType.UNRECOGNIZED);
-//            message.setMessageVersion(input.getMessageVersion());
-//            if (input.hasReplyTo()) {
-//                message.setReplyTo(RealmRoomMessage.putOrUpdate(input.getReplyTo(), roomId));
-//            }
-//            message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
-//            message.setStatusVersion(input.getStatusVersion());
-//            message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
-//            message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
+            secendItemTime = month_date.format(message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
 
-            list.add(message);
+            Log.e("ddd", secendItemTime + "   " + firstItmeTime);
+
+            if (secendItemTime.compareTo(firstItmeTime) > 0 || secendItemTime.compareTo(firstItmeTime) < 0) {
+
+                StructSharedMedia timeItem = new StructSharedMedia();
+                timeItem.time = secendItemTime;
+                timeItem.isItemTime = true;
+
+                result.add(timeItem);
+
+                firstItmeTime = secendItemTime;
+            }
+
+            StructSharedMedia _item = new StructSharedMedia();
+            _item.item = message;
+
+            result.add(_item);
         }
 
 
-        return list;
+        return result;
     }
+
 
 }
