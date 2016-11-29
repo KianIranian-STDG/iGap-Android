@@ -47,7 +47,6 @@
     <dimen name="dp260">390dp</dimen>
     <dimen name="dp280">420dp</dimen>
     <dimen name="dp300">450dp</dimen>
-    <dimen name="dp360">540dp</dimen>
 
 
     <dimen name="dp70">105dp</dimen>

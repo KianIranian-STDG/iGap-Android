@@ -5,7 +5,6 @@
              android:id="@+id/chatSubLayoutMessage"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_marginBottom="@dimen/dp4"
              android:maxWidth="@dimen/chatBoxMaxWidth"
              android:textDirection="firstStrong">
 
@@ -24,31 +23,49 @@
             android:src="@mipmap/empty"/>
 
         <LinearLayout
-            android:id="@+id/contentContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_round_white"
-            android:orientation="vertical"
-            android:paddingBottom="4.5dp"
-            android:paddingLeft="@dimen/messageContainerPadding"
-            android:paddingRight="@dimen/messageContainerPadding"
-            android:paddingTop="@dimen/messageContainerPadding"
-            >
+            android:orientation="horizontal">
 
-            <include
-                android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay"/>
+            <android.support.v7.widget.CardView
+                android:id="@+id/contentContainer"
+                style="@style/ChatMessages.CardView"
+                android:minWidth="150dp">
 
-            <include
-                android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minWidth="150dp"
+                    android:orientation="vertical">
 
-            <io.github.meness.emoji.EmojiTextView
-                android:id="@+id/messageText"
-                style="@style/ChatMessages.EmojiTextView"
-                android:text="SAMPLE TEXT"/>
+                    <include
+                        android:id="@+id/replayLayout"
+                        layout="@layout/chat_sub_layout_replay"/>
 
-            <include layout="@layout/chat_sub_layout_messages_time"/>
+                    <include
+                        android:id="@+id/cslr_ll_forward"
+                        layout="@layout/chat_sub_layout_forward"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/messageContainerPaddingBottom"
+                        android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
+                        android:paddingRight="@dimen/messageContainerPaddingLeftRight"
+                        android:paddingTop="@dimen/messageContainerPadding"
+                        >
+
+                        <io.github.meness.emoji.EmojiTextView
+                            android:id="@+id/messageText"
+                            style="@style/ChatMessages.EmojiTextView"
+                            android:layout_marginBottom="-4dp"
+                            android:text="Hello df df df d fd f df df d f  df df df df df d fd f df df d fd f df d fd fd f df df "/>
+
+                        <include layout="@layout/chat_sub_layout_messages_time"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

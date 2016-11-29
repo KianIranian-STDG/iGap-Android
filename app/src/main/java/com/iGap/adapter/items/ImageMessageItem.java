@@ -100,7 +100,7 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
                 + 0;
 
         new RequestFileDownload().download(token, 0,
-                (int) message.getAttachment().getSmallThumbnail().getSize(), selector, identity);
+                (int) message.getAttachment().getSmallThumbnail().getSize(), selector, message.getMessageId(), identity);
     }
 
     public void onLoadFromLocal(ViewHolder holder, String localPath) {
@@ -146,7 +146,7 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
                 + '*'
                 + offset;
         new RequestFileDownload().download(message.getAttachment().getToken(), offset,
-                (int) message.getAttachment().getSize(), selector, identity);
+                (int) message.getAttachment().getSize(), selector, message.getMessageId(), identity);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.iGap.adapter.items.chat;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -48,6 +49,20 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     }
 
     @Override
+    protected void updateLayoutForReceive(ViewHolder holder) {
+        super.updateLayoutForReceive(holder);
+        holder.myLocationLabel.setTextColor(holder.itemView.getResources().getColor(R.color.gray));
+        holder.location.setTextColor(holder.itemView.getResources().getColor(R.color.gray));
+    }
+
+    @Override
+    protected void updateLayoutForSend(ViewHolder holder) {
+        super.updateLayoutForSend(holder);
+        holder.myLocationLabel.setTextColor(Color.WHITE);
+        holder.location.setTextColor(Color.WHITE);
+    }
+
+    @Override
     public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
@@ -60,10 +75,12 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected TextView location;
+        protected TextView myLocationLabel;
         public ViewHolder(View view) {
             super(view);
 
             location = (TextView) view.findViewById(R.id.location);
+            myLocationLabel = (TextView) view.findViewById(R.id.myLocationLabel);
         }
     }
 }

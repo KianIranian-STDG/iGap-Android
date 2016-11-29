@@ -94,7 +94,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
                         .getSize() + '*' + fileName + '*' + 0;
 
         new RequestFileDownload().download(token, 0, (int) avatar.getSmallThumbnail().getSize(),
-                selector, identity);
+                selector, avatar.getId(), identity);
     }
 
     public void onLoadFromLocal(ViewHolder holder, String localPath) {
@@ -139,7 +139,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
                 + '*'
                 + offset;
         new RequestFileDownload().download(avatar.getToken(), offset, (int) avatar.getSize(),
-                selector, identity);
+                selector, avatar.getId(), identity);
     }
 
     @Override

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="md_cancel_button">\uf136</string>
-    <string name="md_clock_with_white_face">\uf14e</string>
     <string name="md_check_symbol">\uf143</string>
-    <string name="md_double_tick_indicator">\uf166</string>
     <string name="md_emoticon_with_happy_face">\uf172</string>
     <string name="md_black_keyboard_with_white_keys">\uf119</string>
     <string name="md_send_button">\uf23d</string>
@@ -48,10 +45,6 @@
     <string name="fa_bullhorn">&#xf0a1;</string>
     <string name="fa_close">&#xf00d;</string>
     <string name="fa_ellipsis_v">&#xf142;</string>
-    <string name="fa_eye">&#xf06e;</string>
-    <string name="fa_commenting_o">&#xf27b;</string>
-    <string name="fa_thumbs_o_down">&#xf088;</string>
-    <string name="fa_thumbs_o_up">&#xf087;</string>
     <string name="fa_trash_o">&#xf014;</string>
     <string name="fa_long_arrow_right">&#xf178;</string>
     <string name="fa_chevron_down">&#xf078;</string>

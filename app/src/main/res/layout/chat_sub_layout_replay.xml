@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginBottom="@dimen/dp8"
+              android:background="@color/messageBox_replyBoxBackgroundSend"
               android:clickable="true"
               android:orientation="horizontal"
-              android:maxWidth="@dimen/dp280"
-              android:paddingBottom="@dimen/dp4"
+              android:paddingBottom="@dimen/dp8"
               android:paddingRight="@dimen/dp4"
-              android:paddingTop="@dimen/dp4"
+              android:paddingTop="@dimen/dp8"
               android:textDirection="firstStrong">
 
     <View
         android:id="@+id/verticalLine"
         android:layout_width="3dp"
         android:layout_height="match_parent"
-        android:background="@color/iGapColor"/>
+        android:layout_marginLeft="@dimen/messageContainerPadding"
+        android:background="@color/colorOldBlack"/>
 
     <ImageView
         android:id="@+id/chslr_imv_replay_pic"
@@ -27,27 +27,30 @@
         android:visibility="gone"/>
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp8"
-        android:layout_weight="1"
         android:gravity="left"
         android:orientation="vertical">
 
         <io.github.meness.emoji.EmojiTextView
             android:id="@+id/chslr_txt_replay_from"
             style="@style/ChatMessages.EmojiTextView"
+            android:layout_marginBottom="-5dp"
+            android:layout_marginTop="-4dp"
             android:maxLines="1"
-            android:maxWidth="@dimen/dp280"
             android:text="SAMPLE TEXT"
-            android:textColor="@color/newBlack"
-            android:textSize="@dimen/sp14"/>
+            android:textColor="@color/colorOldBlack"
+            android:textSize="@dimen/sp12"
+            android:textStyle="bold"/>
 
         <io.github.meness.emoji.EmojiTextView
             android:id="@+id/chslr_txt_replay_message"
             style="@style/ChatMessages.EmojiTextView"
             android:maxLines="1"
+            android:ellipsize="end"
             android:text="SAMPLE TEXT"
+            android:layout_marginBottom="-6dp"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp14"/>
     </LinearLayout>

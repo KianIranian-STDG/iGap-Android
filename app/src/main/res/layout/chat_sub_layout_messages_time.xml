@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_height="16dp"
               android:layout_gravity="bottom|right"
+              android:layout_marginTop="1dp"
+              android:gravity="center"
               android:orientation="horizontal">
 
     <TextView
         android:id="@+id/txtEditedIndicator"
         style="@style/ChatMessages.Time"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="16dp"
         android:layout_marginRight="@dimen/dp4"
-        android:text="@string/edited" />
+        android:gravity="center"
+        android:text="@string/edited"/>
 
     <TextView
         android:id="@+id/cslr_txt_time"
         style="@style/ChatMessages.Time"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="10:21" />
+        android:layout_height="16dp"
+        android:gravity="center"
+        android:text="10:21"/>
 
-    <com.iGap.module.MaterialDesignTextView
+    <ImageView
         android:id="@+id/cslr_txt_tic"
         style="@style/ChatMessages.MaterialDesignTextView.Tick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginLeft="@dimen/dp4"
-        android:text="@string/md_clock_with_white_face"
-        fontPath="fonts/Flaticon.ttf"/>
-
+        android:src="@drawable/ic_double_check"/>
 </LinearLayout>

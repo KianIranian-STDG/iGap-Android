@@ -3,6 +3,7 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.iGap.R;
@@ -66,8 +67,9 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
             }
         }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], dimens[1]);
+        FrameLayout.LayoutParams layoutParamsForParentParent = new FrameLayout.LayoutParams(dimens[0], dimens[1]);
         ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
-        ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParams);
+        ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParamsForParentParent);
         holder.image.getParent().requestLayout();
         holder.image.getParent().getParent().requestLayout();
 

@@ -22,29 +22,52 @@
             android:layout_marginRight="@dimen/dp8"
             android:src="@mipmap/empty"/>
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:id="@+id/contentContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_round_white"
-            android:orientation="vertical"
-            android:padding="@dimen/messageContainerPadding">
+            style="@style/ChatMessages.CardView">
 
-            <include
-                android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
-
-            <include
-                android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward" />
-
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:id="@+id/location"
-                android:textColor="@android:color/white"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <include layout="@layout/chat_sub_layout_messages_time" />
-        </LinearLayout>
+                <include
+                    android:id="@+id/replayLayout"
+                    layout="@layout/chat_sub_layout_replay"/>
+
+                <include
+                    android:id="@+id/cslr_ll_forward"
+                    layout="@layout/chat_sub_layout_forward"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/messageContainerPaddingBottom"
+                    android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
+                    android:paddingRight="@dimen/messageContainerPaddingLeftRight"
+                    android:paddingTop="@dimen/messageContainerPadding"
+                    >
+
+                    <TextView
+                        android:id="@+id/myLocationLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/my_location_title"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/sp20"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"/>
+
+                    <include layout="@layout/chat_sub_layout_messages_time"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </FrameLayout>

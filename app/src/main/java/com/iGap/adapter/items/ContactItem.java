@@ -138,7 +138,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
                         .getSize() + '*' + fileName + '*' + 0;
 
         new RequestFileDownload().download(token, 0, (int) mContact.avatar.getFile().getSmallThumbnail().getSize(),
-                selector, identity);
+                selector, mContact.peerId, identity);
     }
 
     @Override

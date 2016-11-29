@@ -23,63 +23,77 @@
             android:layout_marginRight="@dimen/dp8"
             android:src="@mipmap/empty"/>
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:id="@+id/contentContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_round_white"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/messageContainerPadding"
-            android:paddingLeft="14dp"
-            android:paddingRight="14dp"
-            android:paddingTop="@dimen/messageContainerPadding">
-
-            <include
-                android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay"/>
-
-            <include
-                android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward"/>
+            style="@style/ChatMessages.CardView">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginRight="14dp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/user"/>
+                <include
+                    android:id="@+id/replayLayout"
+                    layout="@layout/chat_sub_layout_replay"/>
+
+                <include
+                    android:id="@+id/cslr_ll_forward"
+                    layout="@layout/chat_sub_layout_forward"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="@dimen/messageContainerPadding"
+                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/name"
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/image"
+                        android:layout_marginRight="14dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/user"/>
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="SAMPLE"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp14"/>
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="09373778686"
-                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                        android:textColor="@color/gray10"/>
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="SAMPLE"
+                            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sp14"/>
+
+                        <TextView
+                            android:id="@+id/number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="09373778686"
+                            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                            android:textColor="@color/gray10"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/messageContainerPaddingBottom"
+                    android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
+                    android:paddingRight="@dimen/messageContainerPaddingLeftRight"
+                    android:paddingTop="@dimen/messageContainerPadding"
+                    >
+
+                    <include layout="@layout/chat_sub_layout_messages_time"/>
                 </LinearLayout>
             </LinearLayout>
-
-            <include layout="@layout/chat_sub_layout_messages_time"/>
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </FrameLayout>

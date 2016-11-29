@@ -1,25 +1,24 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
-
+    compileSdkVersion 25
+    buildToolsVersion '25.0.1'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-
     defaultConfig {
         minSdkVersion 14
-
         consumerProguardFiles 'proguard-rules.txt'
+        targetSdkVersion 25
     }
-
     resourcePrefix 'emoji'
+    productFlavors {
+    }
 }
 
 dependencies {
-    compile "com.android.support:appcompat-v7:24.2.0"
-    compile "com.android.support:support-core-ui:24.2.0"
-    compile "com.android.support:support-compat:24.2.0"
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:support-core-ui:25.0.1'
+    compile 'com.android.support:support-compat:25.0.1'
 }

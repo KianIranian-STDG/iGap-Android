@@ -371,7 +371,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
 
                             if (avatar != null && avatar.isValid()) {
                                 if (!avatar.getFile().isFileExistsOnLocal() && !avatar.getFile().isThumbnailExistsOnLocal()) {
-                                    requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
+                                    requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize(), avatar.getId());
                                 } else {
                                     if (avatar.getFile().isFileExistsOnLocal()) {
                                         G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalFilePath());
@@ -403,7 +403,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(false).build()).build());
 
         SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
@@ -667,7 +667,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
         }, 1000);
     }
 
-    private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
+    private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize, long fakeMessageID) {
         final String fileName = "thumb_" + token + "_" + name;
         if (done) {
             final Realm realm = Realm.getDefaultInstance();
@@ -694,7 +694,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
                 token + '*' + selector.toString() + '*' + smallSize + '*' + fileName + '*' + 0;
 
         new RequestFileDownload().download(token, 0, smallSize,
-                selector, identity);
+                selector, fakeMessageID, identity);
     }
 
     @Override
@@ -704,7 +704,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
             // requested thumbnail
             RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst();
             if (avatar != null) {
-                requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
+                requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize(), avatar.getId());
             }
         } else {
             // TODO: 11/22/2016 [Alireza] implement

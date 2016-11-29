@@ -1103,7 +1103,7 @@ public class ActivityMain extends ActivityEnhanced
                     Realm realm = Realm.getDefaultInstance();
                     RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst();
                     if (avatar != null) {
-                        requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
+                        requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize(), avatar.getId());
                     }
                     realm.close();
 
@@ -1368,7 +1368,7 @@ public class ActivityMain extends ActivityEnhanced
         });
     }
 
-    private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
+    private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize, long fakeMessageID) {
         final String fileName = "thumb_" + token + "_" + name;
         if (done) {
             final Realm realm = Realm.getDefaultInstance();
@@ -1395,7 +1395,7 @@ public class ActivityMain extends ActivityEnhanced
                 token + '*' + selector.toString() + '*' + smallSize + '*' + fileName + '*' + 0;
 
         new RequestFileDownload().download(token, 0, smallSize,
-                selector, identity);
+                selector, fakeMessageID, identity);
     }
 
     @Override
@@ -1416,7 +1416,7 @@ public class ActivityMain extends ActivityEnhanced
 
                     if (avatar != null && avatar.isValid()) {
                         if (!avatar.getFile().isFileExistsOnLocal() && !avatar.getFile().isThumbnailExistsOnLocal()) {
-                            requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
+                            requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize(), avatar.getId());
                         } else {
                             if (avatar.getFile().isFileExistsOnLocal()) {
                                 G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalFilePath());

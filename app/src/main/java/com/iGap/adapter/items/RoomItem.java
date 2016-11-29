@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iGap.G;
@@ -14,7 +15,6 @@ import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
-import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
@@ -131,7 +131,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 mInfo.getAvatar().getFile().getToken() + '*' + selector.toString() + '*' + mInfo.getAvatar().getFile().getSmallThumbnail().getSize() + '*' + fileName + '*' + 0;
 
         new RequestFileDownload().download(token, 0, (int) mInfo.getAvatar().getFile().getSmallThumbnail().getSize(),
-                selector, identity);
+                selector, mInfo.getId(), identity);
     }
 
     @Override
@@ -385,7 +385,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         protected EmojiTextView lastMessage;
         protected TextView lastSeen;
         protected TextView unreadMessage;
-        protected MaterialDesignTextView messageStatus;
+        protected ImageView messageStatus;
 
         public ViewHolder(View view) {
             super(view);
@@ -399,7 +399,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
             unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
             mute = (TextView) view.findViewById(R.id.cs_txt_mute);
-            messageStatus = (MaterialDesignTextView) view.findViewById(R.id.cslr_txt_tic);
+            messageStatus = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
             mute.setTypeface(G.fontawesome);
             lastSeen.setTypeface(G.arial);

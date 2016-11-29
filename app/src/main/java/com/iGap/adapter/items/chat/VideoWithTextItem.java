@@ -3,6 +3,7 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -73,8 +74,9 @@ public class VideoWithTextItem
             setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams layoutParamsForParentParent = new FrameLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
         ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
-        ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParams);
+        ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParamsForParentParent);
         holder.image.getParent().requestLayout();
         holder.image.getParent().getParent().requestLayout();
     }

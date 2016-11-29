@@ -182,7 +182,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             if (attachment != null) {
                 ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
                 String identity = attachment.getToken() + '*' + selector.toString() + '*' + attachment.getSize() + '*' + attachment.getToken() + "_" + attachment.getName() + '*' + offset;
-                new RequestFileDownload().download(token, offset, (int) attachment.getSize(), selector, identity);
+                new RequestFileDownload().download(token, offset, (int) attachment.getSize(), selector, attachment.getId(), identity);
             }
 
             realm.close();

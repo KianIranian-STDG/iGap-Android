@@ -3,8 +3,12 @@
               android:id="@+id/cslr_ll_forward"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginBottom="@dimen/dp4"
               android:orientation="horizontal"
+              android:clickable="true"
+              android:paddingBottom="@dimen/dp8"
+              android:paddingRight="@dimen/messageContainerPadding"
+              android:paddingTop="@dimen/dp8"
+              android:paddingLeft="@dimen/messageContainerPadding"
               android:visibility="visible">
 
     <TextView

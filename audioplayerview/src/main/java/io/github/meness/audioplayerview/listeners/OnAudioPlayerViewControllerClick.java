@@ -7,5 +7,4 @@ public interface OnAudioPlayerViewControllerClick {
 
     void onPauseClick(AudioPlayerView playerView);
 
-    void onStopClick(AudioPlayerView playerView);
 }

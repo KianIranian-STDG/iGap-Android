@@ -42,6 +42,30 @@ public class HelperSetAction {
     }
 
     /**
+     * set action for showing audience typing.
+     *
+     * @param roomId roomId that send action from that
+     */
+
+    public static void setCancel(final long roomId) {
+
+        if (!checkExistAction(roomId, ProtoGlobal.ClientAction.CANCEL)) {
+            for (int i = structActions.size() - 1; i >= 0; i--) {
+                StructAction action = structActions.get(i);
+                if (action.action == ProtoGlobal.ClientAction.TYPING) {
+                    if (action.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+                        new RequestGroupSetAction().groupSetAction(roomId, ProtoGlobal.ClientAction.CANCEL, action.randomKey);
+                        break;
+                    } else {
+                        new RequestChatSetAction().chatSetAction(roomId, ProtoGlobal.ClientAction.CANCEL, action.randomKey);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * set action for showing audience action
      *
      * @param roomId    roomId that send action from that

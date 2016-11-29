@@ -1,7 +1,9 @@
 package com.iGap.adapter.items.chat;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iGap.R;
@@ -19,6 +21,22 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
     public ContactItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
+    }
+
+    @Override
+    protected void updateLayoutForSend(ViewHolder holder) {
+        super.updateLayoutForSend(holder);
+        holder.name.setTextColor(Color.WHITE);
+        holder.number.setTextColor(Color.WHITE);
+        holder.image.setImageResource(R.drawable.black_contact);
+    }
+
+    @Override
+    protected void updateLayoutForReceive(ViewHolder holder) {
+        super.updateLayoutForReceive(holder);
+        holder.name.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        holder.number.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        holder.image.setImageResource(R.drawable.green_contact);
     }
 
     @Override
@@ -62,11 +80,13 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected TextView name;
         protected TextView number;
+        protected ImageView image;
 
         public ViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
             number = (TextView) view.findViewById(R.id.number);
+            image = (ImageView) view.findViewById(R.id.image);
         }
     }
 }

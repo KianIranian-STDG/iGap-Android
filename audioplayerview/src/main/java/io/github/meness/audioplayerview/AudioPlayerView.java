@@ -59,6 +59,21 @@ public class AudioPlayerView extends FrameLayout {
         }
     }
 
+    /**
+     * set times colors
+     *
+     * @param currentTimeRes current time color res
+     * @param endTimeRes     end time color res
+     */
+    public void setTimesColor(@ColorRes int currentTimeRes, @ColorRes int endTimeRes) {
+        if (mCurrentTime != null) {
+            mCurrentTime.setTextColor(getResources().getColor(currentTimeRes));
+        }
+        if (mEndTime != null) {
+            mEndTime.setTextColor(getResources().getColor(endTimeRes));
+        }
+    }
+
     public void hideRecordedBy() {
         if (mRecordedBy != null) {
             mRecordedBy.setVisibility(GONE);

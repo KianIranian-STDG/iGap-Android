@@ -521,7 +521,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                         + media.downloadAttachment.offset;
 
                 new RequestFileDownload().download(media.downloadAttachment.token, 0,
-                        (int) media.attachment.smallThumbnail.size, selector, identity);
+                        (int) media.attachment.smallThumbnail.size, selector, Long.parseLong(media.messageID), identity);
 
                 // prevent from multiple requesting thumbnail
                 media.downloadAttachment.thumbnailRequested = true;
@@ -736,7 +736,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                     + media.downloadAttachment.offset;
 
             new RequestFileDownload().download(media.downloadAttachment.token,
-                    media.downloadAttachment.offset, (int) media.attachment.size, selector, identity);
+                    media.downloadAttachment.offset, (int) media.attachment.size, selector, Long.parseLong(media.messageID), identity);
         }
 
         @Override

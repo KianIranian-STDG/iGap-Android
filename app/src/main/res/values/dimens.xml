@@ -1,17 +1,17 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-
-    <!--emoji popup window dimens-->
-    <dimen name="emojiPopupIconSize">24sp</dimen>
-
-    <dimen name="chatMessageImageCorner">@dimen/dp4</dimen>
-
-    <dimen name="messageContainerPadding">9dp</dimen>
+    <dimen name="messageContainerPadding">6dp</dimen>
+    <dimen name="messageContainerPaddingBottom">4dp</dimen>
+    <dimen name="messageContainerPaddingLeftRight">10dp</dimen>
 
     <dimen name="chatBoxMaxWidth">270dp</dimen>
 
     <dimen name="design_fab_size_mini">24pt</dimen>
     <dimen name="design_fab_size_normal">30pt</dimen>
+
+    <dimen name="messageBox_cornerRadius">20dp</dimen>
+    <dimen name="messageBox_elevation">4dp</dimen>
+
+    <dimen name="messageBox_minusLeftRightMargin">-5dp</dimen>
 
 
     <dimen name="sp10">10sp</dimen>
@@ -58,7 +58,6 @@
     <dimen name="dp260">260dp</dimen>
     <dimen name="dp280">280dp</dimen>
     <dimen name="dp300">300dp</dimen>
-    <dimen name="dp360">360dp</dimen>
 
 
     <dimen name="dp70">70dp</dimen>

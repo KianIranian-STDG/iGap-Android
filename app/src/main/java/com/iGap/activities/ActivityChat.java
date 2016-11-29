@@ -1506,6 +1506,8 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void onClick(View view) {
 
+                HelperSetAction.setCancel(mRoomId);
+
                 clearDraftRequest();
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
@@ -4114,7 +4116,14 @@ public class ActivityChat extends ActivityEnhanced
         } else if (message.messageType == ProtoGlobal.RoomMessageType.FILE || message.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT ||
                 message.messageType == ProtoGlobal.RoomMessageType.VIDEO || message.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, message.attachment.token).findFirst().getLocalFilePath());
-            if (intent != null) startActivity(intent);
+            if (intent != null) {
+                try {
+                    startActivity(intent);
+                } catch (Exception e) {
+                    // to prevent from 'No Activity found to handle Intent'
+                    e.printStackTrace();
+                }
+            }
         }
         realm.close();
     }
@@ -4247,7 +4256,7 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onUploadCancel(View view, final StructMessageInfo message, int pos) {
-        // TODO: 10/29/2016 [Alireza] implement
+        Toast.makeText(this, "onUploadCancel", Toast.LENGTH_LONG).show();
 
         for (Iterator<Map.Entry<Long, RequestWrapper>> it = G.currentUploadAndDownloadFiles.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<Long, RequestWrapper> entry = it.next();
@@ -4258,6 +4267,10 @@ public class ActivityChat extends ActivityEnhanced
                     G.requestQueueMap.remove(entry.getValue());
 
                     //TODO [Saeed Mozaffari] [2016-11-27 4:57 PM] - clear requestQueueMapRelation
+                }
+
+                if (MessagesAdapter.hasUploadRequested(Long.parseLong(message.messageID))) {
+                    MessagesAdapter.downloading.remove(Long.parseLong(message.messageID));
                 }
 
                 G.currentUploadAndDownloadFiles.remove(entry.getKey());
@@ -4306,8 +4319,44 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onDownloadCancel(View view, StructMessageInfo message, int pos) {
-        // TODO: 10/29/2016 [Alireza] implement
+    public void onDownloadCancel(View view, final StructMessageInfo message, final int pos) {
+        Toast.makeText(this, "onDownloadCancel", Toast.LENGTH_LONG).show();
+
+        for (Iterator<Map.Entry<Long, RequestWrapper>> it = G.currentUploadAndDownloadFiles.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Long, RequestWrapper> entry = it.next();
+
+            if (message.messageID != null && !message.messageID.isEmpty() && Long.parseLong(message.messageID) == entry.getKey()) {
+
+                if (G.requestQueueMap.contains(entry.getValue())) {
+                    G.requestQueueMap.remove(entry.getValue());
+
+                    //TODO [Saeed Mozaffari] [2016-11-27 4:57 PM] - clear requestQueueMapRelation
+                }
+
+                if (MessagesAdapter.hasDownloadRequested(message.attachment.token)) {
+                    MessagesAdapter.downloading.remove(message.attachment.token);
+                }
+
+                G.currentUploadAndDownloadFiles.remove(entry.getKey());
+
+                //===================
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // remove deleted message from adapter
+                        AbstractMessage item = mAdapter.getAdapterItem(pos);
+                        item.mMessage.downloadAttachment = null;
+                        mAdapter.set(pos, item);
+                    }
+                });
+
+                //===================
+
+                break;
+            }
+        }
     }
 
     @Override

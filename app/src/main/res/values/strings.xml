@@ -204,7 +204,6 @@
     <string name="save_to_Music">Save to Music</string>
     <string name="show_all_media">Show all Media</string>
     <string name="save_to_gallery">Save to Gallery</string>
-    <string name="delete_from_gallery">Delete from Gallery</string>
     <string name="select_room">Select Room</string>
     <string name="edited">Edited</string>
     <string name="today">Today</string>
@@ -295,9 +294,6 @@
     <string name="new_message">New message</string>
     <string name="new_messages">New messages</string>
     <string name="new_message_recicve">New Message Received</string>
-    <string name="my_Position_is">My Position is:</string>
-    <string name="latitude">Latitude :</string>
-    <string name="longitude">Longitude :</string>
     <string name="unknown_artist">Unknown Artist</string>
     <string name="add_new_member">Add New Members</string>
     <string name="set_admin">Set Admin</string>
@@ -410,8 +406,6 @@
     <string name="month_3">3 months</string>
     <string name="month_6">6 months</string>
     <string name="year_1">1 year</string>
-    <string name="E_114">Bad payload: Invalid email</string>
-    <string name="E_115">Internal Server Error</string>
     <string name="E_116">Bad payload: Invalid gender</string>
     <string name="E_117">Internal Server Error</string>
     <string name="list_admin">List Admin</string>
@@ -448,7 +442,6 @@
     <string name="last_month">last month</string>
     <string name="last_week">last week</string>
     <string name="online">online</string>
-    <string name="exactly">exactly</string>
     <string name="recently">recently</string>
     <string name="support">support</string>
     <string name="service_notification">service notification</string>
@@ -458,7 +451,6 @@
     <string name="arrow">Arrow</string>
     <string name="Ringtone">Ringtone</string>
     <string name="DISCARD">Discard</string>
-    <string name="unknown">unknown</string>
     <string name="add_to_list_contact">Add to the Contact List.</string>
     <string name="text_add_to_list_contact">Do you want to add this phone number to your contacts?</string>
     <string name="log_out">Logout</string>
@@ -507,7 +499,6 @@
     <string name="USER_VERIFY_MANY_TRIES">Verification code is locked for a while due to too many tries</string>
     <string name="USER_VERIFY_MANY_TRIES_SEND">Verify code has been forwarded exceedingly</string>
     <string name="USER_VERIFY_EXPIRED">Verification code is expired</string>
-    <string name="USER_VERIFY_BLOCK">User is blocked for request</string>
     <string name="convert_chat_to_group_content">Do you want convert this chat to group?</string>
     <string name="convert_chat_to_group_title">Convert chat to group</string>
     <string name="minute_ago">minute ago</string>
@@ -517,7 +508,6 @@
     <string name="ip">ip:</string>
     <string name="current_session">Current Session</string>
     <string name="Active_session">Active Session</string>
-    <string name="terminate">Terminate</string>
     <string name="terminate_all">Terminate all other session</string>
     <string name="forwarded_from">Forwarded from</string>
     <string name="more">more ...</string>
@@ -554,7 +544,6 @@
     <string name="text_copied">Text Copied</string>
     <string name="unmute">UnMute</string>
     <string name="mute">Mute</string>
-    <string name="message">Message</string>
     <string name="future_done">will be offered in the future</string>
     <string name="nick_name_not_exist">nick name not exist</string>
     <string name="first_name">First Name</string>
@@ -564,15 +553,12 @@
     <string name="clear_this_chat">clear This chat?</string>
     <string name="clear">ClEAR</string>
     <string name="can_not_save_image">can\'t save Image</string>
-    <string name="just_owner_can_delete">Just owner can delete</string>
     <string name="left_group">Left Group</string>
     <string name="shate_audio_file">Share audio File</string>
     <string name="last_seen">last seen</string>
     <string name="remove">Remove</string>
     <string name="please_check_your_connenction">Please check your connection</string>
     <string name="errore_verification_sms">Error verification SMS</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
     <string name="share_via">Share via</string>
     <string name="error">Error</string>
     <string name="please_enter_code_for_verify">"Please enter code for verify "</string>
@@ -587,4 +573,6 @@
     <string name="do_you_want_to_leave_this_group">Are you sure that you want to left this Group?</string>
     <string name="waiting_for_connection">Waiting for Connect To Server</string>
     <string name="picture_save_to_galary">"picture save to galary "</string>
+    <string name="my_location_title">My Location</string>
+    <string name="to_delete_chat">Delete Chat</string>
 </resources>

@@ -208,14 +208,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 }
             } else {
                 showInitials();
-                requestDownloadAvatar(false, realmAvatar.getFile().getToken(), realmAvatar.getFile().getName(), (int) realmAvatar.getFile().getSmallThumbnail().getSize());
+                requestDownloadAvatar(false, realmAvatar.getFile().getToken(), realmAvatar.getFile().getName(), (int) realmAvatar.getFile().getSmallThumbnail().getSize(), realmAvatar.getId());
             }
         } else {
             showInitials();
         }
     }
 
-    private void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
+    private void requestDownloadAvatar(boolean done, final String token, String name, int smallSize, long fakeMEssageID) {
         final String fileName = "thumb_" + token + "_" + name;
         if (done) {
             final Realm realm = Realm.getDefaultInstance();
@@ -244,7 +244,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 token + '*' + selector.toString() + '*' + smallSize + '*' + fileName + '*' + 0;
 
         new RequestFileDownload().download(token, 0, smallSize,
-                selector, identity);
+                selector, fakeMEssageID, identity);
     }
 
     private void showInitials() {
@@ -1875,7 +1875,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             // requested thumbnail
             RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst();
             if (avatar != null) {
-                requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
+                requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize(), avatar.getId());
             }
         } else {
             // TODO: 11/22/2016 [Alireza] implement

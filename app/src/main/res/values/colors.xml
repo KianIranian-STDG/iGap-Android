@@ -93,14 +93,23 @@
 
     <color name="colorChatMessageSelectableItemBg">#99AADFF7</color>
 
-    <color name="colorChatMessageTime">#eee</color>
+    <color name="colorChatMessageTime">#2a2a2a</color>
 
     <!--ripple-->
     <color name="rippelColor">#FFFFFF</color>
     <color name="statusSendingColor">#eee</color>
     <color name="iGapColor">#3dbcb3</color>
+    <color name="iGapColorDarker">#37a9a1</color>
+    <color name="black90">#c8000000</color>
+    <color name="grayNew">#8c8b8b</color>
+    <color name="grayNewDarker">#4f4f4f</color>
 
     <color name="newBlack">#171717</color>
     <color name="gray10">#e5e5e5</color>
+    <color name="messageBox_sendColor">#3dbcb3</color>
+    <color name="messageBox_receiveColor">#ffffff</color>
+    <color name="messageBox_replyBoxBackgroundSend">#2caaa3</color>
+    <color name="messageBox_replyBoxBackgroundReceive">#f2f2f2</color>
+    <color name="colorOldBlack">#2a2a2a</color>
 
 </resources>

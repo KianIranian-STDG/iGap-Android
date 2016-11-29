@@ -119,11 +119,13 @@ public class ChatSendMessageResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        makeFailed();
     }
 
-    @Override
-    public void timeOut() {
-        super.timeOut();
+    /**
+     * make messages failed
+     */
+    private void makeFailed() {
         // message failed
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -137,5 +139,11 @@ public class ChatSendMessageResponse extends MessageHandler {
                 }
             }
         });
+    }
+
+    @Override
+    public void timeOut() {
+        super.timeOut();
+        makeFailed();
     }
 }

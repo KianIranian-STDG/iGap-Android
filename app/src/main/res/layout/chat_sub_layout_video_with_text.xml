@@ -24,65 +24,84 @@
             android:layout_marginRight="@dimen/dp8"
             android:src="@mipmap/empty"/>
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:id="@+id/contentContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_round_white"
-            android:orientation="vertical"
-            android:padding="4.5dp">
+            style="@style/ChatMessages.CardView">
 
-            <include
-                android:id="@+id/replayLayout"
-                layout="@layout/chat_sub_layout_replay" />
-
-            <include
-                android:id="@+id/cslr_ll_forward"
-                layout="@layout/chat_sub_layout_forward" />
-
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <com.makeramen.roundedimageview.RoundedImageView
-                    android:id="@+id/thumbnail"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    app:riv_corner_radius="@dimen/chatMessageImageCorner" />
-
-                <TextView
-                    android:id="@+id/duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dp4"
-                    android:maxLines="1"
-                    android:background="@drawable/bg_message_image_time"
-                    android:layout_gravity="left|top"
-                    android:text="3:48 (4.5 MB)"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/gray10"
-                    android:textSize="@dimen/sp14"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <include
-                    android:id="@+id/progress"
-                    layout="@layout/msg_progress_item"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:layout_gravity="center" />
+                    android:id="@+id/replayLayout"
+                    layout="@layout/chat_sub_layout_replay"/>
 
-            </FrameLayout>
+                <include
+                    android:id="@+id/cslr_ll_forward"
+                    layout="@layout/chat_sub_layout_forward"/>
 
-            <io.github.meness.emoji.EmojiTextView
-                android:id="@+id/messageText"
-                android:layout_marginTop="4dp"
-                style="@style/ChatMessages.EmojiTextView"
-                android:text="SAMPLE TEXT"/>
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-            <include layout="@layout/chat_sub_layout_messages_time" />
-        </LinearLayout>
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/thumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        app:riv_border_color="#9e9e9e"
+                        app:riv_border_width="1px"
+                        app:riv_corner_radius="@dimen/messageBox_cornerRadius"/>
+
+                    <TextView
+                        android:id="@+id/duration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|top"
+                        android:layout_marginBottom="-2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="7dp"
+                        android:background="@drawable/bg_message_image_time"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingTop="1dp"
+                        android:text="3:48 (4.5 MB)"
+                        android:textAllCaps="true"
+                        android:textColor="@color/gray10"
+                        android:textSize="@dimen/sp10"/>
+
+                    <include
+                        android:id="@+id/progress"
+                        layout="@layout/msg_progress_item"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"/>
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/messageContainerPaddingBottom"
+                    android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
+                    android:paddingRight="@dimen/messageContainerPaddingLeftRight"
+                    android:paddingTop="@dimen/messageContainerPadding"
+                    >
+
+                    <io.github.meness.emoji.EmojiTextView
+                        android:id="@+id/messageText"
+                        style="@style/ChatMessages.EmojiTextView"
+                        android:layout_marginBottom="-4dp"
+                        android:text="SAMPLE TEXT"/>
+
+                    <include layout="@layout/chat_sub_layout_messages_time"/>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </FrameLayout>

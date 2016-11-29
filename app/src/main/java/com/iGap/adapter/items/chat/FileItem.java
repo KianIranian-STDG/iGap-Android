@@ -1,5 +1,6 @@
 package com.iGap.adapter.items.chat;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -84,6 +85,20 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             AppUtils.rightFileThumbnailIcon(holder.thumbnail, mMessage.messageType, roomMessage.getAttachment());
         }
         realm.close();
+    }
+
+    @Override
+    protected void updateLayoutForSend(ViewHolder holder) {
+        super.updateLayoutForSend(holder);
+        holder.cslf_txt_file_name.setTextColor(Color.WHITE);
+        holder.cslf_txt_file_size.setTextColor(Color.WHITE);
+    }
+
+    @Override
+    protected void updateLayoutForReceive(ViewHolder holder) {
+        super.updateLayoutForReceive(holder);
+        holder.cslf_txt_file_name.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        holder.cslf_txt_file_size.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

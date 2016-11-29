@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/green</item>
     </style>
 
-    <style name="AppTheme.Widget" />
+    <style name="AppTheme.Widget"/>
 
 
     <style name="AppTheme" parent="BaseTheme">
@@ -24,6 +24,9 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/sp16</item>
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:textDirection">firstStrong</item>
+        <item name="android:layoutDirection">locale</item>
+        <item name="emojiSize">30dp</item>
     </style>
 
     <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>
@@ -73,7 +76,7 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="NavigationDrawer" />
+    <style name="NavigationDrawer"/>
 
     <style name="NavigationDrawer.Item">
         <item name="android:clickable">true</item>
@@ -81,9 +84,21 @@
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
-    <style name="ChatMessages" />
+    <style name="ChatMessages"/>
 
-    <style name="ChatMessages.MaterialDesignTextView" />
+    <style name="ChatMessages.CardView">
+        <item name="cardBackgroundColor">@color/messageBox_sendColor</item>
+        <item name="cardCornerRadius">@dimen/messageBox_cornerRadius</item>
+        <item name="cardElevation">@dimen/messageBox_elevation</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cardPreventCornerOverlap">true</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="android:layout_marginRight">@dimen/messageBox_minusLeftRightMargin</item>
+        <item name="android:layout_marginTop">-10dp</item>
+    </style>
+
+    <style name="ChatMessages.MaterialDesignTextView"/>
 
     <style name="ChatMessages.Time">
         <item name="android:textColor">@color/colorChatMessageTime</item>
@@ -91,7 +106,7 @@
     </style>
 
     <style name="ChatMessages.MaterialDesignTextView.Tick">
-        <item name="android:textSize">@dimen/sp16</item>
+
     </style>
 
     <style name="ChatMessages.MaterialDesignTextView.BottomIcon">
@@ -106,7 +121,6 @@
         <item name="android:textColor">@color/red</item>
         <item name="android:textColorHint">@color/red</item>
         <item name="android:textSize">12sp</item>
-
     </style>
 
     <style name="remove_error_appearance" parent="@android:style/TextAppearance">

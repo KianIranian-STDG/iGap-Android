@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IResendMessage;
 import com.iGap.proto.ProtoGlobal;
@@ -26,6 +25,8 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+
+import static com.iGap.G.context;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/22/2016.
@@ -65,21 +66,21 @@ public final class AppUtils {
 
         String userStatus = "Online";
         if (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString())) {
-            userStatus = G.context.getResources().getString(R.string.last_seen_recently);
+            userStatus = context.getResources().getString(R.string.last_seen_recently);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
-            userStatus = G.context.getResources().getString(R.string.long_time_ago);
+            userStatus = context.getResources().getString(R.string.long_time_ago);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_MONTH.toString())) {
-            userStatus = G.context.getResources().getString(R.string.last_month);
+            userStatus = context.getResources().getString(R.string.last_month);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LAST_WEEK.toString())) {
-            userStatus = G.context.getResources().getString(R.string.last_week);
+            userStatus = context.getResources().getString(R.string.last_week);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.RECENTLY.toString())) {
-            userStatus = G.context.getResources().getString(R.string.recently);
+            userStatus = context.getResources().getString(R.string.recently);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SUPPORT.toString())) {
-            userStatus = G.context.getResources().getString(R.string.support);
+            userStatus = context.getResources().getString(R.string.support);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.SERVICE_NOTIFICATIONS.toString())) {
-            userStatus = G.context.getResources().getString(R.string.service_notification);
+            userStatus = context.getResources().getString(R.string.service_notification);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
-            userStatus = G.context.getResources().getString(R.string.online);
+            userStatus = context.getResources().getString(R.string.online);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
             userStatus = ProtoGlobal.RegisteredUser.Status.EXACTLY.toString();
         }
@@ -130,33 +131,28 @@ public final class AppUtils {
      *
      * @param view TextView message status
      */
-    public static void rightMessageStatus(TextView view, String status) {
+    public static void rightMessageStatus(ImageView view, String status) {
         // icons font MaterialDesign yeksan design nashodan vase hamin man dasti size ro barabar kardam
         switch (ProtoGlobal.RoomMessageStatus.valueOf(status)) {
             case DELIVERED:
-                view.setTextColor(view.getContext().getResources().getColor(R.color.white));
-                view.setText(G.context.getResources().getString(R.string.md_check_symbol));
-                view.setTextSize(12F);
+                DrawableCompat.setTint(view.getDrawable(), Color.WHITE);
+                view.setImageResource(R.drawable.ic_check);
                 break;
             case FAILED:
-                view.setTextColor(Color.RED);
-                view.setText(G.context.getResources().getString(R.string.md_cancel_button));
-                view.setTextSize(15F);
+                DrawableCompat.setTint(view.getDrawable(), Color.RED);
+                view.setImageResource(R.drawable.ic_error);
                 break;
             case SEEN:
-                view.setTextColor(view.getContext().getResources().getColor(R.color.white));
-                view.setText(G.context.getResources().getString(R.string.md_double_tick_indicator));
-                view.setTextSize(15F);
+                DrawableCompat.setTint(view.getDrawable(), Color.WHITE);
+                view.setImageResource(R.drawable.ic_double_check);
                 break;
             case SENDING:
-                view.setTextColor(view.getContext().getResources().getColor(R.color.statusSendingColor));
-                view.setText(G.context.getResources().getString(R.string.md_clock_with_white_face));
-                view.setTextSize(12F);
+                DrawableCompat.setTint(view.getDrawable(), view.getContext().getResources().getColor(R.color.statusSendingColor));
+                view.setImageResource(R.drawable.ic_clock);
                 break;
             case SENT:
-                view.setTextColor(view.getContext().getResources().getColor(R.color.statusSendingColor));
-                view.setText(G.context.getResources().getString(R.string.md_check_symbol));
-                view.setTextSize(12F);
+                DrawableCompat.setTint(view.getDrawable(), view.getContext().getResources().getColor(R.color.statusSendingColor));
+                view.setImageResource(R.drawable.ic_check);
                 break;
         }
     }
@@ -260,7 +256,7 @@ public final class AppUtils {
         }
 
         return new MaterialDialog.Builder(context).title("Resend Messages")
-                .negativeText(G.context.getString(R.string.cancel)).items(items).itemsIds(newIds)
+                .negativeText(context.getString(R.string.cancel)).items(items).itemsIds(newIds)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View itemView, int position,
