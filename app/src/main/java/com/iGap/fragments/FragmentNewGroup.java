@@ -300,37 +300,37 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
         txtNextStep = (TextView) view.findViewById(R.id.ng_txt_nextStep);
         txtNextStep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                                           @Override
+                                           public void onClick(View view) {
 
-                if (edtGroupName.getText().toString().length() > 0) {
-                    prgWaiting.setVisibility(View.VISIBLE);
-                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                                               if (edtGroupName.getText().toString().length() > 0) {
+                                                   prgWaiting.setVisibility(View.VISIBLE);
+                                                   getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                   InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                   imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-                    String newName = edtGroupName.getText().toString().replace(" ", "_");
-                    File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
-                    if (prefix.equals("NewChanel")) {
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                                                   String newName = edtGroupName.getText().toString().replace(" ", "_");
+                                                   File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
+                                                   if (prefix.equals("NewChanel")) {
+                                                       getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                       getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
 //                        startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
 
-                        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .addToBackStack(null)
-                                .replace(fragmentContainer, fragmentCreateChannel)
-                                .commitAllowingStateLoss();
+                                                       FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+                                                       getActivity().getSupportFragmentManager()
+                                                               .beginTransaction()
+                                                               .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                                               .addToBackStack(null)
+                                                               .replace(fragmentContainer, fragmentCreateChannel)
+                                                               .commitAllowingStateLoss();
 
-                    } else if (prefix.equals("ConvertToGroup")) {
-                        chatToGroup();
-                    } else {
-                        createGroup();
-                    }
+                                                   } else if (prefix.equals("ConvertToGroup")) {
+                                                       chatToGroup();
+                                                   } else {
+                                                       createGroup();
+                                                   }
                                                } else {
-                    Toast.makeText(G.context, R.string.please_enter_group_name, Toast.LENGTH_SHORT).show();
+                                                   Toast.makeText(G.context, R.string.please_enter_group_name, Toast.LENGTH_SHORT).show();
                                                }
                                            }
                                        }
@@ -514,34 +514,34 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
                 final String limit = room.getGroupRoomExtra().getParticipantsCountLimitLabel();
 
-
                 try {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.i("EEE", "runOnUiThread");
-                            prgWaiting.setVisibility(View.GONE);
-                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.i("EEE", "runOnUiThread");
+                                prgWaiting.setVisibility(View.GONE);
+                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                            Fragment fragment = ContactGroupFragment.newInstance();
-                            Bundle bundle = new Bundle();
-                            bundle.putLong("RoomId", roomId);
-                            bundle.putString("LIMIT", limit);
-                            bundle.putBoolean("NewRoom", true);
-                            fragment.setArguments(bundle);
-                            getActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                    .addToBackStack(null)
-                                    .replace(fragmentContainer, fragment)
-                                    .commitAllowingStateLoss();
-                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                            ActivityMain.mLeftDrawerLayout.closeDrawer();
-//                            getActivity().getSupportFragmentManager().popBackStack();
-                        }
-                    });
+                                Fragment fragment = ContactGroupFragment.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putLong("RoomId", roomId);
+                                bundle.putString("LIMIT", limit);
+                                bundle.putBoolean("NewRoom", true);
+                                fragment.setArguments(bundle);
+                                getActivity().getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                        .addToBackStack(null)
+                                        .replace(fragmentContainer, fragment)
+                                        .commitAllowingStateLoss();
+                                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                                ActivityMain.mLeftDrawerLayout.closeDrawer();
+                            }
+                        });
+                    }
                 } catch (IllegalStateException e) {
-                    Log.i("EEE", "IllegalStateException");
+                    e.printStackTrace();
                 }
 
             }

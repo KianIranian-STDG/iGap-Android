@@ -152,14 +152,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             return size;
 
         for (File file : dir.listFiles()) {
-            if (file.isFile()) {
-                if (file != null) {
+            if (file != null) {
+                if (file.isFile()) {
                     size += file.length();
                 } else {
-                    return size;
+                    size += getFolderSize(file);
                 }
             } else {
-                size += getFolderSize(file);
+                return size;
             }
         }
         return size;
@@ -1088,7 +1088,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     }
                 });
-
 
 
             }
