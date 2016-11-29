@@ -25,6 +25,10 @@ import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.MyService;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
+import com.iGap.interfaces.OnChannelAddMember;
+import com.iGap.interfaces.OnChannelCreate;
+import com.iGap.interfaces.OnChannelDelete;
+import com.iGap.interfaces.OnChannelLeft;
 import com.iGap.interfaces.OnChatConvertToGroup;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatDeleteMessageResponse;
@@ -279,6 +283,10 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static OnUserSessionGetActiveList onUserSessionGetActiveList;
     public static OnUserSessionTerminate onUserSessionTerminate;
     public static OnUserSessionLogout onUserSessionLogout;
+    public static OnChannelCreate onChannelCreate;
+    public static OnChannelAddMember onChannelAddMember;
+    public static OnChannelDelete onChannelDelete;
+    public static OnChannelLeft onChannelLeft;
     public static UpdateListAfterKick updateListAfterKick;
     public static OnHelperSetAction onHelperSetAction;
 

@@ -37,6 +37,7 @@ import com.iGap.activities.ActivityCrop;
 import com.iGap.activities.ActivityMain;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperPermision;
+import com.iGap.interfaces.OnChannelCreate;
 import com.iGap.interfaces.OnChatConvertToGroup;
 import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
@@ -61,8 +62,8 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestChannelCreate;
 import com.iGap.request.RequestChatConvertToGroup;
-import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestGroupCreate;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -93,6 +94,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
     private ProgressBar prgWaiting;
     private static long avatarId = 0;
+
+    private static ProtoGlobal.Room.Type type;
 
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
@@ -313,16 +316,16 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                                                    File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                                                    if (prefix.equals("NewChanel")) {
                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                       getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-//                        startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
-
-                                                       FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
-                                                       getActivity().getSupportFragmentManager()
-                                                               .beginTransaction()
-                                                               .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                                               .addToBackStack(null)
-                                                               .replace(fragmentContainer, fragmentCreateChannel)
-                                                               .commitAllowingStateLoss();
+//                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+////                        startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
+//                        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+//                        getActivity().getSupportFragmentManager()
+//                                .beginTransaction()
+//                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+//                                .addToBackStack(null)
+//                                .replace(fragmentContainer, fragmentCreateChannel)
+//                                .commitAllowingStateLoss();
+                                                       crateChannel();
 
                                                    } else if (prefix.equals("ConvertToGroup")) {
                                                        chatToGroup();
@@ -357,6 +360,49 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         );
     }
 
+    private void crateChannel() {
+
+        G.onChannelCreate = new OnChannelCreate() {
+            @Override
+            public void onChannelCreate(final long roomId, String inviteLink) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        prgWaiting.setVisibility(View.GONE);
+                        getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWaiting.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        prgWaiting.setVisibility(View.GONE);
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+            }
+        };
+
+        new RequestChannelCreate().channelCreate(edtGroupName.getText().toString(), edtDescription.getText().toString());
+
+    }
+
     private void chatToGroup() {
         G.onChatConvertToGroup = new OnChatConvertToGroup() {
             @Override
@@ -383,7 +429,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                             }
                         });
                         realm.close();
-                        getRoom(roomId);
+                        getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
                     }
                 });
             }
@@ -425,7 +471,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                     @Override
                     public void run() {
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        getRoom(roomId);
+                        getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
                     }
                 });
 
@@ -506,7 +552,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         new RequestGroupCreate().groupCreate(edtGroupName.getText().toString(), edtDescription.getText().toString());
     }
 
-    private void getRoom(final long roomId) {
+    private void getRoom(final long roomId, final ProtoGlobal.Room.Type typeCreat) {
 
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
             @Override
@@ -527,6 +573,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                                 Bundle bundle = new Bundle();
                                 bundle.putLong("RoomId", roomId);
                                 bundle.putString("LIMIT", limit);
+                                bundle.putString("TYPE", typeCreat.toString());
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);
                                 getActivity().getSupportFragmentManager()
@@ -537,9 +584,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                                         .commitAllowingStateLoss();
                                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                                 ActivityMain.mLeftDrawerLayout.closeDrawer();
+//                            getActivity().getSupportFragmentManager().popBackStack();
                             }
                         });
-                    }
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -746,7 +793,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
         realm.close();
 
-        getRoom(roomId);
+        getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {

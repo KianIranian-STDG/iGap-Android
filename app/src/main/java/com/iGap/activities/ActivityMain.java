@@ -36,6 +36,8 @@ import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ServiceContact;
+import com.iGap.interfaces.OnChannelDelete;
+import com.iGap.interfaces.OnChannelLeft;
 import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatSendMessageResponse;
@@ -78,8 +80,11 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestChannelDelete;
+import com.iGap.request.RequestChannelLeft;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestFileDownload;
@@ -955,10 +960,116 @@ public class ActivityMain extends ActivityEnhanced
                     }
                 } else if (item.mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                     // TODO: 11/22/2016 [Alireza] delete channel room
+
+                    if (item.mInfo.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
+                        deleteChannel(item, position);
+                    } else {
+                        leftChannel(item, position);
+                    }
                 }
 
                 break;
         }
+    }
+
+    private void deleteChannel(RoomItem item, final int position) {
+
+        G.onChannelDelete = new OnChannelDelete() {
+            @Override
+            public void onChannelDelete(long roomId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.remove(position);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+
+            }
+        };
+        new RequestChannelDelete().channelDelete(item.getInfo().getId());
+    }
+
+    private void leftChannel(RoomItem item, final int position) {
+
+        G.onChannelLeft = new OnChannelLeft() {
+            @Override
+            public void onChannelLeft(long roomId, long memberId) {
+                mAdapter.remove(position);
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+        };
+
+
+        new RequestChannelLeft().channelLeft(item.getInfo().getId());
     }
 
 

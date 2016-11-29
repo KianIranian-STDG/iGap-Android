@@ -6,6 +6,7 @@
                 android:layout_height="match_parent"
                 tools:context="com.iGap.fragments.FragmentCreateChannel"
                 android:background="@color/whit_background"
+                android:elevation="999dp"
                 tools:ignore="MissingPrefix">
 
     <View

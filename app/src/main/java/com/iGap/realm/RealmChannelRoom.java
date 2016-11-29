@@ -4,16 +4,18 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.ChannelChatRole;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class RealmChannelRoom extends RealmObject {
     private String role;
     private String participants_count_label;
+    private String participants_count_limit_label;
     private String description;
     private int avatarCount;
     private RealmAvatar avatar;
     private RealmNotificationSetting realmNotificationSetting;
-
+    private RealmList<RealmMember> members;
     /**
      * convert ProtoGlobal.ChannelRoom to RealmChannelRoom
      *
@@ -46,6 +48,14 @@ public class RealmChannelRoom extends RealmObject {
         this.participants_count_label = participants_count_label;
     }
 
+    public String getParticipants_count_limit_label() {
+        return participants_count_limit_label;
+    }
+
+    public void setParticipants_count_limit_label(String participants_count_limit_label) {
+        this.participants_count_limit_label = participants_count_limit_label;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -76,5 +86,13 @@ public class RealmChannelRoom extends RealmObject {
 
     public void setRealmNotificationSetting(RealmNotificationSetting realmNotificationSetting) {
         this.realmNotificationSetting = realmNotificationSetting;
+    }
+
+    public RealmList<RealmMember> getMembers() {
+        return members;
+    }
+
+    public void setMembers(RealmList<RealmMember> members) {
+        this.members = members;
     }
 }

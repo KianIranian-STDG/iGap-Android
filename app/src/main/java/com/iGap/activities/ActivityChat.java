@@ -2242,7 +2242,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
                 Log.i("BBBBBBNN", "listPathString.get(0): " + listPathString.get(0));
-                intent.putExtra("IMAGE_CAMERA", data.getData().toString());
+                intent.putExtra("IMAGE_CAMERA", listPathString.get(0));
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "chat");
 
