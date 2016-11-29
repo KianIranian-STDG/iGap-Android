@@ -6,8 +6,9 @@
               android:clickable="true"
               android:orientation="horizontal"
               android:paddingBottom="@dimen/dp8"
-              android:paddingRight="@dimen/dp4"
-              android:paddingTop="@dimen/dp8"
+              android:paddingRight="@dimen/messageContainerPadding"
+              android:paddingLeft="@dimen/messageContainerPadding"
+              android:paddingTop="@dimen/messageContainerPadding"
               android:textDirection="firstStrong">
 
     <View
