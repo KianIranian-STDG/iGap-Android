@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.iGap.G.onHelperSetAction;
+
 /**
  * Created by ali on 9/12/2016.
  */
@@ -143,7 +145,7 @@ public class AttachFile {
             public void Allow() {
                 Intent intent = new Intent(context, ActivityPaint.class);
                 ((Activity) context).startActivityForResult(intent, request_code_paint);
-                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.PAINTING);
+                onHelperSetAction.onAction(ProtoGlobal.ClientAction.PAINTING);
             }
         });
     }
@@ -228,7 +230,7 @@ public class AttachFile {
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
-                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
+                onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
                 isInAttach = true;
             }
         });
@@ -245,7 +247,7 @@ public class AttachFile {
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 ((Activity) context).startActivityForResult(intent, requestOpenGalleryForVideoMultipleSelect);
-                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_VIDEO);
+                onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_VIDEO);
                 isInAttach = true;
             }
         });
@@ -301,7 +303,7 @@ public class AttachFile {
                             case 0:
 
                                 requestTakePicture();
-                                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_IMAGE);
+                                onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_IMAGE);
                                 dialog.dismiss();
 
                                 if (prgWaiting != null) {
@@ -311,7 +313,7 @@ public class AttachFile {
                                 break;
                             case 1:
                                 requestVideoCapture();
-                                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_VIDEO);
+                                onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_VIDEO);
                                 dialog.dismiss();
                                 break;
                         }
@@ -338,7 +340,7 @@ public class AttachFile {
                 intent.setType("audio/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
-                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_AUDIO);
+                onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_AUDIO);
 
                 isInAttach = true;
             }
@@ -351,7 +353,7 @@ public class AttachFile {
             public void Allow() {
                 Intent intent = new Intent(context, ActivityExplorer.class);
                 ((Activity) context).startActivityForResult(intent, request_code_pic_file);
-                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
+                onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
             }
         });
     }
@@ -365,7 +367,7 @@ public class AttachFile {
                 intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
-                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CHOOSING_CONTACT);
+                onHelperSetAction.onAction(ProtoGlobal.ClientAction.CHOOSING_CONTACT);
                 isInAttach = true;
             }
         });
@@ -402,7 +404,7 @@ public class AttachFile {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
+                //G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
@@ -442,7 +444,7 @@ public class AttachFile {
                 Intent intent = new Intent(context, ActivityExplorer.class);
                 intent.putExtra("Mode", "documnet");
                 ((Activity) context).startActivityForResult(intent, request_code_open_document);
-                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
+                onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
             }
         });
 

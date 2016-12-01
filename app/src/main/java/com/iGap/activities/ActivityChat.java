@@ -432,7 +432,7 @@ public class ActivityChat extends ActivityEnhanced
 
     private void getChatHistory() {
         Realm realm = Realm.getDefaultInstance();
-        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 0) {
+        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 0 || realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 1) {
             firstTimeGetHistory = true;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
         }
@@ -644,8 +644,7 @@ public class ActivityChat extends ActivityEnhanced
         G.onHelperSetAction = new OnHelperSetAction() {
             @Override
             public void onAction(ProtoGlobal.ClientAction ClientAction) {
-                HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
-
+                //HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
             }
         };
 
@@ -2245,8 +2244,7 @@ public class ActivityChat extends ActivityEnhanced
             if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1 && requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && (listPathString.size() == 1)) {
 
                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                Log.i("BBBBBBNN", "listPathString.get(0): " + listPathString.get(0));
-                intent.putExtra("IMAGE_CAMERA", data.getData().toString());
+                intent.putExtra("IMAGE_CAMERA", listPathString.get(0));
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "chat");
 
@@ -2965,6 +2963,8 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
+    private long lastMessageId;
+
     private ArrayList<StructMessageInfo> getChatList() {
         Realm realm = Realm.getDefaultInstance();
         ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
@@ -2973,6 +2973,7 @@ public class ActivityChat extends ActivityEnhanced
         for (RealmRoomMessage realmRoomMessage : realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll()) {
             if (realmRoomMessage != null) {
                 if (realmRoomMessage.getMessageId() != 0) {
+                    lastMessageId = realmRoomMessage.getMessageId();
                     realmRoomMessages.add(realmRoomMessage);
                 }
             }
@@ -3536,6 +3537,7 @@ public class ActivityChat extends ActivityEnhanced
                     List<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
                     for (ProtoGlobal.RoomMessage roomMessage : messages) {
                         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+
                         if (message != null) {
                             realmRoomMessages.add(message);
                         }
@@ -3563,7 +3565,9 @@ public class ActivityChat extends ActivityEnhanced
                     Collections.sort(lastResultMessages, SortMessages.DESC);
 
                     for (RealmRoomMessage roomMessage : lastResultMessages) {
-                        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), true);
+                        if (lastMessageId != roomMessage.getMessageId()) { //TODO [Saeed Mozaffari] [2016-12-01 10:04 AM] - dar get room history akharim payam duplicate mishod. in shart ro gozashtam , behtare bardashte beshe
+                            switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), true);
+                        }
                     }
 
                     realm.close();

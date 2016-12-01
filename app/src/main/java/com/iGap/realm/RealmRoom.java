@@ -112,6 +112,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getGroupRoomExtra().getAvatar()));
                 break;
         }
+        //realmRoom.setLastMessage(RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId()));
         realmRoom.setLastMessage(RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId()));
 
         RealmRoomDraft realmRoomDraft = realmRoom.getDraft();

@@ -1,11 +1,11 @@
 package com.iGap.module;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 
@@ -66,7 +66,9 @@ public class LastSeenTimeUtil {
             } else {
                 showLastSeen = getMinute(value);
             }
-            if (realmRegisteredInfo != null && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
+            Log.i("TTTU", "UserStatus : " + realmRegisteredInfo.getStatus());
+//            if (realmRegisteredInfo != null && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
+            if (realmRegisteredInfo != null && !realmRegisteredInfo.getStatus().equals("online")) {
                 if (G.onLastSeenUpdateTiming != null) {
                     G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
                 }
