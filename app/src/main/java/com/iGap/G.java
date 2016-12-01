@@ -367,16 +367,22 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
 
                             RealmRegisteredInfo.putOrUpdate(user);
 
-                            G.onChangeUserPhotoListener.onChangeInitials(user.getInitials(), user.getColor());
+                            if (G.onChangeUserPhotoListener != null) {
+                                G.onChangeUserPhotoListener.onChangeInitials(user.getInitials(), user.getColor());
+                            }
 
                             if (avatar != null && avatar.isValid()) {
                                 if (!avatar.getFile().isFileExistsOnLocal() && !avatar.getFile().isThumbnailExistsOnLocal()) {
                                     requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize(), avatar.getId());
                                 } else {
                                     if (avatar.getFile().isFileExistsOnLocal()) {
-                                        G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalFilePath());
+                                        if (G.onChangeUserPhotoListener != null) {
+                                            G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalFilePath());
+                                        }
                                     } else if (avatar.getFile().isThumbnailExistsOnLocal()) {
-                                        G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalThumbnailPath());
+                                        if (G.onChangeUserPhotoListener != null) {
+                                            G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalThumbnailPath());
+                                        }
                                     }
                                 }
                             }
@@ -680,7 +686,9 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
                 @Override
                 public void onSuccess() {
                     String filePath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().getLocalThumbnailPath();
-                    G.onChangeUserPhotoListener.onChangePhoto(filePath);
+                    if (G.onChangeUserPhotoListener != null) {
+                        G.onChangeUserPhotoListener.onChangePhoto(filePath);
+                    }
                     realm.close();
                 }
             });

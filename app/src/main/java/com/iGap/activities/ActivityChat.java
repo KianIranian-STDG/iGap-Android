@@ -2143,6 +2143,11 @@ public class ActivityChat extends ActivityEnhanced
 
                     case 0:
 
+                        /*if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
+                            attachFile.showDialogOpenCamera(toolbar, prgWaiting);
+                        } else {
+                            attachFile.showDialogOpenCamera(toolbar, null);
+                        }*/
                         if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
                             attachFile.showDialogOpenCamera(toolbar, prgWaiting);
                         } else {

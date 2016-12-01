@@ -63,6 +63,7 @@ import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatConvertToGroup;
 import com.iGap.request.RequestClientGetRoom;
+import com.iGap.request.RequestGroupAvatarAdd;
 import com.iGap.request.RequestGroupCreate;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -362,6 +363,36 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             @Override
             public void onChatConvertToGroup(final long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
 
+                if (avatarExist) {
+                    new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Realm realm = Realm.getDefaultInstance();
+
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, groomId).findFirst();
+                                    realmRoom.setId(roomId);
+                                    realmRoom.setType(RoomType.GROUP);
+                                    realmRoom.setTitle(name);
+                                    RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
+                                    realmGroupRoom.setRole(GroupChatRole.OWNER);
+                                    realmGroupRoom.setDescription(description);
+                                    realmGroupRoom.setParticipantsCountLabel("2");
+                                    realmRoom.setGroupRoom(realmGroupRoom);
+                                    realmRoom.setChatRoom(null);
+                                }
+                            });
+                            realm.close();
+                        }
+                    });
+                } else {
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    getRoom(roomId);
+                }
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -424,8 +455,12 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        getRoom(roomId);
+                        if (avatarExist) {
+                            new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
+                        } else {
+                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            getRoom(roomId);
+                        }
                     }
                 });
 
@@ -683,6 +718,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         }
     }
 
+    private boolean avatarExist = false;
+    private FileUploadStructure fileUploadStructure;
+
     @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
 
@@ -691,6 +729,8 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                avatarExist = true;
+                fileUploadStructure = uploadStructure;
                 imgCircleImageView.setTag(uploadStructure.token);
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(pathSaveImage), imgCircleImageView);
                 imgCircleImageView.setPadding(0, 0, 0, 0);
@@ -720,6 +760,16 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
     @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
+
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+            });
+        }
+
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -737,12 +787,12 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         });
 
         // have to be inside a delayed handler
-        G.handler.postDelayed(new Runnable() {
+       /* G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 setImage(roomId);
             }
-        }, 500);
+        }, 500);*/
 
         realm.close();
 

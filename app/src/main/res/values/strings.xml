@@ -124,7 +124,7 @@
     <string name="st_save_to_gallery">Save to Gallery</string>
     <string name="st_title_support">Support</string>
     <string name="st_ask_question">Ask a question.</string>
-    <string name="st_About_iGap">about iGap</string>
+    <string name="st_About_iGap">About iGap</string>
     <string name="st_privacy_policy">Privacy Policy</string>
     <string name="st_keepMedia">Keep media.</string>
     <string name="st_dialog_content_keepMedia">The photos, videos and the other files of cloud chats that you have accessed during this period will be removed from this device to save disc space. All media are kept on the cloud storage and it can be downloaded again if you need it.</string>

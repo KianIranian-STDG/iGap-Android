@@ -11,21 +11,38 @@
               android:paddingLeft="@dimen/messageContainerPadding"
               android:visibility="visible">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/dp4"
-        android:text="@string/forwarded_from"
-        android:textColor="@color/newBlack"
-        android:textSize="@dimen/sp12"
-        android:textStyle="bold"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@color/newBlack"
+        android:layout_marginRight="3dp">
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/cslr_txt_forward_from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SAMPLE TEXT"
-        android:textColor="@color/newBlack"
-        android:textSize="@dimen/sp12"
-        android:textStyle="bold"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp4"
+            android:text="@string/forwarded_from"
+            android:textColor="@color/newBlack"
+            android:textSize="@dimen/sp12"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/cslr_txt_forward_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SAMPLE TEXT"
+            android:textColor="@color/newBlack"
+            android:textSize="@dimen/sp12"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
 </LinearLayout>

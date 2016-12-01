@@ -49,7 +49,6 @@ import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.helper.HelperPermision;
-import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnGroupAddAdmin;
@@ -984,15 +983,19 @@ public class ActivityGroupProfile extends ActivityEnhanced
             long avatarId = SUID.id().get();
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
-                    ImageHelper.correctRotateImage(AttachFile.imagePath);
+                    //ImageHelper.correctRotateImage(AttachFile.imagePath);
                     filePath = AttachFile.imagePath;
+                    Log.i("DDD", "avatarId : " + avatarId);
+                    Log.i("DDD", "exists : " + new File(filePath).exists());
+                    new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     filePath = AttachFile.getFilePathFromUri(data.getData());
+                    new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
                     break;
             }
 
-            new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
+
         }
     }
 
