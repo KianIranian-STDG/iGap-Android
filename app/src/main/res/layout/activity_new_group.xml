@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ng_fragmentContainer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fitsSystemWindows="false"
-    tools:ignore="MissingPrefix">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/ng_fragmentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:fitsSystemWindows="false"
+                tools:ignore="MissingPrefix">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                     android:gravity="center"
                     android:padding="@dimen/dp32"
                     android:src="@mipmap/plus"
-                    app:civ_border_width="0dp" />
+                    app:civ_border_width="0dp"/>
             </com.iGap.libs.rippleeffect.RippleView>
 
 
@@ -49,38 +49,39 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:gravity="end"
-                android:layout_below="@+id/ng_ripple_circle_image">
+                android:layout_below="@+id/ng_ripple_circle_image"
+                android:gravity="end">
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ng_txtInput_newGroup"
                     android:layout_width="@dimen/dp240"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp20"
-                    android:layout_marginStart="@dimen/dp20"
                     android:layout_marginEnd="@dimen/dp20"
+                    android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
+                    android:layout_marginStart="@dimen/dp20"
                     >
 
-                <EditText
-                    android:id="@+id/ng_edt_newGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:paddingBottom="@dimen/dp4"
-                    android:paddingTop="@dimen/dp8"
-                    android:textSize="@dimen/sp15"
-                    android:singleLine="true" />
+                    <EditText
+                        android:id="@+id/ng_edt_newGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:paddingBottom="@dimen/dp4"
+                        android:paddingTop="@dimen/dp8"
+                        android:singleLine="true"
+                        android:textSize="@dimen/sp15"/>
 
-                <View
-                    android:id="@+id/ng_view_newGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/line_edit_text"
-                    />
+                    <View
+                        android:id="@+id/ng_view_newGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/line_edit_text"
+                        />
 
-            </android.support.design.widget.TextInputLayout>
+                </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/ng_txtInput_description"
                 android:layout_width="match_parent"
@@ -96,7 +97,6 @@
                     android:layout_below="@+id/ng_txtInput_newGroup"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
-                    android:textSize="@dimen/sp15"
                     android:background="@android:color/transparent"
                     android:ems="4"
                     android:gravity="top"
@@ -105,7 +105,8 @@
                     android:maxLength="500"
                     android:maxLines="4"
                     android:paddingBottom="@dimen/dp8"
-                    android:paddingTop="@dimen/dp8" />
+                    android:paddingTop="@dimen/dp8"
+                    android:textSize="@dimen/sp15"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -133,15 +134,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ng_txtInput_description"
-                android:layout_marginRight="@dimen/dp20"
                 android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp12"
                 android:layout_toLeftOf="@+id/ng_txt_nextStep"
                 android:padding="@dimen/dp12"
                 android:text="@string/B_cancel"
                 android:textColor="@color/toolbar_background"
                 android:textSize="@dimen/sp15"
-                android:textStyle="normal" />
+                android:textStyle="normal"/>
         </RelativeLayout>
     </ScrollView>
 
@@ -153,9 +154,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@color/toolbar_background"
+        android:layoutDirection="ltr"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
-        android:layoutDirection="ltr"
         app:layout_collapseMode="pin">
 
         <RelativeLayout
@@ -172,7 +173,7 @@
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/sp18"
                 android:textStyle="bold"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <com.iGap.libs.rippleeffect.RippleView
                 android:id="@+id/ng_ripple_back"
@@ -193,7 +194,7 @@
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18" />
+                    android:textSize="@dimen/sp18"/>
             </com.iGap.libs.rippleeffect.RippleView>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
@@ -201,8 +202,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#34a49f"
-        android:layout_below="@+id/ng_backgroundToolbar"/>
+        android:layout_below="@+id/ng_backgroundToolbar"
+        android:background="#34a49f"/>
 
     <ProgressBar
         android:id="@+id/ng_prgWaiting"

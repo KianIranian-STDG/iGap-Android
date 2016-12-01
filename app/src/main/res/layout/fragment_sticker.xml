@@ -1,20 +1,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/stsp_rootLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    tools:context="com.iGap.fragments.FragmentSticker">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/stsp_rootLayout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:elevation="999dp"
+              android:orientation="vertical"
+              tools:context="com.iGap.fragments.FragmentSticker">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="@color/toolbar_background"
+        android:layoutDirection="ltr"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
-        android:layoutDirection="ltr"
         app:layout_collapseMode="pin">
 
         <RelativeLayout
@@ -30,7 +31,7 @@
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/sp22"
                 android:textStyle="bold"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <com.iGap.libs.rippleeffect.RippleView
                 android:id="@+id/stsp_ripple_back"
@@ -50,7 +51,7 @@
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18" />
+                    android:textSize="@dimen/sp18"/>
 
             </com.iGap.libs.rippleeffect.RippleView>
         </RelativeLayout>
@@ -67,18 +68,18 @@
         android:layout_height="@dimen/dp52"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingRight="@dimen/dp16"
-        android:paddingLeft="@dimen/dp16">
+        android:paddingLeft="@dimen/dp16"
+        android:paddingRight="@dimen/dp16">
 
         <TextView
 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/st_crop"
             android:gravity="center_vertical"
+            android:text="@string/st_crop"
             android:textColor="@color/black_register"
             android:textSize="@dimen/sp18"
-            android:textStyle="normal" />
+            android:textStyle="normal"/>
 
         <ToggleButton
             android:id="@+id/stsp_toggle_crop"
@@ -96,6 +97,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/background_editText" />
+        android:background="@color/background_editText"/>
 
 </LinearLayout>

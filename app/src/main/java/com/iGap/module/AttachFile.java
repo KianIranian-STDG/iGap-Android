@@ -167,8 +167,7 @@ public class AttachFile {
                 Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
                 if (outPath != null) {
-                    imagePath = outPath.toString();
-
+                    imagePath = outPath.getPath();
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
                     ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
                     isInAttach = true;

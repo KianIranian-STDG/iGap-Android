@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 
 import com.iGap.R;
 import com.iGap.module.StructSessionsGetActiveList;
-import com.iGap.request.RequestUserSessionTerminate;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import java.util.List;
@@ -48,18 +47,18 @@ public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessi
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+//        holder.root.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////
+//                for (int i = 0; i < itemList.size(); i++) {
+//                    if (!itemList.get(i).isCurrent()) {
+//                        new RequestUserSessionTerminate().userSessionTerminate(itemList.get(i).getSessionId());
 //
-                for (int i = 0; i < itemList.size(); i++) {
-                    if (!itemList.get(i).isCurrent()) {
-
-                        new RequestUserSessionTerminate().userSessionTerminate(itemList.get(i).getSessionId());
-                    }
-                }
-            }
-        });
+//                    }
+//                }
+//            }
+//        });
 
     }
 

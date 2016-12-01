@@ -28,8 +28,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/chat_background3"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/back_menu"
                     />
 
                 <LinearLayout
@@ -60,7 +60,7 @@
                             android:layout_marginTop="@dimen/dp8"
                             android:singleLine="true"
                             android:text="Domenika faniz"
-                            android:textColor="@android:color/black"
+                            android:textColor="@android:color/white"
                             android:textSize="@dimen/sp18"/>
 
                         <TextView
@@ -69,11 +69,11 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/lm_txt_user_name"
                             android:layout_marginBottom="@dimen/dp12"
-                            android:layout_marginTop="@dimen/dp4"
                             android:singleLine="true"
                             android:text="+98 9125544669"
-                            android:textColor="@color/gray_5c"
-                            android:textSize="@dimen/sp14"/>
+                            android:textColor="@color/gray10"
+                            android:textSize="@dimen/sp14"
+                            />
                     </RelativeLayout>
                 </LinearLayout>
 

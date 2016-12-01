@@ -23,6 +23,7 @@ import com.iGap.R;
 import com.iGap.adapter.items.AdapterActiveSessions;
 import com.iGap.adapter.items.chat.AdapterActiveSessionsHeader;
 import com.iGap.interfaces.OnUserSessionGetActiveList;
+import com.iGap.interfaces.OnUserSessionLogout;
 import com.iGap.interfaces.OnUserSessionTerminate;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
@@ -30,6 +31,7 @@ import com.iGap.module.SUID;
 import com.iGap.module.StructSessionsGetActiveList;
 import com.iGap.proto.ProtoUserSessionGetActiveList;
 import com.iGap.request.RequestUserSessionGetActiveList;
+import com.iGap.request.RequestUserSessionLogout;
 import com.iGap.request.RequestUserSessionTerminate;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -123,11 +125,9 @@ public class FragmentActiveSessions extends Fragment {
 
                             if (item.isCurrent()) {
                                 structItems.add(0, item);
-//                                items.add(0,new AdapterActiveSessions(item).withIdentifier(100 + i));
-//                                items.add(new AdapterActiveSessionsHeader().withIdentifier(10000 + i));
+
                             } else {
                                 structItems.add(item);
-//                                items.add(new AdapterActiveSessions(item).withIdentifier(100 + i));
                             }
 
                         }
@@ -145,6 +145,83 @@ public class FragmentActiveSessions extends Fragment {
             public boolean onClick(View v, IAdapter adapter, final IItem item, final int position) {
 
                 if (((AdapterActiveSessions) item).getItem().isCurrent()) {
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.active_session_title)
+                            .content(R.string.active_session_content)
+                            .positiveText(R.string.B_ok)
+                            .negativeText(R.string.B_cancel)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                    prgWaiting.setVisibility(View.VISIBLE);
+                                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                    G.onUserSessionLogout = new OnUserSessionLogout() {
+                                        @Override
+                                        public void onUserSessionLogout() {
+
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                    prgWaiting.setVisibility(View.GONE);
+                                                }
+                                            });
+
+
+                                        }
+
+                                        @Override
+                                        public void onError() {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                    prgWaiting.setVisibility(View.GONE);
+                                                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                            R.string.error,
+                                                            Snackbar.LENGTH_LONG);
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            snack.dismiss();
+                                                        }
+                                                    });
+                                                    snack.show();
+                                                }
+                                            });
+
+
+                                        }
+
+                                        @Override
+                                        public void onTimeOut() {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                    prgWaiting.setVisibility(View.GONE);
+                                                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                            R.string.error,
+                                                            Snackbar.LENGTH_LONG);
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            snack.dismiss();
+                                                        }
+                                                    });
+                                                    snack.show();
+                                                }
+                                            });
+
+                                        }
+                                    };
+
+                                    new RequestUserSessionLogout().userSessionLogout();
+                                }
+                            }).show();
+
 
                 } else {
                     if (item instanceof AdapterActiveSessions) {
@@ -159,7 +236,6 @@ public class FragmentActiveSessions extends Fragment {
 
                                         prgWaiting.setVisibility(View.VISIBLE);
                                         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessions) item).getItem().getSessionId());
                                         G.onUserSessionTerminate = new OnUserSessionTerminate() {
                                             @Override
                                             public void onUserSessionTerminate() {
@@ -217,6 +293,7 @@ public class FragmentActiveSessions extends Fragment {
                                                 });
                                             }
                                         };
+                                        new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessions) item).getItem().getSessionId());
                                     }
                                 }).show();
                     } else {

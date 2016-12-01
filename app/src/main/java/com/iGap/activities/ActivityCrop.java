@@ -12,11 +12,13 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperCorrectImageRotate;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.HelperCopyFile;
 import com.iGap.module.HelperDecodeFile;
@@ -47,6 +49,7 @@ public class ActivityCrop extends ActivityEnhanced {
     private File mediaStorageDir;
     private File fileChat;
     private String result;
+    private ProgressBar prgWaiting;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -58,8 +61,8 @@ public class ActivityCrop extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop);
 
+        prgWaiting = (ProgressBar) findViewById(R.id.crop_prgWaiting);
         imgPic = (ImageView) findViewById(R.id.pu_img_imageBefore);
-
         txtAgreeImage = (TextView) findViewById(R.id.pu_txt_agreeImage);
 
         txtCancel = (TextView) findViewById(R.id.pu_txt_cancel_crop);
@@ -73,8 +76,27 @@ public class ActivityCrop extends ActivityEnhanced {
             id = bundle.getInt("ID");
         }
         if (uri != null) {
+            imgPic.setVisibility(View.INVISIBLE);
+            prgWaiting.setVisibility(View.VISIBLE);
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String Path = getRealPathFromURI(uri);
+                    final Bitmap rotateImage = HelperCorrectImageRotate.correct(Path);
 
-            imgPic.setImageURI(uri);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            imgPic.setImageBitmap(rotateImage);
+                            imgPic.setVisibility(View.VISIBLE);
+                            prgWaiting.setVisibility(View.GONE);
+                        }
+                    });
+
+                }
+            });
+            thread.start();
+
         }
         RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);
         txtCrop = (TextView) findViewById(R.id.pu_txt_crop);

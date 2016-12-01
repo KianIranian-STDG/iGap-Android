@@ -497,6 +497,7 @@ public class ActivityChat extends ActivityEnhanced
         complete = new OnComplete() {
             @Override
             public void complete(boolean result, final String messageOne, String MessageTow) {
+                HelperSetAction.sendCancel(messageId);
                 Realm realm = Realm.getDefaultInstance();
                 final long id = SUID.id().get();
                 realm.executeTransaction(new Realm.Transaction() {
@@ -523,6 +524,7 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
                 realm.close();
+
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -2198,8 +2200,8 @@ public class ActivityChat extends ActivityEnhanced
 
         if (resultCode == Activity.RESULT_OK) {
 
-
             HelperSetAction.sendCancel(messageId);
+
             if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 attachFile.requestGetPosition(complete);
                 return;
@@ -2244,7 +2246,9 @@ public class ActivityChat extends ActivityEnhanced
             if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1 && requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && (listPathString.size() == 1)) {
 
                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                intent.putExtra("IMAGE_CAMERA", listPathString.get(0));
+                Uri uri = Uri.parse(listPathString.get(0));
+                uri = android.net.Uri.parse("file://" + uri.getPath());
+                intent.putExtra("IMAGE_CAMERA", uri.toString());
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "chat");
 
@@ -2267,8 +2271,8 @@ public class ActivityChat extends ActivityEnhanced
             } else if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1 && requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                Log.i("BBBBBBNN", "AttachFile.imagePath: " + AttachFile.imagePath);
-                intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
+                String path = "file://" + AttachFile.imagePath;
+                intent.putExtra("IMAGE_CAMERA", path);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "chat");
                 startActivityForResult(intent, IntentRequests.REQ_CROP);

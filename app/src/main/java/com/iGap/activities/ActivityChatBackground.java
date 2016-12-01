@@ -92,6 +92,11 @@ public class ActivityChatBackground extends ActivityEnhanced {
         rcvContent.clearAnimation();
         setItem();
         adapterChatBackgroundSetting.notifyDataSetChanged();
+        for (int i = 0; i < items.size(); i++) {
+
+            Log.i("MMMMMMN", "getId: " + items.get(i).getId());
+
+        }
     }
 
     public void setItem() {
@@ -100,27 +105,29 @@ public class ActivityChatBackground extends ActivityEnhanced {
         File file[] = addFile.listFiles();
         for (int i = 0; i < file.length; i++) {
             StructAdapterBackground item = new StructAdapterBackground();
-            if (i == 0) {
+            if (!file[i].getPath().equals(chatBackground.toString())) {
                 item.setId(i);
+                item.setPathImage(file[i].toString());
                 items.add(item);
-
-            } else {
-                if (i == 1 && (chatBackground.exists())) {
-                    item.setId(i);
-                    item.setPathImage(chatBackground.toString());
-                    items.add(item);
-
-                } else if (!file[i].getPath().equals(chatBackground.toString())) {
-                    item.setId(i);
-                    item.setPathImage(file[i].toString());
-                    items.add(item);
-
-
-                }
             }
+        }
+
+        int intPlus = 1;
+        if (chatBackground.exists()) intPlus = 2;
+        for (int i = 0; i < intPlus; i++) {
+            StructAdapterBackground item = new StructAdapterBackground();
+            if (chatBackground.exists() && i == 0) {
+                item.setId(i);
+                item.setPathImage(chatBackground.toString());
+            } else {
+                item.setId(i);
+            }
+
+            items.add(0, item);
         }
         adapterChatBackgroundSetting.notifyDataSetChanged();
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
