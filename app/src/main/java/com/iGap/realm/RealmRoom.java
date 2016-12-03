@@ -1,6 +1,7 @@
 package com.iGap.realm;
 
 import com.iGap.G;
+import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
 
@@ -72,7 +73,7 @@ public class RealmRoom extends RealmObject {
 
         if (realmRoom == null) {
             realmRoom = realm.createObject(RealmRoom.class, room.getId());
-            realmRoom.setUpdatedTime(System.currentTimeMillis());
+            realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
         }
 
         realmRoom.setColor(room.getColor());

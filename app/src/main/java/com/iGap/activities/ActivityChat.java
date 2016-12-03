@@ -510,7 +510,7 @@ public class ActivityChat extends ActivityEnhanced
 
                         RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, id);
                         roomMessage.setLocation(messageLocation);
-                        roomMessage.setCreateTime(System.currentTimeMillis());
+                        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
                         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
                         roomMessage.setRoomId(mRoomId);
                         roomMessage.setUserId(userId);
@@ -731,7 +731,7 @@ public class ActivityChat extends ActivityEnhanced
                     long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
                     forwardedMessage.setForwardMessage(roomMessage);
-                    forwardedMessage.setCreateTime(System.currentTimeMillis());
+                    forwardedMessage.setCreateTime(TimeUtils.currentLocalTime());
                     forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                     forwardedMessage.setRoomId(mRoomId);
                     forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());

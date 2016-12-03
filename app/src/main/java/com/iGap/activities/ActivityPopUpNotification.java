@@ -37,6 +37,7 @@ import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
+import com.iGap.module.TimeUtils;
 import com.iGap.module.UploadService;
 import com.iGap.module.VoiceRecord;
 import com.iGap.proto.ProtoGlobal;
@@ -367,7 +368,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 roomMessage.setMessage(message);
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setUserId(senderId);
-                roomMessage.setCreateTime(System.currentTimeMillis());
+                roomMessage.setCreateTime(TimeUtils.currentLocalTime());
             }
         });
 
