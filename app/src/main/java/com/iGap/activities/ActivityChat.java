@@ -1402,7 +1402,7 @@ public class ActivityChat extends ActivityEnhanced
         recyclerView.setItemAnimator(null);
         // following lines make scrolling smoother
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setItemViewCacheSize(1000);
         recyclerView.setDrawingCacheEnabled(true);
 
         mAdapter = new MessagesAdapter<>(this, this, this);
@@ -1417,7 +1417,7 @@ public class ActivityChat extends ActivityEnhanced
         switchAddItem(getChatList(), true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ActivityChat.this);
-        // make start messages from bottom, this is exatly what Telegram and other messengers do
+        // make start messages from bottom, this is exactly what Telegram and other messengers do
         // for their messages list
         layoutManager.setStackFromEnd(true);
         // set behavior to RecyclerView
@@ -2986,10 +2986,11 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void onLoadMore(EndlessRecyclerOnScrollListener listener, int page) {
                 List<RealmRoomMessage> roomMessages = listener.loadMore(page);
+                ArrayList<StructMessageInfo> convertedMessages = new ArrayList<>();
                 for (RealmRoomMessage roomMessage : roomMessages) {
-                    StructMessageInfo messageInfo = StructMessageInfo.convert(roomMessage);
-                    switchAddItem(new ArrayList<>(Collections.singletonList(messageInfo)), true);
+                    convertedMessages.add(StructMessageInfo.convert(roomMessage));
                 }
+                switchAddItem(convertedMessages, true);
             }
 
             @Override
