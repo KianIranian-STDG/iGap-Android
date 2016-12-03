@@ -20,6 +20,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -55,8 +56,34 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     }
 
     @Override
-    public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+    public void onLoadThumbnailFromLocal(ViewHolder holder, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
+
+        if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
+            holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
+                @Override
+                public void onPlayClick(AudioPlayerView playerView) {
+                    // to play/pause itself
+                    MusicPlayer.setListener(playerView);
+                    MusicPlayer.setMp(playerView.getPlayer());
+                    MusicPlayer.startPlayerFromPlayer(localPath, ActivityChat.title, ActivityChat.mRoomId, true);
+                }
+
+                @Override
+                public void onPauseClick(AudioPlayerView playerView) {
+                    // to play/pause itself
+                    MusicPlayer.setListener(playerView);
+                    MusicPlayer.setMp(playerView.getPlayer());
+                    MusicPlayer.playAndPause();
+                }
+
+            });
+
+            holder.playerView.setEnabled(true);
+            holder.playerView.setMediaPlayer(makeMediaPlayer(AndroidUtils.suitablePath(localPath)));
+        } else {
+            holder.playerView.setEnabled(false);
+        }
     }
 
     private MediaPlayer makeMediaPlayer(String filePath) {
@@ -82,9 +109,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             holder.thumbnail.setImageResource(R.drawable.green_music_note);
         }
 
-        // to play/pause itself
-        MusicPlayer.setListener(holder.playerView);
-
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
                 if (mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
@@ -95,22 +119,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                             AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
                 }
                 holder.fileName.setText(mMessage.forwardedFrom.getAttachment().getName());
-                holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
-                    @Override
-                    public void onPlayClick(AudioPlayerView playerView) {
-                        MusicPlayer.setMp(playerView.getPlayer());
-                        MusicPlayer.startPlayer(mMessage.forwardedFrom.getAttachment().getLocalFilePath(), ActivityChat.title, ActivityChat.mRoomId, true);
-                    }
-
-                    @Override
-                    public void onPauseClick(AudioPlayerView playerView) {
-
-                    }
-
-                });
-                holder.playerView.setEnabled(mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal());
                 if (mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
-                    holder.playerView.setMediaPlayer(makeMediaPlayer(AndroidUtils.suitablePath(mMessage.forwardedFrom.getAttachment().getLocalFilePath())));
                     String artistName = AndroidUtils.getAudioArtistName(mMessage.forwardedFrom.getAttachment().getLocalFilePath());
                     if (!TextUtils.isEmpty(artistName)) {
                         holder.songArtist.setText(artistName);
@@ -131,28 +140,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                             AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
                 }
                 holder.fileName.setText(mMessage.attachment.name);
-                holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
-                    @Override
-                    public void onPlayClick(AudioPlayerView playerView) {
-                        // to play/pause itself
-                        MusicPlayer.setListener(playerView);
-                        MusicPlayer.setMp(playerView.getPlayer());
-                        MusicPlayer.startPlayerFromPlayer(mMessage.forwardedFrom.getAttachment().getLocalFilePath(), ActivityChat.title, ActivityChat.mRoomId, true);
-                    }
-
-                    @Override
-                    public void onPauseClick(AudioPlayerView playerView) {
-                        // to play/pause itself
-                        MusicPlayer.setListener(playerView);
-                        MusicPlayer.setMp(playerView.getPlayer());
-                        MusicPlayer.playAndPause();
-                    }
-
-                });
-                holder.playerView.setEnabled(mMessage.attachment.isFileExistsOnLocal());
-                if (mMessage.attachment.isFileExistsOnLocal()) {
-                    holder.playerView.setMediaPlayer(makeMediaPlayer(AndroidUtils.suitablePath(mMessage.attachment.getLocalFilePath())));
-                }
             }
             if (!TextUtils.isEmpty(mMessage.songArtist)) {
                 holder.songArtist.setText(mMessage.songArtist);

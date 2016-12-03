@@ -3,6 +3,7 @@ package com.iGap.adapter.items.chat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -52,65 +54,41 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     }
 
     @Override
-    public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+    public void onLoadThumbnailFromLocal(ViewHolder holder, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
+
+        if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
+            holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
+                @Override
+                public void onPlayClick(AudioPlayerView playerView) {
+                    // to play/pause itself
+                    MusicPlayer.setListener(playerView);
+                    MusicPlayer.setMp(playerView.getPlayer());
+                    MusicPlayer.startPlayerFromPlayer(localPath, ActivityChat.title, ActivityChat.mRoomId, true);
+                }
+
+                @Override
+                public void onPauseClick(AudioPlayerView playerView) {
+                    // to play/pause itself
+                    MusicPlayer.setListener(playerView);
+                    MusicPlayer.setMp(playerView.getPlayer());
+                    MusicPlayer.playAndPause();
+                }
+
+            });
+
+            holder.playerView.setEnabled(true);
+            holder.playerView.setMediaPlayer(makeMediaPlayer(AndroidUtils.suitablePath(localPath)));
+        } else {
+            holder.playerView.setEnabled(false);
+
+            holder.playerView.setTime((int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000));
+        }
     }
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-
-        if (mMessage.forwardedFrom != null) {
-            if (mMessage.forwardedFrom.getAttachment() != null) {
-                holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
-                    @Override
-                    public void onPlayClick(AudioPlayerView playerView) {
-                        // to play/pause itself
-                        MusicPlayer.setListener(playerView);
-                        MusicPlayer.setMp(playerView.getPlayer());
-                        MusicPlayer.startPlayerFromPlayer(mMessage.forwardedFrom.getAttachment().getLocalFilePath(), ActivityChat.title, ActivityChat.mRoomId, true);
-                    }
-
-                    @Override
-                    public void onPauseClick(AudioPlayerView playerView) {
-                        // to play/pause itself
-                        MusicPlayer.setListener(playerView);
-                        MusicPlayer.setMp(playerView.getPlayer());
-                        MusicPlayer.playAndPause();
-                    }
-
-                });
-                holder.playerView.setEnabled(mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal());
-                if (mMessage.attachment.isFileExistsOnLocal()) {
-                    holder.playerView.setMediaPlayer(makeMediaPlayer(AndroidUtils.suitablePath(mMessage.forwardedFrom.getAttachment().getLocalFilePath())));
-                }
-            }
-        } else {
-            if (mMessage.attachment != null) {
-                holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
-                    @Override
-                    public void onPlayClick(AudioPlayerView playerView) {
-                        // to play/pause itself
-                        MusicPlayer.setListener(playerView);
-                        MusicPlayer.setMp(playerView.getPlayer());
-                        MusicPlayer.startPlayerFromPlayer(mMessage.attachment.getLocalFilePath(), ActivityChat.title, ActivityChat.mRoomId, true);
-                    }
-
-                    @Override
-                    public void onPauseClick(AudioPlayerView playerView) {
-                        // to play/pause itself
-                        MusicPlayer.setListener(playerView);
-                        MusicPlayer.setMp(playerView.getPlayer());
-                        MusicPlayer.playAndPause();
-                    }
-
-                });
-                holder.playerView.setEnabled(mMessage.attachment.isFileExistsOnLocal());
-                if (mMessage.attachment.isFileExistsOnLocal()) {
-                    holder.playerView.setMediaPlayer(makeMediaPlayer(AndroidUtils.suitablePath(mMessage.attachment.getLocalFilePath())));
-                }
-            }
-        }
 
         AppUtils.rightFileThumbnailIcon(holder.thumbnail, mMessage.messageType, null);
 

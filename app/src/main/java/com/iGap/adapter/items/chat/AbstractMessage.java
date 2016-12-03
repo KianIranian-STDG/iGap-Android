@@ -395,6 +395,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (attachment.isFileExistsOnLocalAndIsThumbnail()) {
                 // load file from local
                 onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
+            } else if (mMessage.messageType == ProtoGlobal.RoomMessageType.VOICE || mMessage.messageType == ProtoGlobal.RoomMessageType.AUDIO || mMessage.messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
+                onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
             } else {
                 // file doesn't exist on local, I check for a thumbnail
                 // if thumbnail exists, I load it into the view

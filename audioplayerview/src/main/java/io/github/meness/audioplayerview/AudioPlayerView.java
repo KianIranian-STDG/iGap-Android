@@ -81,12 +81,12 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
         }
     }
 
-    public void setTime(int total) {
+    public void setTime(long total) {
         if (mCurrentTime != null) {
-            mCurrentTime.setText(stringForTime(total, false));
+            mCurrentTime.setText("00:00");
         }
         if (mEndTime != null) {
-            mEndTime.setText(stringForTime(total, true));
+            mEndTime.setText(stringForTime((int) total, true));
         }
     }
 
