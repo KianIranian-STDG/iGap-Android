@@ -83,6 +83,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             holder.playerView.setMediaPlayer(makeMediaPlayer(AndroidUtils.suitablePath(localPath)));
         } else {
             holder.playerView.setEnabled(false);
+            holder.playerView.setTime((int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000));
         }
     }
 
