@@ -49,11 +49,13 @@ import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnGroupAddAdmin;
 import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.interfaces.OnGroupAddModerator;
+import com.iGap.interfaces.OnGroupAvatarDelete;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupEdit;
@@ -72,6 +74,7 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.FileUploadStructure;
+import com.iGap.module.HelperCopyFile;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
@@ -95,6 +98,7 @@ import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
 import com.iGap.request.RequestGroupAddModerator;
 import com.iGap.request.RequestGroupAvatarAdd;
+import com.iGap.request.RequestGroupAvatarDelete;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupEdit;
 import com.iGap.request.RequestGroupGetMemberList;
@@ -491,10 +495,12 @@ public class ActivityGroupProfile extends ActivityEnhanced
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!G.imageFile.exists()) {
-                        startDialogSelectPicture(R.array.profile);
+                    Realm realm = Realm.getDefaultInstance();
+
+                    if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).count() > 0) {
+                        startDialogSelectPicture(R.array.profile_delete_group);
                     } else {
-                        startDialogSelectPicture(R.array.profile_delete);
+                        startDialogSelectPicture(R.array.profile);
                     }
                 }
             });
@@ -974,6 +980,8 @@ public class ActivityGroupProfile extends ActivityEnhanced
         }
     }
 
+    private String filePathAvatar;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -983,14 +991,16 @@ public class ActivityGroupProfile extends ActivityEnhanced
             long avatarId = SUID.id().get();
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
-                    //ImageHelper.correctRotateImage(AttachFile.imagePath);
+                    ImageHelper.correctRotateImage(AttachFile.imagePath);
                     filePath = AttachFile.imagePath;
+                    filePathAvatar = filePath;
                     Log.i("DDD", "avatarId : " + avatarId);
                     Log.i("DDD", "exists : " + new File(filePath).exists());
                     new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     filePath = AttachFile.getFilePathFromUri(data.getData());
+                    filePathAvatar = filePath;
                     new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
                     break;
             }
@@ -1001,6 +1011,9 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
     @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
+
+        HelperCopyFile.copyFile(filePathAvatar, G.DIR_IMAGES + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName());
+
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -1015,8 +1028,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
 
-                RealmRoom realmRoom =
-                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null) {
                     if (realmRoom.getGroupRoom() != null) {
                         realmRoom.getGroupRoom().setAvatar(realmAvatar);
@@ -1075,7 +1087,33 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                         R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                             }
                         } else if (text.toString().equals(getString(R.string.delete_photo))) {
-                            // TODO: 9/20/2016  delete  group image
+
+                            G.onGroupAvatarDelete = new OnGroupAvatarDelete() {
+                                @Override
+                                public void onDeleteAvatar(long roomId, final long avatarId) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Realm realm = Realm.getDefaultInstance();
+                                            realm.executeTransaction(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
+                                                    if (realmAvatar != null) {
+                                                        realmAvatar.deleteFromRealm();
+                                                    }
+                                                }
+                                            });
+                                            realm.close();
+                                            setAvatarGroup();
+                                        }
+                                    });
+                                }
+                            };
+
+                            Realm realm = Realm.getDefaultInstance();
+                            new RequestGroupAvatarDelete().groupAvatarDelete(roomId, getLastAvatar().getId());
+                            realm.close();
 
                         } else {
                             attachFile.requestOpenGalleryForImageSingleSelect();
@@ -1084,6 +1122,36 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 })
                 .show();
     }
+
+    //=============get last avatar
+//TODO [Saeed Mozaffari] [2016-12-03 10:18 AM] - in do ta method ro az inja baradram va be surate global estefade konam
+
+    public RealmList<RealmAvatar> getAvatars() {
+        RealmList<RealmAvatar> avatars = new RealmList<>();
+        Realm realm = Realm.getDefaultInstance();
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findAllSorted(RealmAvatarFields.ID, Sort.ASCENDING)) {
+            avatars.add(avatar);
+        }
+        realm.close();
+        return avatars;
+    }
+
+    public RealmAvatar getLastAvatar() {
+        RealmList<RealmAvatar> avatars = getAvatars();
+        if (avatars.isEmpty()) {
+            return null;
+        }
+        // make sure return last avatar which has attachment
+        for (int i = avatars.size() - 1; i >= 0; i--) {
+            RealmAvatar avatar = getAvatars().get(i);
+            if (avatar.getFile() != null) {
+                return avatar;
+            }
+        }
+        return null;
+    }
+
+    //=============
 
     private void addMemberToGroup() {
 
@@ -2660,8 +2728,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 File file = new File(filePath);
                 String fileName = file.getName();
                 long fileSize = file.length();
-                FileUploadStructure fileUploadStructure =
-                        new FileUploadStructure(fileName, fileSize, filePath, avatarId);
+                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
                 fileUploadStructure.openFile(filePath);
 
                 byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
@@ -2756,6 +2823,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         public int getGlobalPosition(int position) {
             return -1;
         }
+
     }
 
     private int setGroupParticipantLable() {

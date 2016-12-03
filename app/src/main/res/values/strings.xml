@@ -233,6 +233,7 @@
     <string name="array_From_Gallery">From Gallery</string>
     <string name="array_From_Camera">From Camera</string>
     <string name="array_Delete_photo">Delete photo</string>
+    <string name="array_delete_photo_group">Delete Photo</string>
     <string name="array_5_minutes">5 minutes</string>
     <string name="array_10_minutes">10 minutes</string>
     <string name="array_30_minutes">30 minutes</string>

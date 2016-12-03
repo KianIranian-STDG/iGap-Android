@@ -43,6 +43,7 @@ import com.iGap.interfaces.OnFileUploadStatusResponse;
 import com.iGap.interfaces.OnGroupAddAdmin;
 import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.interfaces.OnGroupAddModerator;
+import com.iGap.interfaces.OnGroupAvatarDelete;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupClearMessage;
 import com.iGap.interfaces.OnGroupCreate;
@@ -281,6 +282,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static OnUserSessionLogout onUserSessionLogout;
     public static UpdateListAfterKick updateListAfterKick;
     public static OnHelperSetAction onHelperSetAction;
+    public static OnGroupAvatarDelete onGroupAvatarDelete;
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
@@ -409,7 +411,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(false).build()).build());
 
         SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
