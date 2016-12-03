@@ -544,6 +544,7 @@ public class ActivityMain extends ActivityEnhanced
         // remove notifying fancy animation
         recyclerView.setItemAnimator(null);
         recyclerView.setHasFixedSize(true);
+        recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setItemViewCacheSize(100);
         mAdapter = new RoomsAdapter<>();
         mAdapter.withOnClickListener(new FastAdapter.OnClickListener<RoomItem>() {
