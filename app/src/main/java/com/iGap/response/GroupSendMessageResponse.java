@@ -1,10 +1,7 @@
 package com.iGap.response;
 
-import android.text.format.DateUtils;
-
 import com.iGap.G;
 import com.iGap.helper.HelperCheckUserInfoExist;
-import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.realm.RealmClientCondition;
@@ -12,10 +9,7 @@ import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageContact;
 import com.iGap.realm.RealmRoomMessageFields;
-import com.iGap.realm.RealmRoomMessageLocation;
-import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
 
@@ -55,7 +49,6 @@ public class GroupSendMessageResponse extends MessageHandler {
                     realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
                 }
-
 
                 // because user may have more than one device, his another device should not be
                 // recipient
@@ -126,36 +119,9 @@ public class GroupSendMessageResponse extends MessageHandler {
         realm.close();
     }
 
-    private RealmRoomMessage fillRoomMessage(RealmRoomMessage realmRoomMessage, ProtoGlobal.RoomMessage roomMessage) {
-        realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
-        realmRoomMessage.setStatus(roomMessage.getStatus().toString());
-        realmRoomMessage.setMessageType(roomMessage.getMessageType());
-        realmRoomMessage.setMessage(roomMessage.getMessage());
-
-        if (roomMessage.hasAttachment()) {
-            realmRoomMessage.setAttachment(roomMessage.getMessageId(), roomMessage.getAttachment());
-        }
-        realmRoomMessage.setUserId(roomMessage.getAuthor().getUser().getUserId());
-        if (roomMessage.hasLocation()) {
-            realmRoomMessage.setLocation(RealmRoomMessageLocation.build(roomMessage.getLocation()));
-        } else if (roomMessage.hasLog()) {
-            realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
-        } else if (roomMessage.hasContact()) {
-            realmRoomMessage.setRoomMessageContact(RealmRoomMessageContact.build(roomMessage.getContact()));
-        }
-        realmRoomMessage.setEdited(roomMessage.getEdited());
-        realmRoomMessage.setUpdateTime(roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
-        realmRoomMessage.setCreateTime(roomMessage.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
-
-        return realmRoomMessage;
-    }
-
     @Override
     public void error() {
         super.error();
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
     }
 
     @Override

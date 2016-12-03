@@ -721,7 +721,7 @@ public class ActivityChat extends ActivityEnhanced
     private void sendForwardedMessage(final StructMessageInfo messageInfo) {
         final Realm realm = Realm.getDefaultInstance();
         final long messageId = SUID.id().get();
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
@@ -730,7 +730,7 @@ public class ActivityChat extends ActivityEnhanced
                 if (roomMessage != null) {
                     long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
-                    forwardedMessage.setForwardMessage(roomMessage);
+                    forwardedMessage.setForwardMessage(roomMessage.getForwardMessage() == null ? roomMessage : roomMessage.getForwardMessage());
                     forwardedMessage.setCreateTime(TimeUtils.currentLocalTime());
                     forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                     forwardedMessage.setRoomId(mRoomId);
@@ -738,24 +738,16 @@ public class ActivityChat extends ActivityEnhanced
                     forwardedMessage.setUserId(userId);
                 }
             }
-        });
-        realm.close();
-
-        G.handler.postDelayed(new Runnable() {
+        }, new Realm.Transaction.OnSuccess() {
             @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Realm realm1 = Realm.getDefaultInstance();
-                        RealmRoomMessage forwardedMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
-                        chatSendMessageUtil.build(chatType, forwardedMessage.getRoomId(), forwardedMessage);
-                        realm1.close();
-                    }
-                });
+            public void onSuccess() {
+                RealmRoomMessage forwardedMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
+                chatSendMessageUtil.build(chatType, forwardedMessage.getRoomId(), forwardedMessage);
+
+                realm.close();
             }
-        }, 500);
+        });
     }
 
     public void initCallbacks() {

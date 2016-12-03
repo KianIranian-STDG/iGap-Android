@@ -54,15 +54,6 @@ public class RealmRoomMessage extends RealmObject {
         return message;
     }
 
-    public static long getRoomId(ProtoGlobal.RoomMessage.Author author) {
-        if (author.hasUser()) {
-            return author.getUser().getUserId();
-        } else if (author.hasRoom()) {
-            return author.getRoom().getRoomId();
-        }
-        return -1;
-    }
-
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
 
@@ -81,7 +72,7 @@ public class RealmRoomMessage extends RealmObject {
             message.setAttachment(RealmAttachment.build(input.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT));
         }
         if (input.hasForwardFrom()) {
-            message.setForwardMessage(RealmRoomMessage.putOrUpdate(input.getForwardFrom(), getRoomId(input.getForwardFrom().getAuthor())));
+            message.setForwardMessage(RealmRoomMessage.putOrUpdate(input.getForwardFrom(), roomId));
         }
         if (input.hasLocation()) {
             message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
@@ -90,7 +81,7 @@ public class RealmRoomMessage extends RealmObject {
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
         }
         if (input.hasReplyTo()) {
-            message.setReplyTo(RealmRoomMessage.putOrUpdate(input.getReplyTo(), getRoomId(input.getReplyTo().getAuthor())));
+            message.setReplyTo(RealmRoomMessage.putOrUpdate(input.getReplyTo(), roomId));
         }
         if (input.hasContact()) {
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
