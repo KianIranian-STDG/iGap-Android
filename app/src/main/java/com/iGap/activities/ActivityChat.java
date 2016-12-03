@@ -2651,36 +2651,16 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
             });
-
+            Realm realm = Realm.getDefaultInstance();
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
-                if (chatItem.forwardedFrom.getAttachment() != null) {
-                    if (chatItem.forwardedFrom.getAttachment().isFileExistsOnLocalAndIsThumbnail()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(chatItem.forwardedFrom.getAttachment().getLocalFilePath()), thumbnail);
-                    } else if (chatItem.forwardedFrom.getAttachment().isThumbnailExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(chatItem.forwardedFrom.getAttachment().getLocalThumbnailPath()), thumbnail);
-                    } else {
-                        thumbnail.setVisibility(View.GONE);
-                    }
-                } else {
-                    thumbnail.setVisibility(View.GONE);
-                }
+                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom.getAttachment());
                 replayTo.setText(chatItem.forwardedFrom.getMessage());
             } else {
-                if (chatItem.attachment != null) {
-                    if (chatItem.attachment.isFileExistsOnLocalAndIsThumbnail()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(chatItem.attachment.getLocalFilePath()), thumbnail);
-                    } else if (chatItem.attachment.isThumbnailExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(chatItem.attachment.getLocalThumbnailPath()), thumbnail);
-                    } else {
-                        thumbnail.setVisibility(View.GONE);
-                    }
-                } else {
-                    thumbnail.setVisibility(View.GONE);
-                }
+                RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, chatItem.attachment.token).findFirst();
+                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, attachment);
                 replayTo.setText(chatItem.messageText);
             }
-            Realm realm = Realm.getDefaultInstance();
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(chatItem.senderID)).findFirst();
             if (userInfo != null) {
                 replayFrom.setText(userInfo.getDisplayName());
