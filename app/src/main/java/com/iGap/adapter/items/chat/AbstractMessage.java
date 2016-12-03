@@ -278,9 +278,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (messageText != null) {
             messageText.setTextColor(Color.WHITE);
         }
-        //timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorChatMessageTime));
-        timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white)); //TODO [Saeed Mozaffari] [2016-12-01 1:03 PM] - injaro taghir dadam chon black bud rang time
-
+        if (mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.GIF) {
+            timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
+        } else {
+            timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        }
         ((CardView) holder.itemView.findViewById(R.id.contentContainer)).setCardBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_sendColor));
         // add main layout margin to prevent getting match parent completely
         // set to mainContainer not itemView because of selecting item foreground
