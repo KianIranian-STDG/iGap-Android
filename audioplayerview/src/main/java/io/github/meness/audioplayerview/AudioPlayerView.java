@@ -28,11 +28,12 @@ import java.lang.ref.WeakReference;
 import java.util.Formatter;
 import java.util.Locale;
 
+import io.github.meness.audioplayerview.listeners.IAnotherPlayOrPause;
 import io.github.meness.audioplayerview.listeners.OnAudioPlayerViewControllerClick;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 
-public class AudioPlayerView extends FrameLayout {
+public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause {
     private MediaPlayer mPlayer;
     private ViewGroup mAnchor;
     private View mRoot;
@@ -390,13 +391,13 @@ public class AudioPlayerView extends FrameLayout {
     private View.OnClickListener mActionListener = new View.OnClickListener() {
         public void onClick(View v) {
             if ("play".equalsIgnoreCase((String) mActionButton.getTag())) {
-                doPlay();
+                //doPlay();
 
                 if (mOnClickListener != null) {
                     mOnClickListener.onPlayClick(AudioPlayerView.this);
                 }
             } else if ("pause".equalsIgnoreCase((String) mActionButton.getTag())) {
-                doPause();
+                //doPause();
 
                 if (mOnClickListener != null) {
                     mOnClickListener.onPauseClick(AudioPlayerView.this);
@@ -419,11 +420,8 @@ public class AudioPlayerView extends FrameLayout {
             return;
         }
 
-        if (mPlayer.isPlaying()) {
-            mPlayer.pause();
-            mActionButton.setTag("play");
-            mHandler.sendEmptyMessage(ACTION_CHANGED);
-        }
+        mActionButton.setTag("play");
+        mHandler.sendEmptyMessage(ACTION_CHANGED);
     }
 
     private void doPlay() {
@@ -431,11 +429,8 @@ public class AudioPlayerView extends FrameLayout {
             return;
         }
 
-        if (!mPlayer.isPlaying()) {
-            mPlayer.start();
-            mActionButton.setTag("pause");
-            mHandler.sendEmptyMessage(ACTION_CHANGED);
-        }
+        mActionButton.setTag("pause");
+        mHandler.sendEmptyMessage(ACTION_CHANGED);
     }
 
     // There are two scenarios that can trigger the seekbar listener to trigger:
@@ -516,6 +511,21 @@ public class AudioPlayerView extends FrameLayout {
         info.setClassName(AudioPlayerView.class.getName());
     }
 
+    @Override
+    public void onAnotherPlay(MediaPlayer player) {
+        if (getPlayer() == player) {
+            doPlay();
+            mHandler.sendEmptyMessage(SHOW_PROGRESS);
+        }
+    }
+
+    @Override
+    public void onAnotherPause(MediaPlayer player) {
+        if (getPlayer() == player) {
+            doPause();
+        }
+    }
+
     private static class MessageHandler extends Handler {
         private final WeakReference<AudioPlayerView> mView;
 
@@ -541,10 +551,6 @@ public class AudioPlayerView extends FrameLayout {
                     break;
                 case ACTION_CHANGED:
                     view.updateDrawables();
-                    if (!view.mDragging && view.mShowing) {
-                        msg = obtainMessage(ACTION_CHANGED);
-                        sendMessageDelayed(msg, 1000);
-                    }
                     break;
             }
         }

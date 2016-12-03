@@ -33,6 +33,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.github.meness.audioplayerview.listeners.IAnotherPlayOrPause;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -42,6 +43,10 @@ import io.realm.RealmResults;
  */
 public class MusicPlayer {
 
+    public static void setListener(IAnotherPlayOrPause listener) {
+        MusicPlayer.listener = listener;
+    }
+
     public static final int notificationId = 19;
     public static String repeatMode = RepeatMode.noRepeat.toString();
     public static boolean isShuffelOn = false;
@@ -49,6 +54,7 @@ public class MusicPlayer {
     public static TextView txt_music_time_counter;
     public static String musicTime = "";
     public static String roomName;
+    public static IAnotherPlayOrPause listener;
     public static String musicPath;
     public static String musicName;
     public static String musicInfo = "";
@@ -74,6 +80,13 @@ public class MusicPlayer {
     private static double amoungToupdate;
     private static String strTimer = "";
     private static Handler handler;
+
+    public static void setMp(MediaPlayer mp) {
+        if (mp != null && mp.isPlaying()) {
+            mp.pause();
+        }
+        MusicPlayer.mp = mp;
+    }
 
     public MusicPlayer(LinearLayout layoutTripMusic) {
 
@@ -177,8 +190,14 @@ public class MusicPlayer {
         if (mp != null) {
             if (mp.isPlaying()) {
                 pauseSound();
+                if (listener != null) {
+                    listener.onAnotherPause(mp);
+                }
             } else {
                 playSound();
+                if (listener != null) {
+                    listener.onAnotherPlay(mp);
+                }
             }
         } else {
             closeLayoutMediaPlayer();
@@ -320,6 +339,124 @@ public class MusicPlayer {
                 mp.setDataSource(musicPath);
                 mp.prepare();
                 mp.start();
+
+                if (listener != null) {
+                    listener.onAnotherPlay(mp);
+                }
+
+                btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
+
+                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
+                if (!isShowMediaPlayer) {
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                notificationManager.notify(notificationId, notification);
+                            } catch (RuntimeException e) {
+                            }
+                        }
+                    });
+                } else {
+                    onComplete.complete(true, "pause", "");
+                }
+
+                musicTime = milliSecondsToTimer((long) mp.getDuration());
+                txt_music_time.setText(musicTime);
+
+                musicName = musicPath.substring(musicPath.lastIndexOf("/") + 1);
+                txt_music_name.setText(musicName);
+
+                updateNotification();
+            } catch (Exception e) {
+            }
+        } else {
+
+            mp = new MediaPlayer();
+            try {
+                mp.setDataSource(musicPath);
+                mp.prepare();
+                mp.start();
+
+                musicTime = milliSecondsToTimer((long) mp.getDuration());
+                txt_music_time.setText(musicTime);
+
+                btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
+                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
+                if (!isShowMediaPlayer) {
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                notificationManager.notify(notificationId, notification);
+                            } catch (RuntimeException e) {
+                            }
+                        }
+                    });
+                } else {
+                    onComplete.complete(true, "pause", "");
+                }
+
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+
+                        if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
+                            stopSound();
+                        } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
+
+                            if (isShuffelOn) {
+                                nextRandomMusic();
+                            } else {
+
+                                if (selectedMedia >= mediaList.size()) {
+                                    selectedMedia = 0;
+                                }
+                                nextMusic();
+                            }
+                        } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
+                            stopSound();
+                            playAndPause();
+                        }
+                    }
+                });
+
+                musicName = musicPath.substring(musicPath.lastIndexOf("/") + 1);
+                txt_music_name.setText(musicName);
+                updateNotification();
+            } catch (Exception e) {
+            }
+        }
+
+        updateProgress();
+
+        if (updateList) fillMediaList();
+    }
+
+    public static void startPlayerFromPlayer(String musicPath, String roomName, long roomId, boolean updateList) {
+
+        MusicPlayer.musicPath = musicPath;
+        MusicPlayer.roomName = roomName;
+        mediaThumpnail = null;
+        MusicPlayer.roomId = roomId;
+
+        Log.e("ddd", "roomId   " + roomId);
+
+        if (layoutTripMusic.getVisibility() == View.GONE) {
+            layoutTripMusic.setVisibility(View.VISIBLE);
+        }
+
+        if (mp != null) {
+
+            try {
+                mp.start();
+
+                if (listener != null) {
+                    listener.onAnotherPlay(mp);
+                }
 
                 btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
 
@@ -481,13 +618,13 @@ public class MusicPlayer {
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
         notification = new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music")
-                        .setSmallIcon(R.mipmap.j_audio)
-                        .setContentTitle(musicName)
-                        //  .setContentText(place)
-                        .setContent(remoteViews)
-                        .setContentIntent(pi)
-                        .setAutoCancel(false)
-                        .build();
+                .setSmallIcon(R.mipmap.j_audio)
+                .setContentTitle(musicName)
+                //  .setContentText(place)
+                .setContent(remoteViews)
+                .setContentIntent(pi)
+                .setAutoCancel(false)
+                .build();
 
         handler.post(new Runnable() {
             @Override

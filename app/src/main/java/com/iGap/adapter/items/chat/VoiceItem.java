@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.iGap.R;
+import com.iGap.activities.ActivityChat;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
+import com.iGap.module.MusicPlayer;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -52,7 +54,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     @Override
     public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
-        //ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.thumbnail);
     }
 
     @Override
@@ -64,12 +65,18 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
                     @Override
                     public void onPlayClick(AudioPlayerView playerView) {
-                        messageClickListener.onOpenClick(null, mMessage, holder.getAdapterPosition());
+                        // to play/pause itself
+                        MusicPlayer.setListener(playerView);
+                        MusicPlayer.setMp(playerView.getPlayer());
+                        MusicPlayer.startPlayerFromPlayer(mMessage.forwardedFrom.getAttachment().getLocalFilePath(), ActivityChat.title, ActivityChat.mRoomId, true);
                     }
 
                     @Override
                     public void onPauseClick(AudioPlayerView playerView) {
-
+                        // to play/pause itself
+                        MusicPlayer.setListener(playerView);
+                        MusicPlayer.setMp(playerView.getPlayer());
+                        MusicPlayer.playAndPause();
                     }
 
                 });
@@ -83,12 +90,18 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
                     @Override
                     public void onPlayClick(AudioPlayerView playerView) {
-                        messageClickListener.onOpenClick(null, mMessage, holder.getAdapterPosition());
+                        // to play/pause itself
+                        MusicPlayer.setListener(playerView);
+                        MusicPlayer.setMp(playerView.getPlayer());
+                        MusicPlayer.startPlayerFromPlayer(mMessage.attachment.getLocalFilePath(), ActivityChat.title, ActivityChat.mRoomId, true);
                     }
 
                     @Override
                     public void onPauseClick(AudioPlayerView playerView) {
-
+                        // to play/pause itself
+                        MusicPlayer.setListener(playerView);
+                        MusicPlayer.setMp(playerView.getPlayer());
+                        MusicPlayer.playAndPause();
                     }
 
                 });

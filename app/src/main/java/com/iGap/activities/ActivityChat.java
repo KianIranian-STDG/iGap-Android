@@ -286,12 +286,12 @@ public class ActivityChat extends ActivityEnhanced
     private MessagesAdapter<AbstractMessage> mAdapter;
     private static ProtoGlobal.Room.Type chatType;
     private long lastSeen;
-    private static long mRoomId = 0;
+    public static long mRoomId = 0;
     private Button btnUp;
     private Button btnDown;
     private TextView txtChannelMute;
     //popular (chat , group , channel)
-    private String title;
+    public static String title;
     private String initialize;
     private String color;
     private boolean isMute = false;
@@ -724,6 +724,7 @@ public class ActivityChat extends ActivityEnhanced
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
                 if (roomMessage != null) {
@@ -4123,7 +4124,7 @@ public class ActivityChat extends ActivityEnhanced
         Realm realm = Realm.getDefaultInstance();
         if (message.messageType == ProtoGlobal.RoomMessageType.VOICE || message.messageType == ProtoGlobal.RoomMessageType.AUDIO ||
                 message.messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
-            MusicPlayer.startPlayer(message.getAttachment().getLocalFilePath(), title, mRoomId, true);
+            //   MusicPlayer.startPlayer(message.getAttachment().getLocalFilePath(), title, mRoomId, true);
         } else if (message.messageType == ProtoGlobal.RoomMessageType.IMAGE || message.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
             showImage(message);
         } else if (message.messageType == ProtoGlobal.RoomMessageType.FILE || message.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT ||

@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activities.ActivityChat;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.MusicPlayer;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -55,7 +57,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     @Override
     public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
-        //ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.thumbnail);
     }
 
     private MediaPlayer makeMediaPlayer(String filePath) {
@@ -81,6 +82,9 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             holder.thumbnail.setImageResource(R.drawable.green_music_note);
         }
 
+        // to play/pause itself
+        MusicPlayer.setListener(holder.playerView);
+
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
                 if (mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
@@ -94,7 +98,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
                     @Override
                     public void onPlayClick(AudioPlayerView playerView) {
-                        messageClickListener.onOpenClick(null, mMessage, holder.getAdapterPosition());
+                        MusicPlayer.setMp(playerView.getPlayer());
+                        MusicPlayer.startPlayer(mMessage.forwardedFrom.getAttachment().getLocalFilePath(), ActivityChat.title, ActivityChat.mRoomId, true);
                     }
 
                     @Override
@@ -129,12 +134,18 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 holder.playerView.setClickListener(new OnAudioPlayerViewControllerClick() {
                     @Override
                     public void onPlayClick(AudioPlayerView playerView) {
-                        messageClickListener.onOpenClick(null, mMessage, holder.getAdapterPosition());
+                        // to play/pause itself
+                        MusicPlayer.setListener(playerView);
+                        MusicPlayer.setMp(playerView.getPlayer());
+                        MusicPlayer.startPlayerFromPlayer(mMessage.forwardedFrom.getAttachment().getLocalFilePath(), ActivityChat.title, ActivityChat.mRoomId, true);
                     }
 
                     @Override
                     public void onPauseClick(AudioPlayerView playerView) {
-
+                        // to play/pause itself
+                        MusicPlayer.setListener(playerView);
+                        MusicPlayer.setMp(playerView.getPlayer());
+                        MusicPlayer.playAndPause();
                     }
 
                 });

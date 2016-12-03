@@ -1,7 +1,5 @@
 package com.iGap.realm;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
@@ -102,9 +100,6 @@ public class RealmRoom extends RealmObject {
                         realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
                 break;
             case GROUP:
-                Log.i("TTTX", "getTitle : " + room.getTitle());
-                Log.i("TTTX", "getRole : " + room.getGroupRoomExtra().getRole());
-                Log.i("TTTX", "getReadOnly : " + room.getReadOnly());
                 realmRoom.setType(RoomType.GROUP);
                 realmRoom.setGroupRoom(
                         RealmGroupRoom.convert(room.getGroupRoomExtra(), realmRoom.getGroupRoom(), realm));
@@ -210,8 +205,8 @@ public class RealmRoom extends RealmObject {
         return unreadCount;
     }
 
-    public void setUnreadCount(int unread_count) {
-        this.unreadCount = unread_count;
+    public void setUnreadCount(int unreadCount) {
+        this.unreadCount = unreadCount;
     }
 
     public boolean getReadOnly() {
@@ -234,24 +229,24 @@ public class RealmRoom extends RealmObject {
         return chatRoom;
     }
 
-    public void setChatRoom(RealmChatRoom chat_room) {
-        this.chatRoom = chat_room;
+    public void setChatRoom(RealmChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
     }
 
     public RealmGroupRoom getGroupRoom() {
         return groupRoom;
     }
 
-    public void setGroupRoom(RealmGroupRoom group_room) {
-        this.groupRoom = group_room;
+    public void setGroupRoom(RealmGroupRoom groupRoom) {
+        this.groupRoom = groupRoom;
     }
 
     public RealmChannelRoom getChannelRoom() {
         return channelRoom;
     }
 
-    public void setChannelRoom(RealmChannelRoom channel_room) {
-        this.channelRoom = channel_room;
+    public void setChannelRoom(RealmChannelRoom channelRoom) {
+        this.channelRoom = channelRoom;
     }
 
     public RealmRoomDraft getDraft() {
