@@ -58,6 +58,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
@@ -1484,12 +1485,15 @@ public class ActivityChat extends ActivityEnhanced
                     intent.putExtra("enterFrom", CHAT.toString());
                     startActivity(intent);
                 } else if (chatType == GROUP) {
-
                     if (!isChatReadOnly) {
                         Intent intent = new Intent(G.context, ActivityGroupProfile.class);
                         intent.putExtra("RoomId", mRoomId);
                         startActivity(intent);
                     }
+                } else if (chatType == CHANNEL) {
+                    Intent intent = new Intent(G.context, ActivityProfileChannel.class);
+                    intent.putExtra(Config.PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
+                    startActivity(intent);
                 }
             }
         });

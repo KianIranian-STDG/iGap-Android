@@ -3,6 +3,7 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoChatGetRoom;
 import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoGlobal;
 
 public class ChatGetRoomResponse extends MessageHandler {
 
@@ -48,6 +49,10 @@ public class ChatGetRoomResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
 
         G.onChatGetRoom.onChatGetRoomError(majorCode, minorCode);
+    }
+
+    private void setRoomToRealm(ProtoGlobal.Room roomToRealm) {
+
     }
 }
 

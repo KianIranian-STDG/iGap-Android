@@ -434,8 +434,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
         }
 
 
-
-
         LinearLayout llSharedMedia = (LinearLayout) findViewById(R.id.agp_ll_sheared_media);
         llSharedMedia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1090,26 +1088,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                         txtMemberNumber.setText((items.size() + 1) + "");
                     }
                 });
-                        /*runOnUiThread(new Runnable() {
-                                          @Override
-                                          public void run() {
-
-                                              List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-
-                                              for (int i = 0; i < items.size(); i++) {
-                                                  if (items.get(i).mContact.peerId == UserId) {
-                                                      items.get(i).mContact.role = role.toString();
-                                                      if (i < itemAdapter.getAdapterItemCount()) {
-                                                          IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
-                                                          itemAdapter.set(i, item);
-                                                      }
-                                                  }
-                                              }
-                                          }
-                                      }
-                        );*/
-
-                Log.i("TTT", "1");
                 runOnUiThread(new Runnable() { //TODO [Saeed Mozaffari] [2016-11-12 5:15 PM] - get member list from group and add new member . like get member list response
                     @Override
                     public void run() {
@@ -1320,11 +1298,9 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
     private class CreatePopUpMessage {
 
-
         private void show(View view, final StructContactInfo info) {
             PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, view, Gravity.TOP);
             popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
-
 
             if (role == GroupChatRole.OWNER) {
 
@@ -1365,7 +1341,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
                 return;
             }
-
 
             // Setup menu item selection
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -2330,42 +2305,41 @@ public class ActivityGroupProfile extends ActivityEnhanced
                             public void onGroupKickMember(final long roomId, final long memberId) {
 
                                 runOnUiThread(new Runnable() {
-                                                  @Override
-                                                  public void run() {
+                                    @Override
+                                    public void run() {
 
-                                                      final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                                                      runOnUiThread(new Runnable() {
-                                                          @Override
-                                                          public void run() {
-                                                              txtMemberNumber.setText((items.size() - 1) + "");
-                                                          }
-                                                      });
-                                                      for (int i = 0; i < items.size(); i++) {
-                                                          if (items.get(i).mContact.peerId == memberId) {
-                                                              itemAdapter.remove(i);
-                                                              Realm realm = Realm.getDefaultInstance();
-                                                              realm.executeTransaction(new Realm.Transaction() {
-                                                                  @Override
-                                                                  public void execute(Realm realm) {
-                                                                      RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                                                      for (RealmMember realmMember : realmRoom.getGroupRoom().getMembers()) {
-                                                                          if (realmMember.getPeerId() == memberId) {
-                                                                              realmMember.deleteFromRealm();
-                                                                              participantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
-                                                                              participantsCountLabel = (Integer.parseInt(participantsCountLabel) - 1) + "";
-                                                                              realmRoom.getGroupRoom().setParticipantsCountLabel(participantsCountLabel);
-                                                                              break;
-                                                                          }
-                                                                      }
+                                        final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                txtMemberNumber.setText((items.size() - 1) + "");
+                                            }
+                                        });
+                                        for (int i = 0; i < items.size(); i++) {
+                                            if (items.get(i).mContact.peerId == memberId) {
+                                                itemAdapter.remove(i);
+                                                Realm realm = Realm.getDefaultInstance();
+                                                realm.executeTransaction(new Realm.Transaction() {
+                                                    @Override
+                                                    public void execute(Realm realm) {
+                                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                                        for (RealmMember realmMember : realmRoom.getGroupRoom().getMembers()) {
+                                                            if (realmMember.getPeerId() == memberId) {
+                                                                realmMember.deleteFromRealm();
+                                                                participantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
+                                                                participantsCountLabel = (Integer.parseInt(participantsCountLabel) - 1) + "";
+                                                                realmRoom.getGroupRoom().setParticipantsCountLabel(participantsCountLabel);
+                                                                break;
+                                                            }
+                                                        }
 
-                                                                  }
-                                                              });
-                                                              realm.close();
-                                                          }
-                                                      }
-                                                  }
-                                              }
-                                );
+                                                    }
+                                                });
+                                                realm.close();
+                                            }
+                                        }
+                                    }
+                                });
 
 //                                runOnUiThread(new Runnable() {
 //                                    @Override

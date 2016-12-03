@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:id="@+id/coordinator">
 
 
     <android.support.v4.widget.NestedScrollView
@@ -39,7 +40,7 @@
                     android:text="@string/info"
                     android:textColor="@color/green"
                     android:textSize="@dimen/sp18"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -48,7 +49,7 @@
                     android:text="@string/description"
                     android:textColor="@color/st_title_s"
                     android:textSize="@dimen/sp15"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/pch_txt_description"
@@ -60,20 +61,20 @@
                     android:text="@string/test"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp14"
-                    android:theme="@style/Setting_editText" />
+                    android:theme="@style/Setting_editText"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp20"
-                    android:paddingLeft="@dimen/dp4"
-                    android:paddingStart="@dimen/dp4"
-                    android:paddingRight="@dimen/dp4"
                     android:paddingEnd="@dimen/dp4"
+                    android:paddingLeft="@dimen/dp4"
+                    android:paddingRight="@dimen/dp4"
+                    android:paddingStart="@dimen/dp4"
                     android:text="@string/channel_link"
                     android:textColor="@color/st_title_s"
                     android:textSize="@dimen/sp15"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/st_txt_channelLink"
@@ -81,14 +82,14 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:maxLength="25"
-                    android:paddingLeft="@dimen/dp4"
-                    android:paddingStart="@dimen/dp4"
-                    android:paddingRight="@dimen/dp4"
                     android:paddingEnd="@dimen/dp4"
+                    android:paddingLeft="@dimen/dp4"
+                    android:paddingRight="@dimen/dp4"
+                    android:paddingStart="@dimen/dp4"
                     android:text="@string/naturemagazine"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp14"
-                    android:theme="@style/Setting_editText" />
+                    android:theme="@style/Setting_editText"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -99,14 +100,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp8"
-                        android:paddingLeft="@dimen/dp4"
-                        android:paddingStart="@dimen/dp4"
-                        android:paddingRight="@dimen/dp4"
                         android:paddingEnd="@dimen/dp4"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
                         android:text="@string/chi_shared_Media"
                         android:textColor="@color/st_title_s"
                         android:textSize="@dimen/sp15"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/st_txt_phoneNumber"
@@ -115,18 +116,79 @@
                         android:background="@null"
                         android:gravity="center_vertical"
                         android:maxLength="11"
-                        android:text="12"
-                        android:paddingLeft="@dimen/dp4"
-                        android:paddingStart="@dimen/dp4"
-                        android:paddingRight="@dimen/dp4"
                         android:paddingEnd="@dimen/dp4"
+                        android:paddingLeft="@dimen/dp4"
+                        android:paddingRight="@dimen/dp4"
+                        android:paddingStart="@dimen/dp4"
+                        android:text="12"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"
-                        android:theme="@style/Setting_editText" />
+                        android:theme="@style/Setting_editText"/>
 
                 </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray_f2"
+                android:gravity="left"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp12"
+                    android:text="@string/members"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp18"
+                    android:textStyle="bold"/>
+
+                <!-- member list start -->
+                <LinearLayout
+                    android:id="@+id/agp_layout_add_member"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dp8"
+                    android:paddingLeft="@dimen/dp8">
+
+                    <com.iGap.module.CircleImageView
+                        android:layout_width="@dimen/dp48"
+                        android:layout_height="@dimen/dp48"
+                        android:layout_marginLeft="@dimen/dp4"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/add_chat_background3"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/dp8"
+                        android:text="@string/add_new_member"
+                        android:textSize="@dimen/sp16"/>
+
+
+                </LinearLayout>
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/agp_recycler_view_group_member"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:visibility="visible"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+            </LinearLayout>
+            <!-- member list end -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -148,97 +210,86 @@
                     android:text="@string/st_title_general"
                     android:textColor="@color/green"
                     android:textSize="@dimen/sp18"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/pch_txt_notifyAndSound"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
-                    android:paddingRight="@dimen/sp16"
-                    android:paddingLeft="@dimen/sp16"
                     android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/sp16"
+                    android:paddingRight="@dimen/sp16"
                     android:text="@string/st_title_notification_sounds"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
 
                 <TextView
                     android:id="@+id/pch_txt_deleteCache"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
-                    android:paddingRight="@dimen/sp16"
-                    android:paddingLeft="@dimen/sp16"
                     android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/sp16"
+                    android:paddingRight="@dimen/sp16"
                     android:text="@string/delete_from_cache"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"/>
 
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <TextView
                     android:id="@+id/pch_txt_leaveChannel"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
-                    android:paddingRight="@dimen/sp16"
-                    android:paddingLeft="@dimen/sp16"
                     android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/sp16"
+                    android:paddingRight="@dimen/sp16"
                     android:text="@string/leave_channel"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"/>
 
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"/>
 
                 <TextView
                     android:id="@+id/pch_txt_Report"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
-                    android:paddingRight="@dimen/sp16"
-                    android:paddingLeft="@dimen/sp16"
                     android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/sp16"
+                    android:paddingRight="@dimen/sp16"
                     android:text="@string/report"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"/>
 
             </LinearLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/pch_fab_addToChannel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp20"
-        android:clickable="true"
-        android:src="@mipmap/pu_camera"
-        android:theme="@style/FabButton"
-        android:tint="@color/gray"
-        app:fabSize="mini"
-        app:layout_anchor="@+id/pch_appbar"
-        app:layout_anchorGravity="bottom|right|end" />
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/pch_appbar"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:background="@color/toolbar_background">
+        android:background="@color/toolbar_background"
+        android:layout_height="140dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -273,7 +324,8 @@
                     android:text="Amir Molareza"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp16"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:id="@+id/txt_channel_name"/>
 
             </LinearLayout>
 
@@ -284,69 +336,83 @@
                 app:contentInsetStart="0dp"
                 app:layout_collapseMode="pin">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/pch_txt_titleToolbar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="@string/st_titleToolbar"
-                        android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp22"
-                        android:textStyle="bold"
-                        android:visibility="gone"/>
-
-                    <com.iGap.libs.rippleeffect.RippleView
-                        android:id="@+id/pch_ripple_back"
-                        rv_centered="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:rv_alpha="200"
-                        android:layout_alignParentLeft="true"
-                        app:rv_centered="true"
-                        app:rv_rippleDuration="150"
-                        app:rv_ripplePadding="5dp">
-
-                        <com.iGap.module.MaterialDesignTextView
-                            android:id="@+id/pch_txt_back"
-                            fontPath="fonts/Flaticon.ttf"
-                            android:layout_width="@dimen/dp52"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@string/md_back_arrow"
-                            android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp18"/>
-                    </com.iGap.libs.rippleeffect.RippleView>
-
-                    <com.iGap.libs.rippleeffect.RippleView
-                        android:id="@+id/pch_ripple_menuPopup"
-                        rv_centered="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        app:rv_alpha="200"
-                        app:rv_centered="true"
-                        app:rv_rippleDuration="150"
-                        app:rv_ripplePadding="5dp">
-
-                        <com.iGap.module.MaterialDesignTextView
-                            android:id="@+id/pch_img_menuPopup"
-                            fontPath="fonts/Flaticon.ttf"
-                            android:layout_width="@dimen/dp60"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@string/md_show_more_button"
-                            android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp18"/>
-                    </com.iGap.libs.rippleeffect.RippleView>
-                </RelativeLayout>
             </android.support.v7.widget.Toolbar>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/pch_txt_titleToolbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/st_titleToolbar"
+                    android:textColor="@color/whit_background"
+                    android:textSize="@dimen/sp22"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
+
+                <com.iGap.libs.rippleeffect.RippleView
+                    android:id="@+id/pch_ripple_back"
+                    rv_centered="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    app:rv_alpha="200"
+                    app:rv_centered="true"
+                    app:rv_rippleDuration="150"
+                    app:rv_ripplePadding="5dp">
+
+                    <com.iGap.module.MaterialDesignTextView
+                        android:id="@+id/pch_txt_back"
+                        fontPath="fonts/Flaticon.ttf"
+                        android:layout_width="@dimen/dp52"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/md_back_arrow"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp18"/>
+                </com.iGap.libs.rippleeffect.RippleView>
+
+                <com.iGap.libs.rippleeffect.RippleView
+                    android:id="@+id/pch_ripple_menuPopup"
+                    rv_centered="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    app:rv_alpha="200"
+                    app:rv_centered="true"
+                    app:rv_rippleDuration="150"
+                    app:rv_ripplePadding="5dp">
+
+                    <com.iGap.module.MaterialDesignTextView
+                        android:id="@+id/pch_img_menuPopup"
+                        fontPath="fonts/Flaticon.ttf"
+                        android:layout_width="@dimen/dp60"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/md_show_more_button"
+                        android:textColor="@color/whit_background"
+                        android:textSize="@dimen/sp18"/>
+                </com.iGap.libs.rippleeffect.RippleView>
+            </RelativeLayout>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/pch_fab_addToChannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp20"
+        android:clickable="true"
+        android:src="@mipmap/pu_camera"
+        android:theme="@style/FabButton"
+        android:tint="@color/gray"
+        app:fabSize="mini"
+        app:layout_anchor="@+id/pch_appbar"
+        app:layout_anchorGravity="bottom|right|end"/>
 
 </android.support.design.widget.CoordinatorLayout>
 

@@ -23,4 +23,8 @@ public class Config {
     public enum ConnectionState {
         WAITING_FOR_NETWORK, CONNECTING, UPDATING, IGAP
     }
+
+    public enum PutExtraKeys {
+        CHANNEL_PROFILE_ROOM_ID_LONG
+    }
 }

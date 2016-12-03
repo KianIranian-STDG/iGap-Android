@@ -64,6 +64,7 @@ import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChannelCreate;
 import com.iGap.request.RequestChatConvertToGroup;
+import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestGroupCreate;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -75,7 +76,7 @@ import io.realm.Realm;
 
 import static com.iGap.R.id.fragmentContainer;
 
-public class FragmentNewGroup extends android.support.v4.app.Fragment implements OnFileUploadForActivities, OnGroupAvatarResponse {
+public class FragmentNewGroup extends Fragment implements OnFileUploadForActivities, OnGroupAvatarResponse {
 
     private MaterialDesignTextView txtBack;
     private CircleImageView imgCircleImageView;
@@ -316,15 +317,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                                                    File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                                                    if (prefix.equals("NewChanel")) {
                                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-////                        startActivity(new Intent(G.context, ActivityNewChanelFinish.class));
-//                        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
-//                        getActivity().getSupportFragmentManager()
-//                                .beginTransaction()
-//                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-//                                .addToBackStack(null)
-//                                .replace(fragmentContainer, fragmentCreateChannel)
-//                                .commitAllowingStateLoss();
                                                        crateChannel();
 
                                                    } else if (prefix.equals("ConvertToGroup")) {
@@ -587,6 +579,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 //                            getActivity().getSupportFragmentManager().popBackStack();
                             }
                         });
+                    }
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }

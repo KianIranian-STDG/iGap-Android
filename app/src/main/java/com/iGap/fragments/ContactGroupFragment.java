@@ -89,16 +89,16 @@ public class ContactGroupFragment extends Fragment {
             roomId = bundle.getLong("RoomId");
             if (bundle.getString("LIMIT") != null) participantsLimit = bundle.getString("LIMIT");
             typeCreat = bundle.getString("TYPE");
-            Log.i("NNNNNNM", "onViewCreated: " + typeCreat);
-        }
-
-        if (typeCreat.equals("CHANNEL")) {
-            txtNumberOfMember.setVisibility(View.GONE);
         }
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
         txtNumberOfMember.setText("0" + "/" + participantsLimit + " " + getString(R.string.member));
+
+        if (typeCreat.equals("CHANNEL")) {
+            txtNumberOfMember.setVisibility(View.GONE);
+        }
+
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
 
         MaterialDesignTextView btnBack =

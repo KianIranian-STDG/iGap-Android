@@ -22,8 +22,6 @@ public class ChannelCreateResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoChannelCreate.ChannelCreateResponse.Builder builder = (ProtoChannelCreate.ChannelCreateResponse.Builder) message;
-        builder.getRoomId();
-        builder.getInviteLink();
         G.onChannelCreate.onChannelCreate(builder.getRoomId(), builder.getInviteLink());
 
     }

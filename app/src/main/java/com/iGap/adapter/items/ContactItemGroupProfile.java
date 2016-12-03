@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityGroupProfile;
+import com.iGap.activities.ActivityProfileChannel;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
@@ -96,8 +97,14 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
                 holder.btnMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (ActivityGroupProfile.onMenuClick != null)
+                        if (ActivityGroupProfile.onMenuClick != null) {
                             ActivityGroupProfile.onMenuClick.clicked(v, mContact);
+                        }
+
+                        if (ActivityProfileChannel.onMenuClick != null) {
+                            ActivityProfileChannel.onMenuClick.clicked(v, mContact);
+                        }
+
                     }
                 });
 
