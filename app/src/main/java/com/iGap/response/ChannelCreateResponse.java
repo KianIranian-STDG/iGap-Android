@@ -23,13 +23,11 @@ public class ChannelCreateResponse extends MessageHandler {
         super.handler();
         ProtoChannelCreate.ChannelCreateResponse.Builder builder = (ProtoChannelCreate.ChannelCreateResponse.Builder) message;
         G.onChannelCreate.onChannelCreate(builder.getRoomId(), builder.getInviteLink());
-
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-
         G.onChannelCreate.onTimeOut();
     }
 

@@ -16,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,8 +171,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         G.uploaderUtil.setActivityCallbacks(this);
         G.onGroupAvatarResponse = this;
 
-        Log.i("ZZZZZZCCC", "initComponent: " + groomId);
-
         prgWaiting = (ProgressBar) view.findViewById(R.id.ng_prgWaiting);
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
@@ -304,52 +301,50 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
         txtNextStep = (TextView) view.findViewById(R.id.ng_txt_nextStep);
         txtNextStep.setOnClickListener(new View.OnClickListener() {
-                                           @Override
-                                           public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
-                                               if (edtGroupName.getText().toString().length() > 0) {
-                                                   prgWaiting.setVisibility(View.VISIBLE);
-                                                   getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                   InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                                                   imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                if (edtGroupName.getText().toString().length() > 0) {
+                    prgWaiting.setVisibility(View.VISIBLE);
+                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-                                                   String newName = edtGroupName.getText().toString().replace(" ", "_");
-                                                   File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
-                                                   if (prefix.equals("NewChanel")) {
-                                                       getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                       crateChannel();
+                    String newName = edtGroupName.getText().toString().replace(" ", "_");
+                    File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
+                    if (prefix.equals("NewChanel")) {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        crateChannel();
+                    } else if (prefix.equals("ConvertToGroup")) {
+                        chatToGroup();
+                    } else {
+                        createGroup();
+                    }
+                } else {
+                    if (prefix.equals("NewChanel")) {
+                        Toast.makeText(G.context, R.string.please_enter_channel_name, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(G.context, R.string.please_enter_group_name, Toast.LENGTH_SHORT).show();
+                    }
 
-                                                   } else if (prefix.equals("ConvertToGroup")) {
-                                                       chatToGroup();
-                                                   } else {
-                                                       createGroup();
-                                                   }
-                                               } else {
-                                                   Toast.makeText(G.context, R.string.please_enter_group_name, Toast.LENGTH_SHORT).show();
-                                               }
-                                           }
-                                       }
-
-        );
+                }
+            }
+        });
         //=======================button cancel
         txtCancel = (TextView) view.findViewById(R.id.ng_txt_cancel);
-        txtCancel.setOnClickListener(new View.OnClickListener()
-
-                                     {
-                                         @Override
-                                         public void onClick(View view) {
-                                             InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                                             if (G.IMAGE_NEW_GROUP.exists()) {
-                                                 G.IMAGE_NEW_GROUP.delete();
-                                             } else {
-                                                 G.IMAGE_NEW_CHANEL.delete();
-                                             }
-                                             getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                                         }
-                                     }
-
-        );
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                if (G.IMAGE_NEW_GROUP.exists()) {
+                    G.IMAGE_NEW_GROUP.delete();
+                } else {
+                    G.IMAGE_NEW_CHANEL.delete();
+                }
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+            }
+        });
     }
 
     private void crateChannel() {
@@ -357,7 +352,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         G.onChannelCreate = new OnChannelCreate() {
             @Override
             public void onChannelCreate(final long roomId, String inviteLink) {
-
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -394,7 +388,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         };
 
         new RequestChannelCreate().channelCreate(edtGroupName.getText().toString(), edtDescription.getText().toString());
-
     }
 
     private void chatToGroup() {
@@ -546,28 +539,29 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         new RequestGroupCreate().groupCreate(edtGroupName.getText().toString(), edtDescription.getText().toString());
     }
 
-    private void getRoom(final long roomId, final ProtoGlobal.Room.Type typeCreat) {
+    private void getRoom(final long roomId, final ProtoGlobal.Room.Type typeCreate) {
 
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
             @Override
-            public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
-
-                final String limit = room.getGroupRoomExtra().getParticipantsCountLimitLabel();
-
+            public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
                 try {
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Log.i("EEE", "runOnUiThread");
+
                                 prgWaiting.setVisibility(View.GONE);
                                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                 Fragment fragment = ContactGroupFragment.newInstance();
                                 Bundle bundle = new Bundle();
                                 bundle.putLong("RoomId", roomId);
-                                bundle.putString("LIMIT", limit);
-                                bundle.putString("TYPE", typeCreat.toString());
+
+                                if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                    bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
+                                }
+
+                                bundle.putString("TYPE", typeCreate.toString());
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);
                                 getActivity().getSupportFragmentManager()
@@ -578,14 +572,12 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                                         .commitAllowingStateLoss();
                                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                                 ActivityMain.mLeftDrawerLayout.closeDrawer();
-//                            getActivity().getSupportFragmentManager().popBackStack();
                             }
                         });
                     }
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override

@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +26,10 @@ import com.iGap.interfaces.OnChannelAddMember;
 import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
-import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
@@ -64,7 +63,7 @@ public class ContactGroupFragment extends Fragment {
     private int countAddMemberResponse = 0;
     private int countAddMemberRequest = 0;
     private static ProtoGlobal.Room.Type type;
-    private String typeCreat;
+    private String typeCreate;
 
     private int sizeTextEditText = 0;
     private List<StructContactInfo> contacts;
@@ -75,8 +74,7 @@ public class ContactGroupFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contact_group, container, false);
     }
 
@@ -87,23 +85,20 @@ public class ContactGroupFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             roomId = bundle.getLong("RoomId");
+            typeCreate = bundle.getString("TYPE");
             if (bundle.getString("LIMIT") != null) participantsLimit = bundle.getString("LIMIT");
-            typeCreat = bundle.getString("TYPE");
-            Log.i("NNNNNNM", "onViewCreated: " + typeCreat);
         }
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
         txtNumberOfMember.setText("0" + "/" + participantsLimit + " " + getString(R.string.member));
 
-        if (typeCreat.equals("CHANNEL")) {
+        if (typeCreate.equals("CHANNEL")) {
             txtNumberOfMember.setVisibility(View.GONE);
         }
 
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
 
-        MaterialDesignTextView btnBack =
-                (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -112,16 +107,12 @@ public class ContactGroupFragment extends Fragment {
             }
         });
 
-        MaterialDesignTextView btnDone =
-                (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_done);
         RippleView rippleDone = (RippleView) view.findViewById(R.id.fcg_ripple_done);
         rippleDone.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
 
-//                addChannelGroup
-                if (typeCreat.equals("CHANNEL")) {
-
+                if (typeCreate.equals("CHANNEL")) { // addMemberChannel
                     G.onChannelAddMember = new OnChannelAddMember() {
                         @Override
                         public void onChannelAddMember(Long RoomId, Long UserId, ProtoGlobal.ChannelRoom.Role role) {
@@ -129,7 +120,7 @@ public class ContactGroupFragment extends Fragment {
                             countAddMemberResponse++;
                             if (countAddMemberResponse == countAddMemberRequest) {
 
-                                addOwnerToDatabase(RoomId);
+                                addOwnerToDatabase(RoomId, ProtoGlobal.Room.Type.CHANNEL);
 
                                 Realm realm = Realm.getDefaultInstance();
                                 final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, RoomId).findFirst();
@@ -146,10 +137,7 @@ public class ContactGroupFragment extends Fragment {
                                 intent.putExtra("RoomId", RoomId);
                                 startActivity(intent);
                                 getActivity().getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
-//                            getActivity().getSupportFragmentManager().popBackStack();
                             }
-
-
                         }
 
                         @Override
@@ -180,18 +168,17 @@ public class ContactGroupFragment extends Fragment {
 
                 }
 
-//                addMemberGroup
-                if (typeCreat.equals("GROUP")) {
+                if (typeCreate.equals("GROUP")) { //  addMemberGroup
                     G.onGroupAddMember = new OnGroupAddMember() {
                         @Override
-                        public void onGroupAddMember(Long Roomid, Long UserId) {
+                        public void onGroupAddMember(Long roomId, Long UserId) {
                             countAddMemberResponse++;
                             if (countAddMemberResponse == countAddMemberRequest) {
 
-                                addOwnerToDatabase(roomId);
+                                addOwnerToDatabase(ContactGroupFragment.this.roomId, ProtoGlobal.Room.Type.GROUP);
 
                                 Realm realm = Realm.getDefaultInstance();
-                                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, ContactGroupFragment.this.roomId).findFirst();
 
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
@@ -203,10 +190,9 @@ public class ContactGroupFragment extends Fragment {
                                 realm.close();
 
                                 Intent intent = new Intent(G.context, ActivityChat.class);
-                                intent.putExtra("RoomId", roomId);
+                                intent.putExtra("RoomId", ContactGroupFragment.this.roomId);
                                 startActivity(intent);
                                 getActivity().getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
-//                            getActivity().getSupportFragmentManager().popBackStack();
                             }
                         }
 
@@ -214,7 +200,6 @@ public class ContactGroupFragment extends Fragment {
                         public void onError(int majorCode, int minorCode) {
 
                             G.onGroupAddMember.onGroupAddMember(-1l, -1l);
-
 
                             if (majorCode == 302 && minorCode == 1) {
                                 getActivity().runOnUiThread(new Runnable() {
@@ -349,8 +334,6 @@ public class ContactGroupFragment extends Fragment {
                         new RequestGroupAddMember().groupAddMember(roomId, peerId, 0);
                     }
                 }
-
-
             }
         });
 
@@ -392,17 +375,13 @@ public class ContactGroupFragment extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (charSequence.length() > sizeTextEditText) {
-                    String s = edtSearch.getText()
-                            .toString()
-                            .substring(sizeTextEditText, charSequence.length());
+                    String s = edtSearch.getText().toString().substring(sizeTextEditText, charSequence.length());
                     itemAdapter.filter(s);
                 } else {
                     itemAdapter.filter("");
                 }
 
                 edtSearch.setSelection(edtSearch.getText().length());
-                //  fastAdapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -461,61 +440,69 @@ public class ContactGroupFragment extends Fragment {
         fastAdapter.withSavedInstanceState(savedInstanceState);
     }
 
-    private void addOwnerToDatabase(Long roomId) {
-
+    private void addOwnerToDatabase(Long roomId, ProtoGlobal.Room.Type type) {
 
         Realm realm = Realm.getDefaultInstance();
         final Long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-
         if (realmRoom != null) {
-            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-            if (realmGroupRoom != null) {
-                final RealmList<RealmMember> members = realmGroupRoom.getMembers();
 
-                final RealmMember realmMember = new RealmMember();
+            if (type == ProtoGlobal.Room.Type.CHANNEL) {
 
-                realmMember.setId(SUID.id().get());
-                realmMember.setPeerId(userId);
-                realmMember.setRole(ProtoGlobal.GroupRoom.Role.OWNER.toString());
+                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                if (realmChannelRoom != null) {
+                    final RealmList<RealmMember> members = realmChannelRoom.getMembers();
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        members.add(realmMember);
-                    }
-                });
+                    final RealmMember realmMember = new RealmMember();
+                    realmMember.setId(SUID.id().get());
+                    realmMember.setPeerId(userId);
+                    realmMember.setRole(ProtoGlobal.ChannelRoom.Role.OWNER.toString());
 
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            members.add(realmMember);
+                        }
+                    });
+                }
 
+            } else if (type == ProtoGlobal.Room.Type.GROUP) {
+                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                if (realmGroupRoom != null) {
+                    final RealmList<RealmMember> members = realmGroupRoom.getMembers();
+
+                    final RealmMember realmMember = new RealmMember();
+                    realmMember.setId(SUID.id().get());
+                    realmMember.setPeerId(userId);
+                    realmMember.setRole(ProtoGlobal.GroupRoom.Role.OWNER.toString());
+
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            members.add(realmMember);
+                        }
+                    });
+                }
             }
         }
-
-
     }
 
     private void refreshView() {
 
-        int selectedNumber = 0;
         textString = "";
 
         for (int i = 0; i < contacts.size(); i++) {
             if (contacts.get(i).isSelected) {
-                selectedNumber++;
                 textString += contacts.get(i).displayName + ",";
             }
         }
 
-        if (typeCreat.equals("CHANNEL")) {
-
+        if (typeCreate.equals("CHANNEL")) {
             txtNumberOfMember.setVisibility(View.GONE);
         }
         sizeTextEditText = textString.length();
         edtSearch.setText(textString);
-
-        Log.i("NNNNNNM", "refreshView: " + participantsLimit);
-
-
     }
 
     private ArrayList<Long> getSelectedList() {

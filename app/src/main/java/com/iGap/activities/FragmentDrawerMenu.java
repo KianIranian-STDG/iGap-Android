@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
@@ -163,8 +162,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Toast.makeText(G.context, getResources().getString(R.string.future_done), Toast.LENGTH_SHORT).show();
 
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
