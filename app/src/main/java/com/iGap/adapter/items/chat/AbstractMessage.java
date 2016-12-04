@@ -482,6 +482,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
                 }
                 break;
+            default:
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
+                    @Override
+                    public void onMessageProgressClick(MessageProgress progress) {
+                        forOnCLick(holder, attachment);
+                    }
+                });
+                break;
         }
     }
 
