@@ -357,6 +357,8 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         G.onChannelCreate = new OnChannelCreate() {
             @Override
             public void onChannelCreate(final long roomId, String inviteLink) {
+
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

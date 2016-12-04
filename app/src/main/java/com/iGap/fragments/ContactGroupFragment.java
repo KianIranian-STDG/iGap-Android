@@ -89,6 +89,7 @@ public class ContactGroupFragment extends Fragment {
             roomId = bundle.getLong("RoomId");
             if (bundle.getString("LIMIT") != null) participantsLimit = bundle.getString("LIMIT");
             typeCreat = bundle.getString("TYPE");
+            Log.i("NNNNNNM", "onViewCreated: " + typeCreat);
         }
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);

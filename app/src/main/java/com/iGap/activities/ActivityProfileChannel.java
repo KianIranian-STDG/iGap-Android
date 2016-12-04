@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -22,14 +24,15 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
 import com.iGap.G;
@@ -172,68 +175,38 @@ public class ActivityProfileChannel extends AppCompatActivity implements OnChann
             }
         });
         txtBack.setTypeface(G.flaticon);
-
         appBarLayout = (AppBarLayout) findViewById(R.id.pch_appbar);
+        final TextView titleToolbar = (TextView) findViewById(R.id.pch_txt_titleToolbar);
+        titleToolbar.setText("" + title);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                TextView titleToolbar = (TextView) findViewById(R.id.pch_txt_titleToolbar);
-                if (verticalOffset < -2) {
-
-                    titleToolbar.animate().alpha(1).setDuration(300);
+                ViewGroup viewGroup = (ViewGroup) findViewById(R.id.pch_root_circleImage);
+                if (verticalOffset < -5) {
+                    viewGroup.animate().alpha(0).setDuration(700);
+                    viewGroup.setVisibility(View.GONE);
                     titleToolbar.setVisibility(View.VISIBLE);
+                    titleToolbar.animate().alpha(1).setDuration(300);
+
                 } else {
-                    titleToolbar.animate().alpha(0).setDuration(500);
+                    viewGroup.setVisibility(View.VISIBLE);
+                    viewGroup.animate().alpha(1).setDuration(700);
                     titleToolbar.setVisibility(View.GONE);
+                    titleToolbar.animate().alpha(0).setDuration(500);
+
                 }
             }
         });
-        final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
+
         imgPupupMenul = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
         RippleView rippleMenu = (RippleView) findViewById(R.id.pch_ripple_menuPopup);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                LayoutInflater layoutInflater =
-                        (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View popupView = layoutInflater.inflate(R.layout.popup_window, null);
 
-                popupWindow =
-                        new PopupWindow(popupView, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT,
-                                true);
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
-                popupWindow.setOutsideTouchable(true);
+                showPopUp();
 
-                if (popupWindow.isOutsideTouchable()) {
-                    popupWindow.dismiss();
-
-                }
-                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        //TODO do sth here on dismiss
-                    }
-                });
-                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(popupView, Gravity.RIGHT | Gravity.TOP, 10, 30);
-                popupWindow.showAsDropDown(rippleView);
-                TextView remove = (TextView) popupView.findViewById(R.id.popup_txtItem1);
-                remove.setText("Remove");
-                remove.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(ActivityProfileChannel.this, R.string.remove, Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                });
-
-                TextView gone2 = (TextView) popupView.findViewById(R.id.popup_txtItem2);
-                gone2.setVisibility(View.GONE);
-                TextView gone3 = (TextView) popupView.findViewById(R.id.popup_txtItem3);
-                gone3.setVisibility(View.GONE);
-                TextView gone4 = (TextView) popupView.findViewById(R.id.popup_txtItem4);
-                gone4.setVisibility(View.GONE);
             }
         });
 
@@ -893,6 +866,66 @@ public class ActivityProfileChannel extends AppCompatActivity implements OnChann
     @Override
     public void onTimeOut() {
 
+    }
+
+    private void showPopUp() {
+
+        LinearLayout layoutDialog = new LinearLayout(ActivityProfileChannel.this);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutDialog.setOrientation(LinearLayout.VERTICAL);
+        layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
+
+        TextView text3 = new TextView(ActivityProfileChannel.this);
+        text3.setTextColor(getResources().getColor(android.R.color.black));
+        text3.setText(getResources().getString(R.string.delete_contact));
+
+        int dim20 = (int) getResources().getDimension(R.dimen.dp20);
+        int dim12 = (int) getResources().getDimension(R.dimen.dp12);
+
+        text3.setTextSize(14);
+        text3.setPadding(dim20, dim12, dim12, dim12);
+        layoutDialog.addView(text3, params);
+
+        int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
+        popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityProfileChannel.this.getTheme()));
+        } else {
+            popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
+        }
+        if (popupWindow.isOutsideTouchable()) {
+            popupWindow.dismiss();
+        }
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //TODO do sth here on dismiss
+            }
+        });
+        popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
+        popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16),
+                (int) getResources().getDimension(R.dimen.dp32));
+
+        text3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new MaterialDialog.Builder(ActivityProfileChannel.this).title(R.string.to_delete_contact)
+                        .content(R.string.delete_text)
+                        .positiveText(R.string.B_ok)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            }
+                        })
+                        .negativeText(R.string.B_cancel)
+                        .show();
+
+                popupWindow.dismiss();
+            }
+        });
     }
 
 }
