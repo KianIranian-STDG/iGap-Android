@@ -99,6 +99,7 @@ import com.iGap.module.ClearMessagesUtil;
 import com.iGap.module.Contacts;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
+import com.iGap.module.enums.ConnectionMode;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
@@ -287,7 +288,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;
-    public static String connectionMode;
+    public static ConnectionMode connectionMode;
     public static boolean isNetworkRoaming;
 
     public static HashMap<Long, RequestWrapper> currentUploadAndDownloadFiles = new HashMap<>();
@@ -607,13 +608,13 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
                 switch (activeNetwork.getType()) {
                     case ConnectivityManager.TYPE_WIFI:
 
-                        connectionMode = "WIFI";
+                        connectionMode = ConnectionMode.WIFI;
                         break;
                     case ConnectivityManager.TYPE_MOBILE:
-                        connectionMode = "MOBILE";
+                        connectionMode = ConnectionMode.MOBILE;
                         break;
                     case ConnectivityManager.TYPE_WIMAX:
-                        connectionMode = "WIMAX";
+                        connectionMode = ConnectionMode.WIMAX;
                         break;
                 }
 

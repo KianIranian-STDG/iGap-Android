@@ -1,5 +1,7 @@
 package com.iGap.adapter.items.chat;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.CardView;
@@ -25,9 +27,11 @@ import com.iGap.interfaces.OnProgressUpdate;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MyType;
+import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
+import com.iGap.module.enums.ConnectionMode;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
@@ -50,6 +54,8 @@ import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.meness.github.messageprogress.OnProgress;
 import io.meness.github.messageprogress.ProgressProcess;
 import io.realm.Realm;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
@@ -390,6 +396,95 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return itemView.findViewById(R.id.progress) != null;
     }
 
+    private void setClickListener(SharedPreferences sharedPreferences, String key, final VH holder, final RealmAttachment attachment) {
+        if (sharedPreferences.getInt(key, -1) != -1) {
+            autoDownload(holder, attachment);
+        } else {
+            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
+                @Override
+                public void onMessageProgressClick(MessageProgress progress) {
+                    forOnCLick(holder, attachment);
+                }
+            });
+        }
+    }
+
+    private void checkAutoDownload(final VH holder, final RealmAttachment attachment, Context context, ConnectionMode connectionMode) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        switch (mMessage.messageType) {
+            case IMAGE:
+            case IMAGE_TEXT:
+                switch (connectionMode) {
+                    case MOBILE:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_PHOTO, holder, attachment);
+                        break;
+                    case WIFI:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_PHOTO, holder, attachment);
+                        break;
+                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
+                }
+                break;
+            case VOICE:
+                switch (connectionMode) {
+                    case MOBILE:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, holder, attachment);
+                        break;
+                    case WIFI:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, holder, attachment);
+                        break;
+                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
+                }
+                break;
+            case VIDEO:
+            case VIDEO_TEXT:
+                switch (connectionMode) {
+                    case MOBILE:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_VIDEO, holder, attachment);
+                        break;
+                    case WIFI:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VIDEO, holder, attachment);
+                        break;
+                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
+                }
+                break;
+            case FILE:
+            case FILE_TEXT:
+                switch (connectionMode) {
+                    case MOBILE:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_FILE, holder, attachment);
+                        break;
+                    case WIFI:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_FILE, holder, attachment);
+                        break;
+                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
+                }
+                break;
+            case AUDIO:
+            case AUDIO_TEXT:
+                switch (connectionMode) {
+                    case MOBILE:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_MUSIC, holder, attachment);
+                        break;
+                    case WIFI:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_MUSIC, holder, attachment);
+                        break;
+                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
+                }
+                break;
+            case GIF:
+                switch (connectionMode) {
+                    case MOBILE:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_GIF, holder, attachment);
+                        break;
+                    case WIFI:
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_GIF, holder, attachment);
+                        break;
+                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
+                }
+                break;
+        }
+    }
+
     private void prepareAttachmentIfNeeded(final VH holder, final RealmAttachment attachment) {
         // runs if message has attachment
         if (attachment != null) {
@@ -424,12 +519,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             if (hasProgress(holder.itemView)) {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
-                    @Override
-                    public void onMessageProgressClick(MessageProgress progress) {
-                        forOnCLick(holder, attachment);
-                    }
-                });
+                if (!attachment.isFileExistsOnLocalAndIsThumbnail()) {
+                    checkAutoDownload(holder, attachment, holder.itemView.getContext(), ConnectionMode.WIFI);
+                    checkAutoDownload(holder, attachment, holder.itemView.getContext(), ConnectionMode.MOBILE);
+                }
 
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
                     @Override
@@ -469,6 +562,29 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             prepareProgress(holder, attachment);
         }
+    }
+
+    private void autoDownload(VH holder, RealmAttachment attachment) {
+        if (mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
+            View thumbnail = holder.itemView.findViewById(R.id.thumbnail);
+            if (thumbnail != null) {
+                thumbnail.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        // create new download attachment once with attachment token
+        if (mMessage.downloadAttachment == null) {
+            mMessage.downloadAttachment = new StructDownloadAttachment(attachment.getToken());
+        }
+
+        // make sure to not request multiple times by checking last offset with the new one
+        if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
+            onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress, null);
+            mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
+        }
+
+        MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
+        messageClickListener.onDownloadStart(progress, mMessage, holder.getAdapterPosition());
     }
 
     private void forOnCLick(VH holder, RealmAttachment attachment) {

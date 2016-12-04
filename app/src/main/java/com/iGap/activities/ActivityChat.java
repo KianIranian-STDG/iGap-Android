@@ -1002,7 +1002,6 @@ public class ActivityChat extends ActivityEnhanced
                         }
                         break;
                     case LOCATION:
-                        // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] fill
                         if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
