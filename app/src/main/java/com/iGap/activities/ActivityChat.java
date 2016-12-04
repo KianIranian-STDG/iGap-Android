@@ -1491,7 +1491,7 @@ public class ActivityChat extends ActivityEnhanced
                         startActivity(intent);
                     }
                 } else if (chatType == CHANNEL) {
-                    Intent intent = new Intent(G.context, ActivityProfileChannel.class);
+                    Intent intent = new Intent(G.context, ActivityChannelProfile.class);
                     intent.putExtra(Config.PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
                     startActivity(intent);
                 }

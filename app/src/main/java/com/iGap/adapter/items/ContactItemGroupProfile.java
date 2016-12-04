@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activities.ActivityChannelProfile;
 import com.iGap.activities.ActivityGroupProfile;
-import com.iGap.activities.ActivityProfileChannel;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
@@ -101,8 +101,8 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
                             ActivityGroupProfile.onMenuClick.clicked(v, mContact);
                         }
 
-                        if (ActivityProfileChannel.onMenuClick != null) {
-                            ActivityProfileChannel.onMenuClick.clicked(v, mContact);
+                        if (ActivityChannelProfile.onMenuClick != null) {
+                            ActivityChannelProfile.onMenuClick.clicked(v, mContact);
                         }
 
                     }

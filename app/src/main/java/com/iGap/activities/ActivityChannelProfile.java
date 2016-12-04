@@ -93,7 +93,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.iGap.module.MusicPlayer.roomId;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
-public class ActivityProfileChannel extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin {
+public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin {
 
     private AppBarLayout appBarLayout;
     private TextView txtNameChannel, txtDescription, txtChannelLink, txtPhoneNumber,
@@ -251,7 +251,7 @@ public class ActivityProfileChannel extends AppCompatActivity implements OnChann
                             int end = s.getSpanEnd(this);
                             valuesSpan = s.subSequence(start, end).toString();
                         }
-                        new MaterialDialog.Builder(ActivityProfileChannel.this).items(
+                        new MaterialDialog.Builder(ActivityChannelProfile.this).items(
                                 R.array.phone_profile_chanel)
                                 .negativeText(getString(R.string.cancel))
                                 .itemsCallback(new MaterialDialog.ListCallback() {
@@ -303,7 +303,7 @@ public class ActivityProfileChannel extends AppCompatActivity implements OnChann
         txtChannelLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ActivityProfileChannel.this, "txtChannelLink", Toast.LENGTH_SHORT)
+                Toast.makeText(ActivityChannelProfile.this, "txtChannelLink", Toast.LENGTH_SHORT)
                         .show();
             }
         });
@@ -440,16 +440,16 @@ public class ActivityProfileChannel extends AppCompatActivity implements OnChann
             @Override
             public boolean onClick(View v, IAdapter adapter, final ContactItemGroupProfile item, final int position) {
 
-                HelperPermision.getStoragePermision(ActivityProfileChannel.this, new OnGetPermision() {
+                HelperPermision.getStoragePermision(ActivityChannelProfile.this, new OnGetPermision() {
                     @Override
                     public void Allow() {
                         ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
                         Intent intent = null;
 
                         if (contactItemGroupProfile.mContact.peerId == userId) {
-                            intent = new Intent(ActivityProfileChannel.this, ActivitySetting.class);
+                            intent = new Intent(ActivityChannelProfile.this, ActivitySetting.class);
                         } else {
-                            intent = new Intent(ActivityProfileChannel.this, ActivityContactsProfile.class);
+                            intent = new Intent(ActivityChannelProfile.this, ActivityContactsProfile.class);
                             intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
                             intent.putExtra("RoomId", roomId);
                             intent.putExtra("enterFrom", GROUP.toString());
@@ -512,7 +512,7 @@ public class ActivityProfileChannel extends AppCompatActivity implements OnChann
 
         //get our recyclerView and do basic setup
         recyclerView = (RecyclerView) findViewById(R.id.agp_recycler_view_group_member);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ActivityProfileChannel.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(ActivityChannelProfile.this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(
                 stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
@@ -592,7 +592,7 @@ public class ActivityProfileChannel extends AppCompatActivity implements OnChann
     private class CreatePopUpMessage {
 
         private void show(View view, final StructContactInfo info) {
-            PopupMenu popup = new PopupMenu(ActivityProfileChannel.this, view, Gravity.TOP);
+            PopupMenu popup = new PopupMenu(ActivityChannelProfile.this, view, Gravity.TOP);
             popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
 
             if (role == ChannelChatRole.OWNER) {
@@ -870,12 +870,12 @@ public class ActivityProfileChannel extends AppCompatActivity implements OnChann
 
     private void showPopUp() {
 
-        LinearLayout layoutDialog = new LinearLayout(ActivityProfileChannel.this);
+        LinearLayout layoutDialog = new LinearLayout(ActivityChannelProfile.this);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutDialog.setOrientation(LinearLayout.VERTICAL);
         layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
 
-        TextView text3 = new TextView(ActivityProfileChannel.this);
+        TextView text3 = new TextView(ActivityChannelProfile.this);
         text3.setTextColor(getResources().getColor(android.R.color.black));
         text3.setText(getResources().getString(R.string.delete_contact));
 
@@ -891,7 +891,7 @@ public class ActivityProfileChannel extends AppCompatActivity implements OnChann
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityProfileChannel.this.getTheme()));
+            popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityChannelProfile.this.getTheme()));
         } else {
             popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
         }
@@ -912,7 +912,7 @@ public class ActivityProfileChannel extends AppCompatActivity implements OnChann
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivityProfileChannel.this).title(R.string.to_delete_contact)
+                new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.to_delete_contact)
                         .content(R.string.delete_text)
                         .positiveText(R.string.B_ok)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {

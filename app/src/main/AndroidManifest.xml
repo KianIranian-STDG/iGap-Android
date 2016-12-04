@@ -157,7 +157,7 @@
         <activity android:name=".activities.ActivityChatBackground"/>
         <activity android:name=".activities.ActivityWebView"/>
         <activity android:name=".activities.ActivityNewChanelFinish"/>
-        <activity android:name=".activities.ActivityProfileChannel"/>
+        <activity android:name=".activities.ActivityChannelProfile"/>
 
         <service android:name=".helper.ServiceContact"/>
         <service android:name=".module.UploadService"/>
