@@ -743,6 +743,7 @@ public class ActivityChat extends ActivityEnhanced
             public void onSuccess() {
                 RealmRoomMessage forwardedMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                 switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
+                scrollToEnd();
                 chatSendMessageUtil.build(chatType, forwardedMessage.getRoomId(), forwardedMessage);
 
                 realm.close();
@@ -1056,6 +1057,9 @@ public class ActivityChat extends ActivityEnhanced
                                 mAdapter.add(0, new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
+                        break;
+                    case GIF_TEXT:
+                        // TODO: 12/4/2016 [Alireza] implement gif for text
                         break;
                     case LOG:
                         // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement
@@ -2241,28 +2245,36 @@ public class ActivityChat extends ActivityEnhanced
             }
 
             if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1 && requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && (listPathString.size() == 1)) {
+                if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
+                    Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+                    Uri uri = Uri.parse(listPathString.get(0));
+                    uri = android.net.Uri.parse("file://" + uri.getPath());
+                    intent.putExtra("IMAGE_CAMERA", uri.toString());
+                    intent.putExtra("TYPE", "gallery");
+                    intent.putExtra("PAGE", "chat");
 
-                Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                Uri uri = Uri.parse(listPathString.get(0));
-                uri = android.net.Uri.parse("file://" + uri.getPath());
-                intent.putExtra("IMAGE_CAMERA", uri.toString());
-                intent.putExtra("TYPE", "gallery");
-                intent.putExtra("PAGE", "chat");
-
-                if (prgWaiting != null) {
-                    prgWaiting.setVisibility(View.GONE);
-                }
-                startActivityForResult(intent, IntentRequests.REQ_CROP);
+                    startActivityForResult(intent, IntentRequests.REQ_CROP);
 
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (prgWaiting != null) {
-                            prgWaiting.setVisibility(View.GONE);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (prgWaiting != null) {
+                                prgWaiting.setVisibility(View.GONE);
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (prgWaiting != null) {
+                                prgWaiting.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                    return;
+                }
 
 
             } else if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1 && requestCode == AttachFile.request_code_TAKE_PICTURE) {
@@ -2303,7 +2315,11 @@ public class ActivityChat extends ActivityEnhanced
             case AttachFile.requestOpenGalleryForImageMultipleSelect:
                 if (listPathString.size() == 1) {
 //                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
-                    txtFileNameForSend.setText(getString(R.string.image_selected_for_send));
+                    if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
+                        txtFileNameForSend.setText(getString(R.string.image_selected_for_send));
+                    } else {
+                        txtFileNameForSend.setText(getString(R.string.gif_selected_for_send));
+                    }
                 } else {
                     txtFileNameForSend.setText(listPathString.size() + getString(R.string.image_selected_for_send));
                 }
@@ -2434,16 +2450,26 @@ public class ActivityChat extends ActivityEnhanced
 
             case AttachFile.requestOpenGalleryForImageMultipleSelect:
                 //filePath = getFilePathFromUri(uri);
-                resizeImage(filePath);
+                if (!filePath.toLowerCase().endsWith(".gif")) {
+                    resizeImage(filePath);
+
+                    if (isMessageWrote()) {
+                        messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
+                    } else {
+                        messageType = ProtoGlobal.RoomMessageType.IMAGE;
+                    }
+                } else {
+                    if (isMessageWrote()) {
+                        messageType = ProtoGlobal.RoomMessageType.GIF_TEXT;
+                    } else {
+                        messageType = ProtoGlobal.RoomMessageType.GIF;
+                    }
+                }
 
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
                 imageDimens = AndroidUtils.getImageDimens(filePath);
-                if (isMessageWrote()) {
-                    messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
-                } else {
-                    messageType = ProtoGlobal.RoomMessageType.IMAGE;
-                }
+
                 if (userTriesReplay()) {
                     messageInfo =
                             new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
@@ -4094,10 +4120,7 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
         Realm realm = Realm.getDefaultInstance();
-        if (message.messageType == ProtoGlobal.RoomMessageType.VOICE || message.messageType == ProtoGlobal.RoomMessageType.AUDIO ||
-                message.messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
-            //   MusicPlayer.startPlayer(message.getAttachment().getLocalFilePath(), title, mRoomId, true);
-        } else if (message.messageType == ProtoGlobal.RoomMessageType.IMAGE || message.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+        if (message.messageType == ProtoGlobal.RoomMessageType.IMAGE || message.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
             showImage(message);
         } else if (message.messageType == ProtoGlobal.RoomMessageType.FILE || message.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT ||
                 message.messageType == ProtoGlobal.RoomMessageType.VIDEO || message.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
@@ -4268,7 +4291,7 @@ public class ActivityChat extends ActivityEnhanced
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
+                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(474)).findFirst();
                         if (roomMessage != null) {
                             // delete message from database
                             roomMessage.deleteFromRealm();
@@ -4437,7 +4460,6 @@ public class ActivityChat extends ActivityEnhanced
             }
         }
     }
-
 
     @Override
     public void onUserUpdateStatus(long userId, final long time, final String status) {

@@ -198,7 +198,8 @@ public final class AppUtils {
                             message.getAttachment().getName());
                     break;
                 case GIF:
-                    messageText = null;
+                    messageText = resources.getString(R.string.last_msg_format_chat,
+                            message.getAttachment().getName());
                     break;
                 case IMAGE:
                     if (message.getAttachment() == null) {
@@ -208,10 +209,12 @@ public final class AppUtils {
                             message.getAttachment().getName());
                     break;
                 case LOCATION:
-                    messageText = null;
+                    messageText = resources.getString(R.string.last_msg_format_chat,
+                            resources.getString(R.string.location_message));
                     break;
                 case LOG:
-                    messageText = null;
+                    messageText = resources.getString(R.string.last_msg_format_chat,
+                            resources.getString(R.string.log_message));
                     break;
                 case VIDEO:
                     if (message.getAttachment() == null) {

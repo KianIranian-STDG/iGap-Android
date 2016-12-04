@@ -322,7 +322,11 @@ public final class AndroidUtils {
 
             if (newWidth > maxWidth) {
                 newHeight = (int) (height * (newWidth / width)) / density;
-                newWidth = maxWidth;
+                if (maxWidth < width) {
+                    newWidth = maxWidth;
+                } else {
+                    newWidth = width;
+                }
             }
         } else {
             newWidth = maxWidth;

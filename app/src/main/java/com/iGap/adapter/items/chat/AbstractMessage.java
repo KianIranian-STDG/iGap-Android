@@ -66,6 +66,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public boolean directionalBased = true;
     public ProtoGlobal.Room.Type type;
 
+    @Override
+    public void onPlayPauseGIF(VH holder, String localPath) {
+        // empty
+    }
+
     public AbstractMessage(boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         this.directionalBased = directionalBased;
         this.type = type;
@@ -472,6 +477,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
                 break;
             case GIF:
+            case GIF_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
                         setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_GIF, holder, attachment);
@@ -527,7 +533,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             if (hasProgress(holder.itemView)) {
-                if (!attachment.isFileExistsOnLocalAndIsThumbnail()) {
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
+                    @Override
+                    public void onMessageProgressClick(MessageProgress progress) {
+                        forOnCLick(holder, attachment);
+                    }
+                });
+
+                if (!attachment.isFileExistsOnLocal()) {
                     checkAutoDownload(holder, attachment, holder.itemView.getContext(), ConnectionMode.WIFI);
                     checkAutoDownload(holder, attachment, holder.itemView.getContext(), ConnectionMode.MOBILE);
                 }
@@ -562,6 +575,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 break;
                             case VOICE:
                                 holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
+                                break;
+                            case GIF:
+                            case GIF_TEXT:
+                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
                                 break;
                         }
                     }
@@ -627,7 +644,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                     messageClickListener.onFailedMessageClick(progress, mMessage, holder.getAdapterPosition());
                 } else {
-                    messageClickListener.onOpenClick(progress, mMessage, holder.getAdapterPosition());
+                    if (mMessage.messageType == ProtoGlobal.RoomMessageType.GIF || mMessage.messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
+                        onPlayPauseGIF(holder, attachment.getLocalFilePath());
+                    } else {
+                        messageClickListener.onOpenClick(progress, mMessage, holder.getAdapterPosition());
+                    }
                 }
             } else {
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);

@@ -82,4 +82,5 @@ dependencies {
     compile 'com.android.support:gridlayout-v7:25.0.1'
     compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.1'
     compile 'com.google.zxing:core:3.2.1'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
 }

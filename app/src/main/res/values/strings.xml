@@ -604,5 +604,6 @@
     <string name="amunt">Amount</string>
     <string name="email_optional">Email(optional)</string>
     <string name="create">Create</string>
-
+    <string name="gif_selected_for_send">the GIF selected to send</string>
+    <string name="log_message">Log Message</string>
 </resources>

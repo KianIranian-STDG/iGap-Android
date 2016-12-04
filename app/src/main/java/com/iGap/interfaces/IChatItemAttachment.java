@@ -13,4 +13,6 @@ public interface IChatItemAttachment<VH extends RecyclerView.ViewHolder> {
     void onRequestDownloadFile(long offset, int progress, final OnFileDownload onFileDownload);
 
     void onRequestDownloadThumbnail(String token, boolean done, final OnFileDownload onFileDownload);
+
+    void onPlayPauseGIF(VH holder, String localPath);
 }
