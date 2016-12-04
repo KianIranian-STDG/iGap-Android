@@ -582,4 +582,27 @@
     <string name="shared_voice">Shared Voice</string>
     <string name="shared_gif">Shared Gif</string>
     <string name="shared_file">Shared File</string>
+    <string name="qr_payment">QR Payment</string>
+    <string name="charge_balance">Charge Balance</string>
+    <string name="total_balance">Total Balance</string>
+    <string name="rials">Rials</string>
+    <string name="unverified">Unverified/</string>
+    <string name="send_documents">Send Documents</string>
+    <string name="charge">CHARGE</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="transfer_mony">Transfer Mony</string>
+    <string name="create_qr_code">Create QR Code</string>
+    <string name="pay_via_qr_code">Pay Via QR Code</string>
+    <string name="charge_out">Charge Out</string>
+    <string name="e_commerce">E-Commerce</string>
+    <string name="agrement">AGREMENT</string>
+    <string name="payment_charge_out_text">1.None-Didclosure Agreements \n \n Sample None-disclosure Agrement \n Sample Mutual None Disclosure Agreement \n\n 2. Clint/Freelancer Agreements \n\n Sample Client/Service Freelancer Agreement \n Sample Detailed Project Agreement and \n Sample Change Order Agreement\n</string>
+    <string name="description_optional">Description(optional)</string>
+    <string name="enter_the_code_here">Enter THe Code Here</string>
+    <string name="transfer_to">Transfer To</string>
+    <string name="price">Price</string>
+    <string name="amunt">Amount</string>
+    <string name="email_optional">Email(optional)</string>
+    <string name="create">Create</string>
+
 </resources>

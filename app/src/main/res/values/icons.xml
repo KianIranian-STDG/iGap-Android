@@ -11,11 +11,13 @@
     <string name="md_show_more_button">\uf24f</string>
     <string name="md_close_button">\uf14f</string>
     <string name="md_right_arrow_button">\uf186</string>
+    <string name="md_right_arrow_button1">\uf1c0</string>
     <string name="md_refresh_button">\uf213</string>
     <string name="md_round_info_button">\uf223</string>
     <string name="md_back_arrow">\uf1be</string>
     <string name="md_crop_button">\uf15e</string>
     <string name="md_add_user_button">\uf106</string>
+    <string name="md_add_plus_button">\uf104</string>
     <string name="md_user_account_box">\uf287</string>
     <string name="md_user_shape">\uf28b</string>
     <string name="md_users_social_symbol">\uf28c</string>

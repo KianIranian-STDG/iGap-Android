@@ -79,4 +79,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     apt 'org.parceler:parceler:1.1.6'
     provided 'com.android.support:support-annotations:25.0.1'
+    compile 'com.android.support:gridlayout-v7:25.0.1'
+    compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.1'
+    compile 'com.google.zxing:core:3.2.1'
 }

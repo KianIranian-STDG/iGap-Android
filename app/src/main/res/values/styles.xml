@@ -19,6 +19,13 @@
 
     </style>
 
+    <style name="ThemeSpinner">
+        <!-- Color when pressed -->
+        <item name="colorAccent">@color/green</item>
+        <!-- Default color for the dropdown arrow and line -->
+        <item name="colorControlNormal">#dad7d7</item>
+    </style>
+
     <style name="ChatMessages.EmojiTextView" parent="ChatMessages">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
