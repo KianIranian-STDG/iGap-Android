@@ -1,6 +1,8 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoChannelGetMemberList;
+import com.iGap.realm.RealmMember;
 
 public class ChannelGetMemberListResponse extends MessageHandler {
 
@@ -21,7 +23,12 @@ public class ChannelGetMemberListResponse extends MessageHandler {
         super.handler();
 
         ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder builder = (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder) message;
-        builder.getMemberList();
+
+        RealmMember.convertProtoMemberListToRealmMember(builder, identity);
+
+        if (G.onChannelGetMemberList != null) {
+            G.onChannelGetMemberList.onChannelGetMemberList(builder.getMemberList());
+        }
     }
 
     @Override

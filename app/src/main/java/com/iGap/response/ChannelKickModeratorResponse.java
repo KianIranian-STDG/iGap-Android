@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoChannelKickModerator;
 
 public class ChannelKickModeratorResponse extends MessageHandler {
@@ -21,8 +22,9 @@ public class ChannelKickModeratorResponse extends MessageHandler {
         super.handler();
 
         ProtoChannelKickModerator.ChannelKickModeratorResponse.Builder builder = (ProtoChannelKickModerator.ChannelKickModeratorResponse.Builder) message;
-        builder.getRoomId();
-        builder.getMemberId();
+        if (G.onChannelKickModerator != null) {
+            G.onChannelKickModerator.onChannelKickModerator(builder.getRoomId(), builder.getMemberId());
+        }
     }
 
     @Override

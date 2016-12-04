@@ -44,18 +44,21 @@ import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChannelAddAdmin;
 import com.iGap.interfaces.OnChannelAddMember;
 import com.iGap.interfaces.OnChannelAddModerator;
+import com.iGap.interfaces.OnChannelGetMemberList;
 import com.iGap.interfaces.OnChannelKickAdmin;
 import com.iGap.interfaces.OnChannelKickMember;
 import com.iGap.interfaces.OnChannelKickModerator;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
+import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.Contacts;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
+import com.iGap.proto.ProtoChannelGetMemberList;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
@@ -70,6 +73,8 @@ import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.request.RequestChannelAddAdmin;
 import com.iGap.request.RequestChannelAddMember;
 import com.iGap.request.RequestChannelAddModerator;
+import com.iGap.request.RequestChannelGetMemberList;
+import com.iGap.request.RequestChannelKickAdmin;
 import com.iGap.request.RequestChannelKickMember;
 import com.iGap.request.RequestChannelKickModerator;
 import com.iGap.request.RequestUserInfo;
@@ -93,7 +98,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.iGap.module.MusicPlayer.roomId;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
-public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin {
+public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse {
 
     private AppBarLayout appBarLayout;
     private TextView txtNameChannel, txtDescription, txtChannelLink, txtPhoneNumber,
@@ -131,6 +136,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         G.onChannelKickAdmin = this;
         G.onChannelAddModerator = this;
         G.onChannelKickModerator = this;
+        G.onChannelGetMemberList = this;
+        G.onUserInfoResponse = this;
+
+        Log.i("TTT", "channel test : " + ProtoGlobal.GroupRoom.Role.MEMBER.toString().equals(ProtoGlobal.ChannelRoom.Role.MEMBER.toString()));
 
         //=========Put Extra Start
         Bundle extras = getIntent().getExtras();
@@ -138,9 +147,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         Realm realm = Realm.getDefaultInstance();
 
-        //group info
+        //channel info
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        Log.i("QQQ", "realmRoom : " + realmRoom);
         RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
         title = realmRoom.getTitle();
         initials = realmRoom.getInitials();
@@ -362,6 +370,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         setAvatarChannel();
         initRecycleView();
+        channelGetMemberList();
+    }
+
+    private void channelGetMemberList() {
+        new RequestChannelGetMemberList().channelGetMemberList(roomId);
     }
 
     private void setAvatarChannel() {
@@ -547,6 +560,19 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 decoration.invalidateHeaders();
             }
         });
+    }
+
+    //****** user exist in current list checking
+
+    private boolean userExistInList(long userId) {
+
+        for (StructContactInfo info : contacts) {
+            if (info.peerId == userId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     //****** add member
@@ -810,10 +836,93 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     }
 
     private void kickAdmin(Long peerId) {
-        new RequestChannelKickModerator().channelKickModerator(roomId, peerId);
+        new RequestChannelKickAdmin().channelKickAdmin(roomId, peerId);
     }
 
     //********** interfaces
+
+    //***User Info
+
+    @Override
+    public void onUserInfo(final ProtoGlobal.RegisteredUser user, final String identity) {
+        if (Long.parseLong(identity) == roomId) {
+
+            if (!userExistInList(user.getId())) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Realm realm = Realm.getDefaultInstance();
+                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
+
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+
+                        RealmList<RealmMember> result = realmRoom.getChannelRoom().getMembers();
+
+                        String _Role = "";
+
+                        for (int i = 0; i < result.size(); i++) {
+                            if (result.get(i).getPeerId() == user.getId()) {
+                                _Role = result.get(i).getRole().toString();
+                                break;
+                            }
+                        }
+
+                        final StructContactInfo struct = new StructContactInfo(user.getId(), user.getDisplayName(), user.getStatus().toString(), false, false, user.getPhone() + "");
+                        if (realmChannelRoom != null) {
+                            struct.role = _Role;
+                        }
+                        if (realmRegisteredInfo != null) {
+                            struct.avatar = realmRegisteredInfo.getLastAvatar();
+                            struct.initials = realmRegisteredInfo.getInitials();
+                            struct.color = realmRegisteredInfo.getColor();
+                        }
+
+
+                        IItem item = new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get());
+
+                        if (struct.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
+                            itemAdapter.add(0, item);
+                        } else {
+                            itemAdapter.add(item);
+                        }
+
+                        itemAdapter.notifyDataSetChanged();
+
+                        realm.close();
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onUserInfoTimeOut() {
+
+    }
+
+    @Override
+    public void onUserInfoError(int majorCode, int minorCode) {
+
+    }
+
+    //***Get Member List
+
+    @Override
+    public void onChannelGetMemberList(final List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> members) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // member count not exist in channel profile view
+            }
+        });
+
+        for (final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : members) {
+            new RequestUserInfo().userInfo(member.getUserId(), roomId + "");
+        }
+
+    }
 
     //***Member
     @Override

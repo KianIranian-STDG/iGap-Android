@@ -629,8 +629,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 if (Long.parseLong(identity) == roomId) {
 
-                    Log.i("EEE", "getMemberList user.getId() : " + user.getId());
-
                     if (!userExistInList(user.getId())) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
                         runOnUiThread(new Runnable() {
                             @Override
@@ -665,7 +663,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
 
                                 IItem item = new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get());
-
 
                                 if (struct.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                                     itemAdapter.add(0, item);
