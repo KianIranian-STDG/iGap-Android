@@ -534,12 +534,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void onRequestDownloadFile(long offset, int progress, final OnFileDownload onFileDownload) {
         if (mMessage.forwardedFrom != null) {
             final String fileName = mMessage.forwardedFrom.getAttachment().getToken() + "_" + mMessage.forwardedFrom.getAttachment().getName();
+            final long forwardMessageID = mMessage.forwardedFrom.getMessageId();
+            final ProtoGlobal.RoomMessageType forwardMessageType = mMessage.forwardedFrom.getMessageType();
             if (progress == 100) {
                 final Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst().getAttachment().setLocalFilePath(AndroidUtils.suitableAppFilePath(mMessage.forwardedFrom.getMessageType()) + "/" + fileName);
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, forwardMessageID).findFirst().getAttachment().setLocalFilePath(AndroidUtils.suitableAppFilePath(forwardMessageType) + "/" + fileName);
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override

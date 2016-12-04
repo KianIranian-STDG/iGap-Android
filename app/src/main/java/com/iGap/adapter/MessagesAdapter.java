@@ -193,8 +193,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         requestDownload(token, progress, offset);
 
         for (Item item : getAdapterItems()) {
-            //TODO [Saeed Mozaffari] [2016-11-27 12:21 PM] - Alireza salam . man in halat ro ezafe kardam ==>(item.mMessage.attachment.token != null) moshkele
-            //TODO [Saeed Mozaffari] [2016-11-27 12:22 PM] - be nazaram nabayad token == null bashe aslan ,
             if (item.mMessage.attachment != null && item.mMessage.attachment.token != null && item.mMessage.attachment.token.equalsIgnoreCase(token)) {
                 final int pos = getAdapterItems().indexOf(item);
 

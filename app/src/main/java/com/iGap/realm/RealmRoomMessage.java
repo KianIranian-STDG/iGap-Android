@@ -61,8 +61,8 @@ public class RealmRoomMessage extends RealmObject {
 
         if (message == null) {
             message = realm.createObject(RealmRoomMessage.class, input.getMessageId());
+            message.setRoomId(roomId);
         }
-        message.setRoomId(roomId);
         message.setMessage(input.getMessage());
         message.setStatus(input.getStatus().toString());
         message.setUserId(input.getAuthor().getUser().getUserId());

@@ -339,6 +339,12 @@ public class StructMessageInfo implements Parcelable {
             if (userInfo != null) {
                 messageInfo.forwardMessageFrom = userInfo.getDisplayName();
                 messageInfo.forwardedFrom = roomMessage.getForwardMessage();
+                if (roomMessage.getForwardMessage().getAttachment() != null) {
+                    messageInfo.attachment = StructMessageAttachment.convert(roomMessage.getForwardMessage().getAttachment());
+                    messageInfo.uploadProgress =
+                            messageInfo.attachment.token != null && !messageInfo.attachment.token.isEmpty()
+                                    ? 100 : 0;
+                }
             }
         }
         if (roomMessage.getLocation() != null) {
