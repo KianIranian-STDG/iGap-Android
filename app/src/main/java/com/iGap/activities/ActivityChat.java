@@ -4182,7 +4182,7 @@ public class ActivityChat extends ActivityEnhanced
                     if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
                         // copy message
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("Copied Text", message.messageText);
+                        ClipData clip = ClipData.newPlainText("Copied Text", message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText);
                         clipboard.setPrimaryClip(clip);
                         Toast.makeText(G.context, "Text Copied", Toast.LENGTH_SHORT).show();
                     } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {

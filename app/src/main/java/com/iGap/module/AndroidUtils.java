@@ -20,9 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -337,23 +335,4 @@ public final class AndroidUtils {
         return new int[]{(int) newWidth, newHeight};
     }
 
-    /**
-     * return file to bytes
-     *
-     * @return bytes
-     * @throws IOException
-     */
-    public static byte[] fileToBytes(File file) throws IOException {
-        ByteBuffer byteBuffer = ByteBuffer.allocate((int) file.length());
-        RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
-        FileChannel fileChannel = randomAccessFile.getChannel();
-        fileChannel.read(byteBuffer);
-
-        byteBuffer.flip();
-
-        if (byteBuffer.hasArray()) {
-            return byteBuffer.array();
-        }
-        return null;
-    }
 }

@@ -59,8 +59,9 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
         SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0) != 0) {
+        if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0) == 1) {
             holder.image.setImageURI(Uri.fromFile(new File(localPath)));
+            holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
         }
     }
 

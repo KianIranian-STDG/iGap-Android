@@ -96,8 +96,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                         }
                     }
                 } else {
-                    if (!(item instanceof TimeItem))
-                        v.performLongClick();
+                    if (!(item instanceof TimeItem)) {
+                        if (!item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            v.performLongClick();
+                        }
+                    }
                 }
                 return false;
             }
