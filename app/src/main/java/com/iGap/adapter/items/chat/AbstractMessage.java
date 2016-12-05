@@ -761,7 +761,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @Override
     public void onRequestDownloadThumbnail(final String token, boolean done, final OnFileDownload onFileDownload) {
-        if (mMessage.forwardedFrom != null) {
+        if (mMessage.forwardedFrom != null && mMessage.forwardedFrom.getAttachment() != null && mMessage.forwardedFrom.getAttachment().getSmallThumbnail() != null) {
             if (mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize() != 0) {
 
                 final String fileName = "thumb_" + token + "_" + AppUtils.suitableThumbFileName(mMessage.forwardedFrom.getAttachment().getName());
