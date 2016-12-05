@@ -94,7 +94,7 @@ public class ContactGroupFragment extends Fragment {
         txtNumberOfMember.setText("0" + "/" + participantsLimit + " " + getString(R.string.member));
 
         if (typeCreate.equals("CHANNEL")) {
-            txtNumberOfMember.setVisibility(View.GONE);
+            txtNumberOfMember.setText("Add Members");
         }
 
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);

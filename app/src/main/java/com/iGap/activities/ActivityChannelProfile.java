@@ -22,21 +22,22 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.fragments.ShowCustomList;
@@ -44,10 +45,12 @@ import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChannelAddAdmin;
 import com.iGap.interfaces.OnChannelAddMember;
 import com.iGap.interfaces.OnChannelAddModerator;
+import com.iGap.interfaces.OnChannelDelete;
 import com.iGap.interfaces.OnChannelGetMemberList;
 import com.iGap.interfaces.OnChannelKickAdmin;
 import com.iGap.interfaces.OnChannelKickMember;
 import com.iGap.interfaces.OnChannelKickModerator;
+import com.iGap.interfaces.OnChannelLeft;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
@@ -73,10 +76,12 @@ import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.request.RequestChannelAddAdmin;
 import com.iGap.request.RequestChannelAddMember;
 import com.iGap.request.RequestChannelAddModerator;
+import com.iGap.request.RequestChannelDelete;
 import com.iGap.request.RequestChannelGetMemberList;
 import com.iGap.request.RequestChannelKickAdmin;
 import com.iGap.request.RequestChannelKickMember;
 import com.iGap.request.RequestChannelKickModerator;
+import com.iGap.request.RequestChannelLeft;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -95,19 +100,19 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.iGap.G.context;
 import static com.iGap.module.MusicPlayer.roomId;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
-public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse {
+public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft {
 
     private AppBarLayout appBarLayout;
-    private TextView txtNameChannel, txtDescription, txtChannelLink, txtPhoneNumber,
-            txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport;
+    private TextView txtNameChannel, txtDescription, txtChannelLink, txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport;
     private MaterialDesignTextView imgPupupMenul;
     private de.hdodenhof.circleimageview.CircleImageView imgCircleImageView;
     private FloatingActionButton fab;
     private PopupWindow popupWindow;
-    private Spannable wordtoSpan;
+    private Spannable wordToSpan;
     private MaterialDesignTextView txtBack;
 
     @Override
@@ -118,12 +123,14 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private String title;
     private String initials;
     private String color;
-    private ChannelChatRole role;
-    private long noLastMessage;
     private String participantsCountLabel;
     private String description;
-    private RealmList<RealmMember> members;
+    private String inviteLink;
+    private ChannelChatRole role;
+    private long noLastMessage;
     private long userId;
+    private RealmList<RealmMember> members;
+    private ProgressBar prgWait;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +145,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         G.onChannelKickModerator = this;
         G.onChannelGetMemberList = this;
         G.onUserInfoResponse = this;
-
-        Log.i("TTT", "channel test : " + ProtoGlobal.GroupRoom.Role.MEMBER.toString().equals(ProtoGlobal.ChannelRoom.Role.MEMBER.toString()));
+        G.onChannelDelete = this;
+        G.onChannelLeft = this;
 
         //=========Put Extra Start
         Bundle extras = getIntent().getExtras();
@@ -154,6 +161,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
         role = realmChannelRoom.getRole();
+        inviteLink = realmChannelRoom.getInviteLink();
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -161,7 +169,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         } catch (NullPointerException e) {
             e.getStackTrace();
         }
-
         participantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
         members = realmChannelRoom.getMembers();
 
@@ -173,6 +180,12 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         realm.close();
         //=========Put Extra End
+
+        TextView txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);
+        TextView txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
+        //memberNumber = (TextView) findViewById(R.id.txt_member_number);
+        prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting);
+        LinearLayout lytSharedMedia = (LinearLayout) findViewById(R.id.lyt_shared_media);
 
         txtBack = (MaterialDesignTextView) findViewById(R.id.pch_txt_back);
         final RippleView rippleBack = (RippleView) findViewById(R.id.pch_ripple_back);
@@ -212,9 +225,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-
                 showPopUp();
-
             }
         });
 
@@ -235,7 +246,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         });
 
 
-        txtDescription = (TextView) findViewById(R.id.pch_txt_description);
+        txtDescription = (TextView) findViewById(R.id.txt_description);
         txtDescription.setMovementMethod(LinkMovementMethod.getInstance());
 
         String a[] = txtDescription.getText().toString().split(" ");
@@ -244,10 +255,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         for (int i = 0; i < a.length; i++) {
             if (a[i].matches("\\d+")) { //check if only digits. Could also be text.matches("[0-9]+")
 
-                wordtoSpan = new SpannableString(a[i]);
-                wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(),
+                wordToSpan = new SpannableString(a[i]);
+                wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(),
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                wordtoSpan.setSpan(new ClickableSpan() {
+                wordToSpan.setSpan(new ClickableSpan() {
                     @Override
                     public void onClick(View v) {
                         TextView tv = (TextView) v;
@@ -281,10 +292,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 }, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else if (a[i].matches("\\@(\\w+)")) {
 
-                wordtoSpan = new SpannableString(a[i]);
-                wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(),
+                wordToSpan = new SpannableString(a[i]);
+                wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(),
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                wordtoSpan.setSpan(new ClickableSpan() {
+                wordToSpan.setSpan(new ClickableSpan() {
                     @Override
                     public void onClick(View v) {
                         String valuesSpan;
@@ -298,30 +309,17 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     }
                 }, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else {
-                wordtoSpan = new SpannableString(a[i]);
-                wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, a[i].length(),
+                wordToSpan = new SpannableString(a[i]);
+                wordToSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, a[i].length(),
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            builder.append(wordtoSpan).append(" ");
+            builder.append(wordToSpan).append(" ");
         }
         txtDescription.setText(builder);
 
-        txtChannelLink = (TextView) findViewById(R.id.st_txt_channelLink);
-        txtChannelLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(ActivityChannelProfile.this, "txtChannelLink", Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
-        txtPhoneNumber = (TextView) findViewById(R.id.st_txt_phoneNumber);
-        txtPhoneNumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        txtChannelLink = (TextView) findViewById(R.id.txt_channel_link);
 
-            }
-        });
         txtNotifyAndSound = (TextView) findViewById(R.id.pch_txt_notifyAndSound);
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -351,6 +349,15 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         });
 
+        lytSharedMedia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityChannelProfile.this, ActivityShearedMedia.class);
+                intent.putExtra("RoomID", roomId);
+                startActivity(intent);
+            }
+        });
+
         TextView txtChannelName = (TextView) findViewById(R.id.txt_channel_name);
 
         ViewGroup layoutAddMember = (ViewGroup) findViewById(R.id.agp_layout_add_member);
@@ -361,11 +368,14 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         });
 
-        Log.i("TTT", "description : " + description);
         if (description != null && !description.isEmpty()) {
             txtDescription.setText(description);
         }
         txtChannelName.setText(title);
+        txtChannelNameInfo.setText(title);
+        txtChannelLink.setText(inviteLink);
+        txtSharedMedia.setText(AdapterShearedMedia.getCountOfShearedMedia(roomId) + "");
+        //memberNumber.setText(participantsCountLabel);
 
 
         setAvatarChannel();
@@ -533,13 +543,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         recyclerView.setNestedScrollingEnabled(false);
 
         //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration =
-                new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         recyclerView.addItemDecoration(decoration);
 
         items = new ArrayList<>();
 
         ContactItemGroupProfile.mainRole = role.toString();
+        ContactItemGroupProfile.roomType = ProtoGlobal.Room.Type.CHANNEL;
 
         fillItem();
 
@@ -728,7 +738,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         realm.close();
     }
 
-    //**********
+    //********** channel Add Member
 
     private void channelAddMemberResponse(long roomIdResponse, final long userId, final ProtoGlobal.ChannelRoom.Role role) {
         if (roomIdResponse == roomId) {
@@ -755,9 +765,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 }
             });
         }
+
+        //updateMemberCount(roomIdResponse);
     }
 
-    private void channelKickMember(long roomIdResponse, final long memberId) {
+    private void channelKickMember(final long roomIdResponse, final long memberId) {
         if (roomIdResponse == roomId) {
             runOnUiThread(new Runnable() {
                 @Override
@@ -766,30 +778,26 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     for (int i = 0; i < items.size(); i++) {
                         if (items.get(i).mContact.peerId == memberId) {
                             itemAdapter.remove(i);
-                            Realm realm = Realm.getDefaultInstance();
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                    for (RealmMember realmMember : realmRoom.getChannelRoom().getMembers()) {
-                                        if (realmMember.getPeerId() == memberId) {
-                                            realmMember.deleteFromRealm();
-                                            participantsCountLabel = realmRoom.getChannelRoom().getParticipantsCountLabel();
-                                            participantsCountLabel = (Integer.parseInt(participantsCountLabel) - 1) + "";
-                                            realmRoom.getChannelRoom().setParticipantsCountLabel(participantsCountLabel);
-                                            break;
-                                        }
-                                    }
-
-                                }
-                            });
-                            realm.close();
                         }
                     }
+                    //updateMemberCount(roomIdResponse);
                 }
             });
         }
     }
+
+    //********** update member count
+
+    /*private void updateMemberCount(long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        String memberCount = realmRoom.getChannelRoom().getMembers().size() + "";
+        realmRoom.getChannelRoom().setParticipantsCountLabel(memberCount);
+        memberNumber.setText(memberCount);
+
+        realm.close();
+    }*/
 
     //********** update role (to admin, kick admin , kick moderator and all of this things...)
 
@@ -906,6 +914,37 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     }
 
+    //***Delete Channel
+
+    @Override
+    public void onChannelDelete(long roomId) {
+        closeActivity();
+    }
+
+    //***Left Channel
+
+    @Override
+    public void onChannelLeft(long roomId, long memberId) {
+        closeActivity();
+    }
+
+    //***
+
+    private void closeActivity() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ActivityChannelProfile.this.finish();
+                if (ActivityChat.activityChat != null) {
+                    ActivityChat.activityChat.finish();
+                }
+
+                prgWait.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
     //***Get Member List
 
     @Override
@@ -986,7 +1025,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         TextView text3 = new TextView(ActivityChannelProfile.this);
         text3.setTextColor(getResources().getColor(android.R.color.black));
-        text3.setText(getResources().getString(R.string.delete_contact));
+        if (role.equals(ChannelChatRole.OWNER)) {
+            text3.setText(getResources().getString(R.string.channel_delete));
+        } else {
+            text3.setText(getResources().getString(R.string.channel_left));
+        }
 
         int dim20 = (int) getResources().getDimension(R.dimen.dp20);
         int dim12 = (int) getResources().getDimension(R.dimen.dp12);
@@ -1021,12 +1064,29 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.to_delete_contact)
-                        .content(R.string.delete_text)
+                String str = context.getString(R.string.channel);
+                String deleteText = "";
+                if (role.equals(ChannelChatRole.OWNER)) {
+                    deleteText = context.getString(R.string.do_you_want_delete_this);
+                } else {
+                    deleteText = context.getString(R.string.do_you_want_left_this);
+                }
+
+                new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_delete)
+                        .content(deleteText + " " + str + " ?")
                         .positiveText(R.string.B_ok)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                if (role.equals(ChannelChatRole.OWNER)) {
+                                    new RequestChannelDelete().channelDelete(roomId);
+                                } else {
+                                    new RequestChannelLeft().channelLeft(roomId);
+                                }
+
+                                prgWait.setVisibility(View.VISIBLE);
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             }
                         })
                         .negativeText(R.string.B_cancel)
@@ -1036,5 +1096,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         });
     }
+
+
+    //*** default Override method
 
 }

@@ -67,15 +67,13 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public static int getCountOfSheareddMedia(long roomId) {
+    public static int getCountOfShearedMedia(long roomId) {
 
         int counter = 0;
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmRoomMessage> realmRoomMessages =
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                        .findAll();
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
 
         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             ProtoGlobal.RoomMessageType type = realmRoomMessage.getMessageType();

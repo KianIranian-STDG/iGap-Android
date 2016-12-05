@@ -13,9 +13,6 @@ import com.iGap.R;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoGlobal;
 
-/**
- * Created by android3 on 8/3/2016.
- */
 public class MyDialog {
 
     public static void showDialogMenuItemRooms(final Context context, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, final OnComplete complete) {

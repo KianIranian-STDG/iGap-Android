@@ -296,6 +296,7 @@ public class FragmentListAdmin extends Fragment {
         rv.addItemDecoration(decoration);
 
         ContactItemGroupProfile.isShoMore = true;
+        ContactItemGroupProfile.roomType = ProtoGlobal.Room.Type.GROUP;
 
         List<IItem> items = new ArrayList<>();
         for (int i = 0; i < contacts.size(); i++) {

@@ -1,8 +1,7 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
+import com.iGap.helper.HelperRealmDelete;
 import com.iGap.proto.ProtoChannelDelete;
 import com.iGap.proto.ProtoError;
 
@@ -23,33 +22,26 @@ public class ChannelDeleteResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+        final ProtoChannelDelete.ChannelDeleteResponse.Builder builder = (ProtoChannelDelete.ChannelDeleteResponse.Builder) message;
 
-        Log.i("GGGGGG", "ChannelDeleteResponse handler: ");
-        ProtoChannelDelete.ChannelDeleteResponse.Builder builder = (ProtoChannelDelete.ChannelDeleteResponse.Builder) message;
-        builder.getRoomId();
+        HelperRealmDelete.deleteRoom(builder.getRoomId());
 
         if (G.onChannelDelete != null) {
             G.onChannelDelete.onChannelDelete(builder.getRoomId());
         }
-
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-
-        Log.i("GGGGGG", "ChannelDeleteResponse timeOut: ");
         if (G.onChannelDelete != null) {
             G.onChannelDelete.onTimeOut();
         }
-
     }
 
     @Override
     public void error() {
         super.error();
-
-        Log.i("GGGGGG", "ChannelDeleteResponse error: ");
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

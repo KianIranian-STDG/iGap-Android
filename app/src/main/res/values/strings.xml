@@ -454,7 +454,6 @@
     <string name="service_notification">service notification</string>
     <string name="B_edit">Edit</string>
     <string name="left">Left</string>
-    <string name="Channel_name">New Channel</string>
     <string name="arrow">Arrow</string>
     <string name="Ringtone">Ringtone</string>
     <string name="DISCARD">Discard</string>
@@ -588,4 +587,9 @@
     <string name="waiting_for_connection">Waiting for Connect To Server</string>
     <string name="picture_save_to_galary">"picture save to galary "</string>
     <string name="please_enter_channel_name">Please Enter Channel Name</string>
+    <string name="new_channel">New Channel</string>
+    <string name="channel_name">Channel Name</string>
+    <string name="channel_description">Channel Description</string>
+    <string name="channel_delete">Channel Delete</string>
+    <string name="channel_left">Channel Left</string>
 </resources>

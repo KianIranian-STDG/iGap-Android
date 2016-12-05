@@ -665,7 +665,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         }
 
         TextView txtCountOfShearedMedia = (TextView) findViewById(R.id.chi_txt_count_of_sharedMedia);
-        txtCountOfShearedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
+        txtCountOfShearedMedia.setText(AdapterShearedMedia.getCountOfShearedMedia(roomId) + "");
 
         txtUserName.setText(username);
         txtPhoneNumber.setText("" + phone);

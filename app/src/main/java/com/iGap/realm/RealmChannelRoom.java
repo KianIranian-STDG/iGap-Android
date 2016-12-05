@@ -12,8 +12,10 @@ public class RealmChannelRoom extends RealmObject {
     private String participants_count_label;
     private String participants_count_limit_label;
     private String description;
+    private String inviteLink;
     private int avatarCount;
     private RealmAvatar avatar;
+
     private RealmNotificationSetting realmNotificationSetting;
     private RealmList<RealmMember> members;
     /**
@@ -86,6 +88,14 @@ public class RealmChannelRoom extends RealmObject {
 
     public void setRealmNotificationSetting(RealmNotificationSetting realmNotificationSetting) {
         this.realmNotificationSetting = realmNotificationSetting;
+    }
+
+    public String getInviteLink() {
+        return inviteLink;
+    }
+
+    public void setInviteLink(String inviteLink) {
+        this.inviteLink = inviteLink;
     }
 
     public RealmList<RealmMember> getMembers() {

@@ -55,6 +55,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
+import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
@@ -252,7 +253,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
         switch (prefix) {
             case "NewChanel":
-                txtInputNewGroup.setHint(getResources().getString(R.string.Channel_name));
+                txtInputNewGroup.setHint(getResources().getString(R.string.new_channel));
                 break;
             case "ConvertToGroup":
                 txtInputNewGroup.setHint(getResources().getString(R.string.chat_to_group));
@@ -314,7 +315,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                     File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                     if (prefix.equals("NewChanel")) {
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        crateChannel();
+                        createChannel();
                     } else if (prefix.equals("ConvertToGroup")) {
                         chatToGroup();
                     } else {
@@ -347,15 +348,40 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         });
     }
 
-    private void crateChannel() {
+    /**
+     * create room with empty info , just Id and inviteLink
+     *
+     * @param roomId     roomId
+     * @param inviteLink inviteLink
+     */
+
+    public static void createChannelRoom(final long roomId, final String inviteLink) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.createObject(RealmRoom.class);
+
+                RealmChannelRoom realmChannelRoom = realm.createObject(RealmChannelRoom.class);
+                realmChannelRoom.setInviteLink(inviteLink);
+
+                realmRoom.setId(roomId);
+                realmRoom.setChannelRoom(realmChannelRoom);
+            }
+        });
+        realm.close();
+    }
+
+    private void createChannel() {
 
         G.onChannelCreate = new OnChannelCreate() {
             @Override
-            public void onChannelCreate(final long roomId, String inviteLink) {
+            public void onChannelCreate(final long roomId, final String inviteLink) {
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        createChannelRoom(roomId, inviteLink);
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         prgWaiting.setVisibility(View.GONE);
                         getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
