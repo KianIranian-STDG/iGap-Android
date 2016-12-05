@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.text.format.DateUtils;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoError;
@@ -9,14 +7,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageContact;
-import com.iGap.realm.RealmRoomMessageFields;
-import com.iGap.realm.RealmRoomMessageLocation;
-import com.iGap.realm.RealmRoomMessageLog;
 import com.iGap.realm.RealmUserInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.realm.Realm;
 
@@ -44,8 +35,6 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
         final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder =
                 (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
 
-        final List<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
-
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -61,42 +50,14 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                         realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
                     }
 
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
-                            .equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId())
-                            .findFirst();
-
-                    if (realmRoomMessage == null) {
-                        realmRoomMessage = realm.createObject(RealmRoomMessage.class, roomMessage.getMessageId());
-                        realmRoomMessage.setRoomId(Long.parseLong(identity));
-                    }
-
-                    realmRoomMessage.setMessageVersion(roomMessage.getMessageVersion());
-                    realmRoomMessage.setStatus(roomMessage.getStatus().toString());
-                    realmRoomMessage.setMessageType(roomMessage.getMessageType());
-                    realmRoomMessage.setMessage(roomMessage.getMessage());
-
-                    realmRoomMessage.setAttachment(roomMessage.getMessageId(),
-                            roomMessage.getAttachment());
-                    realmRoomMessage.setUserId(roomMessage.getAuthor().getUser().getUserId());
-                    realmRoomMessage.setLocation(
-                            RealmRoomMessageLocation.build(roomMessage.getLocation()));
-                    realmRoomMessage.setLog(RealmRoomMessageLog.build(roomMessage.getLog()));
-                    realmRoomMessage.setRoomMessageContact(
-                            RealmRoomMessageContact.build(roomMessage.getContact()));
-                    realmRoomMessage.setEdited(roomMessage.getEdited());
-                    realmRoomMessage.setUpdateTime(
-                            roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
-                    realmRoomMessage.setCreateTime(
-                            roomMessage.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
+                    RealmRoomMessage.putOrUpdate(roomMessage, Long.parseLong(identity));
 
                     if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
                         if (!G.isAppInFg) {
-
                             G.helperNotificationAndBadge.checkAlert(true,
                                     ProtoGlobal.Room.Type.CHAT, Long.parseLong(identity));
                         }
                     }
-                    realmRoomMessages.add(realmRoomMessage);
                 }
             }
         });

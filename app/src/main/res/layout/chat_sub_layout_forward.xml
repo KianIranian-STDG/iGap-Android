@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/cslr_ll_forward"
-              android:layout_width="wrap_content"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="horizontal"
               android:clickable="true"
-              android:paddingBottom="@dimen/dp8"
-              android:paddingRight="@dimen/messageContainerPadding"
-              android:paddingTop="@dimen/dp8"
-              android:paddingLeft="@dimen/messageContainerPadding"
-              android:visibility="visible">
+              android:orientation="horizontal"
+              android:paddingBottom="@dimen/messageContainerPadding"
+              android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
+              android:paddingRight="@dimen/messageContainerPaddingLeftRight"
+              android:paddingTop="@dimen/messageContainerPadding">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <View
         android:layout_width="2dp"
         android:layout_height="match_parent"
-        android:background="@color/newBlack"
-        android:layout_marginRight="3dp">
-    </LinearLayout>
+        android:layout_marginRight="3dp"
+        android:background="@color/newBlack"/>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,18 +28,16 @@
             android:text="@string/forwarded_from"
             android:textColor="@color/newBlack"
             android:textSize="@dimen/sp12"
-            android:textStyle="bold"
-            android:layout_weight="1"/>
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/cslr_txt_forward_from"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SAMPLE TEXT"
             android:textColor="@color/newBlack"
             android:textSize="@dimen/sp12"
-            android:textStyle="bold"
-            android:layout_weight="1"/>
+            android:textStyle="bold"/>
     </LinearLayout>
 
 </LinearLayout>

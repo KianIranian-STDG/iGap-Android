@@ -5,9 +5,9 @@
               android:background="@color/messageBox_replyBoxBackgroundSend"
               android:clickable="true"
               android:orientation="horizontal"
-              android:paddingBottom="@dimen/dp8"
-              android:paddingRight="@dimen/messageContainerPadding"
-              android:paddingLeft="@dimen/messageContainerPadding"
+              android:paddingBottom="@dimen/messageContainerPadding"
+              android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
+              android:paddingRight="@dimen/messageContainerPaddingLeftRight"
               android:paddingTop="@dimen/messageContainerPadding"
               android:textDirection="firstStrong">
 
@@ -15,22 +15,21 @@
         android:id="@+id/verticalLine"
         android:layout_width="3dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/messageContainerPadding"
+        android:layout_marginRight="@dimen/dp8"
         android:background="@color/colorOldBlack"/>
 
     <ImageView
         android:id="@+id/chslr_imv_replay_pic"
         android:layout_width="@dimen/dp40"
-        android:layout_height="@dimen/dp40"
-        android:layout_marginLeft="@dimen/dp8"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp8"
         android:adjustViewBounds="true"
         android:src="@mipmap/empty"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp8"
+        android:layout_height="match_parent"
         android:gravity="left"
         android:orientation="vertical">
 
@@ -48,13 +47,11 @@
         <io.github.meness.emoji.EmojiTextView
             android:id="@+id/chslr_txt_replay_message"
             style="@style/ChatMessages.EmojiTextView"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:text="SAMPLE TEXT"
             android:layout_marginBottom="-6dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="SAMPLE TEXT"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp14"/>
     </LinearLayout>
-
-
 </LinearLayout>
