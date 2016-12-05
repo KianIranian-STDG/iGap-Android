@@ -2682,8 +2682,8 @@ public class ActivityChat extends ActivityEnhanced
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom.getAttachment());
                 replayTo.setText(chatItem.forwardedFrom.getMessage());
             } else {
-                RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, chatItem.attachment.token).findFirst();
-                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, attachment);
+                RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(chatItem.messageID)).findFirst();
+                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message.getAttachment());
                 replayTo.setText(chatItem.messageText);
             }
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(chatItem.senderID)).findFirst();
@@ -2744,8 +2744,9 @@ public class ActivityChat extends ActivityEnhanced
         rippleReplaySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                // FIXME: 10/31/2016 [Alireza] inja nabayad null bashe
-                replay(null);
+                if (!mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
+                    replay(mAdapter.getSelectedItems().iterator().next().mMessage);
+                }
             }
         });
         btnCopySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_copy_selected);

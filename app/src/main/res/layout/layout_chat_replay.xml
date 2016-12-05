@@ -26,13 +26,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingRight="@dimen/dp6"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingRight="@dimen/dp6">
 
         <io.github.meness.emoji.EmojiTextView
             android:id="@+id/replyFrom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="SAMPLE TEXT"
             android:textColor="@color/green"
             android:textStyle="bold"/>
@@ -41,6 +43,8 @@
             android:id="@+id/replayTo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="SAMPLE TEXT"/>
     </LinearLayout>
 
