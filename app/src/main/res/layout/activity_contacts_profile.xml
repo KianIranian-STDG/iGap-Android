@@ -388,11 +388,13 @@
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal" />
 
+                <!--this part is gone-->
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText" />
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/chi_txt_blockContact"
@@ -404,7 +406,8 @@
                     android:text="@string/chi_blockContact"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

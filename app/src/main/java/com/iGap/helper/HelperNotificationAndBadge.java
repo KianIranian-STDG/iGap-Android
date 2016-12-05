@@ -31,7 +31,6 @@ import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
-import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -71,7 +70,7 @@ public class HelperNotificationAndBadge {
     private RemoteViews remoteViewsLarge;
     private SharedPreferences sharedPreferences;
     private int led;
-    private String vibrator;
+    private int vibrator;
     private int popupNotification;
     private int sound;
     private int messagePeriview;
@@ -80,11 +79,11 @@ public class HelperNotificationAndBadge {
     private int inRoomSound;        //specially for each room
     private int inRoomLedColor;     //specially for each room
     private int inAppSound;
-    private int inVibrator;
+    private int inAppVibrator;
     private int inAppPreview;
     private int inChat_Sound;
     private int countUnicChat = 0;
-    private int idRoom;
+    private long idRoom;
 
     public HelperNotificationAndBadge() {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -304,20 +303,6 @@ public class HelperNotificationAndBadge {
                 .setOngoing(true)
                 .build();
 
-        if (inAppPreview == 0 && G.isAppInFg) {
-
-            if (messagePeriview == 0) {
-
-                notification.tickerText = "";
-            }
-        } else {
-            if (messagePeriview == 0) {
-                notification.tickerText = "";
-            } else {
-
-                notification.tickerText = list.get(0).name + " " + messageToshow;
-            }
-        }
         if (isMute) {
 
             Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
@@ -325,48 +310,53 @@ public class HelperNotificationAndBadge {
         } else {
 
             //=======================================================
-            if (inAppSound == 0 && G.isAppInFg) {
-                notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
-            } else {
-                if (inChat_Sound == 0 && isChatRoomNow) {
-                    notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
-                } else if (inChat_Sound == 1 && isChatRoomNow) {
-                    notification.sound = Uri.parse(
+//            if (inAppSound == 0 && G.isAppInFg) {
+//                notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
+//            } else {
+//                if (inChat_Sound == 0 && isChatRoomNow) {
+//                    notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
+//                } else if (inChat_Sound == 1 && isChatRoomNow) {
+//                    notification.sound = Uri.parse(
+//
+//                            "android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
+//                } else if (inAppSound == 0) {
+//                    notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
+//                } else if (inAppSound == 1) {
+//                    notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
+//                }
+//            }
 
-                            "android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
-                } else if (inAppSound == 0) {
-                    notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
-                } else if (inAppSound == 1) {
+            if (G.isAppInFg) {
+                if (!isChatRoomNow) {
+
+                    if (inAppVibrator == 1) {
+                        notification.vibrate = setVibrator(vibrator);
+                    }
+                    if (inAppSound == 1) {
+                        notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
+                    }
+                    if (inAppPreview == 1) {
+                        notification.tickerText = list.get(0).name + " " + messageToshow;
+                    }
+                } else if (inChat_Sound == 1) {
                     notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
                 }
-            }
-            //=======================================================
-
-            if (inVibrator == 0 && G.isAppInFg) {
-                notification.vibrate = new long[]{0, 0, 0};
             } else {
-
                 notification.vibrate = setVibrator(vibrator);
-                //if (inRoomVibrator.equals("Disable")) {
-                //
-                //
-                //} else {
-                //    //notification.vibrate = setVibrator(inRoomVibrator);
-                //}
+                notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
 
+                if (messagePeriview == 1) {
+                    notification.tickerText = list.get(0).name + " " + messageToshow;
+                } else {
+                    notification.tickerText = "";
+                }
             }
         }
-        //=======================================================
 
         notification.flags |= Notification.FLAG_SHOW_LIGHTS;
-        if (inRoomLedColor == 0) {
-            notification.ledARGB = led;
-        } else {
-            //notification.ledARGB = inRoomLedColor;
-        }
-
+        notification.ledARGB = led;
         notification.ledOnMS = 1000;
-        notification.ledOffMS = 1000;
+        notification.ledOffMS = 2000;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             setRemoteViewsLarge();
@@ -378,56 +368,22 @@ public class HelperNotificationAndBadge {
 
     public void checkAlert(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
 
-        if (G.isAppInFg || AttachFile.isInAttach) {
 
-            return;   // if program is in forground do not show notification
-        }
+        idRoom = roomId;
 
-        idRoom = (int) roomId;
-
+        int vipCheck = checkSpecialNotification(updateNotification, type, roomId);
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         int checkAlert = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
-        if (checkAlert == 1) {
-            Realm realm = Realm.getDefaultInstance();
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
+        if (vipCheck == ENABLE) {
             startActivityPopUpNotification(type);
-
-            switch (type) {
-                case CHAT:
-                    if (realmRoom != null
-                            && realmRoom.getChatRoom() != null
-                            && realmRoom.getChatRoom().getRealmNotificationSetting() != null
-                            && realmRoom.getChatRoom().getRealmNotificationSetting().getNotification() != 0) {
-                        switch (realmRoom.getChatRoom().getRealmNotificationSetting().getNotification()) {
-                            case DEFAULT:
-                                updateNotificationAndBadge(updateNotification, type);
-                                break;
-                            case ENABLE:
-                                updateNotificationAndBadge(updateNotification, type);
-                                break;
-                            case DISABLE:
-                                return;
-                        }
-                    } else {
-                        updateNotificationAndBadge(updateNotification, type);
-                    }
-
-
-                    break;
-                case GROUP:
-
-                    if (realmRoom != null) {
-                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                        if (realmGroupRoom.getRealmNotificationSetting() != null && realmGroupRoom.getRealmNotificationSetting().getNotification() != 0) {
-                            updateNotificationAndBadge(updateNotification, type);
-                        }
-                    }
-
-                    break;
-                case CHANNEL:
-                    break;
+            updateNotificationAndBadge(updateNotification, type);
+        } else if (vipCheck == DEFAULT) {
+            if (checkAlert == 1) {
+                startActivityPopUpNotification(type);
+                updateNotificationAndBadge(updateNotification, type);
             }
+        } else if (vipCheck == DISABLE) {
+            return;
         }
     }
 
@@ -452,19 +408,17 @@ public class HelperNotificationAndBadge {
                 }
                 if (realmRoom != null
                         && realmRoom.getChatRoom() != null
-                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null
-                        && realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate() != null) {
-
+                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null) {
                     vibrator = realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate();
                 } else {
-                    vibrator = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, "Default");
+                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
                 }
                 //    popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 3);
 
                 if (realmRoom != null
                         && realmRoom.getChatRoom() != null
                         && realmRoom.getChatRoom().getRealmNotificationSetting() != null
-                        && realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound() != 0) {
+                        ) {
 
                     sound = realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
@@ -482,28 +436,27 @@ public class HelperNotificationAndBadge {
 
                     led = realmRoom.getGroupRoom().getRealmNotificationSetting().getLedColor();
                 } else {
-
                     led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
                 }
 
                 if (realmRoom != null
                         && realmRoom.getGroupRoom() != null
-                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null
-                        && realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate() != null) {
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null) {
 
-                    vibrator = realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate();
+                    if (realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate() == 1) {
+                        vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
+
+                    } else {
+                        vibrator = realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate();
+                    }
+
                 } else {
-                    vibrator = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, "Default");
+                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
                 }
-
-
-                //   popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 3);
-
 
                 if (realmRoom != null
                         && realmRoom.getGroupRoom() != null
-                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null
-                        && realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound() != 0) {
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null) {
 
                     sound = realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
@@ -523,7 +476,7 @@ public class HelperNotificationAndBadge {
             isMute = realmRoom.getMute();
         }
         inAppSound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
-        inVibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
+        inAppVibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
         inAppPreview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);
         inChat_Sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 1);
 
@@ -661,23 +614,23 @@ public class HelperNotificationAndBadge {
         return sound;
     }
 
-    public long[] setVibrator(String vibre) {
+    public long[] setVibrator(int vibre) {
         long[] intVibrator = new long[]{};
 
         switch (vibre) {
-            case "Disable":
+            case 0:
                 intVibrator = new long[]{0, 0, 0};
                 break;
-            case "Default":
-                intVibrator = new long[]{0, 500, 0};
+            case 1:
+                intVibrator = new long[]{0, 350, 0};
                 break;
-            case "Short":
+            case 2:
                 intVibrator = new long[]{0, 200, 0};
                 break;
-            case "Long":
+            case 3:
                 intVibrator = new long[]{0, 1000, 0};
                 break;
-            case "Only if silent":
+            case 4:
                 AudioManager am2 = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
                 switch (am2.getRingerMode()) {
                     case AudioManager.RINGER_MODE_SILENT:
@@ -828,5 +781,66 @@ public class HelperNotificationAndBadge {
         String name = "";
         String message = "";
         String time = "";
+    }
+
+    private int checkSpecialNotification(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        switch (type) {
+            case CHAT:
+                if (realmRoom != null
+                        && realmRoom.getChatRoom() != null
+                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null) {
+                    switch (realmRoom.getChatRoom().getRealmNotificationSetting().getNotification()) {
+                        case DEFAULT:
+                            return DEFAULT;
+                        case ENABLE:
+                            return ENABLE;
+                        case DISABLE:
+                            return DISABLE;
+                    }
+                } else {
+                    return DEFAULT;
+                }
+                break;
+            case GROUP:
+
+                if (realmRoom != null
+                        && realmRoom.getGroupRoom() != null
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null) {
+
+                    switch (realmRoom.getGroupRoom().getRealmNotificationSetting().getNotification()) {
+                        case DEFAULT:
+                            return DEFAULT;
+                        case ENABLE:
+                            return ENABLE;
+                        case DISABLE:
+                            return DISABLE;
+                    }
+                } else {
+                    return DEFAULT;
+                }
+            case CHANNEL:
+                if (realmRoom != null
+                        && realmRoom.getChannelRoom() != null
+                        && realmRoom.getChannelRoom().getRealmNotificationSetting() != null) {
+
+                    switch (realmRoom.getChannelRoom().getRealmNotificationSetting().getNotification()) {
+                        case DEFAULT:
+                            return DEFAULT;
+                        case ENABLE:
+                            return ENABLE;
+                        case DISABLE:
+                            return DISABLE;
+                    }
+                } else {
+                    return DEFAULT;
+                }
+
+            default:
+                return DEFAULT;
+        }
+        realm.close();
+        return 0;
     }
 }

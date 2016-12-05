@@ -63,7 +63,7 @@ public class GroupSendMessageResponse extends MessageHandler {
 
                     RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId());
 
-                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.GROUP, roomMessage.getMessageId());
+                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.GROUP, builder.getRoomId());
                 } else {
                     // i'm the sender
                     // update message fields into database

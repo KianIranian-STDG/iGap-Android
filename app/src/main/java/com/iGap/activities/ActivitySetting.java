@@ -1250,9 +1250,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        poRbDialogTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16) - 11;
+        poRbDialogTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14) - 11;
         txtMessageTextSize = (TextView) findViewById(R.id.st_txt_messageTextSize_number);
-        txtMessageTextSize.setText("" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16));
+        txtMessageTextSize.setText("" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
 
         ltMessageTextSize = (ViewGroup) findViewById(R.id.st_layout_messageTextSize);
         ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
@@ -1463,7 +1463,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         for (Integer aWhich : which) {
 
                             if (aWhich == 0) {
-
                                 KEY_AD_WIFI_PHOTO = aWhich;
                             } else if (aWhich == 1) {
                                 KEY_AD_WIFI_VOICE_MESSAGE = aWhich;
@@ -1574,7 +1573,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ltAutoGifs = (TextView) findViewById(R.id.st_txt_autoGif);
         toggleAutoGifs = (ToggleButton) findViewById(R.id.st_toggle_autoGif);
-        int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0);
+        int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 1);
         if (checkedAutoGif == 1) {
             toggleAutoGifs.setChecked(true);
         } else {
@@ -1601,7 +1600,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ltSaveToGallery = (TextView) findViewById(R.id.st_txt_saveGallery);
         toggleSaveToGallery = (ToggleButton) findViewById(R.id.st_toggle_saveGallery);
-        int checkedSaveToGallery = sharedPreferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
+        int checkedSaveToGallery = sharedPreferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 1);
         if (checkedSaveToGallery == 1) {
             toggleSaveToGallery.setChecked(true);
         } else {

@@ -5,7 +5,7 @@ import io.realm.RealmObject;
 public class RealmNotificationSetting extends RealmObject {
 
     private int notification;
-    private String vibrate;
+    private int vibrate;
     private String sound;
     private int idRadioButtonSound;
     private String smartNotification;
@@ -22,11 +22,11 @@ public class RealmNotificationSetting extends RealmObject {
     }
 
 
-    public String getVibrate() {
+    public int getVibrate() {
         return vibrate;
     }
 
-    public void setVibrate(String vibrate) {
+    public void setVibrate(int vibrate) {
         this.vibrate = vibrate;
     }
 

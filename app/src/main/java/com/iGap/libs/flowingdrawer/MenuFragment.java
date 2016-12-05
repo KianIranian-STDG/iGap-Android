@@ -28,7 +28,7 @@ public class MenuFragment extends Fragment {
     public void show(int y) {
         if (!isShown) {
             isShown = true;
-            mRevealLayout.show(50, y, 1500);
+            mRevealLayout.show(100, y, 900);
             //event call back
             onOpenMenu();
         }

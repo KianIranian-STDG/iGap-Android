@@ -168,7 +168,8 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                     fragmentActivity.setArguments(bundle);
                     ((FragmentActivity) G.currentActivity).getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.stcb_root, fragmentActivity)
+                            .addToBackStack(null)
+                            .replace(R.id.stcb_root, fragmentActivity, null)
                             .commit();
 
                     ActivityChatBackground.savePath = item.getPathImage();

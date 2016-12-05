@@ -191,4 +191,21 @@ public class ActivityChatBackground extends ActivityEnhanced {
             }
         }
     }
+
+    /*@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            Log.i("CCCX", "onKeyDown 1: ");
+            FragmentFullChatBackground fm = (FragmentFullChatBackground) getSupportFragmentManager().findFragmentByTag("FRAGMENT_FULL");
+            if (fm !=null && fm.isVisible()){
+                Log.i("CCCX", "onKeyDown 2: ");
+                getSupportFragmentManager().beginTransaction().remove(fm).commit();
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }*/
 }
