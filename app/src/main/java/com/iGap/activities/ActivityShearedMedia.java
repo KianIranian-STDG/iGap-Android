@@ -31,12 +31,22 @@ import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoClientSearchRoomHistory;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmShearedMedia;
 import com.iGap.request.RequestClientSearchRoomHistory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -61,6 +71,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = false;
+
 
     ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter mFilter;
 
@@ -187,7 +198,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 super.onScrollStateChanged(recyclerView, newState);
 
 
-                Log.e("dddd", mAdapter.getItemCount() + "   " + ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition());
 
                 if (isThereAnyMoreItemToLoad) {
                     if (!isSendRequestForLoading) {
@@ -370,7 +380,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 });
 
 
-                offset = mList.size();
 
             }
         }, mFilter);
@@ -397,7 +406,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     }
                 });
 
-                offset = mList.size();
+
 
             }
         }, mFilter);
@@ -427,7 +436,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 });
 
 
-                offset = mList.size();
 
             }
         }, mFilter);
@@ -440,7 +448,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         getDataFromServer(new OnFillList() {
             @Override
             public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
 
                 mList = addTimeToList(resultList);
                 mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.voice, complete, musicPlayer, roomId);
@@ -455,9 +462,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     }
                 });
 
-
-                offset = mList.size();
-
             }
         }, mFilter);
 
@@ -470,7 +474,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         getDataFromServer(new OnFillList() {
             @Override
             public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
 
                 mList = addTimeToList(resultList);
 
@@ -486,7 +489,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 });
 
 
-                offset = mList.size();
 
             }
         }, mFilter);
@@ -514,8 +516,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     }
                 });
 
-
-                offset = mList.size();
 
 
             }
@@ -545,7 +545,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     }
                 });
 
-                offset = mList.size();
+
 
             }
         }, mFilter);
@@ -557,7 +557,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     //********************************************************************************************
 
 
-    private void getDataFromServer(final OnFillList onFillList, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter) {
+    private void getDataFromServer(final OnFillList onFillList, final ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter) {
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
             @Override
@@ -569,20 +569,25 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                 }
 
+                offset += resultList.size();
+
                 if (totalCount > 0) {
-                    onFillList.getList(totalCount, notDeletedCount, resultList);
+                    saveDataToLocal(filter, resultList);
+
+                    onFillList.getList(totalCount, notDeletedCount, loadDataFromLocal(filter));
+
                 } else {
                     Toast.makeText(ActivityShearedMedia.this, "there is no Sheared media", Toast.LENGTH_LONG).show();
                 }
 
-                if (totalCount > mList.size()) {
+                if (totalCount > offset) {
                     isThereAnyMoreItemToLoad = true;
                 } else {
                     isThereAnyMoreItemToLoad = false;
                 }
 
 
-                Log.e("dddd", "isThereAnyMoreItemToLoad   " + isThereAnyMoreItemToLoad);
+                Log.e("dddd", "isThereAnyMoreItemToLoad   " + isThereAnyMoreItemToLoad + "    " + offset);
             }
 
             @Override
@@ -624,9 +629,31 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         };
 
+        onFillList.getList(0, 0, loadDataFromLocal(filter));
+
         new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, filter);
         isSendRequestForLoading = true;
 
+
+    }
+
+    private ArrayList<ProtoGlobal.RoomMessage> loadDataFromLocal(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter) {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        byte[] type = SerializationUtils.serialize(filter);
+
+        RealmResults<RealmShearedMedia> mediaList = realm.where(RealmShearedMedia.class).equalTo("roomId", roomId).equalTo("filter", type).findAllSorted("messageId", Sort.ASCENDING);
+
+        ArrayList<ProtoGlobal.RoomMessage> list = new ArrayList<>();
+
+        for (RealmShearedMedia media : mediaList) {
+            list.add((ProtoGlobal.RoomMessage) SerializationUtils.deserialize(media.getRoomMessage()));
+        }
+
+        realm.close();
+
+        return list;
 
     }
 
@@ -636,15 +663,44 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             @Override
             public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
-                mList.addAll(addTimeToList(resultList));
+                mList = addTimeToList(resultList);
                 mAdapter.notifyDataSetChanged();
 
-
-                offset = mList.size();
+                Log.e("ddd", "load more **********************************");
 
             }
         }, mFilter);
 
+
+    }
+
+    private void saveDataToLocal(final ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter, final List<ProtoGlobal.RoomMessage> RoomMessages) {
+
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                for (ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
+
+                    RealmShearedMedia mediaList = realm.where(RealmShearedMedia.class).equalTo("messageId", roomMessage.getMessageId()).equalTo("roomId", roomId).findFirst();
+
+                    if (mediaList == null) {
+                        mediaList = realm.createObject(RealmShearedMedia.class);
+
+                        mediaList.setRoomId(roomId);
+                        mediaList.setFilter(SerializationUtils.serialize(filter));
+                        mediaList.setMessageId(roomMessage.getMessageId());
+                        mediaList.setRoomMessage(SerializationUtils.serialize(roomMessage));
+                    }
+                }
+
+            }
+        });
+
+        realm.close();
 
     }
 
@@ -692,6 +748,80 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         return result;
     }
+
+
+    /**
+     * Simple Class to serialize object to byte arrays
+     *
+     * @author Nick Russler
+     *         http://www.whitebyte.info
+     */
+    public static class SerializationUtils {
+
+
+        /**
+         * @param obj - object to serialize to a byte array
+         * @return byte array containing the serialized obj
+         */
+        public static byte[] serialize(Object obj) {
+            byte[] result = null;
+            ByteArrayOutputStream fos = null;
+
+            try {
+                fos = new ByteArrayOutputStream();
+                ObjectOutputStream o = new ObjectOutputStream(fos);
+                o.writeObject(obj);
+                result = fos.toByteArray();
+            } catch (IOException e) {
+                System.err.println(e);
+            } finally {
+                try {
+                    fos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return result;
+        }
+
+
+        /**
+         * @param arr - the byte array that holds the serialized object
+         * @return the deserialized object
+         */
+        public static Object deserialize(byte[] arr) {
+            InputStream fis = null;
+
+            try {
+                fis = new ByteArrayInputStream(arr);
+                ObjectInputStream o = new ObjectInputStream(fis);
+                return o.readObject();
+            } catch (IOException e) {
+                System.err.println(e);
+            } catch (ClassNotFoundException e) {
+                System.err.println(e);
+            } finally {
+                try {
+                    fis.close();
+                } catch (Exception e) {
+                }
+            }
+
+            return null;
+        }
+
+        /**
+         * @param obj - object to be cloned
+         * @return a clone of obj
+         */
+        @SuppressWarnings("unchecked")
+        public static <T> T cloneObject(T obj) {
+            return (T) deserialize(serialize(obj));
+        }
+    }
+
+
 
 
 }

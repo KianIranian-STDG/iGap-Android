@@ -246,6 +246,8 @@ public class ActivityGroupProfile extends ActivityEnhanced
     protected void onResume() {
         super.onResume();
 
+        txtNumberOfSharedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
+
         LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
     }
 
