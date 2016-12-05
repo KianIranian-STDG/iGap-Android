@@ -100,6 +100,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="cardPreventCornerOverlap">true</item>
+        <item name="contentPadding">0dp</item>
         <item name="cardUseCompatPadding">true</item>
         <item name="android:layout_marginRight">@dimen/messageBox_minusLeftRightMargin</item>
         <item name="android:layout_marginTop">-5dp</item>

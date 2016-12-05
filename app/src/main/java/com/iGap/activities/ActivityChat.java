@@ -67,6 +67,7 @@ import com.iGap.adapter.items.chat.AudioItem;
 import com.iGap.adapter.items.chat.ContactItem;
 import com.iGap.adapter.items.chat.FileItem;
 import com.iGap.adapter.items.chat.GifItem;
+import com.iGap.adapter.items.chat.GifWithTextItem;
 import com.iGap.adapter.items.chat.ImageItem;
 import com.iGap.adapter.items.chat.ImageWithTextItem;
 import com.iGap.adapter.items.chat.LocationItem;
@@ -1059,7 +1060,13 @@ public class ActivityChat extends ActivityEnhanced
                         }
                         break;
                     case GIF_TEXT:
-                        // TODO: 12/4/2016 [Alireza] implement gif for text
+                        if (chatType != CHANNEL) {
+                            if (!addTop) {
+                                mAdapter.add(new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(0, new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
+                        }
                         break;
                     case LOG:
                         // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement
@@ -4540,7 +4547,7 @@ public class ActivityChat extends ActivityEnhanced
             action = SENDING_AUDIO;
         } else if (type == ProtoGlobal.RoomMessageType.VOICE) {
             action = SENDING_VOICE;
-        } else if (type == ProtoGlobal.RoomMessageType.GIF) {
+        } else if ((type == ProtoGlobal.RoomMessageType.GIF) || type == ProtoGlobal.RoomMessageType.GIF_TEXT) {
             action = SENDING_GIF;
         } else if ((type == ProtoGlobal.RoomMessageType.FILE) || (type == ProtoGlobal.RoomMessageType.FILE_TEXT)) {
             action = SENDING_FILE;

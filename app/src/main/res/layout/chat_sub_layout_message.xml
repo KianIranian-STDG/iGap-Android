@@ -60,7 +60,7 @@
                             android:id="@+id/messageText"
                             style="@style/ChatMessages.EmojiTextView"
                             android:layout_marginBottom="-4dp"
-                            android:text="Hello df df df d fd f df df d f  df df df df df d fd f df df d fd f df d fd fd f df df "/>
+                            android:text="SAMPLE TEXT"/>
 
                         <include layout="@layout/chat_sub_layout_messages_time"/>
                     </LinearLayout>

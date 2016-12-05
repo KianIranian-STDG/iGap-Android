@@ -578,6 +578,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 break;
                             case GIF:
                             case GIF_TEXT:
+                                holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        forOnCLick(holder, attachment);
+                                    }
+                                });
+
                                 SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                 if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0) == 0) {
                                     ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
@@ -19,6 +20,7 @@ import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.io.File;
 import java.util.List;
 
+import io.github.meness.emoji.EmojiTextView;
 import io.meness.github.messageprogress.MessageProgress;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
@@ -28,10 +30,10 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
  */
-public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
+public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
-    public GifItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+    public GifWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
     }
 
@@ -55,12 +57,12 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
 
     @Override
     public int getType() {
-        return R.id.chatSubLayoutGif;
+        return R.id.chatSubLayoutGifWithText;
     }
 
     @Override
     public int getLayoutRes() {
-        return R.layout.chat_sub_layout_gif;
+        return R.layout.chat_sub_layout_gif_with_text;
     }
 
     @Override
@@ -98,14 +100,18 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
                 dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
                         mMessage.forwardedFrom.getAttachment().getWidth(), mMessage.forwardedFrom.getAttachment().getHeight());
             }
+
+            setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
         } else {
             if (mMessage.attachment != null) {
                 dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
                         mMessage.attachment.width, mMessage.attachment.height);
             }
+
+            setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], dimens[1]);
-        FrameLayout.LayoutParams layoutParamsForParentParent = new FrameLayout.LayoutParams(dimens[0], dimens[1]);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams layoutParamsForParentParent = new FrameLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
         ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
         ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParamsForParentParent);
         holder.image.getParent().requestLayout();
@@ -143,6 +149,33 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
                 return false;
             }
         });
+
+        holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                holder.itemView.performLongClick();
+                return false;
+            }
+        });
+
+        holder.messageText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isSelected()) {
+                    if (mMessage.status.equalsIgnoreCase(
+                            ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        return;
+                    }
+                    if (mMessage.status.equalsIgnoreCase(
+                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, mMessage,
+                                holder.getAdapterPosition());
+                    } else {
+                        messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+                    }
+                }
+            }
+        });
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
@@ -153,11 +186,14 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected GifImageView image;
+        protected EmojiTextView messageText;
 
         public ViewHolder(View view) {
             super(view);
 
             image = (GifImageView) view.findViewById(R.id.thumbnail);
+            messageText = (EmojiTextView) view.findViewById(R.id.messageText);
+            messageText.setTextSize(G.userTextSize);
         }
     }
 }

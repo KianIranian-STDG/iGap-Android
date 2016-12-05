@@ -3,6 +3,7 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.iGap.G;
@@ -46,27 +47,28 @@ public class ImageWithTextItem
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        int[] dimens = new int[2];
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
-                int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
+                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
                         mMessage.forwardedFrom.getAttachment().getWidth(), mMessage.forwardedFrom.getAttachment().getHeight());
-                ((ViewGroup) holder.image.getParent()).setLayoutParams(
-                        new LinearLayout.LayoutParams(dimens[0], dimens[1]));
-                holder.image.getParent().requestLayout();
             }
 
             setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
         } else {
             if (mMessage.attachment != null) {
-                int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
+                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
                         mMessage.attachment.width, mMessage.attachment.height);
-                ((ViewGroup) holder.image.getParent()).setLayoutParams(
-                        new LinearLayout.LayoutParams(dimens[0], dimens[1]));
-                holder.image.getParent().requestLayout();
             }
 
             setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams layoutParamsForParentParent = new FrameLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
+        ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
+        ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParamsForParentParent);
+        holder.image.getParent().requestLayout();
+        holder.image.getParent().getParent().requestLayout();
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
