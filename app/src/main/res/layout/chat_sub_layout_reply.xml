@@ -14,21 +14,21 @@
     <View
         android:id="@+id/verticalLine"
         android:layout_width="3dp"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/dp40"
         android:layout_marginRight="@dimen/dp8"
         android:background="@color/colorOldBlack"/>
 
     <ImageView
         android:id="@+id/chslr_imv_replay_pic"
-        android:layout_width="@dimen/dp40"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp40"
         android:layout_marginRight="@dimen/dp8"
         android:adjustViewBounds="true"
         android:src="@mipmap/empty"
         android:visibility="visible"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="left"
         android:orientation="vertical">
@@ -36,6 +36,7 @@
         <io.github.meness.emoji.EmojiTextView
             android:id="@+id/chslr_txt_replay_from"
             style="@style/ChatMessages.EmojiTextView"
+            android:layout_width="match_parent"
             android:layout_marginBottom="-5dp"
             android:layout_marginTop="-4dp"
             android:maxLines="1"
@@ -47,6 +48,8 @@
         <io.github.meness.emoji.EmojiTextView
             android:id="@+id/chslr_txt_replay_message"
             style="@style/ChatMessages.EmojiTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginBottom="-6dp"
             android:ellipsize="end"
             android:maxLines="1"

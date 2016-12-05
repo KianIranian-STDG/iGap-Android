@@ -2662,7 +2662,7 @@ public class ActivityChat extends ActivityEnhanced
         if (findViewById(R.id.replayLayoutAboveEditText) == null) {
             ViewStubCompat stubView = (ViewStubCompat) findViewById(R.id.replayLayoutStub);
             stubView.setInflatedId(R.id.replayLayoutAboveEditText);
-            stubView.setLayoutResource(R.layout.layout_chat_replay);
+            stubView.setLayoutResource(R.layout.layout_chat_reply);
             stubView.inflate();
 
             inflateReplayLayoutIntoStub(chatItem);

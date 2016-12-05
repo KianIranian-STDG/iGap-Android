@@ -33,7 +33,7 @@
 
                 <include
                     android:id="@+id/replayLayout"
-                    layout="@layout/chat_sub_layout_replay"/>
+                    layout="@layout/chat_sub_layout_reply"/>
 
                 <include
                     android:id="@+id/cslr_ll_forward"
