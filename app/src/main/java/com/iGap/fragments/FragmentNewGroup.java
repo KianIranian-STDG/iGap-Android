@@ -850,13 +850,18 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
         }
     }
 
+    @Override
+    public void onUploadStarted(FileUploadStructure struct) {
+        // empty
+    }
+
     //=======================result for picture
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == IntentRequests.REQ_CAMERA && resultCode == getActivity().RESULT_OK) {// result for camera
+        if (requestCode == IntentRequests.REQ_CAMERA && resultCode == Activity.RESULT_OK) {// result for camera
 
             Intent intent = new Intent(getActivity(), ActivityCrop.class);
             if (uriIntent != null) {
@@ -867,7 +872,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
             } else {
                 Toast.makeText(G.context, R.string.can_not_save_picture_pleas_try_again, Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == getActivity().RESULT_OK) {// result for gallery
+        } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == Activity.RESULT_OK) {// result for gallery
             if (data != null) {
                 Intent intent = new Intent(getActivity(), ActivityCrop.class);
                 intent.putExtra("IMAGE_CAMERA", data.getData().toString());

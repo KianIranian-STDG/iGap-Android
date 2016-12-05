@@ -38,6 +38,9 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
     }
 
     public void startUploading(FileUploadStructure uploadStructure, String identity) {
+        if (activityCallbacks != null) {
+            activityCallbacks.onUploadStarted(uploadStructure);
+        }
         mSelectedFiles.add(uploadStructure);
         // make first request
         new RequestFileUploadOption().fileUploadOption(uploadStructure, identity);
@@ -72,7 +75,9 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
         FileUploadStructure fileUploadStructure = getSelectedFile(identity);
         fileUploadStructure.token = token;
 
-        activityCallbacks.onFileUploading(fileUploadStructure, identity, progress);
+        if (activityCallbacks != null) {
+            activityCallbacks.onFileUploading(fileUploadStructure, identity, progress);
+        }
 
         // not already uploaded
         if (progress != 100.0) {
@@ -131,7 +136,9 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
 
             if (progress != 100.0) {
                 FileUploadStructure fileUploadStructure = getSelectedFile(identity);
-                activityCallbacks.onFileUploading(fileUploadStructure, identity, progress);
+                if (activityCallbacks != null) {
+                    activityCallbacks.onFileUploading(fileUploadStructure, identity, progress);
+                }
                 Log.i("BreakPoint", identity + " > fileUploadStructure");
                 final long startGetNBytesTime = System.currentTimeMillis();
                 byte[] bytes =
@@ -167,7 +174,9 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
 
     @Override
     public void onFileUploadTimeOut(String identity) {
-        activityCallbacks.onFileTimeOut(identity);
+        if (activityCallbacks != null) {
+            activityCallbacks.onFileTimeOut(identity);
+        }
     }
 
     /**
@@ -195,7 +204,9 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
             return;
         }
         if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED) {
-            activityCallbacks.onFileUploaded(fileUploadStructure, identity);
+            if (activityCallbacks != null) {
+                activityCallbacks.onFileUploaded(fileUploadStructure, identity);
+            }
 
             // remove from selected files to prevent calling this method multiple times
             // multiple calling may occurs because of the server

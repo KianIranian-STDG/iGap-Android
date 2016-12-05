@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
-import com.iGap.module.AppUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -63,7 +62,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
                 holder.image.getParent().requestLayout();
                 holder.duration.setText(
                         String.format(holder.itemView.getResources().getString(R.string.video_duration),
-                                AppUtils.humanReadableDuration(mMessage.forwardedFrom.getAttachment().getDuration()).replace(".", ":"),
+                                AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)),
                                 AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
             }
         } else {
@@ -72,7 +71,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
                         mMessage.attachment.width, mMessage.attachment.height);
                 holder.duration.setText(
                         String.format(holder.itemView.getResources().getString(R.string.video_duration),
-                                AppUtils.humanReadableDuration(mMessage.attachment.duration).replace(".", ":"),
+                                AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)),
                                 AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true)));
             }
         }

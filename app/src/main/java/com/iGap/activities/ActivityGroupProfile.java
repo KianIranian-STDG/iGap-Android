@@ -1063,6 +1063,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
     }
 
+    @Override
+    public void onUploadStarted(FileUploadStructure struct) {
+        // empty
+    }
+
     //dialog for choose pic from gallery or camera
     private void startDialogSelectPicture(int r) {
 

@@ -2631,7 +2631,6 @@ public class ActivityChat extends ActivityEnhanced
                         finalMessageInfo.attachment.height = bitmap.getHeight();
                     }
                 }
-                switchAddItem(new ArrayList<>(Collections.singletonList(finalMessageInfo)), false);
 
                 if (finalFilePath != null && finalMessageType != ProtoGlobal.RoomMessageType.CONTACT) {
                     new UploadTask().execute(finalFilePath, finalMessageId, finalMessageType, mRoomId, getWrittenMessage());
@@ -3702,6 +3701,16 @@ public class ActivityChat extends ActivityEnhanced
 
     }
 
+    @Override
+    public void onUploadStarted(FileUploadStructure struct) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
+        if (roomMessage != null) {
+            switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+        }
+        realm.close();
+    }
+
     private void onSelectRoomMenu(String message, int item) {
         switch (message) {
             case "txtMuteNotification":
@@ -4527,6 +4536,7 @@ public class ActivityChat extends ActivityEnhanced
         protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
             MessagesAdapter.uploading.put(result.messageId, 0);
+
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
 
             HelperSetAction.setActionFiles(mRoomId, result.messageId, getAction(result.messageType), chatType);

@@ -1952,4 +1952,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
         return info.versionName;
     }
+
+    @Override
+    public void onUploadStarted(FileUploadStructure struct) {
+        // empty
+    }
 }

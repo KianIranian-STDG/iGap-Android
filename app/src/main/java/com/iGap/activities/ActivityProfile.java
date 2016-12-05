@@ -506,4 +506,9 @@ public class ActivityProfile extends ActivityEnhanced
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
         }
     }
+
+    @Override
+    public void onUploadStarted(FileUploadStructure struct) {
+        // empty
+    }
 }

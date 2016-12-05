@@ -36,6 +36,20 @@ public final class AndroidUtils {
         return size.x;
     }
 
+    public static String formatDuration(int timeMs) {
+        int totalSeconds = timeMs / 1000;
+
+        int seconds = totalSeconds % 60;
+        int minutes = (totalSeconds / 60) % 60;
+        int hours = totalSeconds / 3600;
+
+        if (hours > 0) {
+            return String.format("%d:%02d:%02d", hours, minutes, seconds);
+        } else {
+            return String.format("%02d:%02d", minutes, seconds);
+        }
+    }
+
     public static String getAudioArtistName(String filePath) {
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
         metaRetriever.setDataSource(filePath);
@@ -334,5 +348,4 @@ public final class AndroidUtils {
 
         return new int[]{(int) newWidth, newHeight};
     }
-
 }
