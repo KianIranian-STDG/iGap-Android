@@ -1044,8 +1044,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         fragmentDeleteAccount.setArguments(bundle);
                                         getSupportFragmentManager()
                                                 .beginTransaction()
+                                                .addToBackStack(null)
                                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                                .replace(R.id.st_layoutParent, fragmentDeleteAccount)
+                                                .replace(R.id.st_layoutParent, fragmentDeleteAccount, null)
                                                 .commit();
 
                                     }
@@ -1108,6 +1109,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat);
                     ActivitySetting.this.getSupportFragmentManager()
                             .beginTransaction()
+                            .addToBackStack(null)
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                             .replace(st_layoutParent, fragment, null).commit();
                 }
@@ -1246,7 +1248,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void onClick(View view) {
                 FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity = new FragmentPrivacyAndSecurity();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(st_layoutParent, fragmentPrivacyAndSecurity)
+                        .replace(st_layoutParent, fragmentPrivacyAndSecurity, null)
+                        .addToBackStack(null)
                         .commit();
             }
         });
@@ -1293,7 +1296,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void onClick(View view) {
                 FragmentSticker fragmentSticker = new FragmentSticker();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(st_layoutParent, fragmentSticker)
+                        .replace(st_layoutParent, fragmentSticker, null)
+                        .addToBackStack(null)
                         .commit();
             }
         });
@@ -1409,57 +1413,46 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 new MaterialDialog.Builder(ActivitySetting.this)
                         .title(R.string.st_auto_download_data)
                         .items(R.array.auto_download_data)
-                        .alwaysCallMultiChoiceCallback()
                         .itemsCallbackMultiChoice(new Integer[]{
-                        KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
-                }, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                                KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
+                        }, new MaterialDialog.ListCallbackMultiChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                        for (Integer aWhich : which) {
-                            Log.i("JJJJ", "WIFI: " + aWhich);
-                            if (aWhich == 0) {
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, aWhich);
-                            } else {
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
-                            }
-                            if (aWhich == 1) {
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, aWhich);
-                            } else {
                                 editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1);
-                            }
-                            if (aWhich == 2) {
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, aWhich);
-                            } else {
                                 editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1);
-                            }
-                            if (aWhich == 3) {
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, aWhich);
-                            } else {
                                 editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, -1);
-                            }
-                            if (aWhich == 4) {
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, aWhich);
-                            } else {
                                 editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
-                            }
-                            if (aWhich == 5) {
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, aWhich);
-                            } else {
                                 editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, -1);
-                            }
-                            editor.apply();
-                        }
+                                editor.apply();
 
-                        return true;
-                    }
-                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
+                                for (Integer aWhich : which) {
+                                    Log.i("JJJJ", "WIFI: " + aWhich);
+
+                                    if (aWhich == 0) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, aWhich);
+                                    } else if (aWhich == 1) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, aWhich);
+                                    } else if (aWhich == 2) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, aWhich);
+                                    } else if (aWhich == 3) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, aWhich);
+                                    } else if (aWhich == 4) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, aWhich);
+                                    } else if (aWhich == 5) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, aWhich);
+                                    }
+                                    editor.apply();
+                                }
+
+                                return true;
+                            }
+                        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
             }
         });
-
 
 
         txtAutoDownloadWifi = (TextView) findViewById(R.id.st_txt_autoDownloadWifi);
@@ -1474,7 +1467,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_WIFI_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
                 KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_wifi)
+                        .items(R.array.auto_download_data)
+                        .itemsCallbackMultiChoice(new Integer[]{
                         KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
@@ -1483,42 +1478,31 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
+                        editor.apply();
+
                         for (Integer aWhich : which) {
                             Log.i("JJJJ", "WIFI: " + aWhich);
 
                             if (aWhich == 0) {
                                 editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, aWhich);
-                            } else {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
-                            }
-                            if (aWhich == 1) {
+                            } else if (aWhich == 1) {
                                 editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, aWhich);
-                            } else {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
-                            }
-                            if (aWhich == 2) {
-
+                            } else if (aWhich == 2) {
                                 editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, aWhich);
-                            } else {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1);
-                            }
-                            if (aWhich == 3) {
-
+                            } else if (aWhich == 3) {
                                 editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, aWhich);
-                            } else {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
-                            }
-                            if (aWhich == 4) {
+                            } else if (aWhich == 4) {
 
                                 editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, aWhich);
-                            } else {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
-                            }
-                            if (aWhich == 5) {
-
+                            } else if (aWhich == 5) {
                                 editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, aWhich);
-                            } else {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
                             }
                             editor.apply();
                         }
@@ -1529,72 +1513,62 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        KEY_AD_ROAMING_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
-        KEY_AD_ROAMING_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
-        KEY_AD_ROAMING_VIDEO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, -1);
-        KEY_AD_ROAMING_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_FILE, -1);
-        KEY_AD_ROAMING_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
-        KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
+
 
         txtAutoDownloadRoaming = (TextView) findViewById(R.id.st_txt_autoDownloadRoaming);
         txtAutoDownloadRoaming.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                KEY_AD_ROAMING_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
+                KEY_AD_ROAMING_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
+                KEY_AD_ROAMING_VIDEO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, -1);
+                KEY_AD_ROAMING_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_FILE, -1);
+                KEY_AD_ROAMING_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
+                KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
+
                 new MaterialDialog.Builder(ActivitySetting.this)
                         .title(R.string.st_auto_download_roaming)
                         .items(R.array.auto_download_data)
-//                        .alwaysCallMultiChoiceCallback()
                         .itemsCallbackMultiChoice(new Integer[]{
-                        KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
-                }, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                                KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
+                        }, new MaterialDialog.ListCallbackMultiChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
-                        //
+                                //
 
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                        Log.i("JJJJ", "which: " + which.length);
-
-                        for (Integer aWhich : which) {
-
-                            Log.i("JJJJ", "onSelection: " + aWhich);
-                            if (aWhich == 0) {
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, aWhich);
-                            } else {
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
-                            }
-                            if (aWhich == 1) {
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, aWhich);
-                            } else {
                                 editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
-                            }
-                            if (aWhich == 2) {
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, aWhich);
-                            } else {
                                 editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, -1);
-                            }
-                            if (aWhich == 3) {
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, aWhich);
-                            } else {
                                 editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, -1);
-                            }
-                            if (aWhich == 4) {
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, aWhich);
-                            } else {
                                 editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
-                            }
-                            if (aWhich == 5) {
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, aWhich);
-                            } else {
                                 editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
-                            }
+                                editor.apply();
 
-                            editor.apply();
-                        }
-                        return true;
-                    }
+                                for (Integer aWhich : which) {
+                                    if (aWhich > -1) {
+                                        if ((aWhich == 0)) {
+                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, aWhich);
+                                        } else if ((aWhich == 1)) {
+                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, aWhich);
+                                        } else if ((aWhich == 2)) {
+                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, aWhich);
+                                        } else if ((aWhich == 3)) {
+                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, aWhich);
+                                        } else if ((aWhich == 4)) {
+                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, aWhich);
+                                        } else if ((aWhich == 5)) {
+                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, aWhich);
+                                        }
+                                        editor.apply();
+                                    }
+                                }
+                                return true;
+
+                            }
                         })
                         .positiveText(getResources().getString(R.string.B_ok))
                         .negativeText(getResources().getString(R.string.B_cancel))

@@ -80,7 +80,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
                 getActivity()
                         .getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(st_layoutParent, fragmentActiveSessions)
+                        .addToBackStack(null)
+                        .replace(st_layoutParent, fragmentActiveSessions, null)
                         .commit();
 
 
