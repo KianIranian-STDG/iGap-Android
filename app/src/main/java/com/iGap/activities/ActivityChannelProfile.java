@@ -185,7 +185,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         //=========Put Extra End
 
         TextView txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);
-        TextView txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
+        txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
         //memberNumber = (TextView) findViewById(R.id.txt_member_number);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting);
         LinearLayout lytSharedMedia = (LinearLayout) findViewById(R.id.lyt_shared_media);
