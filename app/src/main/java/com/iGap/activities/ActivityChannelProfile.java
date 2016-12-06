@@ -130,6 +130,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private ProgressBar prgWait;
     private LinearLayout lytListAdmin;
     private LinearLayout lytListModerator;
+    private LinearLayout lytDeleteChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +191,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         LinearLayout lytChannelDescription = (LinearLayout) findViewById(R.id.lyt_description);
         lytListAdmin = (LinearLayout) findViewById(R.id.lyt_list_admin);
         lytListModerator = (LinearLayout) findViewById(R.id.lyt_list_moderator);
+        lytDeleteChannel = (LinearLayout) findViewById(R.id.lyt_delete_channel);
 
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,6 +204,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public void onClick(View v) {
                 membersList(ProtoGlobal.ChannelRoom.Role.MODERATOR);
+            }
+        });
+
+        lytDeleteChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteChannel();
             }
         });
 
@@ -246,6 +255,12 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 showPopUp();
             }
         });
+
+        //show option item just for owner
+        if (role != ChannelChatRole.OWNER) {
+            imgPupupMenul.setVisibility(View.GONE);
+            rippleMenu.setVisibility(View.GONE);
+        }
 
         fab = (FloatingActionButton) findViewById(R.id.pch_fab_addToChannel);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -1213,11 +1228,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         TextView text3 = new TextView(ActivityChannelProfile.this);
         text3.setTextColor(getResources().getColor(android.R.color.black));
-        if (role.equals(ChannelChatRole.OWNER)) {
-            text3.setText(getResources().getString(R.string.channel_delete));
-        } else {
-            text3.setText(getResources().getString(R.string.channel_left));
-        }
+        text3.setText(getResources().getString(R.string.clear_history));
 
         int dim20 = (int) getResources().getDimension(R.dimen.dp20);
         int dim12 = (int) getResources().getDimension(R.dimen.dp12);
@@ -1230,6 +1241,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityChannelProfile.this.getTheme()));
         } else {
@@ -1238,47 +1250,23 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         if (popupWindow.isOutsideTouchable()) {
             popupWindow.dismiss();
         }
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                //TODO do sth here on dismiss
-            }
-        });
+
         popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-        popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16),
-                (int) getResources().getDimension(R.dimen.dp32));
+        popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources()
+
+                .
+
+                        getDimension(R.dimen.dp16), (int) getResources()
+
+                .
+
+                        getDimension(R.dimen.dp32));
 
         text3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String str = context.getString(R.string.channel);
-                String deleteText = "";
-                if (role.equals(ChannelChatRole.OWNER)) {
-                    deleteText = context.getString(R.string.do_you_want_delete_this);
-                } else {
-                    deleteText = context.getString(R.string.do_you_want_left_this);
-                }
-
-                new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_delete)
-                        .content(deleteText + " " + str + " ?")
-                        .positiveText(R.string.B_ok)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                if (role.equals(ChannelChatRole.OWNER)) {
-                                    new RequestChannelDelete().channelDelete(roomId);
-                                } else {
-                                    new RequestChannelLeft().channelLeft(roomId);
-                                }
-
-                                prgWait.setVisibility(View.VISIBLE);
-                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            }
-                        })
-                        .negativeText(R.string.B_cancel)
-                        .show();
+                //TODO [Saeed Mozaffari] [2016-12-06 12:06 PM] - Clear History Channel
 
                 popupWindow.dismiss();
             }
@@ -1286,6 +1274,36 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     }
 
 
-    //*** default Override method
+    //*** show delete channel dialog
+
+    private void deleteChannel() {
+        String str = context.getString(R.string.channel);
+        String deleteText = "";
+        if (role.equals(ChannelChatRole.OWNER)) {
+            deleteText = context.getString(R.string.do_you_want_delete_this);
+        } else {
+            deleteText = context.getString(R.string.do_you_want_left_this);
+        }
+
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_delete)
+                .content(deleteText + " " + str + " ?")
+                .positiveText(R.string.B_ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        if (role.equals(ChannelChatRole.OWNER)) {
+                            new RequestChannelDelete().channelDelete(roomId);
+                        } else {
+                            new RequestChannelLeft().channelLeft(roomId);
+                        }
+
+                        prgWait.setVisibility(View.VISIBLE);
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                })
+                .negativeText(R.string.B_cancel)
+                .show();
+    }
 
 }

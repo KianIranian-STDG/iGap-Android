@@ -436,13 +436,13 @@
                         android:background="@color/background_editText"/>
 
                     <LinearLayout
-                        android:id="@+id/agp_ll_delete_and_left_group"
+                        android:id="@+id/lyt_delete_channel"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/agp_txt_str_delete_and_leave_group"
+                            android:id="@+id/txt_delete_channel"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
