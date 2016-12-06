@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.helper.HelperDeleteMessage;
 import com.iGap.proto.ProtoChannelDeleteMessage;
 
 public class ChannelDeleteMessageResponse extends MessageHandler {
@@ -20,10 +21,8 @@ public class ChannelDeleteMessageResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.Builder builder = (ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.Builder) message;
-        builder.getRoomId();
-        builder.getMessageId();
-        builder.getDeleteVersion();
+        final ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.Builder builder = (ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.Builder) message;
+        HelperDeleteMessage.deleteMessage(builder.getRoomId(), builder.getMessageId(), builder.getDeleteVersion(), builder.getResponse());
     }
 
     @Override

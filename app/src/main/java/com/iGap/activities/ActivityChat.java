@@ -163,6 +163,8 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestChannelDeleteMessage;
+import com.iGap.request.RequestChannelUpdateDraft;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
@@ -1748,19 +1750,15 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void setUserStatus(String status, long time) {
-        Log.i("CCC", "2 status : " + status);
-        Log.i("QQQ", "setUserStatus 1");
         userStatus = status;
         if (status != null) {
             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                Log.i("QQQ", "EXACTLY");
                 /*String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
                 txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);*/
 
                 txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time));
                 //txtLastSeen.setText(LastSeenTimeUtil.computeTime(userId, time));
             } else {
-                Log.i("QQQ", "NOT EXACTLY");
                 txtLastSeen.setText(status);
             }
         }
@@ -2821,6 +2819,8 @@ public class ActivityChat extends ActivityEnhanced
                                 new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
                             } else if (chatType == CHAT) {
                                 new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
+                            } else if (chatType == CHANNEL) {
+                                new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
                             }
                         }
                     }
@@ -3922,6 +3922,8 @@ public class ActivityChat extends ActivityEnhanced
                                 new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, message, replyToMessageId);
                             } else if (chatType == GROUP) {
                                 new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, replyToMessageId);
+                            } else if (chatType == CHANNEL) {
+                                new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, message, replyToMessageId);
                             }
                             if (G.onDraftMessage != null) { // zamani ke mostaghim varede chat beshim bedune vorud be list room ha onDraftMessage null mishe
                                 G.onDraftMessage.onDraftMessage(mRoomId, message);
@@ -4211,6 +4213,8 @@ public class ActivityChat extends ActivityEnhanced
                                                     new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(message.messageID));
                                                 } else if (chatType == CHAT) {
                                                     new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(message.messageID));
+                                                } else if (chatType == CHANNEL) {
+                                                    new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(message.messageID));
                                                 }
                                             }
                                             element.removeChangeListeners();

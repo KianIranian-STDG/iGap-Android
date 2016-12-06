@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.proto.ProtoChannelGetDraft;
+import com.iGap.realm.RealmRoom;
 
 public class ChannelGetDraftResponse extends MessageHandler {
 
@@ -21,7 +22,7 @@ public class ChannelGetDraftResponse extends MessageHandler {
         super.handler();
 
         ProtoChannelGetDraft.ChannelGetDraftResponse.Builder builder = (ProtoChannelGetDraft.ChannelGetDraftResponse.Builder) message;
-        builder.getDraft();
+        RealmRoom.convertAndSetDraft(Long.parseLong(identity), builder.getDraft().getMessage(), builder.getDraft().getReplyTo());
     }
 
     @Override
