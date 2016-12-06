@@ -592,4 +592,5 @@
     <string name="channel_description">Channel Description</string>
     <string name="channel_delete">Channel Delete</string>
     <string name="channel_left">Channel Left</string>
+    <string name="please_enter_channel_description">Please Enter Channel Description</string>
 </resources>

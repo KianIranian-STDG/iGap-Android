@@ -1,7 +1,7 @@
 package com.iGap.response;
 
-import com.iGap.G;
 import com.iGap.proto.ProtoChannelKickModerator;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
@@ -9,6 +9,8 @@ import com.iGap.realm.RealmRoomFields;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+
+import static com.iGap.G.onChannelKickModerator;
 
 public class ChannelKickModeratorResponse extends MessageHandler {
 
@@ -45,8 +47,8 @@ public class ChannelKickModeratorResponse extends MessageHandler {
                         }
                     });
 
-                    if (G.onChannelKickModerator != null) {
-                        G.onChannelKickModerator.onChannelKickModerator(builder.getRoomId(), builder.getMemberId());
+                    if (onChannelKickModerator != null) {
+                        onChannelKickModerator.onChannelKickModerator(builder.getRoomId(), builder.getMemberId());
                     }
                     break;
                 }
@@ -59,11 +61,18 @@ public class ChannelKickModeratorResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        onChannelKickModerator.onTimeOut();
     }
 
     @Override
     public void error() {
         super.error();
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        onChannelKickModerator.onError(majorCode, minorCode);
     }
 }
 

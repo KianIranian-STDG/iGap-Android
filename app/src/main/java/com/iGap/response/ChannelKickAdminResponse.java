@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoChannelKickAdmin;
+import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
@@ -57,11 +58,19 @@ public class ChannelKickAdminResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+
+        G.onChannelKickAdmin.onTimeOut();
     }
 
     @Override
     public void error() {
         super.error();
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        G.onChannelKickAdmin.onError(majorCode, minorCode);
     }
 }
 

@@ -2,7 +2,6 @@ package com.iGap.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,13 +14,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +40,7 @@ import com.iGap.interfaces.OnChannelAddAdmin;
 import com.iGap.interfaces.OnChannelAddMember;
 import com.iGap.interfaces.OnChannelAddModerator;
 import com.iGap.interfaces.OnChannelDelete;
+import com.iGap.interfaces.OnChannelEdit;
 import com.iGap.interfaces.OnChannelGetMemberList;
 import com.iGap.interfaces.OnChannelKickAdmin;
 import com.iGap.interfaces.OnChannelKickMember;
@@ -77,6 +72,7 @@ import com.iGap.request.RequestChannelAddAdmin;
 import com.iGap.request.RequestChannelAddMember;
 import com.iGap.request.RequestChannelAddModerator;
 import com.iGap.request.RequestChannelDelete;
+import com.iGap.request.RequestChannelEdit;
 import com.iGap.request.RequestChannelGetMemberList;
 import com.iGap.request.RequestChannelKickAdmin;
 import com.iGap.request.RequestChannelKickMember;
@@ -104,10 +100,10 @@ import static com.iGap.G.context;
 import static com.iGap.module.MusicPlayer.roomId;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
-public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft {
+public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit {
 
     private AppBarLayout appBarLayout;
-    private TextView txtNameChannel, txtDescription, txtChannelLink, txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport;
+    private TextView txtNameChannel, txtDescription, txtChannelLink, txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport, txtChannelNameInfo;
     private MaterialDesignTextView imgPupupMenul;
     private de.hdodenhof.circleimageview.CircleImageView imgCircleImageView;
     private FloatingActionButton fab;
@@ -147,6 +143,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         G.onUserInfoResponse = this;
         G.onChannelDelete = this;
         G.onChannelLeft = this;
+        G.onChannelEdit = this;
 
         //=========Put Extra Start
         Bundle extras = getIntent().getExtras();
@@ -182,10 +179,12 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         //=========Put Extra End
 
         TextView txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);
-        TextView txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
+        txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
         //memberNumber = (TextView) findViewById(R.id.txt_member_number);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting);
         LinearLayout lytSharedMedia = (LinearLayout) findViewById(R.id.lyt_shared_media);
+        LinearLayout lytChannelName = (LinearLayout) findViewById(R.id.lyt_channel_name);
+        LinearLayout lytChannelDescription = (LinearLayout) findViewById(R.id.lyt_description);
 
         txtBack = (MaterialDesignTextView) findViewById(R.id.pch_txt_back);
         final RippleView rippleBack = (RippleView) findViewById(R.id.pch_ripple_back);
@@ -247,7 +246,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
 
         txtDescription = (TextView) findViewById(R.id.txt_description);
-        txtDescription.setMovementMethod(LinkMovementMethod.getInstance());
+       /* txtDescription.setMovementMethod(LinkMovementMethod.getInstance());
 
         String a[] = txtDescription.getText().toString().split(" ");
         SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -316,7 +315,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
             builder.append(wordToSpan).append(" ");
         }
-        txtDescription.setText(builder);
+        txtDescription.setText(builder);*/
 
         txtChannelLink = (TextView) findViewById(R.id.txt_channel_link);
 
@@ -357,6 +356,21 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 startActivity(intent);
             }
         });
+
+        lytChannelName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeGroupName();
+            }
+        });
+
+        lytChannelDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeGroupDescription();
+            }
+        });
+
 
         TextView txtChannelName = (TextView) findViewById(R.id.txt_channel_name);
 
@@ -822,6 +836,96 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         }
     }
 
+    //********** dialog for edit channel
+
+    private String dialogDesc;
+    private String dialogName;
+
+    private void ChangeGroupDescription() {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_description)
+                .positiveText(getString(R.string.save))
+                .alwaysCallInputCallback()
+                .widgetColor(getResources().getColor(R.color.toolbar_background))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        editChannelRequest(txtChannelNameInfo.getText().toString(), dialogDesc);
+                    }
+                })
+                .negativeText(getString(R.string.cancel))
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+                .input(getString(R.string.please_enter_group_description), txtDescription.getText().toString(), new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                        dialogDesc = input.toString();
+                        if (!input.toString().equals(txtDescription.getText().toString())) {
+
+                            positive.setClickable(true);
+                            positive.setAlpha(1.0f);
+                        } else {
+                            positive.setClickable(false);
+                            positive.setAlpha(0.5f);
+                        }
+                    }
+                }).show();
+    }
+
+    private void ChangeGroupName() {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_name)
+                .positiveText(getString(R.string.save))
+                .alwaysCallInputCallback()
+                .widgetColor(getResources().getColor(R.color.toolbar_background))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        editChannelRequest(dialogName, txtDescription.getText().toString());
+
+                        prgWait.setVisibility(View.VISIBLE);
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                })
+                .negativeText(getString(R.string.cancel))
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+                .input(getString(R.string.please_enter_channel_name), txtChannelNameInfo.getText().toString(), new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                        dialogName = input.toString();
+                        if (!input.toString().equals(txtChannelNameInfo.getText().toString())) {
+                            positive.setClickable(true);
+                            positive.setAlpha(1.0f);
+                        } else {
+                            positive.setClickable(false);
+                            positive.setAlpha(0.5f);
+                        }
+                    }
+                }).show();
+    }
+
+
+    //********** channel edit name and description
+
+    private void editChannelResponse(long roomIdR, final String name, final String description) {
+        if (roomIdR == roomId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    txtChannelNameInfo.setText(name);
+                    txtDescription.setText(description);
+
+                    prgWait.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+            });
+        }
+    }
+
+    private void editChannelRequest(String name, String description) {
+        new RequestChannelEdit().channelEdit(roomId, name, description);
+    }
 
     //********** set roles
 
@@ -847,7 +951,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         new RequestChannelKickAdmin().channelKickAdmin(roomId, peerId);
     }
 
-    //********** interfaces
+    //************************************************** interfaces
 
     //***User Info
 
@@ -912,6 +1016,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     @Override
     public void onUserInfoError(int majorCode, int minorCode) {
 
+    }
+
+    //***Edit Channel
+
+    @Override
+    public void onChannelEdit(long roomId, String name, String description) {
+        editChannelResponse(roomId, name, description);
     }
 
     //***Delete Channel
