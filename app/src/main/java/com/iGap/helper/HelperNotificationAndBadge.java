@@ -84,6 +84,8 @@ public class HelperNotificationAndBadge {
     private int inChat_Sound;
     private int countUnicChat = 0;
     private long idRoom;
+    private int delayAlarm = 1500;
+    private long currentAlarm;
 
     public HelperNotificationAndBadge() {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -287,6 +289,7 @@ public class HelperNotificationAndBadge {
             pi = PendingIntent.getActivity(context, 10, new Intent(context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
+
         setRemoteViewsNormal();
 
         String messageToshow = list.get(0).message;
@@ -303,28 +306,25 @@ public class HelperNotificationAndBadge {
                 .setOngoing(true)
                 .build();
 
+        if (currentAlarm + delayAlarm < System.currentTimeMillis()) {
+
+            alarmNotification(messageToshow);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            setRemoteViewsLarge();
+            notification.bigContentView = remoteViewsLarge;
+        }
+
+        notificationManager.notify(notificationId, notification);
+    }
+
+    private void alarmNotification(String messageToShow) {
         if (isMute) {
 
             Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
             notification.vibrate = new long[]{0, 0, 0};
         } else {
-
-            //=======================================================
-//            if (inAppSound == 0 && G.isAppInFg) {
-//                notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
-//            } else {
-//                if (inChat_Sound == 0 && isChatRoomNow) {
-//                    notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
-//                } else if (inChat_Sound == 1 && isChatRoomNow) {
-//                    notification.sound = Uri.parse(
-//
-//                            "android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
-//                } else if (inAppSound == 0) {
-//                    notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
-//                } else if (inAppSound == 1) {
-//                    notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
-//                }
-//            }
 
             if (G.isAppInFg) {
                 if (!isChatRoomNow) {
@@ -336,7 +336,7 @@ public class HelperNotificationAndBadge {
                         notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
                     }
                     if (inAppPreview == 1) {
-                        notification.tickerText = list.get(0).name + " " + messageToshow;
+                        notification.tickerText = list.get(0).name + " " + messageToShow;
                     }
                 } else if (inChat_Sound == 1) {
                     notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
@@ -346,7 +346,7 @@ public class HelperNotificationAndBadge {
                 notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
 
                 if (messagePeriview == 1) {
-                    notification.tickerText = list.get(0).name + " " + messageToshow;
+                    notification.tickerText = list.get(0).name + " " + messageToShow;
                 } else {
                     notification.tickerText = "";
                 }
@@ -358,12 +358,7 @@ public class HelperNotificationAndBadge {
         notification.ledOnMS = 1000;
         notification.ledOffMS = 2000;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            setRemoteViewsLarge();
-            notification.bigContentView = remoteViewsLarge;
-        }
-
-        notificationManager.notify(notificationId, notification);
+        currentAlarm = System.currentTimeMillis();
     }
 
     public void checkAlert(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {

@@ -1123,7 +1123,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
-                                editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, getResources().getString(R.string.array_Default));
+                                editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
                                 editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
