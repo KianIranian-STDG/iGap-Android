@@ -5,6 +5,7 @@ package com.iGap.interfaces;
  */
 
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmRoomMessage;
 
 /**
  * use this interface for each activities which need callbacks
@@ -21,5 +22,5 @@ public interface OnFileUpload {
 
     void onFileUploadComplete(String fileHashAsIdentity, ProtoResponse.Response response);
 
-    void onFileUploadTimeOut(String identity);
+    void onFileUploadTimeOut(RealmRoomMessage roomMessage, long roomId);
 }

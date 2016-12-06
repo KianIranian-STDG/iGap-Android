@@ -135,7 +135,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                         realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
                 if (message != null) {
                     message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-                    G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message, ProtoGlobal.Room.Type.CHAT);
+                    G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
                 }
             }
         });
@@ -144,6 +144,5 @@ public class ChatSendMessageResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-        makeFailed();
     }
 }

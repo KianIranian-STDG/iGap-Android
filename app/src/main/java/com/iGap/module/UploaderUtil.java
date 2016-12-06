@@ -9,6 +9,7 @@ import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnFileUploadStatusResponse;
 import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmRoomMessage;
 import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
 import com.iGap.request.RequestFileUploadOption;
@@ -140,14 +141,12 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
                     activityCallbacks.onFileUploading(fileUploadStructure, identity, progress);
                 }
                 Log.i("BreakPoint", identity + " > fileUploadStructure");
-                final long startGetNBytesTime = System.currentTimeMillis();
                 byte[] bytes =
                         AndroidUtils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset,
                                 nextLimit);
 
                 Log.i("BreakPoint", identity + " > after bytes");
                 // make request till uploading has finished
-                final long startSendReqTime = System.currentTimeMillis();
 
                 new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes,
                         identity);
@@ -173,9 +172,12 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
     }
 
     @Override
-    public void onFileUploadTimeOut(String identity) {
+    public void onFileUploadTimeOut(RealmRoomMessage roomMessage, long roomId) {
         if (activityCallbacks != null) {
-            activityCallbacks.onFileTimeOut(identity);
+            FileUploadStructure structure = getSelectedFile(Long.toString(roomMessage.getMessageId()));
+            if (structure != null) {
+                activityCallbacks.onFileUploadTimeOut(structure, roomId);
+            }
         }
     }
 

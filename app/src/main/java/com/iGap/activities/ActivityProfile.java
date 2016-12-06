@@ -419,7 +419,7 @@ public class ActivityProfile extends ActivityEnhanced
     }
 
     @Override
-    public void onFileTimeOut(String identity) {
+    public void onFileUploadTimeOut(FileUploadStructure uploadStructure, long roomId) {
 
     }
 

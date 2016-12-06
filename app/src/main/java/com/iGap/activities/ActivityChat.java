@@ -2491,7 +2491,7 @@ public class ActivityChat extends ActivityEnhanced
                 //filePath = getFilePathFromUri(uri);
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
-                duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
+                duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath) / 1000;
                 if (isMessageWrote()) {
                     messageType = ProtoGlobal.RoomMessageType.VIDEO_TEXT;
                 } else {
@@ -2625,7 +2625,7 @@ public class ActivityChat extends ActivityEnhanced
                         roomMessage.getAttachment().setWidth(bitmap.getWidth());
                         roomMessage.getAttachment().setHeight(bitmap.getHeight());
 
-                        finalMessageInfo.attachment.setLocalFilePath(roomMessage.getMessageId(), path);
+                        finalMessageInfo.attachment.setLocalFilePath(roomMessage.getMessageId(), finalFilePath);
                         finalMessageInfo.attachment.width = bitmap.getWidth();
                         finalMessageInfo.attachment.height = bitmap.getHeight();
                     }
@@ -2640,6 +2640,11 @@ public class ActivityChat extends ActivityEnhanced
                         messageUtil.contact(finalMessageInfo.userInfo.firstName, finalMessageInfo.userInfo.lastName, finalMessageInfo.userInfo.phone);
                     }
                     messageUtil.sendMessage(Long.toString(finalMessageId));
+                }
+
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                if (realmRoom != null) {
+                    realmRoom.setLastMessage(roomMessage);
                 }
             }
         });
@@ -3261,9 +3266,9 @@ public class ActivityChat extends ActivityEnhanced
                                             }
 
                                             // make update status to message sender that i've read his message
-                                            if (roomType == CHAT) {
+                                            if (chatType == CHAT) {
                                                 G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                                            } else if (roomType == GROUP && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT || roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
+                                            } else if (chatType == GROUP && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT || roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
                                                 G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                                             }
                                         }
@@ -3308,7 +3313,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onMessageFailed(long roomId, RealmRoomMessage message, ProtoGlobal.Room.Type roomType) {
+    public void onMessageFailed(long roomId, RealmRoomMessage message) {
         if (roomId == mRoomId) {
             mAdapter.updateMessageStatus(message.getMessageId(), ProtoGlobal.RoomMessageStatus.FAILED);
         }
@@ -3696,8 +3701,8 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onFileTimeOut(String identity) {
-        // TODO: 12/6/2016 [Alireza] implement
+    public void onFileUploadTimeOut(final FileUploadStructure uploadStructure, long roomId) {
+        // empty
     }
 
     @Override
@@ -3705,7 +3710,13 @@ public class ActivityChat extends ActivityEnhanced
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
         if (roomMessage != null) {
-            switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+            AbstractMessage message = mAdapter.getItemByFileIdentity(struct.messageId);
+            // message doesn't exists
+            if (message == null) {
+                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+            } else {
+                // message already exists, happens when re-upload an attachment
+            }
         }
         realm.close();
     }
@@ -4306,7 +4317,7 @@ public class ActivityChat extends ActivityEnhanced
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(474)).findFirst();
+                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID)).findFirst();
                         if (roomMessage != null) {
                             // delete message from database
                             roomMessage.deleteFromRealm();

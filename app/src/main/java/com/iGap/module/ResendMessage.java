@@ -3,6 +3,7 @@ package com.iGap.module;
 import android.content.Context;
 
 import com.iGap.G;
+import com.iGap.activities.ActivityChat;
 import com.iGap.interfaces.IResendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
@@ -104,8 +105,12 @@ public class ResendMessage implements IResendMessage {
                             .equalTo(RealmRoomFields.ID, roomMessage.getRoomId())
                             .findFirst()
                             .getType();
-                    G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(),
-                            roomMessage);
+                    if (roomMessage.getAttachment() == null) {
+                        G.chatSendMessageUtil.build(roomType,
+                                roomMessage.getRoomId(), roomMessage);
+                    } else {
+                        new ActivityChat.UploadTask().execute(roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getRoomId(), roomMessage.getMessage());
+                    }
                 }
             } else {
                 if (message.messageID.equalsIgnoreCase(Long.toString(mSelectedMessageID))) {
@@ -118,8 +123,11 @@ public class ResendMessage implements IResendMessage {
                                 .equalTo(RealmRoomFields.ID, roomMessage.getRoomId())
                                 .findFirst()
                                 .getType();
-                        G.chatSendMessageUtil.build(roomType,
-                                roomMessage.getRoomId(), roomMessage);
+                        if (roomMessage.getAttachment() == null) {
+                            G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
+                        } else {
+                            new ActivityChat.UploadTask().execute(roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getRoomId(), roomMessage.getMessage());
+                        }
                     }
                     break;
                 }

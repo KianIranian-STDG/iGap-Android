@@ -751,9 +751,9 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
     }
 
     @Override
-    public void onFileTimeOut(String identity) {
+    public void onFileUploadTimeOut(FileUploadStructure uploadStructure, long roomId) {
 
-        if (Long.parseLong(identity) == avatarId) {
+        if (uploadStructure.messageId == avatarId) {
             // disable progress and show snack bar for retry upload avatar
         }
     }

@@ -212,10 +212,9 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     }
 
     @Override
-    public void onMessageFailed(long roomId, RealmRoomMessage roomMessage,
-                                ProtoGlobal.Room.Type roomType) {
+    public void onMessageFailed(long roomId, RealmRoomMessage roomMessage) {
         if (onChatSendMessageResponse != null) {
-            onChatSendMessageResponse.onMessageFailed(roomId, roomMessage, roomType);
+            onChatSendMessageResponse.onMessageFailed(roomId, roomMessage);
         }
     }
 }

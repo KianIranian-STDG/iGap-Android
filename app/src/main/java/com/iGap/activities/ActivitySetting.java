@@ -1863,7 +1863,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     @Override
-    public void onFileTimeOut(String identity) {
+    public void onFileUploadTimeOut(FileUploadStructure uploadStructure, long roomId) {
 
     }
 
