@@ -35,6 +35,7 @@ import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.fragments.FragmentListAdmin;
+import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChannelAddAdmin;
@@ -131,6 +132,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private LinearLayout lytListAdmin;
     private LinearLayout lytListModerator;
     private LinearLayout lytDeleteChannel;
+    private LinearLayout lytNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +194,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         lytListAdmin = (LinearLayout) findViewById(R.id.lyt_list_admin);
         lytListModerator = (LinearLayout) findViewById(R.id.lyt_list_moderator);
         lytDeleteChannel = (LinearLayout) findViewById(R.id.lyt_delete_channel);
+        lytNotification = (LinearLayout) findViewById(R.id.lyt_notification);
 
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,6 +214,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public void onClick(View v) {
                 deleteChannel();
+            }
+        });
+
+        lytNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notificationAndSound();
             }
         });
 
@@ -257,10 +267,12 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         });
 
         //show option item just for owner
-        if (role != ChannelChatRole.OWNER) {
+        imgPupupMenul.setVisibility(View.GONE);
+        rippleMenu.setVisibility(View.GONE);
+        /*if (role != ChannelChatRole.OWNER) {
             imgPupupMenul.setVisibility(View.GONE);
             rippleMenu.setVisibility(View.GONE);
-        }
+        }*/
 
         fab = (FloatingActionButton) findViewById(R.id.pch_fab_addToChannel);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -1304,6 +1316,20 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 })
                 .negativeText(R.string.B_cancel)
                 .show();
+    }
+
+    //*** notification and sounds
+
+    private void notificationAndSound() {
+        FragmentNotification fragmentNotification = new FragmentNotification();
+        Bundle bundle = new Bundle();
+        bundle.putString("PAGE", "CHANNEL");
+        bundle.putLong("ID", roomId);
+        fragmentNotification.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                .replace(R.id.fragmentContainer_channel_profile, fragmentNotification)
+                .commit();
     }
 
 }

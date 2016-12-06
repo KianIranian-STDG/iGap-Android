@@ -408,13 +408,13 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/agp_ll_notification"
+                        android:id="@+id/lyt_notification"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/agp_txt_str_notification_and_sound"
+                            android:id="@+id/txt_notification"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
