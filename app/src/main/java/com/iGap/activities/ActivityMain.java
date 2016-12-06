@@ -1454,4 +1454,24 @@ public class ActivityMain extends ActivityEnhanced
     public void onSetAction(long roomId, long userId, ProtoGlobal.ClientAction clientAction) {
 
     }
+
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//
+//        setLocaleJust();
+//
+//        }
+//
+//    private void setLocaleJust() {
+//        final Resources resources = getResources();
+//        final Configuration configuration = resources.getConfiguration();
+//        final Locale locale = getLocale(this);
+//        if (!configuration.locale.equals(locale)) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//                configuration.setLocale(locale);
+//            }
+//            resources.updateConfiguration(configuration, null);
+//        }
+//    }
 }

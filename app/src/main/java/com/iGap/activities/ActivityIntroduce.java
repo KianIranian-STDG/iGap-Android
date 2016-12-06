@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
@@ -68,17 +67,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-
-    public void setLocale(String lang) {
-
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-
-    }
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +117,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
     }
 
     private void goToProgram(Bundle savedInstanceState) {
-        setLocale("en");
 
         Realm realm = Realm.getDefaultInstance();
 

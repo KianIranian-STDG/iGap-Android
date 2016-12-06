@@ -507,12 +507,12 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
 
         switch (language) {
             case "فارسی":
+                setLocale("fa");
 
                 CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                         .setDefaultFontPath("fonts/IRANSansMobile.ttf")
                         .setFontAttrId(R.attr.fontPath)
                         .build());
-                setLocale("fa");
 
                 break;
             case "English":
