@@ -2,7 +2,6 @@ package com.iGap.fragments;
 
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -17,8 +16,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
@@ -30,10 +27,7 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.request.RequestGroupKickAdmin;
-import com.iGap.request.RequestGroupKickModerator;
 import com.mikepenz.fastadapter.FastAdapter;
-import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
@@ -60,6 +54,7 @@ public class FragmentListAdmin extends Fragment {
     private ItemAdapter itemAdapter;
     private ProgressBar prgWait;
     private ViewGroup layoutRoot;
+    private String roomType;
 
     public static FragmentListAdmin newInstance(List<StructContactInfo> list) {
 
@@ -87,6 +82,7 @@ public class FragmentListAdmin extends Fragment {
         if (bundle != null) {
 
             type = bundle.getString("TYPE");
+            roomType = bundle.getString("ROOM_TYPE");
             roomId = bundle.getLong("ID");
         }
 
@@ -137,16 +133,18 @@ public class FragmentListAdmin extends Fragment {
         G.updateListAfterKick = new UpdateListAfterKick() {
             @Override
             public void updateList(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (role.toString().equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-                            updateRoleToAdmin(memberId);
-                        } else {
-                            updateRole(memberId);
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (role.toString().equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                                updateRoleToAdmin(memberId);
+                            } else {
+                                updateRole(memberId);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         };
 
@@ -157,7 +155,7 @@ public class FragmentListAdmin extends Fragment {
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         itemAdapter = new ItemAdapter();
 
-        fastAdapter.withOnClickListener(new FastAdapter.OnClickListener() {
+        /*fastAdapter.withOnClickListener(new FastAdapter.OnClickListener() {
             @Override
             public boolean onClick(View v, IAdapter adapter, final IItem item, final int position) {
 
@@ -174,7 +172,12 @@ public class FragmentListAdmin extends Fragment {
                                     getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                                    new RequestGroupKickAdmin().groupKickAdmin(roomId, contactItemGroupProfile.mContact.peerId);
+
+                                    if (roomType == ProtoGlobal.Room.Type.CHANNEL.toString()) {
+                                        new RequestChannelKickAdmin().channelKickAdmin(roomId, contactItemGroupProfile.mContact.peerId);
+                                    } else if (roomType == ProtoGlobal.Room.Type.GROUP.toString()) {
+                                        new RequestGroupKickAdmin().groupKickAdmin(roomId, contactItemGroupProfile.mContact.peerId);
+                                    }
                                 }
                             })
                             .negativeText(R.string.B_cancel)
@@ -192,8 +195,12 @@ public class FragmentListAdmin extends Fragment {
                                     getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+                                    if (roomType == ProtoGlobal.Room.Type.CHANNEL.toString()) {
+                                        new RequestChannelKickModerator().channelKickModerator(roomId, contactItemGroupProfile.mContact.peerId);
+                                    } else if (roomType == ProtoGlobal.Room.Type.GROUP.toString()) {
+                                        new RequestGroupKickModerator().groupKickModerator(roomId, contactItemGroupProfile.mContact.peerId);
+                                    }
 
-                                    new RequestGroupKickModerator().groupKickModerator(roomId, contactItemGroupProfile.mContact.peerId);
                                 }
                             })
                             .negativeText(R.string.B_cancel)
@@ -202,7 +209,7 @@ public class FragmentListAdmin extends Fragment {
                 return false;
 
             }
-        });
+        });*/
 
         G.onGroupKickModerator = new OnGroupKickModerator() {
             @Override
@@ -279,7 +286,6 @@ public class FragmentListAdmin extends Fragment {
         };
 
 
-
         //configure our fastAdapter
         //as we provide id's for the items we want the hasStableIds enabled to speed up things
         fastAdapter.setHasStableIds(true);
@@ -296,7 +302,12 @@ public class FragmentListAdmin extends Fragment {
         rv.addItemDecoration(decoration);
 
         ContactItemGroupProfile.isShoMore = true;
-        ContactItemGroupProfile.roomType = ProtoGlobal.Room.Type.GROUP;
+
+        if (roomType.equals(ProtoGlobal.Room.Type.CHANNEL.toString())) {
+            ContactItemGroupProfile.roomType = ProtoGlobal.Room.Type.CHANNEL;
+        } else if (roomType.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+            ContactItemGroupProfile.roomType = ProtoGlobal.Room.Type.GROUP;
+        }
 
         List<IItem> items = new ArrayList<>();
         for (int i = 0; i < contacts.size(); i++) {

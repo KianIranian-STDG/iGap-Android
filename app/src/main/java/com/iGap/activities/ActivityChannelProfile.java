@@ -34,6 +34,7 @@ import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroupProfile;
+import com.iGap.fragments.FragmentListAdmin;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChannelAddAdmin;
@@ -127,6 +128,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private long userId;
     private RealmList<RealmMember> members;
     private ProgressBar prgWait;
+    private LinearLayout lytListAdmin;
+    private LinearLayout lytListModerator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,12 +182,28 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         //=========Put Extra End
 
         TextView txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);
-        txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
+        TextView txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
         //memberNumber = (TextView) findViewById(R.id.txt_member_number);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting);
         LinearLayout lytSharedMedia = (LinearLayout) findViewById(R.id.lyt_shared_media);
         LinearLayout lytChannelName = (LinearLayout) findViewById(R.id.lyt_channel_name);
         LinearLayout lytChannelDescription = (LinearLayout) findViewById(R.id.lyt_description);
+        lytListAdmin = (LinearLayout) findViewById(R.id.lyt_list_admin);
+        lytListModerator = (LinearLayout) findViewById(R.id.lyt_list_moderator);
+
+        lytListAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                membersList(ProtoGlobal.ChannelRoom.Role.ADMIN);
+            }
+        });
+
+        lytListModerator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                membersList(ProtoGlobal.ChannelRoom.Role.MODERATOR);
+            }
+        });
 
         txtBack = (MaterialDesignTextView) findViewById(R.id.pch_txt_back);
         final RippleView rippleBack = (RippleView) findViewById(R.id.pch_ripple_back);
@@ -319,7 +338,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         txtChannelLink = (TextView) findViewById(R.id.txt_channel_link);
 
-        txtNotifyAndSound = (TextView) findViewById(R.id.pch_txt_notifyAndSound);
+       /* txtNotifyAndSound = (TextView) findViewById(R.id.pch_txt_notifyAndSound);
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -346,7 +365,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             public void onClick(View view) {
 
             }
-        });
+        });*/
 
         lytSharedMedia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -395,6 +414,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         setAvatarChannel();
         initRecycleView();
         channelGetMemberList();
+        showAdminOrModeratorList();
     }
 
     private void channelGetMemberList() {
@@ -584,6 +604,51 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 decoration.invalidateHeaders();
             }
         });
+    }
+
+    //******Add And Moderator List
+
+    private void membersList(ProtoGlobal.ChannelRoom.Role role) {
+        Fragment fragment = FragmentListAdmin.newInstance(getCurrentUser(role));
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("DIALOG_SHOWING", false);
+        bundle.putLong("ID", roomId);
+        bundle.putString("ROOM_TYPE", ProtoGlobal.Room.Type.CHANNEL.toString());
+
+        if (role.toString().equals(ProtoGlobal.ChannelRoom.Role.MODERATOR.toString())) {
+            bundle.putString("TYPE", "MODERATOR");
+        } else if (role.toString().equals(ProtoGlobal.ChannelRoom.Role.ADMIN.toString())) {
+            bundle.putString("TYPE", "ADMIN");
+        }
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                .addToBackStack(null)
+                .replace(R.id.fragmentContainer_channel_profile, fragment)
+                .commit();
+    }
+
+    private List<StructContactInfo> getCurrentUser(ProtoGlobal.ChannelRoom.Role role) {
+        List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+
+        List<StructContactInfo> users = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).mContact.role.equals(role.toString())) {
+                users.add(items.get(i).mContact);
+            }
+        }
+        return users;
+    }
+
+    //****** show admin or moderator list
+
+    private void showAdminOrModeratorList() {
+        if ((role == ChannelChatRole.MEMBER) || (role == ChannelChatRole.MODERATOR)) {
+            lytListAdmin.setVisibility(View.GONE);
+            lytListModerator.setVisibility(View.GONE);
+        } else if (role == ChannelChatRole.ADMIN) {
+            lytListAdmin.setVisibility(View.GONE);
+        }
     }
 
     //****** user exist in current list checking
@@ -1094,11 +1159,19 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     @Override
     public void onChannelKickModerator(long roomId, long memberId) {
         updateRole(roomId, memberId, ProtoGlobal.ChannelRoom.Role.MEMBER);
+
+        if (G.updateListAfterKick != null) {
+            G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+        }
     }
 
     //***Admin
     @Override
     public void onChannelAddAdmin(long roomId, long memberId) {
+
+        if (G.updateListAfterKick != null) {
+            G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.ADMIN);
+        }
 
         //update list is for admin list or moderator list
         //after do that check this interface or create new interface for that
@@ -1113,6 +1186,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     @Override
     public void onChannelKickAdmin(long roomId, long memberId) {
         updateRole(roomId, memberId, ProtoGlobal.ChannelRoom.Role.MEMBER);
+
+        if (G.updateListAfterKick != null) {
+            G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
+        }
     }
 
     //***time out and errors for either of this interfaces

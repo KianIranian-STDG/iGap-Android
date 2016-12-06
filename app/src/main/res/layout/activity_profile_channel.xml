@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/fragmentContainer_group_profile"
+                android:id="@+id/fragmentContainer_channel_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:ignore="MissingPrefix"
@@ -281,91 +281,180 @@
                 <!-- member list end -->
 
                 <LinearLayout
+                    android:id="@+id/agp_ll_seetting"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:background="@android:color/white"
-                    android:orientation="vertical"
-                    android:visibility="visible">
+                    android:gravity="left"
+                    android:orientation="vertical">
 
                     <TextView
+                        fontPath="fonts/IRANSansMobile_Bold.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:paddingBottom="@dimen/dp20"
+                        android:padding="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp12"
-                        android:text="@string/st_title_general"
+                        android:text="@string/settings"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        tools:ignore="MissingPrefix"/>
 
-                    <TextView
-                        android:id="@+id/pch_txt_notifyAndSound"
+                    <LinearLayout
+                        android:id="@+id/lyt_list_admin"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/sp16"
-                        android:paddingRight="@dimen/sp16"
-                        android:text="@string/st_title_notification_sounds"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp15"
-                        android:textStyle="normal"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txt_list_admin"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="@dimen/sp16"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingRight="@dimen/sp16"
+                            android:paddingStart="@dimen/sp16"
+                            android:singleLine="true"
+                            android:text="@string/list_admin"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp15"/>
+
+
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="1px"
                         android:background="@color/background_editText"/>
 
-
-                    <TextView
-                        android:id="@+id/pch_txt_deleteCache"
+                    <LinearLayout
+                        android:id="@+id/lyt_list_moderator"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/sp16"
-                        android:paddingRight="@dimen/sp16"
-                        android:text="@string/delete_from_cache"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp15"
-                        android:textStyle="normal"/>
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:id="@+id/txt_list_moderator"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="@dimen/sp16"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingRight="@dimen/sp16"
+                            android:paddingStart="@dimen/sp16"
+                            android:singleLine="true"
+                            android:text="@string/list_modereator"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp15"/>
+
+
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="1px"
                         android:background="@color/background_editText"/>
 
-                    <TextView
-                        android:id="@+id/pch_txt_leaveChannel"
+                    <LinearLayout
+                        android:id="@+id/agp_ll_member_can_add_member"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp48"
+                            android:paddingEnd="@dimen/dp16"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingRight="@dimen/dp16"
+                            android:paddingStart="@dimen/dp16"
+                            >
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:singleLine="true"
+                                android:text="@string/member_can_add_new_member"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/sp15"/>
+
+                            <ToggleButton
+                                android:id="@+id/agp_toggle_member_can_add_member"
+                                android:layout_width="@dimen/dp44"
+                                android:layout_height="@dimen/dp40"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/st_switch_button"
+                                android:textOff=""
+                                android:textOn=""/>
+
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@color/background_editText"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/agp_ll_notification"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/sp16"
-                        android:paddingRight="@dimen/sp16"
-                        android:text="@string/leave_channel"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp15"
-                        android:textStyle="normal"/>
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:id="@+id/agp_txt_str_notification_and_sound"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="@dimen/sp16"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingRight="@dimen/sp16"
+                            android:paddingStart="@dimen/sp16"
+                            android:singleLine="true"
+                            android:text="@string/notificaion_and_sound"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp15"/>
+
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="1px"
+
                         android:background="@color/background_editText"/>
 
-                    <TextView
-                        android:id="@+id/pch_txt_Report"
+                    <LinearLayout
+                        android:id="@+id/agp_ll_delete_and_left_group"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/sp16"
-                        android:paddingRight="@dimen/sp16"
-                        android:text="@string/report"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp15"
-                        android:textStyle="normal"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/agp_txt_str_delete_and_leave_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="@dimen/sp16"
+                            android:paddingLeft="@dimen/dp16"
+                            android:paddingRight="@dimen/sp16"
+                            android:paddingStart="@dimen/sp16"
+                            android:singleLine="true"
+                            android:text="@string/delete_and_leave_channel"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/sp15"/>
+                    </LinearLayout>
 
                 </LinearLayout>
 

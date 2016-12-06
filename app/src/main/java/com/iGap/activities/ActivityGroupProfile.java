@@ -2579,6 +2579,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         Bundle bundle = new Bundle();
         bundle.putString("TYPE", "MODERATOR");
         bundle.putLong("ID", roomId);
+        bundle.putString("ROOM_TYPE", ProtoGlobal.Room.Type.GROUP.toString());
         bundle.putBoolean("DIALOG_SHOWING", false);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
@@ -2593,6 +2594,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         Bundle bundle = new Bundle();
         bundle.putBoolean("DIALOG_SHOWING", false);
         bundle.putLong("ID", roomId);
+        bundle.putString("ROOM_TYPE", ProtoGlobal.Room.Type.GROUP.toString());
         bundle.putString("TYPE", "ADMIN");
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
