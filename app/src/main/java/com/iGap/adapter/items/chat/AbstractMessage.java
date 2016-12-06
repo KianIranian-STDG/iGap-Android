@@ -549,23 +549,22 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     @Override
                     public void onProgressFinished() {
                         holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(null);
+                        holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
 
                         switch (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType) {
                             case IMAGE:
                             case IMAGE_TEXT:
-                                holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
                                 break;
                             case VIDEO:
                             case VIDEO_TEXT:
+                                holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
                                 break;
                             case AUDIO:
                             case AUDIO_TEXT:
-                                holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
                                 break;
                             case FILE:
                             case FILE_TEXT:
-                                holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
                                 holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -574,7 +573,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 });
                                 break;
                             case VOICE:
-                                holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
                                 break;
                             case GIF:
                             case GIF_TEXT:
@@ -587,6 +585,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                                 SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                 if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0) == 0) {
+                                    holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                                     ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
                                 } else {
                                     holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
