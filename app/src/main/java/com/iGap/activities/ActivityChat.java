@@ -2382,7 +2382,6 @@ public class ActivityChat extends ActivityEnhanced
 
     //TODO [Saeed Mozaffari] [2016-10-29 10:45 AM] - work on gps
     private void sendMessage(int requestCode, String filePath) {
-        // TODO: 10/30/2016 [Alireza]  test
         Realm realm = Realm.getDefaultInstance();
         //RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
@@ -3698,7 +3697,7 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onFileTimeOut(String identity) {
-
+        // TODO: 12/6/2016 [Alireza] implement
     }
 
     @Override
@@ -4195,7 +4194,6 @@ public class ActivityChat extends ActivityEnhanced
             new MaterialDialog.Builder(this).title("Message").negativeText("CANCEL").items(items).itemsCallback(new MaterialDialog.ListCallback() {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                    // TODO: 9/14/2016 [Alireza Eskandarpour Shoferi] implement other items
                     if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
                         // copy message
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -4387,7 +4385,7 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onDownloadStart(View view, StructMessageInfo message, int pos) {
-        // TODO: 10/29/2016 [Alireza] implement
+        // empty
     }
 
     @Override

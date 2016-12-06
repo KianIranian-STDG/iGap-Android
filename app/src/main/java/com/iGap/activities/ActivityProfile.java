@@ -415,7 +415,7 @@ public class ActivityProfile extends ActivityEnhanced
     @Override
     public void onFileUploading(FileUploadStructure uploadStructure, String identity,
                                 double progress) {
-        // TODO: 10/20/2016 [Alireza] update view something like updating progress
+        // empty, update view something like updating progress
     }
 
     @Override
