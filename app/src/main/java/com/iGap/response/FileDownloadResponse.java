@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.helper.HelperSetAction;
 import com.iGap.module.AndroidUtils;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoFileDownload;
@@ -60,6 +61,7 @@ public class FileDownloadResponse extends MessageHandler {
 
     @Override
     public void error() {
+        HelperSetAction.sendCancel(Long.parseLong(this.identity));
         super.error();
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
@@ -67,8 +69,6 @@ public class FileDownloadResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
 
         G.onFileDownloadResponse.onError(majorCode, minorCode);
-
-
     }
 }
 

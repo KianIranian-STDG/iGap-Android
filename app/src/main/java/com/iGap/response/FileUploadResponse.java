@@ -72,6 +72,7 @@ public class FileUploadResponse extends MessageHandler {
 
     @Override
     public void error() {
+        HelperSetAction.sendCancel(Long.parseLong(this.identity));
         super.error();
         makeFailed();
     }

@@ -1989,37 +1989,68 @@ public class ActivityChat extends ActivityEnhanced
             case "AUDIO":
             case "AUDIO_TEXT":
                 intent.setType("audio/*");
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+                putExtra(intent, messageInfo);
                 choserDialogText = getString(R.string.share_audio_file);
                 break;
             case "IMAGE":
             case "IMAGE_TEXT":
                 intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+                putExtra(intent, messageInfo);
                 choserDialogText = getString(R.string.share_image);
                 break;
             case "VIDEO":
             case "VIDEO_TEXT":
                 intent.setType("video/*");
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+                putExtra(intent, messageInfo);
                 choserDialogText = getString(R.string.share_video_file);
                 break;
             case "FILE":
             case "FILE_TEXT":
-                Uri uri = Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath()));
-                String mimeType = FileUtils.getMimeType(ActivityChat.this, uri);
 
-                if (mimeType == null || mimeType.length() < 1) {
-                    mimeType = "*/*";
+                if (messageInfo.getAttachment().getLocalFilePath() != null) {
+                    Uri uri = Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath()));
+                    String mimeType = FileUtils.getMimeType(ActivityChat.this, uri);
+
+                    if (mimeType == null || mimeType.length() < 1) {
+                        mimeType = "*/*";
+                    }
+
+                    intent.setType(mimeType);
+                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+                    choserDialogText = getString(R.string.share_file);
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(G.context, "File Not Downloaded Yet", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
-                intent.setType(mimeType);
-                intent.putExtra(Intent.EXTRA_STREAM, uri);
-                choserDialogText = getString(R.string.share_file);
                 break;
         }
 
         startActivity(Intent.createChooser(intent, choserDialogText));
+    }
+
+    private void putExtra(Intent intent, StructMessageInfo messageInfo) {
+        if (messageInfo.getAttachment() != null) {
+
+            if (messageInfo.getAttachment().getLocalFilePath() != null) {
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
+            } else {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(G.context, "File Not Downloaded Yet", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
+        }
+
     }
 
     private void setAvatar() {
