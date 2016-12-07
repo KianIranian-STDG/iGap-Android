@@ -116,7 +116,11 @@ public class MessageProgress extends FrameLayout
 
     @Override
     public void withDrawable(Drawable drawable, boolean hideProgress) {
-        show();
+        if (drawable != null) {
+            show();
+        } else {
+            hide();
+        }
         setForeground(drawable);
         if (hideProgress) {
             withHideProgress(true);

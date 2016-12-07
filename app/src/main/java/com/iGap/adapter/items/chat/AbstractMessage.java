@@ -540,7 +540,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     @Override
                     public void onProgressFinished() {
                         holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(null);
-                        holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
                         ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(null, true);
 
                         switch (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType) {
