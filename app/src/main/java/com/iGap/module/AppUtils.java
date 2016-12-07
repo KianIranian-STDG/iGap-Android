@@ -132,6 +132,9 @@ public final class AppUtils {
      * @param view TextView message status
      */
     public static void rightMessageStatus(ImageView view, String status, boolean isSenderMe) {
+        if (view == null) {
+            return;
+        }
         if (!isSenderMe) {
             view.setVisibility(View.GONE);
             return;
