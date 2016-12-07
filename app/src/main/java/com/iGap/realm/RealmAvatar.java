@@ -12,7 +12,7 @@ public class RealmAvatar extends RealmObject {
 
     @PrimaryKey
     private long id;
-    private long ownerId;
+    private long ownerId; // userId for users and roomId for rooms
     private RealmAttachment file;
 
     public RealmAvatar() {

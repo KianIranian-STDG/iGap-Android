@@ -77,6 +77,7 @@ import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImageMessages;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperConvertEnumToString;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
@@ -86,6 +87,7 @@ import com.iGap.helper.HelperSetAction;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.IResendMessage;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatDeleteMessageResponse;
@@ -2018,40 +2020,57 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setAvatar() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatar> avatars = null;
-        if (chatType != CHAT) {
-            avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mRoomId).findAll();
-        } else {
-            avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, chatPeerId).findAll();
-        }
 
-        if (avatars.isEmpty()) {
-            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-            return;
-        }
-        RealmAvatar realmAvatar = null;
-        for (int i = avatars.size() - 1; i >= 0; i--) {
-            RealmAvatar avatar = avatars.get(i);
-            if (avatar.getFile() != null) {
-                realmAvatar = avatar;
-                break;
+        if (chatType != CHANNEL) {
+
+            HelperAvatar.getAvatar(mRoomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+                @Override
+                public void onAvatarGet(String avatarPath) {
+                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
+                }
+
+                @Override
+                public void onShowInitials(String initials, String color) {
+                    imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                }
+            });
+
+        } else {
+            RealmResults<RealmAvatar> avatars = null;
+            if (chatType != CHAT) {
+                avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mRoomId).findAll();
+            } else {
+                avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, chatPeerId).findAll();
             }
-        }
 
-        if (realmAvatar == null) {
-            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-            return;
-        }
+            if (avatars.isEmpty()) {
+                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+                return;
+            }
+            RealmAvatar realmAvatar = null;
+            for (int i = avatars.size() - 1; i >= 0; i--) {
+                RealmAvatar avatar = avatars.get(i);
+                if (avatar.getFile() != null) {
+                    realmAvatar = avatar;
+                    break;
+                }
+            }
 
-        if (realmAvatar.getFile().isFileExistsOnLocal()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imvUserPicture);
-        } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvUserPicture);
-        } else {
-            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-        }
+            if (realmAvatar == null) {
+                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+                return;
+            }
 
-        realm.close();
+            if (realmAvatar.getFile().isFileExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imvUserPicture);
+            } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvUserPicture);
+            } else {
+                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+            }
+
+            realm.close();
+        }
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {

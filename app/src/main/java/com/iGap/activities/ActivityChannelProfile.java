@@ -1,8 +1,11 @@
 package com.iGap.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,7 +41,10 @@ import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.fragments.FragmentListAdmin;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.ShowCustomList;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.ImageHelper;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChannelAddAdmin;
 import com.iGap.interfaces.OnChannelAddMember;
 import com.iGap.interfaces.OnChannelAddModerator;
@@ -48,13 +55,16 @@ import com.iGap.interfaces.OnChannelKickAdmin;
 import com.iGap.interfaces.OnChannelKickMember;
 import com.iGap.interfaces.OnChannelKickModerator;
 import com.iGap.interfaces.OnChannelLeft;
+import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AttachFile;
 import com.iGap.module.Contacts;
+import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
@@ -90,6 +100,9 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +115,7 @@ import static com.iGap.G.context;
 import static com.iGap.module.MusicPlayer.roomId;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
-public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit {
+public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities {
 
     private AppBarLayout appBarLayout;
     private TextView txtNameChannel, txtDescription, txtChannelLink, txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport, txtChannelNameInfo;
@@ -133,6 +146,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private LinearLayout lytListModerator;
     private LinearLayout lytDeleteChannel;
     private LinearLayout lytNotification;
+    private AttachFile attachFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -437,11 +451,28 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         txtSharedMedia.setText(AdapterShearedMedia.getCountOfShearedMedia(roomId) + "");
         //memberNumber.setText(participantsCountLabel);
 
+        attachFile = new AttachFile(this);
 
+        setAvatar();
         setAvatarChannel();
         initRecycleView();
         channelGetMemberList();
         showAdminOrModeratorList();
+
+    }
+
+    private void setAvatar() {
+        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(String avatarPath) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgCircleImageView);
+            }
+
+            @Override
+            public void onShowInitials(String initials, String color) {
+                imgCircleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+            }
+        });
     }
 
     private void channelGetMemberList() {
@@ -728,7 +759,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 .replace(R.id.coordinator, fragment).commit();
     }
 
-
     //****** create popup
 
     private class CreatePopUpMessage {
@@ -842,6 +872,30 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         }
 
         realm.close();
+    }
+
+    //********** select picture
+
+    private void startDialogSelectPicture(int r) {
+
+        new MaterialDialog.Builder(this).title(R.string.choose_picture).negativeText(R.string.cansel).items(r).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                if (text.toString().equals(getString(R.string.from_camera))) {
+
+                    if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                        attachFile.requestTakePicture();
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(ActivityChannelProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                    }
+                } else if (text.toString().equals(getString(R.string.delete_photo))) {
+
+                } else {
+                    attachFile.requestOpenGalleryForImageSingleSelect();
+                }
+            }
+        }).show();
     }
 
     //********** channel Add Member
@@ -1044,6 +1098,23 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     }
 
     //************************************************** interfaces
+
+    //***Upload File Callbacks
+
+    @Override
+    public void onFileUploaded(FileUploadStructure uploadStructure, String identity) {
+
+    }
+
+    @Override
+    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
+
+    }
+
+    @Override
+    public void onFileTimeOut(String identity) {
+
+    }
 
     //***User Info
 
@@ -1332,5 +1403,78 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 .replace(R.id.fragmentContainer_channel_profile, fragmentNotification)
                 .commit();
     }
+
+    //*** UploadTask
+
+    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+
+        private ProgressBar prg;
+        private Activity myActivityReference;
+
+        public UploadTask(ProgressBar prg, Activity myActivityReference) {
+            this.prg = prg;
+            this.myActivityReference = myActivityReference;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            myActivityReference.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            prg.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected FileUploadStructure doInBackground(Object... params) {
+            try {
+                String filePath = (String) params[0];
+                long avatarId = (long) params[1];
+                File file = new File(filePath);
+                String fileName = file.getName();
+                long fileSize = file.length();
+                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
+                fileUploadStructure.openFile(filePath);
+
+                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                fileUploadStructure.setFileHash(fileHash);
+
+                return fileUploadStructure;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(FileUploadStructure result) {
+            super.onPostExecute(result);
+            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+        }
+    }
+
+    //*** onActivityResult
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            String filePath = null;
+            long avatarId = SUID.id().get();
+            switch (requestCode) {
+                case AttachFile.request_code_TAKE_PICTURE:
+                    ImageHelper.correctRotateImage(AttachFile.imagePath);
+                    filePath = AttachFile.imagePath;
+                    break;
+                case AttachFile.request_code_image_from_gallery_single_select:
+                    filePath = AttachFile.getFilePathFromUri(data.getData());
+                    break;
+            }
+
+            new ActivityChannelProfile.UploadTask(prgWait, ActivityChannelProfile.this).execute(filePath, avatarId);
+        }
+    }
+
 
 }
