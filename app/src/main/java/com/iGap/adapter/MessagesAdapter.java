@@ -185,7 +185,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             if (attachment != null) {
                 ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
                 String identity = attachment.getToken() + '*' + selector.toString() + '*' + attachment.getSize() + '*' + attachment.getToken() + "_" + attachment.getName() + '*' + offset;
-                new RequestFileDownload().download(token, offset, (int) attachment.getSize(), selector, attachment.getId(), identity);
+                new RequestFileDownload().download(token, offset, (int) attachment.getSize(), selector, identity);
             }
 
             realm.close();
@@ -205,6 +205,16 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                         notifyItemChanged(pos);
                     }
                 });
+            }
+        }
+    }
+
+    public void makeNotDownloaded(String token) {
+        for (Item item : getAdapterItems()) {
+            if (item.mMessage.attachment != null && item.mMessage.attachment.token != null && item.mMessage.attachment.token.equalsIgnoreCase(token)) {
+                final int pos = getAdapterItems().indexOf(item);
+                item.mMessage.downloadAttachment = null;
+                set(pos, item);
             }
         }
     }
@@ -292,6 +302,14 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 break;
             }
         }
+    }
+
+    public void removeMessage(int pos) {
+        if (onChatMessageRemove != null) {
+            AbstractMessage message = getAdapterItem(pos);
+            onChatMessageRemove.onPreChatMessageRemove(message.mMessage, pos);
+        }
+        remove(pos);
     }
 
     /**

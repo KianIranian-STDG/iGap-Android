@@ -11,7 +11,7 @@ public interface OnFileUploadForActivities {
 
     void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress);
 
-    void onFileUploadTimeOut(FileUploadStructure uploadStructure, long roomId);
-
     void onUploadStarted(FileUploadStructure struct);
+
+    void onBadDownload(String token);
 }

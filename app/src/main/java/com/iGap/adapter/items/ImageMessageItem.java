@@ -100,7 +100,7 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
                 + 0;
 
         new RequestFileDownload().download(token, 0,
-                (int) message.getAttachment().getSmallThumbnail().getSize(), selector, message.getMessageId(), identity);
+                (int) message.getAttachment().getSmallThumbnail().getSize(), selector, identity);
     }
 
     public void onLoadFromLocal(ViewHolder holder, String localPath) {
@@ -146,7 +146,7 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
                 + '*'
                 + offset;
         new RequestFileDownload().download(message.getAttachment().getToken(), offset,
-                (int) message.getAttachment().getSize(), selector, message.getMessageId(), identity);
+                (int) message.getAttachment().getSize(), selector, identity);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
             holder.progress.withOnMessageProgress(new OnMessageProgressClick() {
                 @Override
                 public void onMessageProgressClick(MessageProgress progress) {
-                    holder.progress.withDrawable(R.drawable.ic_gray_cancel);
+                    holder.progress.withDrawable(R.drawable.ic_gray_cancel, false);
                     holder.progress.withIndeterminate(true);
 
                     // make sure to not request multiple times by checking last offset with the new one
@@ -190,12 +190,12 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
         } else {
             if (AvatarsAdapter.hasFileRequested(message.getAttachment().getToken())) {
                 holder.progress.setVisibility(View.VISIBLE);
-                holder.progress.withDrawable(R.drawable.ic_gray_cancel);
+                holder.progress.withDrawable(R.drawable.ic_gray_cancel, false);
                 holder.progress.withProgress(
                         AvatarsAdapter.requestsProgress.get(message.getAttachment().getToken()));
             } else {
                 holder.progress.setVisibility(View.VISIBLE);
-                holder.progress.withDrawable(R.drawable.ic_download);
+                holder.progress.withDrawable(R.drawable.ic_download, true);
             }
         }
     }

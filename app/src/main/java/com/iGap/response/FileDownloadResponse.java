@@ -1,7 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.G;
-import com.iGap.helper.HelperSetAction;
+import com.iGap.adapter.MessagesAdapter;
 import com.iGap.module.AndroidUtils;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoFileDownload;
@@ -61,14 +61,27 @@ public class FileDownloadResponse extends MessageHandler {
 
     @Override
     public void error() {
-        HelperSetAction.sendCancel(Long.parseLong(this.identity));
         super.error();
+        makeReDownload();
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
         G.onFileDownloadResponse.onError(majorCode, minorCode);
+    }
+
+    /**
+     * make re-download
+     */
+    private void makeReDownload() {
+        String[] identityParams = identity.split("\\*");
+        String token = identityParams[0];
+
+        if (MessagesAdapter.hasDownloadRequested(token)) {
+            MessagesAdapter.downloading.remove(token);
+            G.onFileDownloadResponse.onBadDownload(token);
+        }
     }
 }
 

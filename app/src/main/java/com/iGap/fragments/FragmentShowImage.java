@@ -396,6 +396,11 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
         }
     }
 
+    @Override
+    public void onBadDownload(String token) {
+        // empty
+    }
+
     public void popUpMenuShowImage() {
 
         MaterialDialog dialog =
@@ -521,7 +526,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                         + media.downloadAttachment.offset;
 
                 new RequestFileDownload().download(media.downloadAttachment.token, 0,
-                        (int) media.attachment.smallThumbnail.size, selector, Long.parseLong(media.messageID), identity);
+                        (int) media.attachment.smallThumbnail.size, selector, identity);
 
                 // prevent from multiple requesting thumbnail
                 media.downloadAttachment.thumbnailRequested = true;
@@ -670,7 +675,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
             }
 
             ((MessageProgress) itemView.findViewById(R.id.progress)).withDrawable(
-                    R.drawable.ic_download);
+                    R.drawable.ic_download, true);
             // update progress when user trying to download
             if (!media.attachment.isFileExistsOnLocal() && media.downloadAttachment != null) {
                 ((MessageProgress) itemView.findViewById(R.id.progress)).withProgress(
@@ -736,7 +741,7 @@ public class FragmentShowImage extends Fragment implements OnFileDownloadRespons
                     + media.downloadAttachment.offset;
 
             new RequestFileDownload().download(media.downloadAttachment.token,
-                    media.downloadAttachment.offset, (int) media.attachment.size, selector, Long.parseLong(media.messageID), identity);
+                    media.downloadAttachment.offset, (int) media.attachment.size, selector, identity);
         }
 
         @Override

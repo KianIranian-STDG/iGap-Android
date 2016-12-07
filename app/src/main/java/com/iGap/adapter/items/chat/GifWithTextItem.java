@@ -41,7 +41,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     public void onPlayPauseGIF(ViewHolder holder, String localPath) {
         super.onPlayPauseGIF(holder, localPath);
 
-        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play, true);
 
         GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
         if (gifDrawable != null) {

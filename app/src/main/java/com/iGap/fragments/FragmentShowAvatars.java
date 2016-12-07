@@ -449,4 +449,9 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             });
         }
     }
+
+    @Override
+    public void onBadDownload(String token) {
+        // empty
+    }
 }

@@ -751,14 +751,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
     }
 
     @Override
-    public void onFileUploadTimeOut(FileUploadStructure uploadStructure, long roomId) {
-
-        if (uploadStructure.messageId == avatarId) {
-            // disable progress and show snack bar for retry upload avatar
-        }
-    }
-
-    @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
 
         if (getActivity() != null) {
@@ -785,14 +777,6 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                 }
             }
         });
-
-        // have to be inside a delayed handler
-       /* G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setImage(roomId);
-            }
-        }, 500);*/
 
         realm.close();
 
@@ -852,6 +836,11 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
 
     @Override
     public void onUploadStarted(FileUploadStructure struct) {
+        // empty
+    }
+
+    @Override
+    public void onBadDownload(String token) {
         // empty
     }
 

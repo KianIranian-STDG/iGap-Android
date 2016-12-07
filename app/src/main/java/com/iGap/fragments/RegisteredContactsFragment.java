@@ -639,4 +639,9 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             });
         }
     }
+
+    @Override
+    public void onBadDownload(String token) {
+        // empty
+    }
 }

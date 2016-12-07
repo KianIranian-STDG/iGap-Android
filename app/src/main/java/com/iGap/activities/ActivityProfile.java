@@ -418,11 +418,6 @@ public class ActivityProfile extends ActivityEnhanced
         // empty, update view something like updating progress
     }
 
-    @Override
-    public void onFileUploadTimeOut(FileUploadStructure uploadStructure, long roomId) {
-
-    }
-
     private void setImage(String path) {
         if (pathImageUser != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(path);
@@ -509,6 +504,11 @@ public class ActivityProfile extends ActivityEnhanced
 
     @Override
     public void onUploadStarted(FileUploadStructure struct) {
+        // empty
+    }
+
+    @Override
+    public void onBadDownload(String token) {
         // empty
     }
 }

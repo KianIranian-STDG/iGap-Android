@@ -77,6 +77,7 @@ import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImageMessages;
+import com.iGap.helper.HelperCancelDownloadUpload;
 import com.iGap.helper.HelperConvertEnumToString;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
@@ -172,7 +173,6 @@ import com.iGap.request.RequestClientGetRoomHistory;
 import com.iGap.request.RequestGroupDeleteMessage;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.iGap.request.RequestUserInfo;
-import com.iGap.request.RequestWrapper;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
@@ -191,10 +191,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import io.github.meness.emoji.emoji.Emoji;
@@ -642,7 +640,7 @@ public class ActivityChat extends ActivityEnhanced
         getUserInfo();
         updateStatus();
         setUpEmojiPopup();
-        checkAction();
+        //checkAction();
 
         G.onHelperSetAction = new OnHelperSetAction() {
             @Override
@@ -3497,6 +3495,19 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
+    public void onBadDownload(final String token) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // make item not downloaded
+                if (mAdapter != null) {
+                    mAdapter.makeNotDownloaded(token);
+                }
+            }
+        });
+    }
+
+    @Override
     public void onVoiceRecordDone(final String savedPath) {
         Realm realm = Realm.getDefaultInstance();
         final long messageId = SUID.id().get();
@@ -3729,11 +3740,6 @@ public class ActivityChat extends ActivityEnhanced
                 mAdapter.updateProgress(parseLong(identity), (int) progress);
             }
         });
-    }
-
-    @Override
-    public void onFileUploadTimeOut(final FileUploadStructure uploadStructure, long roomId) {
-        // empty
     }
 
     @Override
@@ -4321,107 +4327,42 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onUploadCancel(View view, final StructMessageInfo message, int pos) {
-        Toast.makeText(this, "onUploadCancel", Toast.LENGTH_LONG).show();
-
-        for (Iterator<Map.Entry<Long, RequestWrapper>> it = G.currentUploadFiles.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<Long, RequestWrapper> entry = it.next();
-
-            if (message.messageID != null && !message.messageID.isEmpty() && Long.parseLong(message.messageID) == entry.getKey()) {
-
-                if (G.requestQueueMap.contains(entry.getValue())) {
-                    G.requestQueueMap.remove(entry.getValue());
-
-                    //TODO [Saeed Mozaffari] [2016-11-27 4:57 PM] - clear requestQueueMapRelation
+    public void onUploadCancel(View view, final StructMessageInfo message, final int pos) {
+        if (HelperCancelDownloadUpload.cancelUpload(Long.parseLong(message.messageID))) {
+            // empty tag if selected message has been set
+            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                    edtChat.setTag(null);
                 }
-
-                if (MessagesAdapter.hasUploadRequested(Long.parseLong(message.messageID))) {
-                    MessagesAdapter.downloading.remove(Long.parseLong(message.messageID));
-                }
-
-                G.currentUploadFiles.remove(entry.getKey());
-
-                //===================
-
-                Realm realm = Realm.getDefaultInstance();
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID)).findFirst();
-                        if (roomMessage != null) {
-                            // delete message from database
-                            roomMessage.deleteFromRealm();
-                        }
-                    }
-                });
-
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // remove deleted message from adapter
-                        mAdapter.removeMessage(Long.parseLong(message.messageID));
-
-                        // remove tag from edtChat if the
-                        // message has deleted
-                        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                            if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                edtChat.setTag(null);
-                            }
-                        }
-                    }
-                });
-
-                realm.close();
-
-                //===================
-
-                break;
             }
+
+            mAdapter.removeMessage(pos);
+
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID)).findFirst();
+                    if (roomMessage != null) {
+                        // delete message from database
+                        roomMessage.deleteFromRealm();
+                    }
+                }
+            });
+            realm.close();
         }
-
-
     }
 
     @Override
     public void onDownloadCancel(View view, final StructMessageInfo message, final int pos) {
-        Toast.makeText(this, "onDownloadCancel", Toast.LENGTH_LONG).show();
-
-        for (Iterator<Map.Entry<Long, RequestWrapper>> it = G.currentUploadFiles.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<Long, RequestWrapper> entry = it.next();
-
-            if (message.messageID != null && !message.messageID.isEmpty() && Long.parseLong(message.messageID) == entry.getKey()) {
-
-                if (G.requestQueueMap.contains(entry.getValue())) {
-                    G.requestQueueMap.remove(entry.getValue());
-
-                    //TODO [Saeed Mozaffari] [2016-11-27 4:57 PM] - clear requestQueueMapRelation
+        if (HelperCancelDownloadUpload.cancelDownload(message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token)) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // make item not downloaded
+                    mAdapter.makeNotDownloaded(message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token);
                 }
-
-                if (MessagesAdapter.hasDownloadRequested(message.attachment.token)) {
-                    MessagesAdapter.downloading.remove(message.attachment.token);
-                }
-
-                G.currentUploadFiles.remove(entry.getKey());
-
-                //===================
-
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // remove deleted message from adapter
-                        AbstractMessage item = mAdapter.getAdapterItem(pos);
-                        item.mMessage.downloadAttachment = null;
-                        mAdapter.set(pos, item);
-                    }
-                });
-
-                //===================
-
-                break;
-            }
+            });
         }
     }
 

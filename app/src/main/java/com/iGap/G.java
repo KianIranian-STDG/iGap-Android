@@ -198,6 +198,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static LayoutInflater inflater;
     public static Typeface FONT_IGAP;
     public static Typeface HELETICBLK_TITR;
+    public static List<String> downloadingTokens = new ArrayList<>();
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -376,7 +377,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
 
                             if (avatar != null && avatar.isValid()) {
                                 if (!avatar.getFile().isFileExistsOnLocal() && !avatar.getFile().isThumbnailExistsOnLocal()) {
-                                    requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize(), avatar.getId());
+                                    requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
                                 } else {
                                     if (avatar.getFile().isFileExistsOnLocal()) {
                                         if (G.onChangeUserPhotoListener != null) {
@@ -676,7 +677,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
         }, 1000);
     }
 
-    private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize, long fakeMessageID) {
+    private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
         final String fileName = "thumb_" + token + "_" + name;
         if (done) {
             final Realm realm = Realm.getDefaultInstance();
@@ -705,7 +706,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
                 token + '*' + selector.toString() + '*' + smallSize + '*' + fileName + '*' + 0;
 
         new RequestFileDownload().download(token, 0, smallSize,
-                selector, fakeMessageID, identity);
+                selector, identity);
     }
 
     @Override
@@ -715,7 +716,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
             // requested thumbnail
             RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst();
             if (avatar != null) {
-                requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize(), avatar.getId());
+                requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
             }
         } else {
             // TODO: 11/22/2016 [Alireza] implement
@@ -731,5 +732,10 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     @Override
     public void onError(int majorCode, int minorCode) {
 
+    }
+
+    @Override
+    public void onBadDownload(String token) {
+        // empty
     }
 }

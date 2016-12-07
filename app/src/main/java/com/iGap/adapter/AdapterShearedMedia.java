@@ -681,7 +681,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             }
 
             playButtom = ((MessageProgress) itemView.findViewById(R.id.smslg_progress));
-            playButtom.withDrawable(R.drawable.ic_play);
+            playButtom.withDrawable(R.drawable.ic_play, true);
             playButtom.setVisibility(View.GONE);
 
 

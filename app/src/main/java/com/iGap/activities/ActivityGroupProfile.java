@@ -1062,12 +1062,12 @@ public class ActivityGroupProfile extends ActivityEnhanced
     }
 
     @Override
-    public void onFileUploadTimeOut(FileUploadStructure uploadStructure, long roomId) {
-
+    public void onUploadStarted(FileUploadStructure struct) {
+        // empty
     }
 
     @Override
-    public void onUploadStarted(FileUploadStructure struct) {
+    public void onBadDownload(String token) {
         // empty
     }
 

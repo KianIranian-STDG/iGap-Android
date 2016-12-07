@@ -60,9 +60,7 @@ public class FileUploadResponse extends MessageHandler {
                     public void onSuccess() {
                         final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
                         if (message != null) {
-                            HelperSetAction.sendCancel(Long.parseLong(FileUploadResponse.this.identity));
                             G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
-                            G.uploaderUtil.onFileUploadTimeOut(message, message.getRoomId());
                         }
                     }
                 });
@@ -72,8 +70,8 @@ public class FileUploadResponse extends MessageHandler {
 
     @Override
     public void error() {
-        HelperSetAction.sendCancel(Long.parseLong(this.identity));
         super.error();
+        HelperSetAction.sendCancel(Long.parseLong(this.identity));
         makeFailed();
     }
 }

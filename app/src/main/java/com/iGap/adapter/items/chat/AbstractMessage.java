@@ -52,7 +52,6 @@ import java.util.List;
 import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.meness.github.messageprogress.OnProgress;
-import io.meness.github.messageprogress.ProgressProcess;
 import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -144,7 +143,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     + "*"
                     + type.toString();
 
-            new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.senderAvatar.largeThumbnail.size, selector, Long.parseLong(mMessage.messageID), identity);
+            new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.senderAvatar.largeThumbnail.size, selector, identity);
         }
     }
 
@@ -175,9 +174,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        if (mMessage.sendType == MyType.SendType.send) {
-            AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), mMessage.status);
-        }
+        AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), mMessage.status, mMessage.isSenderMe());
 
         // display 'edited' indicator beside message time if message was edited
         if (holder.itemView.findViewById(R.id.txtEditedIndicator) != null) {
@@ -274,9 +271,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         ((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).leftMargin = (int) holder.itemView.getResources().getDimension(R.dimen.messageBox_minusLeftRightMargin);
         ((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).rightMargin = 0;
-
-        // gone message status
-        holder.itemView.findViewById(R.id.cslr_txt_tic).setVisibility(View.GONE);
     }
 
     @CallSuper
@@ -303,9 +297,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         ((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).rightMargin = (int) holder.itemView.getResources().getDimension(R.dimen.messageBox_minusLeftRightMargin);
         ((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).leftMargin = 0;
-
-        // visible message status
-        holder.itemView.findViewById(R.id.cslr_txt_tic).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -550,6 +541,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     public void onProgressFinished() {
                         holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(null);
                         holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
+                        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(null, true);
 
                         switch (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType) {
                             case IMAGE:
@@ -558,7 +550,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             case VIDEO:
                             case VIDEO_TEXT:
                                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play, true);
                                 break;
                             case AUDIO:
                             case AUDIO_TEXT:
@@ -586,7 +578,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                 if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0) == 0) {
                                     holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play);
+                                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play, true);
                                 } else {
                                     holder.itemView.findViewById(R.id.progress).setVisibility(View.INVISIBLE);
                                 }
@@ -610,7 +602,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         // create new download attachment once with attachment token
         if (mMessage.downloadAttachment == null) {
-            mMessage.downloadAttachment = new StructDownloadAttachment(attachment.getToken());
+            mMessage.downloadAttachment = new StructDownloadAttachment(attachment);
         }
 
         // make sure to not request multiple times by checking last offset with the new one
@@ -625,25 +617,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void forOnCLick(VH holder, RealmAttachment attachment) {
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
+        View thumbnail = holder.itemView.findViewById(R.id.thumbnail);
 
         if (mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
-            View thumbnail = holder.itemView.findViewById(R.id.thumbnail);
             if (thumbnail != null) {
                 thumbnail.setVisibility(View.INVISIBLE);
             }
         }
 
-        if (progress.getProcessType() == ProgressProcess.PROCESSING) {
-            if (MessagesAdapter.hasUploadRequested(Long.parseLong(mMessage.messageID))) {
-                messageClickListener.onUploadCancel(progress, mMessage, holder.getAdapterPosition());
-            } else {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
-                progress.withHideProgress();
-
-                messageClickListener.onDownloadCancel(progress, mMessage, holder.getAdapterPosition());
-            }
+        if (MessagesAdapter.hasUploadRequested(Long.parseLong(mMessage.messageID))) {
+            messageClickListener.onUploadCancel(progress, mMessage, holder.getAdapterPosition());
+        } else if (MessagesAdapter.hasDownloadRequested(attachment.getToken())) {
+            messageClickListener.onDownloadCancel(progress, mMessage, holder.getAdapterPosition());
         } else {
-            View thumbnail = holder.itemView.findViewById(R.id.thumbnail);
             if (thumbnail != null) {
                 thumbnail.setVisibility(View.VISIBLE);
             }
@@ -655,6 +641,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                     messageClickListener.onFailedMessageClick(progress, mMessage, holder.getAdapterPosition());
                 } else {
+                    // TODO: 12/7/2016 [Alireza] ba in shart dige nemishe GIF haro dar fragment show images did
                     if (mMessage.messageType == ProtoGlobal.RoomMessageType.GIF || mMessage.messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                         onPlayPauseGIF(holder, attachment.getLocalFilePath());
                     } else {
@@ -662,10 +649,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
             } else {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
+                progress.withDrawable(R.drawable.ic_cancel, false);
+
                 // create new download attachment once with attachment token
                 if (mMessage.downloadAttachment == null) {
-                    mMessage.downloadAttachment = new StructDownloadAttachment(attachment.getToken());
+                    mMessage.downloadAttachment = new StructDownloadAttachment(attachment);
+                    progress.withProgress(mMessage.downloadAttachment.progress);
                 }
 
                 // make sure to not request multiple times by checking last offset with the new one
@@ -719,6 +708,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if (!MessagesAdapter.hasDownloadRequested(mMessage.forwardedFrom.getAttachment().getToken())) {
                 MessagesAdapter.requestDownload(mMessage.forwardedFrom.getAttachment().getToken(), progress, offset);
+                G.downloadingTokens.add(mMessage.forwardedFrom.getAttachment().getToken());
             }
         } else {
             final String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
@@ -749,6 +739,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if (!MessagesAdapter.hasDownloadRequested(mMessage.attachment.token)) {
                 MessagesAdapter.requestDownload(mMessage.attachment.token, progress, offset);
+                G.downloadingTokens.add(mMessage.attachment.token);
             }
         }
 
@@ -788,7 +779,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
                 String identity = mMessage.attachment.token + '*' + selector.toString() + '*' + mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize() + '*' + fileName + '*' + 0;
 
-                new RequestFileDownload().download(token, 0, (int) mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize(), selector, Long.parseLong(mMessage.messageID), identity);
+                new RequestFileDownload().download(token, 0, (int) mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize(), selector, identity);
             }
         } else {
             if (mMessage.attachment.smallThumbnail != null && mMessage.attachment.smallThumbnail.size != 0) {
@@ -819,7 +810,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
                 String identity = mMessage.attachment.token + '*' + selector.toString() + '*' + mMessage.attachment.smallThumbnail.size + '*' + fileName + '*' + 0;
 
-                new RequestFileDownload().download(token, 0, (int) mMessage.attachment.smallThumbnail.size, selector, Long.parseLong(mMessage.messageID), identity);
+                new RequestFileDownload().download(token, 0, (int) mMessage.attachment.smallThumbnail.size, selector, identity);
             }
         }
 
@@ -857,7 +848,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
+            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel, false);
             // update progress when user trying to upload or download
             if (MessagesAdapter.uploading.containsKey(Long.parseLong(mMessage.messageID))) {
                 hideThumbnailIf(holder);
@@ -885,24 +876,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void checkForDownloading(VH holder, RealmAttachment attachment) {
+        MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         if (MessagesAdapter.downloading.containsKey(attachment.getToken())) {
             hideThumbnailIf(holder);
 
-            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel);
-            holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.downloading.get(attachment.getToken()));
+            progress.withDrawable(R.drawable.ic_cancel, false);
+            progress.setVisibility(View.VISIBLE);
+            progress.withProgress(MessagesAdapter.downloading.get(attachment.getToken()));
 
             if (MessagesAdapter.downloading.get(attachment.getToken()) == 100) {
                 MessagesAdapter.downloading.remove(attachment.getToken());
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+                progress.performProgress();
             }
         } else {
             if (attachment.isFileExistsOnLocal()) {
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+                progress.performProgress();
             } else {
                 hideThumbnailIf(holder);
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_download);
-                holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                progress.withDrawable(R.drawable.ic_download, true);
+                progress.setVisibility(View.VISIBLE);
             }
         }
     }

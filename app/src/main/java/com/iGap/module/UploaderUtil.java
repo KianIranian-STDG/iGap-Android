@@ -9,7 +9,6 @@ import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnFileUploadStatusResponse;
 import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.realm.RealmRoomMessage;
 import com.iGap.request.RequestFileUpload;
 import com.iGap.request.RequestFileUploadInit;
 import com.iGap.request.RequestFileUploadOption;
@@ -169,16 +168,6 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
 
         new RequestFileUploadStatus().fileUploadStatus(fileUploadStructure.token,
                 fileHashAsIdentity);
-    }
-
-    @Override
-    public void onFileUploadTimeOut(RealmRoomMessage roomMessage, long roomId) {
-        if (activityCallbacks != null) {
-            FileUploadStructure structure = getSelectedFile(Long.toString(roomMessage.getMessageId()));
-            if (structure != null) {
-                activityCallbacks.onFileUploadTimeOut(structure, roomId);
-            }
-        }
     }
 
     /**

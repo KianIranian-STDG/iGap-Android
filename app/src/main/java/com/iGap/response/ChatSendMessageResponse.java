@@ -1,5 +1,8 @@
 package com.iGap.response;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.iGap.G;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
@@ -127,16 +130,27 @@ public class ChatSendMessageResponse extends MessageHandler {
      */
     private void makeFailed() {
         // message failed
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
-            public void execute(Realm realm) {
-                RealmRoomMessage message =
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
-                if (message != null) {
-                    message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-                    G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
-                }
+            public void run() {
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+                        if (message != null) {
+                            message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+                        }
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+                        if (message != null) {
+                            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
+                        }
+                    }
+                });
             }
         });
     }

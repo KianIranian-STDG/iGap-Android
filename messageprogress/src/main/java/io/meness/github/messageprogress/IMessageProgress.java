@@ -7,15 +7,13 @@ import android.support.annotation.DrawableRes;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/10/2016.
  */
 public interface IMessageProgress {
-    void withDrawable(@DrawableRes int res);
+    void withDrawable(@DrawableRes int res, boolean hideProgress);
 
-    void withDrawable(Drawable drawable);
+    void withDrawable(Drawable drawable, boolean hideProgress);
 
     void withProgress(int i);
 
     void withIndeterminate(boolean b);
-
-    void withHideProgress();
 
     float getProgress();
 
@@ -32,6 +30,4 @@ public interface IMessageProgress {
     void withOnProgress(OnProgress listener);
 
     void performProgress();
-
-    @ProgressProcess int getProcessType();
 }

@@ -131,27 +131,32 @@ public final class AppUtils {
      *
      * @param view TextView message status
      */
-    public static void rightMessageStatus(ImageView view, String status) {
-        // icons font MaterialDesign yeksan design nashodan vase hamin man dasti size ro barabar kardam
+    public static void rightMessageStatus(ImageView view, String status, boolean isSenderMe) {
+        if (!isSenderMe) {
+            view.setVisibility(View.GONE);
+            return;
+        } else {
+            view.setVisibility(View.VISIBLE);
+        }
         switch (ProtoGlobal.RoomMessageStatus.valueOf(status)) {
             case DELIVERED:
-                DrawableCompat.setTint(view.getDrawable(), Color.WHITE);
+                DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 view.setImageResource(R.drawable.ic_check);
                 break;
             case FAILED:
-                DrawableCompat.setTint(view.getDrawable(), Color.RED);
+                DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
                 view.setImageResource(R.drawable.ic_error);
                 break;
             case SEEN:
-                DrawableCompat.setTint(view.getDrawable(), Color.WHITE);
+                DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 view.setImageResource(R.drawable.ic_double_check);
                 break;
             case SENDING:
-                DrawableCompat.setTint(view.getDrawable(), view.getContext().getResources().getColor(R.color.statusSendingColor));
+                DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
                 view.setImageResource(R.drawable.ic_clock);
                 break;
             case SENT:
-                DrawableCompat.setTint(view.getDrawable(), view.getContext().getResources().getColor(R.color.statusSendingColor));
+                DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
                 view.setImageResource(R.drawable.ic_check);
                 break;
         }

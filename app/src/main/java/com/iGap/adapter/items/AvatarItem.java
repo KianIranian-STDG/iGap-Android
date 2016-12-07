@@ -94,7 +94,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
                         .getSize() + '*' + fileName + '*' + 0;
 
         new RequestFileDownload().download(token, 0, (int) avatar.getSmallThumbnail().getSize(),
-                selector, avatar.getId(), identity);
+                selector, identity);
     }
 
     public void onLoadFromLocal(ViewHolder holder, String localPath) {
@@ -139,7 +139,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
                 + '*'
                 + offset;
         new RequestFileDownload().download(avatar.getToken(), offset, (int) avatar.getSize(),
-                selector, avatar.getId(), identity);
+                selector, identity);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
             holder.progress.withOnMessageProgress(new OnMessageProgressClick() {
                 @Override
                 public void onMessageProgressClick(MessageProgress progress) {
-                    holder.progress.withDrawable(R.drawable.ic_gray_cancel);
+                    holder.progress.withDrawable(R.drawable.ic_gray_cancel, false);
                     holder.progress.withIndeterminate(true);
 
                     // make sure to not request multiple times by checking last offset with the new one
@@ -183,12 +183,12 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
         } else {
             if (AvatarsAdapter.hasFileRequested(avatar.getToken())) {
                 holder.progress.setVisibility(View.VISIBLE);
-                holder.progress.withDrawable(R.drawable.ic_gray_cancel);
+                holder.progress.withDrawable(R.drawable.ic_gray_cancel, false);
                 holder.progress.withProgress(
                         AvatarsAdapter.requestsProgress.get(avatar.getToken()));
             } else {
                 holder.progress.setVisibility(View.VISIBLE);
-                holder.progress.withDrawable(R.drawable.ic_download);
+                holder.progress.withDrawable(R.drawable.ic_download, true);
             }
         }
     }

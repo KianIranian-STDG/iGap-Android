@@ -15,4 +15,6 @@ public interface OnFileDownloadResponse {
                           RoomType roomType);
 
     void onError(int majorCode, int minorCode);
+
+    void onBadDownload(String token);
 }

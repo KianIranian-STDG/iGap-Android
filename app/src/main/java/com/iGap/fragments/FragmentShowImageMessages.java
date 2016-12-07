@@ -431,4 +431,9 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             });
         }
     }
+
+    @Override
+    public void onBadDownload(String token) {
+        // empty
+    }
 }

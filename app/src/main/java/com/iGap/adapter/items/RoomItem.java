@@ -131,7 +131,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                 mInfo.getAvatar().getFile().getToken() + '*' + selector.toString() + '*' + mInfo.getAvatar().getFile().getSmallThumbnail().getSize() + '*' + fileName + '*' + 0;
 
         new RequestFileDownload().download(token, 0, (int) mInfo.getAvatar().getFile().getSmallThumbnail().getSize(),
-                selector, mInfo.getId(), identity);
+                selector, identity);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                     holder.lastMessageSender.setVisibility(GONE);
                 } else {
                     if (mInfo.getLastMessage().isSenderMe()) {
-                        AppUtils.rightMessageStatus(holder.messageStatus, mInfo.getLastMessage().getStatus());
+                        AppUtils.rightMessageStatus(holder.messageStatus, mInfo.getLastMessage().getStatus(), mInfo.getLastMessage().isSenderMe());
                         holder.messageStatus.setVisibility(View.VISIBLE);
                     } else {
                         holder.messageStatus.setVisibility(GONE);
@@ -209,7 +209,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                                     } else {
                                         lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
                                     }
-
 
 
                                 }
