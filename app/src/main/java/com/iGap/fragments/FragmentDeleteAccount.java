@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -153,16 +152,16 @@ public class FragmentDeleteAccount extends Fragment {
 
                                     switch (which) {
                                         case 0:
-                                            Toast.makeText(G.context, "1", Toast.LENGTH_SHORT).show();
+
                                             break;
                                         case 1:
-                                            Toast.makeText(G.context, "2", Toast.LENGTH_SHORT).show();
+
                                             break;
                                         case 2:
-                                            Toast.makeText(G.context, "3", Toast.LENGTH_SHORT).show();
+
                                             break;
                                         case 3:
-                                            Toast.makeText(G.context, "4", Toast.LENGTH_SHORT).show();
+
                                             break;
                                     }
 

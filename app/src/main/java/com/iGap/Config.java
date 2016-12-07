@@ -19,7 +19,7 @@ public class Config {
     public static final long LAST_SEEN_TIME_OUT = (60 * DateUtils.MINUTE_IN_MILLIS); // after this time show exactly time instead of minutes
     public static final long LAST_SEEN_DELAY_CHECKING = (DateUtils.MINUTE_IN_MILLIS);
     public static final long GROUP_SHOW_ACTIONS_COUNT = 3;
-    public static String urlWebsocket = "wss://secure.igap.im/connect/"; // wss://secure.igap.im/wss/ , ws://nano.igap.im:7755 // ws://10.10.10.102:6708
+    public static String urlWebsocket = "ws://10.10.10.102:6708"; // wss://secure.igap.im/wss/ , ws://nano.igap.im:7755 // ws://10.10.10.102:6708
 
     public enum ConnectionState {
         WAITING_FOR_NETWORK, CONNECTING, UPDATING, IGAP

@@ -577,6 +577,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction()
+                        .addToBackStack(null)
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                                 R.anim.slide_in_right, R.anim.slide_out_left)
                         .replace(fragmentContainer_group_profile, fragmentNotification)
@@ -612,6 +613,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.group);
                     ActivityGroupProfile.this.getSupportFragmentManager()
                             .beginTransaction()
+                            .addToBackStack(null)
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                             .replace(R.id.fragmentContainer_group_profile, fragment, null).commit();
                 }
@@ -810,7 +812,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
 
-                        finish();
                     }
                 });
 

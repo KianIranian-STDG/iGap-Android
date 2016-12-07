@@ -155,6 +155,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                                 .beginTransaction()
                                 .remove(FragmentShowAvatars.this)
                                 .commit();
+                        appBarLayout.setVisibility(View.VISIBLE);
                     }
                 });
 

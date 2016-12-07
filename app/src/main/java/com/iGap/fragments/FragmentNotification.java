@@ -745,14 +745,13 @@ public class FragmentNotification extends Fragment {
                 realmNotificationSetting = realm.createObject(RealmNotificationSetting.class);
 
                 realmNotificationSetting.setNotification(0);
-                realmNotificationSetting.setVibrate(1);
+                realmNotificationSetting.setVibrate(-1);
                 realmNotificationSetting.setSound("Default Notification Tone");
-                realmNotificationSetting.setIdRadioButtonSound(0);
+                realmNotificationSetting.setIdRadioButtonSound(-1);
                 realmNotificationSetting.setSmartNotification("default");
-                realmNotificationSetting.setTimes(0);
-                realmNotificationSetting.setMinutes(0);
-                realmNotificationSetting.setSmartNotification("default");
-                realmNotificationSetting.setLedColor(-8257792);
+                realmNotificationSetting.setTimes(-1);
+                realmNotificationSetting.setMinutes(-1);
+                realmNotificationSetting.setLedColor(-1);
 
                 if (realmGroupRoom != null) {
                     realmGroupRoom.setRealmNotificationSetting(realmNotificationSetting);
@@ -778,7 +777,11 @@ public class FragmentNotification extends Fragment {
         realmSmartNotification = realmNotificationSetting.getSmartNotification();
         realmTimes = realmNotificationSetting.getTimes();
         realmMinutes = realmNotificationSetting.getMinutes();
-        realmLedColor = realmNotificationSetting.getLedColor();
+        if (realmNotificationSetting.getLedColor() != -1) {
+            realmLedColor = realmNotificationSetting.getLedColor();
+        } else {
+            realmLedColor = -8257792;
+        }
     }
 
     private void callObject(View view) {

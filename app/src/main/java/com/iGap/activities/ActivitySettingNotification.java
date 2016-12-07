@@ -193,8 +193,25 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtVibrateMessage = (TextView) findViewById(R.id.stns_txt_vibrate_message_text);
-        String vibrateMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, getResources().getString(R.string.array_Default));
-        txtVibrateMessage.setText(vibrateMessage);
+        int vibrateMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
+        switch (vibrateMessage) {
+            case 0:
+                txtVibrateMessage.setText(getResources().getString(R.string.array_Disable));
+                break;
+            case 1:
+                txtVibrateMessage.setText(getResources().getString(R.string.array_Default));
+                break;
+            case 2:
+                txtVibrateMessage.setText(getResources().getString(R.string.array_Short));
+                break;
+            case 3:
+                txtVibrateMessage.setText(getResources().getString(R.string.array_Long));
+                break;
+            case 4:
+                txtVibrateMessage.setText(getResources().getString(R.string.array_Only_if_silent));
+                break;
+        }
+
         ltVibrate_message = (ViewGroup) findViewById(R.id.stns_layout_vibrate_message);
         ltVibrate_message.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -331,9 +348,9 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
 
-        poRbDialogSoundMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 3);
+        poRbDialogSoundMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 1);
         txtSoundMessage = (TextView) findViewById(R.id.stns_txt_sound_text);
-        String soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, getResources().getString(R.string.arrow));
+        String soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, getResources().getString(R.string.array_Default_Notification_tone));
         txtSoundMessage.setText(soundMessage);
         ltSoundMessage = (ViewGroup) findViewById(R.id.stns_layout_sound_message);
 

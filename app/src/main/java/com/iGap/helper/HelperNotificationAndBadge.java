@@ -394,7 +394,7 @@ public class HelperNotificationAndBadge {
                 if (realmRoom != null
                         && realmRoom.getChatRoom() != null
                         && realmRoom.getChatRoom().getRealmNotificationSetting() != null
-                        && realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor() != 0) {
+                        && realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor() != -1) {
 
                     led = realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor();
 
@@ -403,7 +403,9 @@ public class HelperNotificationAndBadge {
                 }
                 if (realmRoom != null
                         && realmRoom.getChatRoom() != null
-                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null) {
+                        && realmRoom.getChatRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate() != -1) {
+
                     vibrator = realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate();
                 } else {
                     vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
@@ -413,7 +415,7 @@ public class HelperNotificationAndBadge {
                 if (realmRoom != null
                         && realmRoom.getChatRoom() != null
                         && realmRoom.getChatRoom().getRealmNotificationSetting() != null
-                        ) {
+                        && realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
 
                     sound = realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
@@ -427,8 +429,7 @@ public class HelperNotificationAndBadge {
                 if (realmRoom != null
                         && realmRoom.getGroupRoom() != null
                         && realmRoom.getGroupRoom().getRealmNotificationSetting() != null
-                        && realmRoom.getGroupRoom().getRealmNotificationSetting().getLedColor() != 0) {
-
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting().getLedColor() != -1) {
                     led = realmRoom.getGroupRoom().getRealmNotificationSetting().getLedColor();
                 } else {
                     led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
@@ -436,14 +437,11 @@ public class HelperNotificationAndBadge {
 
                 if (realmRoom != null
                         && realmRoom.getGroupRoom() != null
-                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null) {
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate() != -1
+                        ) {
 
-                    if (realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate() == 1) {
-                        vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
-
-                    } else {
-                        vibrator = realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate();
-                    }
+                    vibrator = realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate();
 
                 } else {
                     vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
@@ -451,7 +449,8 @@ public class HelperNotificationAndBadge {
 
                 if (realmRoom != null
                         && realmRoom.getGroupRoom() != null
-                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null) {
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
 
                     sound = realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
