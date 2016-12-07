@@ -3110,7 +3110,7 @@ public class ActivityChat extends ActivityEnhanced
 
         FragmentShowImageMessages.appBarLayout = appBarLayout;
 
-        FragmentShowImageMessages fragment = FragmentShowImageMessages.newInstance(mRoomId, messageInfo.attachment.token);
+        FragmentShowImageMessages fragment = FragmentShowImageMessages.newInstance(mRoomId, messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getToken() : messageInfo.attachment.token);
         getSupportFragmentManager().beginTransaction().addToBackStack("hello").replace(R.id.ac_ll_parent, fragment, null).commit();
     }
 
@@ -4183,12 +4183,13 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
+        ProtoGlobal.RoomMessageType messageType = message.forwardedFrom != null ? message.forwardedFrom.getMessageType() : message.messageType;
         Realm realm = Realm.getDefaultInstance();
-        if (message.messageType == ProtoGlobal.RoomMessageType.IMAGE || message.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
             showImage(message);
-        } else if (message.messageType == ProtoGlobal.RoomMessageType.FILE || message.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT ||
-                message.messageType == ProtoGlobal.RoomMessageType.VIDEO || message.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-            Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, message.attachment.token).findFirst().getLocalFilePath());
+        } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT ||
+                messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+            Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token).findFirst().getLocalFilePath());
             if (intent != null) {
                 try {
                     startActivity(intent);
