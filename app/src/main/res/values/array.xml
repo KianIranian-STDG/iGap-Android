@@ -186,7 +186,7 @@
     </string-array>
 
     <string-array name="pop_up_menu_show_image">
-        <item>@string/show_all_media</item>
+        <item>@string/share_image</item>
         <item>@string/save_to_gallery</item>
     </string-array>
 

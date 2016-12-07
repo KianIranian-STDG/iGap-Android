@@ -19,7 +19,6 @@ import android.graphics.Path;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore.MediaColumns;
 import android.view.Display;
 import android.view.Gravity;
@@ -278,16 +277,13 @@ public class ActivityPaint extends ActivityEnhanced {
 
     void savePicToFile(String fileName, Boolean send) {
 
-        File dir =
-                new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/igap/paint");
+        File dir = new File(G.DIR_IMAGES);
         if (!dir.exists()) dir.mkdirs();
         File f = new File(dir, fileName + ".png");
 
         int x = 0;
         while (f.exists()) {
-            f = new File(
-                    Environment.getExternalStorageDirectory().getAbsoluteFile() + "/igap/paint",
-                    fileName + Integer.toString(x) + ".png");
+            f = new File(G.DIR_IMAGES, fileName + Integer.toString(x) + ".png");
             x++;
         }
 
@@ -307,8 +303,7 @@ public class ActivityPaint extends ActivityEnhanced {
             setResult(Activity.RESULT_OK, data);
             finish();
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.picture_is_saved_en),
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.picture_is_saved_en), Toast.LENGTH_SHORT).show();
         }
     }
 

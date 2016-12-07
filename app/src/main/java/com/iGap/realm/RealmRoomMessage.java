@@ -76,7 +76,7 @@ public class RealmRoomMessage extends RealmObject {
         message.setDeleted(input.getDeleted());
         message.setEdited(input.getEdited());
         if (input.hasAttachment()) {
-            message.setAttachment(RealmAttachment.build(input.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT));
+            message.setAttachment(RealmAttachment.build(input.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT, input.getMessageType()));
         }
         if (input.hasLocation()) {
             message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));

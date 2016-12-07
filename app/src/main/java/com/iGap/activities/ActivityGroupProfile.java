@@ -1029,7 +1029,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     realmAvatar.setOwnerId(roomId);
                 }
 
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
 
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null) {

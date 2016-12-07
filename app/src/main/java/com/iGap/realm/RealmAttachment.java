@@ -3,6 +3,7 @@ package com.iGap.realm;
 import android.support.annotation.Nullable;
 
 import com.iGap.G;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
@@ -50,7 +51,7 @@ public class RealmAttachment extends RealmObject {
         realm.close();
     }
 
-    public static RealmAttachment build(ProtoGlobal.File file, AttachmentFor attachmentFor) {
+    public static RealmAttachment build(ProtoGlobal.File file, AttachmentFor attachmentFor, @Nullable ProtoGlobal.RoomMessageType messageType) {
         Realm realm = Realm.getDefaultInstance();
 
         RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, file.getToken()).findFirst();
@@ -77,7 +78,7 @@ public class RealmAttachment extends RealmObject {
             String filePath = "";
             switch (attachmentFor) {
                 case MESSAGE_ATTACHMENT:
-                    filePath = G.DIR_IMAGES;
+                    filePath = AndroidUtils.suitableAppFilePath(messageType);
                     break;
                 case AVATAR:
                     filePath = G.DIR_IMAGE_USER;

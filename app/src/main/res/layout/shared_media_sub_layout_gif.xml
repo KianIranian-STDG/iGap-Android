@@ -13,16 +13,19 @@
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/smslg_gif_view"
             android:layout_width="match_parent"
+            android:background="@color/green"
             android:layout_height="match_parent"
+            android:minHeight="@dimen/dp80"
+            android:minWidth="@dimen/dp80"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             />
 
         <include
-            android:id="@+id/smslg_progress"
+            android:id="@+id/progress"
             layout="@layout/msg_progress_item"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"/>
 
 

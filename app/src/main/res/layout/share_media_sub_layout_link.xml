@@ -19,5 +19,13 @@
             android:padding="@dimen/dp8"
             android:id="@+id/smsll_txt_shared_link"/>
 
+        <include
+            android:id="@+id/progress"
+            layout="@layout/msg_progress_item"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"/>
+
+
     </FrameLayout>
 </LinearLayout>

@@ -42,7 +42,7 @@ public class UserAvatarGetListResponse extends MessageHandler {
                 for (ProtoGlobal.Avatar avatar : userAvatarGetListResponse.getAvatarList()) {
 
                     RealmAvatar realmAvatar = RealmAvatar.convert(Long.parseLong(identity),
-                            RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
+                            RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
 
                     if (!realmAvatars.contains(realmAvatar)) {
                         realmAvatars.add(realmAvatar);

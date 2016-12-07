@@ -247,6 +247,15 @@ public final class AndroidUtils {
         deleteFile(cutFrom);
     }
 
+    public static void cutFromTemp(String pathTmp, String newPath) throws IOException {
+        File cutTo = new File(newPath);
+        File cutFrom = new File(pathTmp);
+
+        copyFile(cutFrom, cutTo);
+        deleteFile(cutFrom);
+    }
+
+
     public static void copyFile(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
         OutputStream out = new FileOutputStream(dst);
@@ -276,6 +285,8 @@ public final class AndroidUtils {
                 return G.DIR_DOCUMENT;
             case IMAGE:
             case IMAGE_TEXT:
+            case GIF:
+            case GIF_TEXT:
                 return G.DIR_IMAGES;
             case VIDEO:
             case VIDEO_TEXT:

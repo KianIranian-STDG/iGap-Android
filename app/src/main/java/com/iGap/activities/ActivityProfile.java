@@ -462,7 +462,7 @@ public class ActivityProfile extends ActivityEnhanced
                 long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                 RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
                 realmAvatar.setOwnerId(userId);
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
                 realmAvatar.setId(avatar.getId());
             }
         });

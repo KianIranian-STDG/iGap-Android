@@ -1851,7 +1851,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void execute(Realm realm) {
                 RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
                 realmAvatar.setOwnerId(userId);
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
                 String newFilePath = G.DIR_IMAGE_USER + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName();
                 realmAvatar.getFile().setLocalFilePath(newFilePath);
 
