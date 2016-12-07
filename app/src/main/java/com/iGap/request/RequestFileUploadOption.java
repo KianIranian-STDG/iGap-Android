@@ -14,7 +14,7 @@ public class RequestFileUploadOption {
         try {
             RequestWrapper requestWrapper = new RequestWrapper(700, fileUploadOption, identity);
 
-            G.currentUploadAndDownloadFiles.put(fileUploadStructure.messageId, requestWrapper);
+            G.currentUploadFiles.put(fileUploadStructure.messageId, requestWrapper);
 
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

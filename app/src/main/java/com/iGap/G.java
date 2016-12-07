@@ -291,7 +291,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static ConnectionMode connectionMode;
     public static boolean isNetworkRoaming;
 
-    public static HashMap<Long, RequestWrapper> currentUploadAndDownloadFiles = new HashMap<>();
+    public static ConcurrentHashMap<Long, RequestWrapper> currentUploadFiles = new ConcurrentHashMap<>();
 
     public static void setUserTextSize() {
 

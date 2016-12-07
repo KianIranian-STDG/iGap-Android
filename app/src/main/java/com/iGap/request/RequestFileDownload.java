@@ -21,7 +21,7 @@ public class RequestFileDownload {
         try {
             RequestWrapper requestWrapper = new RequestWrapper(705, builder, identity);
 
-            G.currentUploadAndDownloadFiles.put(fakeMessageID, requestWrapper);
+            G.currentUploadFiles.put(fakeMessageID, requestWrapper);
 
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

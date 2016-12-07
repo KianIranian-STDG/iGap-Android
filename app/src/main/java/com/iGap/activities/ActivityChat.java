@@ -4324,7 +4324,7 @@ public class ActivityChat extends ActivityEnhanced
     public void onUploadCancel(View view, final StructMessageInfo message, int pos) {
         Toast.makeText(this, "onUploadCancel", Toast.LENGTH_LONG).show();
 
-        for (Iterator<Map.Entry<Long, RequestWrapper>> it = G.currentUploadAndDownloadFiles.entrySet().iterator(); it.hasNext(); ) {
+        for (Iterator<Map.Entry<Long, RequestWrapper>> it = G.currentUploadFiles.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<Long, RequestWrapper> entry = it.next();
 
             if (message.messageID != null && !message.messageID.isEmpty() && Long.parseLong(message.messageID) == entry.getKey()) {
@@ -4339,7 +4339,7 @@ public class ActivityChat extends ActivityEnhanced
                     MessagesAdapter.downloading.remove(Long.parseLong(message.messageID));
                 }
 
-                G.currentUploadAndDownloadFiles.remove(entry.getKey());
+                G.currentUploadFiles.remove(entry.getKey());
 
                 //===================
 
@@ -4388,7 +4388,7 @@ public class ActivityChat extends ActivityEnhanced
     public void onDownloadCancel(View view, final StructMessageInfo message, final int pos) {
         Toast.makeText(this, "onDownloadCancel", Toast.LENGTH_LONG).show();
 
-        for (Iterator<Map.Entry<Long, RequestWrapper>> it = G.currentUploadAndDownloadFiles.entrySet().iterator(); it.hasNext(); ) {
+        for (Iterator<Map.Entry<Long, RequestWrapper>> it = G.currentUploadFiles.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<Long, RequestWrapper> entry = it.next();
 
             if (message.messageID != null && !message.messageID.isEmpty() && Long.parseLong(message.messageID) == entry.getKey()) {
@@ -4403,7 +4403,7 @@ public class ActivityChat extends ActivityEnhanced
                     MessagesAdapter.downloading.remove(message.attachment.token);
                 }
 
-                G.currentUploadAndDownloadFiles.remove(entry.getKey());
+                G.currentUploadFiles.remove(entry.getKey());
 
                 //===================
 
