@@ -29,6 +29,7 @@ import com.iGap.interfaces.OnChannelAddAdmin;
 import com.iGap.interfaces.OnChannelAddMember;
 import com.iGap.interfaces.OnChannelAddModerator;
 import com.iGap.interfaces.OnChannelAvatarAdd;
+import com.iGap.interfaces.OnChannelAvatarDelete;
 import com.iGap.interfaces.OnChannelCreate;
 import com.iGap.interfaces.OnChannelDelete;
 import com.iGap.interfaces.OnChannelEdit;
@@ -305,6 +306,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static OnChannelGetMemberList onChannelGetMemberList;
     public static OnChannelEdit onChannelEdit;
     public static OnChannelAvatarAdd onChannelAvatarAdd;
+    public static OnChannelAvatarDelete onChannelAvatarDelete;
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
