@@ -44,10 +44,14 @@ import com.iGap.fragments.ShowCustomList;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ImageHelper;
+import com.iGap.interfaces.OnAvatarAdd;
+import com.iGap.interfaces.OnAvatarDelete;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChannelAddAdmin;
 import com.iGap.interfaces.OnChannelAddMember;
 import com.iGap.interfaces.OnChannelAddModerator;
+import com.iGap.interfaces.OnChannelAvatarAdd;
+import com.iGap.interfaces.OnChannelAvatarDelete;
 import com.iGap.interfaces.OnChannelDelete;
 import com.iGap.interfaces.OnChannelEdit;
 import com.iGap.interfaces.OnChannelGetMemberList;
@@ -83,6 +87,8 @@ import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.request.RequestChannelAddAdmin;
 import com.iGap.request.RequestChannelAddMember;
 import com.iGap.request.RequestChannelAddModerator;
+import com.iGap.request.RequestChannelAvatarAdd;
+import com.iGap.request.RequestChannelAvatarDelete;
 import com.iGap.request.RequestChannelDelete;
 import com.iGap.request.RequestChannelEdit;
 import com.iGap.request.RequestChannelGetMemberList;
@@ -112,10 +118,11 @@ import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
+import static com.iGap.activities.ActivitySetting.pathSaveImage;
 import static com.iGap.module.MusicPlayer.roomId;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
-public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities {
+public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities, OnChannelAvatarAdd, OnChannelAvatarDelete {
 
     private AppBarLayout appBarLayout;
     private TextView txtNameChannel, txtDescription, txtChannelLink, txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport, txtChannelNameInfo;
@@ -141,12 +148,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private long noLastMessage;
     private long userId;
     private RealmList<RealmMember> members;
-    private ProgressBar prgWait;
+    private static ProgressBar prgWait;
     private LinearLayout lytListAdmin;
     private LinearLayout lytListModerator;
     private LinearLayout lytDeleteChannel;
     private LinearLayout lytNotification;
     private AttachFile attachFile;
+    private long avatarId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,7 +300,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (HelperAvatar.checkExistAvatar(roomId)) {
+                    startDialogSelectPicture(R.array.profile);
+                } else {
+                    startDialogSelectPicture(R.array.profile_delete);
+                }
             }
         });
 
@@ -462,15 +474,20 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     }
 
     private void setAvatar() {
-        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+        runOnUiThread(new Runnable() {
             @Override
-            public void onAvatarGet(String avatarPath) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgCircleImageView);
-            }
+            public void run() {
+                HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+                    @Override
+                    public void onAvatarGet(String avatarPath) {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgCircleImageView);
+                    }
 
-            @Override
-            public void onShowInitials(String initials, String color) {
-                imgCircleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    @Override
+                    public void onShowInitials(String initials, String color) {
+                        imgCircleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
             }
         });
     }
@@ -891,6 +908,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     }
                 } else if (text.toString().equals(getString(R.string.delete_photo))) {
 
+                    RealmAvatar realmAvatar = HelperAvatar.getLastAvatar(roomId);
+                    if (realmAvatar != null) {
+                        new RequestChannelAvatarDelete().channelAvatarDelete(roomId, realmAvatar.getId());
+                    }
+
                 } else {
                     attachFile.requestOpenGalleryForImageSingleSelect();
                 }
@@ -1099,11 +1121,60 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     //************************************************** interfaces
 
+    //***On Add Avatar Response From Server
+
+    @Override
+    public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
+        HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
+            @Override
+            public void onAvatarAdd(final String avatarPath) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //TODO [Saeed Mozaffari] [2016-12-07 3:50 PM] - also for avatar timeout do this actions
+
+                        prgWait.setVisibility(View.GONE);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        setImage(avatarPath);
+                    }
+                });
+
+            }
+        });
+    }
+
+    //***On Avatar Delete
+
+    @Override
+    public void onChannelAvatarDelete(final long roomId, final long avatarId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                HelperAvatar.avatarDelete(roomId, avatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
+                    @Override
+                    public void latestAvatarPath(String avatarPath) {
+                        setImage(avatarPath);
+                    }
+
+                    @Override
+                    public void showInitials(String initials, String color) {
+                        imgCircleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
+            }
+        });
+    }
+
     //***Upload File Callbacks
 
     @Override
     public void onFileUploaded(FileUploadStructure uploadStructure, String identity) {
-
+        if (Long.parseLong(identity) == avatarId) {
+            prgWait.setVisibility(View.GONE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            new RequestChannelAvatarAdd().channelAvatarAdd(roomId, uploadStructure.token);
+        }
     }
 
     @Override
@@ -1113,7 +1184,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     @Override
     public void onFileTimeOut(String identity) {
-
+        if (Long.parseLong(identity) == avatarId) {
+            prgWait.setVisibility(View.GONE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
     }
 
     //***User Info
@@ -1389,6 +1463,15 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 .show();
     }
 
+    //*** set avatar image
+
+    private void setImage(String imagePath) {
+        if (new File(imagePath).exists()) {
+            imgCircleImageView.setPadding(0, 0, 0, 0);
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
+        }
+    }
+
     //*** notification and sounds
 
     private void notificationAndSound() {
@@ -1420,7 +1503,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         protected void onPreExecute() {
             super.onPreExecute();
             myActivityReference.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            prg.setVisibility(View.VISIBLE);
+            prgWait.setVisibility(View.VISIBLE);
         }
 
         @Override

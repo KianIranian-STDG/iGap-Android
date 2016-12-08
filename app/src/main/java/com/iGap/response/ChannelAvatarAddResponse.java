@@ -22,8 +22,8 @@ public class ChannelAvatarAddResponse extends MessageHandler {
         super.handler();
 
         ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder builder = (ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder) message;
-        if (G.onGroupAvatarResponse != null) {
-            G.onGroupAvatarResponse.onAvatarAdd(builder.getRoomId(), builder.getAvatar());
+        if (G.onChannelAvatarAdd != null) {
+            G.onChannelAvatarAdd.onAvatarAdd(builder.getRoomId(), builder.getAvatar());
         }
 
     }

@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import io.realm.Sort;
 
 /**
@@ -96,7 +97,14 @@ public class HelperAvatar {
         }
     }
 
-    private static RealmAvatar getLastAvatar(long ownerId) {
+    /**
+     * return latest avatar with this ownerId
+     *
+     * @param ownerId if is user set userId and if is room set roomId
+     * @return return latest RealmAvatar for this ownerId
+     */
+
+    public static RealmAvatar getLastAvatar(long ownerId) {
         Realm realm = Realm.getDefaultInstance();
         for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.ID, Sort.ASCENDING)) {
             if (avatar.getFile() != null) {
@@ -141,6 +149,26 @@ public class HelperAvatar {
         }
 
         return null;
+    }
+
+    /**
+     * check in RealmAvatar that exist any avatar for this
+     * ownerId (User or Room)
+     *
+     * @param ownerId userId if avatar is for user , roomId if avatar is for room
+     * @return true if avatar exist otherwise return false
+     */
+
+    public static boolean checkExistAvatar(final long ownerId) {
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmAvatar> results = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAll();
+        if (results.size() > 0) {
+            realm.close();
+            return true;
+        }
+        realm.close();
+        return false;
     }
 
     /**
