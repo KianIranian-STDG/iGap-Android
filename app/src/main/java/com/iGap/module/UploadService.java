@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.iGap.activities.ActivityChat;
 import com.iGap.module.enums.LocalFileType;
@@ -33,8 +32,6 @@ public class UploadService extends Service {
 
         String path = intent.getStringExtra("Path");
         Long roomId = intent.getLongExtra("Roomid", 0);
-
-        Log.e("ddd", path + "   " + roomId);
 
         sendVoice(path, roomId);
 
@@ -67,7 +64,6 @@ public class UploadService extends Service {
 
         new ActivityChat.UploadTask().execute(savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, mRoomId, "");
 
-        Log.e("ddd", "voice");
         realm.close();
     }
 

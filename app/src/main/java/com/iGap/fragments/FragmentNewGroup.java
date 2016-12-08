@@ -495,7 +495,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_302_1), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -510,7 +510,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_300_2), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -525,7 +525,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_301), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -598,7 +598,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_610), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -613,7 +613,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_611), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -628,7 +628,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_612), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -643,7 +643,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_613), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -658,7 +658,7 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
                         public void run() {
                             final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_614), Snackbar.LENGTH_LONG);
 
-                            snack.setAction("CANCEL", new View.OnClickListener() {
+                            snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();
@@ -884,6 +884,5 @@ public class FragmentNewGroup extends android.support.v4.app.Fragment implements
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Toast.makeText(getActivity(), "ddd", Toast.LENGTH_SHORT).show();
     }
 }

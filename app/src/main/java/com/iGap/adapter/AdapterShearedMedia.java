@@ -56,7 +56,6 @@ import pl.droidsonroids.gif.GifImageView;
 public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ArrayList<ActivityShearedMedia.StructSharedMedia> list;
-    ArrayList<option> options;
     Context context;
     private boolean isSelectedMode = false;    // for determine user select some file
     private int numberOfSelected = 0;
@@ -75,11 +74,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         this.roomId = roomId;
         this.musicPlayer = musicPlayer;
 
-        options = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            options.add(new option());
-        }
     }
 
     public static long getCountOfSheareddMedia(long roomId) {
@@ -224,7 +218,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         // set blue back ground for selected file
         FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
-        if (options.get(position).isSelected) {
+
+        if (list.get(position).options.isSelected) {
             layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
         } else {
             layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
@@ -290,21 +285,21 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void startDownload(final int position) {
-        options.get(position).isDownloadCancel = false;
-        options.get(position).isDownloading = true;
+        list.get(position).options.isDownloadCancel = false;
+        list.get(position).options.isDownloading = true;
 
         new DownLoad().getFile(list.get(position).item, position);
 
     }
 
     private void stopDownload(int position) {
-        options.get(position).isDownloading = false;
-        options.get(position).isDownloadCancel = true;
+        list.get(position).options.isDownloading = false;
+        list.get(position).options.isDownloadCancel = true;
     }
 
     private void downloadFile(int position) {
 
-        if (options.get(position).isDownloading) {
+        if (list.get(position).options.isDownloading) {
             stopDownload(position);
         } else {
             startDownload(position);
@@ -313,11 +308,11 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private void setSelectedItem(int position) {
 
-        if (options.get(position).isSelected == false) {
-            options.get(position).isSelected = true;
+        if (list.get(position).options.isSelected == false) {
+            list.get(position).options.isSelected = true;
             numberOfSelected++;
         } else {
-            options.get(position).isSelected = false;
+            list.get(position).options.isSelected = false;
             numberOfSelected--;
 
             if (numberOfSelected < 1) {
@@ -339,8 +334,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             isSelectedMode = false;
 
             for (int i = 0; i < list.size(); i++) {
-                if (options.get(i).isSelected) {
-                    options.get(i).isSelected = false;
+                if (list.get(i).options.isSelected) {
+                    list.get(i).options.isSelected = false;
                     notifyItemChanged(i);
                     numberOfSelected--;
                     if (numberOfSelected < 1) break;
@@ -356,7 +351,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private void openSelectedFile(int position, RecyclerView.ViewHolder holder) {
 
-        if (options.get(position).needDownload) {
+        if (list.get(position).options.needDownload) {
 
             // first need to download file
 
@@ -467,15 +462,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
     //****************************************************************************************************************
 
-    private class option {
-        public boolean isSelected = false;
-        public boolean isDownloading = false;
-        public boolean needDownload = false;
-        public boolean isDownloadCancel = false;
-        public int progress = 0;
-        public long downloadOffset = 0;
-        public MessageProgress messageProgress;
-    }
+
 
     public static String getThumpnailPath(String token, String fileName) {
 
@@ -554,7 +541,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     downloadFile(getPosition());
 
-                    if (options.get(getPosition()).isDownloading) {
+                    if (list.get(getPosition()).options.isDownloading) {
                         messageProgress.withDrawable(R.drawable.ic_cancel, true);
                     } else {
                         messageProgress.withDrawable(R.drawable.ic_download, true);
@@ -582,14 +569,14 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             filePath = getFilePath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName(), list.get(position).item.getMessageType());
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
-            options.get(position).messageProgress = messageProgress;
+            list.get(position).options.messageProgress = messageProgress;
 
             File file = new File(filePath);
             if (file.exists()) {
-                options.get(position).needDownload = false;
+                list.get(position).options.needDownload = false;
                 messageProgress.setVisibility(View.GONE);
             } else {
-                options.get(position).needDownload = true;
+                list.get(position).options.needDownload = true;
                 messageProgress.setVisibility(View.VISIBLE);
             }
 
@@ -607,7 +594,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
-            options.get(position).messageProgress = messageProgress;
+            list.get(position).options.messageProgress = messageProgress;
 
             itemView.findViewById(R.id.smsl_ll_video).setVisibility(View.VISIBLE);
 
@@ -625,10 +612,10 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             File file = new File(filePath);
             if (file.exists()) {
-                options.get(position).needDownload = false;
+                list.get(position).options.needDownload = false;
                 messageProgress.setVisibility(View.GONE);
             } else {
-                options.get(position).needDownload = true;
+                list.get(position).options.needDownload = true;
                 messageProgress.setVisibility(View.VISIBLE);
             }
 
@@ -647,14 +634,14 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
             tempFilePath = getThumpnailPath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName());
             filePath = getFilePath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName(), list.get(position).item.getMessageType());
-            options.get(position).messageProgress = messageProgress;
+            list.get(position).options.messageProgress = messageProgress;
 
             File file = new File(filePath);
             if (file.exists()) {
-                options.get(position).needDownload = false;
+                list.get(position).options.needDownload = false;
                 messageProgress.setVisibility(View.GONE);
             } else {
-                options.get(position).needDownload = true;
+                list.get(position).options.needDownload = true;
                 messageProgress.setVisibility(View.VISIBLE);
             }
 
@@ -681,7 +668,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
             imvPicFile.setImageResource(R.drawable.green_music_note);
 
-            options.get(position).messageProgress = messageProgress;
+            list.get(position).options.messageProgress = messageProgress;
 
             tempFilePath = getThumpnailPath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName());
             filePath = getFilePath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName(), list.get(position).item.getMessageType());
@@ -697,7 +684,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
             if (file.exists()) {
-                options.get(position).needDownload = false;
+                list.get(position).options.needDownload = false;
                 messageProgress.setVisibility(View.GONE);
                 MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
                 Uri uri = (Uri) Uri.fromFile(file);
@@ -725,7 +712,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 } catch (Exception e) {
                 }
             } else {
-                options.get(position).needDownload = true;
+                list.get(position).options.needDownload = true;
                 messageProgress.setVisibility(View.VISIBLE);
                 file = new File(tempFilePath);
                 if (file.exists()) {
@@ -762,7 +749,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             messageProgress.setVisibility(View.GONE);
 
-            options.get(position).messageProgress = messageProgress;
+            list.get(position).options.messageProgress = messageProgress;
         }
     }
 
@@ -782,12 +769,12 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             tempFilePath = getThumpnailPath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName());
             filePath = getFilePath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName(), list.get(position).item.getMessageType());
 
-            options.get(position).messageProgress = messageProgress;
+            list.get(position).options.messageProgress = messageProgress;
 
             File file = new File(filePath);
             if (file.exists()) {
                 gifView.setImageURI(Uri.fromFile(file));
-                options.get(position).needDownload = false;
+                list.get(position).options.needDownload = false;
 
                 messageProgress.withDrawable(R.drawable.ic_play, true);
                 messageProgress.setVisibility(View.GONE);
@@ -801,7 +788,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 });
             } else {
-                options.get(position).needDownload = true;
+                list.get(position).options.needDownload = true;
                 messageProgress.setVisibility(View.VISIBLE);
             }
 
@@ -826,19 +813,19 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                     int position = getItemPosition(token);
 
                     if (position >= 0) {
-                        options.get(position).progress = progress;
-                        options.get(position).downloadOffset = offset;
+                        list.get(position).options.progress = progress;
+                        list.get(position).options.downloadOffset = offset;
 
                         updateView(position);
 
 
                         if (progress < 100) {
-                            if (!options.get(position).isDownloadCancel) {
+                            if (!list.get(position).options.isDownloadCancel) {
                                 getFile(list.get(position).item, position);
                             }
                         } else {
-                            String localFilePath = getFilePath(list.get(position).item.getAttachment().getToken(),
-                                    list.get(position).item.getAttachment().getName(), list.get(position).item.getMessageType());
+                            String localFilePath = AndroidUtils.suitableAppFilePath(list.get(position).item.getMessageType())
+                                    + "/" + token + "_" + list.get(position).item.getAttachment().getName();
 
                             String tmpPath = G.DIR_TEMP + "/" + list.get(position).item.getAttachment().getToken() + "_" +
                                     list.get(position).item.getAttachment().getName();
@@ -881,7 +868,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         private void getFile(ProtoGlobal.RoomMessage item, final int position) {
 
-            if (options.get(position).progress == 100) {
+            if (list.get(position).options.progress == 100) {
                 updateView(position);
                 return;
             }
@@ -899,10 +886,10 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                     + '*'
                     + tmpPath
                     + '*'
-                    + options.get(position).downloadOffset;
+                    + list.get(position).options.downloadOffset;
 
 
-            new RequestFileDownload().download(item.getAttachment().getToken(), options.get(position).downloadOffset,
+            new RequestFileDownload().download(item.getAttachment().getToken(), list.get(position).options.downloadOffset,
                     (int) item.getAttachment().getSize(), selector, identity);
         }
 
@@ -929,7 +916,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         private void updateView(final int position) {
 
-            final MessageProgress messageProgress = options.get(position).messageProgress;
+            final MessageProgress messageProgress = list.get(position).options.messageProgress;
 
             if (messageProgress != null) {
 
@@ -937,12 +924,17 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void run() {
 
-                        if (options.get(position).progress < 100) {
-                            messageProgress.withProgress(options.get(position).progress);
+                        if (list.get(position).options.progress < 100) {
+                            if (list.get(position).options.isDownloadCancel) {
+                                messageProgress.withProgress(0);
+                            } else {
+                                messageProgress.withProgress(list.get(position).options.progress);
+                            }
+
                         } else {
                             messageProgress.setVisibility(View.GONE);
-                            options.get(position).needDownload = false;
-                            options.get(position).needDownload = false;
+                            list.get(position).options.needDownload = false;
+                            list.get(position).options.needDownload = false;
                         }
 
                     }

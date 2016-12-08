@@ -619,4 +619,9 @@
     <string name="create">Create</string>
     <string name="gif_selected_for_send">the GIF selected to send</string>
     <string name="log_message">Log Message</string>
+    <string name="iranian_rials">Iranian Rials(IRR)</string>
+    <string name="your_login_code_is">"Your login code is : "</string>
+    <string name="there_is_no_sheared_media">there is no Sheared media</string>
+    <string name="pending">Pending</string>
+    <string name="completed">Completed</string>
 </resources>

@@ -17,7 +17,6 @@ import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -172,7 +171,7 @@ public class AttachFile {
                     ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
                     isInAttach = true;
                 } else {
-                    Log.e("dddd", "file path is null");
+
                 }
             }
         });

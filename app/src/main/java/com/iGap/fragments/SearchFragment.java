@@ -402,7 +402,7 @@ public class SearchFragment extends Fragment {
                             public void run() {
                                 final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_200), Snackbar.LENGTH_LONG);
 
-                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                snack.setAction(R.string.cancel, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -418,7 +418,7 @@ public class SearchFragment extends Fragment {
                             public void run() {
                                 final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_201), Snackbar.LENGTH_LONG);
 
-                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                snack.setAction(R.string.cancel, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -434,7 +434,7 @@ public class SearchFragment extends Fragment {
                             public void run() {
                                 final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_202), Snackbar.LENGTH_LONG);
 
-                                snack.setAction("CANCEL", new View.OnClickListener() {
+                                snack.setAction(R.string.cancel, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();

@@ -2,7 +2,6 @@ package com.iGap.activities;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -55,7 +54,6 @@ public class Activity_CreateQRCode extends ActivityEnhanced {
         rippleCreate.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                Log.e("dddd", "create clicked");
 
             }
         });
@@ -66,8 +64,6 @@ public class Activity_CreateQRCode extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-
-                Log.e("dddd", "cancel clicked");
             }
         });
 
@@ -76,10 +72,6 @@ public class Activity_CreateQRCode extends ActivityEnhanced {
         txtCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                Log.e("dddd", "txtCharge clicked");
-
 
                 HelperPermision.getStoragePermision(Activity_CreateQRCode.this, new OnGetPermision() {
                     @Override
@@ -126,7 +118,7 @@ public class Activity_CreateQRCode extends ActivityEnhanced {
 
 
         List<String> spinnerArray = new ArrayList<String>();
-        spinnerArray.add("Iranian Rials(IRR)");
+        spinnerArray.add(getString(R.string.iranian_rials));
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(Activity_CreateQRCode.this, android.R.layout.simple_spinner_item, spinnerArray);

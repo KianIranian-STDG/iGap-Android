@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -86,6 +87,18 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         public boolean isItemTime = false;
 
+        public option options = new option();
+
+    }
+
+    public class option {
+        public boolean isSelected = false;
+        public boolean isDownloading = false;
+        public boolean needDownload = false;
+        public boolean isDownloadCancel = false;
+        public int progress = 0;
+        public long downloadOffset = 0;
+        public MessageProgress messageProgress;
     }
 
 
@@ -565,8 +578,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 isSendRequestForLoading = false;
                 for (ProtoGlobal.RoomMessage message : resultList) {
 
-                    Log.e("ddd", message + "      eeee");
-
                 }
 
                 offset += resultList.size();
@@ -577,7 +588,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     onFillList.getList(totalCount, notDeletedCount, loadDataFromLocal(filter));
 
                 } else {
-                    Toast.makeText(ActivityShearedMedia.this, "there is no Sheared media", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ActivityShearedMedia.this, R.string.there_is_no_sheared_media, Toast.LENGTH_LONG).show();
                 }
 
                 if (totalCount > offset) {
@@ -604,7 +615,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(ActivityShearedMedia.this, "there is no shared madia to show", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ActivityShearedMedia.this, R.string.there_is_no_sheared_media, Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -613,7 +624,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(ActivityShearedMedia.this, "there is no shared madia to show", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ActivityShearedMedia.this, R.string.there_is_no_sheared_media, Toast.LENGTH_SHORT).show();
                             }
                         });
                         break;
@@ -666,7 +677,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 mList = addTimeToList(resultList);
                 mAdapter.notifyDataSetChanged();
 
-                Log.e("ddd", "load more **********************************");
 
             }
         }, mFilter);
@@ -725,8 +735,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             ProtoGlobal.RoomMessage message = uploadList.get(i - 1);
 
             secendItemTime = month_date.format(message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
-
-            Log.e("ddd", secendItemTime + "   " + firstItmeTime);
 
             if (secendItemTime.compareTo(firstItmeTime) > 0 || secendItemTime.compareTo(firstItmeTime) < 0) {
 

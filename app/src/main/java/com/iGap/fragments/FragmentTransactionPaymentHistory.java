@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -173,8 +172,6 @@ public class FragmentTransactionPaymentHistory extends Fragment {
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<IItem>() {
             @Override
             public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
-
-                Log.e("ddd", position + "");
 
                 return false;
             }

@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -110,8 +109,6 @@ public class Activity_QrPayment extends ActivityEnhanced {
             cardViewEComerece.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    Log.e("ddd", "cardViewEComerece  clicked");
 
                 }
             });

@@ -4240,7 +4240,7 @@ public class ActivityChat extends ActivityEnhanced
             }
             realm.close();
 
-            new MaterialDialog.Builder(this).title("Message").negativeText("CANCEL").items(items).itemsCallback(new MaterialDialog.ListCallback() {
+            new MaterialDialog.Builder(this).title(getString(R.string.messages)).negativeText(getString(R.string.cancel)).items(items).itemsCallback(new MaterialDialog.ListCallback() {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
@@ -4248,7 +4248,7 @@ public class ActivityChat extends ActivityEnhanced
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("Copied Text", message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText);
                         clipboard.setPrimaryClip(clip);
-                        Toast.makeText(G.context, "Text Copied", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(G.context, R.string.text_copied, Toast.LENGTH_SHORT).show();
                     } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
                         final Realm realmCondition = Realm.getDefaultInstance();
                         final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirstAsync();

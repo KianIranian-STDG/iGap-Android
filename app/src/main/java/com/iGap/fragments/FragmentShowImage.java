@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -308,7 +307,6 @@ public class FragmentShowImage extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    Log.e("ddd", "download started");
                 }
             });
 

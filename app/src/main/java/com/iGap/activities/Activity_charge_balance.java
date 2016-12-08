@@ -1,7 +1,6 @@
 package com.iGap.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -51,8 +50,6 @@ public class Activity_charge_balance extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-
-                Log.e("dddd", "cancel clicked");
             }
         });
 
@@ -62,8 +59,6 @@ public class Activity_charge_balance extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-
-                Log.e("dddd", "txtCharge clicked");
             }
         });
 

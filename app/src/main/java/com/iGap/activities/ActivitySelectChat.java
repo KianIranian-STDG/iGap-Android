@@ -87,7 +87,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
                     startActivity(intent);
                     finish();
                 } else {
-                    new MaterialDialog.Builder(ActivitySelectChat.this).title(R.string.dialog_readonly_chat).positiveText("OK").show();
+                    new MaterialDialog.Builder(ActivitySelectChat.this).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
                 }
                 return false;
             }

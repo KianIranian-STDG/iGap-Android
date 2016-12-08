@@ -535,7 +535,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (gander == null || gander.getNumber() == -1 || gander == ProtoGlobal.Gender.UNKNOWN) {
             txtGander.setText(getResources().getString(R.string.set_gender));
         } else {
-            txtGander.setText(gander == ProtoGlobal.Gender.MALE ? "Male" : "Female");
+            txtGander.setText(gander == ProtoGlobal.Gender.MALE ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
         }
 
         ViewGroup layoutGander = (ViewGroup) findViewById(R.id.st_layout_gander);

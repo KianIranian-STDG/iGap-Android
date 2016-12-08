@@ -2,7 +2,6 @@ package com.iGap.activities;
 
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -92,7 +91,7 @@ public class Activity_payViaQRCode extends ActivityEnhanced implements QRCodeRea
         rippleCreate.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                Log.e("dddd", "create clicked");
+
 
             }
         });

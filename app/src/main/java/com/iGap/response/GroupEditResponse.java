@@ -2,7 +2,6 @@ package com.iGap.response;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
@@ -36,7 +35,6 @@ public class GroupEditResponse extends MessageHandler {
         final String name = builder.getName();
         final String descriptions = builder.getDescription();
 
-        Log.e("ddd", message + "");
 
         Intent intent = new Intent("Intent_filter_on_change_group_name");
         intent.putExtra("Name", name);

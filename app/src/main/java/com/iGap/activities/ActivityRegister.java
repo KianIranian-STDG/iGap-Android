@@ -843,7 +843,7 @@ public class ActivityRegister extends ActivityEnhanced {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        rg_txt_verify_sms.setText("Your login code is : " + verificationCode);
+                        rg_txt_verify_sms.setText(getString(R.string.your_login_code_is) + verificationCode);
                         rg_prg_verify_sms.setVisibility(View.GONE);
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
                         rg_img_verify_sms.setImageResource(R.mipmap.check);
