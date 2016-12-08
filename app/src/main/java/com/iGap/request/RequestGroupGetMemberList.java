@@ -8,6 +8,7 @@ public class RequestGroupGetMemberList {
 
         ProtoGroupGetMemberList.GroupGetMemberList.Builder builder = ProtoGroupGetMemberList.GroupGetMemberList.newBuilder();
         builder.setRoomId(roomId);
+        builder.setFilterRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL);
 
         RequestWrapper requestWrapper = new RequestWrapper(317, builder, roomId + "");
         try {

@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoUserAvatarAdd {
   private ProtoUserAvatarAdd() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoUserAvatarAdd {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface UserAvatarAddOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.UserAvatarAdd)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoUserAvatarAdd {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -40,14 +36,12 @@ public final class ProtoUserAvatarAdd {
      * <code>optional string attachment = 2;</code>
      */
     java.lang.String getAttachment();
-
     /**
      * <code>optional string attachment = 2;</code>
      */
     com.google.protobuf.ByteString
     getAttachmentBytes();
   }
-
   /**
    * Protobuf type {@code proto.UserAvatarAdd}
    */
@@ -59,7 +53,6 @@ public final class ProtoUserAvatarAdd {
     private UserAvatarAdd(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserAvatarAdd() {
       attachment_ = "";
     }
@@ -69,7 +62,6 @@ public final class ProtoUserAvatarAdd {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserAvatarAdd(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -120,7 +112,6 @@ public final class ProtoUserAvatarAdd {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserAvatarAdd.internal_static_proto_UserAvatarAdd_descriptor;
@@ -135,21 +126,18 @@ public final class ProtoUserAvatarAdd {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -159,7 +147,6 @@ public final class ProtoUserAvatarAdd {
 
     public static final int ATTACHMENT_FIELD_NUMBER = 2;
     private volatile java.lang.Object attachment_;
-
     /**
      * <code>optional string attachment = 2;</code>
      */
@@ -175,7 +162,6 @@ public final class ProtoUserAvatarAdd {
         return s;
       }
     }
-
     /**
      * <code>optional string attachment = 2;</code>
      */
@@ -194,7 +180,6 @@ public final class ProtoUserAvatarAdd {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -231,7 +216,6 @@ public final class ProtoUserAvatarAdd {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -276,32 +260,27 @@ public final class ProtoUserAvatarAdd {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -309,13 +288,11 @@ public final class ProtoUserAvatarAdd {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -323,14 +300,12 @@ public final class ProtoUserAvatarAdd {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -345,11 +320,9 @@ public final class ProtoUserAvatarAdd {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -361,7 +334,6 @@ public final class ProtoUserAvatarAdd {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserAvatarAdd}
      */
@@ -391,13 +363,11 @@ public final class ProtoUserAvatarAdd {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -443,35 +413,29 @@ public final class ProtoUserAvatarAdd {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd) {
           return mergeFrom((com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd) other);
@@ -519,14 +483,12 @@ public final class ProtoUserAvatarAdd {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -537,7 +499,6 @@ public final class ProtoUserAvatarAdd {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -554,7 +515,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -569,7 +529,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -588,7 +547,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -603,7 +561,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -612,7 +569,6 @@ public final class ProtoUserAvatarAdd {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -624,7 +580,6 @@ public final class ProtoUserAvatarAdd {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -643,7 +598,6 @@ public final class ProtoUserAvatarAdd {
       }
 
       private java.lang.Object attachment_ = "";
-
       /**
        * <code>optional string attachment = 2;</code>
        */
@@ -659,7 +613,6 @@ public final class ProtoUserAvatarAdd {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string attachment = 2;</code>
        */
@@ -676,7 +629,6 @@ public final class ProtoUserAvatarAdd {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string attachment = 2;</code>
        */
@@ -685,12 +637,11 @@ public final class ProtoUserAvatarAdd {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         attachment_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string attachment = 2;</code>
        */
@@ -700,7 +651,6 @@ public final class ProtoUserAvatarAdd {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string attachment = 2;</code>
        */
@@ -710,12 +660,11 @@ public final class ProtoUserAvatarAdd {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         attachment_ = value;
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -732,7 +681,6 @@ public final class ProtoUserAvatarAdd {
 
     // @@protoc_insertion_point(class_scope:proto.UserAvatarAdd)
     private static final com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAdd();
     }
@@ -774,12 +722,10 @@ public final class ProtoUserAvatarAdd {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -789,18 +735,15 @@ public final class ProtoUserAvatarAdd {
      * <code>optional .proto.Avatar avatar = 2;</code>
      */
     boolean hasAvatar();
-
     /**
      * <code>optional .proto.Avatar avatar = 2;</code>
      */
     com.iGap.proto.ProtoGlobal.Avatar getAvatar();
-
     /**
      * <code>optional .proto.Avatar avatar = 2;</code>
      */
     com.iGap.proto.ProtoGlobal.AvatarOrBuilder getAvatarOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.UserAvatarAddResponse}
    */
@@ -812,7 +755,6 @@ public final class ProtoUserAvatarAdd {
     private UserAvatarAddResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserAvatarAddResponse() {
     }
 
@@ -821,7 +763,6 @@ public final class ProtoUserAvatarAdd {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserAvatarAddResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -879,7 +820,6 @@ public final class ProtoUserAvatarAdd {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserAvatarAdd.internal_static_proto_UserAvatarAddResponse_descriptor;
@@ -894,21 +834,18 @@ public final class ProtoUserAvatarAdd {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -918,21 +855,18 @@ public final class ProtoUserAvatarAdd {
 
     public static final int AVATAR_FIELD_NUMBER = 2;
     private com.iGap.proto.ProtoGlobal.Avatar avatar_;
-
     /**
      * <code>optional .proto.Avatar avatar = 2;</code>
      */
     public boolean hasAvatar() {
       return avatar_ != null;
     }
-
     /**
      * <code>optional .proto.Avatar avatar = 2;</code>
      */
     public com.iGap.proto.ProtoGlobal.Avatar getAvatar() {
       return avatar_ == null ? com.iGap.proto.ProtoGlobal.Avatar.getDefaultInstance() : avatar_;
     }
-
     /**
      * <code>optional .proto.Avatar avatar = 2;</code>
      */
@@ -941,7 +875,6 @@ public final class ProtoUserAvatarAdd {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -979,7 +912,6 @@ public final class ProtoUserAvatarAdd {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1029,32 +961,27 @@ public final class ProtoUserAvatarAdd {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1062,13 +989,11 @@ public final class ProtoUserAvatarAdd {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1076,14 +1001,12 @@ public final class ProtoUserAvatarAdd {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1095,15 +1018,12 @@ public final class ProtoUserAvatarAdd {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -1115,7 +1035,6 @@ public final class ProtoUserAvatarAdd {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserAvatarAddResponse}
      */
@@ -1145,7 +1064,6 @@ public final class ProtoUserAvatarAdd {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
@@ -1204,35 +1122,29 @@ public final class ProtoUserAvatarAdd {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse) {
           return mergeFrom((com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse) other);
@@ -1280,14 +1192,12 @@ public final class ProtoUserAvatarAdd {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1298,7 +1208,6 @@ public final class ProtoUserAvatarAdd {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1315,7 +1224,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1330,7 +1238,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1349,7 +1256,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1364,7 +1270,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1373,7 +1278,6 @@ public final class ProtoUserAvatarAdd {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1385,7 +1289,6 @@ public final class ProtoUserAvatarAdd {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1406,14 +1309,12 @@ public final class ProtoUserAvatarAdd {
       private com.iGap.proto.ProtoGlobal.Avatar avatar_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoGlobal.Avatar, com.iGap.proto.ProtoGlobal.Avatar.Builder, com.iGap.proto.ProtoGlobal.AvatarOrBuilder> avatarBuilder_;
-
       /**
        * <code>optional .proto.Avatar avatar = 2;</code>
        */
       public boolean hasAvatar() {
         return avatarBuilder_ != null || avatar_ != null;
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 2;</code>
        */
@@ -1424,7 +1325,6 @@ public final class ProtoUserAvatarAdd {
           return avatarBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 2;</code>
        */
@@ -1441,7 +1341,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 2;</code>
        */
@@ -1456,7 +1355,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 2;</code>
        */
@@ -1475,7 +1373,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 2;</code>
        */
@@ -1490,7 +1387,6 @@ public final class ProtoUserAvatarAdd {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 2;</code>
        */
@@ -1499,7 +1395,6 @@ public final class ProtoUserAvatarAdd {
         onChanged();
         return getAvatarFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 2;</code>
        */
@@ -1511,7 +1406,6 @@ public final class ProtoUserAvatarAdd {
                   com.iGap.proto.ProtoGlobal.Avatar.getDefaultInstance() : avatar_;
         }
       }
-
       /**
        * <code>optional .proto.Avatar avatar = 2;</code>
        */
@@ -1528,7 +1422,6 @@ public final class ProtoUserAvatarAdd {
         }
         return avatarBuilder_;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1545,7 +1438,6 @@ public final class ProtoUserAvatarAdd {
 
     // @@protoc_insertion_point(class_scope:proto.UserAvatarAddResponse)
     private static final com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserAvatarAdd.UserAvatarAddResponse();
     }
@@ -1597,7 +1489,6 @@ public final class ProtoUserAvatarAdd {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\023UserAvatarAdd.proto\022\005proto\032\rRequest.pr" +

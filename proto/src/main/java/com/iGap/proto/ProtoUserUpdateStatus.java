@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoUserUpdateStatus {
   private ProtoUserUpdateStatus() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoUserUpdateStatus {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface UserUpdateStatusOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.UserUpdateStatus)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoUserUpdateStatus {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -40,13 +36,11 @@ public final class ProtoUserUpdateStatus {
      * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
      */
     int getStatusValue();
-
     /**
      * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
      */
     com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus.Status getStatus();
   }
-
   /**
    * Protobuf type {@code proto.UserUpdateStatus}
    */
@@ -58,7 +52,6 @@ public final class ProtoUserUpdateStatus {
     private UserUpdateStatus(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserUpdateStatus() {
       status_ = 0;
     }
@@ -68,7 +61,6 @@ public final class ProtoUserUpdateStatus {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserUpdateStatus(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -119,7 +111,6 @@ public final class ProtoUserUpdateStatus {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserUpdateStatus.internal_static_proto_UserUpdateStatus_descriptor;
@@ -188,7 +179,6 @@ public final class ProtoUserUpdateStatus {
       internalGetValueMap() {
         return internalValueMap;
       }
-
       private static final com.google.protobuf.Internal.EnumLiteMap<
               Status> internalValueMap =
               new com.google.protobuf.Internal.EnumLiteMap<Status>() {
@@ -201,12 +191,10 @@ public final class ProtoUserUpdateStatus {
       getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-
       public final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptorForType() {
         return getDescriptor();
       }
-
       public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
         return com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus.getDescriptor().getEnumTypes().get(0);
@@ -237,21 +225,18 @@ public final class ProtoUserUpdateStatus {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -261,14 +246,12 @@ public final class ProtoUserUpdateStatus {
 
     public static final int STATUS_FIELD_NUMBER = 2;
     private int status_;
-
     /**
      * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
      */
     public int getStatusValue() {
       return status_;
     }
-
     /**
      * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
      */
@@ -278,7 +261,6 @@ public final class ProtoUserUpdateStatus {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -316,7 +298,6 @@ public final class ProtoUserUpdateStatus {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -360,32 +341,27 @@ public final class ProtoUserUpdateStatus {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -393,13 +369,11 @@ public final class ProtoUserUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -407,14 +381,12 @@ public final class ProtoUserUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -426,15 +398,12 @@ public final class ProtoUserUpdateStatus {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -446,7 +415,6 @@ public final class ProtoUserUpdateStatus {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserUpdateStatus}
      */
@@ -476,13 +444,11 @@ public final class ProtoUserUpdateStatus {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -528,35 +494,29 @@ public final class ProtoUserUpdateStatus {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus) {
           return mergeFrom((com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus) other);
@@ -604,14 +564,12 @@ public final class ProtoUserUpdateStatus {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -622,7 +580,6 @@ public final class ProtoUserUpdateStatus {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -639,7 +596,6 @@ public final class ProtoUserUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -654,7 +610,6 @@ public final class ProtoUserUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -673,7 +628,6 @@ public final class ProtoUserUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -688,7 +642,6 @@ public final class ProtoUserUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -697,7 +650,6 @@ public final class ProtoUserUpdateStatus {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -709,7 +661,6 @@ public final class ProtoUserUpdateStatus {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -728,14 +679,12 @@ public final class ProtoUserUpdateStatus {
       }
 
       private int status_ = 0;
-
       /**
        * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
        */
       public int getStatusValue() {
         return status_;
       }
-
       /**
        * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
        */
@@ -744,7 +693,6 @@ public final class ProtoUserUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
        */
@@ -752,7 +700,6 @@ public final class ProtoUserUpdateStatus {
         com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus.Status result = com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus.Status.valueOf(status_);
         return result == null ? com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus.Status.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
        */
@@ -765,7 +712,6 @@ public final class ProtoUserUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
        */
@@ -775,7 +721,6 @@ public final class ProtoUserUpdateStatus {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -792,7 +737,6 @@ public final class ProtoUserUpdateStatus {
 
     // @@protoc_insertion_point(class_scope:proto.UserUpdateStatus)
     private static final com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus();
     }
@@ -834,12 +778,10 @@ public final class ProtoUserUpdateStatus {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -849,7 +791,6 @@ public final class ProtoUserUpdateStatus {
      * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
      */
     int getStatusValue();
-
     /**
      * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
      */
@@ -860,7 +801,6 @@ public final class ProtoUserUpdateStatus {
      */
     long getUserId();
   }
-
   /**
    * Protobuf type {@code proto.UserUpdateStatusResponse}
    */
@@ -872,7 +812,6 @@ public final class ProtoUserUpdateStatus {
     private UserUpdateStatusResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserUpdateStatusResponse() {
       status_ = 0;
       userId_ = 0L;
@@ -883,7 +822,6 @@ public final class ProtoUserUpdateStatus {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserUpdateStatusResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -939,7 +877,6 @@ public final class ProtoUserUpdateStatus {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserUpdateStatus.internal_static_proto_UserUpdateStatusResponse_descriptor;
@@ -954,21 +891,18 @@ public final class ProtoUserUpdateStatus {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -978,14 +912,12 @@ public final class ProtoUserUpdateStatus {
 
     public static final int STATUS_FIELD_NUMBER = 2;
     private int status_;
-
     /**
      * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
      */
     public int getStatusValue() {
       return status_;
     }
-
     /**
      * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
      */
@@ -996,7 +928,6 @@ public final class ProtoUserUpdateStatus {
 
     public static final int USER_ID_FIELD_NUMBER = 8;
     private long userId_;
-
     /**
      * <code>optional uint64 user_id = 8;</code>
      */
@@ -1005,7 +936,6 @@ public final class ProtoUserUpdateStatus {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1050,7 +980,6 @@ public final class ProtoUserUpdateStatus {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1099,32 +1028,27 @@ public final class ProtoUserUpdateStatus {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1132,13 +1056,11 @@ public final class ProtoUserUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1146,14 +1068,12 @@ public final class ProtoUserUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1165,11 +1085,9 @@ public final class ProtoUserUpdateStatus {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -1184,7 +1102,6 @@ public final class ProtoUserUpdateStatus {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserUpdateStatusResponse}
      */
@@ -1214,13 +1131,11 @@ public final class ProtoUserUpdateStatus {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1269,35 +1184,29 @@ public final class ProtoUserUpdateStatus {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse) {
           return mergeFrom((com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse) other);
@@ -1348,14 +1257,12 @@ public final class ProtoUserUpdateStatus {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1366,7 +1273,6 @@ public final class ProtoUserUpdateStatus {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1383,7 +1289,6 @@ public final class ProtoUserUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1398,7 +1303,6 @@ public final class ProtoUserUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1417,7 +1321,6 @@ public final class ProtoUserUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1432,7 +1335,6 @@ public final class ProtoUserUpdateStatus {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1441,7 +1343,6 @@ public final class ProtoUserUpdateStatus {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1453,7 +1354,6 @@ public final class ProtoUserUpdateStatus {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1472,14 +1372,12 @@ public final class ProtoUserUpdateStatus {
       }
 
       private int status_ = 0;
-
       /**
        * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
        */
       public int getStatusValue() {
         return status_;
       }
-
       /**
        * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
        */
@@ -1488,7 +1386,6 @@ public final class ProtoUserUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
        */
@@ -1496,7 +1393,6 @@ public final class ProtoUserUpdateStatus {
         com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus.Status result = com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus.Status.valueOf(status_);
         return result == null ? com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatus.Status.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
        */
@@ -1509,7 +1405,6 @@ public final class ProtoUserUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.UserUpdateStatus.Status status = 2;</code>
        */
@@ -1521,14 +1416,12 @@ public final class ProtoUserUpdateStatus {
       }
 
       private long userId_;
-
       /**
        * <code>optional uint64 user_id = 8;</code>
        */
       public long getUserId() {
         return userId_;
       }
-
       /**
        * <code>optional uint64 user_id = 8;</code>
        */
@@ -1538,7 +1431,6 @@ public final class ProtoUserUpdateStatus {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 user_id = 8;</code>
        */
@@ -1548,7 +1440,6 @@ public final class ProtoUserUpdateStatus {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1565,7 +1456,6 @@ public final class ProtoUserUpdateStatus {
 
     // @@protoc_insertion_point(class_scope:proto.UserUpdateStatusResponse)
     private static final com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserUpdateStatus.UserUpdateStatusResponse();
     }
@@ -1617,7 +1507,6 @@ public final class ProtoUserUpdateStatus {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\026UserUpdateStatus.proto\022\005proto\032\rRequest" +
@@ -1650,7 +1539,7 @@ public final class ProtoUserUpdateStatus {
     internal_static_proto_UserUpdateStatus_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_proto_UserUpdateStatus_descriptor,
-            new java.lang.String[] { "Request", "Status", });
+            new java.lang.String[]{"Request", "Status",});
     internal_static_proto_UserUpdateStatusResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_UserUpdateStatusResponse_fieldAccessorTable = new

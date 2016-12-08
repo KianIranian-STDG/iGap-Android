@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoFileDownload {
   private ProtoFileDownload() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoFileDownload {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface FileDownloadOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.FileDownload)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoFileDownload {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -40,7 +36,6 @@ public final class ProtoFileDownload {
      * <code>optional string token = 2;</code>
      */
     java.lang.String getToken();
-
     /**
      * <code>optional string token = 2;</code>
      */
@@ -61,13 +56,11 @@ public final class ProtoFileDownload {
      * <code>optional .proto.FileDownload.Selector selector = 5;</code>
      */
     int getSelectorValue();
-
     /**
      * <code>optional .proto.FileDownload.Selector selector = 5;</code>
      */
     com.iGap.proto.ProtoFileDownload.FileDownload.Selector getSelector();
   }
-
   /**
    * Protobuf type {@code proto.FileDownload}
    */
@@ -79,7 +72,6 @@ public final class ProtoFileDownload {
     private FileDownload(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private FileDownload() {
       token_ = "";
       offset_ = 0L;
@@ -92,7 +84,6 @@ public final class ProtoFileDownload {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private FileDownload(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -159,7 +150,6 @@ public final class ProtoFileDownload {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoFileDownload.internal_static_proto_FileDownload_descriptor;
@@ -248,7 +238,6 @@ public final class ProtoFileDownload {
       internalGetValueMap() {
         return internalValueMap;
       }
-
       private static final com.google.protobuf.Internal.EnumLiteMap<
               Selector> internalValueMap =
               new com.google.protobuf.Internal.EnumLiteMap<Selector>() {
@@ -261,12 +250,10 @@ public final class ProtoFileDownload {
       getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-
       public final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptorForType() {
         return getDescriptor();
       }
-
       public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
         return com.iGap.proto.ProtoFileDownload.FileDownload.getDescriptor().getEnumTypes().get(0);
@@ -297,21 +284,18 @@ public final class ProtoFileDownload {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -321,7 +305,6 @@ public final class ProtoFileDownload {
 
     public static final int TOKEN_FIELD_NUMBER = 2;
     private volatile java.lang.Object token_;
-
     /**
      * <code>optional string token = 2;</code>
      */
@@ -337,7 +320,6 @@ public final class ProtoFileDownload {
         return s;
       }
     }
-
     /**
      * <code>optional string token = 2;</code>
      */
@@ -357,7 +339,6 @@ public final class ProtoFileDownload {
 
     public static final int OFFSET_FIELD_NUMBER = 3;
     private long offset_;
-
     /**
      * <code>optional int64 offset = 3;</code>
      */
@@ -367,7 +348,6 @@ public final class ProtoFileDownload {
 
     public static final int MAX_LIMIT_FIELD_NUMBER = 4;
     private int maxLimit_;
-
     /**
      * <code>optional int32 max_limit = 4;</code>
      */
@@ -377,14 +357,12 @@ public final class ProtoFileDownload {
 
     public static final int SELECTOR_FIELD_NUMBER = 5;
     private int selector_;
-
     /**
      * <code>optional .proto.FileDownload.Selector selector = 5;</code>
      */
     public int getSelectorValue() {
       return selector_;
     }
-
     /**
      * <code>optional .proto.FileDownload.Selector selector = 5;</code>
      */
@@ -394,7 +372,6 @@ public final class ProtoFileDownload {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -452,7 +429,6 @@ public final class ProtoFileDownload {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -509,32 +485,27 @@ public final class ProtoFileDownload {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownload parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownload parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownload parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownload parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownload parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -542,13 +513,11 @@ public final class ProtoFileDownload {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownload parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownload parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -556,14 +525,12 @@ public final class ProtoFileDownload {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownload parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownload parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -575,15 +542,12 @@ public final class ProtoFileDownload {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoFileDownload.FileDownload prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -595,7 +559,6 @@ public final class ProtoFileDownload {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.FileDownload}
      */
@@ -625,13 +588,11 @@ public final class ProtoFileDownload {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -686,35 +647,29 @@ public final class ProtoFileDownload {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoFileDownload.FileDownload) {
           return mergeFrom((com.iGap.proto.ProtoFileDownload.FileDownload) other);
@@ -771,14 +726,12 @@ public final class ProtoFileDownload {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -789,7 +742,6 @@ public final class ProtoFileDownload {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -806,7 +758,6 @@ public final class ProtoFileDownload {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -821,7 +772,6 @@ public final class ProtoFileDownload {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -840,7 +790,6 @@ public final class ProtoFileDownload {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -855,7 +804,6 @@ public final class ProtoFileDownload {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -864,7 +812,6 @@ public final class ProtoFileDownload {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -876,7 +823,6 @@ public final class ProtoFileDownload {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -895,7 +841,6 @@ public final class ProtoFileDownload {
       }
 
       private java.lang.Object token_ = "";
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -911,7 +856,6 @@ public final class ProtoFileDownload {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -928,7 +872,6 @@ public final class ProtoFileDownload {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -937,12 +880,11 @@ public final class ProtoFileDownload {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         token_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -952,7 +894,6 @@ public final class ProtoFileDownload {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -962,21 +903,19 @@ public final class ProtoFileDownload {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         token_ = value;
         onChanged();
         return this;
       }
 
       private long offset_;
-
       /**
        * <code>optional int64 offset = 3;</code>
        */
       public long getOffset() {
         return offset_;
       }
-
       /**
        * <code>optional int64 offset = 3;</code>
        */
@@ -986,7 +925,6 @@ public final class ProtoFileDownload {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional int64 offset = 3;</code>
        */
@@ -998,14 +936,12 @@ public final class ProtoFileDownload {
       }
 
       private int maxLimit_;
-
       /**
        * <code>optional int32 max_limit = 4;</code>
        */
       public int getMaxLimit() {
         return maxLimit_;
       }
-
       /**
        * <code>optional int32 max_limit = 4;</code>
        */
@@ -1015,7 +951,6 @@ public final class ProtoFileDownload {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional int32 max_limit = 4;</code>
        */
@@ -1027,14 +962,12 @@ public final class ProtoFileDownload {
       }
 
       private int selector_ = 0;
-
       /**
        * <code>optional .proto.FileDownload.Selector selector = 5;</code>
        */
       public int getSelectorValue() {
         return selector_;
       }
-
       /**
        * <code>optional .proto.FileDownload.Selector selector = 5;</code>
        */
@@ -1043,7 +976,6 @@ public final class ProtoFileDownload {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.FileDownload.Selector selector = 5;</code>
        */
@@ -1051,7 +983,6 @@ public final class ProtoFileDownload {
         com.iGap.proto.ProtoFileDownload.FileDownload.Selector result = com.iGap.proto.ProtoFileDownload.FileDownload.Selector.valueOf(selector_);
         return result == null ? com.iGap.proto.ProtoFileDownload.FileDownload.Selector.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.FileDownload.Selector selector = 5;</code>
        */
@@ -1064,7 +995,6 @@ public final class ProtoFileDownload {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.FileDownload.Selector selector = 5;</code>
        */
@@ -1074,7 +1004,6 @@ public final class ProtoFileDownload {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1091,7 +1020,6 @@ public final class ProtoFileDownload {
 
     // @@protoc_insertion_point(class_scope:proto.FileDownload)
     private static final com.iGap.proto.ProtoFileDownload.FileDownload DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoFileDownload.FileDownload();
     }
@@ -1133,12 +1061,10 @@ public final class ProtoFileDownload {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1149,7 +1075,6 @@ public final class ProtoFileDownload {
      */
     com.google.protobuf.ByteString getBytes();
   }
-
   /**
    * Protobuf type {@code proto.FileDownloadResponse}
    */
@@ -1161,7 +1086,6 @@ public final class ProtoFileDownload {
     private FileDownloadResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private FileDownloadResponse() {
       bytes_ = com.google.protobuf.ByteString.EMPTY;
     }
@@ -1171,7 +1095,6 @@ public final class ProtoFileDownload {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private FileDownloadResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1221,7 +1144,6 @@ public final class ProtoFileDownload {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoFileDownload.internal_static_proto_FileDownloadResponse_descriptor;
@@ -1236,21 +1158,18 @@ public final class ProtoFileDownload {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1260,7 +1179,6 @@ public final class ProtoFileDownload {
 
     public static final int BYTES_FIELD_NUMBER = 4;
     private com.google.protobuf.ByteString bytes_;
-
     /**
      * <code>optional bytes bytes = 4;</code>
      */
@@ -1269,7 +1187,6 @@ public final class ProtoFileDownload {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1307,7 +1224,6 @@ public final class ProtoFileDownload {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1352,32 +1268,27 @@ public final class ProtoFileDownload {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownloadResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownloadResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownloadResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownloadResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownloadResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1385,13 +1296,11 @@ public final class ProtoFileDownload {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownloadResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownloadResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1399,14 +1308,12 @@ public final class ProtoFileDownload {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownloadResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoFileDownload.FileDownloadResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1418,15 +1325,12 @@ public final class ProtoFileDownload {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoFileDownload.FileDownloadResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -1438,7 +1342,6 @@ public final class ProtoFileDownload {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.FileDownloadResponse}
      */
@@ -1468,13 +1371,11 @@ public final class ProtoFileDownload {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1520,35 +1421,29 @@ public final class ProtoFileDownload {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoFileDownload.FileDownloadResponse) {
           return mergeFrom((com.iGap.proto.ProtoFileDownload.FileDownloadResponse)other);
@@ -1596,14 +1491,12 @@ public final class ProtoFileDownload {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1614,7 +1507,6 @@ public final class ProtoFileDownload {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1631,7 +1523,6 @@ public final class ProtoFileDownload {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1646,7 +1537,6 @@ public final class ProtoFileDownload {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1665,7 +1555,6 @@ public final class ProtoFileDownload {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1680,7 +1569,6 @@ public final class ProtoFileDownload {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1689,7 +1577,6 @@ public final class ProtoFileDownload {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1701,7 +1588,6 @@ public final class ProtoFileDownload {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1720,14 +1606,12 @@ public final class ProtoFileDownload {
       }
 
       private com.google.protobuf.ByteString bytes_ = com.google.protobuf.ByteString.EMPTY;
-
       /**
        * <code>optional bytes bytes = 4;</code>
        */
       public com.google.protobuf.ByteString getBytes() {
         return bytes_;
       }
-
       /**
        * <code>optional bytes bytes = 4;</code>
        */
@@ -1735,12 +1619,11 @@ public final class ProtoFileDownload {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         bytes_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional bytes bytes = 4;</code>
        */
@@ -1750,7 +1633,6 @@ public final class ProtoFileDownload {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1767,7 +1649,6 @@ public final class ProtoFileDownload {
 
     // @@protoc_insertion_point(class_scope:proto.FileDownloadResponse)
     private static final com.iGap.proto.ProtoFileDownload.FileDownloadResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoFileDownload.FileDownloadResponse();
     }
@@ -1819,7 +1700,6 @@ public final class ProtoFileDownload {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\022FileDownload.proto\022\005proto\032\rRequest.pro" +

@@ -143,6 +143,14 @@ public class HelperFillLookUpClass {
         lookupMap.put(30319, "ProtoGroupSetAction.GroupSetActionResponse");
         lookupMap.put(320, "GroupDeleteMessage");
         lookupMap.put(30320, "ProtoGroupDeleteMessage.GroupDeleteMessageResponse");
+        lookupMap.put(321, "GroupCheckUsername");
+        lookupMap.put(30321, "ProtoGroupCheckUsername.GroupCheckUsernameResponse");
+        lookupMap.put(322, "GroupUpdateUsername");
+        lookupMap.put(30322, "ProtoGroupUpdateUsername.GroupUpdateUsernameResponse");
+        lookupMap.put(323, "GroupRemoveUsername");
+        lookupMap.put(30323, "ProtoGroupRemoveUsername.GroupRemoveUsernameResponse");
+        lookupMap.put(324, "GroupRevokeLink");
+        lookupMap.put(30324, "ProtoGroupRevokeLink.GroupRevokeLinkResponse");
 
         // Channel 4xx , 304xx
         lookupMap.put(400, "ChannelCreate");
@@ -181,6 +189,20 @@ public class HelperFillLookUpClass {
         lookupMap.put(30416, "ProtoChannelGetDraft.ChannelGetDraftResponse");
         lookupMap.put(417, "ChannelGetMemberList");
         lookupMap.put(30417, "ProtoChannelGetMemberList.ChannelGetMemberListResponse");
+        lookupMap.put(418, "ChannelCheckUsername");
+        lookupMap.put(30418, "ProtoChannelCheckUsername.ChannelCheckUsernameResponse");
+        lookupMap.put(419, "ChannelUpdateUsername");
+        lookupMap.put(30419, "ProtoChannelUpdateUsername.ChannelUpdateUsernameResponse");
+        lookupMap.put(420, "ChannelRemoveUsername");
+        lookupMap.put(30420, "ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse");
+        lookupMap.put(421, "ChannelRevokeLink");
+        lookupMap.put(30421, "ProtoChannelRevokeLink.ChannelRevokeLinkResponse");
+        lookupMap.put(422, "ChannelUpdateSignature");
+        lookupMap.put(30422, "ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse");
+        lookupMap.put(423, "ChannelGetMessagesStats");
+        lookupMap.put(30423, "ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse");
+        lookupMap.put(424, "ChannelAddMessageReaction");
+        lookupMap.put(30424, "ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse");
 
         // Info 5xx , 305xx
         lookupMap.put(500, "Info.Location");
@@ -201,8 +223,22 @@ public class HelperFillLookUpClass {
         lookupMap.put(30602, "ProtoClientGetRoom.ClientGetRoomResponse");
         lookupMap.put(603, "ClientGetRoomHistory");
         lookupMap.put(30603, "ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse");
+        lookupMap.put(604, "ClientGetRoomMessage");
+        lookupMap.put(30604, "ProtoClientGetRoomMessage.ClientGetRoomMessageResponse");
         lookupMap.put(605, "ClientSearchRoomHistory");
         lookupMap.put(30605, "ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse");
+        lookupMap.put(606, "ClientResolveUsername");
+        lookupMap.put(30606, "ProtoClientResolveUsername.ClientResolveUsernameResponse");
+        lookupMap.put(607, "ClientCheckInviteLink");
+        lookupMap.put(30607, "ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse");
+        lookupMap.put(608, "ClientJoinByInviteLink");
+        lookupMap.put(30608, "ProtoClientJoinByInviteLink.ClientJoinByInviteLinkResponse");
+        lookupMap.put(609, "ClientJoinByUsername");
+        lookupMap.put(30609, "ProtoClientJoinByUsername.ClientJoinByUsernameResponse");
+        lookupMap.put(610, "ClientSubscribeToRoom");
+        lookupMap.put(30610, "ProtoClientSubscribeToRoom.ClientSubscribeToRoomResponse");
+        lookupMap.put(611, "ClientUnsubscribeFromRoom");
+        lookupMap.put(30611, "ProtoClientUnsubscribeFromRoom.ClientUnsubscribeFromRoomResponse");
 
         // FileUpload 7xx , 307xx
         lookupMap.put(700, "FileUploadOption");

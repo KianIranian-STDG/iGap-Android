@@ -151,11 +151,6 @@ public final class ProtoChannelAddMember {
        * <code>optional uint64 user_id = 1;</code>
        */
       long getUserId();
-
-      /**
-       * <code>optional uint64 start_message_id = 2;</code>
-       */
-      long getStartMessageId();
     }
     /**
      * Protobuf type {@code proto.ChannelAddMember.Member}
@@ -170,7 +165,6 @@ public final class ProtoChannelAddMember {
       }
       private Member() {
         userId_ = 0L;
-        startMessageId_ = 0L;
       }
 
       @java.lang.Override
@@ -201,11 +195,6 @@ public final class ProtoChannelAddMember {
               case 8: {
 
                 userId_ = input.readUInt64();
-                break;
-              }
-              case 16: {
-
-                startMessageId_ = input.readUInt64();
                 break;
               }
             }
@@ -240,15 +229,6 @@ public final class ProtoChannelAddMember {
         return userId_;
       }
 
-      public static final int START_MESSAGE_ID_FIELD_NUMBER = 2;
-      private long startMessageId_;
-      /**
-       * <code>optional uint64 start_message_id = 2;</code>
-       */
-      public long getStartMessageId() {
-        return startMessageId_;
-      }
-
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
@@ -264,9 +244,6 @@ public final class ProtoChannelAddMember {
         if (userId_ != 0L) {
           output.writeUInt64(1, userId_);
         }
-        if (startMessageId_ != 0L) {
-          output.writeUInt64(2, startMessageId_);
-        }
       }
 
       public int getSerializedSize() {
@@ -277,10 +254,6 @@ public final class ProtoChannelAddMember {
         if (userId_ != 0L) {
           size += com.google.protobuf.CodedOutputStream
             .computeUInt64Size(1, userId_);
-        }
-        if (startMessageId_ != 0L) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeUInt64Size(2, startMessageId_);
         }
         memoizedSize = size;
         return size;
@@ -300,8 +273,6 @@ public final class ProtoChannelAddMember {
         boolean result = true;
         result = result && (getUserId()
             == other.getUserId());
-        result = result && (getStartMessageId()
-            == other.getStartMessageId());
         return result;
       }
 
@@ -315,9 +286,6 @@ public final class ProtoChannelAddMember {
         hash = (37 * hash) + USER_ID_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
             getUserId());
-        hash = (37 * hash) + START_MESSAGE_ID_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            getStartMessageId());
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
         return hash;
@@ -438,8 +406,6 @@ public final class ProtoChannelAddMember {
           super.clear();
           userId_ = 0L;
 
-          startMessageId_ = 0L;
-
           return this;
         }
 
@@ -463,7 +429,6 @@ public final class ProtoChannelAddMember {
         public com.iGap.proto.ProtoChannelAddMember.ChannelAddMember.Member buildPartial() {
           com.iGap.proto.ProtoChannelAddMember.ChannelAddMember.Member result = new com.iGap.proto.ProtoChannelAddMember.ChannelAddMember.Member(this);
           result.userId_ = userId_;
-          result.startMessageId_ = startMessageId_;
           onBuilt();
           return result;
         }
@@ -507,9 +472,6 @@ public final class ProtoChannelAddMember {
           if (other == com.iGap.proto.ProtoChannelAddMember.ChannelAddMember.Member.getDefaultInstance()) return this;
           if (other.getUserId() != 0L) {
             setUserId(other.getUserId());
-          }
-          if (other.getStartMessageId() != 0L) {
-            setStartMessageId(other.getStartMessageId());
           }
           onChanged();
           return this;
@@ -559,32 +521,6 @@ public final class ProtoChannelAddMember {
         public Builder clearUserId() {
           
           userId_ = 0L;
-          onChanged();
-          return this;
-        }
-
-        private long startMessageId_ ;
-        /**
-         * <code>optional uint64 start_message_id = 2;</code>
-         */
-        public long getStartMessageId() {
-          return startMessageId_;
-        }
-        /**
-         * <code>optional uint64 start_message_id = 2;</code>
-         */
-        public Builder setStartMessageId(long value) {
-          
-          startMessageId_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>optional uint64 start_message_id = 2;</code>
-         */
-        public Builder clearStartMessageId() {
-          
-          startMessageId_ = 0L;
           onChanged();
           return this;
         }
@@ -2131,16 +2067,16 @@ public final class ProtoChannelAddMember {
   static {
     java.lang.String[] descriptorData = {
       "\n\026ChannelAddMember.proto\022\005proto\032\rRequest" +
-      ".proto\032\016Response.proto\032\014Global.proto\"\251\001\n" +
+              ".proto\032\016Response.proto\032\014Global.proto\"\217\001\n" +
       "\020ChannelAddMember\022\037\n\007request\030\001 \001(\0132\016.pro" +
       "to.Request\022\017\n\007room_id\030\002 \001(\004\022.\n\006member\030\003 " +
-      "\001(\0132\036.proto.ChannelAddMember.Member\0323\n\006M" +
-      "ember\022\017\n\007user_id\030\001 \001(\004\022\030\n\020start_message_" +
-      "id\030\002 \001(\004\"\206\001\n\030ChannelAddMemberResponse\022!\n" +
-      "\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007room" +
-      "_id\030\002 \001(\004\022\017\n\007user_id\030\003 \001(\004\022%\n\004role\030\004 \001(\016" +
-      "2\027.proto.ChannelRoom.RoleB\'\n\016com.iGap.pr",
-      "otoB\025ProtoChannelAddMemberb\006proto3"
+              "\001(\0132\036.proto.ChannelAddMember.Member\032\031\n\006M" +
+              "ember\022\017\n\007user_id\030\001 \001(\004\"\206\001\n\030ChannelAddMem" +
+              "berResponse\022!\n\010response\030\001 \001(\0132\017.proto.Re" +
+              "sponse\022\017\n\007room_id\030\002 \001(\004\022\017\n\007user_id\030\003 \001(\004" +
+              "\022%\n\004role\030\004 \001(\0162\027.proto.ChannelRoom.RoleB" +
+              "\'\n\016com.iGap.protoB\025ProtoChannelAddMember",
+            "b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2168,7 +2104,7 @@ public final class ProtoChannelAddMember {
     internal_static_proto_ChannelAddMember_Member_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChannelAddMember_Member_descriptor,
-        new java.lang.String[] { "UserId", "StartMessageId", });
+            new java.lang.String[]{"UserId",});
     internal_static_proto_ChannelAddMemberResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChannelAddMemberResponse_fieldAccessorTable = new

@@ -35,6 +35,16 @@ public final class ProtoChannelGetMemberList {
      * <code>optional uint64 room_id = 2;</code>
      */
     long getRoomId();
+
+    /**
+     * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
+     */
+    int getFilterRoleValue();
+
+    /**
+     * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
+     */
+    com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole getFilterRole();
   }
   /**
    * Protobuf type {@code proto.ChannelGetMemberList}
@@ -49,6 +59,7 @@ public final class ProtoChannelGetMemberList {
     }
     private ChannelGetMemberList() {
       roomId_ = 0L;
+      filterRole_ = 0;
     }
 
     @java.lang.Override
@@ -94,6 +105,12 @@ public final class ProtoChannelGetMemberList {
               roomId_ = input.readUInt64();
               break;
             }
+            case 24: {
+              int rawValue = input.readEnum();
+
+              filterRole_ = rawValue;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -115,6 +132,129 @@ public final class ProtoChannelGetMemberList {
       return com.iGap.proto.ProtoChannelGetMemberList.internal_static_proto_ChannelGetMemberList_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.class, com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.Builder.class);
+    }
+
+    /**
+     * Protobuf enum {@code proto.ChannelGetMemberList.FilterRole}
+     */
+    public enum FilterRole
+            implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>ALL = 0;</code>
+       */
+      ALL(0),
+      /**
+       * <code>MEMBER = 1;</code>
+       */
+      MEMBER(1),
+      /**
+       * <code>MODERATOR = 2;</code>
+       */
+      MODERATOR(2),
+      /**
+       * <code>ADMIN = 3;</code>
+       */
+      ADMIN(3),
+      UNRECOGNIZED(-1),;
+
+      /**
+       * <code>ALL = 0;</code>
+       */
+      public static final int ALL_VALUE = 0;
+      /**
+       * <code>MEMBER = 1;</code>
+       */
+      public static final int MEMBER_VALUE = 1;
+      /**
+       * <code>MODERATOR = 2;</code>
+       */
+      public static final int MODERATOR_VALUE = 2;
+      /**
+       * <code>ADMIN = 3;</code>
+       */
+      public static final int ADMIN_VALUE = 3;
+
+
+      public final int getNumber() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalArgumentException(
+                  "Can't get the number of an unknown enum value.");
+        }
+        return value;
+      }
+
+      /**
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
+      @java.lang.Deprecated
+      public static FilterRole valueOf(int value) {
+        return forNumber(value);
+      }
+
+      public static FilterRole forNumber(int value) {
+        switch (value) {
+          case 0:
+            return ALL;
+          case 1:
+            return MEMBER;
+          case 2:
+            return MODERATOR;
+          case 3:
+            return ADMIN;
+          default:
+            return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<FilterRole>
+      internalGetValueMap() {
+        return internalValueMap;
+      }
+
+      private static final com.google.protobuf.Internal.EnumLiteMap<
+              FilterRole> internalValueMap =
+              new com.google.protobuf.Internal.EnumLiteMap<FilterRole>() {
+                public FilterRole findValueByNumber(int number) {
+                  return FilterRole.forNumber(number);
+                }
+              };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+      getValueDescriptor() {
+        return getDescriptor().getValues().get(ordinal());
+      }
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+      getDescriptorForType() {
+        return getDescriptor();
+      }
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+      getDescriptor() {
+        return com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final FilterRole[] VALUES = values();
+
+      public static FilterRole valueOf(
+              com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+                  "EnumValueDescriptor is not for this type.");
+        }
+        if (desc.getIndex() == -1) {
+          return UNRECOGNIZED;
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int value;
+
+      private FilterRole(int value) {
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:proto.ChannelGetMemberList.FilterRole)
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -147,6 +287,24 @@ public final class ProtoChannelGetMemberList {
       return roomId_;
     }
 
+    public static final int FILTER_ROLE_FIELD_NUMBER = 3;
+    private int filterRole_;
+
+    /**
+     * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
+     */
+    public int getFilterRoleValue() {
+      return filterRole_;
+    }
+
+    /**
+     * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
+     */
+    public com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole getFilterRole() {
+      com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole result = com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(filterRole_);
+      return result == null ? com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.UNRECOGNIZED : result;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -165,6 +323,9 @@ public final class ProtoChannelGetMemberList {
       if (roomId_ != 0L) {
         output.writeUInt64(2, roomId_);
       }
+      if (filterRole_ != com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.ALL.getNumber()) {
+        output.writeEnum(3, filterRole_);
+      }
     }
 
     public int getSerializedSize() {
@@ -178,7 +339,11 @@ public final class ProtoChannelGetMemberList {
       }
       if (roomId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(2, roomId_);
+                .computeUInt64Size(2, roomId_);
+      }
+      if (filterRole_ != com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.ALL.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeEnumSize(3, filterRole_);
       }
       memoizedSize = size;
       return size;
@@ -202,7 +367,8 @@ public final class ProtoChannelGetMemberList {
             .equals(other.getRequest());
       }
       result = result && (getRoomId()
-          == other.getRoomId());
+              == other.getRoomId());
+      result = result && filterRole_ == other.filterRole_;
       return result;
     }
 
@@ -219,7 +385,9 @@ public final class ProtoChannelGetMemberList {
       }
       hash = (37 * hash) + ROOM_ID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getRoomId());
+              getRoomId());
+      hash = (37 * hash) + FILTER_ROLE_FIELD_NUMBER;
+      hash = (53 * hash) + filterRole_;
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -346,6 +514,8 @@ public final class ProtoChannelGetMemberList {
         }
         roomId_ = 0L;
 
+        filterRole_ = 0;
+
         return this;
       }
 
@@ -374,6 +544,7 @@ public final class ProtoChannelGetMemberList {
           result.request_ = requestBuilder_.build();
         }
         result.roomId_ = roomId_;
+        result.filterRole_ = filterRole_;
         onBuilt();
         return result;
       }
@@ -420,6 +591,9 @@ public final class ProtoChannelGetMemberList {
         }
         if (other.getRoomId() != 0L) {
           setRoomId(other.getRoomId());
+        }
+        if (other.filterRole_ != 0) {
+          setFilterRoleValue(other.getFilterRoleValue());
         }
         onChanged();
         return this;
@@ -586,6 +760,55 @@ public final class ProtoChannelGetMemberList {
       public Builder clearRoomId() {
         
         roomId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private int filterRole_ = 0;
+
+      /**
+       * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
+       */
+      public int getFilterRoleValue() {
+        return filterRole_;
+      }
+
+      /**
+       * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
+       */
+      public Builder setFilterRoleValue(int value) {
+        filterRole_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
+       */
+      public com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole getFilterRole() {
+        com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole result = com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(filterRole_);
+        return result == null ? com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.UNRECOGNIZED : result;
+      }
+
+      /**
+       * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
+       */
+      public Builder setFilterRole(com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        filterRole_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
+       */
+      public Builder clearFilterRole() {
+
+        filterRole_ = 0;
         onChanged();
         return this;
       }
@@ -2117,15 +2340,19 @@ public final class ProtoChannelGetMemberList {
   static {
     java.lang.String[] descriptorData = {
       "\n\032ChannelGetMemberList.proto\022\005proto\032\rReq" +
-      "uest.proto\032\016Response.proto\032\014Global.proto" +
-      "\"H\n\024ChannelGetMemberList\022\037\n\007request\030\001 \001(" +
-      "\0132\016.proto.Request\022\017\n\007room_id\030\002 \001(\004\"\276\001\n\034C" +
-      "hannelGetMemberListResponse\022!\n\010response\030" +
-      "\001 \001(\0132\017.proto.Response\022:\n\006member\030\002 \003(\0132*" +
-      ".proto.ChannelGetMemberListResponse.Memb" +
-      "er\032?\n\006Member\022\016\n\006userId\030\001 \001(\004\022%\n\004role\030\002 \001" +
-      "(\0162\027.proto.ChannelRoom.RoleB+\n\016com.iGap." +
-      "protoB\031ProtoChannelGetMemberListb\006proto3"
+              "uest.proto\032\016Response.proto\032\014Global.proto" +
+              "\"\302\001\n\024ChannelGetMemberList\022\037\n\007request\030\001 \001" +
+              "(\0132\016.proto.Request\022\017\n\007room_id\030\002 \001(\004\022;\n\013f" +
+              "ilter_role\030\003 \001(\0162&.proto.ChannelGetMembe" +
+              "rList.FilterRole\";\n\nFilterRole\022\007\n\003ALL\020\000\022" +
+              "\n\n\006MEMBER\020\001\022\r\n\tMODERATOR\020\002\022\t\n\005ADMIN\020\003\"\276\001" +
+              "\n\034ChannelGetMemberListResponse\022!\n\010respon" +
+              "se\030\001 \001(\0132\017.proto.Response\022:\n\006member\030\002 \003(" +
+              "\0132*.proto.ChannelGetMemberListResponse.M",
+            "ember\032?\n\006Member\022\016\n\006userId\030\001 \001(\004\022%\n\004role\030" +
+                    "\002 \001(\0162\027.proto.ChannelRoom.RoleB+\n\016com.iG" +
+      "ap.protoB\031ProtoChannelGetMemberListb\006pro" +
+      "to3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2146,8 +2373,8 @@ public final class ProtoChannelGetMemberList {
       getDescriptor().getMessageTypes().get(0);
     internal_static_proto_ChannelGetMemberList_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_ChannelGetMemberList_descriptor,
-        new java.lang.String[] { "Request", "RoomId", });
+            internal_static_proto_ChannelGetMemberList_descriptor,
+        new java.lang.String[] { "Request", "RoomId", "FilterRole", });
     internal_static_proto_ChannelGetMemberListResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChannelGetMemberListResponse_fieldAccessorTable = new

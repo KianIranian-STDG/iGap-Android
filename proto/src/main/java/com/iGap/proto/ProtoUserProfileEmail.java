@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoUserProfileEmail {
   private ProtoUserProfileEmail() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoUserProfileEmail {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface UserProfileSetEmailOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.UserProfileSetEmail)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoUserProfileEmail {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -40,14 +36,12 @@ public final class ProtoUserProfileEmail {
      * <code>optional string email = 2;</code>
      */
     java.lang.String getEmail();
-
     /**
      * <code>optional string email = 2;</code>
      */
     com.google.protobuf.ByteString
     getEmailBytes();
   }
-
   /**
    * Protobuf type {@code proto.UserProfileSetEmail}
    */
@@ -59,7 +53,6 @@ public final class ProtoUserProfileEmail {
     private UserProfileSetEmail(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserProfileSetEmail() {
       email_ = "";
     }
@@ -69,7 +62,6 @@ public final class ProtoUserProfileEmail {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserProfileSetEmail(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -120,7 +112,6 @@ public final class ProtoUserProfileEmail {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserProfileEmail.internal_static_proto_UserProfileSetEmail_descriptor;
@@ -135,21 +126,18 @@ public final class ProtoUserProfileEmail {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -159,7 +147,6 @@ public final class ProtoUserProfileEmail {
 
     public static final int EMAIL_FIELD_NUMBER = 2;
     private volatile java.lang.Object email_;
-
     /**
      * <code>optional string email = 2;</code>
      */
@@ -175,7 +162,6 @@ public final class ProtoUserProfileEmail {
         return s;
       }
     }
-
     /**
      * <code>optional string email = 2;</code>
      */
@@ -194,7 +180,6 @@ public final class ProtoUserProfileEmail {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -231,7 +216,6 @@ public final class ProtoUserProfileEmail {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -276,32 +260,27 @@ public final class ProtoUserProfileEmail {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -309,13 +288,11 @@ public final class ProtoUserProfileEmail {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -323,14 +300,12 @@ public final class ProtoUserProfileEmail {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -345,11 +320,9 @@ public final class ProtoUserProfileEmail {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -361,7 +334,6 @@ public final class ProtoUserProfileEmail {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserProfileSetEmail}
      */
@@ -391,13 +363,11 @@ public final class ProtoUserProfileEmail {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -443,35 +413,29 @@ public final class ProtoUserProfileEmail {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail) {
           return mergeFrom((com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail) other);
@@ -519,14 +483,12 @@ public final class ProtoUserProfileEmail {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -537,7 +499,6 @@ public final class ProtoUserProfileEmail {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -554,7 +515,6 @@ public final class ProtoUserProfileEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -569,7 +529,6 @@ public final class ProtoUserProfileEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -588,7 +547,6 @@ public final class ProtoUserProfileEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -603,7 +561,6 @@ public final class ProtoUserProfileEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -612,7 +569,6 @@ public final class ProtoUserProfileEmail {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -624,7 +580,6 @@ public final class ProtoUserProfileEmail {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -643,7 +598,6 @@ public final class ProtoUserProfileEmail {
       }
 
       private java.lang.Object email_ = "";
-
       /**
        * <code>optional string email = 2;</code>
        */
@@ -659,7 +613,6 @@ public final class ProtoUserProfileEmail {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string email = 2;</code>
        */
@@ -676,7 +629,6 @@ public final class ProtoUserProfileEmail {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string email = 2;</code>
        */
@@ -685,12 +637,11 @@ public final class ProtoUserProfileEmail {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         email_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string email = 2;</code>
        */
@@ -700,7 +651,6 @@ public final class ProtoUserProfileEmail {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string email = 2;</code>
        */
@@ -710,12 +660,11 @@ public final class ProtoUserProfileEmail {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         email_ = value;
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -732,7 +681,6 @@ public final class ProtoUserProfileEmail {
 
     // @@protoc_insertion_point(class_scope:proto.UserProfileSetEmail)
     private static final com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmail();
     }
@@ -774,12 +722,10 @@ public final class ProtoUserProfileEmail {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -789,14 +735,12 @@ public final class ProtoUserProfileEmail {
      * <code>optional string email = 2;</code>
      */
     java.lang.String getEmail();
-
     /**
      * <code>optional string email = 2;</code>
      */
     com.google.protobuf.ByteString
     getEmailBytes();
   }
-
   /**
    * Protobuf type {@code proto.UserProfileSetEmailResponse}
    */
@@ -808,7 +752,6 @@ public final class ProtoUserProfileEmail {
     private UserProfileSetEmailResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserProfileSetEmailResponse() {
       email_ = "";
     }
@@ -818,7 +761,6 @@ public final class ProtoUserProfileEmail {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserProfileSetEmailResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -869,7 +811,6 @@ public final class ProtoUserProfileEmail {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserProfileEmail.internal_static_proto_UserProfileSetEmailResponse_descriptor;
@@ -884,21 +825,18 @@ public final class ProtoUserProfileEmail {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -908,7 +846,6 @@ public final class ProtoUserProfileEmail {
 
     public static final int EMAIL_FIELD_NUMBER = 2;
     private volatile java.lang.Object email_;
-
     /**
      * <code>optional string email = 2;</code>
      */
@@ -924,7 +861,6 @@ public final class ProtoUserProfileEmail {
         return s;
       }
     }
-
     /**
      * <code>optional string email = 2;</code>
      */
@@ -943,7 +879,6 @@ public final class ProtoUserProfileEmail {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -980,7 +915,6 @@ public final class ProtoUserProfileEmail {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1025,32 +959,27 @@ public final class ProtoUserProfileEmail {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1058,13 +987,11 @@ public final class ProtoUserProfileEmail {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1072,14 +999,12 @@ public final class ProtoUserProfileEmail {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1091,15 +1016,12 @@ public final class ProtoUserProfileEmail {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -1111,7 +1033,6 @@ public final class ProtoUserProfileEmail {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserProfileSetEmailResponse}
      */
@@ -1141,13 +1062,11 @@ public final class ProtoUserProfileEmail {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1193,35 +1112,29 @@ public final class ProtoUserProfileEmail {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse) {
           return mergeFrom((com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse) other);
@@ -1270,14 +1183,12 @@ public final class ProtoUserProfileEmail {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1288,7 +1199,6 @@ public final class ProtoUserProfileEmail {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1305,7 +1215,6 @@ public final class ProtoUserProfileEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1320,7 +1229,6 @@ public final class ProtoUserProfileEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1339,7 +1247,6 @@ public final class ProtoUserProfileEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1354,7 +1261,6 @@ public final class ProtoUserProfileEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1363,7 +1269,6 @@ public final class ProtoUserProfileEmail {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1375,7 +1280,6 @@ public final class ProtoUserProfileEmail {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1394,7 +1298,6 @@ public final class ProtoUserProfileEmail {
       }
 
       private java.lang.Object email_ = "";
-
       /**
        * <code>optional string email = 2;</code>
        */
@@ -1410,7 +1313,6 @@ public final class ProtoUserProfileEmail {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string email = 2;</code>
        */
@@ -1427,7 +1329,6 @@ public final class ProtoUserProfileEmail {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string email = 2;</code>
        */
@@ -1436,12 +1337,11 @@ public final class ProtoUserProfileEmail {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         email_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string email = 2;</code>
        */
@@ -1451,7 +1351,6 @@ public final class ProtoUserProfileEmail {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string email = 2;</code>
        */
@@ -1461,12 +1360,11 @@ public final class ProtoUserProfileEmail {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         email_ = value;
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1483,7 +1381,6 @@ public final class ProtoUserProfileEmail {
 
     // @@protoc_insertion_point(class_scope:proto.UserProfileSetEmailResponse)
     private static final com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserProfileEmail.UserProfileSetEmailResponse();
     }
@@ -1535,7 +1432,6 @@ public final class ProtoUserProfileEmail {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\031UserProfileSetEmail.proto\022\005proto\032\rRequ" +

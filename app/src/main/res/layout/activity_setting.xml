@@ -29,9 +29,9 @@
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
+                android:layoutDirection="ltr"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
-                android:layoutDirection="ltr"
                 app:layout_collapseMode="pin">
 
                 <RelativeLayout
@@ -140,7 +140,6 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
-
 
 
     <android.support.v4.widget.NestedScrollView
@@ -576,9 +575,9 @@
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:gravity="center"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
+                        android:gravity="center"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
@@ -753,12 +752,14 @@
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal"
+                    android:visibility="gone"
                     />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/background_editText"/>
+                    android:background="@color/background_editText"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/st_txt_autoDownloadData"
@@ -1066,9 +1067,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:background="@drawable/pu_circle_dialog_give_image_gallery"
         android:indeterminate="true"
-        android:layout_gravity="center"
         android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>

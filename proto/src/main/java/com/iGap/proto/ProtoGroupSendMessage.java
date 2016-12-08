@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoGroupSendMessage {
   private ProtoGroupSendMessage() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -81,46 +80,33 @@ public final class ProtoGroupSendMessage {
     com.iGap.proto.ProtoGlobal.RoomMessageLocationOrBuilder getLocationOrBuilder();
 
     /**
-     * <code>optional .proto.RoomMessageLog log = 7;</code>
-     */
-    boolean hasLog();
-    /**
-     * <code>optional .proto.RoomMessageLog log = 7;</code>
-     */
-    com.iGap.proto.ProtoGlobal.RoomMessageLog getLog();
-    /**
-     * <code>optional .proto.RoomMessageLog log = 7;</code>
-     */
-    com.iGap.proto.ProtoGlobal.RoomMessageLogOrBuilder getLogOrBuilder();
-
-    /**
-     * <code>optional .proto.RoomMessageContact contact = 8;</code>
+     * <code>optional .proto.RoomMessageContact contact = 7;</code>
      */
     boolean hasContact();
     /**
-     * <code>optional .proto.RoomMessageContact contact = 8;</code>
+     * <code>optional .proto.RoomMessageContact contact = 7;</code>
      */
     com.iGap.proto.ProtoGlobal.RoomMessageContact getContact();
     /**
-     * <code>optional .proto.RoomMessageContact contact = 8;</code>
+     * <code>optional .proto.RoomMessageContact contact = 7;</code>
      */
     com.iGap.proto.ProtoGlobal.RoomMessageContactOrBuilder getContactOrBuilder();
 
     /**
-     * <code>optional uint64 reply_to = 9;</code>
+     * <code>optional uint64 reply_to = 8;</code>
      */
     long getReplyTo();
 
     /**
-     * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+     * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
      */
     boolean hasForwardFrom();
     /**
-     * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+     * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
      */
     com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom getForwardFrom();
     /**
-     * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+     * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
      */
     com.iGap.proto.ProtoGlobal.RoomMessageForwardFromOrBuilder getForwardFromOrBuilder();
   }
@@ -148,10 +134,9 @@ public final class ProtoGroupSendMessage {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private GroupSendMessage(
             com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
@@ -219,19 +204,6 @@ public final class ProtoGroupSendMessage {
               break;
             }
             case 58: {
-              com.iGap.proto.ProtoGlobal.RoomMessageLog.Builder subBuilder = null;
-              if (log_ != null) {
-                subBuilder = log_.toBuilder();
-              }
-              log_ = input.readMessage(com.iGap.proto.ProtoGlobal.RoomMessageLog.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(log_);
-                log_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 66: {
               com.iGap.proto.ProtoGlobal.RoomMessageContact.Builder subBuilder = null;
               if (contact_ != null) {
                 subBuilder = contact_.toBuilder();
@@ -244,12 +216,12 @@ public final class ProtoGroupSendMessage {
 
               break;
             }
-            case 72: {
+            case 64: {
 
               replyTo_ = input.readUInt64();
               break;
             }
-            case 82: {
+            case 74: {
               com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom.Builder subBuilder = null;
               if (forwardFrom_ != null) {
                 subBuilder = forwardFrom_.toBuilder();
@@ -273,7 +245,6 @@ public final class ProtoGroupSendMessage {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessage_descriptor;
@@ -421,73 +392,52 @@ public final class ProtoGroupSendMessage {
       return getLocation();
     }
 
-    public static final int LOG_FIELD_NUMBER = 7;
-    private com.iGap.proto.ProtoGlobal.RoomMessageLog log_;
-    /**
-     * <code>optional .proto.RoomMessageLog log = 7;</code>
-     */
-    public boolean hasLog() {
-      return log_ != null;
-    }
-    /**
-     * <code>optional .proto.RoomMessageLog log = 7;</code>
-     */
-    public com.iGap.proto.ProtoGlobal.RoomMessageLog getLog() {
-      return log_ == null ? com.iGap.proto.ProtoGlobal.RoomMessageLog.getDefaultInstance() : log_;
-    }
-    /**
-     * <code>optional .proto.RoomMessageLog log = 7;</code>
-     */
-    public com.iGap.proto.ProtoGlobal.RoomMessageLogOrBuilder getLogOrBuilder() {
-      return getLog();
-    }
-
-    public static final int CONTACT_FIELD_NUMBER = 8;
+    public static final int CONTACT_FIELD_NUMBER = 7;
     private com.iGap.proto.ProtoGlobal.RoomMessageContact contact_;
     /**
-     * <code>optional .proto.RoomMessageContact contact = 8;</code>
+     * <code>optional .proto.RoomMessageContact contact = 7;</code>
      */
     public boolean hasContact() {
       return contact_ != null;
     }
     /**
-     * <code>optional .proto.RoomMessageContact contact = 8;</code>
+     * <code>optional .proto.RoomMessageContact contact = 7;</code>
      */
     public com.iGap.proto.ProtoGlobal.RoomMessageContact getContact() {
       return contact_ == null ? com.iGap.proto.ProtoGlobal.RoomMessageContact.getDefaultInstance() : contact_;
     }
     /**
-     * <code>optional .proto.RoomMessageContact contact = 8;</code>
+     * <code>optional .proto.RoomMessageContact contact = 7;</code>
      */
     public com.iGap.proto.ProtoGlobal.RoomMessageContactOrBuilder getContactOrBuilder() {
       return getContact();
     }
 
-    public static final int REPLY_TO_FIELD_NUMBER = 9;
+    public static final int REPLY_TO_FIELD_NUMBER = 8;
     private long replyTo_;
     /**
-     * <code>optional uint64 reply_to = 9;</code>
+     * <code>optional uint64 reply_to = 8;</code>
      */
     public long getReplyTo() {
       return replyTo_;
     }
 
-    public static final int FORWARD_FROM_FIELD_NUMBER = 10;
+    public static final int FORWARD_FROM_FIELD_NUMBER = 9;
     private com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom forwardFrom_;
     /**
-     * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+     * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
      */
     public boolean hasForwardFrom() {
       return forwardFrom_ != null;
     }
     /**
-     * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+     * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
      */
     public com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom getForwardFrom() {
       return forwardFrom_ == null ? com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom.getDefaultInstance() : forwardFrom_;
     }
     /**
-     * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+     * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
      */
     public com.iGap.proto.ProtoGlobal.RoomMessageForwardFromOrBuilder getForwardFromOrBuilder() {
       return getForwardFrom();
@@ -523,17 +473,14 @@ public final class ProtoGroupSendMessage {
       if (location_ != null) {
         output.writeMessage(6, getLocation());
       }
-      if (log_ != null) {
-        output.writeMessage(7, getLog());
-      }
       if (contact_ != null) {
-        output.writeMessage(8, getContact());
+        output.writeMessage(7, getContact());
       }
       if (replyTo_ != 0L) {
-        output.writeUInt64(9, replyTo_);
+        output.writeUInt64(8, replyTo_);
       }
       if (forwardFrom_ != null) {
-        output.writeMessage(10, getForwardFrom());
+        output.writeMessage(9, getForwardFrom());
       }
     }
 
@@ -564,28 +511,23 @@ public final class ProtoGroupSendMessage {
         size += com.google.protobuf.CodedOutputStream
                 .computeMessageSize(6, getLocation());
       }
-      if (log_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(7, getLog());
-      }
       if (contact_ != null) {
         size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(8, getContact());
+                .computeMessageSize(7, getContact());
       }
       if (replyTo_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(9, replyTo_);
+                .computeUInt64Size(8, replyTo_);
       }
       if (forwardFrom_ != null) {
         size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(10, getForwardFrom());
+                .computeMessageSize(9, getForwardFrom());
       }
       memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -613,11 +555,6 @@ public final class ProtoGroupSendMessage {
       if (hasLocation()) {
         result = result && getLocation()
                 .equals(other.getLocation());
-      }
-      result = result && (hasLog() == other.hasLog());
-      if (hasLog()) {
-        result = result && getLog()
-                .equals(other.getLog());
       }
       result = result && (hasContact() == other.hasContact());
       if (hasContact()) {
@@ -658,10 +595,6 @@ public final class ProtoGroupSendMessage {
         hash = (37 * hash) + LOCATION_FIELD_NUMBER;
         hash = (53 * hash) + getLocation().hashCode();
       }
-      if (hasLog()) {
-        hash = (37 * hash) + LOG_FIELD_NUMBER;
-        hash = (53 * hash) + getLog().hashCode();
-      }
       if (hasContact()) {
         hash = (37 * hash) + CONTACT_FIELD_NUMBER;
         hash = (53 * hash) + getContact().hashCode();
@@ -693,14 +626,12 @@ public final class ProtoGroupSendMessage {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage parseFrom(
             byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
@@ -713,7 +644,6 @@ public final class ProtoGroupSendMessage {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
@@ -746,7 +676,6 @@ public final class ProtoGroupSendMessage {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -817,12 +746,6 @@ public final class ProtoGroupSendMessage {
           location_ = null;
           locationBuilder_ = null;
         }
-        if (logBuilder_ == null) {
-          log_ = null;
-        } else {
-          log_ = null;
-          logBuilder_ = null;
-        }
         if (contactBuilder_ == null) {
           contact_ = null;
         } else {
@@ -873,11 +796,6 @@ public final class ProtoGroupSendMessage {
         } else {
           result.location_ = locationBuilder_.build();
         }
-        if (logBuilder_ == null) {
-          result.log_ = log_;
-        } else {
-          result.log_ = logBuilder_.build();
-        }
         if (contactBuilder_ == null) {
           result.contact_ = contact_;
         } else {
@@ -896,32 +814,27 @@ public final class ProtoGroupSendMessage {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+              int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+              Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -955,9 +868,6 @@ public final class ProtoGroupSendMessage {
         }
         if (other.hasLocation()) {
           mergeLocation(other.getLocation());
-        }
-        if (other.hasLog()) {
-          mergeLog(other.getLog());
         }
         if (other.hasContact()) {
           mergeContact(other.getContact());
@@ -1436,134 +1346,17 @@ public final class ProtoGroupSendMessage {
         return locationBuilder_;
       }
 
-      private com.iGap.proto.ProtoGlobal.RoomMessageLog log_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoGlobal.RoomMessageLog, com.iGap.proto.ProtoGlobal.RoomMessageLog.Builder, com.iGap.proto.ProtoGlobal.RoomMessageLogOrBuilder> logBuilder_;
-      /**
-       * <code>optional .proto.RoomMessageLog log = 7;</code>
-       */
-      public boolean hasLog() {
-        return logBuilder_ != null || log_ != null;
-      }
-      /**
-       * <code>optional .proto.RoomMessageLog log = 7;</code>
-       */
-      public com.iGap.proto.ProtoGlobal.RoomMessageLog getLog() {
-        if (logBuilder_ == null) {
-          return log_ == null ? com.iGap.proto.ProtoGlobal.RoomMessageLog.getDefaultInstance() : log_;
-        } else {
-          return logBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .proto.RoomMessageLog log = 7;</code>
-       */
-      public Builder setLog(com.iGap.proto.ProtoGlobal.RoomMessageLog value) {
-        if (logBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          log_ = value;
-          onChanged();
-        } else {
-          logBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>optional .proto.RoomMessageLog log = 7;</code>
-       */
-      public Builder setLog(
-              com.iGap.proto.ProtoGlobal.RoomMessageLog.Builder builderForValue) {
-        if (logBuilder_ == null) {
-          log_ = builderForValue.build();
-          onChanged();
-        } else {
-          logBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>optional .proto.RoomMessageLog log = 7;</code>
-       */
-      public Builder mergeLog(com.iGap.proto.ProtoGlobal.RoomMessageLog value) {
-        if (logBuilder_ == null) {
-          if (log_ != null) {
-            log_ =
-                    com.iGap.proto.ProtoGlobal.RoomMessageLog.newBuilder(log_).mergeFrom(value).buildPartial();
-          } else {
-            log_ = value;
-          }
-          onChanged();
-        } else {
-          logBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>optional .proto.RoomMessageLog log = 7;</code>
-       */
-      public Builder clearLog() {
-        if (logBuilder_ == null) {
-          log_ = null;
-          onChanged();
-        } else {
-          log_ = null;
-          logBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>optional .proto.RoomMessageLog log = 7;</code>
-       */
-      public com.iGap.proto.ProtoGlobal.RoomMessageLog.Builder getLogBuilder() {
-
-        onChanged();
-        return getLogFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .proto.RoomMessageLog log = 7;</code>
-       */
-      public com.iGap.proto.ProtoGlobal.RoomMessageLogOrBuilder getLogOrBuilder() {
-        if (logBuilder_ != null) {
-          return logBuilder_.getMessageOrBuilder();
-        } else {
-          return log_ == null ?
-                  com.iGap.proto.ProtoGlobal.RoomMessageLog.getDefaultInstance() : log_;
-        }
-      }
-      /**
-       * <code>optional .proto.RoomMessageLog log = 7;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoGlobal.RoomMessageLog, com.iGap.proto.ProtoGlobal.RoomMessageLog.Builder, com.iGap.proto.ProtoGlobal.RoomMessageLogOrBuilder>
-      getLogFieldBuilder() {
-        if (logBuilder_ == null) {
-          logBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  com.iGap.proto.ProtoGlobal.RoomMessageLog, com.iGap.proto.ProtoGlobal.RoomMessageLog.Builder, com.iGap.proto.ProtoGlobal.RoomMessageLogOrBuilder>(
-                  getLog(),
-                  getParentForChildren(),
-                  isClean());
-          log_ = null;
-        }
-        return logBuilder_;
-      }
-
       private com.iGap.proto.ProtoGlobal.RoomMessageContact contact_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoGlobal.RoomMessageContact, com.iGap.proto.ProtoGlobal.RoomMessageContact.Builder, com.iGap.proto.ProtoGlobal.RoomMessageContactOrBuilder> contactBuilder_;
       /**
-       * <code>optional .proto.RoomMessageContact contact = 8;</code>
+       * <code>optional .proto.RoomMessageContact contact = 7;</code>
        */
       public boolean hasContact() {
         return contactBuilder_ != null || contact_ != null;
       }
       /**
-       * <code>optional .proto.RoomMessageContact contact = 8;</code>
+       * <code>optional .proto.RoomMessageContact contact = 7;</code>
        */
       public com.iGap.proto.ProtoGlobal.RoomMessageContact getContact() {
         if (contactBuilder_ == null) {
@@ -1573,7 +1366,7 @@ public final class ProtoGroupSendMessage {
         }
       }
       /**
-       * <code>optional .proto.RoomMessageContact contact = 8;</code>
+       * <code>optional .proto.RoomMessageContact contact = 7;</code>
        */
       public Builder setContact(com.iGap.proto.ProtoGlobal.RoomMessageContact value) {
         if (contactBuilder_ == null) {
@@ -1589,7 +1382,7 @@ public final class ProtoGroupSendMessage {
         return this;
       }
       /**
-       * <code>optional .proto.RoomMessageContact contact = 8;</code>
+       * <code>optional .proto.RoomMessageContact contact = 7;</code>
        */
       public Builder setContact(
           com.iGap.proto.ProtoGlobal.RoomMessageContact.Builder builderForValue) {
@@ -1603,7 +1396,7 @@ public final class ProtoGroupSendMessage {
         return this;
       }
       /**
-       * <code>optional .proto.RoomMessageContact contact = 8;</code>
+       * <code>optional .proto.RoomMessageContact contact = 7;</code>
        */
       public Builder mergeContact(com.iGap.proto.ProtoGlobal.RoomMessageContact value) {
         if (contactBuilder_ == null) {
@@ -1621,7 +1414,7 @@ public final class ProtoGroupSendMessage {
         return this;
       }
       /**
-       * <code>optional .proto.RoomMessageContact contact = 8;</code>
+       * <code>optional .proto.RoomMessageContact contact = 7;</code>
        */
       public Builder clearContact() {
         if (contactBuilder_ == null) {
@@ -1635,7 +1428,7 @@ public final class ProtoGroupSendMessage {
         return this;
       }
       /**
-       * <code>optional .proto.RoomMessageContact contact = 8;</code>
+       * <code>optional .proto.RoomMessageContact contact = 7;</code>
        */
       public com.iGap.proto.ProtoGlobal.RoomMessageContact.Builder getContactBuilder() {
 
@@ -1643,7 +1436,7 @@ public final class ProtoGroupSendMessage {
         return getContactFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .proto.RoomMessageContact contact = 8;</code>
+       * <code>optional .proto.RoomMessageContact contact = 7;</code>
        */
       public com.iGap.proto.ProtoGlobal.RoomMessageContactOrBuilder getContactOrBuilder() {
         if (contactBuilder_ != null) {
@@ -1654,7 +1447,7 @@ public final class ProtoGroupSendMessage {
         }
       }
       /**
-       * <code>optional .proto.RoomMessageContact contact = 8;</code>
+       * <code>optional .proto.RoomMessageContact contact = 7;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoGlobal.RoomMessageContact, com.iGap.proto.ProtoGlobal.RoomMessageContact.Builder, com.iGap.proto.ProtoGlobal.RoomMessageContactOrBuilder>
@@ -1672,13 +1465,13 @@ public final class ProtoGroupSendMessage {
 
       private long replyTo_;
       /**
-       * <code>optional uint64 reply_to = 9;</code>
+       * <code>optional uint64 reply_to = 8;</code>
        */
       public long getReplyTo() {
         return replyTo_;
       }
       /**
-       * <code>optional uint64 reply_to = 9;</code>
+       * <code>optional uint64 reply_to = 8;</code>
        */
       public Builder setReplyTo(long value) {
 
@@ -1687,7 +1480,7 @@ public final class ProtoGroupSendMessage {
         return this;
       }
       /**
-       * <code>optional uint64 reply_to = 9;</code>
+       * <code>optional uint64 reply_to = 8;</code>
        */
       public Builder clearReplyTo() {
 
@@ -1700,13 +1493,13 @@ public final class ProtoGroupSendMessage {
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom, com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom.Builder, com.iGap.proto.ProtoGlobal.RoomMessageForwardFromOrBuilder> forwardFromBuilder_;
       /**
-       * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+       * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
        */
       public boolean hasForwardFrom() {
         return forwardFromBuilder_ != null || forwardFrom_ != null;
       }
       /**
-       * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+       * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
        */
       public com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom getForwardFrom() {
         if (forwardFromBuilder_ == null) {
@@ -1716,7 +1509,7 @@ public final class ProtoGroupSendMessage {
         }
       }
       /**
-       * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+       * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
        */
       public Builder setForwardFrom(com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom value) {
         if (forwardFromBuilder_ == null) {
@@ -1732,7 +1525,7 @@ public final class ProtoGroupSendMessage {
         return this;
       }
       /**
-       * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+       * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
        */
       public Builder setForwardFrom(
           com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom.Builder builderForValue) {
@@ -1746,7 +1539,7 @@ public final class ProtoGroupSendMessage {
         return this;
       }
       /**
-       * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+       * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
        */
       public Builder mergeForwardFrom(com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom value) {
         if (forwardFromBuilder_ == null) {
@@ -1764,7 +1557,7 @@ public final class ProtoGroupSendMessage {
         return this;
       }
       /**
-       * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+       * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
        */
       public Builder clearForwardFrom() {
         if (forwardFromBuilder_ == null) {
@@ -1778,7 +1571,7 @@ public final class ProtoGroupSendMessage {
         return this;
       }
       /**
-       * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+       * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
        */
       public com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom.Builder getForwardFromBuilder() {
 
@@ -1786,7 +1579,7 @@ public final class ProtoGroupSendMessage {
         return getForwardFromFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+       * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
        */
       public com.iGap.proto.ProtoGlobal.RoomMessageForwardFromOrBuilder getForwardFromOrBuilder() {
         if (forwardFromBuilder_ != null) {
@@ -1797,7 +1590,7 @@ public final class ProtoGroupSendMessage {
         }
       }
       /**
-       * <code>optional .proto.RoomMessageForwardFrom forward_from = 10;</code>
+       * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom, com.iGap.proto.ProtoGlobal.RoomMessageForwardFrom.Builder, com.iGap.proto.ProtoGlobal.RoomMessageForwardFromOrBuilder>
@@ -1916,10 +1709,9 @@ public final class ProtoGroupSendMessage {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private GroupSendMessageResponse(
             com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
@@ -1979,7 +1771,6 @@ public final class ProtoGroupSendMessage {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessageResponse_descriptor;
@@ -2088,7 +1879,6 @@ public final class ProtoGroupSendMessage {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -2149,7 +1939,6 @@ public final class ProtoGroupSendMessage {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
@@ -2160,7 +1949,6 @@ public final class ProtoGroupSendMessage {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
@@ -2173,7 +1961,6 @@ public final class ProtoGroupSendMessage {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
@@ -2206,7 +1993,6 @@ public final class ProtoGroupSendMessage {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -2311,32 +2097,27 @@ public final class ProtoGroupSendMessage {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+              int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+              Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -2715,20 +2496,20 @@ public final class ProtoGroupSendMessage {
   static {
     java.lang.String[] descriptorData = {
             "\n\026GroupSendMessage.proto\022\005proto\032\rRequest" +
-                    ".proto\032\016Response.proto\032\014Global.proto\"\334\002\n" +
+                    ".proto\032\016Response.proto\032\014Global.proto\"\270\002\n" +
                     "\020GroupSendMessage\022\037\n\007request\030\001 \001(\0132\016.pro" +
                     "to.Request\022,\n\014message_type\030\002 \001(\0162\026.proto" +
                     ".RoomMessageType\022\017\n\007room_id\030\003 \001(\004\022\017\n\007mes" +
                     "sage\030\004 \001(\t\022\022\n\nattachment\030\005 \001(\t\022,\n\010locati" +
-                    "on\030\006 \001(\0132\032.proto.RoomMessageLocation\022\"\n\003" +
-                    "log\030\007 \001(\0132\025.proto.RoomMessageLog\022*\n\007cont" +
-                    "act\030\010 \001(\0132\031.proto.RoomMessageContact\022\020\n\010" +
-                    "reply_to\030\t \001(\004\0223\n\014forward_from\030\n \001(\0132\035.p",
-            "roto.RoomMessageForwardFrom\"x\n\030GroupSend" +
-                    "MessageResponse\022!\n\010response\030\001 \001(\0132\017.prot" +
-                    "o.Response\022\017\n\007room_id\030\002 \001(\004\022(\n\014room_mess" +
-                    "age\030\003 \001(\0132\022.proto.RoomMessageB\'\n\016com.iGa" +
-                    "p.protoB\025ProtoGroupSendMessageb\006proto3"
+                    "on\030\006 \001(\0132\032.proto.RoomMessageLocation\022*\n\007" +
+                    "contact\030\007 \001(\0132\031.proto.RoomMessageContact" +
+                    "\022\020\n\010reply_to\030\010 \001(\004\0223\n\014forward_from\030\t \001(\013" +
+                    "2\035.proto.RoomMessageForwardFrom\"x\n\030Group",
+            "SendMessageResponse\022!\n\010response\030\001 \001(\0132\017." +
+                    "proto.Response\022\017\n\007room_id\030\002 \001(\004\022(\n\014room_" +
+                    "message\030\003 \001(\0132\022.proto.RoomMessageB\'\n\016com" +
+                    ".iGap.protoB\025ProtoGroupSendMessageb\006prot" +
+                    "o3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
             new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2750,7 +2531,7 @@ public final class ProtoGroupSendMessage {
     internal_static_proto_GroupSendMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_GroupSendMessage_descriptor,
-        new java.lang.String[] { "Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Log", "Contact", "ReplyTo", "ForwardFrom", });
+            new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
     internal_static_proto_GroupSendMessageResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_GroupSendMessageResponse_fieldAccessorTable = new

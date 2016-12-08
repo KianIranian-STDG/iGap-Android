@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoUserInfo {
   private ProtoUserInfo() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoUserInfo {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface UserInfoOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.UserInfo)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoUserInfo {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -41,7 +37,6 @@ public final class ProtoUserInfo {
      */
     long getUserId();
   }
-
   /**
    * Protobuf type {@code proto.UserInfo}
    */
@@ -53,7 +48,6 @@ public final class ProtoUserInfo {
     private UserInfo(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserInfo() {
       userId_ = 0L;
     }
@@ -63,7 +57,6 @@ public final class ProtoUserInfo {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserInfo(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -113,7 +106,6 @@ public final class ProtoUserInfo {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserInfo.internal_static_proto_UserInfo_descriptor;
@@ -128,21 +120,18 @@ public final class ProtoUserInfo {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -152,7 +141,6 @@ public final class ProtoUserInfo {
 
     public static final int USER_ID_FIELD_NUMBER = 3;
     private long userId_;
-
     /**
      * <code>optional uint64 user_id = 3;</code>
      */
@@ -161,7 +149,6 @@ public final class ProtoUserInfo {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -199,7 +186,6 @@ public final class ProtoUserInfo {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -245,32 +231,27 @@ public final class ProtoUserInfo {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfo parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfo parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfo parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfo parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfo parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -278,13 +259,11 @@ public final class ProtoUserInfo {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfo parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfo parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -292,14 +271,12 @@ public final class ProtoUserInfo {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfo parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfo parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -311,15 +288,12 @@ public final class ProtoUserInfo {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserInfo.UserInfo prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -331,7 +305,6 @@ public final class ProtoUserInfo {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserInfo}
      */
@@ -361,13 +334,11 @@ public final class ProtoUserInfo {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -413,35 +384,29 @@ public final class ProtoUserInfo {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserInfo.UserInfo) {
           return mergeFrom((com.iGap.proto.ProtoUserInfo.UserInfo) other);
@@ -488,14 +453,12 @@ public final class ProtoUserInfo {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -506,7 +469,6 @@ public final class ProtoUserInfo {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -523,7 +485,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -538,7 +499,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -557,7 +517,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -572,7 +531,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -581,7 +539,6 @@ public final class ProtoUserInfo {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -593,7 +550,6 @@ public final class ProtoUserInfo {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -612,14 +568,12 @@ public final class ProtoUserInfo {
       }
 
       private long userId_;
-
       /**
        * <code>optional uint64 user_id = 3;</code>
        */
       public long getUserId() {
         return userId_;
       }
-
       /**
        * <code>optional uint64 user_id = 3;</code>
        */
@@ -629,7 +583,6 @@ public final class ProtoUserInfo {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 user_id = 3;</code>
        */
@@ -639,7 +592,6 @@ public final class ProtoUserInfo {
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -656,7 +608,6 @@ public final class ProtoUserInfo {
 
     // @@protoc_insertion_point(class_scope:proto.UserInfo)
     private static final com.iGap.proto.ProtoUserInfo.UserInfo DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserInfo.UserInfo();
     }
@@ -698,12 +649,10 @@ public final class ProtoUserInfo {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -713,18 +662,15 @@ public final class ProtoUserInfo {
      * <code>optional .proto.RegisteredUser user = 2;</code>
      */
     boolean hasUser();
-
     /**
      * <code>optional .proto.RegisteredUser user = 2;</code>
      */
     com.iGap.proto.ProtoGlobal.RegisteredUser getUser();
-
     /**
      * <code>optional .proto.RegisteredUser user = 2;</code>
      */
     com.iGap.proto.ProtoGlobal.RegisteredUserOrBuilder getUserOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.UserInfoResponse}
    */
@@ -736,7 +682,6 @@ public final class ProtoUserInfo {
     private UserInfoResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserInfoResponse() {
     }
 
@@ -745,7 +690,6 @@ public final class ProtoUserInfo {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private UserInfoResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -803,7 +747,6 @@ public final class ProtoUserInfo {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoUserInfo.internal_static_proto_UserInfoResponse_descriptor;
@@ -818,21 +761,18 @@ public final class ProtoUserInfo {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -842,21 +782,18 @@ public final class ProtoUserInfo {
 
     public static final int USER_FIELD_NUMBER = 2;
     private com.iGap.proto.ProtoGlobal.RegisteredUser user_;
-
     /**
      * <code>optional .proto.RegisteredUser user = 2;</code>
      */
     public boolean hasUser() {
       return user_ != null;
     }
-
     /**
      * <code>optional .proto.RegisteredUser user = 2;</code>
      */
     public com.iGap.proto.ProtoGlobal.RegisteredUser getUser() {
       return user_ == null ? com.iGap.proto.ProtoGlobal.RegisteredUser.getDefaultInstance() : user_;
     }
-
     /**
      * <code>optional .proto.RegisteredUser user = 2;</code>
      */
@@ -865,7 +802,6 @@ public final class ProtoUserInfo {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -903,7 +839,6 @@ public final class ProtoUserInfo {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -953,32 +888,27 @@ public final class ProtoUserInfo {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfoResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfoResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfoResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfoResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfoResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -986,13 +916,11 @@ public final class ProtoUserInfo {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfoResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfoResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1000,14 +928,12 @@ public final class ProtoUserInfo {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfoResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoUserInfo.UserInfoResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1019,15 +945,12 @@ public final class ProtoUserInfo {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserInfo.UserInfoResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -1039,7 +962,6 @@ public final class ProtoUserInfo {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserInfoResponse}
      */
@@ -1069,13 +991,11 @@ public final class ProtoUserInfo {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1129,35 +1049,29 @@ public final class ProtoUserInfo {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserInfo.UserInfoResponse) {
           return mergeFrom((com.iGap.proto.ProtoUserInfo.UserInfoResponse) other);
@@ -1205,14 +1119,12 @@ public final class ProtoUserInfo {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1223,7 +1135,6 @@ public final class ProtoUserInfo {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1240,7 +1151,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1255,7 +1165,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1274,7 +1183,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1289,7 +1197,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1298,7 +1205,6 @@ public final class ProtoUserInfo {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1310,7 +1216,6 @@ public final class ProtoUserInfo {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1331,14 +1236,12 @@ public final class ProtoUserInfo {
       private com.iGap.proto.ProtoGlobal.RegisteredUser user_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoGlobal.RegisteredUser, com.iGap.proto.ProtoGlobal.RegisteredUser.Builder, com.iGap.proto.ProtoGlobal.RegisteredUserOrBuilder> userBuilder_;
-
       /**
        * <code>optional .proto.RegisteredUser user = 2;</code>
        */
       public boolean hasUser() {
         return userBuilder_ != null || user_ != null;
       }
-
       /**
        * <code>optional .proto.RegisteredUser user = 2;</code>
        */
@@ -1349,7 +1252,6 @@ public final class ProtoUserInfo {
           return userBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.RegisteredUser user = 2;</code>
        */
@@ -1366,7 +1268,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RegisteredUser user = 2;</code>
        */
@@ -1381,7 +1282,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RegisteredUser user = 2;</code>
        */
@@ -1400,7 +1300,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RegisteredUser user = 2;</code>
        */
@@ -1415,7 +1314,6 @@ public final class ProtoUserInfo {
 
         return this;
       }
-
       /**
        * <code>optional .proto.RegisteredUser user = 2;</code>
        */
@@ -1424,7 +1322,6 @@ public final class ProtoUserInfo {
         onChanged();
         return getUserFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.RegisteredUser user = 2;</code>
        */
@@ -1436,7 +1333,6 @@ public final class ProtoUserInfo {
                   com.iGap.proto.ProtoGlobal.RegisteredUser.getDefaultInstance() : user_;
         }
       }
-
       /**
        * <code>optional .proto.RegisteredUser user = 2;</code>
        */
@@ -1453,7 +1349,6 @@ public final class ProtoUserInfo {
         }
         return userBuilder_;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1470,7 +1365,6 @@ public final class ProtoUserInfo {
 
     // @@protoc_insertion_point(class_scope:proto.UserInfoResponse)
     private static final com.iGap.proto.ProtoUserInfo.UserInfoResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserInfo.UserInfoResponse();
     }
@@ -1522,7 +1416,6 @@ public final class ProtoUserInfo {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\016UserInfo.proto\022\005proto\032\rRequest.proto\032\016" +

@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoGroupCreate {
   private ProtoGroupCreate() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoGroupCreate {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface GroupCreateOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.GroupCreate)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoGroupCreate {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -40,7 +36,6 @@ public final class ProtoGroupCreate {
      * <code>optional string name = 2;</code>
      */
     java.lang.String getName();
-
     /**
      * <code>optional string name = 2;</code>
      */
@@ -51,14 +46,12 @@ public final class ProtoGroupCreate {
      * <code>optional string description = 3;</code>
      */
     java.lang.String getDescription();
-
     /**
      * <code>optional string description = 3;</code>
      */
     com.google.protobuf.ByteString
     getDescriptionBytes();
   }
-
   /**
    * Protobuf type {@code proto.GroupCreate}
    */
@@ -70,7 +63,6 @@ public final class ProtoGroupCreate {
     private GroupCreate(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private GroupCreate() {
       name_ = "";
       description_ = "";
@@ -81,7 +73,6 @@ public final class ProtoGroupCreate {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private GroupCreate(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -138,7 +129,6 @@ public final class ProtoGroupCreate {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoGroupCreate.internal_static_proto_GroupCreate_descriptor;
@@ -153,21 +143,18 @@ public final class ProtoGroupCreate {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -177,7 +164,6 @@ public final class ProtoGroupCreate {
 
     public static final int NAME_FIELD_NUMBER = 2;
     private volatile java.lang.Object name_;
-
     /**
      * <code>optional string name = 2;</code>
      */
@@ -193,7 +179,6 @@ public final class ProtoGroupCreate {
         return s;
       }
     }
-
     /**
      * <code>optional string name = 2;</code>
      */
@@ -213,7 +198,6 @@ public final class ProtoGroupCreate {
 
     public static final int DESCRIPTION_FIELD_NUMBER = 3;
     private volatile java.lang.Object description_;
-
     /**
      * <code>optional string description = 3;</code>
      */
@@ -229,7 +213,6 @@ public final class ProtoGroupCreate {
         return s;
       }
     }
-
     /**
      * <code>optional string description = 3;</code>
      */
@@ -248,7 +231,6 @@ public final class ProtoGroupCreate {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -291,7 +273,6 @@ public final class ProtoGroupCreate {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -340,32 +321,27 @@ public final class ProtoGroupCreate {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreate parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreate parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreate parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreate parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreate parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -373,13 +349,11 @@ public final class ProtoGroupCreate {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreate parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreate parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -387,14 +361,12 @@ public final class ProtoGroupCreate {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreate parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreate parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -406,15 +378,12 @@ public final class ProtoGroupCreate {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoGroupCreate.GroupCreate prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -426,7 +395,6 @@ public final class ProtoGroupCreate {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.GroupCreate}
      */
@@ -456,13 +424,11 @@ public final class ProtoGroupCreate {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -511,35 +477,29 @@ public final class ProtoGroupCreate {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoGroupCreate.GroupCreate) {
           return mergeFrom((com.iGap.proto.ProtoGroupCreate.GroupCreate) other);
@@ -591,14 +551,12 @@ public final class ProtoGroupCreate {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -609,7 +567,6 @@ public final class ProtoGroupCreate {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -626,7 +583,6 @@ public final class ProtoGroupCreate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -641,7 +597,6 @@ public final class ProtoGroupCreate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -660,7 +615,6 @@ public final class ProtoGroupCreate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -675,7 +629,6 @@ public final class ProtoGroupCreate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -684,7 +637,6 @@ public final class ProtoGroupCreate {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -696,7 +648,6 @@ public final class ProtoGroupCreate {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -715,7 +666,6 @@ public final class ProtoGroupCreate {
       }
 
       private java.lang.Object name_ = "";
-
       /**
        * <code>optional string name = 2;</code>
        */
@@ -731,7 +681,6 @@ public final class ProtoGroupCreate {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string name = 2;</code>
        */
@@ -748,7 +697,6 @@ public final class ProtoGroupCreate {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string name = 2;</code>
        */
@@ -757,12 +705,11 @@ public final class ProtoGroupCreate {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         name_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string name = 2;</code>
        */
@@ -772,7 +719,6 @@ public final class ProtoGroupCreate {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string name = 2;</code>
        */
@@ -782,14 +728,13 @@ public final class ProtoGroupCreate {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         name_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object description_ = "";
-
       /**
        * <code>optional string description = 3;</code>
        */
@@ -805,7 +750,6 @@ public final class ProtoGroupCreate {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string description = 3;</code>
        */
@@ -822,7 +766,6 @@ public final class ProtoGroupCreate {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string description = 3;</code>
        */
@@ -831,12 +774,11 @@ public final class ProtoGroupCreate {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         description_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string description = 3;</code>
        */
@@ -846,7 +788,6 @@ public final class ProtoGroupCreate {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string description = 3;</code>
        */
@@ -856,12 +797,11 @@ public final class ProtoGroupCreate {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         description_ = value;
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -878,7 +818,6 @@ public final class ProtoGroupCreate {
 
     // @@protoc_insertion_point(class_scope:proto.GroupCreate)
     private static final com.iGap.proto.ProtoGroupCreate.GroupCreate DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoGroupCreate.GroupCreate();
     }
@@ -920,12 +859,10 @@ public final class ProtoGroupCreate {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -940,14 +877,12 @@ public final class ProtoGroupCreate {
      * <code>optional string invite_link = 3;</code>
      */
     java.lang.String getInviteLink();
-
     /**
      * <code>optional string invite_link = 3;</code>
      */
     com.google.protobuf.ByteString
     getInviteLinkBytes();
   }
-
   /**
    * Protobuf type {@code proto.GroupCreateResponse}
    */
@@ -959,7 +894,6 @@ public final class ProtoGroupCreate {
     private GroupCreateResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private GroupCreateResponse() {
       roomId_ = 0L;
       inviteLink_ = "";
@@ -970,7 +904,6 @@ public final class ProtoGroupCreate {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private GroupCreateResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1026,7 +959,6 @@ public final class ProtoGroupCreate {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoGroupCreate.internal_static_proto_GroupCreateResponse_descriptor;
@@ -1041,21 +973,18 @@ public final class ProtoGroupCreate {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1065,7 +994,6 @@ public final class ProtoGroupCreate {
 
     public static final int ROOM_ID_FIELD_NUMBER = 2;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 2;</code>
      */
@@ -1075,7 +1003,6 @@ public final class ProtoGroupCreate {
 
     public static final int INVITE_LINK_FIELD_NUMBER = 3;
     private volatile java.lang.Object inviteLink_;
-
     /**
      * <code>optional string invite_link = 3;</code>
      */
@@ -1091,7 +1018,6 @@ public final class ProtoGroupCreate {
         return s;
       }
     }
-
     /**
      * <code>optional string invite_link = 3;</code>
      */
@@ -1110,7 +1036,6 @@ public final class ProtoGroupCreate {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1154,7 +1079,6 @@ public final class ProtoGroupCreate {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1204,32 +1128,27 @@ public final class ProtoGroupCreate {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreateResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreateResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreateResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreateResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreateResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1237,13 +1156,11 @@ public final class ProtoGroupCreate {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreateResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreateResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1251,14 +1168,12 @@ public final class ProtoGroupCreate {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreateResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupCreate.GroupCreateResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1270,15 +1185,12 @@ public final class ProtoGroupCreate {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoGroupCreate.GroupCreateResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -1290,7 +1202,6 @@ public final class ProtoGroupCreate {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.GroupCreateResponse}
      */
@@ -1320,13 +1231,11 @@ public final class ProtoGroupCreate {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1375,35 +1284,29 @@ public final class ProtoGroupCreate {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoGroupCreate.GroupCreateResponse) {
           return mergeFrom((com.iGap.proto.ProtoGroupCreate.GroupCreateResponse) other);
@@ -1455,14 +1358,12 @@ public final class ProtoGroupCreate {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1473,7 +1374,6 @@ public final class ProtoGroupCreate {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1490,7 +1390,6 @@ public final class ProtoGroupCreate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1505,7 +1404,6 @@ public final class ProtoGroupCreate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1524,7 +1422,6 @@ public final class ProtoGroupCreate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1539,7 +1436,6 @@ public final class ProtoGroupCreate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1548,7 +1444,6 @@ public final class ProtoGroupCreate {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1560,7 +1455,6 @@ public final class ProtoGroupCreate {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1579,14 +1473,12 @@ public final class ProtoGroupCreate {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1596,7 +1488,6 @@ public final class ProtoGroupCreate {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1608,7 +1499,6 @@ public final class ProtoGroupCreate {
       }
 
       private java.lang.Object inviteLink_ = "";
-
       /**
        * <code>optional string invite_link = 3;</code>
        */
@@ -1624,7 +1514,6 @@ public final class ProtoGroupCreate {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string invite_link = 3;</code>
        */
@@ -1641,7 +1530,6 @@ public final class ProtoGroupCreate {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string invite_link = 3;</code>
        */
@@ -1650,12 +1538,11 @@ public final class ProtoGroupCreate {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         inviteLink_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string invite_link = 3;</code>
        */
@@ -1665,7 +1552,6 @@ public final class ProtoGroupCreate {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string invite_link = 3;</code>
        */
@@ -1675,12 +1561,11 @@ public final class ProtoGroupCreate {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         inviteLink_ = value;
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1697,7 +1582,6 @@ public final class ProtoGroupCreate {
 
     // @@protoc_insertion_point(class_scope:proto.GroupCreateResponse)
     private static final com.iGap.proto.ProtoGroupCreate.GroupCreateResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoGroupCreate.GroupCreateResponse();
     }
@@ -1749,7 +1633,6 @@ public final class ProtoGroupCreate {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\021GroupCreate.proto\022\005proto\032\rRequest.prot" +

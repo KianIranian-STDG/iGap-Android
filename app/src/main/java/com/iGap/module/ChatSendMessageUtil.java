@@ -72,9 +72,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             builder.location(message.getLocation().getLocationLat(),
                     message.getLocation().getLocationLong());
         }
-        if (message.getLog() != null) {
-            builder.log(message.getLog().getType());
-        }
+
         if (message.getForwardMessage() != null) {
             builder.forwardMessage(message.getForwardMessage().getRoomId(),
                     message.getForwardMessage().getMessageId());
@@ -141,26 +139,6 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChatSendMessage.location(location.build());
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.location(location.build());
-        }
-        return this;
-    }
-
-    public ChatSendMessageUtil log(ProtoGlobal.RoomMessageLog value) {
-        if (roomType == ProtoGlobal.Room.Type.CHAT) {
-            requestChatSendMessage.log(value);
-        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
-            requestGroupSendMessage.log(value);
-        }
-        return this;
-    }
-
-    public ChatSendMessageUtil log(ProtoGlobal.RoomMessageLog.Type type) {
-        ProtoGlobal.RoomMessageLog.Builder log = ProtoGlobal.RoomMessageLog.newBuilder();
-        log.setType(type);
-        if (roomType == ProtoGlobal.Room.Type.CHAT) {
-            requestChatSendMessage.log(log.build());
-        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
-            requestGroupSendMessage.log(log.build());
         }
         return this;
     }

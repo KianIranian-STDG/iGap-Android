@@ -29,11 +29,6 @@ public class RequestChatSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02 
         return this;
     }
 
-    public RequestChatSendMessage log(ProtoGlobal.RoomMessageLog value) {
-        chatSendMessage.setLog(value);
-        return this;
-    }
-
     public RequestChatSendMessage contact(ProtoGlobal.RoomMessageContact value) {
         chatSendMessage.setContact(value);
         return this;

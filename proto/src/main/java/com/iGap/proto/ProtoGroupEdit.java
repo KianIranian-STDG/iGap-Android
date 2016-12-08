@@ -6,7 +6,6 @@ package com.iGap.proto;
 public final class ProtoGroupEdit {
   private ProtoGroupEdit() {
   }
-
   public static void registerAllExtensions(
           com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -16,7 +15,6 @@ public final class ProtoGroupEdit {
     registerAllExtensions(
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface GroupEditOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.GroupEdit)
           com.google.protobuf.MessageOrBuilder {
@@ -25,12 +23,10 @@ public final class ProtoGroupEdit {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -45,7 +41,6 @@ public final class ProtoGroupEdit {
      * <code>optional string name = 3;</code>
      */
     java.lang.String getName();
-
     /**
      * <code>optional string name = 3;</code>
      */
@@ -56,14 +51,12 @@ public final class ProtoGroupEdit {
      * <code>optional string description = 4;</code>
      */
     java.lang.String getDescription();
-
     /**
      * <code>optional string description = 4;</code>
      */
     com.google.protobuf.ByteString
     getDescriptionBytes();
   }
-
   /**
    * Protobuf type {@code proto.GroupEdit}
    */
@@ -75,7 +68,6 @@ public final class ProtoGroupEdit {
     private GroupEdit(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private GroupEdit() {
       roomId_ = 0L;
       name_ = "";
@@ -87,7 +79,6 @@ public final class ProtoGroupEdit {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private GroupEdit(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -149,7 +140,6 @@ public final class ProtoGroupEdit {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoGroupEdit.internal_static_proto_GroupEdit_descriptor;
@@ -164,21 +154,18 @@ public final class ProtoGroupEdit {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -188,7 +175,6 @@ public final class ProtoGroupEdit {
 
     public static final int ROOM_ID_FIELD_NUMBER = 2;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 2;</code>
      */
@@ -198,7 +184,6 @@ public final class ProtoGroupEdit {
 
     public static final int NAME_FIELD_NUMBER = 3;
     private volatile java.lang.Object name_;
-
     /**
      * <code>optional string name = 3;</code>
      */
@@ -214,7 +199,6 @@ public final class ProtoGroupEdit {
         return s;
       }
     }
-
     /**
      * <code>optional string name = 3;</code>
      */
@@ -234,7 +218,6 @@ public final class ProtoGroupEdit {
 
     public static final int DESCRIPTION_FIELD_NUMBER = 4;
     private volatile java.lang.Object description_;
-
     /**
      * <code>optional string description = 4;</code>
      */
@@ -250,7 +233,6 @@ public final class ProtoGroupEdit {
         return s;
       }
     }
-
     /**
      * <code>optional string description = 4;</code>
      */
@@ -269,7 +251,6 @@ public final class ProtoGroupEdit {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -319,7 +300,6 @@ public final class ProtoGroupEdit {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -373,32 +353,27 @@ public final class ProtoGroupEdit {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEdit parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEdit parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEdit parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEdit parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEdit parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -406,13 +381,11 @@ public final class ProtoGroupEdit {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEdit parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEdit parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -420,14 +393,12 @@ public final class ProtoGroupEdit {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEdit parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEdit parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -439,15 +410,12 @@ public final class ProtoGroupEdit {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoGroupEdit.GroupEdit prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -459,7 +427,6 @@ public final class ProtoGroupEdit {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.GroupEdit}
      */
@@ -489,13 +456,11 @@ public final class ProtoGroupEdit {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -547,35 +512,29 @@ public final class ProtoGroupEdit {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoGroupEdit.GroupEdit) {
           return mergeFrom((com.iGap.proto.ProtoGroupEdit.GroupEdit) other);
@@ -630,14 +589,12 @@ public final class ProtoGroupEdit {
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -648,7 +605,6 @@ public final class ProtoGroupEdit {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -665,7 +621,6 @@ public final class ProtoGroupEdit {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -680,7 +635,6 @@ public final class ProtoGroupEdit {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -699,7 +653,6 @@ public final class ProtoGroupEdit {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -714,7 +667,6 @@ public final class ProtoGroupEdit {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -723,7 +675,6 @@ public final class ProtoGroupEdit {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -735,7 +686,6 @@ public final class ProtoGroupEdit {
                   com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -754,14 +704,12 @@ public final class ProtoGroupEdit {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -771,7 +719,6 @@ public final class ProtoGroupEdit {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -783,7 +730,6 @@ public final class ProtoGroupEdit {
       }
 
       private java.lang.Object name_ = "";
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -799,7 +745,6 @@ public final class ProtoGroupEdit {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -816,7 +761,6 @@ public final class ProtoGroupEdit {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -825,12 +769,11 @@ public final class ProtoGroupEdit {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         name_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -840,7 +783,6 @@ public final class ProtoGroupEdit {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -850,14 +792,13 @@ public final class ProtoGroupEdit {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         name_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object description_ = "";
-
       /**
        * <code>optional string description = 4;</code>
        */
@@ -873,7 +814,6 @@ public final class ProtoGroupEdit {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string description = 4;</code>
        */
@@ -890,7 +830,6 @@ public final class ProtoGroupEdit {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string description = 4;</code>
        */
@@ -899,12 +838,11 @@ public final class ProtoGroupEdit {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         description_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string description = 4;</code>
        */
@@ -914,7 +852,6 @@ public final class ProtoGroupEdit {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string description = 4;</code>
        */
@@ -924,12 +861,11 @@ public final class ProtoGroupEdit {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         description_ = value;
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -946,7 +882,6 @@ public final class ProtoGroupEdit {
 
     // @@protoc_insertion_point(class_scope:proto.GroupEdit)
     private static final com.iGap.proto.ProtoGroupEdit.GroupEdit DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoGroupEdit.GroupEdit();
     }
@@ -988,12 +923,10 @@ public final class ProtoGroupEdit {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1008,7 +941,6 @@ public final class ProtoGroupEdit {
      * <code>optional string name = 3;</code>
      */
     java.lang.String getName();
-
     /**
      * <code>optional string name = 3;</code>
      */
@@ -1019,14 +951,12 @@ public final class ProtoGroupEdit {
      * <code>optional string description = 4;</code>
      */
     java.lang.String getDescription();
-
     /**
      * <code>optional string description = 4;</code>
      */
     com.google.protobuf.ByteString
     getDescriptionBytes();
   }
-
   /**
    * Protobuf type {@code proto.GroupEditResponse}
    */
@@ -1038,7 +968,6 @@ public final class ProtoGroupEdit {
     private GroupEditResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private GroupEditResponse() {
       roomId_ = 0L;
       name_ = "";
@@ -1050,7 +979,6 @@ public final class ProtoGroupEdit {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-
     private GroupEditResponse(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1112,7 +1040,6 @@ public final class ProtoGroupEdit {
         makeExtensionsImmutable();
       }
     }
-
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
       return com.iGap.proto.ProtoGroupEdit.internal_static_proto_GroupEditResponse_descriptor;
@@ -1127,21 +1054,18 @@ public final class ProtoGroupEdit {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1151,7 +1075,6 @@ public final class ProtoGroupEdit {
 
     public static final int ROOM_ID_FIELD_NUMBER = 2;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 2;</code>
      */
@@ -1161,7 +1084,6 @@ public final class ProtoGroupEdit {
 
     public static final int NAME_FIELD_NUMBER = 3;
     private volatile java.lang.Object name_;
-
     /**
      * <code>optional string name = 3;</code>
      */
@@ -1177,7 +1099,6 @@ public final class ProtoGroupEdit {
         return s;
       }
     }
-
     /**
      * <code>optional string name = 3;</code>
      */
@@ -1197,7 +1118,6 @@ public final class ProtoGroupEdit {
 
     public static final int DESCRIPTION_FIELD_NUMBER = 4;
     private volatile java.lang.Object description_;
-
     /**
      * <code>optional string description = 4;</code>
      */
@@ -1213,7 +1133,6 @@ public final class ProtoGroupEdit {
         return s;
       }
     }
-
     /**
      * <code>optional string description = 4;</code>
      */
@@ -1232,7 +1151,6 @@ public final class ProtoGroupEdit {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1282,7 +1200,6 @@ public final class ProtoGroupEdit {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1336,32 +1253,27 @@ public final class ProtoGroupEdit {
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEditResponse parseFrom(
             com.google.protobuf.ByteString data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEditResponse parseFrom(byte[] data)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEditResponse parseFrom(
             byte[] data,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEditResponse parseFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEditResponse parseFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1369,13 +1281,11 @@ public final class ProtoGroupEdit {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEditResponse parseDelimitedFrom(java.io.InputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEditResponse parseDelimitedFrom(
             java.io.InputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1383,14 +1293,12 @@ public final class ProtoGroupEdit {
       return com.google.protobuf.GeneratedMessageV3
               .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEditResponse parseFrom(
             com.google.protobuf.CodedInputStream input)
             throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
               .parseWithIOException(PARSER, input);
     }
-
     public static com.iGap.proto.ProtoGroupEdit.GroupEditResponse parseFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1402,15 +1310,12 @@ public final class ProtoGroupEdit {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoGroupEdit.GroupEditResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
               ? new Builder() : new Builder().mergeFrom(this);
@@ -1422,7 +1327,6 @@ public final class ProtoGroupEdit {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.GroupEditResponse}
      */
@@ -1452,13 +1356,11 @@ public final class ProtoGroupEdit {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1510,35 +1412,29 @@ public final class ProtoGroupEdit {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
       public Builder setRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
               Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoGroupEdit.GroupEditResponse) {
           return mergeFrom((com.iGap.proto.ProtoGroupEdit.GroupEditResponse) other);
@@ -1594,14 +1490,12 @@ public final class ProtoGroupEdit {
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
               com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1612,7 +1506,6 @@ public final class ProtoGroupEdit {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1629,7 +1522,6 @@ public final class ProtoGroupEdit {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1644,7 +1536,6 @@ public final class ProtoGroupEdit {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1663,7 +1554,6 @@ public final class ProtoGroupEdit {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1678,7 +1568,6 @@ public final class ProtoGroupEdit {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1687,7 +1576,6 @@ public final class ProtoGroupEdit {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1699,7 +1587,6 @@ public final class ProtoGroupEdit {
                   com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1718,14 +1605,12 @@ public final class ProtoGroupEdit {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1735,7 +1620,6 @@ public final class ProtoGroupEdit {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1747,7 +1631,6 @@ public final class ProtoGroupEdit {
       }
 
       private java.lang.Object name_ = "";
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -1763,7 +1646,6 @@ public final class ProtoGroupEdit {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -1780,7 +1662,6 @@ public final class ProtoGroupEdit {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -1789,12 +1670,11 @@ public final class ProtoGroupEdit {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         name_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -1804,7 +1684,6 @@ public final class ProtoGroupEdit {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string name = 3;</code>
        */
@@ -1814,14 +1693,13 @@ public final class ProtoGroupEdit {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         name_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object description_ = "";
-
       /**
        * <code>optional string description = 4;</code>
        */
@@ -1837,7 +1715,6 @@ public final class ProtoGroupEdit {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string description = 4;</code>
        */
@@ -1854,7 +1731,6 @@ public final class ProtoGroupEdit {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string description = 4;</code>
        */
@@ -1863,12 +1739,11 @@ public final class ProtoGroupEdit {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         description_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string description = 4;</code>
        */
@@ -1878,7 +1753,6 @@ public final class ProtoGroupEdit {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string description = 4;</code>
        */
@@ -1888,12 +1762,11 @@ public final class ProtoGroupEdit {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         description_ = value;
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1910,7 +1783,6 @@ public final class ProtoGroupEdit {
 
     // @@protoc_insertion_point(class_scope:proto.GroupEditResponse)
     private static final com.iGap.proto.ProtoGroupEdit.GroupEditResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoGroupEdit.GroupEditResponse();
     }
@@ -1962,7 +1834,6 @@ public final class ProtoGroupEdit {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\017GroupEdit.proto\022\005proto\032\rRequest.proto\032" +
