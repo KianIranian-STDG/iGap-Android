@@ -4329,6 +4329,9 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onUploadCancel(View view, final StructMessageInfo message, final int pos) {
+
+        HelperSetAction.sendCancel(Long.parseLong(message.messageID));
+
         if (HelperCancelDownloadUpload.cancelUpload(Long.parseLong(message.messageID))) {
             // empty tag if selected message has been set
             if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {

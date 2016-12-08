@@ -727,7 +727,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             e.printStackTrace();
                         }
 
-                        onFileDownload.onFileDownloaded();
+                        if (onFileDownload != null) {
+                            onFileDownload.onFileDownloaded();
+                        }
 
                         realm.close();
                     }

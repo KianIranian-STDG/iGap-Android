@@ -308,7 +308,7 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
         }
     }
 
-    private int setProgress() {
+    private int setProgress() throws IllegalStateException {
         if (mPlayer == null || mDragging) {
             return 0;
         }
