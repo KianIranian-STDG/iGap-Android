@@ -60,6 +60,7 @@ import com.iGap.interfaces.OnInfoTime;
 import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnReceiveInfoLocation;
 import com.iGap.interfaces.OnReceivePageInfoTOS;
+import com.iGap.interfaces.OnRefreshActivity;
 import com.iGap.interfaces.OnSecuring;
 import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
@@ -285,6 +286,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static UpdateListAfterKick updateListAfterKick;
     public static OnHelperSetAction onHelperSetAction;
     public static OnGroupAvatarDelete onGroupAvatarDelete;
+    public static OnRefreshActivity onRefreshActivity;
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;

@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -364,6 +365,8 @@ public class HelperNotificationAndBadge {
     public void checkAlert(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
 
 
+        // TODO: 12/7/2016 (molareza) must set G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.GROUP, builder.getRoomId()) on  ChannelSendMessage for receive notification and check it
+
         idRoom = roomId;
 
         int vipCheck = checkSpecialNotification(updateNotification, type, roomId);
@@ -463,6 +466,38 @@ public class HelperNotificationAndBadge {
                 break;
             case CHANNEL:
 
+//                if (realmRoom != null
+//                        && realmRoom.getChannelRoom() != null
+//                        && realmRoom.getChannelRoom().getRealmNotificationSetting() != null
+//                        && realmRoom.getChannelRoom().getRealmNotificationSetting().getLedColor() != -1) {
+//                    led = realmRoom.getChannelRoom().getRealmNotificationSetting().getLedColor();
+//                } else {
+//                    led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
+//                }
+//
+//                if (realmRoom != null
+//                        && realmRoom.getChannelRoom() != null
+//                        && realmRoom.getChannelRoom().getRealmNotificationSetting() != null
+//                        && realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1
+//                        ) {
+//
+//                    vibrator = realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate();
+//
+//                } else {
+//                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
+//                }
+//
+//                if (realmRoom != null
+//                        && realmRoom.getChannelRoom() != null
+//                        && realmRoom.getChannelRoom().getRealmNotificationSetting() != null
+//                        && realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
+//
+//                    sound = realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound();
+//                } else {
+//                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
+//                }
+//
+//                messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
                 break;
         }
 
@@ -608,10 +643,10 @@ public class HelperNotificationAndBadge {
         return sound;
     }
 
-    public long[] setVibrator(int vibre) {
+    public long[] setVibrator(int vb) {
         long[] intVibrator = new long[]{};
 
-        switch (vibre) {
+        switch (vb) {
             case 0:
                 intVibrator = new long[]{0, 0, 0};
                 break;
@@ -628,7 +663,13 @@ public class HelperNotificationAndBadge {
                 AudioManager am2 = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
                 switch (am2.getRingerMode()) {
                     case AudioManager.RINGER_MODE_SILENT:
-                        intVibrator = new long[]{0, 500, 0};
+                        intVibrator = new long[]{0, 350, 0};
+                        break;
+                    case AudioManager.RINGER_MODE_VIBRATE:
+                        Log.i("MyApp", "Vibrate mode");
+                        break;
+                    case AudioManager.RINGER_MODE_NORMAL:
+                        Log.i("MyApp", "Normal mode");
                         break;
                 }
                 break;

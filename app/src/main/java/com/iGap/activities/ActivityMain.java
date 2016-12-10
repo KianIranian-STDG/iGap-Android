@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +49,7 @@ import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupLeft;
+import com.iGap.interfaces.OnRefreshActivity;
 import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OpenFragment;
@@ -119,6 +121,10 @@ public class ActivityMain extends ActivityEnhanced
     private MaterialDesignTextView btnSearchAll;
     private int clickPosition = 0;
 
+    private SharedPreferences sharedPreferences;
+    private String cLanguage;
+
+
     private void scrollToTop() {
         recyclerView.postDelayed(new Runnable() {
             @Override
@@ -188,6 +194,18 @@ public class ActivityMain extends ActivityEnhanced
 
             }
         };
+
+//       =======> after change language in ActivitySetting this part refresh Activity main
+        G.onRefreshActivity = new OnRefreshActivity() {
+            @Override
+            public void refresh(String changeLanguage) {
+
+                ActivityMain.this.recreate();
+
+            }
+        };
+
+
 
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
             @Override

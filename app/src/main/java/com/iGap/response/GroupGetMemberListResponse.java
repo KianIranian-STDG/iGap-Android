@@ -26,6 +26,7 @@ public class GroupGetMemberListResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         final ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder builder = (ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder) message;
         final RealmList<RealmMember> newMembers = new RealmList<>();
         Realm realm = Realm.getDefaultInstance();
