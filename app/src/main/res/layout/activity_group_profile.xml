@@ -383,12 +383,16 @@
                         android:gravity="left|center"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/dp8"
-                        android:paddingLeft="@dimen/dp8">
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingStart="@dimen/dp16"
+                        android:paddingEnd="@dimen/dp16"
+                        android:paddingRight="@dimen/dp16">
 
                         <com.iGap.module.CircleImageView
                             android:layout_width="@dimen/dp48"
                             android:layout_height="@dimen/dp48"
                             android:layout_marginLeft="@dimen/dp4"
+                            android:layout_marginStart="@dimen/dp8"
                             android:scaleType="centerCrop"
                             android:src="@mipmap/add_chat_background3"/>
 

@@ -91,7 +91,7 @@
     <string-array name="profile_delete_group">
         <item>@string/array_From_Gallery</item>
         <item>@string/array_From_Camera</item>
-        <item>@string/array_delete_photo_group</item>
+        <item>@string/array_Delete_photo</item>
     </string-array>
 
     <string-array name="phone_number">

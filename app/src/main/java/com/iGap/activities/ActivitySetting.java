@@ -1116,7 +1116,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 realm.close();
             }
         });
-        textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "English");
+
+        textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
         if (textLanguage.equals("English")) {
             poRbDialogLangouage = 0;
         } else if (textLanguage.equals("فارسی")) {

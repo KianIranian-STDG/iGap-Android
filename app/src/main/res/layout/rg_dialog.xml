@@ -20,7 +20,6 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:theme="@style/MySearch"
-            android:layoutDirection="ltr"
             app:submitBackground="@color/red" />
 
         <TextView
@@ -30,12 +29,13 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             android:paddingLeft="@dimen/dp24"
-            android:paddingRight="@dimen/dp24"
+            android:paddingRight="@dimen/dp52"
+            android:paddingStart="@dimen/dp52"
             android:singleLine="true"
             android:text="@string/rg_Select_Country"
             android:textColor="@android:color/black"
             android:textSize="@dimen/sp20"
-            android:layoutDirection="ltr"
+            android:layoutDirection="rtl"
             android:textStyle="bold" />
 
     </RelativeLayout>
