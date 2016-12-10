@@ -119,6 +119,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
 import static com.iGap.activities.ActivitySetting.pathSaveImage;
+import static com.iGap.module.AttachFile.imagePath;
 import static com.iGap.module.MusicPlayer.roomId;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
@@ -1133,8 +1134,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //TODO [Saeed Mozaffari] [2016-12-07 3:50 PM] - also for avatar timeout do this actions
-
                         prgWait.setVisibility(View.GONE);
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         setImage(avatarPath);
@@ -1143,6 +1142,18 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
             }
         });
+    }
+
+    @Override
+    public void onAvatarAddError() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWait.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+
     }
 
     //***On Avatar Delete
@@ -1159,8 +1170,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     }
 
                     @Override
-                    public void showInitials(String initials, String color) {
-                        imgCircleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    public void showInitials(final String initials, final String color) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imgCircleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            }
+                        });
                     }
                 });
             }
@@ -1476,11 +1492,16 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     //*** set avatar image
 
-    private void setImage(String imagePath) {
-        if (new File(imagePath).exists()) {
-            imgCircleImageView.setPadding(0, 0, 0, 0);
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
-        }
+    private void setImage(final String imagePath) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (new File(imagePath).exists()) {
+                    imgCircleImageView.setPadding(0, 0, 0, 0);
+                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
+                }
+            }
+        });
     }
 
     //*** notification and sounds
@@ -1558,8 +1579,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             long avatarId = SUID.id().get();
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
-                    ImageHelper.correctRotateImage(AttachFile.imagePath);
-                    filePath = AttachFile.imagePath;
+                    ImageHelper.correctRotateImage(imagePath);
+                    filePath = imagePath;
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     filePath = AttachFile.getFilePathFromUri(data.getData());

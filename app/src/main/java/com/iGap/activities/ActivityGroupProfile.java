@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,8 +47,12 @@ import com.iGap.fragments.FragmentListAdmin;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.ShowCustomList;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ImageHelper;
+import com.iGap.interfaces.OnAvatarAdd;
+import com.iGap.interfaces.OnAvatarDelete;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnGroupAddAdmin;
@@ -74,14 +77,11 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.FileUploadStructure;
-import com.iGap.module.HelperCopyFile;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
-import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupGetMemberList;
-import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmGroupRoom;
@@ -136,8 +136,7 @@ import static com.iGap.realm.enums.RoomType.GROUP;
 /**
  * Created by android3 on 9/18/2016.
  */
-public class ActivityGroupProfile extends ActivityEnhanced
-        implements OnGroupAvatarResponse, OnFileUploadForActivities {
+public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAvatarResponse, OnFileUploadForActivities, OnGroupAvatarDelete {
 
     LinearLayout layoutSetting;
     LinearLayout layoutSetAdmin;
@@ -622,13 +621,12 @@ public class ActivityGroupProfile extends ActivityEnhanced
             }
         });
 
-        setAvatarGroup();
         txtMemberNumber.setText(participantsCountLabel);
 
+        showAvatar();
         setUiIndependRole();
         initRecycleView();
         getMemberList();
-
         //TODO [Saeed Mozaffari] [2016-11-29 3:12 PM] - please impalement this callbacks
         onGroupAddMemberCallback();
         onGroupKickMemberCallback();
@@ -1013,45 +1011,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
     }
 
     @Override
-    public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
-
-        HelperCopyFile.copyFile(filePathAvatar, G.DIR_IMAGES + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName());
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmAvatar realmAvatar = realm.where(RealmAvatar.class)
-                        .equalTo(RealmAvatarFields.OWNER_ID, roomId)
-                        .findFirst();
-                if (realmAvatar == null) {
-                    realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
-                    realmAvatar.setOwnerId(roomId);
-                }
-
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
-
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null) {
-                    if (realmRoom.getGroupRoom() != null) {
-                        realmRoom.getGroupRoom().setAvatar(realmAvatar);
-                    }
-                }
-
-            }
-        });
-        realm.close();
-    }
-
-    @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                imvGroupAvatar.setImageURI(Uri.fromFile(new File(uploadStructure.filePath)));
-            }
-        });
-
         new RequestGroupAvatarAdd().groupAvatarAdd(roomId, uploadStructure.token);
     }
 
@@ -1100,30 +1060,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
                                         R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                             }
                         } else if (text.toString().equals(getString(R.string.delete_photo))) {
-
-                            G.onGroupAvatarDelete = new OnGroupAvatarDelete() {
-                                @Override
-                                public void onDeleteAvatar(long roomId, final long avatarId) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Realm realm = Realm.getDefaultInstance();
-                                            realm.executeTransaction(new Realm.Transaction() {
-                                                @Override
-                                                public void execute(Realm realm) {
-                                                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
-                                                    if (realmAvatar != null) {
-                                                        realmAvatar.deleteFromRealm();
-                                                    }
-                                                }
-                                            });
-                                            realm.close();
-                                            setAvatarGroup();
-                                        }
-                                    });
-                                }
-                            };
-
                             Realm realm = Realm.getDefaultInstance();
                             new RequestGroupAvatarDelete().groupAvatarDelete(roomId, getLastAvatar().getId());
                             realm.close();
@@ -2859,5 +2795,77 @@ public class ActivityGroupProfile extends ActivityEnhanced
         realm.close();
 
         return _member[0];
+    }
+
+    //********** Avatars
+
+    //***Get Avatar
+
+    private void showAvatar() {
+        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
+            }
+        });
+    }
+
+    //***Add Avatar
+
+    @Override
+    public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
+        HelperAvatar.avatarAdd(roomId, filePathAvatar, avatar, new OnAvatarAdd() {
+            @Override
+            public void onAvatarAdd(final String avatarPath) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
+                    }
+                });
+            }
+        });
+    }
+
+    //***Delete Avatar
+
+    @Override
+    public void onDeleteAvatar(long roomId, long avatarId) {
+        HelperAvatar.avatarDelete(roomId, avatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
+            @Override
+            public void latestAvatarPath(final String avatarPath) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
+                    }
+                });
+            }
+
+            @Override
+            public void showInitials(final String initials, final String color) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
+            }
+        });
     }
 }

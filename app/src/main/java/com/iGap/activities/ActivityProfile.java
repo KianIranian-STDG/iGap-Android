@@ -19,13 +19,16 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperPermision;
+import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnUserAvatarResponse;
@@ -34,10 +37,8 @@ import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.EditTextAdjustPan;
 import com.iGap.module.FileUploadStructure;
-import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmUserInfo;
@@ -68,6 +69,9 @@ public class ActivityProfile extends ActivityEnhanced
     private File pathImageFromCamera = new File(G.imageFile.toString() + "_" + 0 + ".jpg");
     private int idAvatar;
     private int lastUploadedAvatarId;
+    private ProgressBar prgWait;
+    private String pathSaveImage;
+    private boolean existAvatar = false;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -84,6 +88,7 @@ public class ActivityProfile extends ActivityEnhanced
         txtDesc = (TextView) findViewById(R.id.pu_txt_title_desc);
 
         txtAddPhoto = (TextView) findViewById(R.id.pu_txt_addPhoto);
+        prgWait = (ProgressBar) findViewById(R.id.prg);
 
         G.uploaderUtil.setActivityCallbacks(this);
         G.onUserAvatarResponse = this;
@@ -98,15 +103,14 @@ public class ActivityProfile extends ActivityEnhanced
         btnSetImage.setOnClickListener(new View.OnClickListener() { // button for set image
             @Override
             public void onClick(View view) {
-
-                HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
-                    @Override
-                    public void Allow() {
-                        startDialog(); // this dialog show 2 way for choose image : gallery and camera
-                    }
-                });
-
-
+                if (!existAvatar) {
+                    HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
+                        @Override
+                        public void Allow() {
+                            startDialog(); // this dialog show 2 way for choose image : gallery and camera
+                        }
+                    });
+                }
             }
         });
 
@@ -400,26 +404,8 @@ public class ActivityProfile extends ActivityEnhanced
         }
     }
 
-    @Override
-    public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                setImage(uploadStructure.filePath);
-            }
-        });
-
-        new RequestUserAvatarAdd().userAddAvatar(uploadStructure.token);
-    }
-
-    @Override
-    public void onFileUploading(FileUploadStructure uploadStructure, String identity,
-                                double progress) {
-        // empty, update view something like updating progress
-    }
-
     private void setImage(String path) {
-        if (pathImageUser != null) {
+        if (path != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(path);
             btnSetImage.setPadding(0, 0, 0, 0);
             btnSetImage.setImageBitmap(bitmap);
@@ -455,18 +441,29 @@ public class ActivityProfile extends ActivityEnhanced
 
     @Override
     public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
+
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        HelperAvatar.avatarAdd(userId, pathSaveImage, avatar, new OnAvatarAdd() {
             @Override
-            public void execute(Realm realm) {
-                long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, lastUploadedAvatarId).findFirst();
-                realmAvatar.setOwnerId(userId);
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
-                realmAvatar.setId(avatar.getId());
+            public void onAvatarAdd(final String avatarPath) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        existAvatar = true;
+                        hideProgressBar();
+                        setImage(avatarPath);
+                    }
+                });
+
             }
         });
-        realm.close();
+    }
+
+    @Override
+    public void onAvatarError() {
+        hideProgressBar();
     }
 
     private static class UploadTask
@@ -504,16 +501,61 @@ public class ActivityProfile extends ActivityEnhanced
 
     @Override
     public void onUploadStarted(FileUploadStructure struct) {
-        // empty
+        showProgressBar();
     }
 
     @Override
+    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
+    }
+
+    @Override
+    public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
+       /* runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                *//*existAvatar = true;
+                token = uploadStructure.token;*//*
+                hideProgressBar();
+                pathSaveImage = uploadStructure.filePath;
+                setImage(pathSaveImage);
+            }
+        });*/
+
+        pathSaveImage = uploadStructure.filePath;
+
+        new RequestUserAvatarAdd().userAddAvatar(uploadStructure.token);
+    }
+
+
+    @Override
     public void onBadDownload(String token) {
-        // empty
+        hideProgressBar();
     }
 
     @Override
     public void onFileTimeOut(String identity) {
-        // empty
+        hideProgressBar();
+    }
+
+    //***Show And Hide Progress
+
+    private void showProgressBar() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWait.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
+    private void hideProgressBar() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWait.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
     }
 }

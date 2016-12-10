@@ -23,7 +23,9 @@ public class UserAvatarAddResponse extends MessageHandler {
         ProtoUserAvatarAdd.UserAvatarAddResponse.Builder userAvatarAddResponse =
                 (ProtoUserAvatarAdd.UserAvatarAddResponse.Builder) message;
 
-        G.onUserAvatarResponse.onAvatarAdd(userAvatarAddResponse.getAvatar());
+        if (G.onUserAvatarResponse != null) {
+            G.onUserAvatarResponse.onAvatarAdd(userAvatarAddResponse.getAvatar());
+        }
     }
 
     @Override
@@ -34,6 +36,9 @@ public class UserAvatarAddResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        if (G.onUserAvatarResponse != null) {
+            G.onUserAvatarResponse.onAvatarError();
+        }
     }
 }
 

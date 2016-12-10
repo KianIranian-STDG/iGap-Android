@@ -46,6 +46,7 @@ public class FileUploadOptionResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        G.uploaderUtil.onFileUploadTimeOut(this.identity);
         HelperSetAction.sendCancel(Long.parseLong(this.identity));
         makeFailed();
     }

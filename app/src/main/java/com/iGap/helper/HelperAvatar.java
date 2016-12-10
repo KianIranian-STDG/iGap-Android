@@ -74,7 +74,7 @@ public class HelperAvatar {
     }
 
     /**
-     * read avatarPath from realm avatar and return avatarPath
+     * read avatarPath from realm avatar and return latest avatarPath
      *
      * @param ownerId if is user set userId and if is room set roomId
      */
@@ -94,6 +94,11 @@ public class HelperAvatar {
                     onAvatarGet.onShowInitials(initials[0], initials[1]);
                 }
             }
+        } else {
+            String[] initials = showInitials(ownerId, avatarType);
+            if (initials != null) {
+                onAvatarGet.onShowInitials(initials[0], initials[1]);
+            }
         }
     }
 
@@ -106,7 +111,7 @@ public class HelperAvatar {
 
     public static RealmAvatar getLastAvatar(long ownerId) {
         Realm realm = Realm.getDefaultInstance();
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.ID, Sort.ASCENDING)) {
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
             if (avatar.getFile() != null) {
                 return avatar;
             }

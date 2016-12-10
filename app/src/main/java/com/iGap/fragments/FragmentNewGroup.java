@@ -946,6 +946,11 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         }
     }
 
+    @Override
+    public void onAvatarAddError() {
+        hideProgressBar();
+    }
+
     private void startRoom() {
         prgWaiting.setVisibility(View.GONE);
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -1074,5 +1079,26 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    //***Show And Hide ProgressBar
+    private void showProgressBar() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                prgWaiting.setVisibility(View.VISIBLE);
+                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
+    private void hideProgressBar() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                prgWaiting.setVisibility(View.GONE);
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
     }
 }

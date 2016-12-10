@@ -143,8 +143,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
-import com.iGap.realm.RealmAvatar;
-import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmClientCondition;
@@ -2056,58 +2054,38 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void setAvatar() {
-        Realm realm = Realm.getDefaultInstance();
 
-        if (chatType != CHANNEL) {
-
-            HelperAvatar.getAvatar(mRoomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(String avatarPath) {
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
-                }
-
-                @Override
-                public void onShowInitials(String initials, String color) {
-                    imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                }
-            });
-
+        long idForGetAvatar;
+        HelperAvatar.AvatarType type;
+        if (chatType == CHAT) {
+            idForGetAvatar = chatPeerId;
+            type = HelperAvatar.AvatarType.USER;
         } else {
-            RealmResults<RealmAvatar> avatars = null;
-            if (chatType != CHAT) {
-                avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mRoomId).findAll();
-            } else {
-                avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, chatPeerId).findAll();
-            }
-
-            if (avatars.isEmpty()) {
-                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-                return;
-            }
-            RealmAvatar realmAvatar = null;
-            for (int i = avatars.size() - 1; i >= 0; i--) {
-                RealmAvatar avatar = avatars.get(i);
-                if (avatar.getFile() != null) {
-                    realmAvatar = avatar;
-                    break;
-                }
-            }
-
-            if (realmAvatar == null) {
-                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-                return;
-            }
-
-            if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imvUserPicture);
-            } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvUserPicture);
-            } else {
-                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-            }
-
-            realm.close();
+            idForGetAvatar = mRoomId;
+            type = HelperAvatar.AvatarType.ROOM;
         }
+
+        HelperAvatar.getAvatar(idForGetAvatar, type, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
+            }
+        });
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
