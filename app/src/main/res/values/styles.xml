@@ -70,7 +70,7 @@
         <item name="android:textColorHint">@color/text_verify</item>
         <item name="colorAccent">@color/toolbar_background</item>
         <item name="android:tint">@color/border_editText</item>
-        <item name="android:gravity">right</item>
+        <item name="android:gravity">end|right</item>
         <item name="android:textColor">@color/text_verify</item>
     </style>
 
