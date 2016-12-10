@@ -1048,14 +1048,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                         if (which == 0) {
+                            attachFile.requestOpenGalleryForImageSingleSelect();
+                        } else if (which == 1) {
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                                 attachFile.requestTakePicture();
                                 dialog.dismiss();
                             } else {
                                 Toast.makeText(ActivityGroupProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                             }
-                        } else if (which == 1) {
-                            attachFile.requestOpenGalleryForImageSingleSelect();
                         } else if (which == 2) {
                             showProgressBar();
                             Realm realm = Realm.getDefaultInstance();

@@ -11,7 +11,9 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AvatarsAdapter;
 import com.iGap.adapter.RoomsAdapter;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.interfaces.IChatItemAvatar;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
@@ -149,7 +151,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     }
 
     @Override
-    public void bindView(ViewHolder holder, List payloads) throws IllegalStateException {
+    public void bindView(final ViewHolder holder, List payloads) throws IllegalStateException {
         super.bindView(holder, payloads);
 
         if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
@@ -290,7 +292,30 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             }
         }
 
-        if (mInfo.getAvatar() != null && mInfo.getAvatar().getFile() != null) {
+
+        HelperAvatar.getAvatar(mInfo.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
+            }
+        });
+
+        /*if (mInfo.getAvatar() != null && mInfo.getAvatar().getFile() != null) {
 
             if (mInfo.getAvatar().getFile().isFileExistsOnLocal()) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.getAvatar().getFile().getLocalFilePath()), holder.image);
@@ -318,7 +343,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         } else {
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.getInitials(), mInfo.getColor()));
             requestForUserInfo();
-        }
+        }*/
 
         if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
             holder.chatIcon.setVisibility(GONE);
