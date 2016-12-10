@@ -179,6 +179,9 @@ public class ActivityGroupProfile extends ActivityEnhanced
     private PopupWindow popupWindow;
     private ProgressBar prgWait;
 
+    private RealmList<RealmMember> memberList;
+
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -212,7 +215,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
         members = realmGroupRoom.getMembers();
-
+        memberList = realmGroupRoom.getMembers();
         description = realmGroupRoom.getDescription();
 
 
@@ -715,6 +718,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
                     @Override
                     public void run() {
                         txtMemberNumber.setText(members.size() + "");
+                        compareMemberList(memberList, members);
                     }
                 });
 
@@ -2795,6 +2799,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
             }
         }
 
+
         /**
          * REQUIRED FOR THE FastAdapter. Set order to < 0 to tell the FastAdapter he can ignore
          * this
@@ -2855,5 +2860,48 @@ public class ActivityGroupProfile extends ActivityEnhanced
         realm.close();
 
         return _member[0];
+    }
+
+
+    private void compareMemberList(RealmList<RealmMember> memberList, List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> serverLiseMember) {
+
+        Log.i("TTTT", "compareMemberList: " + memberList.size());
+        Log.i("TTTT", "compareMemberList: " + serverLiseMember.size());
+
+        ArrayList<Long> b1 = new ArrayList<>();
+        for (RealmMember r : memberList) {
+            long a1 = r.getPeerId();
+            b1.add(a1);
+            Log.i("TTTT", "00 a: " + a1);
+        }
+
+        ArrayList<Long> c1 = new ArrayList<>();
+        for (int i = 0; i < serverLiseMember.size(); i++) {
+            for (int j = 0; j < b1.size(); j++) {
+
+                if (serverLiseMember.get(i).getUserId() == memberList.get(j).getPeerId()) {
+                    c1.add(memberList.get(j).getPeerId());
+                    Log.i("TTTT", "aa to c: " + memberList.size());
+                    Log.i("TTTT", "01 a: " + memberList.get(j).getPeerId());
+                    break;
+                }
+            }
+        }
+
+        b1.removeAll(c1);
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+        for (int i = 0; i < realmMembers.size(); i++) {
+            for (int j = 0; j < b1.size(); j++) {
+
+                if (realmMembers.get(i).getPeerId() == b1.get(j)) {
+                    realmMembers.get(i).deleteFromRealm();
+                    Log.i("TTTT", "remove: " + memberList.size());
+                    Log.i("TTTT", "01 b: " + memberList.size());
+                }
+            }
+        }
+        realm.close();
     }
 }
