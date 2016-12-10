@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.RemoteViews;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -37,13 +36,11 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.iGap.G.context;
 
@@ -536,7 +533,18 @@ public class HelperNotificationAndBadge {
                                 if (room != null) {
                                     item.name = room.getTitle() + " : ";
                                 }
-                                item.message = roomMessage.getMessage();
+
+                                String text = "";
+                                try {
+                                    text = roomMessage.getMessage();
+                                    if (text.length() < 1) if (roomMessage.getForwardMessage() != null) text = roomMessage.getForwardMessage().getMessage();
+                                    if (text.length() < 1) if (roomMessage.getReplyTo() != null) text = roomMessage.getReplyTo().getMessage();
+                                    if (text.length() < 1) text = ActivityPopUpNotification.getTextOfMessageType(roomMessage.getMessageType());
+                                } catch (NullPointerException e) {
+
+                                }
+
+                                item.message = text;
                                 item.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
                                 list.add(item);
                             }

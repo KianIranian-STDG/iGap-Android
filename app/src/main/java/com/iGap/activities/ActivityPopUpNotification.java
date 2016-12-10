@@ -29,7 +29,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.OnVoiceRecord;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -51,11 +51,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import io.github.meness.emoji.EmojiEditText;
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
@@ -67,6 +62,9 @@ import io.github.meness.emoji.listeners.OnSoftKeyboardOpenListener;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.iGap.G.context;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
@@ -656,29 +654,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
 
             TextView txtMessage = (TextView) layout.findViewById(R.id.slapn_txt_message);
-
-
-            if (unreadList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.VOICE) {
-                txtMessage.setText(R.string.voice_message);
-            } else if (unreadList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
-                txtMessage.setText(R.string.video_message);
-            } else if (unreadList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.FILE) {
-                txtMessage.setText(R.string.file_message);
-            } else if (unreadList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.AUDIO) {
-                txtMessage.setText(R.string.audio_message);
-            } else if (unreadList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.IMAGE) {
-                txtMessage.setText(R.string.image_message);
-            } else if (unreadList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.CONTACT) {
-                txtMessage.setText(R.string.contact_message);
-            } else if (unreadList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.GIF) {
-                txtMessage.setText(R.string.gif_message);
-            } else if (unreadList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.LOCATION) {
-                txtMessage.setText(R.string.location_message);
-            } else {
-                txtMessage.setText(unreadList.get(position).getMessage());
-            }
-
-
+            txtMessage.setText(getTextOfMessageType(unreadList.get(position).getMessageType()));
 
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -700,6 +676,29 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }
     }
 
+    public static String getTextOfMessageType(ProtoGlobal.RoomMessageType messageType) {
+
+        switch (messageType) {
+            case VOICE:
+                return G.context.getString(R.string.voice_message);
+            case VIDEO:
+                return G.context.getString(R.string.video_message);
+            case FILE:
+                return G.context.getString(R.string.file_message);
+            case AUDIO:
+                return G.context.getString(R.string.audio_message);
+            case IMAGE:
+                return G.context.getString(R.string.image_message);
+            case CONTACT:
+                return G.context.getString(R.string.contact_message);
+            case GIF:
+                return G.context.getString(R.string.gif_message);
+            case LOCATION:
+                return G.context.getString(R.string.location_message);
+        }
+
+        return "";
+    }
 
     /**
      * Checks if the application is being sent in the background (i.e behind
