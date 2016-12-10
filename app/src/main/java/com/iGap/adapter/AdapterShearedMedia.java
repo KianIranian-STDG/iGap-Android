@@ -11,7 +11,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,33 +19,26 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityShearedMedia;
 import com.iGap.fragments.FragmentShowImage;
+import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperMimeType;
-import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoClientSearchRoomHistory;
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmShearedMedia;
-import com.iGap.realm.enums.RoomType;
-import com.iGap.request.RequestFileDownload;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
+import java.io.File;
+import java.util.ArrayList;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -84,9 +76,12 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL;
 
-        counter = realm.where(RealmShearedMedia.class).equalTo("roomId", roomId).
+        try {
+            counter = realm.where(RealmShearedMedia.class).equalTo("roomId", roomId).
                 notEqualTo("filter", ActivityShearedMedia.SerializationUtils.serialize(filter)).count();
+        } catch (NullPointerException e) {
 
+        }
 
         realm.close();
 
@@ -284,25 +279,65 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         return position;
     }
 
-    private void startDownload(final int position) {
-        list.get(position).options.isDownloadCancel = false;
+    private void startDownload(final int position, final MessageProgress messageProgress) {
         list.get(position).options.isDownloading = true;
 
-        new DownLoad().getFile(list.get(position).item, position);
+        messageProgress.withDrawable(R.drawable.ic_cancel, true);
+
+        ProtoGlobal.RoomMessage item = list.get(position).item;
+
+        HelperDownloadFile.startDoanload(item.getAttachment().getToken(), item.getAttachment().getName(), item.getAttachment().getSize(), item.getMessageType(),
+            new HelperDownloadFile.UpdateListener() {
+                @Override public void OnProgress(String token, final int progress) {
+
+                    if (messageProgress != null) {
+
+                        messageProgress.post(new Runnable() {
+                            @Override public void run() {
+
+                                if (progress < 100) {
+                                    messageProgress.withProgress(progress);
+                                } else {
+                                    messageProgress.withProgress(0);
+                                    messageProgress.setVisibility(View.GONE);
+                                    list.get(position).options.needDownload = false;
+                                }
+                            }
+                        });
+                    }
+                }
+
+                @Override public void OnError(String token) {
+
+                    Log.e("dddd", "OnError  token  = " + token + "   " + messageProgress);
+                    stopDownload(position, messageProgress);
+                }
+            });
 
     }
 
-    private void stopDownload(int position) {
+    private void stopDownload(int position, final MessageProgress messageProgress) {
+
+        messageProgress.post(new Runnable() {
+            @Override public void run() {
+                messageProgress.withProgress(0);
+                messageProgress.withDrawable(R.drawable.ic_download, true);
+            }
+        });
+
+
+
         list.get(position).options.isDownloading = false;
-        list.get(position).options.isDownloadCancel = true;
+
     }
 
-    private void downloadFile(int position) {
+    private void downloadFile(int position, MessageProgress messageProgress) {
 
         if (list.get(position).options.isDownloading) {
-            stopDownload(position);
+            HelperDownloadFile.stopDownLoad(list.get(position).item.getAttachment().getToken());
+            stopDownload(position, messageProgress);
         } else {
-            startDownload(position);
+            startDownload(position, messageProgress);
         }
     }
 
@@ -463,7 +498,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
     //****************************************************************************************************************
 
 
-
     public static String getThumpnailPath(String token, String fileName) {
 
         String result = "";
@@ -499,7 +533,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         return result;
     }
-
 
 
     public class MyHolder extends RecyclerView.ViewHolder {
@@ -539,17 +572,10 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View view) {
 
-                    downloadFile(getPosition());
-
-                    if (list.get(getPosition()).options.isDownloading) {
-                        messageProgress.withDrawable(R.drawable.ic_cancel, true);
-                    } else {
-                        messageProgress.withDrawable(R.drawable.ic_download, true);
-                    }
+                    downloadFile(getPosition(), messageProgress);
 
                 }
             });
-
 
 
         }
@@ -569,7 +595,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             filePath = getFilePath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName(), list.get(position).item.getMessageType());
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
-            list.get(position).options.messageProgress = messageProgress;
 
             File file = new File(filePath);
             if (file.exists()) {
@@ -594,7 +619,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
-            list.get(position).options.messageProgress = messageProgress;
 
             itemView.findViewById(R.id.smsl_ll_video).setVisibility(View.VISIBLE);
 
@@ -634,7 +658,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
             tempFilePath = getThumpnailPath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName());
             filePath = getFilePath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName(), list.get(position).item.getMessageType());
-            list.get(position).options.messageProgress = messageProgress;
 
             File file = new File(filePath);
             if (file.exists()) {
@@ -667,8 +690,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smslf_imv_icon_file);
             imvPicFile.setImageResource(R.drawable.green_music_note);
-
-            list.get(position).options.messageProgress = messageProgress;
 
             tempFilePath = getThumpnailPath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName());
             filePath = getFilePath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName(), list.get(position).item.getMessageType());
@@ -749,7 +770,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             messageProgress.setVisibility(View.GONE);
 
-            list.get(position).options.messageProgress = messageProgress;
         }
     }
 
@@ -768,8 +788,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             tempFilePath = getThumpnailPath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName());
             filePath = getFilePath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName(), list.get(position).item.getMessageType());
-
-            list.get(position).options.messageProgress = messageProgress;
 
             File file = new File(filePath);
             if (file.exists()) {
@@ -795,282 +813,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             gifDrawable = (GifDrawable) gifView.getDrawable();
 
-
         }
-    }
-
-
-    class DownLoad {
-
-        OnFileDownloadResponse onFileDownloadResponse;
-
-
-        public DownLoad() {
-
-            onFileDownloadResponse = new OnFileDownloadResponse() {
-                @Override
-                public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
-                    int position = getItemPosition(token);
-
-                    if (position >= 0) {
-                        list.get(position).options.progress = progress;
-                        list.get(position).options.downloadOffset = offset;
-
-                        updateView(position);
-
-
-                        if (progress < 100) {
-                            if (!list.get(position).options.isDownloadCancel) {
-                                getFile(list.get(position).item, position);
-                            }
-                        } else {
-                            String localFilePath = AndroidUtils.suitableAppFilePath(list.get(position).item.getMessageType())
-                                    + "/" + token + "_" + list.get(position).item.getAttachment().getName();
-
-                            String tmpPath = G.DIR_TEMP + "/" + list.get(position).item.getAttachment().getToken() + "_" +
-                                    list.get(position).item.getAttachment().getName();
-
-                            try {
-                                AndroidUtils.cutFromTemp(tmpPath, localFilePath);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }
-
-
-                    Log.e("tttt", position + "  " + offset + "   " + progress);
-
-                }
-
-                @Override
-                public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
-
-                }
-
-                @Override
-                public void onError(int majorCode, int minorCode) {
-                    onError(majorCode, minorCode);
-                }
-
-                @Override
-                public void onBadDownload(String token) {
-
-                }
-            };
-
-
-            G.onFileDownloadResponse = onFileDownloadResponse;
-
-        }
-
-
-        private void getFile(ProtoGlobal.RoomMessage item, final int position) {
-
-            if (list.get(position).options.progress == 100) {
-                updateView(position);
-                return;
-            }
-
-
-            ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-
-            final String tmpPath = item.getAttachment().getToken() + "_" + item.getAttachment().getName();
-
-            String identity = item.getAttachment().getToken()
-                    + '*'
-                    + selector.toString()
-                    + '*'
-                    + item.getAttachment().getSize()
-                    + '*'
-                    + tmpPath
-                    + '*'
-                    + list.get(position).options.downloadOffset;
-
-
-            new RequestFileDownload().download(item.getAttachment().getToken(), list.get(position).options.downloadOffset,
-                    (int) item.getAttachment().getSize(), selector, identity);
-        }
-
-        private int getItemPosition(String token) {
-
-            int position = -1;
-
-            for (int i = 0; i < list.size(); i++) {
-
-                try {
-                    if (list.get(i).item.getAttachment().getToken().equals(token)) {
-                        position = i;
-                        break;
-                    }
-                } catch (NullPointerException e) {
-
-                }
-
-            }
-
-            return position;
-        }
-
-
-        private void updateView(final int position) {
-
-            final MessageProgress messageProgress = list.get(position).options.messageProgress;
-
-            if (messageProgress != null) {
-
-                messageProgress.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (list.get(position).options.progress < 100) {
-                            if (list.get(position).options.isDownloadCancel) {
-                                messageProgress.withProgress(0);
-                            } else {
-                                messageProgress.withProgress(list.get(position).options.progress);
-                            }
-
-                        } else {
-                            messageProgress.setVisibility(View.GONE);
-                            list.get(position).options.needDownload = false;
-                            list.get(position).options.needDownload = false;
-                        }
-
-                    }
-                });
-
-            }
-
-        }
-
-        private void onError(int majorCode, int minorCode) {
-            if (majorCode == 713 && minorCode == 1) {
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack = Snackbar.make(((Activity) context).findViewById(android.R.id.content),
-                                context.getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
-
-                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            } else if (majorCode == 713 && minorCode == 2) {
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack =
-                                Snackbar.make(((Activity) context).findViewById(android.R.id.content),
-                                        context.getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
-
-                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            } else if (majorCode == 713 && minorCode == 3) {
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack =
-                                Snackbar.make(((Activity) context).findViewById(android.R.id.content),
-                                        context.getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
-
-                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            } else if (majorCode == 713 && minorCode == 4) {
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack =
-                                Snackbar.make(((Activity) context).findViewById(android.R.id.content),
-                                        context.getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
-
-                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            } else if (majorCode == 713 && minorCode == 5) {
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack =
-                                Snackbar.make(((Activity) context).findViewById(android.R.id.content),
-                                        context.getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
-
-                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            } else if (majorCode == 714) {
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack =
-                                Snackbar.make(((Activity) context).findViewById(android.R.id.content),
-                                        context.getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
-
-                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            } else if (majorCode == 715) {
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack =
-                                Snackbar.make(((Activity) context).findViewById(android.R.id.content),
-                                        context.getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
-
-                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            }
-        }
-
-    }
-
-
-    public interface updateProgress {
-        void OnProgress(int progress);
     }
 
 

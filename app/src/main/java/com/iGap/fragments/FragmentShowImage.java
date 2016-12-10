@@ -16,22 +16,21 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activities.ActivityShearedMedia;
 import com.iGap.adapter.AdapterShearedMedia;
+import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.TouchImageView;
 import com.iGap.proto.ProtoGlobal;
-
+import io.meness.github.messageprogress.MessageProgress;
 import java.io.File;
 import java.util.ArrayList;
-
-import io.meness.github.messageprogress.MessageProgress;
 
 public class FragmentShowImage extends Fragment {
 
@@ -43,11 +42,19 @@ public class FragmentShowImage extends Fragment {
     private ViewGroup ltImageName;
     private ViewPager viewPager;
 
-    private ArrayList<ProtoGlobal.RoomMessage> list;
+    private ArrayList<StructShowImage> mList;
     private int selectedFile = 0;
     private int listSize = 0;
     private AdapterViewPager mAdapter;
     private long peerId = 0;
+
+    class StructShowImage {
+
+        ProtoGlobal.RoomMessage item;
+        boolean isDownloading = false;
+    }
+
+
 
 
     public static View appBarLayout;
@@ -72,7 +79,9 @@ public class FragmentShowImage extends Fragment {
     @Override
     public void onDetach() {
         if (appBarLayout != null)
+
             appBarLayout.setVisibility(View.VISIBLE);
+        if (ActivityShearedMedia.onComplete != null) ActivityShearedMedia.onComplete.complete(true, "", "");
 
         super.onDetach();
     }
@@ -92,7 +101,7 @@ public class FragmentShowImage extends Fragment {
 
             peerId = bundle.getLong("PeedId");
 
-            list = (ArrayList<ProtoGlobal.RoomMessage>) bundle.getSerializable("listPic");
+            ArrayList<ProtoGlobal.RoomMessage> list = (ArrayList<ProtoGlobal.RoomMessage>) bundle.getSerializable("listPic");
             if (list == null) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 return false;
@@ -104,6 +113,16 @@ public class FragmentShowImage extends Fragment {
 
             int si = bundle.getInt("SelectedImage");
             if (si >= 0) selectedFile = si;
+
+            mList = new ArrayList<>();
+
+            for (int i = 0; i < list.size(); i++) {
+                StructShowImage sh = new StructShowImage();
+                sh.item = list.get(i);
+                mList.add(sh);
+            }
+
+
 
             return true;
         } else {
@@ -151,15 +170,15 @@ public class FragmentShowImage extends Fragment {
 
         mAdapter = new AdapterViewPager();
         viewPager.setAdapter(mAdapter);
-        listSize = list.size();
+        listSize = mList.size();
         viewPager.setCurrentItem(selectedFile);
 
         txtImageNumber.setText(selectedFile + 1 + " " + getString(R.string.of) + " " + listSize);
-        if (list.get(selectedFile).getAttachment() != null) {
-            txtImageName.setText(list.get(selectedFile).getAttachment().getName());
+        if (mList.get(selectedFile).item.getAttachment() != null) {
+            txtImageName.setText(mList.get(selectedFile).item.getAttachment().getName());
         }
-        if (list.get(selectedFile).getUpdateTime() != 0) {
-            txtImageDate.setText(TimeUtils.toLocal(list.get(selectedFile).getUpdateTime(), G.CHAT_MESSAGE_TIME));
+        if (mList.get(selectedFile).item.getUpdateTime() != 0) {
+            txtImageDate.setText(TimeUtils.toLocal(mList.get(selectedFile).item.getUpdateTime(), G.CHAT_MESSAGE_TIME));
         }
 
         viewPager.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +196,7 @@ public class FragmentShowImage extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                ProtoGlobal.RoomMessage sharedMedia = list.get(position);
+                ProtoGlobal.RoomMessage sharedMedia = mList.get(position).item;
 
                 txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + listSize);
 
@@ -234,7 +253,7 @@ public class FragmentShowImage extends Fragment {
     }
 
     private void shareImage() {
-        ProtoGlobal.RoomMessage media = list.get(viewPager.getCurrentItem());
+        ProtoGlobal.RoomMessage media = mList.get(viewPager.getCurrentItem()).item;
         if (media != null) {
             String path = AdapterShearedMedia.getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
             File file = new File(path);
@@ -253,7 +272,7 @@ public class FragmentShowImage extends Fragment {
 
     private void saveToGalary() {
 
-        ProtoGlobal.RoomMessage media = list.get(viewPager.getCurrentItem());
+        ProtoGlobal.RoomMessage media = mList.get(viewPager.getCurrentItem()).item;
         if (media != null) {
             String path = AdapterShearedMedia.getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
             File file = new File(path);
@@ -268,7 +287,7 @@ public class FragmentShowImage extends Fragment {
 
         @Override
         public int getCount() {
-            return list.size();
+            return mList.size();
         }
 
         @Override
@@ -276,18 +295,21 @@ public class FragmentShowImage extends Fragment {
             return view.equals(object);
         }
 
-        @Override
-        public Object instantiateItem(View container, int position) {
+        @Override public Object instantiateItem(View container, final int position) {
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
 
-            TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
+            final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
+            final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
 
-            MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
+            if (mList.get(position).isDownloading) {
+                progress.withDrawable(R.drawable.ic_cancel, true);
+            } else {
+                progress.withDrawable(R.drawable.ic_download, true);
+            }
 
-
-            ProtoGlobal.RoomMessage media = list.get(position);
+            final ProtoGlobal.RoomMessage media = mList.get(position).item;
             if (media != null) {
                 String path = AdapterShearedMedia.getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
                 File file = new File(path);
@@ -306,6 +328,50 @@ public class FragmentShowImage extends Fragment {
             progress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    if (mList.get(position).isDownloading) {
+                        HelperDownloadFile.stopDownLoad(mList.get(position).item.getAttachment().getToken());
+                        progress.withDrawable(R.drawable.ic_download, true);
+                    } else {
+                        progress.withDrawable(R.drawable.ic_cancel, true);
+
+                        HelperDownloadFile.startDoanload(mList.get(position).item.getAttachment().getToken(), mList.get(position).item.getAttachment().getName(),
+                            mList.get(position).item.getAttachment().getSize(), mList.get(position).item.getMessageType(), new HelperDownloadFile.UpdateListener() {
+                                @Override public void OnProgress(String token, final int progres) {
+
+                                    if (progress != null) {
+
+                                        progress.post(new Runnable() {
+                                            @Override public void run() {
+
+                                                if (progres < 100) {
+                                                    progress.withProgress(progres);
+                                                } else {
+                                                    progress.withProgress(0);
+                                                    progress.setVisibility(View.GONE);
+
+                                                    String path = AdapterShearedMedia.getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
+                                                    File file = new File(path);
+                                                    touchImageView.setImageURI(Uri.fromFile(file));
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override public void OnError(String token) {
+                                    progress.post(new Runnable() {
+                                        @Override public void run() {
+                                            progress.withProgress(0);
+                                            progress.withDrawable(R.drawable.ic_download, true);
+                                        }
+                                    });
+                                }
+                            });
+                    }
+
+
+
 
                 }
             });

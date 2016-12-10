@@ -7,18 +7,19 @@
 
     <FrameLayout
         android:id="@+id/smsl_fl_contain_main"
+        android:layout_margin="2dp"
         android:layout_width="wrap_content"
+        android:background="@color/green"
+        android:padding="2dp"
         android:layout_height="wrap_content">
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/smslg_gif_view"
-            android:layout_width="match_parent"
-            android:background="@color/green"
+            android:layout_width="@dimen/dp120"
+            android:background="@color/gray_f2"
             android:layout_height="match_parent"
-            android:minHeight="@dimen/dp80"
-            android:minWidth="@dimen/dp80"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:minHeight="@dimen/dp120"
+            android:scaleType="fitCenter"
             />
 
         <include

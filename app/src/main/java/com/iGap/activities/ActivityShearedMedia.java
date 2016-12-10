@@ -18,12 +18,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.fragments.FragmentShowImage;
+import com.iGap.helper.HelperDownloadFile;
 import com.iGap.interfaces.OnClientSearchRoomHistory;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
@@ -33,7 +33,9 @@ import com.iGap.proto.ProtoClientSearchRoomHistory;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmShearedMedia;
 import com.iGap.request.RequestClientSearchRoomHistory;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -43,11 +45,6 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.meness.github.messageprogress.MessageProgress;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -73,6 +70,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = false;
 
+    public static OnComplete onComplete;
 
     ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter mFilter;
 
@@ -95,10 +93,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         public boolean isSelected = false;
         public boolean isDownloading = false;
         public boolean needDownload = false;
-        public boolean isDownloadCancel = false;
-        public int progress = 0;
-        public long downloadOffset = 0;
-        public MessageProgress messageProgress;
     }
 
 
@@ -123,13 +117,13 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
+
     }
 
     @Override
@@ -141,6 +135,15 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sheared_media);
+
+        onComplete = new OnComplete() {
+            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+                recyclerView.setAdapter(null);
+                recyclerView.setAdapter(mAdapter);
+            }
+        };
+
+        HelperDownloadFile helperDownloadFile = new HelperDownloadFile();
 
         mediaLayout = (LinearLayout) findViewById(R.id.asm_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
@@ -495,9 +498,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        recyclerView.setLayoutManager(mLayoutManager);
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
-                        recyclerView.setAdapter(mAdapter);
+                        initLayoutRecycleviewForImage();
                     }
                 });
 
@@ -828,8 +829,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             return (T) deserialize(serialize(obj));
         }
     }
-
-
 
 
 }

@@ -34,7 +34,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -80,15 +79,13 @@ import com.iGap.request.RequestUserContactsDelete;
 import com.iGap.request.RequestUserContactsEdit;
 import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.File;
-import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import java.io.File;
+import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -106,6 +103,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private String color;
     private String enterFrom;
     private String userStatus;
+
+    TextView txtCountOfShearedMedia;
 
     private boolean showNumber = true;
 
@@ -139,6 +138,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         }
     }
 
+    @Override protected void onResume() {
+        txtCountOfShearedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
+
+        super.onResume();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -663,8 +667,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             vgPhoneNumber.setVisibility(View.GONE);
         }
 
-        TextView txtCountOfShearedMedia = (TextView) findViewById(R.id.chi_txt_count_of_sharedMedia);
-        txtCountOfShearedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
+        txtCountOfShearedMedia = (TextView) findViewById(R.id.chi_txt_count_of_sharedMedia);
+
 
         txtUserName.setText(username);
         txtPhoneNumber.setText("" + phone);

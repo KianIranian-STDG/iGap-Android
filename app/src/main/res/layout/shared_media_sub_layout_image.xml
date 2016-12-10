@@ -16,8 +16,8 @@
             android:id="@+id/smsl_imv_file_pic"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp120"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
+            android:minWidth="@dimen/dp120"
+            android:scaleType="fitCenter"
             android:src="@mipmap/difaultimage" />
 
         <LinearLayout
