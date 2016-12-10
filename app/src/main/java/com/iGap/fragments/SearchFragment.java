@@ -390,6 +390,11 @@ public class SearchFragment extends Fragment {
                 }
 
                 @Override
+                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+
+                }
+
+                @Override
                 public void onChatGetRoomTimeOut() {
 
                 }

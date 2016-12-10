@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoChannelAvatarDelete;
 
 public class ChannelAvatarDeleteResponse extends MessageHandler {
@@ -21,8 +22,9 @@ public class ChannelAvatarDeleteResponse extends MessageHandler {
         super.handler();
 
         ProtoChannelAvatarDelete.ChannelAvatarDeleteResponse.Builder builder = (ProtoChannelAvatarDelete.ChannelAvatarDeleteResponse.Builder) message;
-        builder.getRoomId();
-        builder.getId(); // Avatar Id
+        if (G.onChannelAvatarDelete != null) {
+            G.onChannelAvatarDelete.onChannelAvatarDelete(builder.getRoomId(), builder.getId());
+        }
     }
 
     @Override

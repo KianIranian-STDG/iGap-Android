@@ -34,8 +34,11 @@ public class HelperSetAction {
 
             if (structAction.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
                 new RequestGroupSetAction().groupSetAction(roomId, ProtoGlobal.ClientAction.TYPING, randomNumber);
-            } else {
+            } else if (structAction.chatType.toString().equals(ProtoGlobal.Room.Type.CHAT.toString())) {
                 new RequestChatSetAction().chatSetAction(roomId, ProtoGlobal.ClientAction.TYPING, randomNumber);
+            } else if (structAction.chatType.toString().equals(ProtoGlobal.Room.Type.CHAT.toString())) {
+                new RequestChatSetAction().chatSetAction(roomId, ProtoGlobal.ClientAction.TYPING, randomNumber);
+
             }
             timeOutChecking(structAction);
         }

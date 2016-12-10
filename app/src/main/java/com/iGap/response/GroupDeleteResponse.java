@@ -3,6 +3,8 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupDelete;
+import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -10,6 +12,8 @@ import com.iGap.realm.RealmRoomMessageFields;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static com.iGap.module.MusicPlayer.roomId;
 
 public class GroupDeleteResponse extends MessageHandler {
 
@@ -45,10 +49,17 @@ public class GroupDeleteResponse extends MessageHandler {
                     realmRoomMessage.deleteAllFromRealm();
                 }
 
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                if (realmClientCondition != null) {
+                    realmClientCondition.deleteFromRealm();
+                }
+
             }
         });
         realm.close();
-        G.onGroupDelete.onGroupDelete(id);
+        if (G.onGroupDelete != null) {
+            G.onGroupDelete.onGroupDelete(id);
+        }
     }
 
     @Override

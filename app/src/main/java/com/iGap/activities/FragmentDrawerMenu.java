@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
@@ -164,19 +163,17 @@ public class FragmentDrawerMenu extends MenuFragment {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(G.context, getResources().getString(R.string.future_done), Toast.LENGTH_SHORT).show();
-
-//                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("TYPE", "NewChanel");
-//                fragment.setArguments(bundle);
-//                getActivity().getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-//                                R.anim.slide_in_right, R.anim.slide_out_left)
-//                        .addToBackStack(null)
-//                        .replace(R.id.fragmentContainer, fragment)
-//                        .commit();
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TYPE", "NewChanel");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
             }
         });
 

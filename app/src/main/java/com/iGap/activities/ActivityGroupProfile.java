@@ -415,7 +415,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         txtGroupDescription.setText(description);
 
         txtNumberOfSharedMedia = (TextView) findViewById(R.id.agp_txt_number_of_shared_media);
-        txtNumberOfSharedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
+        txtNumberOfSharedMedia.setText(AdapterShearedMedia.getCountOfShearedMedia(roomId) + "");
         txtMemberNumber = (TextView) findViewById(R.id.agp_txt_member_number);
         appBarLayout = (AppBarLayout) findViewById(R.id.agp_appbar);
 
@@ -680,7 +680,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
                                 IItem item = new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get());
 
-
                                 if (struct.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                                     itemAdapter.add(0, item);
                                 } else {
@@ -880,6 +879,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         items = new ArrayList<>();
 
         ContactItemGroupProfile.mainRole = role.toString();
+        ContactItemGroupProfile.roomType = ProtoGlobal.Room.Type.GROUP;
 
         fillItem();
 
@@ -1213,11 +1213,9 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
     private class CreatePopUpMessage {
 
-
         private void show(View view, final StructContactInfo info) {
             PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, view, Gravity.TOP);
             popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
-
 
             if (role == GroupChatRole.OWNER) {
 
@@ -1258,7 +1256,6 @@ public class ActivityGroupProfile extends ActivityEnhanced
 
                 return;
             }
-
 
             // Setup menu item selection
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -2688,6 +2685,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         Bundle bundle = new Bundle();
         bundle.putString("TYPE", "MODERATOR");
         bundle.putLong("ID", roomId);
+        bundle.putString("ROOM_TYPE", ProtoGlobal.Room.Type.GROUP.toString());
         bundle.putBoolean("DIALOG_SHOWING", false);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
@@ -2702,6 +2700,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         Bundle bundle = new Bundle();
         bundle.putBoolean("DIALOG_SHOWING", false);
         bundle.putLong("ID", roomId);
+        bundle.putString("ROOM_TYPE", ProtoGlobal.Room.Type.GROUP.toString());
         bundle.putString("TYPE", "ADMIN");
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()

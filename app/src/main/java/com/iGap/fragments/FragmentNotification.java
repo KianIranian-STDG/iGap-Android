@@ -154,11 +154,11 @@ public class FragmentNotification extends Fragment {
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                getActivity().getSupportFragmentManager()
+                getActivity().getSupportFragmentManager().popBackStack();
+                /*getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .remove(FragmentNotification.this)
-                        .commit();
+                        .commit();*/
             }
         });
         root.setOnClickListener(new View.OnClickListener() {

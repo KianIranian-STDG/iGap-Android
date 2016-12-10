@@ -44,7 +44,9 @@ public class GroupAddAdminResponse extends MessageHandler {
                     for (RealmMember member : realmMemberRealmList) {
                         if (member.getPeerId() == builder.getMemberId()) {
                             member.setRole(ProtoGlobal.GroupRoom.Role.ADMIN.toString());
-                            G.onGroupAddAdmin.onGroupAddAdmin(builder.getRoomId(), builder.getMemberId());
+                            if (G.onGroupAddAdmin != null) {
+                                G.onGroupAddAdmin.onGroupAddAdmin(builder.getRoomId(), builder.getMemberId());
+                            }
                             break;
                         }
                     }

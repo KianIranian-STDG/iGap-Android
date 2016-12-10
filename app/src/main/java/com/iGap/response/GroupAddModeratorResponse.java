@@ -29,20 +29,13 @@ public class GroupAddModeratorResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoGroupAddModerator.GroupAddModeratorResponse.Builder builder =
-                (ProtoGroupAddModerator.GroupAddModeratorResponse.Builder) message;
-        builder.getRoomId();
-        builder.getMemberId();
-
+        final ProtoGroupAddModerator.GroupAddModeratorResponse.Builder builder = (ProtoGroupAddModerator.GroupAddModeratorResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
 
-        final RealmRoom realmRoom = realm.where(RealmRoom.class)
-                .equalTo(RealmRoomFields.ID, builder.getRoomId())
-                .findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
 
         if (realmRoom != null) {
-
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -52,8 +45,9 @@ public class GroupAddModeratorResponse extends MessageHandler {
                     for (RealmMember member : realmMemberRealmList) {
                         if (member.getPeerId() == builder.getMemberId()) {
                             member.setRole(ProtoGlobal.GroupRoom.Role.MODERATOR.toString());
-                            G.onGroupAddModerator.onGroupAddModerator(builder.getRoomId(),
-                                    builder.getMemberId());
+                            if (G.onGroupAddModerator != null) {
+                                G.onGroupAddModerator.onGroupAddModerator(builder.getRoomId(), builder.getMemberId());
+                            }
                             break;
                         }
                     }

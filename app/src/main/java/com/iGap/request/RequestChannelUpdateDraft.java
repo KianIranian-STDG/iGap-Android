@@ -6,8 +6,13 @@ import com.iGap.proto.ProtoGlobal;
 
 public class RequestChannelUpdateDraft {
 
-    public void channelUpdateDraft(long roomId, ProtoGlobal.RoomDraft draft) {
+    public void channelUpdateDraft(long roomId, String message, long replyToMessageId) {
         ProtoChannelUpdateDraft.ChannelUpdateDraft.Builder builder = ProtoChannelUpdateDraft.ChannelUpdateDraft.newBuilder();
+
+        ProtoGlobal.RoomDraft.Builder draft = ProtoGlobal.RoomDraft.newBuilder();
+        draft.setMessage(message);
+        draft.setReplyTo(replyToMessageId);
+
         builder.setRoomId(roomId);
         builder.setDraft(draft);
 

@@ -5,7 +5,14 @@ import com.iGap.proto.ProtoChannelAddMember;
 
 public class RequestChannelAddMember {
 
-    public void channelAddMember(long roomId, ProtoChannelAddMember.ChannelAddMember.Member member) {
+    public void channelAddMember(long roomId, long userId, long startMessageId) {
+
+
+        ProtoChannelAddMember.ChannelAddMember.Member.Builder member = ProtoChannelAddMember.ChannelAddMember.Member.newBuilder();
+        member.setUserId(userId);
+        member.setStartMessageId(startMessageId);
+
+
         ProtoChannelAddMember.ChannelAddMember.Builder builder = ProtoChannelAddMember.ChannelAddMember.newBuilder();
         builder.setRoomId(roomId);
         builder.setMember(member);

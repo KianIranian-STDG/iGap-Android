@@ -1,0 +1,42 @@
+package com.iGap.helper;
+
+import com.iGap.G;
+import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
+import com.iGap.realm.RealmOfflineDelete;
+
+import io.realm.Realm;
+
+public final class HelperDeleteMessage {
+
+    /**
+     * update client condition with delete response and call onChatDeleteMessage
+     */
+
+    public static void deleteMessage(final long roomId, final long messageId, final long deleteVersion, final ProtoResponse.Response response) {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                if (realmClientCondition != null) {
+                    realmClientCondition.setDeleteVersion(deleteVersion);
+                    for (RealmOfflineDelete realmOfflineDeleted : realmClientCondition.getOfflineDeleted()) {
+                        if (realmOfflineDeleted.getOfflineDelete() == messageId) {
+                            realmOfflineDeleted.deleteFromRealm();
+                            break;
+                        }
+                    }
+                }
+                if (G.onChatDeleteMessageResponse != null) {
+                    G.onChatDeleteMessageResponse.onChatDeleteMessage(deleteVersion, messageId, roomId, response);
+                }
+            }
+        });
+
+        realm.close();
+    }
+}

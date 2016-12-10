@@ -3,6 +3,10 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoChatGetRoom;
 import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoom;
+
+import io.realm.Realm;
 
 public class ChatGetRoomResponse extends MessageHandler {
 
@@ -21,7 +25,7 @@ public class ChatGetRoomResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoChatGetRoom.ChatGetRoomResponse.Builder chatGetRoomResponse = (ProtoChatGetRoom.ChatGetRoomResponse.Builder) message;
+        final ProtoChatGetRoom.ChatGetRoomResponse.Builder chatGetRoomResponse = (ProtoChatGetRoom.ChatGetRoomResponse.Builder) message;
 
         /**
          * before client just get roomId from server and send that with receiver
@@ -31,7 +35,23 @@ public class ChatGetRoomResponse extends MessageHandler {
          *
          * hint : we can set another interface for another state.
          */
-        G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoom().getId());
+
+        if (chatGetRoomResponse.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) {
+
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom.putOrUpdate(chatGetRoomResponse.getRoom());
+                }
+            });
+            realm.close();
+
+            G.onChatGetRoom.onChatGetRoomCompletely(chatGetRoomResponse.getRoom());
+        } else {
+            G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoom().getId());
+        }
+
     }
 
     @Override

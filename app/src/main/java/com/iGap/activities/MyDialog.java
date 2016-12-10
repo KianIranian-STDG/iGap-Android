@@ -13,9 +13,6 @@ import com.iGap.R;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoGlobal;
 
-/**
- * Created by android3 on 8/3/2016.
- */
 public class MyDialog {
 
     public static void showDialogMenuItemRooms(final Context context, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, final OnComplete complete) {
@@ -69,7 +66,17 @@ public class MyDialog {
                 txtDeleteChat.setText(context.getString(R.string.left) + " " + context.getString(R.string.group));
             }
         } else if (mType == ProtoGlobal.Room.Type.CHANNEL) {
+
+
             txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.channel));
+
+            if (role.equals("OWNER")) {
+
+                txtDeleteChat.setText(context.getString(R.string.delete_item_dialog) + " " + context.getString(R.string.channel));
+            } else {
+
+                txtDeleteChat.setText(context.getString(R.string.left) + " " + context.getString(R.string.channel));
+            }
         }
 
         txtDeleteChat.setOnClickListener(new View.OnClickListener() {
@@ -89,8 +96,14 @@ public class MyDialog {
                     }
 
                 } else if (mType == ProtoGlobal.Room.Type.CHANNEL) {
-                    str0 = context.getString(R.string.do_you_want_delete_this);
+
+
                     str = context.getString(R.string.channel);
+                    if (role.equals("OWNER")) {
+                        str0 = context.getString(R.string.do_you_want_delete_this);
+                    } else {
+                        str0 = context.getString(R.string.do_you_want_left_this);
+                    }
                 }
 
                 showDialogNotification(context, str0 + " " + str + " ?", complete, "txtDeleteChat");

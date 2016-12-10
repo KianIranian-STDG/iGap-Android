@@ -58,6 +58,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
@@ -77,6 +78,7 @@ import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImageMessages;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCancelDownloadUpload;
 import com.iGap.helper.HelperConvertEnumToString;
 import com.iGap.helper.HelperGetAction;
@@ -88,6 +90,7 @@ import com.iGap.helper.HelperSetAction;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.IResendMessage;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatDeleteMessageResponse;
@@ -165,6 +168,8 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestChannelDeleteMessage;
+import com.iGap.request.RequestChannelUpdateDraft;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
@@ -173,6 +178,7 @@ import com.iGap.request.RequestClientGetRoomHistory;
 import com.iGap.request.RequestGroupDeleteMessage;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.iGap.request.RequestUserInfo;
+import com.iGap.request.RequestWrapper;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
@@ -191,8 +197,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import io.github.meness.emoji.emoji.Emoji;
@@ -1487,12 +1495,15 @@ public class ActivityChat extends ActivityEnhanced
                     intent.putExtra("enterFrom", CHAT.toString());
                     startActivity(intent);
                 } else if (chatType == GROUP) {
-
                     if (!isChatReadOnly) {
                         Intent intent = new Intent(G.context, ActivityGroupProfile.class);
                         intent.putExtra("RoomId", mRoomId);
                         startActivity(intent);
                     }
+                } else if (chatType == CHANNEL) {
+                    Intent intent = new Intent(G.context, ActivityChannelProfile.class);
+                    intent.putExtra(Config.PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
+                    startActivity(intent);
                 }
             }
         });
@@ -1750,19 +1761,15 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void setUserStatus(String status, long time) {
-        Log.i("CCC", "2 status : " + status);
-        Log.i("QQQ", "setUserStatus 1");
         userStatus = status;
         if (status != null) {
             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                Log.i("QQQ", "EXACTLY");
                 /*String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
                 txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);*/
 
                 txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time));
                 //txtLastSeen.setText(LastSeenTimeUtil.computeTime(userId, time));
             } else {
-                Log.i("QQQ", "NOT EXACTLY");
                 txtLastSeen.setText(status);
             }
         }
@@ -2053,40 +2060,57 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setAvatar() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatar> avatars = null;
-        if (chatType != CHAT) {
-            avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mRoomId).findAll();
-        } else {
-            avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, chatPeerId).findAll();
-        }
 
-        if (avatars.isEmpty()) {
-            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-            return;
-        }
-        RealmAvatar realmAvatar = null;
-        for (int i = avatars.size() - 1; i >= 0; i--) {
-            RealmAvatar avatar = avatars.get(i);
-            if (avatar.getFile() != null) {
-                realmAvatar = avatar;
-                break;
+        if (chatType != CHANNEL) {
+
+            HelperAvatar.getAvatar(mRoomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+                @Override
+                public void onAvatarGet(String avatarPath) {
+                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
+                }
+
+                @Override
+                public void onShowInitials(String initials, String color) {
+                    imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                }
+            });
+
+        } else {
+            RealmResults<RealmAvatar> avatars = null;
+            if (chatType != CHAT) {
+                avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mRoomId).findAll();
+            } else {
+                avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, chatPeerId).findAll();
             }
-        }
 
-        if (realmAvatar == null) {
-            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-            return;
-        }
+            if (avatars.isEmpty()) {
+                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+                return;
+            }
+            RealmAvatar realmAvatar = null;
+            for (int i = avatars.size() - 1; i >= 0; i--) {
+                RealmAvatar avatar = avatars.get(i);
+                if (avatar.getFile() != null) {
+                    realmAvatar = avatar;
+                    break;
+                }
+            }
 
-        if (realmAvatar.getFile().isFileExistsOnLocal()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imvUserPicture);
-        } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvUserPicture);
-        } else {
-            imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
-        }
+            if (realmAvatar == null) {
+                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+                return;
+            }
 
-        realm.close();
+            if (realmAvatar.getFile().isFileExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imvUserPicture);
+            } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvUserPicture);
+            } else {
+                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+            }
+
+            realm.close();
+        }
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
@@ -2866,6 +2890,8 @@ public class ActivityChat extends ActivityEnhanced
                                 new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
                             } else if (chatType == CHAT) {
                                 new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
+                            } else if (chatType == CHANNEL) {
+                                new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
                             }
                         }
                     }
@@ -3998,6 +4024,8 @@ public class ActivityChat extends ActivityEnhanced
                                 new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, message, replyToMessageId);
                             } else if (chatType == GROUP) {
                                 new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, replyToMessageId);
+                            } else if (chatType == CHANNEL) {
+                                new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, message, replyToMessageId);
                             }
                             if (G.onDraftMessage != null) { // zamani ke mostaghim varede chat beshim bedune vorud be list room ha onDraftMessage null mishe
                                 G.onDraftMessage.onDraftMessage(mRoomId, message);
@@ -4291,6 +4319,8 @@ public class ActivityChat extends ActivityEnhanced
                                                     new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(message.messageID));
                                                 } else if (chatType == CHAT) {
                                                     new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(message.messageID));
+                                                } else if (chatType == CHANNEL) {
+                                                    new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(message.messageID));
                                                 }
                                             }
                                             element.removeChangeListeners();
