@@ -511,4 +511,9 @@ public class ActivityProfile extends ActivityEnhanced
     public void onBadDownload(String token) {
         // empty
     }
+
+    @Override
+    public void onFileTimeOut(String identity) {
+        // empty
+    }
 }

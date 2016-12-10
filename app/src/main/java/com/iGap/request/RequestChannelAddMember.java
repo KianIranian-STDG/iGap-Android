@@ -10,7 +10,6 @@ public class RequestChannelAddMember {
 
         ProtoChannelAddMember.ChannelAddMember.Member.Builder member = ProtoChannelAddMember.ChannelAddMember.Member.newBuilder();
         member.setUserId(userId);
-        member.setStartMessageId(startMessageId);
 
 
         ProtoChannelAddMember.ChannelAddMember.Builder builder = ProtoChannelAddMember.ChannelAddMember.newBuilder();

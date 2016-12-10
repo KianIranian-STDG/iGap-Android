@@ -16,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -459,7 +458,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                     });
                 } else {
                     getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    getRoom(roomId);
+                    getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
                 }
 
                 getActivity().runOnUiThread(new Runnable() {
@@ -924,7 +923,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                 public void execute(Realm realm) {
                     RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
                     realmAvatar.setOwnerId(roomId);
-                    realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
+                    realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
 
                     try {
                         AndroidUtils.copyFile(new File(pathSaveImage), new File(G.DIR_IMAGE_USER + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName()));

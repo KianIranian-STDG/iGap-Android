@@ -415,7 +415,7 @@ public class ActivityGroupProfile extends ActivityEnhanced
         txtGroupDescription.setText(description);
 
         txtNumberOfSharedMedia = (TextView) findViewById(R.id.agp_txt_number_of_shared_media);
-        txtNumberOfSharedMedia.setText(AdapterShearedMedia.getCountOfShearedMedia(roomId) + "");
+        txtNumberOfSharedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
         txtMemberNumber = (TextView) findViewById(R.id.agp_txt_member_number);
         appBarLayout = (AppBarLayout) findViewById(R.id.agp_appbar);
 
@@ -1069,6 +1069,11 @@ public class ActivityGroupProfile extends ActivityEnhanced
     @Override
     public void onBadDownload(String token) {
         // empty
+    }
+
+    @Override
+    public void onFileTimeOut(String identity) {
+        //empty
     }
 
     //dialog for choose pic from gallery or camera

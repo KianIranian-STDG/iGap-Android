@@ -178,7 +178,6 @@ import com.iGap.request.RequestClientGetRoomHistory;
 import com.iGap.request.RequestGroupDeleteMessage;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.iGap.request.RequestUserInfo;
-import com.iGap.request.RequestWrapper;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
@@ -197,10 +196,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import io.github.meness.emoji.emoji.Emoji;
@@ -3531,6 +3528,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
+    }
+
+    @Override
+    public void onFileTimeOut(String identity) {
+        //empty
     }
 
     @Override

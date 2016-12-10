@@ -624,4 +624,13 @@
     <string name="there_is_no_sheared_media">there is no sheared media</string>
     <string name="pending">Pending</string>
     <string name="completed">Completed</string>
+    <!-- New String -->
+    <string name="please_enter_channel_name">Please Enter Channel Name</string>
+    <string name="new_channel">New Channel</string>
+    <string name="channel_name">Channel Name</string>
+    <string name="channel_description">Channel Description</string>
+    <string name="channel_delete">Channel Delete</string>
+    <string name="channel_left">Channel Left</string>
+    <string name="please_enter_channel_description">Please Enter Channel Description</string>
+    <string name="delete_and_leave_channel">Delete and Leave Channel</string>
 </resources>

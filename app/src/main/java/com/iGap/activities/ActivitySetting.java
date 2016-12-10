@@ -1989,4 +1989,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     public void onBadDownload(String token) {
         // empty
     }
+
+    @Override
+    public void onFileTimeOut(String identity) {
+        //empty
+    }
 }

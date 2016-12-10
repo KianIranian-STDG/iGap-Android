@@ -460,7 +460,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         txtChannelName.setText(title);
         txtChannelNameInfo.setText(title);
         txtChannelLink.setText(inviteLink);
-        txtSharedMedia.setText(AdapterShearedMedia.getCountOfShearedMedia(roomId) + "");
+        //txtSharedMedia.setText(AdapterShearedMedia.getCountOfShearedMedia(roomId) + "");
+        txtSharedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
         //memberNumber.setText(participantsCountLabel);
 
         attachFile = new AttachFile(this);
@@ -1179,6 +1180,16 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     @Override
     public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
+
+    }
+
+    @Override
+    public void onUploadStarted(FileUploadStructure struct) {
+
+    }
+
+    @Override
+    public void onBadDownload(String token) {
 
     }
 

@@ -14,4 +14,6 @@ public interface OnFileUploadForActivities {
     void onUploadStarted(FileUploadStructure struct);
 
     void onBadDownload(String token);
+
+    void onFileTimeOut(String identity);
 }

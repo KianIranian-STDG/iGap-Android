@@ -48,7 +48,7 @@ public class HelperAvatar {
 
                 RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
                 realmAvatar.setOwnerId(ownerId);
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR));
+                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
 
                 if (onAvatarAdd != null && avatarPath != null) {
                     onAvatarAdd.onAvatarAdd(avatarPath);
