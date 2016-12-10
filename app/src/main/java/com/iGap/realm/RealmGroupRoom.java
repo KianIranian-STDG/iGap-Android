@@ -13,7 +13,6 @@ public class RealmGroupRoom extends RealmObject {
     private String participants_count_limit_label;
     private String description;
     private int avatarCount;
-    private RealmAvatar avatar;
     private RealmNotificationSetting realmNotificationSetting;
     private RealmList<RealmMember> members;
 
@@ -72,14 +71,6 @@ public class RealmGroupRoom extends RealmObject {
 
     public void setAvatarCount(int avatarCount) {
         this.avatarCount = avatarCount;
-    }
-
-    public RealmAvatar getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(RealmAvatar avatar) {
-        this.avatar = avatar;
     }
 
     public RealmNotificationSetting getRealmNotificationSetting() {

@@ -427,6 +427,7 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         requestMessageHistory();
+        setAvatar();
     }
 
 
@@ -639,7 +640,6 @@ public class ActivityChat extends ActivityEnhanced
 
         getChatHistory();
         getDraft();
-        setAvatar();
         getUserInfo();
         updateStatus();
         setUpEmojiPopup();

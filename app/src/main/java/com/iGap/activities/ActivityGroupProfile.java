@@ -226,6 +226,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         G.uploaderUtil.setActivityCallbacks(this);
         G.onGroupAvatarResponse = this;
+        G.onGroupAvatarDelete = this;
     }
 
     @Override
@@ -1023,7 +1024,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     @Override
     public void onUploadStarted(FileUploadStructure struct) {
-        // empty
+        showProgressBar();
     }
 
     @Override
@@ -1033,7 +1034,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     @Override
     public void onFileTimeOut(String identity) {
-        //empty
+        hideProgressBar();
     }
 
     //dialog for choose pic from gallery or camera
@@ -1044,28 +1045,22 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 .items(r)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which,
-                                            CharSequence text) {
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        if (text.toString().equals(getString(R.string.from_camera))) {
-
-                            if (getPackageManager().hasSystemFeature(
-                                    PackageManager.FEATURE_CAMERA_ANY)) {
-
+                        if (which == 0) {
+                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                                 attachFile.requestTakePicture();
-
                                 dialog.dismiss();
                             } else {
-                                Toast.makeText(ActivityGroupProfile.this,
-                                        R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ActivityGroupProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                             }
-                        } else if (text.toString().equals(getString(R.string.delete_photo))) {
+                        } else if (which == 1) {
+                            attachFile.requestOpenGalleryForImageSingleSelect();
+                        } else if (which == 2) {
+                            showProgressBar();
                             Realm realm = Realm.getDefaultInstance();
                             new RequestGroupAvatarDelete().groupAvatarDelete(roomId, getLastAvatar().getId());
                             realm.close();
-
-                        } else {
-                            attachFile.requestOpenGalleryForImageSingleSelect();
                         }
                     }
                 })
@@ -2664,8 +2659,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            myActivityReference.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            prg.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -2694,8 +2687,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         @Override
         protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
-            myActivityReference.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            prg.setVisibility(View.GONE);
             G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
         }
     }
@@ -2829,6 +2820,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
+        hideProgressBar();
         HelperAvatar.avatarAdd(roomId, filePathAvatar, avatar, new OnAvatarAdd() {
             @Override
             public void onAvatarAdd(final String avatarPath) {
@@ -2842,10 +2834,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
     }
 
+    @Override
+    public void onAvatarAddError() {
+        hideProgressBar();
+    }
+
     //***Delete Avatar
 
     @Override
     public void onDeleteAvatar(long roomId, long avatarId) {
+        hideProgressBar();
         HelperAvatar.avatarDelete(roomId, avatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
             @Override
             public void latestAvatarPath(final String avatarPath) {
@@ -2865,6 +2863,33 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
+            }
+        });
+    }
+
+    @Override
+    public void onDeleteAvatarError() {
+        hideProgressBar();
+    }
+
+    //***Show And Hide Progress
+
+    private void showProgressBar() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWait.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
+    private void hideProgressBar() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWait.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
     }
