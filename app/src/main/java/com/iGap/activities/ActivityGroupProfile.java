@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +36,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -77,14 +77,11 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.FileUploadStructure;
-import com.iGap.module.HelperCopyFile;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
-import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupGetMemberList;
-import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmGroupRoom;
@@ -120,10 +117,7 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import io.realm.Sort;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -2811,6 +2805,42 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         return _member[0];
     }
 
+    //********** compare member list
+
+    private void compareMemberList(RealmList<RealmMember> memberList, List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> serverLiseMember) {
+
+        ArrayList<Long> b1 = new ArrayList<>();
+        for (RealmMember r : memberList) {
+            long a1 = r.getPeerId();
+            b1.add(a1);
+        }
+
+        ArrayList<Long> c1 = new ArrayList<>();
+        for (int i = 0; i < serverLiseMember.size(); i++) {
+            for (int j = 0; j < b1.size(); j++) {
+
+                if (serverLiseMember.get(i).getUserId() == memberList.get(j).getPeerId()) {
+                    c1.add(memberList.get(j).getPeerId());
+                    break;
+                }
+            }
+        }
+
+        b1.removeAll(c1);
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+        for (int i = 0; i < realmMembers.size(); i++) {
+            for (int j = 0; j < b1.size(); j++) {
+
+                if (realmMembers.get(i).getPeerId() == b1.get(j)) {
+                    realmMembers.get(i).deleteFromRealm();
+                }
+            }
+        }
+        realm.close();
+    }
+
     //********** Avatars
 
     //***Get Avatar
@@ -2917,46 +2947,4 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
     }
 
-
-    private void compareMemberList(RealmList<RealmMember> memberList, List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> serverLiseMember) {
-
-        Log.i("TTTT", "compareMemberList: " + memberList.size());
-        Log.i("TTTT", "compareMemberList: " + serverLiseMember.size());
-
-        ArrayList<Long> b1 = new ArrayList<>();
-        for (RealmMember r : memberList) {
-            long a1 = r.getPeerId();
-            b1.add(a1);
-            Log.i("TTTT", "00 a: " + a1);
-        }
-
-        ArrayList<Long> c1 = new ArrayList<>();
-        for (int i = 0; i < serverLiseMember.size(); i++) {
-            for (int j = 0; j < b1.size(); j++) {
-
-                if (serverLiseMember.get(i).getUserId() == memberList.get(j).getPeerId()) {
-                    c1.add(memberList.get(j).getPeerId());
-                    Log.i("TTTT", "aa to c: " + memberList.size());
-                    Log.i("TTTT", "01 a: " + memberList.get(j).getPeerId());
-                    break;
-                }
-            }
-        }
-
-        b1.removeAll(c1);
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
-        for (int i = 0; i < realmMembers.size(); i++) {
-            for (int j = 0; j < b1.size(); j++) {
-
-                if (realmMembers.get(i).getPeerId() == b1.get(j)) {
-                    realmMembers.get(i).deleteFromRealm();
-                    Log.i("TTTT", "remove: " + memberList.size());
-                    Log.i("TTTT", "01 b: " + memberList.size());
-                }
-            }
-        }
-        realm.close();
-    }
 }
