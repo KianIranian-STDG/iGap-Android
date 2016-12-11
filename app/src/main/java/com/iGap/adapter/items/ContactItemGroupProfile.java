@@ -10,6 +10,8 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChannelProfile;
 import com.iGap.activities.ActivityGroupProfile;
+import com.iGap.helper.HelperAvatar;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
@@ -60,14 +62,25 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
 
         setRoleStarColor(holder.roleStar);
 
+        HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(String avatarPath) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+            }
 
-        if (mContact.avatar != null && mContact.avatar.getFile().isFileExistsOnLocal()) {
+            @Override
+            public void onShowInitials(String initials, String color) {
+                holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+            }
+        });
+
+       /* if (mContact.avatar != null && mContact.avatar.getFile().isFileExistsOnLocal()) {
             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mContact.avatar.getFile().getLocalFilePath()), holder.image);
         } else if (mContact.avatar != null && mContact.avatar.getFile().isThumbnailExistsOnLocal()) {
             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mContact.avatar.getFile().getLocalThumbnailPath()), holder.image);
         } else {
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), mContact.initials, mContact.color));
-        }
+        }*/
 
         if (mContact.status != null) {
             if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {

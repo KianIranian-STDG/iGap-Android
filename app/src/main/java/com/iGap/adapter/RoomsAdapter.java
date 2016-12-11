@@ -1,7 +1,5 @@
 package com.iGap.adapter;
 
-import android.util.Log;
-
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
@@ -82,12 +80,19 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
             if (chat.mInfo.getId() == chatId) {
 
                 final int position = items.indexOf(chat);
-                Log.i("BBB", "chat.mInfo.chatTitle : " + chat.mInfo.getTitle());
-                Log.i("BBB", "position : " + position);
 
                 // because of nested transactions, following lines should not be into a transaction method
                 chat.mInfo.getDraft().setMessage(draftMessage);
                 notifyItemChanged(position);
+            }
+        }
+    }
+
+    public void notify(long chatId) {
+        List<Item> items = getAdapterItems();
+        for (final Item chat : items) {
+            if (chat.mInfo.getId() == chatId) {
+                notifyItemChanged(items.indexOf(chat));
             }
         }
     }

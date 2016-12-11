@@ -4,8 +4,11 @@ import com.iGap.G;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
 import com.iGap.interfaces.OnAvatarGet;
+import com.iGap.interfaces.OnDownload;
+import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.enums.AttachmentFor;
+import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
@@ -14,6 +17,8 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestFileDownload;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,6 +63,15 @@ public class HelperAvatar {
         realm.close();
     }
 
+    /**
+     * get temp address for source and get token and name
+     * from avatar for file destination
+     *
+     * @param src    temp address
+     * @param avatar avatar that want copy
+     * @return return destination path if copy was successfully
+     */
+
     private static String copyAvatar(String src, ProtoGlobal.Avatar avatar) {
         try {
             /*
@@ -79,15 +93,27 @@ public class HelperAvatar {
      * @param ownerId if is user set userId and if is room set roomId
      */
 
-    public static void getAvatar(long ownerId, AvatarType avatarType, OnAvatarGet onAvatarGet) {
+    public static void getAvatar(long ownerId, AvatarType avatarType, final OnAvatarGet onAvatarGet) {
 
-        RealmAvatar realmAvatar = getLastAvatar(ownerId);
+        final RealmAvatar realmAvatar = getLastAvatar(ownerId);
         if (realmAvatar != null) {
             if (realmAvatar.getFile().isFileExistsOnLocal()) {
                 onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalFilePath());
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
                 onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalThumbnailPath());
             } else {
+
+                new AvatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
+                    @Override
+                    public void onDownload(String filepath) {
+                        onAvatarGet.onAvatarGet(filepath);
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
 
                 String[] initials = showInitials(ownerId, avatarType);
                 if (initials != null) {
@@ -225,4 +251,117 @@ public class HelperAvatar {
 
         realm.close();
     }
+
+    private static class AvatarDownload {
+
+        private static RealmAttachment realmAttachment;
+        private static ProtoFileDownload.FileDownload.Selector selector;
+        private static OnDownload onDownload;
+        private static String fileName = "";
+        private static long fileSize = 0;
+
+
+        public AvatarDownload(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector, OnDownload onDownload) {
+            this.realmAttachment = realmAttachment;
+            this.selector = selector;
+            this.onDownload = onDownload;
+
+            avatarDownload();
+        }
+
+        private static void avatarDownload() {
+
+            if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+                fileName = realmAttachment.getToken() + "_" + realmAttachment.getName();
+                fileSize = realmAttachment.getSize();
+            } else if (selector == ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL) {
+                fileName = "thumb_" + realmAttachment.getToken() + "_" + realmAttachment.getName();
+                fileSize = realmAttachment.getLargeThumbnail().getSize();
+            } else if (selector == ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL) {
+                fileName = "thumb_" + realmAttachment.getToken() + "_" + realmAttachment.getName();
+                fileSize = realmAttachment.getSmallThumbnail().getSize();
+            }
+
+            String identity = realmAttachment.getToken()
+                    + '*' + selector.toString()
+                    + '*' + fileSize
+                    + '*' + fileName
+                    + '*' + 0;
+
+            new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector, identity);
+
+            new OnFileDownloadResponse() {
+                @Override
+                public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+                    if (progress == 100) {
+
+                        try {
+                            AndroidUtils.cutFromTemp(fileName);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        onDownload.onDownload(G.DIR_IMAGE_USER + "/" + fileName);
+                    } else {
+                        // I don't use offset in getting thumbnail
+                        String identity = realmAttachment.getToken()
+                                + '*' + selector.toString()
+                                + '*' + fileSize
+                                + '*' + fileName
+                                + '*' + offset;
+
+                        new RequestFileDownload().download(realmAttachment.getToken(), offset, getFileSize(realmAttachment, selector), selector, identity);
+                    }
+                }
+
+                @Override
+                public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
+
+                }
+
+                @Override
+                public void onError(int majorCode, int minorCode) {
+
+                }
+
+                @Override
+                public void onBadDownload(String token) {
+
+                }
+            };
+        }
+
+        private static int getFileSize(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector) {
+            long fileSize = 0;
+            if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+                fileSize = realmAttachment.getSize();
+            } else if (selector == ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL) {
+                fileSize = realmAttachment.getLargeThumbnail().getSize();
+            } else if (selector == ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL) {
+                fileSize = realmAttachment.getSmallThumbnail().getSize();
+            }
+            return (int) fileSize;
+        }
+
+       /* @Override
+        public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+
+        }
+
+        @Override
+        public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
+            //onDownload.onDownload();
+        }
+
+        @Override
+        public void onError(int majorCode, int minorCode) {
+            onDownload.onError();
+        }
+
+        @Override
+        public void onBadDownload(String token) {
+            //empty
+        }*/
+    }
+
 }
