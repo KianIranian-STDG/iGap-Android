@@ -25,8 +25,8 @@ android {
         applicationId "com.iGap"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 15
-        versionName "1.0.23"
+        versionCode 16
+        versionName "1.1.0"
 
         multiDexEnabled true
     }
