@@ -55,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -181,17 +182,9 @@ import com.nightonke.boommenu.Types.ButtonType;
 import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import io.github.meness.emoji.emoji.Emoji;
-import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
-import io.github.meness.emoji.listeners.OnEmojiClickedListener;
-import io.github.meness.emoji.listeners.OnEmojiPopupDismissListener;
-import io.github.meness.emoji.listeners.OnEmojiPopupShownListener;
-import io.github.meness.emoji.listeners.OnSoftKeyboardCloseListener;
-import io.github.meness.emoji.listeners.OnSoftKeyboardOpenListener;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
-import io.realm.Sort;
+
+import org.parceler.Parcels;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -203,7 +196,18 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.parceler.Parcels;
+
+import io.github.meness.emoji.emoji.Emoji;
+import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
+import io.github.meness.emoji.listeners.OnEmojiClickedListener;
+import io.github.meness.emoji.listeners.OnEmojiPopupDismissListener;
+import io.github.meness.emoji.listeners.OnEmojiPopupShownListener;
+import io.github.meness.emoji.listeners.OnSoftKeyboardCloseListener;
+import io.github.meness.emoji.listeners.OnSoftKeyboardOpenListener;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -4221,6 +4225,7 @@ public class ActivityChat extends ActivityEnhanced
             case FILE_TEXT:
             case IMAGE_TEXT:
             case VIDEO_TEXT:
+            case GIF_TEXT:
                 itemsRes = R.array.fileTextMessageDialogItems;
                 break;
             case FILE:
@@ -4228,6 +4233,7 @@ public class ActivityChat extends ActivityEnhanced
             case VIDEO:
             case AUDIO:
             case VOICE:
+            case GIF:
                 itemsRes = R.array.fileMessageDialogItems;
                 break;
             case LOCATION:
