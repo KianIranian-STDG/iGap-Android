@@ -13,7 +13,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -30,7 +28,6 @@ import com.iGap.activities.ActivityPaint;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.proto.ProtoGlobal;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,7 +56,7 @@ public class AttachFile {
 
     private PopupWindow popupWindow;
 
-    public static final String IMAGE_DIRECTORY_NAME = "Upload";
+
     public static boolean isInAttach = false;
     public static String imagePath = "";
     OnComplete complete;
@@ -186,7 +183,7 @@ public class AttachFile {
     private File getOutputMediaFile(int type) {
 
         // External sdcard location
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
+        File mediaStorageDir = new File(G.DIR_IMAGES);
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {

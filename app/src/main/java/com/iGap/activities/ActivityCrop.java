@@ -15,23 +15,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.helper.HelperCorrectImageRotate;
+import com.iGap.helper.ImageHelper;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.HelperCopyFile;
-import com.iGap.module.HelperDecodeFile;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityCrop extends ActivityEnhanced {
@@ -82,7 +76,8 @@ public class ActivityCrop extends ActivityEnhanced {
                 @Override
                 public void run() {
                     String Path = getRealPathFromURI(uri);
-                    final Bitmap rotateImage = HelperCorrectImageRotate.correct(Path);
+
+                    final Bitmap rotateImage = ImageHelper.correctRotateImage(Path, true);
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -192,7 +187,6 @@ public class ActivityCrop extends ActivityEnhanced {
                 }
                 if (page != null) {
 
-                    resizeImage(result);
                     Intent data = new Intent();
                     data.setData(Uri.parse(result));
                     setResult(Activity.RESULT_OK, data);
@@ -238,19 +232,4 @@ public class ActivityCrop extends ActivityEnhanced {
         return result;
     }
 
-    private void resizeImage(String pathSaveImage) {
-        Bitmap b = HelperDecodeFile.decodeFile(new File(pathSaveImage));
-        try {
-            FileOutputStream out = new FileOutputStream(pathSaveImage);
-
-            if (b != null) {
-                b.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            } else {
-            }
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

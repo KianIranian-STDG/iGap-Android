@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -120,7 +119,6 @@ import com.iGap.module.ContactUtils;
 import com.iGap.module.EndlessRecyclerOnScrollListener;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.FileUtils;
-import com.iGap.module.HelperDecodeFile;
 import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
@@ -183,21 +181,6 @@ import com.nightonke.boommenu.Types.ButtonType;
 import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -209,6 +192,18 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -2251,8 +2246,6 @@ public class ActivityChat extends ActivityEnhanced
             listPathString = null;
             if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
 
-                ImageHelper.correctRotateImage(AttachFile.imagePath);
-
                 listPathString = new ArrayList<>();
                 listPathString.add(AttachFile.imagePath);
                 // latestFilePath = AttachFile.imagePath;
@@ -2329,6 +2322,14 @@ public class ActivityChat extends ActivityEnhanced
                         }
                     }
                 });
+            } else if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override public void run() {
+                        ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                    }
+                });
+                thread.start();
             }
 
         }
@@ -3936,7 +3937,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void resizeImage(String pathSaveImage) {
-        Bitmap b = HelperDecodeFile.decodeFile(new File(pathSaveImage));
+        Bitmap b = ImageHelper.decodeFile(new File(pathSaveImage));
         try {
             FileOutputStream out = new FileOutputStream(pathSaveImage);
 

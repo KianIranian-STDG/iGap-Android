@@ -10,15 +10,16 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.ExifInterface;
-
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ImageHelper {
+
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
-        Bitmap output =
-                Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
         final int color = 0xff424242;
@@ -45,15 +46,28 @@ public class ImageHelper {
      * @param filepath picture file address
      * @return return correct rotate bitmap or return null if file path not exist
      */
-    public static Bitmap correctRotateImage(String filepath) {
+    public static Bitmap correctRotateImage(String filepath, boolean compress) {
 
         Bitmap bitmap = null;
+        boolean saveChange = compress;
 
         try {
 
             if (filepath.length() > 0) {
                 File file = new File(filepath);
-                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+                try {
+                    if (compress) {
+                        bitmap = decodeFile(file);
+                    } else {
+                        bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    }
+                } catch (Exception e) {
+                    saveChange = true;
+                    bitmap = decodeFile(file);
+                }
+
+
             } else {
                 return null;
             }
@@ -61,26 +75,26 @@ public class ImageHelper {
             ExifInterface ei = new ExifInterface(filepath);
             int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
+
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     bitmap = rotateImage(bitmap, 90);
-                    if (filepath.length() > 0)
-                        SaveBitmapToFile(filepath, bitmap);
+                    saveChange = true;
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_180:
                     bitmap = rotateImage(bitmap, 180);
-                    if (filepath.length() > 0)
-                        SaveBitmapToFile(filepath, bitmap);
+                    saveChange = true;
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     bitmap = rotateImage(bitmap, 270);
-                    if (filepath.length() > 0)
-                        SaveBitmapToFile(filepath, bitmap);
+                    saveChange = true;
                     break;
+
             }
         } catch (IOException e) {
         }
 
+        if (filepath.length() > 0 && saveChange) SaveBitmapToFile(filepath, bitmap);
 
         return bitmap;
     }
@@ -91,7 +105,7 @@ public class ImageHelper {
         try {
             File imgFile = new File(filepath);
             out = new FileOutputStream(imgFile);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -113,6 +127,57 @@ public class ImageHelper {
         retVal = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
 
         return retVal;
+    }
+
+    public static void compressImage(String path) {
+
+        Bitmap b = decodeFile(new File(path));
+
+        try {
+            FileOutputStream out = new FileOutputStream(path);
+
+            if (b != null) {
+                b.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            } else {
+            }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * decrease iamge size of file to request size
+     *
+     * @param f image file
+     */
+    public static Bitmap decodeFile(File f) {
+        try {
+            //decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+            //Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE = 200;
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE) break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+
+            //decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            //  o2.inSampleSize = 15;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {
+        }
+        return null;
     }
 
 
