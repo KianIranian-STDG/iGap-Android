@@ -1,17 +1,14 @@
 package com.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperCalander;
 import com.iGap.module.StructSessionsGetActiveList;
-import com.iGap.module.TimeUtils;
 import com.mikepenz.fastadapter.items.AbstractItem;
-
 import java.util.List;
 
 import static com.iGap.R.id.adp_currentSession;
@@ -71,7 +68,8 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
         holder.txtCountry.setText("" + item.getCountry());
         holder.txtIp.setText("" + item.getIp());
 
-        String changeTime = TimeUtils.toLocal(item.getActiveTime() * DateUtils.SECOND_IN_MILLIS, "dd MMM yyyy");
+        String changeTime = HelperCalander.checkHijriAndReturnTime(item.getActiveTime());
+
         holder.txtCreateTime.setText("" + changeTime);
 
 

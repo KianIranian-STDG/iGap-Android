@@ -1,6 +1,11 @@
 package com.iGap.helper;
 
+import android.content.SharedPreferences;
+import android.text.format.DateUtils;
+import com.iGap.G;
 import com.iGap.libs.CalendarTools;
+import com.iGap.module.SHP_SETTING;
+import com.iGap.module.TimeUtils;
 import java.util.Calendar;
 
 /**
@@ -9,32 +14,44 @@ import java.util.Calendar;
 
 public class HelperCalander {
 
-    public static class StructCalander {
-
-        int year = 0;
-        String month = "0";
-        String daye = "0";
-    }
-
-    public static StructCalander getPersianCalander(int year, int mounth, int day) {
+    public static String getPersianCalander(int year, int mounth, int day) {
 
         CalendarTools convertTime = new CalendarTools();
         convertTime.GregorianToPersian(year, mounth, day);
 
-        StructCalander sc = new StructCalander();
-
-        sc.year = convertTime.getYear();
-        sc.month = convertTime.getMonth();
-        sc.daye = convertTime.getDay();
-
-        return sc;
+        return convertTime.getYear() + "/" + convertTime.getMonth() + "/" + convertTime.getDay();
     }
 
-    public static StructCalander getPersianCalander(long time) {
+    public static String getPersianCalander(long time) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
 
         return getPersianCalander(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
     }
+
+    public static boolean isTimeHijri() {
+
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
+        int result = sharedPreferences.getInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 0);
+
+        if (result == 1) return true;
+
+        return false;
+    }
+
+    public static String checkHijriAndReturnTime(long time) {
+
+        String result = "";
+
+        if (isTimeHijri()) {
+            result = getPersianCalander(time * DateUtils.SECOND_IN_MILLIS);
+        } else {
+            result = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, "dd MMM yyyy");
+        }
+
+        return result;
+    }
+
+
 }

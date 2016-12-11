@@ -1,14 +1,12 @@
 package com.iGap.response;
 
 import android.text.format.DateUtils;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoGroupClearMessage;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 
 public class GroupClearMessageResponse extends MessageHandler {
@@ -27,6 +25,7 @@ public class GroupClearMessageResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         final ProtoGroupClearMessage.GroupClearMessageResponse.Builder builder =
                 (ProtoGroupClearMessage.GroupClearMessageResponse.Builder) message;
         builder.getRoomId();
@@ -59,6 +58,6 @@ public class GroupClearMessageResponse extends MessageHandler {
 
     @Override
     public void error() {
-
+        super.error();
     }
 }

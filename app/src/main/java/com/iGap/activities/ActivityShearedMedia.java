@@ -23,6 +23,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.fragments.FragmentShowImage;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.interfaces.OnClientSearchRoomHistory;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -731,16 +732,25 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         String secendItemTime = "";
         SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
 
+        boolean isTimeHijri = HelperCalander.isTimeHijri();
+
         for (int i = uploadList.size(); i > 0; i--) {
 
             ProtoGlobal.RoomMessage message = uploadList.get(i - 1);
+            Long time = message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
 
-            secendItemTime = month_date.format(message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+            secendItemTime = month_date.format(time);
 
             if (secendItemTime.compareTo(firstItmeTime) > 0 || secendItemTime.compareTo(firstItmeTime) < 0) {
 
                 StructSharedMedia timeItem = new StructSharedMedia();
-                timeItem.time = secendItemTime;
+
+                if (isTimeHijri) {
+                    timeItem.time = HelperCalander.getPersianCalander(time);
+                } else {
+                    timeItem.time = secendItemTime;
+                }
+
                 timeItem.isItemTime = true;
 
                 result.add(timeItem);
