@@ -292,8 +292,17 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             }
         }
 
+        long idForGetAvatar;
+        HelperAvatar.AvatarType avatarType;
+        if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
+            idForGetAvatar = mInfo.getChatRoom().getPeerId();
+            avatarType = HelperAvatar.AvatarType.USER;
+        } else {
+            idForGetAvatar = mInfo.getId();
+            avatarType = HelperAvatar.AvatarType.ROOM;
+        }
 
-        HelperAvatar.getAvatar(mInfo.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+        HelperAvatar.getAvatar(idForGetAvatar, avatarType, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath) {
                 G.handler.post(new Runnable() {
