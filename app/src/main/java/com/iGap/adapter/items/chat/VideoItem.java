@@ -2,16 +2,14 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -54,12 +52,8 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        int[] dimens = new int[2];
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
-                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                        mMessage.forwardedFrom.getAttachment().getWidth(), mMessage.forwardedFrom.getAttachment().getHeight());
-                holder.image.getParent().requestLayout();
                 holder.duration.setText(
                         String.format(holder.itemView.getResources().getString(R.string.video_duration),
                                 AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)),
@@ -67,17 +61,12 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
             }
         } else {
             if (mMessage.attachment != null) {
-                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                        mMessage.attachment.width, mMessage.attachment.height);
                 holder.duration.setText(
                         String.format(holder.itemView.getResources().getString(R.string.video_duration),
                                 AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)),
                                 AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true)));
             }
         }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
-        ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
-        holder.image.getParent().requestLayout();
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
@@ -87,13 +76,13 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected RoundedImageView image;
+        protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
 
         public ViewHolder(View view) {
             super(view);
 
-            image = (RoundedImageView) view.findViewById(R.id.thumbnail);
+            image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
             duration = (TextView) view.findViewById(R.id.duration);
         }
     }

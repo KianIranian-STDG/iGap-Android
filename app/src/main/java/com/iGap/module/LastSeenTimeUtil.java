@@ -1,7 +1,6 @@
 package com.iGap.module;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import com.iGap.Config;
 import com.iGap.G;
@@ -57,23 +56,21 @@ public class LastSeenTimeUtil {
             long value = entry.getValue();
 
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
-
-
-            String showLastSeen;
-            if (timeOut(value * DateUtils.SECOND_IN_MILLIS)) {
-                showLastSeen = TimeUtils.toLocal(value * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
-                userIdList.add(userId);
-            } else {
-                showLastSeen = getMinute(value);
-            }
-            Log.i("TTTU", "UserStatus : " + realmRegisteredInfo.getStatus());
+            if (realmRegisteredInfo != null) {
+                String showLastSeen;
+                if (timeOut(value * DateUtils.SECOND_IN_MILLIS)) {
+                    showLastSeen = TimeUtils.toLocal(value * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                    userIdList.add(userId);
+                } else {
+                    showLastSeen = getMinute(value);
+                }
 //            if (realmRegisteredInfo != null && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
-            if (realmRegisteredInfo != null && !realmRegisteredInfo.getStatus().equals("online")) {
-                if (G.onLastSeenUpdateTiming != null) {
-                    G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
+                if (!realmRegisteredInfo.getStatus().equals("online")) {
+                    if (G.onLastSeenUpdateTiming != null) {
+                        G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
+                    }
                 }
             }
-
         }
 
         // i separate hashMap remove from iterator , because i guess remove in that iterator make bug in app , but i'm not insuring

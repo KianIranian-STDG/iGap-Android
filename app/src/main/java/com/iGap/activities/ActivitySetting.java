@@ -1620,7 +1620,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ltAutoGifs = (TextView) findViewById(R.id.st_txt_autoGif);
         toggleAutoGifs = (ToggleButton) findViewById(R.id.st_toggle_autoGif);
-        int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 1);
+        int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS);
         if (checkedAutoGif == 1) {
             toggleAutoGifs.setChecked(true);
         } else {

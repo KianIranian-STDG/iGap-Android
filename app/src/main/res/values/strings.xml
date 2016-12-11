@@ -633,4 +633,6 @@
     <string name="channel_left">Channel Left</string>
     <string name="please_enter_channel_description">Please Enter Channel Description</string>
     <string name="delete_and_leave_channel">Delete and Leave Channel</string>
+    <string name="txt_draft">Draft: </string>
+    <string name="txt_you">You: </string>
 </resources>

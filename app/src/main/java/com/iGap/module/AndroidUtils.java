@@ -330,21 +330,17 @@ public final class AndroidUtils {
         return null;
     }
 
-    public static int[] scaleDimenWithSavedRatio(Context context, int width, int height) {
+    public static int[] scaleDimenWithSavedRatio(Context context, float width, float height) {
         DisplayMetrics display = context.getResources().getDisplayMetrics();
-        int density = Math.round(display.density * 0.9f);
+        float density = display.density * 0.9f;
+        float maxWidth = context.getResources().getDimension(R.dimen.chatBoxMaxWidth);
         float newWidth;
-        int newHeight;
-        float maxWidth =
-                context.getResources().getDimension(R.dimen.chatBoxMaxWidth) - (context.getResources()
-                        .getDimension(R.dimen.messageContainerPadding) * 4);
+        float newHeight;
 
         if (width < maxWidth) {
-            newHeight = height * density;
             newWidth = width * density;
 
             if (newWidth > maxWidth) {
-                newHeight = (int) (height * (newWidth / width)) / density;
                 if (maxWidth < width) {
                     newWidth = maxWidth;
                 } else {
@@ -353,10 +349,10 @@ public final class AndroidUtils {
             }
         } else {
             newWidth = maxWidth;
-            int calculatedFromWidth = (int) (width - maxWidth);
-            newHeight = height - calculatedFromWidth;
         }
 
-        return new int[]{(int) newWidth, newHeight};
+        newHeight = Math.round((height / width) * newWidth);
+
+        return new int[]{Math.round(newWidth), Math.round(newHeight)};
     }
 }

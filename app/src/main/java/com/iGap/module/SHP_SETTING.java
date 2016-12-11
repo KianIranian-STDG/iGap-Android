@@ -98,6 +98,10 @@ public class SHP_SETTING {
             "KEY_NTSG_LED_COLOR_CONTACT_PROFILE";
 
     // ========================================================================================== Notifications and sound contact profile
+
+    public static class Defaults {
+        public static final int KEY_AUTOPLAY_GIFS = 1;
+    }
 }
 
 

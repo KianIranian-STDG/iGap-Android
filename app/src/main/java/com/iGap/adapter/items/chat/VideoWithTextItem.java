@@ -2,16 +2,13 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -48,11 +45,8 @@ public class VideoWithTextItem
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        int[] dimens = new int[2];
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
-                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                        mMessage.forwardedFrom.getAttachment().getWidth(), mMessage.forwardedFrom.getAttachment().getHeight());
                 holder.duration.setText(
                         String.format(holder.itemView.getResources().getString(R.string.video_duration),
                                 AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)),
@@ -62,8 +56,6 @@ public class VideoWithTextItem
             setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
         } else {
             if (mMessage.attachment != null) {
-                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                        mMessage.attachment.width, mMessage.attachment.height);
                 holder.duration.setText(
                         String.format(holder.itemView.getResources().getString(R.string.video_duration),
                                 AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)),
@@ -72,12 +64,6 @@ public class VideoWithTextItem
 
             setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
-        FrameLayout.LayoutParams layoutParamsForParentParent = new FrameLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
-        ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
-        ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParamsForParentParent);
-        holder.image.getParent().requestLayout();
-        holder.image.getParent().getParent().requestLayout();
     }
 
     @Override
@@ -98,7 +84,7 @@ public class VideoWithTextItem
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView image;
+        protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
         protected EmojiTextView messageText;
 
@@ -107,7 +93,7 @@ public class VideoWithTextItem
 
             messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
-            image = (ImageView) view.findViewById(R.id.thumbnail);
+            image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
             duration = (TextView) view.findViewById(R.id.duration);
         }
     }

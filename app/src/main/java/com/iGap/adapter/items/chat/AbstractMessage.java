@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +26,8 @@ import com.iGap.interfaces.OnProgressUpdate;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MyType;
+import com.iGap.module.ReserveSpaceGifImageView;
+import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.StructMessageInfo;
@@ -240,7 +241,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
         if (roomMessage != null) {
-            prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment());
+            prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
         realm.close();
     }
@@ -253,7 +254,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (messageText != null) {
             messageText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
-        if (mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.GIF) {
+        ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
+
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
         } else {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
@@ -283,11 +286,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (messageText != null) {
             messageText.setTextColor(Color.WHITE);
         }
-        if (mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.GIF) {
+        ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
+
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
         } else {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
+
         ((CardView) holder.itemView.findViewById(R.id.contentContainer)).setCardBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_sendColor));
         // add main layout margin to prevent getting match parent completely
         // set to mainContainer not itemView because of selecting item foreground
@@ -490,32 +496,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void prepareAttachmentIfNeeded(final VH holder, final RealmAttachment attachment) {
+    private void prepareAttachmentIfNeeded(final VH holder, final RealmAttachment attachment, final ProtoGlobal.RoomMessageType messageType) {
         // runs if message has attachment
         if (attachment != null) {
+            if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
+                if (imageViewReservedSpace != null) {
+                    imageViewReservedSpace.reserveSpace(attachment.getWidth(), attachment.getHeight());
+                }
+            } else if (messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
+                ReserveSpaceGifImageView imageViewReservedSpace = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
+                if (imageViewReservedSpace != null) {
+                    imageViewReservedSpace.reserveSpace(attachment.getWidth(), attachment.getHeight());
+                }
+            }
+
             // if file already exists, simply show the local one
             if (attachment.isFileExistsOnLocalAndIsThumbnail()) {
                 // load file from local
                 onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
-            } else if (mMessage.messageType == ProtoGlobal.RoomMessageType.VOICE || mMessage.messageType == ProtoGlobal.RoomMessageType.AUDIO || mMessage.messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
+            } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
                 onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
             } else {
                 // file doesn't exist on local, I check for a thumbnail
                 // if thumbnail exists, I load it into the view
                 if (attachment.isThumbnailExistsOnLocal()) {
-                    if ((mMessage.forwardedFrom != null && (mMessage.forwardedFrom.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || mMessage.forwardedFrom.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT || mMessage.forwardedFrom.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || mMessage.forwardedFrom.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT)) || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE || mMessage.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-                        ViewGroup view = (ViewGroup) holder.itemView.findViewById(R.id.thumbnail).getParent();
-                        if (view != null) {
-                            int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(), attachment.getWidth(), attachment.getHeight());
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
-                            FrameLayout.LayoutParams layoutParamsForParentParent = new FrameLayout.LayoutParams(dimens[0], ViewGroup.LayoutParams.WRAP_CONTENT);
-                            view.setLayoutParams(layoutParams);
-                            ((ViewGroup) view.getParent()).setLayoutParams(layoutParamsForParentParent);
-                            view.requestLayout();
-                            view.getParent().getParent().requestLayout();
-                        }
-                    }
-
                     // load thumbnail from local
                     onLoadThumbnailFromLocal(holder, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
@@ -542,7 +547,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(null);
                         ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(null, true);
 
-                        switch (mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType) {
+                        switch (messageType) {
                             case IMAGE:
                             case IMAGE_TEXT:
                                 break;
@@ -575,7 +580,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 });
 
                                 SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0) == 0) {
+                                if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 0) {
                                     holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                                     ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play, true);
                                 } else {

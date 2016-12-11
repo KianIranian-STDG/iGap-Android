@@ -158,12 +158,12 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             holder.messageStatus.setVisibility(GONE);
             holder.lastMessage.setVisibility(View.VISIBLE);
             holder.lastMessageSender.setVisibility(View.VISIBLE);
-            holder.lastMessageSender.setText("Draft: ");
+            holder.lastMessageSender.setText(R.string.txt_draft);
             holder.lastMessageSender.setTextColor(Color.parseColor("#ff4644"));
             holder.lastMessage.setText(mInfo.getDraft().getMessage());
         } else {
             if (mInfo.getLastMessage() != null) {
-                String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage());
+                String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
                 if (lastMessage == null) {
                     lastMessage = mInfo.getLastMessage().getMessage();
                 }
@@ -190,7 +190,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
 
                     String lastMessageSender = "";
                     if (mInfo.getLastMessage().isSenderMe()) {
-                        lastMessageSender = "You: ";
+                        lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                     } else {
                         Realm realm1 = Realm.getDefaultInstance();
                         RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class)

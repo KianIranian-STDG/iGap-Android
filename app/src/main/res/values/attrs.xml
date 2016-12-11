@@ -16,6 +16,11 @@
         <attr name="gifMoviewViewStyle" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="RatioImageView">
+        <attr name="groupId" format="string"/>
+        <attr name="adjustWidth" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="ArcMenu">
         <attr name="menu_scr" format="reference" />
         <attr name="menu_color" format="reference|color" />

@@ -4,13 +4,10 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
-import com.iGap.module.AndroidUtils;
+import com.iGap.module.ReserveSpaceGifImageView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
@@ -21,7 +18,6 @@ import java.util.List;
 
 import io.meness.github.messageprogress.MessageProgress;
 import pl.droidsonroids.gif.GifDrawable;
-import pl.droidsonroids.gif.GifImageView;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -75,7 +71,7 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
 
         if (fileType == LocalFileType.FILE) {
             SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0) == 1) {
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 1) {
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
             } else {
                 if (holder.image.getDrawable() instanceof GifDrawable) {
@@ -91,25 +87,6 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-
-        int[] dimens = new int[2];
-        if (mMessage.forwardedFrom != null) {
-            if (mMessage.forwardedFrom.getAttachment() != null) {
-                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                        mMessage.forwardedFrom.getAttachment().getWidth(), mMessage.forwardedFrom.getAttachment().getHeight());
-            }
-        } else {
-            if (mMessage.attachment != null) {
-                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                        mMessage.attachment.width, mMessage.attachment.height);
-            }
-        }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], dimens[1]);
-        FrameLayout.LayoutParams layoutParamsForParentParent = new FrameLayout.LayoutParams(dimens[0], dimens[1]);
-        ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
-        ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParamsForParentParent);
-        holder.image.getParent().requestLayout();
-        holder.image.getParent().getParent().requestLayout();
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,12 +129,12 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected GifImageView image;
+        protected ReserveSpaceGifImageView image;
 
         public ViewHolder(View view) {
             super(view);
 
-            image = (GifImageView) view.findViewById(R.id.thumbnail);
+            image = (ReserveSpaceGifImageView) view.findViewById(R.id.thumbnail);
         }
     }
 }

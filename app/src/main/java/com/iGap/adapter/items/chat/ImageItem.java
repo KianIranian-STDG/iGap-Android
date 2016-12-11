@@ -2,16 +2,12 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
-import com.iGap.module.AndroidUtils;
+import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -54,25 +50,6 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        int[] dimens = new int[2];
-        if (mMessage.forwardedFrom != null) {
-            if (mMessage.forwardedFrom.getAttachment() != null) {
-                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                        mMessage.forwardedFrom.getAttachment().getWidth(), mMessage.forwardedFrom.getAttachment().getHeight());
-            }
-        } else {
-            if (mMessage.attachment != null) {
-                dimens = AndroidUtils.scaleDimenWithSavedRatio(holder.itemView.getContext(),
-                        mMessage.attachment.width, mMessage.attachment.height);
-            }
-        }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens[0], dimens[1]);
-        FrameLayout.LayoutParams layoutParamsForParentParent = new FrameLayout.LayoutParams(dimens[0], dimens[1]);
-        ((ViewGroup) holder.image.getParent()).setLayoutParams(layoutParams);
-        ((ViewGroup) holder.image.getParent().getParent()).setLayoutParams(layoutParamsForParentParent);
-        holder.image.getParent().requestLayout();
-        holder.image.getParent().getParent().requestLayout();
-
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,12 +85,12 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected RoundedImageView image;
+        protected ReserveSpaceRoundedImageView image;
 
         public ViewHolder(View view) {
             super(view);
 
-            image = (RoundedImageView) view.findViewById(R.id.thumbnail);
+            image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
         }
     }
 }

@@ -3605,7 +3605,7 @@ public class ActivityChat extends ActivityEnhanced
                     for (ProtoGlobal.RoomMessage roomMessage : messages) {
                         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
-                        if (message != null) {
+                        if (message != null && !message.isDeleted()) {
                             realmRoomMessages.add(message);
                         }
                     }

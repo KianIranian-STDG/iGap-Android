@@ -175,7 +175,7 @@ public final class AppUtils {
         return 0;
     }
 
-    public static String rightLastMessage(Resources resources, ProtoGlobal.Room.Type roomType, RealmRoomMessage message) {
+    public static String rightLastMessage(Resources resources, ProtoGlobal.Room.Type roomType, RealmRoomMessage message, RealmAttachment attachment) {
         String messageText;
         if (message == null) {
             return null;
@@ -189,32 +189,35 @@ public final class AppUtils {
         } else {
             switch (message.getForwardMessage() == null ? message.getMessageType() : message.getForwardMessage().getMessageType()) {
                 case AUDIO:
-                    if (message.getAttachment() == null) {
+                    if (attachment == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                            message.getAttachment().getName());
+                            attachment.getName());
                     break;
                 case CONTACT:
                     messageText = "contact"; // need to fill messageText with a String because in return check null
                     break;
                 case FILE:
-                    if (message.getAttachment() == null) {
+                    if (attachment == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                            message.getAttachment().getName());
+                            attachment.getName());
                     break;
                 case GIF:
-                    messageText = resources.getString(R.string.last_msg_format_chat,
-                            message.getAttachment().getName());
-                    break;
-                case IMAGE:
-                    if (message.getAttachment() == null) {
+                    if (attachment == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                            message.getAttachment().getName());
+                            attachment.getName());
+                    break;
+                case IMAGE:
+                    if (attachment == null) {
+                        return null;
+                    }
+                    messageText = resources.getString(R.string.last_msg_format_chat,
+                            attachment.getName());
                     break;
                 case LOCATION:
                     messageText = resources.getString(R.string.last_msg_format_chat,
@@ -225,18 +228,18 @@ public final class AppUtils {
                             resources.getString(R.string.log_message));
                     break;
                 case VIDEO:
-                    if (message.getAttachment() == null) {
+                    if (attachment == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                            message.getAttachment().getName());
+                            attachment.getName());
                     break;
                 case VOICE:
-                    if (message.getAttachment() == null) {
+                    if (attachment == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat,
-                            message.getAttachment().getName());
+                            attachment.getName());
                     break;
                 default:
                     messageText = null;
