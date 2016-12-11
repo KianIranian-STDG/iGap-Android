@@ -3,7 +3,6 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoError;
-import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserInfo;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -28,7 +27,6 @@ public class UserInfoResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
-        final ProtoResponse.Response response = builder.getResponse();
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -83,6 +81,25 @@ public class UserInfoResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
         G.onUserInfoResponse.onUserInfoError(majorCode, minorCode);
     }
+
+
+    /*public static void main(String interfaceArgument) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
+        Class<?> someInterface = Class.forName(interfaceArgument);
+
+        Object instance = Proxy.newProxyInstance(someInterface.getClassLoader(), new Class<?>[]{someInterface},
+                new InvocationHandler() {
+
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+                        //Handle the invocations
+                        if (method.getName().equals("someMethod")) {
+                            return 1;
+                        } else return -1;
+                    }
+                });
+        Log.i("WWW", "interface : " + instance.getClass().getDeclaredMethod("someMethod", (Class<?>[]) null).invoke(instance, new Object[]{}));
+    }*/
 }
 
 

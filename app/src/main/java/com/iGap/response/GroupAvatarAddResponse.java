@@ -20,10 +20,10 @@ public class GroupAvatarAddResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder groupAvatarAddResponse =
-                (ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder) message;
-        G.onGroupAvatarResponse.onAvatarAdd(groupAvatarAddResponse.getRoomId(),
-                groupAvatarAddResponse.getAvatar());
+        ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder groupAvatarAddResponse = (ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder) message;
+        if (G.onGroupAvatarResponse != null) {
+            G.onGroupAvatarResponse.onAvatarAdd(groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
+        }
     }
 
     @Override
@@ -34,6 +34,9 @@ public class GroupAvatarAddResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        if (G.onGroupAvatarResponse != null) {
+            G.onGroupAvatarResponse.onAvatarAddError();
+        }
     }
 }
 

@@ -3,12 +3,12 @@ package com.iGap.adapter.items;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activities.ActivityChannelProfile;
 import com.iGap.activities.ActivityGroupProfile;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
@@ -27,6 +27,7 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructContactInfo mContact;
     public static String mainRole;
+    public static ProtoGlobal.Room.Type roomType;
     public static boolean isShoMore;
 
 
@@ -77,10 +78,6 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
             }
         }
 
-        Log.i("WWW", "mainRole : " + mainRole);
-        Log.i("WWW", "isShoMore : " + isShoMore);
-        Log.i("WWW", "mContact.role : " + mContact.role);
-
         if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
 
             holder.btnMenu.setVisibility(View.GONE);
@@ -88,19 +85,23 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
         } else {
 
             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
-
                 holder.btnMenu.setVisibility(View.GONE);
-
             } else {
-
                 holder.btnMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (ActivityGroupProfile.onMenuClick != null)
-                            ActivityGroupProfile.onMenuClick.clicked(v, mContact);
+
+                        if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+                            if (ActivityChannelProfile.onMenuClick != null) {
+                                ActivityChannelProfile.onMenuClick.clicked(v, mContact);
+                            }
+                        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                            if (ActivityGroupProfile.onMenuClick != null) {
+                                ActivityGroupProfile.onMenuClick.clicked(v, mContact);
+                            }
+                        }
                     }
                 });
-
             }
         }
     }

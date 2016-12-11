@@ -28,16 +28,11 @@ public class GroupKickModeratorResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoGroupKickModerator.GroupKickModeratorResponse.Builder builder =
-                (ProtoGroupKickModerator.GroupKickModeratorResponse.Builder) message;
-        builder.getRoomId();
-        builder.getMemberId();
+        ProtoGroupKickModerator.GroupKickModeratorResponse.Builder builder = (ProtoGroupKickModerator.GroupKickModeratorResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class)
-                .equalTo(RealmRoomFields.ID, builder.getRoomId())
-                .findFirst();
 
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
         if (realmRoom != null) {
             RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
 
@@ -50,12 +45,15 @@ public class GroupKickModeratorResponse extends MessageHandler {
                         }
                     });
 
-                    G.onGroupKickModerator.onGroupKickModerator(builder.getRoomId(),
-                            builder.getMemberId());
+                    if (G.onGroupKickModerator != null) {
+                        G.onGroupKickModerator.onGroupKickModerator(builder.getRoomId(), builder.getMemberId());
+                    }
                     break;
                 }
             }
         }
+
+        realm.close();
     }
 
     @Override

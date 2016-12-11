@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoChannelAvatarAdd;
 
 public class ChannelAvatarAddResponse extends MessageHandler {
@@ -21,8 +22,10 @@ public class ChannelAvatarAddResponse extends MessageHandler {
         super.handler();
 
         ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder builder = (ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder) message;
-        builder.getRoomId();
-        builder.getAvatar();
+        if (G.onChannelAvatarAdd != null) {
+            G.onChannelAvatarAdd.onAvatarAdd(builder.getRoomId(), builder.getAvatar());
+        }
+
     }
 
     @Override

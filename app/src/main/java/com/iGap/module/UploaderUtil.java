@@ -170,6 +170,13 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
                 fileHashAsIdentity);
     }
 
+    @Override
+    public void onFileUploadTimeOut(String identity) {
+        if (activityCallbacks != null) {
+            activityCallbacks.onFileTimeOut(identity);
+        }
+    }
+
     /**
      * get file with hash string
      *

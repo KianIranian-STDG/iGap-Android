@@ -45,10 +45,14 @@ import com.iGap.fragments.FragmentDeleteAccount;
 import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.FragmentSticker;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ImageHelper;
+import com.iGap.interfaces.OnAvatarAdd;
+import com.iGap.interfaces.OnAvatarDelete;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
@@ -65,15 +69,12 @@ import com.iGap.module.FileUploadStructure;
 import com.iGap.module.IncomingSms;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
-import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
-import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
-import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
@@ -146,6 +147,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private IncomingSms smsReceiver;
     private String regex;
     public ProgressBar prgWait;
+    private static String identityCurrent;
 
     public static long getFolderSize(File dir) throws RuntimeException {
         long size = 0;
@@ -191,7 +193,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         return hrSize;
     }
 
-    private void setImage() {
+    /*private void setImage() {
         final Realm realm = Realm.getDefaultInstance();
 
         RealmRegisteredInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst().getUserInfo();
@@ -213,6 +215,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         } else {
             showInitials();
+        }
+    }*/
+
+    private void setImage(String path) {
+        if (path != null) {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), circleImageView);
+            if (G.onChangeUserPhotoListener != null) {
+                G.onChangeUserPhotoListener.onChangePhoto(path);
+            }
         }
     }
 
@@ -1475,49 +1486,48 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_wifi)
                         .items(R.array.auto_download_data)
                         .itemsCallbackMultiChoice(new Integer[]{
-                        KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
-                }, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                                KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
+                        }, new MaterialDialog.ListCallbackMultiChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
 
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1);
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
-                        editor.apply();
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1);
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
+                                editor.apply();
 
-                        for (Integer aWhich : which) {
-                            Log.i("JJJJ", "WIFI: " + aWhich);
+                                for (Integer aWhich : which) {
+                                    Log.i("JJJJ", "WIFI: " + aWhich);
 
-                            if (aWhich == 0) {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, aWhich);
-                            } else if (aWhich == 1) {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, aWhich);
-                            } else if (aWhich == 2) {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, aWhich);
-                            } else if (aWhich == 3) {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, aWhich);
-                            } else if (aWhich == 4) {
+                                    if (aWhich == 0) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, aWhich);
+                                    } else if (aWhich == 1) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, aWhich);
+                                    } else if (aWhich == 2) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, aWhich);
+                                    } else if (aWhich == 3) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, aWhich);
+                                    } else if (aWhich == 4) {
 
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, aWhich);
-                            } else if (aWhich == 5) {
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, aWhich);
+                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, aWhich);
+                                    } else if (aWhich == 5) {
+                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, aWhich);
+                                    }
+                                    editor.apply();
+                                }
+
+                                return true;
                             }
-                            editor.apply();
-                        }
-
-                        return true;
-                    }
-                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.cancel)).show();
+                        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.cancel)).show();
             }
         });
-
 
 
         txtAutoDownloadRoaming = (TextView) findViewById(R.id.st_txt_autoDownloadRoaming);
@@ -1690,7 +1700,32 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         realm.close();
 
-        setImage();
+        showImage();
+    }
+
+    // call this method for show image in enter to this activity
+    private void showImage() {
+        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), circleImageView);
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+                    }
+                });
+            }
+        });
     }
 
     //dialog for choose pic from gallery or camera
@@ -1722,27 +1757,39 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Realm realm = Realm.getDefaultInstance();
-                                            realm.executeTransaction(new Realm.Transaction() {
+                                            hideProgressBar();
+                                            HelperAvatar.avatarDelete(userId, avatarId, HelperAvatar.AvatarType.USER, new OnAvatarDelete() {
                                                 @Override
-                                                public void execute(Realm realm) {
-                                                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
-                                                    if (realmAvatar != null) {
-                                                        realmAvatar.deleteFromRealm();
-                                                    }
+                                                public void latestAvatarPath(final String avatarPath) {
+                                                    setImage(avatarPath);
+                                                }
+
+                                                @Override
+                                                public void showInitials(final String initials, final String color) {
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+                                                            if (G.onChangeUserPhotoListener != null) {
+                                                                G.onChangeUserPhotoListener.onChangePhoto(null);
+                                                            }
+                                                        }
+                                                    });
                                                 }
                                             });
-                                            realm.close();
-                                            setImage();
                                         }
                                     });
                                 }
+
+                                @Override
+                                public void onUserAvatarDeleteError() {
+                                    hideProgressBar();
+                                }
                             };
 
-                            Realm realm = Realm.getDefaultInstance();
-                            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmUserInfo.class).findFirst().getUserInfo();
-                            new RequestUserAvatarDelete().userAvatarDelete(realmRegisteredInfo.getLastAvatar().getId());
-                            realm.close();
+                            showProgressBar();
+                            RealmAvatar realmAvatar = HelperAvatar.getLastAvatar(userId);
+                            new RequestUserAvatarDelete().userAvatarDelete(realmAvatar.getId());
 
                         } else {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -1850,47 +1897,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     @Override
     public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
-                realmAvatar.setOwnerId(userId);
-                realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
-                String newFilePath = G.DIR_IMAGE_USER + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName();
-                realmAvatar.getFile().setLocalFilePath(newFilePath);
 
-                try {
-                    AndroidUtils.copyFile(new File(pathSaveImage), new File(newFilePath));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        HelperAvatar.avatarAdd(userId, pathSaveImage, avatar, new OnAvatarAdd() {
+            @Override
+            public void onAvatarAdd(final String avatarPath) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideProgressBar();
+                        setImage(avatarPath);
+                    }
+                });
             }
         });
-
-        // have to be inside a delayed handler
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.onChangeUserPhotoListener != null) {
-                    G.onChangeUserPhotoListener.onChangePhoto(pathSaveImage);
-                }
-                setImage();
-            }
-        }, 500);
-
-        realm.close();
     }
 
     @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                circleImageView.setImageURI(Uri.fromFile(new File(uploadStructure.filePath)));
-            }
-        });
-
         new RequestUserAvatarAdd().userAddAvatar(uploadStructure.token);
     }
 
@@ -1920,6 +1944,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     @Override
+    public void onAvatarError() {
+
+    }
+
+    @Override
     public void onError(int majorCode, int minorCode) {
 
     }
@@ -1937,8 +1966,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            myActivityReference.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            prg.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -1969,7 +1996,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             super.onPostExecute(result);
             myActivityReference.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             prg.setVisibility(View.GONE);
-            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+            identityCurrent = Long.toString(result.messageId);
+            G.uploaderUtil.startUploading(result, identityCurrent);
         }
     }
 
@@ -1987,11 +2015,39 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     @Override
     public void onUploadStarted(FileUploadStructure struct) {
-        // empty
+        showProgressBar();
     }
 
     @Override
     public void onBadDownload(String token) {
-        // empty
+    }
+
+    @Override
+    public void onFileTimeOut(String identity) {
+        if (identityCurrent.equals(identity)) {
+            hideProgressBar();
+        }
+    }
+
+    //***Show And Hide Progress
+
+    private void showProgressBar() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWait.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
+    private void hideProgressBar() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWait.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
     }
 }

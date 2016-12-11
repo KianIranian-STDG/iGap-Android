@@ -290,6 +290,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                             }
 
                             @Override
+                            public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+
+                            }
+
+                            @Override
                             public void onChatGetRoomTimeOut() {
 
                             }

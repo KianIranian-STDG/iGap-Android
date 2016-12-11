@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.proto.ProtoChannelUpdateDraft;
+import com.iGap.realm.RealmRoom;
 
 public class ChannelUpdateDraftResponse extends MessageHandler {
 
@@ -20,9 +21,11 @@ public class ChannelUpdateDraftResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoChannelUpdateDraft.ChannelUpdateDraftResponse.Builder builder = (ProtoChannelUpdateDraft.ChannelUpdateDraftResponse.Builder) message;
-        builder.getRoomId();
-        builder.getDraft();
+        final ProtoChannelUpdateDraft.ChannelUpdateDraftResponse.Builder builder = (ProtoChannelUpdateDraft.ChannelUpdateDraftResponse.Builder) message;
+
+        if (builder.getResponse().getId().isEmpty()) {
+            RealmRoom.convertAndSetDraft(builder.getRoomId(), builder.getDraft().getMessage(), builder.getDraft().getReplyTo());
+        }
     }
 
     @Override

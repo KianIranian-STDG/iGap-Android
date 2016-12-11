@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoGroupAvatarDelete;
 
 public class GroupAvatarDeleteResponse extends MessageHandler {
@@ -19,10 +20,10 @@ public class GroupAvatarDeleteResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoGroupAvatarDelete.GroupAvatarDelete.Builder groupAvatarDelete =
-                (ProtoGroupAvatarDelete.GroupAvatarDelete.Builder) message;
-        groupAvatarDelete.getRoomId();
-        groupAvatarDelete.getId();
+        ProtoGroupAvatarDelete.GroupAvatarDelete.Builder groupAvatarDelete = (ProtoGroupAvatarDelete.GroupAvatarDelete.Builder) message;
+        if (G.onGroupAvatarDelete != null) {
+            G.onGroupAvatarDelete.onDeleteAvatar(groupAvatarDelete.getRoomId(), groupAvatarDelete.getId());
+        }
     }
 
     @Override
@@ -33,6 +34,9 @@ public class GroupAvatarDeleteResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        if (G.onGroupAvatarDelete != null) {
+            G.onGroupAvatarDelete.onDeleteAvatarError();
+        }
     }
 }
 

@@ -13,21 +13,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperPermision;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnGetPermision;
-import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.AndroidUtils;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -164,19 +162,17 @@ public class FragmentDrawerMenu extends MenuFragment {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(G.context, getResources().getString(R.string.future_done), Toast.LENGTH_SHORT).show();
-
-//                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("TYPE", "NewChanel");
-//                fragment.setArguments(bundle);
-//                getActivity().getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-//                                R.anim.slide_in_right, R.anim.slide_out_left)
-//                        .addToBackStack(null)
-//                        .replace(R.id.fragmentContainer, fragment)
-//                        .commit();
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TYPE", "NewChanel");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
             }
         });
 
@@ -242,6 +238,29 @@ public class FragmentDrawerMenu extends MenuFragment {
     //TODO [Saeed Mozaffari] [2016-09-10 2:49 PM] -dar har vorud be barname decode kardane tasvir eshtebah ast.
 
     public void setImage(long userId) {
+
+        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgUserPhoto);
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+                    }
+                });
+            }
+        });
+
 //        final Realm realm = Realm.getDefaultInstance();
 //        RealmResults<RealmAvatarPath> realmAvatarPaths =
 //                realm.where(RealmAvatarPath.class).findAll();
@@ -264,7 +283,7 @@ public class FragmentDrawerMenu extends MenuFragment {
 //            }
 //        }
 
-        final Realm realm = Realm.getDefaultInstance();
+       /* final Realm realm = Realm.getDefaultInstance();
 
         RealmAvatar realmAvatar = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getLastAvatar();
         if (realmAvatar != null) {
@@ -318,7 +337,7 @@ public class FragmentDrawerMenu extends MenuFragment {
             public void onUserInfoError(int majorCode, int minorCode) {
 
             }
-        };
+        };*/
 
         G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
             @Override
@@ -353,7 +372,7 @@ public class FragmentDrawerMenu extends MenuFragment {
             }
         };
 
-        realm.close();
+        //realm.close();
     }
 
     private void showInitials() {

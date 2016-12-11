@@ -267,6 +267,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 }
 
                 @Override
+                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+
+                }
+
+                @Override
                 public void onChatGetRoomTimeOut() {
 
                     getActivity().runOnUiThread(new Runnable() {

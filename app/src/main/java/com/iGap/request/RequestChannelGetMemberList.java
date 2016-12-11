@@ -9,7 +9,7 @@ public class RequestChannelGetMemberList {
         ProtoChannelGetMemberList.ChannelGetMemberList.Builder builder = ProtoChannelGetMemberList.ChannelGetMemberList.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(417, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(417, builder, roomId + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

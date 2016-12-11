@@ -61,6 +61,7 @@ public class RealmRoom extends RealmObject {
 
     /**
      * convert ProtoGlobal.Room to RealmRoom for saving into database
+     * hint : call this method in execute transaction
      *
      * @param room ProtoGlobal.Room
      * @return RealmRoom
@@ -86,24 +87,19 @@ public class RealmRoom extends RealmObject {
         switch (room.getType()) {
             case CHANNEL:
                 realmRoom.setType(RoomType.CHANNEL);
-                realmRoom.setChannelRoom(
-                        RealmChannelRoom.convert(room.getChannelRoomExtra(), realmRoom.getChannelRoom(),
-                                realm));
+                realmRoom.setChannelRoom(RealmChannelRoom.convert(room.getChannelRoomExtra(), realmRoom.getChannelRoom(), realm));
+                realmRoom.getChannelRoom().setDescription(room.getChannelRoomExtra().getDescription());
                 realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getChannelRoomExtra().getAvatar()));
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
                 realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoomExtra()));
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                        .equalTo(RealmRegisteredInfoFields.ID, room.getChatRoomExtra().getPeer().getId())
-                        .findFirst();
-                realmRoom.setAvatar(
-                        realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, room.getChatRoomExtra().getPeer().getId()).findFirst();
+                realmRoom.setAvatar(realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
                 break;
             case GROUP:
                 realmRoom.setType(RoomType.GROUP);
-                realmRoom.setGroupRoom(
-                        RealmGroupRoom.convert(room.getGroupRoomExtra(), realmRoom.getGroupRoom(), realm));
+                realmRoom.setGroupRoom(RealmGroupRoom.convert(room.getGroupRoomExtra(), realmRoom.getGroupRoom(), realm));
                 realmRoom.getGroupRoom().setDescription(room.getGroupRoomExtra().getDescription());
                 realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getGroupRoomExtra().getAvatar()));
                 break;
@@ -128,24 +124,19 @@ public class RealmRoom extends RealmObject {
 
     private static void putChatToClientCondition(final ProtoGlobal.Room room) {
         Realm realm = Realm.getDefaultInstance();
-        if (realm.where(RealmClientCondition.class)
-                .equalTo(RealmClientConditionFields.ROOM_ID, room.getId())
-                .findFirst() == null) {
+        if (realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, room.getId()).findFirst() == null) {
             realm.createObject(RealmClientCondition.class, room.getId());
         }
-
         realm.close();
     }
 
-    public static void convertAndSetDraft(final long roomId, final String message,
-                                          final long replyToMessageId) {
+    public static void convertAndSetDraft(final long roomId, final String message, final long replyToMessageId) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoom realmRoom =
-                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                 RealmRoomDraft realmRoomDraft = realm.createObject(RealmRoomDraft.class);
                 realmRoomDraft.setMessage(message);
