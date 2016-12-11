@@ -27,13 +27,17 @@
     </style>
 
     <style name="ChatMessages.EmojiTextView" parent="ChatMessages">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/sp16</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textDirection">firstStrong</item>
         <item name="android:layoutDirection">locale</item>
-        <item name="emojiSize">30dp</item>
+        <item name="emojiSize">@dimen/dp32</item>
+        <item name="android:paddingBottom">@dimen/messageContainerPaddingBottom</item>
+        <item name="android:paddingLeft">@dimen/messageContainerPaddingLeftRight</item>
+        <item name="android:paddingRight">@dimen/messageContainerPaddingLeftRight</item>
+        <item name="android:paddingTop">@dimen/messageContainerPadding</item>
     </style>
 
     <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>

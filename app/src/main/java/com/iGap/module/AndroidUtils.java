@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
@@ -354,5 +355,18 @@ public final class AndroidUtils {
         newHeight = Math.round((height / width) * newWidth);
 
         return new int[]{Math.round(newWidth), Math.round(newHeight)};
+    }
+
+    /**
+     * @param s mixed language text
+     * @return true if text is RTL
+     */
+    public static boolean isTextRtl(String s) {
+        if (TextUtils.isEmpty(s)) {
+            return false;
+        }
+
+        int c = s.codePointAt(0);
+        return c >= 0x0600 && c <= 0x06FF;
     }
 }

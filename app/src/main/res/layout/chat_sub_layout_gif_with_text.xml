@@ -62,10 +62,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingBottom="@dimen/messageContainerPaddingBottom"
-                    android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
-                    android:paddingRight="@dimen/messageContainerPaddingLeftRight"
-                    android:paddingTop="@dimen/messageContainerPadding"
                     >
 
                     <io.github.meness.emoji.EmojiTextView
@@ -73,8 +69,9 @@
                         style="@style/ChatMessages.EmojiTextView"
                         android:text="SAMPLE TEXT"/>
 
-                    <include layout="@layout/chat_sub_layout_messages_time"/>
                 </LinearLayout>
+
+                <include layout="@layout/chat_sub_layout_messages_time"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>

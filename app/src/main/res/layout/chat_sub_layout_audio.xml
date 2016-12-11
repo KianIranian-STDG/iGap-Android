@@ -142,20 +142,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingBottom="2dp"
-                    android:paddingLeft="@dimen/messageContainerPadding"
-                    android:paddingRight="@dimen/messageContainerPadding"
-                    android:paddingTop="6dp"
                     >
 
                     <io.github.meness.emoji.EmojiTextView
                         android:id="@+id/messageText"
                         style="@style/ChatMessages.EmojiTextView"
-                        android:layout_marginBottom="-4dp"
                         android:text="SAMPLE TEXT"/>
 
-                    <include layout="@layout/chat_sub_layout_messages_time"/>
                 </LinearLayout>
+
+                <include layout="@layout/chat_sub_layout_messages_time"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
