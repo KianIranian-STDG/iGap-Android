@@ -131,7 +131,7 @@ public final class AppUtils {
      *
      * @param view TextView message status
      */
-    public static void rightMessageStatus(ImageView view, String status, boolean isSenderMe) {
+    public static void rightMessageStatus(ImageView view, ProtoGlobal.RoomMessageStatus status, boolean isSenderMe) {
         if (view == null) {
             return;
         }
@@ -141,26 +141,77 @@ public final class AppUtils {
         } else {
             view.setVisibility(View.VISIBLE);
         }
-        switch (ProtoGlobal.RoomMessageStatus.valueOf(status)) {
+        switch (status) {
             case DELIVERED:
-                DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 view.setImageResource(R.drawable.ic_check);
+                DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 break;
             case FAILED:
-                DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
                 view.setImageResource(R.drawable.ic_error);
+                DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
                 break;
             case SEEN:
-                DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 view.setImageResource(R.drawable.ic_double_check);
+                DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 break;
             case SENDING:
-                DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
                 view.setImageResource(R.drawable.ic_clock);
+                DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
                 break;
             case SENT:
-                DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
                 view.setImageResource(R.drawable.ic_check);
+                DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
+                break;
+        }
+    }
+
+    /**
+     * update message status automatically
+     *
+     * @param view TextView message status
+     */
+    public static void rightMessageStatus(ImageView view, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
+        if (view == null) {
+            return;
+        }
+        if (!isSenderMe) {
+            view.setVisibility(View.GONE);
+            return;
+        } else {
+            view.setVisibility(View.VISIBLE);
+        }
+        switch (status) {
+            case DELIVERED:
+                view.setImageResource(R.drawable.ic_check);
+                DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
+                break;
+            case FAILED:
+                view.setImageResource(R.drawable.ic_error);
+                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
+                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
+                } else {
+                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
+                }
+                break;
+            case SEEN:
+                view.setImageResource(R.drawable.ic_double_check);
+                DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
+                break;
+            case SENDING:
+                view.setImageResource(R.drawable.ic_clock);
+                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
+                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
+                } else {
+                    DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
+                }
+                break;
+            case SENT:
+                view.setImageResource(R.drawable.ic_check);
+                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
+                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
+                } else {
+                    DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
+                }
                 break;
         }
     }

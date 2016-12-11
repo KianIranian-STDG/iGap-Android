@@ -174,7 +174,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                     holder.lastMessageSender.setVisibility(GONE);
                 } else {
                     if (mInfo.getLastMessage().isSenderMe()) {
-                        AppUtils.rightMessageStatus(holder.messageStatus, mInfo.getLastMessage().getStatus(), mInfo.getLastMessage().isSenderMe());
+                        AppUtils.rightMessageStatus(holder.messageStatus, ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isSenderMe());
                         holder.messageStatus.setVisibility(View.VISIBLE);
                     } else {
                         holder.messageStatus.setVisibility(GONE);

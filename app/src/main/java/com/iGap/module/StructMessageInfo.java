@@ -39,7 +39,6 @@ public class StructMessageInfo implements Parcelable {
     public boolean isEdited;
     public String status;
     public String initials;
-    public String forwardMessageFrom;
     public ProtoGlobal.RoomMessageType messageType;
     public MyType.SendType sendType;
     public RealmRoomMessage replayTo;
@@ -208,7 +207,6 @@ public class StructMessageInfo implements Parcelable {
         this.isEdited = in.readByte() != 0;
         this.status = in.readString();
         this.initials = in.readString();
-        this.forwardMessageFrom = in.readString();
         int tmpMessageType = in.readInt();
         this.messageType =
                 tmpMessageType == -1 ? null : ProtoGlobal.RoomMessageType.values()[tmpMessageType];
@@ -337,7 +335,6 @@ public class StructMessageInfo implements Parcelable {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, roomMessage.getForwardMessage().getUserId())
                     .findFirst();
             if (userInfo != null) {
-                messageInfo.forwardMessageFrom = userInfo.getDisplayName();
                 messageInfo.forwardedFrom = roomMessage.getForwardMessage();
                 if (roomMessage.getForwardMessage().getAttachment() != null) {
                     messageInfo.attachment = StructMessageAttachment.convert(roomMessage.getForwardMessage().getAttachment());
@@ -399,7 +396,6 @@ public class StructMessageInfo implements Parcelable {
         dest.writeByte(this.isEdited ? (byte) 1 : (byte) 0);
         dest.writeString(this.status);
         dest.writeString(this.initials);
-        dest.writeString(this.forwardMessageFrom);
         dest.writeInt(this.messageType == null ? -1 : this.messageType.ordinal());
         dest.writeInt(this.sendType == null ? -1 : this.sendType.ordinal());
         dest.writeParcelable(Parcels.wrap(this.replayTo), flags);
