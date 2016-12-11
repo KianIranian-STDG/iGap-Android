@@ -43,14 +43,13 @@
         <!--page 1-->
         <ImageView
             android:id="@+id/int_img_logo_introduce"
-            android:layout_width="@dimen/dp80"
-            android:layout_height="@dimen/dp110"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/dp12"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:scaleType="centerInside"
             android:src="@mipmap/logo"
             android:visibility="invisible" />
 
@@ -58,43 +57,41 @@
         <!--page 2-->
         <ImageView
             android:id="@+id/int_img_security_introduce"
-            android:layout_width="@dimen/dp95"
-            android:layout_height="@dimen/dp105"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@mipmap/security"
+            android:scaleType="centerInside"
+            android:src="@mipmap/secure"
             android:visibility="invisible" />
         <!--page 2-->
 
         <!--page 3-->
         <ImageView
             android:id="@+id/int_img_chat_introduce"
-            android:layout_width="@dimen/dp80"
-            android:layout_height="@dimen/dp100"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:scaleType="centerInside"
             android:src="@mipmap/chat"
             android:visibility="invisible" />
 
         <!--page 4-->
         <ImageView
             android:id="@+id/int_img_transfer_introduce"
-            android:layout_width="@dimen/dp80"
-            android:layout_height="@dimen/dp100"
-            android:layout_alignLeft="@+id/int_img_security_introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/int_img_security_introduce"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp16"
             android:adjustViewBounds="true"
             android:foregroundGravity="center"
-            android:scaleType="fitCenter"
+            android:scaleType="center"
             android:src="@mipmap/transfer"
             android:visibility="invisible" />
 
@@ -106,7 +103,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
             android:src="@mipmap/boy"
             android:visibility="gone" />
 

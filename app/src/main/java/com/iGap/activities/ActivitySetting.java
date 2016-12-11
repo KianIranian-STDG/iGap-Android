@@ -1270,6 +1270,34 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        TextView txtDataShams = (TextView) findViewById(R.id.st_txt_st_toggle_dataShams);
+        final ToggleButton toggleEnableDataShams = (ToggleButton) findViewById(R.id.st_toggle_dataShams);
+        int checkedEnableDataShams = sharedPreferences.getInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 1);
+        if (checkedEnableDataShams == 1) {
+            toggleEnableDataShams.setChecked(true);
+        } else {
+            toggleEnableDataShams.setChecked(false);
+        }
+
+        txtDataShams.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleEnableDataShams.isChecked()) {
+                    toggleEnableDataShams.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 0);
+                    editor.apply();
+                } else {
+                    toggleEnableDataShams.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 1);
+                    editor.apply();
+                }
+            }
+        });
+
+
         poRbDialogTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14) - 11;
         txtMessageTextSize = (TextView) findViewById(R.id.st_txt_messageTextSize_number);
         txtMessageTextSize.setText("" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
@@ -1328,7 +1356,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ltInAppBrowser = (TextView) findViewById(R.id.st_txt_inAppBrowser);
         toggleInAppBrowser = (ToggleButton) findViewById(R.id.st_toggle_inAppBrowser);
-        int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 0);
+        int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
         if (checkedInappBrowser == 1) {
             toggleInAppBrowser.setChecked(true);
         } else {
@@ -1363,7 +1391,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ltSentByEnter = (TextView) findViewById(R.id.st_txt_sendEnter);
         toggleSentByEnter = (ToggleButton) findViewById(R.id.st_toggle_sendEnter);
-        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
+        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 1);
         if (checkedSendByEnter == 1) {
             toggleSentByEnter.setChecked(true);
         } else {

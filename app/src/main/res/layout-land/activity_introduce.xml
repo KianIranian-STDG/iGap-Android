@@ -81,7 +81,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@mipmap/security"
+            android:src="@mipmap/secure"
             android:visibility="invisible" />
         <!--page 2-->
 

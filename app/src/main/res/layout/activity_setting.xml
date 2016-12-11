@@ -527,6 +527,44 @@
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal"/>
 
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:orientation="horizontal"
+                    android:paddingEnd="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingStart="@dimen/dp16">
+
+                    <ToggleButton
+                        android:id="@+id/st_toggle_dataShams"
+                        android:layout_width="@dimen/dp44"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/st_switch_button"
+                        android:textOff=""
+                        android:textOn=""/>
+
+                    <TextView
+                        android:id="@+id/st_txt_st_toggle_dataShams"
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/st_data_shams"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"
+                        />
+
+
+                </RelativeLayout>
+
             </LinearLayout>
 
 

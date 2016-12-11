@@ -11,6 +11,7 @@ public class SHP_SETTING {
     public static final String KEY_IN_APP_BROWSER = "app_browser";
     public static final String KEY_SEND_BT_ENTER = "send_by_enter";
     public static final String KEY_ENABLE_ANIMATION = "enable_animation";
+    public static final String KEY_ENABLE_DATA_SHAMS = "enable_dataShams";
     public static final String KEY_AUTOPLAY_GIFS = "autoplay_gif";
     public static final String KEY_SAVE_TO_GALLERY = "save_to_gallery";
     public static final String KEY_CROP = "KEY_CROP";
