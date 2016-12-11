@@ -1,8 +1,11 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.helper.HelperGetUserInfo;
+import com.iGap.interfaces.OnGetUserInfo;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
 
 import io.realm.Realm;
@@ -31,7 +34,19 @@ public class ClientGetRoomResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoom.putOrUpdate(clientGetRoom.getRoom());
+
+                if (clientGetRoom.getRoom().getType() == ProtoGlobal.Room.Type.CHAT) {
+
+                    new HelperGetUserInfo(new OnGetUserInfo() {
+                        @Override
+                        public void onGetUserInfo(ProtoGlobal.RegisteredUser registeredUser) {
+                            RealmRoom.putOrUpdate(clientGetRoom.getRoom());
+                        }
+                    }).getUserInfo(clientGetRoom.getRoom().getChatRoomExtra().getPeer().getId());
+
+                } else {
+                    RealmRoom.putOrUpdate(clientGetRoom.getRoom());
+                }
             }
         });
         realm.close();
