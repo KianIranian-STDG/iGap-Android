@@ -97,4 +97,15 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         }
     }
 
+    public boolean existRoom(long roomId) {
+        List<Item> items = getAdapterItems();
+        for (final Item chat : items) {
+            if (chat.mInfo.getId() == roomId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }

@@ -1,7 +1,5 @@
 package com.iGap.adapter.items;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -9,7 +7,9 @@ import android.view.View;
 import com.hanks.library.AnimateCheckBox;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.helper.HelperImageBackColor;
+import com.iGap.helper.HelperAvatar;
+import com.iGap.interfaces.OnAvatarGet;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
@@ -17,8 +17,8 @@ import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -44,7 +44,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
     }
 
     @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         holder.checkBoxSelect.setChecked(true);
@@ -73,39 +73,29 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
             }
         }
 
-        holder.image.setImageBitmap(setAvatar(holder.image.getLayoutParams().width));
+        HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
+            }
+        });
     }
 
-    private Bitmap setAvatar(int size) {
-
-        String path = null;
-        Bitmap bitmap = null;
-
-        if (mContact.avatar != null && mContact.avatar.getFile() != null) {
-            if (mContact.avatar.getFile().getLocalFilePath() != null) {
-                path = mContact.avatar.getFile().getLocalFilePath();
-            } else {
-                path = mContact.avatar.getFile().getLocalThumbnailPath();
-            }
-        }
-
-        File imgFile = null;
-
-        if (path != null) {
-            imgFile = new File(path);
-        }
-
-        if (imgFile != null) {
-            if (imgFile.exists()) {
-                return BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            }
-        }
-
-        String name = HelperImageBackColor.getFirstAlphabetName(mContact.displayName);
-        bitmap = HelperImageBackColor.drawAlphabetOnPicture(size, name, HelperImageBackColor.getColor(name));
-
-        return bitmap;
-    }
 
     @Override
     public ViewHolderFactory<? extends ViewHolder> getFactory() {

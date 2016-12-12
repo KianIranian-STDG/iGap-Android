@@ -2,7 +2,6 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoGroupAvatarAdd;
-import com.iGap.realm.RealmAvatar;
 
 import io.realm.Realm;
 
@@ -31,7 +30,7 @@ public class GroupAvatarAddResponse extends MessageHandler {
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmAvatar.put(groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
+                        //RealmAvatar.put(groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override

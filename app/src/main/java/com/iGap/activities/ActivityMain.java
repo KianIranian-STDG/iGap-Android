@@ -260,9 +260,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             @Override
                             public void run() {
                                 Realm realm = Realm.getDefaultInstance();
+
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
-                                mAdapter.add(0, new RoomItem().setInfo(realmRoom).withIdentifier(SUID.id().get()));
-                                scrollToTop();
+
+                                if (!mAdapter.existRoom(room.getId())) {
+                                    mAdapter.add(0, new RoomItem().setInfo(realmRoom).withIdentifier(SUID.id().get()));
+                                    scrollToTop();
+                                }
 
                                 //realm.close(); //TODO [Saeed Mozaffari] [2016-11-27 1:43 PM] - Check Close Realm
                             }
