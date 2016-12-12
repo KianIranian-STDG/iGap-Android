@@ -329,7 +329,7 @@
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">"کاربر مسدود شده است و امکان تأیید وجود ندارد."</string>
-    <string name="Enter_Code">"رمز"</string>
+    <string name="Enter_Code">"کد تخریب"</string>
     <string name="E_335">"خطایی از کلاینت"</string>
     <string name="E_336">"خطای درونی سرور"</string>
     <string name="E_337">"این کار مجاز نیست."</string>
