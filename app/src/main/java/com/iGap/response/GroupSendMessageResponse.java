@@ -46,42 +46,36 @@ public class GroupSendMessageResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 // set info for clientCondition
-                RealmClientCondition realmClientCondition =
-                        realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                     realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
                 }
 
-                // because user may have more than one device, his another device should not be
-                // recipient
-                // but sender. so I check current userId with room message user id, and if not
-                // equals
+                // because user may have more than one device, his another device should not be recipient
+                // but sender. so I check current userId with room message user id, and if not equals
                 // and response is null, so we sure recipient is another user
+
                 //TODO [Saeed Mozaffari] [2016-11-13 7:40 PM] - AUTHOR_CHECK . niaz hast inja check beshe ke author user bud ya room? chon inja vase group hast va faghat user darim.
                 if (userId != roomMessage.getAuthor().getUser().getUserId() && builder.getResponse().getId().isEmpty()) {
                     // i'm the recipient
-
                     HelperCheckUserInfoExist.checkUserInfoExist(roomMessage.getAuthor().getUser().getUserId());
-
                     RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId());
-
                     G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.GROUP, builder.getRoomId());
+
                 } else {
                     // i'm the sender
                     // update message fields into database
                     if (builder.getResponse().getId().isEmpty()) {
                         RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId());
                     } else {
-                        RealmResults<RealmRoomMessage> realmRoomMessageRealmResults =
-                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
+                        RealmResults<RealmRoomMessage> realmRoomMessageRealmResults = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
                         for (RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
                             // find the message using identity and update it
                             if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
                                 if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).count() == 0) {
                                     RealmRoomMessage.updateId(Long.parseLong(identity), roomMessage.getMessageId());
                                 }
-
                                 RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId());
                                 break;
                             }
@@ -111,8 +105,7 @@ public class GroupSendMessageResponse extends MessageHandler {
             // invoke following callback when i'm not the sender, because I already done
             // everything after sending message
             if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst() != null) {
-                G.chatSendMessageUtil.onMessageReceive(builder.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType(),
-                        roomMessage, ProtoGlobal.Room.Type.GROUP);
+                G.chatSendMessageUtil.onMessageReceive(builder.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.GROUP);
             }
         } else {
             // invoke following callback when I'm the sender and the message has updated

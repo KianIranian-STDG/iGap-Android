@@ -3025,17 +3025,41 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
         hideProgressBar();
-        HelperAvatar.avatarAdd(roomId, filePathAvatar, avatar, new OnAvatarAdd() {
-            @Override
-            public void onAvatarAdd(final String avatarPath) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
-                    }
-                });
-            }
-        });
+        if (filePathAvatar != null) {
+            HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+                @Override
+                public void onAvatarGet(final String avatarPath) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
+                        }
+                    });
+                }
+
+                @Override
+                public void onShowInitials(final String initials, final String color) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        }
+                    });
+                }
+            });
+        } else {
+            HelperAvatar.avatarAdd(roomId, filePathAvatar, avatar, new OnAvatarAdd() {
+                @Override
+                public void onAvatarAdd(final String avatarPath) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     @Override
