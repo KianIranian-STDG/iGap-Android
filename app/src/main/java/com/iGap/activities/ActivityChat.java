@@ -90,6 +90,7 @@ import com.iGap.helper.HelperSetAction;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.IResendMessage;
+import com.iGap.interfaces.OnActivityChatStart;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.interfaces.OnChatDelete;
@@ -334,64 +335,32 @@ public class ActivityChat extends ActivityEnhanced
     protected void onStart() {
         super.onStart();
 
-        // when user receive message, I send update status as SENT to the message sender
-        // but imagine user is not in the room (or he is in another room) and received some messages
-        // when came back to the room with new messages, I make new update status request as SEEN to
-        // the message sender
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllAsync();
-        realmRoomMessages.addChangeListener(new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
+        RealmRoomMessage.fetchMessages(mRoomId, new OnActivityChatStart() {
             @Override
-            public void onChange(final RealmResults<RealmRoomMessage> element) {
-                //Start ClientCondition OfflineSeen
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+            public void resendMessage(RealmRoomMessage message) {
+                G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
+            }
 
-                        if (realmClientCondition != null) {
-                            final ArrayList<Long> offlineSeenId = new ArrayList<>();
+            @Override
+            public void resendMessageNeedsUpload(RealmRoomMessage message) {
+                new UploadTask().execute(message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getRoomId(), message.getMessage());
+            }
 
-                            long id = SUID.id().get();
-
-                            for (RealmRoomMessage roomMessage : element) {
-                                if (roomMessage != null) {
-                                    if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId() && !roomMessage.getStatus()
-                                            .equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-
-                                        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-
-                                        RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, id++);
-                                        realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
-                                        realm.copyToRealmOrUpdate(realmOfflineSeen);
-
-                                        realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                        offlineSeenId.add(roomMessage.getMessageId());
-                                    }
-                                }
-                            }
-                            for (long seenId : offlineSeenId) {
-                                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, seenId, ProtoGlobal.RoomMessageStatus.SEEN);
-                            }
-                        }
-
-                        if (chatType != null) {
-
-                            if (chatType == CHAT) {
-                                G.helperNotificationAndBadge.checkAlert(false, CHAT, mRoomId);
-                            } else if (chatType == GROUP) {
-                                G.helperNotificationAndBadge.checkAlert(false, GROUP, mRoomId);
-                            } else if (chatType == CHANNEL) {
-                                G.helperNotificationAndBadge.checkAlert(false, CHANNEL, mRoomId);
-                            }
-                        }
-                    }
-                });
-
-                element.removeChangeListeners();
-                realm.close();
+            @Override
+            public void sendSeenStatus(RealmRoomMessage message) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
             }
         });
+
+        if (chatType != null) {
+            if (chatType == CHAT) {
+                G.helperNotificationAndBadge.checkAlert(false, CHAT, mRoomId);
+            } else if (chatType == GROUP) {
+                G.helperNotificationAndBadge.checkAlert(false, GROUP, mRoomId);
+            } else if (chatType == CHANNEL) {
+                G.helperNotificationAndBadge.checkAlert(false, CHANNEL, mRoomId);
+            }
+        }
 
         final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
         updateUnreadCountRealm.executeTransactionAsync(new Realm.Transaction() {
@@ -2330,7 +2299,8 @@ public class ActivityChat extends ActivityEnhanced
             } else if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
                 Thread thread = new Thread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         ImageHelper.correctRotateImage(AttachFile.imagePath, true);
                     }
                 });

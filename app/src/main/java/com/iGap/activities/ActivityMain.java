@@ -36,6 +36,7 @@ import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ServiceContact;
+import com.iGap.interfaces.OnActivityMainStart;
 import com.iGap.interfaces.OnChannelDelete;
 import com.iGap.interfaces.OnChannelLeft;
 import com.iGap.interfaces.OnChatClearMessageResponse;
@@ -139,28 +140,6 @@ public class ActivityMain extends ActivityEnhanced
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
-
-    private void deliverSentMessages() {
-        final Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> sentMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString()).findAllAsync();
-        sentMessages.addChangeListener(new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
-            @Override
-            public void onChange(RealmResults<RealmRoomMessage> element) {
-                for (RealmRoomMessage roomMessage : element) {
-                    if (roomMessage == null) {
-                        return;
-                    }
-                    final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-                    if (realmRoom == null) {
-                        return;
-                    }
-
-                    G.chatUpdateStatusUtil.sendUpdateStatus(realmRoom.getType(), roomMessage.getRoomId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                }
-            }
-        });
-        realm.close();
     }
 
     @Override
@@ -368,7 +347,13 @@ public class ActivityMain extends ActivityEnhanced
     @Override
     protected void onStart() {
         super.onStart();
-        deliverSentMessages();
+
+        RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
+            @Override
+            public void sendDeliveredStatus(RealmRoom room, RealmRoomMessage message) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            }
+        });
     }
 
     /**

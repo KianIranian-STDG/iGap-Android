@@ -73,6 +73,15 @@ public class RealmClientCondition extends RealmObject {
         return offlineSeen;
     }
 
+    public boolean containsOfflineSeen(long l) {
+        for (RealmOfflineSeen r : offlineSeen) {
+            if (r.getOfflineSeen() == l) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setOfflineSeen(RealmList<RealmOfflineSeen> offlineSeen) {
         this.offlineSeen = offlineSeen;
     }

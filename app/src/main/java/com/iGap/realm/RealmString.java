@@ -16,7 +16,7 @@ public class RealmString extends RealmObject {
         return string;
     }
 
-    public void setString(String phone) {
-        this.string = phone;
+    public void setString(String s) {
+        this.string = s;
     }
 }
