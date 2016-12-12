@@ -77,23 +77,23 @@
     <string name="pu_nikname_profileUser">"نام مستعار"</string>
     <string name="pu_Lets_Go">"ادامه"</string>
 
-    <!-- REGISTER PAGE -->
+    <!-- Register Page -->
     <string name="rg_title_register">"ثبت نام"</string>
-    <string name="rg_confirm_text_register">"لطفاً کد کشور خود را تأیید و شماره تلفن خود را وارد کنید."</string>
-    <string name="rg_Start">"شروع"</string>
-    <string name="rg_Select_Country">"یک کشور را انتخاب کنید."</string>
-    <string name="rg_agreement_text_register">"بررسی دوبارهٔ شماره تلفن شما! ما قصد داریم از طریق پیامک کد تأییدیه دریافت کنیم."</string>
-    <string name="rg_verify_register1">"در حال برقراری ارتباط"</string>
-    <string name="rg_verify_register2">"در انتظار تأییدیهٔ پیامک"</string>
-    <string name="rg_verify_register3">"کلید تولید"</string>
-    <string name="rg_verify_register4">"ثبت نام شما ضمن برقراری ارتباط با سرور"</string>
+    <string name="rg_confirm_text_register">"لطفا کشور ، کد کشور خود را تایید کنید و سپس تلفن خود را بدون صفر ابتدایی وارد کنید"</string>
+    <string name="rg_Start">"بزن بریم"</string>
+    <string name="rg_Select_Country">"کشور خود را انتخاب کنید"</string>
+    <string name="rg_agreement_text_register">"تایید نهایی تلفن شما ، ما قصد داریم کد فعال سازی را برای این شماره ارسال کنیم"</string>
+    <string name="rg_verify_register1">"در حال اتصال"</string>
+    <string name="rg_verify_register2">"منتظر کد تایید"</string>
+    <string name="rg_verify_register3">"تولید کلید امنیتی"</string>
+    <string name="rg_verify_register4">"ثبت نام نهایی در سرور"</string>
     <string name="rg_verify_dialog_enter_code">"آی گپ به صورت خودکار پیامک فرستاده شده را تشخیص می‌دهد؛ اما شاید بخواهید آن را به صورت دستی وارد کنید و آن زمانی است که یا قادر به کنترل چیزی نیستید و یا درخواست می‌کنید کد دوباره ارسال شود."</string>
-    <string name="rg_verify_dialog_try_code">"امتحان کردن"</string>
-    <string name="rg_verify_dialog_resend_code">"ارسال دوبارهٔ کد"</string>
+    <string name="rg_verify_dialog_try_code">"دستی وارد کردم"</string>
+    <string name="rg_verify_dialog_resend_code">"ارسال مجدد کد تایید"</string>
     <string name="search">"جستجو"</string>
-    <string name="Re_dialog_verify_number_part1">"ما شماره تلفن را تأیید می‌کنیم."</string>
-    <string name="Re_dialog_verify_number_part2">"اگر شماره تلفنی که وارد کرده‌اید، درست است، دکمهٔ تأیید را بزنید؛ در غیر این صورت می‌توانید به سادگی آن را ویرایش کنید."</string>
-    <string name="Re_Enter_Verify_Code_Please">"لطفاً کد تأییدیه را وارد کنید."</string>
+    <string name="Re_dialog_verify_number_part1">"تایید نهایی تلفن شما"</string>
+    <string name="Re_dialog_verify_number_part2">"اگر شماره تلفن صحیح است تایید کرده و در غیر اینصورت براحتی تغییرش دهید"</string>
+    <string name="Re_Enter_Verify_Code_Please">"لطفا کد تایید را دستی وارد کنید"</string>
 
     <!-- setting -->
     <string name="st_Info">"اطلاعات"</string>
