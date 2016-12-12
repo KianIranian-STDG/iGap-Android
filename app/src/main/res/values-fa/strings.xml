@@ -48,8 +48,8 @@
     <string name="Re_Phone_Verification">"تأیید شماره تلفن"</string>
 
     <!-- Check connect to internet Page introduce app -->
-    <string name="text_i_introduce_page1">"گپ"</string>
-    <string name="text_line_1_introduce_page1">"آی"</string>
+    <string name="text_i_introduce_page1">"آی"</string>
+    <string name="text_line_1_introduce_page1">"گپ"</string>
     <string name="text_line_2_introduce_page1">"بی حد و مرز"</string>
     <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آی گپ بسازید"</string>
 
