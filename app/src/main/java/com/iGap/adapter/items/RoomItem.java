@@ -309,7 +309,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                     @Override
                     public void run() {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
-                        //notify();
                     }
                 });
             }

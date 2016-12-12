@@ -115,7 +115,7 @@ public class HelperAvatar {
                                     public void execute(Realm realm) {
                                         for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).findAll()) {
                                             if (realmAvatar1.getFile().getToken().equals(token)) {
-                                                realmAvatar1.getFile().setLocalFilePath(filepath);
+                                                realmAvatar1.getFile().setLocalThumbnailPath(filepath);
                                                 break;
                                             }
                                         }

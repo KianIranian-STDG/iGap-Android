@@ -88,7 +88,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         }
     }
 
-    public void notify(long chatId) {
+    public void notifyWithRoomId(long chatId) {
         List<Item> items = getAdapterItems();
         for (final Item chat : items) {
             if (chat.mInfo.getId() == chatId) {

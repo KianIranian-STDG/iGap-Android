@@ -104,7 +104,6 @@ import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
-import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnHelperSetAction;
 import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnSetAction;
@@ -228,7 +227,7 @@ import static java.lang.Long.parseLong;
 
 public class ActivityChat extends ActivityEnhanced
         implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
-        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse {
+        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -2330,7 +2329,8 @@ public class ActivityChat extends ActivityEnhanced
             } else if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
                 Thread thread = new Thread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         ImageHelper.correctRotateImage(AttachFile.imagePath, true);
                     }
                 });
@@ -4645,17 +4645,5 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }, 100);
         }
-    }
-
-    //******* GroupAvatar
-
-    @Override
-    public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
-
-    }
-
-    @Override
-    public void onAvatarAddError() {
-
     }
 }
