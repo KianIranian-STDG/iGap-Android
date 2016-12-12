@@ -21,7 +21,7 @@
             android:layout_margin="0dp"
             app:rv_alpha="200"
             app:rv_centered="true"
-            app:rv_rippleDuration="150"
+            app:rv_rippleDuration="0"
             app:rv_ripplePadding="5dp">
 
             <com.iGap.module.MaterialDesignTextView
@@ -54,7 +54,7 @@
             android:layout_margin="0dp"
             app:rv_alpha="200"
             app:rv_centered="true"
-            app:rv_rippleDuration="150"
+            app:rv_rippleDuration="100"
             app:rv_ripplePadding="5dp">
 
             <com.iGap.module.MaterialDesignTextView

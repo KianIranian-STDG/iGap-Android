@@ -390,6 +390,7 @@ public class ActivityRegister extends ActivityEnhanced {
                                         edtCodeNumber.setText("+" + callingCode);
                                         edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
                                         regex = regexR;
+                                        btnStart.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                                         btnStart.setEnabled(true);
                                     }
                                 });
@@ -453,6 +454,8 @@ public class ActivityRegister extends ActivityEnhanced {
                                             @Override
                                             public void run() {
 
+                                                btnStart.setBackgroundColor(getResources().getColor(R.color.rg_background_verify));
+                                                btnStart.setTextColor(getResources().getColor(R.color.rg_border_editText));
                                                 btnChoseCountry.setEnabled(false);
                                                 btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
                                                 edtPhoneNumber.setEnabled(false);
@@ -473,9 +476,10 @@ public class ActivityRegister extends ActivityEnhanced {
 
                                         dialogVerifyLandScape = new Dialog(ActivityRegister.this);
 
-                                        btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_background_editText));
+                                        btnStart.setBackgroundColor(getResources().getColor(R.color.rg_border_editText));
+                                        btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
                                         btnChoseCountry.setEnabled(false);
-                                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_background_editText));
+                                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
                                         edtPhoneNumber.setEnabled(false);
 
                                         dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
