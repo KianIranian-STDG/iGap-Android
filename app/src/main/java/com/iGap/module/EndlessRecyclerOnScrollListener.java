@@ -99,12 +99,8 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                 // Object is no longer valid to operate on. Was it deleted by another thread?
                 // I check validity of the model
                 // if it isn't valid, force to pass this item but fetch and check another more item
-                if (mMessagesList.get(i).isValid()) {
-                    messages.add(mMessagesList.get(i));
-                    if (mMessagesList.get(i).isOnlyTime()) {
-                        timeMessagesAddedCount++;
-                    }
-                } else {
+                messages.add(mMessagesList.get(i));
+                if (mMessagesList.get(i).isOnlyTime()) {
                     timeMessagesAddedCount++;
                 }
             } else {

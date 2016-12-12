@@ -1424,7 +1424,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        switchAddItem(getChatList(), true);
+        switchAddItem(getLocalMessages(), true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ActivityChat.this);
         // make start messages from bottom, this is exactly what Telegram and other messengers do
@@ -3018,10 +3018,9 @@ public class ActivityChat extends ActivityEnhanced
 
     private long lastMessageId;
 
-    private ArrayList<StructMessageInfo> getChatList() {
+    private ArrayList<StructMessageInfo> getLocalMessages() {
         Realm realm = Realm.getDefaultInstance();
         ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
-        // get all RealmRoomMessages
 
         for (RealmRoomMessage realmRoomMessage : realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll()) {
             if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
