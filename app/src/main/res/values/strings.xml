@@ -310,17 +310,17 @@
     <string name="last_msg_format_chat" formatted="false">%s</string>
 
     <!-- Toast -->
-    <string name="Toast_waiting_fot_get_info">Waiting for getting info</string>
-    <string name="Toast_Location_Not_Found">Location Not Found</string>
-    <string name="Toast_First_0">Don\'t need First 0.</string>
-    <string name="Toast_Enter_Phone_Number">Please enter your phone number.</string>
-    <string name="Toast_Enter_Code">Please enter code.</string>
-    <string name="Toast_Number_Block">This number is blocked.</string>
-    <string name="Toast_Invalid_nickname">Invalid Nickname. Please change nickname.</string>
-    <string name="Toast_Write_NickName">Please write your nickname.</string>
+    <string name="Toast_waiting_fot_get_info">Connecting and get Info...</string>
+    <string name="Toast_Location_Not_Found">Location not found.</string>
+    <string name="Toast_First_0">Don\'t need 0 on first</string>
+    <string name="Toast_Enter_Phone_Number">Please enter your phone number without first zero</string>
+    <string name="Toast_Enter_Code">Please enter the verification code</string>
+    <string name="Toast_Number_Block">This number is blocked</string>
+    <string name="Toast_Invalid_nickname">Invalid Nickname,Please change it.</string>
+    <string name="Toast_Write_NickName">Please enter your nickname</string>
     <string name="d_of_d" formatted="false">%d of %d</string>
     <string name="add_to_contact">Add to Contact</string>
-    <string name="resend_message">Resend message</string>
+    <string name="resend_message">Resend verification code</string>
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">User Verify Blocked User</string>
