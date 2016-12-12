@@ -87,7 +87,7 @@
     <string name="rg_verify_register2">"منتظر کد تایید"</string>
     <string name="rg_verify_register3">"تولید کلید امنیتی"</string>
     <string name="rg_verify_register4">"ثبت نام نهایی"</string>
-    <string name="rg_verify_dialog_enter_code">"آی گپ به صورت خودکار پیامک فرستاده شده را تشخیص می‌دهد؛ اما شاید بخواهید آن را به صورت دستی وارد کنید و آن زمانی است که یا قادر به کنترل چیزی نیستید و یا درخواست می‌کنید کد دوباره ارسال شود."</string>
+    <string name="rg_verify_dialog_enter_code">"آی گپ بصورت خودکار پیام تایید را تشخیص میدهد ، شاید دریافت شده و شما دستی میخواهید وارد کنید لطفا کد را دستی وارد کرده و یا در صورتی که دریافت نکردید درخواست ارسال مجدد کنید."</string>
     <string name="rg_verify_dialog_try_code">"دستی وارد کردم"</string>
     <string name="rg_verify_dialog_resend_code">"ارسال مجدد کد تایید"</string>
     <string name="search">"جستجو"</string>
