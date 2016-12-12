@@ -88,7 +88,7 @@ public class ActivityRegister extends ActivityEnhanced {
     ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private SoftKeyboard softKeyboard;
     private Button btnStart;
-    private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc, txtTitleAgreement;
+    private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc;
     private ProgressBar rg_prg_verify_connect, rg_prg_verify_sms, rg_prg_verify_generate, rg_prg_verify_register;
     private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate, rg_txt_verify_register, txtTimer;
     private ImageView rg_img_verify_connect, rg_img_verify_sms, rg_img_verify_generate, rg_img_verify_register;
@@ -187,7 +187,6 @@ public class ActivityRegister extends ActivityEnhanced {
 
         txtTitleRegister = (TextView) findViewById(R.id.rg_txt_title_register);
         txtDesc = (TextView) findViewById(R.id.rg_txt_text_descRegister);
-        txtTitleAgreement = (TextView) findViewById(R.id.rg_txt_title_agreement);
 
         txtTitleToolbar = (TextView) findViewById(R.id.rg_txt_titleToolbar);
         txtTitleToolbar.setTypeface(G.FONT_IGAP);

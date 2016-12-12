@@ -150,16 +150,6 @@
                 android:padding="@dimen/dp8"
                 android:visibility="visible">
 
-                <TextView
-                    android:id="@+id/rg_txt_title_agreement"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/rg_agreement_title_register"
-                    android:textColor="@color/rg_black_register"
-                    android:textSize="@dimen/sp18" />
-
-
                 <com.uncopt.android.widget.text.justify.JustifiedTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

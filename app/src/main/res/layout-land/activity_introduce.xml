@@ -385,13 +385,17 @@
         android:id="@+id/int_txt_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/dp4"
-        android:layout_marginRight="@dimen/dp8"
-        android:text="@string/skip"
-        android:textColor="@color/toolbar_background"
-        android:textSize="@dimen/sp16" />
+        android:layout_alignTop="@+id/int_layoutParentCircleImage"
+        android:layout_marginTop="@dimen/dp4"
+        android:background="@color/toolbar_background"
+        android:gravity="center"
+        android:minWidth="@dimen/dp60"
+        android:padding="@dimen/dp4"
+        android:text="@string/B_skip"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp14"/>
 
 
 </android.support.percent.PercentRelativeLayout>

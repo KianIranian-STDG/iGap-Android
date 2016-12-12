@@ -151,6 +151,7 @@
             android:layout_marginTop="@dimen/dp12"
             android:background="@drawable/rg_background_button_start_register"
             android:text="@string/rg_Start"
+            android:gravity="center"
             android:paddingTop="@dimen/dp4"
             android:paddingBottom="@dimen/dp4"
             android:textColor="@color/rg_whit_background" />
@@ -359,42 +360,24 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/rg_layout_agreement"
+        <com.uncopt.android.widget.text.justify.JustifiedTextView
+            android:id="@+id/txtAgreement_register"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp4"
+            android:fadeScrollbars="false"
+            android:lineSpacingExtra="@dimen/dp4"
             android:layout_marginLeft="@dimen/dp8"
             android:layout_marginRight="@dimen/dp12"
-            android:layout_marginTop="@dimen/dp8"
-            android:background="@drawable/rg_background_agreement2"
-            android:orientation="vertical"
+            android:layout_marginEnd="@dimen/dp8"
+            android:layout_marginStart="@dimen/dp12"
+            android:overScrollMode="always"
             android:padding="@dimen/dp4"
-            android:visibility="visible">
-
-            <TextView
-                android:id="@+id/rg_txt_title_agreement"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/rg_agreement_title_register"
-                android:textColor="@color/rg_black_register"
-                android:textSize="@dimen/sp16"/>
-
-            <TextView
-                android:id="@+id/txtAgreement_register"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp4"
-                android:fadeScrollbars="false"
-                android:lineSpacingExtra="@dimen/dp4"
-                android:overScrollMode="always"
-                android:padding="@dimen/dp4"
-                android:textSize="@dimen/sp14"
-                android:scrollbarSize="@dimen/dp4"
-                android:scrollbarThumbVertical="@color/rg_start_background"
-                android:scrollbars="vertical"
-                android:text="@string/rg_agreement_text_register" />
-        </LinearLayout>
+            android:textSize="@dimen/sp14"
+            android:scrollbarSize="@dimen/dp4"
+            android:scrollbarThumbVertical="@color/rg_start_background"
+            android:scrollbars="vertical"
+            android:text="@string/rg_agreement_text_register" />
     </LinearLayout>
 </LinearLayout>
 
