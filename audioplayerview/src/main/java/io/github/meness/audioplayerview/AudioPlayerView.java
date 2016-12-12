@@ -49,6 +49,12 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
     private TextView mRecordedBy;
     private Handler mHandler = new MessageHandler(this);
     private OnAudioPlayerViewControllerClick mOnClickListener;
+    private MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            reset();
+        }
+    };
 
     public MediaPlayer getPlayer() {
         return mPlayer;
@@ -64,7 +70,7 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
      * set times colors
      *
      * @param currentTimeRes current time color res
-     * @param endTimeRes     end time color res
+     * @param endTimeRes end time color res
      */
     public void setTimesColor(@ColorRes int currentTimeRes, @ColorRes int endTimeRes) {
         if (mCurrentTime != null) {
@@ -128,6 +134,13 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
 
     public void setMediaPlayer(MediaPlayer player) {
         mPlayer = player;
+        mPlayer.setOnCompletionListener(mOnCompletionListener);
+        mPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+            @Override
+            public void onSeekComplete(MediaPlayer mediaPlayer) {
+                mHandler.sendEmptyMessage(SHOW_PROGRESS);
+            }
+        });
     }
 
     /**
@@ -164,8 +177,10 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
     private void updateDrawables() {
         if (!mPlayer.isPlaying()) {
             mActionButton.setImageResource(R.drawable.audioplayerview_ic_media_play);
+            mActionButton.setTag("play");
         } else {
             mActionButton.setImageResource(R.drawable.audioplayerview_ic_media_pause);
+            mActionButton.setTag("pause");
         }
     }
 
@@ -179,9 +194,8 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
 
         mProgress = (SeekBar) v.findViewById(R.id.seekBar);
         if (mProgress != null) {
-            SeekBar seeker = mProgress;
-            seeker.setOnSeekBarChangeListener(mSeekListener);
-            mProgress.setMax(1000);
+            mProgress.setOnSeekBarChangeListener(mSeekListener);
+            mProgress.setMax(100);
         }
 
         mEndTime = (TextView) v.findViewById(R.id.totalTime);
@@ -208,7 +222,7 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
      */
     public void show() {
         if (!mShowing && mAnchor != null) {
-            setProgress();
+            updateProgress();
             if (mActionButton != null) {
                 mActionButton.requestFocus();
             }
@@ -233,8 +247,7 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
      */
     public void setProgressColor(@ColorRes int res) {
         if (mProgress != null) {
-            mProgress.getProgressDrawable().mutate().setColorFilter(
-                    getResources().getColor(res), android.graphics.PorterDuff.Mode.SRC_IN);
+            mProgress.getProgressDrawable().mutate().setColorFilter(getResources().getColor(res), android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -247,8 +260,7 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
     public void setProgressThumb(@ColorRes int res) {
         if (mProgress != null) {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                mProgress.getThumb().mutate().setColorFilter(
-                        getResources().getColor(res), PorterDuff.Mode.SRC_IN);
+                mProgress.getThumb().mutate().setColorFilter(getResources().getColor(res), PorterDuff.Mode.SRC_IN);
             }
         }
     }
@@ -260,8 +272,7 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
      */
     public void setDrawablesColor(@ColorRes int res) {
         if (mActionButton != null) {
-            mActionButton.setColorFilter(
-                    getResources().getColor(res), android.graphics.PorterDuff.Mode.SRC_IN);
+            mActionButton.setColorFilter(getResources().getColor(res), android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -308,18 +319,17 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
         }
     }
 
-    private int setProgress() throws IllegalStateException {
-        if (mPlayer == null || mDragging) {
-            return 0;
+    private void updateProgress() throws IllegalStateException {
+        if (mPlayer == null) {
+            return;
         }
 
         int position = mPlayer.getCurrentPosition();
         int duration = mPlayer.getDuration();
         if (mProgress != null) {
             if (duration > 0) {
-                // use long to avoid overflow
-                long pos = 1000L * position / duration;
-                mProgress.setProgress((int) pos);
+                int pos = (100 * position) / duration;
+                mProgress.setProgress(pos);
             }
         }
 
@@ -329,8 +339,6 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
         if (mCurrentTime != null) {
             mCurrentTime.setText(stringForTime(position, false));
         }
-
-        return position;
     }
 
     @Override
@@ -391,13 +399,13 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
     private View.OnClickListener mActionListener = new View.OnClickListener() {
         public void onClick(View v) {
             if ("play".equalsIgnoreCase((String) mActionButton.getTag())) {
-                //doPlay();
+                doPlay();
 
                 if (mOnClickListener != null) {
                     mOnClickListener.onPlayClick(AudioPlayerView.this);
                 }
             } else if ("pause".equalsIgnoreCase((String) mActionButton.getTag())) {
-                //doPause();
+                doPause();
 
                 if (mOnClickListener != null) {
                     mOnClickListener.onPauseClick(AudioPlayerView.this);
@@ -420,7 +428,6 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
             return;
         }
 
-        mActionButton.setTag("play");
         mHandler.sendEmptyMessage(ACTION_CHANGED);
     }
 
@@ -429,7 +436,6 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
             return;
         }
 
-        mActionButton.setTag("pause");
         mHandler.sendEmptyMessage(ACTION_CHANGED);
     }
 
@@ -445,10 +451,10 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
     // case there WON'T BE onStartTrackingTouch/onStopTrackingTouch notifications,
     // we will simply apply the updated position without suspending regular updates.
     private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
+        @Override
         public void onStartTrackingTouch(SeekBar bar) {
-            show();
-
             mDragging = true;
+            doPause();
 
             // By removing these pending progress messages we make sure
             // that a) we won't update the progress while the user adjusts
@@ -458,32 +464,22 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
             mHandler.removeMessages(SHOW_PROGRESS);
         }
 
+        @Override
         public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
             if (mPlayer == null) {
                 return;
             }
 
-            if (!fromuser) {
-                // We're not interested in programmatically generated changes to
-                // the progress bar's position.
-                return;
+            if (fromuser) {
+                int duration = mPlayer.getDuration();
+                int newPosition = (duration * progress) / 100;
+                mPlayer.seekTo(newPosition);
             }
-
-            long duration = mPlayer.getDuration();
-            long newPosition = (duration * progress) / 1000L;
-            mPlayer.seekTo((int) newPosition);
-            if (mCurrentTime != null) mCurrentTime.setText(stringForTime((int) newPosition, false));
         }
 
+        @Override
         public void onStopTrackingTouch(SeekBar bar) {
             mDragging = false;
-            setProgress();
-            show();
-
-            // Ensure that progress is properly updated in the future,
-            // the call to show() does not guarantee this because it is a
-            // no-op if we are already showing.
-            mHandler.sendEmptyMessage(SHOW_PROGRESS);
         }
     };
 
@@ -497,6 +493,13 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
         }
         disableUnsupportedButtons();
         super.setEnabled(enabled);
+    }
+
+    public void reset() {
+        if (mPlayer.isPlaying()) {
+            mPlayer.pause();
+        }
+        mHandler.sendEmptyMessage(ACTION_CHANGED);
     }
 
     @Override
@@ -540,13 +543,13 @@ public class AudioPlayerView extends FrameLayout implements IAnotherPlayOrPause 
                 return;
             }
 
-            int pos;
             switch (msg.what) {
                 case SHOW_PROGRESS:
-                    pos = view.setProgress();
+                    view.updateProgress();
+
                     if (!view.mDragging && view.mShowing && view.mPlayer.isPlaying()) {
                         msg = obtainMessage(SHOW_PROGRESS);
-                        sendMessageDelayed(msg, 1000 - (pos % 1000));
+                        sendMessage(msg);
                     }
                     break;
                 case ACTION_CHANGED:
