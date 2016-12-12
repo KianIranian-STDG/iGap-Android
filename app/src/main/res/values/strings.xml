@@ -84,7 +84,7 @@
     <string name="rg_verify_register2">Verification</string>
     <string name="rg_verify_register3">Generating Secret Key</string>
     <string name="rg_verify_register4">Final Registration</string>
-    <string name="rg_verify_dialog_enter_code">iGap tries to detect SMS automatically; but probably you need to enter it manually, Please enter manually code or if not recive code try to resend it.</string>
+    <string name="rg_verify_dialog_enter_code">iGap tries to detect SMS automatically, but probably you need to enter it manually, Please enter manually code or if not recive code try to resend it.</string>
     <string name="rg_verify_dialog_try_code">Manually Enter</string>
     <string name="rg_verify_dialog_resend_code">Resend Code</string>
     <string name="search">Search</string>
