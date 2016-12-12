@@ -45,26 +45,25 @@
     <string name="phone_number">Phone Number</string>
     <string name="Re_Phone_Verification">Phone Number Verification</string>
 
-    <!-- check connect to internet Page
-    introduce app -->
+    <!-- Check connect to internet Page introduce app -->
     <string name="text_i_introduce_page1">i</string>
     <string name="text_line_1_introduce_page1">GAP</string>
     <string name="text_line_2_introduce_page1">Limitless Connection</string>
     <string name="text_line_3_introduce_page1">Create your very own world with iGap right now.</string>
 
-    <!-- page2 -->
+    <!-- Page 2 introduce app -->
     <string name="text_line_1_introduce_page2">Security</string>
     <string name="text_line_2_introduce_page2">iGap promises you providing a secure connection with your friends and family. We use all new encryption algorithms to secure your privacy.</string>
 
-    <!-- page3 -->
+    <!-- Page 3 introduce app -->
     <string name="text_line_1_introduce_page3">Chat</string>
     <string name="text_line_2_introduce_page3">You can chat in private or groups and even create your own channel and add members.</string>
 
-    <!-- page4 -->
+    <!-- Page 4 introduce app -->
     <string name="text_line_1_introduce_page4">File Transfering</string>
     <string name="text_line_2_introduce_page4">You can transfer any file with any extension and size. Share anything you’d like to with whoever you want to.</string>
 
-    <!-- page5 -->
+    <!-- Page 5 introduce app -->
     <string name="btn_start_page5">Start now</string>
     <string name="text_line_1_introduce_page5">Everything for Free!</string>
     <string name="text_line_2_introduce_page5"><![CDATA[ Not to bore you any more! <br /> iGap is all free. Create your own world just now! ]]></string>
