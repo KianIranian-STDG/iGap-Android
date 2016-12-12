@@ -62,6 +62,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private OnComplete complete;
     private long roomId = 0;
     private ArrayList<StructSharedMedia> mList;
+    public static String totalCountItem = "";
 
     private LinearLayout mediaLayout;
     private MusicPlayer musicPlayer;
@@ -75,7 +76,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter mFilter;
 
-
     private int offset = 0;
 
     public class StructSharedMedia {
@@ -87,7 +87,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         public boolean isItemTime = false;
 
         public option options = new option();
-
     }
 
     public class option {
@@ -95,7 +94,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         public boolean isDownloading = false;
         public boolean needDownload = false;
     }
-
 
     public enum SharedMediaType {
 
@@ -118,22 +116,18 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
-
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sheared_media);
 
@@ -154,8 +148,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         initComponent();
     }
 
-    @Override
-    public void onBackPressed() {
+    @Override public void onBackPressed() {
         FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag("Show_Image_fragment_shared_media");
         if (myFragment != null && myFragment.isVisible()) {
             getFragmentManager().beginTransaction().remove(myFragment).commit();
@@ -173,8 +166,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.asm_btn_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.asm_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -182,8 +174,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.asm_btn_menu);
         RippleView rippleMenu = (RippleView) findViewById(R.id.asm_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 popUpMenuSharedMedai();
             }
         });
@@ -191,8 +182,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         txtSharedMedia = (TextView) findViewById(R.id.asm_txt_sheared_media);
 
         complete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override public void complete(boolean result, String messageOne, String MessageTow) {
 
                 int whatAction = 0;
                 String number = "0";
@@ -210,11 +200,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         recyclerView = (RecyclerView) findViewById(R.id.asm_recycler_view_sheared_media);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-
-
 
                 if (isThereAnyMoreItemToLoad) {
                     if (!isSendRequestForLoading) {
@@ -227,8 +214,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         }
                     }
                 }
-
-
             }
         });
 
@@ -242,8 +227,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         RippleView rippleCloseAppBarSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
         rippleCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 mAdapter.resetSelected();
             }
         });
@@ -251,8 +235,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         Button btnForwardSelected = (Button) findViewById(R.id.asm_btn_forward_selected);
         btnForwardSelected.setTypeface(G.fontawesome);
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
             }
         });
@@ -260,8 +243,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         Button btnDeleteSelected = (Button) findViewById(R.id.asm_btn_delete_selected);
         RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
             }
         });
@@ -291,40 +273,36 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     public void popUpMenuSharedMedai() {
 
-        MaterialDialog dialog = new MaterialDialog.Builder(this).items(R.array.pop_up_shared_media)
-                .contentColor(Color.BLACK)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+        MaterialDialog dialog = new MaterialDialog.Builder(this).items(R.array.pop_up_shared_media).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        offset = 0;
+                offset = 0;
 
-                        switch (which) {
-                            case 0:
-                                fillListImage();
-                                break;
-                            case 1:
-                                fillListVideo();
-                                break;
-                            case 2:
-                                fillListAudio();
-                                break;
-                            case 3:
-                                fillListVoice();
-                                break;
-                            case 4:
-                                fillListGif();
-                                break;
-                            case 5:
-                                fillListFile();
-                                break;
-                            case 6:
-                                fillListLink();
-                                break;
-                        }
-                    }
-                })
-                .show();
+                switch (which) {
+                    case 0:
+                        fillListImage();
+                        break;
+                    case 1:
+                        fillListVideo();
+                        break;
+                    case 2:
+                        fillListAudio();
+                        break;
+                    case 3:
+                        fillListVoice();
+                        break;
+                    case 4:
+                        fillListGif();
+                        break;
+                    case 5:
+                        fillListFile();
+                        break;
+                    case 6:
+                        fillListLink();
+                        break;
+                }
+            }
+        }).show();
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
@@ -334,17 +312,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         dialog.getWindow().setAttributes(layoutParams);
     }
 
-
     //********************************************************************************************
-
 
     private void initLayoutRecycleviewForImage() {
 
         final GridLayoutManager gLayoutManager = new GridLayoutManager(ActivityShearedMedia.this, spanItemCount);
 
         gLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
+            @Override public int getSpanSize(int position) {
                 if (mList.get(position).isItemTime) {
                     return spanItemCount;
                 } else {
@@ -356,24 +331,20 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         recyclerView.setLayoutManager(gLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        recyclerView.getViewTreeObserver()
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        int viewWidth = recyclerView.getMeasuredWidth();
-                        float cardViewWidth = getResources().getDimension(R.dimen.dp120);
-                        int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override public void onGlobalLayout() {
+                recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                int viewWidth = recyclerView.getMeasuredWidth();
+                float cardViewWidth = getResources().getDimension(R.dimen.dp120);
+                int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
 
-                        if (newSpanCount < 3) newSpanCount = 3;
+                if (newSpanCount < 3) newSpanCount = 3;
 
-                        spanItemCount = newSpanCount;
-                        gLayoutManager.setSpanCount(newSpanCount);
-                        gLayoutManager.requestLayout();
-                    }
-                });
-
-
+                spanItemCount = newSpanCount;
+                gLayoutManager.setSpanCount(newSpanCount);
+                gLayoutManager.requestLayout();
+            }
+        });
     }
 
     private void fillListImage() {
@@ -382,52 +353,37 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE;
 
         getDataFromServer(new OnFillList() {
-            @Override
-            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
+            @Override public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
                 mList = addTimeToList(resultList);
                 mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.image, complete, musicPlayer, roomId);
 
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         initLayoutRecycleviewForImage();
                     }
                 });
-
-
-
             }
         }, mFilter);
-
     }
 
     private void fillListVideo() {
 
-
         txtSharedMedia.setText(R.string.shared_video);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO;
         getDataFromServer(new OnFillList() {
-            @Override
-            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
+            @Override public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
                 mList = addTimeToList(resultList);
                 mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.video, complete, musicPlayer, roomId);
 
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         initLayoutRecycleviewForImage();
                     }
                 });
-
-
-
             }
         }, mFilter);
-
     }
 
     private void fillListAudio() {
@@ -435,25 +391,19 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         txtSharedMedia.setText(R.string.shared_audio);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO;
         getDataFromServer(new OnFillList() {
-            @Override
-            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
-
+            @Override public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
                 mList = addTimeToList(resultList);
 
                 mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.audio, complete, musicPlayer, roomId);
                 final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         recyclerView.setLayoutManager(mLayoutManager);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
                         recyclerView.setAdapter(mAdapter);
                     }
                 });
-
-
-
             }
         }, mFilter);
     }
@@ -463,25 +413,21 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE;
 
         getDataFromServer(new OnFillList() {
-            @Override
-            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+            @Override public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
                 mList = addTimeToList(resultList);
                 mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.voice, complete, musicPlayer, roomId);
 
                 final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         recyclerView.setLayoutManager(mLayoutManager);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
                         recyclerView.setAdapter(mAdapter);
                     }
                 });
-
             }
         }, mFilter);
-
     }
 
     private void fillListGif() {
@@ -489,25 +435,19 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF;
 
         getDataFromServer(new OnFillList() {
-            @Override
-            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+            @Override public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
                 mList = addTimeToList(resultList);
 
                 mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.gif, complete, musicPlayer, roomId);
                 final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         initLayoutRecycleviewForImage();
                     }
                 });
-
-
-
             }
         }, mFilter);
-
     }
 
     private void fillListFile() {
@@ -515,24 +455,19 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE;
 
         getDataFromServer(new OnFillList() {
-            @Override
-            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+            @Override public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
                 mList = addTimeToList(resultList);
                 mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.file, complete, musicPlayer, roomId);
 
                 final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         recyclerView.setLayoutManager(mLayoutManager);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
                         recyclerView.setAdapter(mAdapter);
                     }
                 });
-
-
-
             }
         }, mFilter);
     }
@@ -543,8 +478,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL;
 
         getDataFromServer(new OnFillList() {
-            @Override
-            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+            @Override public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
                 mList = addTimeToList(resultList);
                 mAdapter = new AdapterShearedMedia(ActivityShearedMedia.this, mList, SharedMediaType.link, complete, musicPlayer, roomId);
@@ -552,31 +486,22 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 final LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityShearedMedia.this);
 
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         recyclerView.setLayoutManager(mLayoutManager);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
                         recyclerView.setAdapter(mAdapter);
                     }
                 });
-
-
-
             }
         }, mFilter);
-
-
     }
 
-
     //********************************************************************************************
-
 
     private void getDataFromServer(final OnFillList onFillList, final ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter) {
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override
-            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+            @Override public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
                 isSendRequestForLoading = false;
                 for (ProtoGlobal.RoomMessage message : resultList) {
 
@@ -588,7 +513,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     saveDataToLocal(filter, resultList);
 
                     onFillList.getList(totalCount, notDeletedCount, loadDataFromLocal(filter));
-
                 } else {
                     Toast.makeText(ActivityShearedMedia.this, R.string.there_is_no_sheared_media, Toast.LENGTH_LONG).show();
                 }
@@ -599,14 +523,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     isThereAnyMoreItemToLoad = false;
                 }
 
-
                 Log.e("dddd", "isThereAnyMoreItemToLoad   " + isThereAnyMoreItemToLoad + "    " + offset);
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
                 isSendRequestForLoading = false;
-
 
                 Log.e("ddd", "erore  onClientSearchRoomHistory    majorCode  " + majorCode + "   " + minorCode);
 
@@ -615,8 +536,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     case 617:
 
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 Toast.makeText(ActivityShearedMedia.this, R.string.there_is_no_sheared_media, Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -624,19 +544,15 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         break;
                     case 620:
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 Toast.makeText(ActivityShearedMedia.this, R.string.there_is_no_sheared_media, Toast.LENGTH_SHORT).show();
                             }
                         });
                         break;
                 }
-
-
             }
 
-            @Override
-            public void onTimeOut() {
+            @Override public void onTimeOut() {
                 isSendRequestForLoading = false;
                 Log.e("ddd", "timeOut  onClientSearchRoomHistory");
             }
@@ -646,8 +562,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, filter);
         isSendRequestForLoading = true;
-
-
     }
 
     private ArrayList<ProtoGlobal.RoomMessage> loadDataFromLocal(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter) {
@@ -667,33 +581,25 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         realm.close();
 
         return list;
-
     }
 
     private void loadMoreData() {
 
         getDataFromServer(new OnFillList() {
-            @Override
-            public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+            @Override public void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
 
                 mList = addTimeToList(resultList);
                 mAdapter.notifyDataSetChanged();
-
-
             }
         }, mFilter);
-
-
     }
 
     private void saveDataToLocal(final ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter, final List<ProtoGlobal.RoomMessage> RoomMessages) {
 
-
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
 
                 for (ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
 
@@ -708,12 +614,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         mediaList.setRoomMessage(SerializationUtils.serialize(roomMessage));
                     }
                 }
-
             }
         });
 
         realm.close();
-
     }
 
     //********************************************************************************************
@@ -721,7 +625,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     public interface OnFillList {
 
         void getList(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList);
-
     }
 
     private ArrayList<StructSharedMedia> addTimeToList(List<ProtoGlobal.RoomMessage> uploadList) {
@@ -764,10 +667,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             result.add(_item);
         }
 
-
         return result;
     }
-
 
     /**
      * Simple Class to serialize object to byte arrays
@@ -776,7 +677,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
      *         http://www.whitebyte.info
      */
     public static class SerializationUtils {
-
 
         /**
          * @param obj - object to serialize to a byte array
@@ -803,7 +703,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             return result;
         }
-
 
         /**
          * @param arr - the byte array that holds the serialized object
@@ -834,11 +733,105 @@ public class ActivityShearedMedia extends ActivityEnhanced {
          * @param obj - object to be cloned
          * @return a clone of obj
          */
-        @SuppressWarnings("unchecked")
-        public static <T> T cloneObject(T obj) {
+        @SuppressWarnings("unchecked") public static <T> T cloneObject(T obj) {
             return (T) deserialize(serialize(obj));
         }
     }
 
+    static int counts = 0;
 
+    public static void getCountOfSharedMedia(final long roomid, String text, final OnComplete complete) {
+
+        counts = 0;
+
+        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
+            @Override public void onClientSearchRoomHistory(final int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+
+                counts++;
+                if (notDeletedCount > 0) {
+                    ProtoGlobal.RoomMessageType type = resultList.get(0).getMessageType();
+
+                    switch (type) {
+                        case IMAGE:
+                        case IMAGE_TEXT:
+                            totalCountItem += "\n" + G.context.getString(R.string.shared_image) + " " + notDeletedCount;
+                            break;
+                        case VIDEO:
+                        case VIDEO_TEXT:
+                            totalCountItem += "\n" + G.context.getString(R.string.shared_video) + " " + notDeletedCount;
+                            break;
+                        case AUDIO:
+                        case AUDIO_TEXT:
+                            totalCountItem += "\n" + G.context.getString(R.string.shared_audio) + " " + notDeletedCount;
+                            break;
+                        case VOICE:
+                            totalCountItem += "\n" + G.context.getString(R.string.shared_voice) + " " + notDeletedCount;
+                            break;
+                        case GIF:
+                        case GIF_TEXT:
+                            totalCountItem += "\n" + G.context.getString(R.string.shared_gif) + " " + notDeletedCount;
+                            break;
+                        case FILE:
+                        case FILE_TEXT:
+                            totalCountItem += "\n" + G.context.getString(R.string.shared_file) + " " + notDeletedCount;
+                            break;
+                        default:
+                            totalCountItem += "\n" + G.context.getString(R.string.shared_links) + " " + notDeletedCount;
+                            break;
+                    }
+
+                    if (complete != null) {
+                        if (counts >= 7) complete.complete(true, totalCountItem, "");
+                    }
+
+                    Realm realm = Realm.getDefaultInstance();
+                    final RealmShearedMedia rsm = realm.where(RealmShearedMedia.class).equalTo("roomId", roomid).findFirst();
+                    if (rsm != null) {
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override public void execute(Realm realm) {
+                                rsm.setSharedMediaCount(totalCountItem);
+                            }
+                        });
+                    }
+                    realm.close();
+                }
+            }
+
+            @Override public void onError(int majorCode, int minorCode) {
+                counts++;
+            }
+
+            @Override public void onTimeOut() {
+                counts++;
+            }
+        };
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmShearedMedia rsm = realm.where(RealmShearedMedia.class).equalTo("roomId", roomid).findFirst();
+        if (rsm != null) {
+            if (rsm.getSharedMediaCount() != null) {
+                if (rsm.getSharedMediaCount().length() > 0) {
+                    if (complete != null) {
+                        complete.complete(true, rsm.getSharedMediaCount(), "");
+                    }
+                }
+            }
+        }
+        realm.close();
+
+        if (text.length() == 0) {
+            totalCountItem = "";
+            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE);
+            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO);
+            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
+            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE);
+            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF);
+            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE);
+            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL);
+        } else {
+            if (complete != null) {
+                complete.complete(true, text, "");
+            }
+        }
+    }
 }

@@ -27,6 +27,7 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.TouchImageView;
+import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import io.meness.github.messageprogress.MessageProgress;
 import java.io.File;
@@ -336,7 +337,8 @@ public class FragmentShowImage extends Fragment {
                         progress.withDrawable(R.drawable.ic_cancel, true);
 
                         HelperDownloadFile.startDoanload(mList.get(position).item.getAttachment().getToken(), mList.get(position).item.getAttachment().getName(),
-                            mList.get(position).item.getAttachment().getSize(), mList.get(position).item.getMessageType(), new HelperDownloadFile.UpdateListener() {
+                            mList.get(position).item.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, mList.get(position).item.getMessageType(),
+                            new HelperDownloadFile.UpdateListener() {
                                 @Override public void OnProgress(String token, final int progres) {
 
                                     if (progress != null) {

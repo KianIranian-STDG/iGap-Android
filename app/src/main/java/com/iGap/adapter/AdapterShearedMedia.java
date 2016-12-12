@@ -29,11 +29,10 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
-import com.iGap.proto.ProtoClientSearchRoomHistory;
+import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
-import com.iGap.realm.RealmShearedMedia;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
@@ -58,38 +57,17 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
     ActivityShearedMedia.SharedMediaType mediaType;
 
-    public AdapterShearedMedia(Context context, ArrayList<ActivityShearedMedia.StructSharedMedia> list, ActivityShearedMedia.SharedMediaType mediaType, OnComplete complete, MusicPlayer musicPlayer, long roomId) {
+    public AdapterShearedMedia(Context context, ArrayList<ActivityShearedMedia.StructSharedMedia> list, ActivityShearedMedia.SharedMediaType mediaType, OnComplete complete, MusicPlayer musicPlayer,
+        long roomId) {
         this.context = context;
         this.list = list;
         this.mediaType = mediaType;
         this.complete = complete;
         this.roomId = roomId;
         this.musicPlayer = musicPlayer;
-
     }
 
-    public static long getCountOfSheareddMedia(long roomId) {
-
-        long counter = 0;
-
-        Realm realm = Realm.getDefaultInstance();
-
-        ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL;
-
-        try {
-            counter = realm.where(RealmShearedMedia.class).equalTo("roomId", roomId).
-                notEqualTo("filter", ActivityShearedMedia.SerializationUtils.serialize(filter)).count();
-        } catch (NullPointerException e) {
-
-        }
-
-        realm.close();
-
-        return counter;
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
+    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
 
         RecyclerView.ViewHolder viewHolder = null;
         boolean isHeader = false;
@@ -97,7 +75,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         if (list.get(position).isItemTime) {
             isHeader = true;
         }
-
 
         switch (mediaType) {
 
@@ -159,7 +136,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
         }
 
-
         return viewHolder;
     }
 
@@ -171,13 +147,11 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         return view;
     }
 
-    @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    @Override public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
         if (!list.get(position).isItemTime) {
 
             setBackgroundColor(holder, position);
-
 
             switch (mediaType) {
 
@@ -203,8 +177,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     break;
             }
-
-
         }
     }
 
@@ -213,30 +185,25 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         // set blue back ground for selected file
         FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
-
         if (list.get(position).options.isSelected) {
             layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
         } else {
             layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
         }
-
     }
 
     private void onBindImage(RecyclerView.ViewHolder holder, int position) {
 
-        MyHoldersImage mi = (MyHoldersImage) holder;
+        //  final MyHoldersImage mi = (MyHoldersImage) holder;
 
-
-        File file = new File(mi.filePath);
-        if (file.exists()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mi.filePath), mi.imvPicFile);
-        } else {
-            file = new File(mi.tempFilePath);
-            if (file.exists()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mi.tempFilePath), mi.imvPicFile);
-            }
-        }
-
+        //  File file = new File(mi.filePath);
+        //   if (file.exists()) {
+        //      ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mi.filePath), mi.imvPicFile);
+        //  } else {
+        //File file = new File(mi.tempFilePath);
+        //if (file.exists()) {
+        //    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mi.tempFilePath), mi.imvPicFile);
+        //}
     }
 
     private void onBindVideo(RecyclerView.ViewHolder holder, int position) {
@@ -246,11 +213,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (file.exists()) {
             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mv.tempFilePath), ((MyHoldersVideo) holder).imvPicFile);
-
         } else {
             ((MyHoldersVideo) holder).imvPicFile.setImageResource(R.mipmap.j_video);
         }
-
     }
 
     private void onBindFile(RecyclerView.ViewHolder holder, int position) {
@@ -262,20 +227,15 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mf.tempFilePath), mf.imvPicFile);
         } else {
             Bitmap bitmap = HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource(list.get(position).item.getAttachment().getName()));
-            if (bitmap != null)
-                mf.imvPicFile.setImageBitmap(bitmap);
+            if (bitmap != null) mf.imvPicFile.setImageBitmap(bitmap);
         }
-
-
     }
 
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
         return list.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
+    @Override public int getItemViewType(int position) {
         return position;
     }
 
@@ -286,8 +246,8 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         ProtoGlobal.RoomMessage item = list.get(position).item;
 
-        HelperDownloadFile.startDoanload(item.getAttachment().getToken(), item.getAttachment().getName(), item.getAttachment().getSize(), item.getMessageType(),
-            new HelperDownloadFile.UpdateListener() {
+        HelperDownloadFile.startDoanload(item.getAttachment().getToken(), item.getAttachment().getName(), item.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE,
+            item.getMessageType(), new HelperDownloadFile.UpdateListener() {
                 @Override public void OnProgress(String token, final int progress) {
 
                     if (messageProgress != null) {
@@ -313,7 +273,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                     stopDownload(position, messageProgress);
                 }
             });
-
     }
 
     private void stopDownload(int position, final MessageProgress messageProgress) {
@@ -325,10 +284,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         });
 
-
-
         list.get(position).options.isDownloading = false;
-
     }
 
     private void downloadFile(int position, MessageProgress messageProgress) {
@@ -414,8 +370,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     break;
             }
-
-
         }
     }
 
@@ -433,7 +387,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 holderGif.messageProgress.setVisibility(View.GONE);
             }
         }
-
     }
 
     private void playVideo(int position, RecyclerView.ViewHolder holder) {
@@ -442,7 +395,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         Intent intent = HelperMimeType.appropriateProgram(myHoldersVideo.filePath);
         if (intent != null) context.startActivity(intent);
-
     }
 
     private void openFile(int position, RecyclerView.ViewHolder holder) {
@@ -451,7 +403,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         Intent intent = HelperMimeType.appropriateProgram(myHoldersFile.filePath);
         if (intent != null) context.startActivity(intent);
-
     }
 
     private void showImage(int position, RecyclerView.ViewHolder holder) {
@@ -460,7 +411,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         ArrayList<ProtoGlobal.RoomMessage> listPic = new ArrayList<>();
         int selectedPicture = 1;
-
 
         for (ActivityShearedMedia.StructSharedMedia sharedMedia : list) {
 
@@ -476,13 +426,11 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         }
 
-
         Fragment fragment = FragmentShowImage.newInstance();
         Bundle bundle = new Bundle();
         bundle.putSerializable("listPic", listPic);
         bundle.putInt("SelectedImage", selectedPicture);
         fragment.setArguments(bundle);
-
 
         ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
     }
@@ -492,11 +440,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         MyHoldersMusic holdersMusic = (MyHoldersMusic) holder;
 
         MusicPlayer.startPlayer(holdersMusic.filePath, list.get(position).item.getAttachment().getName(), roomId, true);
-
     }
 
     //****************************************************************************************************************
-
 
     public static String getThumpnailPath(String token, String fileName) {
 
@@ -506,12 +452,10 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
 
         if (attachment != null) {
-            if (attachment.getLocalThumbnailPath() != null)
-                result = attachment.getLocalThumbnailPath();
+            if (attachment.getLocalThumbnailPath() != null) result = attachment.getLocalThumbnailPath();
         }
 
-        if (result.length() < 1)
-            result = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(fileName);
+        if (result.length() < 1) result = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(fileName);
 
         return result;
     }
@@ -524,28 +468,23 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
 
         if (attachment != null) {
-            if (attachment.getLocalFilePath() != null)
-                result = attachment.getLocalFilePath();
+            if (attachment.getLocalFilePath() != null) result = attachment.getLocalFilePath();
         }
 
-        if (result.length() < 1)
-            result = AndroidUtils.suitableAppFilePath(messageType) + "/" + token + "_" + fileName;
+        if (result.length() < 1) result = AndroidUtils.suitableAppFilePath(messageType) + "/" + token + "_" + fileName;
 
         return result;
     }
-
 
     public class MyHolder extends RecyclerView.ViewHolder {
 
         public MessageProgress messageProgress;
 
-
         public MyHolder(final View itemView) {
             super(itemView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
                     if (isSelectedMode) {
                         setSelectedItem(getPosition());
                     } else {
@@ -555,29 +494,22 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             });
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
+                @Override public boolean onLongClick(View view) {
                     isSelectedMode = true;
                     setSelectedItem(getPosition());
                     return true;
                 }
             });
 
-
             messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
             messageProgress.withDrawable(R.drawable.ic_download, true);
 
-
             messageProgress.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
 
                     downloadFile(getPosition(), messageProgress);
-
                 }
             });
-
-
         }
     }
 
@@ -587,12 +519,13 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
         public String tempFilePath;
         public String filePath;
 
-
         public MyHoldersImage(View itemView, final int position) {
             super(itemView);
 
-            tempFilePath = getThumpnailPath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName());
-            filePath = getFilePath(list.get(position).item.getAttachment().getToken(), list.get(position).item.getAttachment().getName(), list.get(position).item.getMessageType());
+            ProtoGlobal.File at = list.get(position).item.getAttachment();
+
+            tempFilePath = getThumpnailPath(at.getToken(), at.getName());
+            filePath = getFilePath(at.getToken(), at.getName(), list.get(position).item.getMessageType());
 
             imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
 
@@ -605,7 +538,32 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 messageProgress.setVisibility(View.VISIBLE);
             }
 
+            File filet = new File(tempFilePath);
+            if (filet.exists()) {
+                imvPicFile.setImageURI(Uri.fromFile(new File(tempFilePath)));
+            } else {
+                ProtoGlobal.RoomMessage item = list.get(position).item;
 
+                if (item.getAttachment().getSmallThumbnail().getSize() > 0) {
+                    HelperDownloadFile.startDoanload(item.getAttachment().getToken(), item.getAttachment().getName(), item.getAttachment().getSmallThumbnail().getSize(),
+                        ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, item.getMessageType(), new HelperDownloadFile.UpdateListener() {
+                            @Override public void OnProgress(String token, int progress) {
+
+                                Log.e("ddd", token + "    " + progress);
+
+                                imvPicFile.post(new Runnable() {
+                                    @Override public void run() {
+                                        imvPicFile.setImageURI(Uri.fromFile(new File(tempFilePath)));
+                                    }
+                                });
+                            }
+
+                            @Override public void OnError(String token) {
+
+                            }
+                        });
+                }
+            }
         }
     }
 
@@ -642,7 +600,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 list.get(position).options.needDownload = true;
                 messageProgress.setVisibility(View.VISIBLE);
             }
-
         }
     }
 
@@ -675,7 +632,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             txtFileName.setText(list.get(position).item.getAttachment().getName());
             txtFileInfo.setText(AndroidUtils.humanReadableByteCount(list.get(position).item.getAttachment().getSize(), true));
-
         }
     }
 
@@ -703,7 +659,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             TextView txtFileInfo = (TextView) itemView.findViewById(R.id.smslf_txt_file_info);
             File file = new File(filePath);
 
-
             if (file.exists()) {
                 list.get(position).options.needDownload = false;
                 messageProgress.setVisibility(View.GONE);
@@ -712,11 +667,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 mediaMetadataRetriever.setDataSource(G.context, uri);
                 String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
 
-                if (artist == null)
-                    artist = G.context.getString(R.string.unknown_artist);
+                if (artist == null) artist = G.context.getString(R.string.unknown_artist);
 
                 txtFileInfo.setText(artist);
-
 
                 try {
                     mediaMetadataRetriever.setDataSource(G.context, uri);
@@ -739,9 +692,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 if (file.exists()) {
                     ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(tempFilePath), imvPicFile);
                 }
-
             }
-
         }
     }
 
@@ -769,7 +720,6 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             txtLink.setText(list.get(position).item.getMessage());
 
             messageProgress.setVisibility(View.GONE);
-
         }
     }
 
@@ -797,8 +747,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 messageProgress.withDrawable(R.drawable.ic_play, true);
                 messageProgress.setVisibility(View.GONE);
                 messageProgress.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    @Override public void onClick(View view) {
                         if (gifDrawable != null) {
                             gifDrawable.start();
                             messageProgress.setVisibility(View.GONE);
@@ -810,11 +759,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
                 messageProgress.setVisibility(View.VISIBLE);
             }
 
-
             gifDrawable = (GifDrawable) gifView.getDrawable();
-
         }
     }
-
-
 }

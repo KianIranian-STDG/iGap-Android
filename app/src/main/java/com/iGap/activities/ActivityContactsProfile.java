@@ -38,7 +38,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.interfaces.OnChatDelete;
@@ -51,6 +50,7 @@ import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.StructListOfContact;
 import com.iGap.module.StructMessageAttachment;
@@ -139,7 +139,16 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     }
 
     @Override protected void onResume() {
-        txtCountOfShearedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
+
+        ActivityShearedMedia.getCountOfSharedMedia(roomId, txtCountOfShearedMedia.getText().toString(), new OnComplete() {
+            @Override public void complete(boolean result, final String messageOne, String MessageTow) {
+                txtCountOfShearedMedia.post(new Runnable() {
+                    @Override public void run() {
+                        txtCountOfShearedMedia.setText(messageOne);
+                    }
+                });
+            }
+        });
 
         super.onResume();
     }

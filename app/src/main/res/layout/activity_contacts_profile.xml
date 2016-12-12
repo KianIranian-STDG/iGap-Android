@@ -310,11 +310,12 @@
                         android:clickable="false"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
+                        android:textColor="@color/green"
                         android:paddingRight="@dimen/dp4"
+                        android:gravity="center"
                         android:paddingEnd="@dimen/dp4"
                         android:text="@string/chi_shared_Media"
-                        android:textColor="@android:color/secondary_text_light"
-                        android:textSize="@dimen/sp15"
+                        android:textSize="@dimen/sp18"
                         android:layout_marginTop="@dimen/dp8"
                         android:textStyle="bold" />
 
@@ -324,12 +325,11 @@
                         android:layout_height="wrap_content"
                         android:clickable="false"
                         android:gravity="center_vertical"
-                        android:maxLength="11"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
                         android:paddingRight="@dimen/dp4"
                         android:paddingEnd="@dimen/dp4"
-                        android:text="12"
+                        android:text=""
                         android:textColor="@color/gray_5c"
                         android:textSize="@dimen/sp13"
                         android:theme="@style/Setting_editText" />
@@ -341,7 +341,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp8"
                 android:background="@color/st_background2"
                 android:orientation="vertical">
 
