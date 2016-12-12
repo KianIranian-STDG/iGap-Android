@@ -15,13 +15,13 @@
     <string name="delete_chat_content">"آیا مطمئنید که می‌خواهید گفتگو را حذف کنید؟"</string>
     <string name="to_delete_contact">"حذف مخاطب"</string>
     <string name="delete_text">"آیا مطمئنید که می خواهید این مخاطب را حذف کنید؟"</string>
-    <string name="cancel">"لغو"</string>
-    <string name="B_cancel">"لغو"</string>
+    <string name="cancel">"انصراف"</string>
+    <string name="B_cancel">"انصراف"</string>
     <string name="B_skip">"بیخیال"</string>
     <string name="B_finish">"پایان"</string>
     <string name="ok">"تأیید"</string>
     <string name="B_ok">"تأیید"</string>
-    <string name="set">"تنظیم"</string>
+    <string name="set">"تأیید"</string>
     <string name="am_camera">"دوربین"</string>
     <string name="am_music">"موسیقی"</string>
     <string name="am_paint">"نقاشی"</string>
@@ -87,7 +87,7 @@
     <string name="rg_verify_register2">"منتظر کد تایید"</string>
     <string name="rg_verify_register3">"تولید کلید امنیتی"</string>
     <string name="rg_verify_register4">"ثبت نام نهایی"</string>
-    <string name="rg_verify_dialog_enter_code">"آی گپ بصورت خودکار پیام تایید را تشخیص میدهد ، شاید دریافت شده و شما دستی میخواهید وارد کنید لطفا کد را دستی وارد کرده و یا در صورتی که دریافت نکردید درخواست ارسال مجدد کنید."</string>
+    <string name="rg_verify_dialog_enter_code">"آی گپ بصورت خودکار پیام تایید را تشخیص میدهد یا شاید دریافت شده و شما میخواهید دستی وارد کنید، لطفا کد را دستی وارد کرده و یا در صورتی که دریافت نکردید درخواست ارسال مجدد کنید."</string>
     <string name="rg_verify_dialog_try_code">"دستی وارد کردم"</string>
     <string name="rg_verify_dialog_resend_code">"ارسال مجدد کد تایید"</string>
     <string name="search">"جستجو"</string>
