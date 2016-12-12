@@ -54,6 +54,7 @@ import com.iGap.interfaces.OnConnectionChangeState;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnDraftMessage;
 import com.iGap.interfaces.OnFileDownloadResponse;
+import com.iGap.interfaces.OnFileDownloaded;
 import com.iGap.interfaces.OnFileUploadStatusResponse;
 import com.iGap.interfaces.OnGetUserInfo;
 import com.iGap.interfaces.OnGroupAddAdmin;
@@ -319,6 +320,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static OnGroupAvatarDelete onGroupAvatarDelete;
     public static OnRefreshActivity onRefreshActivity;
     public static OnGetUserInfo onGetUserInfo;
+    public static OnFileDownloaded onFileDownloaded;
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;

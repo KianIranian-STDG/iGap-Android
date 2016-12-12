@@ -104,6 +104,7 @@ import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnHelperSetAction;
 import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnSetAction;
@@ -227,7 +228,7 @@ import static java.lang.Long.parseLong;
 
 public class ActivityChat extends ActivityEnhanced
         implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
-        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming {
+        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -4644,5 +4645,17 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }, 100);
         }
+    }
+
+    //******* GroupAvatar
+
+    @Override
+    public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
+
+    }
+
+    @Override
+    public void onAvatarAddError() {
+
     }
 }

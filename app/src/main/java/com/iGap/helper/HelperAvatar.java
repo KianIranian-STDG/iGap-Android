@@ -5,7 +5,7 @@ import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnDownload;
-import com.iGap.interfaces.OnFileDownloadResponse;
+import com.iGap.interfaces.OnFileDownloaded;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoFileDownload;
@@ -17,7 +17,6 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
 
 import java.io.File;
@@ -105,8 +104,31 @@ public class HelperAvatar {
 
                 new AvatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
                     @Override
-                    public void onDownload(String filepath) {
-                        onAvatarGet.onAvatarGet(filepath);
+                    public void onDownload(final String filepath, final String token) {
+
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).findAll()) {
+                                            if (realmAvatar1.getFile().getToken().equals(token)) {
+                                                realmAvatar1.getFile().setLocalFilePath(filepath);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }, new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                        onAvatarGet.onAvatarGet(filepath);
+                                    }
+                                });
+                                realm.close();
+                            }
+                        });
                     }
 
                     @Override
@@ -252,7 +274,7 @@ public class HelperAvatar {
         realm.close();
     }
 
-    private static class AvatarDownload {
+    private static class AvatarDownload implements OnFileDownloaded {
 
         private static RealmAttachment realmAttachment;
         private static ProtoFileDownload.FileDownload.Selector selector;
@@ -267,6 +289,7 @@ public class HelperAvatar {
             this.onDownload = onDownload;
 
             avatarDownload();
+            G.onFileDownloaded = this;
         }
 
         private static void avatarDownload() {
@@ -290,7 +313,7 @@ public class HelperAvatar {
 
             new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector, identity);
 
-            new OnFileDownloadResponse() {
+           /* new OnFileDownloadResponse() {
                 @Override
                 public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
                     if (progress == 100) {
@@ -328,7 +351,7 @@ public class HelperAvatar {
                 public void onBadDownload(String token) {
 
                 }
-            };
+            };*/
         }
 
         private static int getFileSize(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector) {
@@ -343,25 +366,32 @@ public class HelperAvatar {
             return (int) fileSize;
         }
 
-       /* @Override
+        @Override
         public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+            if (progress == 100) {
 
+                try {
+                    AndroidUtils.cutFromTemp(fileName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                onDownload.onDownload(G.DIR_IMAGE_USER + "/" + fileName, token);
+            } else {
+                // I don't use offset in getting thumbnail
+                String identity = realmAttachment.getToken()
+                        + '*' + selector.toString()
+                        + '*' + fileSize
+                        + '*' + fileName
+                        + '*' + offset;
+
+                new RequestFileDownload().download(realmAttachment.getToken(), offset, getFileSize(realmAttachment, selector), selector, identity);
+            }
         }
 
         @Override
-        public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
-            //onDownload.onDownload();
-        }
+        public void onError() {
 
-        @Override
-        public void onError(int majorCode, int minorCode) {
-            onDownload.onError();
         }
-
-        @Override
-        public void onBadDownload(String token) {
-            //empty
-        }*/
     }
-
 }

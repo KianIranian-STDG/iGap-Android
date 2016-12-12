@@ -46,7 +46,6 @@ import com.iGap.interfaces.OnClientGetRoomListResponse;
 import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnConnectionChangeState;
 import com.iGap.interfaces.OnDraftMessage;
-import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupLeft;
@@ -83,7 +82,6 @@ import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChannelDelete;
 import com.iGap.request.RequestChannelLeft;
 import com.iGap.request.RequestChatDelete;
@@ -108,7 +106,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.iGap.R.string.updating;
 
 public class ActivityMain extends ActivityEnhanced
-        implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnFileDownloadResponse, OnUserInfoResponse, OnDraftMessage, OnSetAction {
+        implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetAction {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
@@ -210,7 +208,6 @@ public class ActivityMain extends ActivityEnhanced
         };
 
 
-
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
             @Override
             public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response) {
@@ -271,7 +268,7 @@ public class ActivityMain extends ActivityEnhanced
             }
         };
 
-        G.onFileDownloadResponse = this;
+        //G.onFileDownloadResponse = this;
         G.onUserInfoResponse = this;
         G.onDraftMessage = this;
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
@@ -1221,7 +1218,7 @@ public class ActivityMain extends ActivityEnhanced
         return roomItem;
     }
 
-    @Override
+   /* @Override
     public void onFileDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
             // requested thumbnail
@@ -1229,13 +1226,18 @@ public class ActivityMain extends ActivityEnhanced
                 @Override
                 public void run() {
                     Realm realm = Realm.getDefaultInstance();
-                    RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst();
-                    if (avatar != null) {
-                        requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
-                    }
-                    realm.close();
+                    long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                    for (RealmAvatar realmAvatar : realm.where(RealmAvatar.class).findAll()) {
+                        if (realmAvatar.getId() == userId) {
+                            RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst();
+                            if (avatar != null) {
+                                requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
+                            }
+                            realm.close();
 
-                    mAdapter.downloadingAvatarThumbnail(token);
+                            mAdapter.downloadingAvatarThumbnail(token);
+                        }
+                    }
                 }
             });
         } else {
@@ -1354,7 +1356,7 @@ public class ActivityMain extends ActivityEnhanced
     @Override
     public void onBadDownload(String token) {
         // empty
-    }
+    }*/
 
     @Override
     public void complete(boolean result, String messageOne, String MessageTow) {

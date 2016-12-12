@@ -45,11 +45,12 @@ public class FileDownloadResponse extends MessageHandler {
 
         AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
         if (!avatarRequested) {
+            if (G.onFileDownloaded != null) {
+                G.onFileDownloaded.onFileDownload(token, nextOffset, selector, (int) progress);
+            }
             G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, (int) progress);
         } else {
-
-            G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, (int) progress, userId,
-                    roomType);
+            G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, (int) progress, userId, roomType);
         }
     }
 
@@ -66,7 +67,9 @@ public class FileDownloadResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
+        if (G.onFileDownloaded != null) {
+            G.onFileDownloaded.onError();
+        }
         G.onFileDownloadResponse.onError(majorCode, minorCode);
     }
 

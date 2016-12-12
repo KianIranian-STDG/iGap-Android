@@ -8,6 +8,8 @@ import android.view.View;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperAvatar;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
@@ -85,6 +87,23 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
     }
 
     private void setAvatar(ViewHolder holder) {
+
+        HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(String avatarPath) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(String initials, String color) {
+
+            }
+        });
 
         String avatarPath = null;
         if (mContact.avatar != null && mContact.avatar.isValid() && mContact.avatar.getFile() != null && mContact.avatar.getFile().isValid()) {
