@@ -106,7 +106,7 @@ public class MyDialog {
                     }
                 }
 
-                showDialogNotification(context, str0 + " " + str + " ?", complete, "txtDeleteChat");
+                showDialogNotification(context, str0 + " ?", complete, "txtDeleteChat");
 
                 dialog.cancel();
             }

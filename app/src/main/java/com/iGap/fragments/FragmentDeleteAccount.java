@@ -45,6 +45,7 @@ public class FragmentDeleteAccount extends Fragment {
     private RippleView txtSet;
     private CountDownTimer countDownTimer;
     private String phone;
+    private ViewGroup ltTime;
 
     public FragmentDeleteAccount() {
         // Required empty public constructor
@@ -131,6 +132,9 @@ public class FragmentDeleteAccount extends Fragment {
             }
         });
 
+
+        ltTime = (ViewGroup) view.findViewById(R.id.stda_layout_time);
+
         TextView txtPhoneNumber = (TextView) view.findViewById(R.id.stda_txt_phoneNumber);
         if (phone != null) txtPhoneNumber.setText("" + phone);
 
@@ -145,35 +149,12 @@ public class FragmentDeleteAccount extends Fragment {
                     new MaterialDialog.Builder(getActivity())
                             .title(getResources().getString(R.string.delete_account))
                             .titleColor(getResources().getColor(android.R.color.black))
-                            .items(R.array.delete_account)
-                            .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
-                                @Override
-                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                                    switch (which) {
-                                        case 0:
-
-                                            break;
-                                        case 1:
-
-                                            break;
-                                        case 2:
-
-                                            break;
-                                        case 3:
-
-                                            break;
-                                    }
-
-                                    return false;
-                                }
-                            })
+                            .content(R.string.sure_delete_account)
                             .positiveText(getResources().getString(R.string.B_ok))
                             .negativeText(getResources().getString(R.string.B_cancel))
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
 
 //                                    String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
                                     String verificationCode = edtDeleteAccount.getText().toString();
@@ -183,6 +164,117 @@ public class FragmentDeleteAccount extends Fragment {
                                             @Override
                                             public void onUserDeleteResponse() {
                                                 HelperLogout.logout();
+                                            }
+
+                                            @Override
+                                            public void Error(int majorCode, final int minorCode) {
+                                                if (majorCode == 154) {
+                                                    getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+
+                                                            if (minorCode == 1) {
+                                                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_154_1), Snackbar.LENGTH_LONG);
+                                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View view) {
+                                                                        snack.dismiss();
+                                                                    }
+                                                                });
+                                                                snack.show();
+                                                            } else {
+                                                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_154_2), Snackbar.LENGTH_LONG);
+                                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View view) {
+                                                                        snack.dismiss();
+                                                                    }
+                                                                });
+                                                                snack.show();
+                                                            }
+
+
+                                                        }
+                                                    });
+                                                } else if (majorCode == 155) {
+                                                    getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_155), Snackbar.LENGTH_LONG);
+
+                                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View view) {
+                                                                    snack.dismiss();
+                                                                }
+                                                            });
+                                                            snack.show();
+                                                        }
+                                                    });
+                                                } else if (majorCode == 156) {
+                                                    getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_156), Snackbar.LENGTH_LONG);
+
+                                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View view) {
+                                                                    snack.dismiss();
+                                                                }
+                                                            });
+                                                            snack.show();
+                                                        }
+                                                    });
+                                                } else if (majorCode == 157) {
+                                                    getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_157), Snackbar.LENGTH_LONG);
+
+                                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View view) {
+                                                                    snack.dismiss();
+                                                                }
+                                                            });
+                                                            snack.show();
+                                                        }
+                                                    });
+                                                } else if (majorCode == 158) {
+                                                    getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_158), Snackbar.LENGTH_LONG);
+
+                                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View view) {
+                                                                    snack.dismiss();
+                                                                }
+                                                            });
+                                                            snack.show();
+                                                        }
+                                                    });
+                                                }
+                                            }
+
+                                            @Override
+                                            public void TimeOut() {
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
                                             }
                                         };
 
@@ -244,6 +336,7 @@ public class FragmentDeleteAccount extends Fragment {
                     public void onFinish() {
                         edtDeleteAccount.setEnabled(true);
                         txtSet.setEnabled(true);
+                        ltTime.setVisibility(View.GONE);
                     }
                 };
                 countDownTimer.start();

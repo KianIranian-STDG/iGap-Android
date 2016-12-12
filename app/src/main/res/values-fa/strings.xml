@@ -624,5 +624,12 @@
     <string name="pending">معلق</string>
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ هجری شمسی</string>
-
+    <string name="sure_delete_account">Are you sure deleting your account ?</string>
+    <string name="E_154_1">Bad payload: get token</string>
+    <string name="E_154_2">Bad payload: get reason</string>
+    <string name="E_155">USER_DELETE INTERNAL SERVER ERROR</string>
+    <string name="E_156">USER DELETE INVALID TOKEN</string>
+    <string name="E_157">USER DELETE EXPIRED TOKEN</string>
+    <string name="E_158">USER DELETE MAX TRY LOCK</string>
+    <string name="time_out">can\'t connect to server</string>
 </resources>

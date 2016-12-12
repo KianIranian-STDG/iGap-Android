@@ -324,7 +324,7 @@
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">User Verify Blocked User</string>
-    <string name="Enter_Code">Code</string>
+    <string name="Enter_Code">Waiting for Code</string>
     <string name="E_335">Bad payload</string>
     <string name="E_336">Internal Server Error</string>
     <string name="E_337">This operation is not permitted.</string>
@@ -634,4 +634,12 @@
     <string name="st_data_shams">Shamsi Date</string>
     <string name="do_you_want_left_this">"Are you sure left from selected item ?"</string>
     <string name="do_you_want_delete_this">Are you sure deleting selected item ?</string>
+    <string name="sure_delete_account">Are you sure deleting your account ?</string>
+    <string name="E_154_1">Bad payload: get token</string>
+    <string name="E_154_2">Bad payload: get reason</string>
+    <string name="E_155">USER_DELETE INTERNAL SERVER ERROR</string>
+    <string name="E_156">USER DELETE INVALID TOKEN</string>
+    <string name="E_157">USER DELETE EXPIRED TOKEN</string>
+    <string name="E_158">USER DELETE MAX TRY LOCK</string>
+    <string name="time_out">can\'t connect to server</string>
 </resources>
