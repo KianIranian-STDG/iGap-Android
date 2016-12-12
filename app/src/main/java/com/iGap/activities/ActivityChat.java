@@ -1426,16 +1426,9 @@ public class ActivityChat extends ActivityEnhanced
             if (position > 0) recyclerView.scrollToPosition(position - 1);
         }
 
-        //        imvBackButton.setOnClickListener(new View.OnClickListener() {
-        //            @Override
-        //            public void onClick(View view) {
-        //                finish();
-        //            }
-        //        });
-        rippleBackButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        imvBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
-
+            public void onClick(View view) {
                 if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
                     ActivityPopUpNotification.isGoingToChatFromPopUp = false;
                     Intent intent = new Intent(context, ActivityMain.class);
@@ -1445,6 +1438,28 @@ public class ActivityChat extends ActivityEnhanced
                 finish();
             }
         });
+
+
+        rippleBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
+                    ActivityPopUpNotification.isGoingToChatFromPopUp = false;
+                    Intent intent = new Intent(context, ActivityMain.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+                finish();
+            }
+        });
+
+     /*  rippleBackButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+
+
+            }
+        });*/
 
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3543,7 +3558,8 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-        runOnUiThread(new Runnable() {
+
+        /*runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
@@ -3553,7 +3569,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 realm.close();
             }
-        });
+        });*/
     }
 
     @Override

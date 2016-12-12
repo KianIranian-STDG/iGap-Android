@@ -74,23 +74,23 @@
     <string name="pu_nikname_profileUser">Nickname</string>
     <string name="pu_Lets_Go">Continue</string>
 
-    <!-- REGISTER PAGE -->
+    <!-- Register Page -->
     <string name="rg_title_register">Registration</string>
-    <string name="rg_confirm_text_register">Please confirm your country code and enter your phone number.</string>
-    <string name="rg_Start">Start</string>
+    <string name="rg_confirm_text_register">Please confirm your country &amp; country code and enter your phone number without first zero</string>
+    <string name="rg_Start">Let\'s Go</string>
     <string name="rg_Select_Country">Select a Country</string>
-    <string name="rg_agreement_text_register">Double checking your phone number! We\'re intended to get verification code via SMS.</string>
+    <string name="rg_agreement_text_register">Re-Checking your phone number! We\'re send verification code to this number</string>
     <string name="rg_verify_register1">Connecting</string>
-    <string name="rg_verify_register2">Waiting for SMS Verification</string>
-    <string name="rg_verify_register3">Generating Key</string>
-    <string name="rg_verify_register4">Registering you while connecting to the server</string>
-    <string name="rg_verify_dialog_enter_code">iGap tries to detect sent SMS automatically; but probably you need to enter it manually, in case of being unable to handle something or asking for resending the code.</string>
-    <string name="rg_verify_dialog_try_code">Try</string>
+    <string name="rg_verify_register2">Verification</string>
+    <string name="rg_verify_register3">Generating Secret Key</string>
+    <string name="rg_verify_register4">Final Registration</string>
+    <string name="rg_verify_dialog_enter_code">iGap tries to detect SMS automatically; but probably you need to enter it manually, Please enter manually code or if not recive code try to resend it.</string>
+    <string name="rg_verify_dialog_try_code">Manually Enter</string>
     <string name="rg_verify_dialog_resend_code">Resend Code</string>
     <string name="search">Search</string>
-    <string name="Re_dialog_verify_number_part1">We will verify the phone number.</string>
-    <string name="Re_dialog_verify_number_part2">Press OK, if this is your phone number, or simply modify it.</string>
-    <string name="Re_Enter_Verify_Code_Please">Please enter the verification code.</string>
+    <string name="Re_dialog_verify_number_part1">You enter this number :</string>
+    <string name="Re_dialog_verify_number_part2">Press OK, if this phone number is correct or simply modify it.</string>
+    <string name="Re_Enter_Verify_Code_Please">Please enter verification code</string>
 
     <!-- setting -->
     <string name="st_Info">Info</string>
@@ -310,17 +310,17 @@
     <string name="last_msg_format_chat" formatted="false">%s</string>
 
     <!-- Toast -->
-    <string name="Toast_waiting_fot_get_info">Waiting for getting info</string>
-    <string name="Toast_Location_Not_Found">Location Not Found</string>
-    <string name="Toast_First_0">Don\'t need First 0.</string>
-    <string name="Toast_Enter_Phone_Number">Please enter your phone number.</string>
-    <string name="Toast_Enter_Code">Please enter code.</string>
-    <string name="Toast_Number_Block">This number is blocked.</string>
-    <string name="Toast_Invalid_nickname">Invalid Nickname. Please change nickname.</string>
-    <string name="Toast_Write_NickName">Please write your nickname.</string>
+    <string name="Toast_waiting_fot_get_info">Connecting and get Info...</string>
+    <string name="Toast_Location_Not_Found">Location not found.</string>
+    <string name="Toast_First_0">Don\'t need 0 on first</string>
+    <string name="Toast_Enter_Phone_Number">Please enter your phone number without first zero</string>
+    <string name="Toast_Enter_Code">Please enter the verification code</string>
+    <string name="Toast_Number_Block">This number is blocked</string>
+    <string name="Toast_Invalid_nickname">Invalid Nickname,Please change it.</string>
+    <string name="Toast_Write_NickName">Please enter your nickname</string>
     <string name="d_of_d" formatted="false">%d of %d</string>
     <string name="add_to_contact">Add to Contact</string>
-    <string name="resend_message">Resend message</string>
+    <string name="resend_message">Resend verification code</string>
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">User Verify Blocked User</string>

@@ -6,8 +6,8 @@
     <string-array name="language">
         <item>English</item>
         <item>فارسی</item>
-        <item>العربی</item>
-        <item>Deutsch</item>
+        <!--<item>العربی</item>-->
+        <!--<item>Deutsch</item>-->
     </string-array>
 
     <string-array name="message_text_size">

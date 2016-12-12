@@ -313,45 +313,6 @@ public class HelperAvatar {
 
             new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector, identity);
 
-           /* new OnFileDownloadResponse() {
-                @Override
-                public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
-                    if (progress == 100) {
-
-                        try {
-                            AndroidUtils.cutFromTemp(fileName);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        onDownload.onDownload(G.DIR_IMAGE_USER + "/" + fileName);
-                    } else {
-                        // I don't use offset in getting thumbnail
-                        String identity = realmAttachment.getToken()
-                                + '*' + selector.toString()
-                                + '*' + fileSize
-                                + '*' + fileName
-                                + '*' + offset;
-
-                        new RequestFileDownload().download(realmAttachment.getToken(), offset, getFileSize(realmAttachment, selector), selector, identity);
-                    }
-                }
-
-                @Override
-                public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
-
-                }
-
-                @Override
-                public void onError(int majorCode, int minorCode) {
-
-                }
-
-                @Override
-                public void onBadDownload(String token) {
-
-                }
-            };*/
         }
 
         private static int getFileSize(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector) {

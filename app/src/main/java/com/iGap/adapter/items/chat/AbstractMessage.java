@@ -18,10 +18,12 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IChatItemAttachment;
 import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.interfaces.IMessageItem;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnFileDownload;
 import com.iGap.interfaces.OnProgressUpdate;
 import com.iGap.module.AndroidUtils;
@@ -44,7 +46,6 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestFileDownload;
-import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -106,18 +107,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void requestForUserInfo() {
-        if (!MessagesAdapter.usersInfoRequested.contains(mMessage.senderID)) {
-            RequestUserInfo requestUserInfo = new RequestUserInfo();
-            requestUserInfo.userInfo(Long.parseLong(mMessage.senderID));
+    /* private void requestForUserInfo() {
+         if (!MessagesAdapter.usersInfoRequested.contains(mMessage.senderID)) {
+             RequestUserInfo requestUserInfo = new RequestUserInfo();
+             requestUserInfo.userInfo(Long.parseLong(mMessage.senderID));
 
-            MessagesAdapter.usersInfoRequested.add(mMessage.senderID);
-        }
-    }
-
+             MessagesAdapter.usersInfoRequested.add(mMessage.senderID);
+         }
+     }
+ */
     @Override
     public void onRequestDownloadAvatar(long offset, int progress) {
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+        /*ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
         String fileName = mMessage.downloadAttachment.token + "_" + mMessage.senderAvatar.name;
         if (progress == 100) {
             mMessage.senderAvatar.setLocalThumbnailPath(Long.parseLong(mMessage.senderID), G.DIR_IMAGE_USER + "/" + fileName);
@@ -146,7 +147,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     + type.toString();
 
             new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.senderAvatar.largeThumbnail.size, selector, identity);
-        }
+        }*/
     }
 
     @Override
@@ -201,7 +202,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
                     }
                 });
-                if (mMessage.senderAvatar != null) {
+
+
+                HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+                    @Override
+                    public void onAvatarGet(final String avatarPath) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onShowInitials(final String initials, final String color) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            }
+                        });
+                    }
+                });
+
+                /*if (mMessage.senderAvatar != null) {
                     if (mMessage.senderAvatar.isFileExistsOnLocal()) {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalFilePath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
                     } else if (mMessage.senderAvatar.isThumbnailExistsOnLocal()) {
@@ -224,7 +249,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     mMessage.senderColor));
 
                     requestForUserInfo();
-                }
+                }*/
             } else {
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
             }

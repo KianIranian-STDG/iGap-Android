@@ -22,7 +22,7 @@ public class HelperUserInfo {
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
-        if (!realmRegisteredInfo.getCacheId().equals(cacheId)) {
+        if (realmRegisteredInfo.getCacheId().equals(cacheId)) {
             return false;
         }
         new RequestUserInfo().userInfo(userId);

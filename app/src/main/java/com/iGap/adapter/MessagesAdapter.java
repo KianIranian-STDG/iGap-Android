@@ -350,6 +350,16 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
+    /**
+     * update
+     *
+     * @param userId
+     */
+
+    public void updateMessageWithUserId(long userId) {
+
+    }
+
     @Override
     public void notifyAdapterItemRemoved(int position) {
         super.notifyAdapterItemRemoved(position);

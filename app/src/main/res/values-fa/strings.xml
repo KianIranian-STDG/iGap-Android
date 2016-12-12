@@ -77,23 +77,23 @@
     <string name="pu_nikname_profileUser">"نام مستعار"</string>
     <string name="pu_Lets_Go">"ادامه"</string>
 
-    <!-- REGISTER PAGE -->
+    <!-- Register Page -->
     <string name="rg_title_register">"ثبت نام"</string>
-    <string name="rg_confirm_text_register">"لطفاً کد کشور خود را تأیید و شماره تلفن خود را وارد کنید."</string>
-    <string name="rg_Start">"شروع"</string>
-    <string name="rg_Select_Country">"یک کشور را انتخاب کنید."</string>
-    <string name="rg_agreement_text_register">"بررسی دوبارهٔ شماره تلفن شما! ما قصد داریم از طریق پیامک کد تأییدیه دریافت کنیم."</string>
-    <string name="rg_verify_register1">"در حال برقراری ارتباط"</string>
-    <string name="rg_verify_register2">"در انتظار تأییدیهٔ پیامک"</string>
-    <string name="rg_verify_register3">"کلید تولید"</string>
-    <string name="rg_verify_register4">"ثبت نام شما ضمن برقراری ارتباط با سرور"</string>
-    <string name="rg_verify_dialog_enter_code">"آی گپ به صورت خودکار پیامک فرستاده شده را تشخیص می‌دهد؛ اما شاید بخواهید آن را به صورت دستی وارد کنید و آن زمانی است که یا قادر به کنترل چیزی نیستید و یا درخواست می‌کنید کد دوباره ارسال شود."</string>
-    <string name="rg_verify_dialog_try_code">"امتحان کردن"</string>
-    <string name="rg_verify_dialog_resend_code">"ارسال دوبارهٔ کد"</string>
+    <string name="rg_confirm_text_register">"لطفا کشور ، کد کشور خود را تایید کنید و سپس تلفن خود را بدون صفر ابتدایی وارد کنید"</string>
+    <string name="rg_Start">"بزن بریم"</string>
+    <string name="rg_Select_Country">"کشور خود را انتخاب کنید"</string>
+    <string name="rg_agreement_text_register">"تایید نهایی تلفن شما ، ما قصد داریم کد فعال سازی را برای این شماره ارسال کنیم"</string>
+    <string name="rg_verify_register1">"در حال اتصال"</string>
+    <string name="rg_verify_register2">"منتظر کد تایید"</string>
+    <string name="rg_verify_register3">"تولید کلید امنیتی"</string>
+    <string name="rg_verify_register4">"ثبت نام نهایی"</string>
+    <string name="rg_verify_dialog_enter_code">"آی گپ بصورت خودکار پیام تایید را تشخیص میدهد ، شاید دریافت شده و شما دستی میخواهید وارد کنید لطفا کد را دستی وارد کرده و یا در صورتی که دریافت نکردید درخواست ارسال مجدد کنید."</string>
+    <string name="rg_verify_dialog_try_code">"دستی وارد کردم"</string>
+    <string name="rg_verify_dialog_resend_code">"ارسال مجدد کد تایید"</string>
     <string name="search">"جستجو"</string>
-    <string name="Re_dialog_verify_number_part1">"ما شماره تلفن را تأیید می‌کنیم."</string>
-    <string name="Re_dialog_verify_number_part2">"اگر شماره تلفنی که وارد کرده‌اید، درست است، دکمهٔ تأیید را بزنید؛ در غیر این صورت می‌توانید به سادگی آن را ویرایش کنید."</string>
-    <string name="Re_Enter_Verify_Code_Please">"لطفاً کد تأییدیه را وارد کنید."</string>
+    <string name="Re_dialog_verify_number_part1">"شما شماره زیر را وارد کردید:</string>
+    <string name="Re_dialog_verify_number_part2">"اگر شماره تلفن صحیح است تایید کرده و در غیر اینصورت براحتی تغییرش دهید"</string>
+    <string name="Re_Enter_Verify_Code_Please">"لطفا کد تایید را دستی وارد کنید"</string>
 
     <!-- setting -->
     <string name="st_Info">"اطلاعات"</string>
@@ -315,17 +315,17 @@
     <string name="last_msg_format_chat" formatted="false">"%s"</string>
 
     <!-- Toast -->
-    <string name="Toast_waiting_fot_get_info">"در انتظار دریافت اطلاعات"</string>
-    <string name="Toast_Location_Not_Found">"موقعیت یافت نشد."</string>
-    <string name="Toast_First_0">"نیازی به First 0 نیست."</string>
-    <string name="Toast_Enter_Phone_Number">"لطفاً شمارهٔ تماس خود را وارد کنید."</string>
-    <string name="Toast_Enter_Code">"لطفاً رمز را وارد کنید."</string>
-    <string name="Toast_Number_Block">"این شماره مسدود است."</string>
+    <string name="Toast_waiting_fot_get_info">"در انتظار اتصال و موقعیت یابی"</string>
+    <string name="Toast_Location_Not_Found">"موقعیت شما یافت نشد"</string>
+    <string name="Toast_First_0">"در ابتدای شماره نیاز به 0 نیست"</string>
+    <string name="Toast_Enter_Phone_Number">"لطفا شماره تلفن خود را بدون صفر ابتدایی وارد کنید"</string>
+    <string name="Toast_Enter_Code">"لطفا کد تایید را وارد نمایید"</string>
+    <string name="Toast_Number_Block">"شماره وارد شده مسدود شده است"</string>
     <string name="Toast_Invalid_nickname">"نام مستعار نامعتبر است. لطفاً نام مستعار را تغییر دهید."</string>
-    <string name="Toast_Write_NickName">"لطفاً نام مستعار خود را وارد کنید."</string>
+    <string name="Toast_Write_NickName">"لطفاً نام مستعار خود را وارد کنید"</string>
     <string name="d_of_d" formatted="false">"%d از %d"</string>
     <string name="add_to_contact">"افزودن به مخاطبین"</string>
-    <string name="resend_message">"ارسال دوبارهٔ پیام"</string>
+    <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">"کاربر مسدود شده است و امکان تأیید وجود ندارد."</string>

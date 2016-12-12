@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/rg_agreement_background"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/rg_agreement_background"
+              android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
@@ -20,14 +20,14 @@
             android:gravity="center"
             android:text="@string/igap"
             android:textColor="@color/rg_whit_background"
-            android:textSize="@dimen/sp20" />
+            android:textSize="@dimen/sp20"/>
 
     </android.support.v7.widget.Toolbar>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/rg_line1_background" />
+        android:background="@color/rg_line1_background"/>
 
 
     <RelativeLayout
@@ -55,7 +55,7 @@
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginRight="@dimen/dp32"
             android:layout_marginTop="@dimen/dp8"
-            android:background="@color/rg_line2_background" />
+            android:background="@color/rg_line2_background"/>
 
         <TextView
             android:id="@+id/rg_txt_text_descRegister"
@@ -91,12 +91,12 @@
             android:layout_marginRight="@dimen/dp32"
             android:background="@drawable/rg_background_agreement"
             android:drawableLeft="@mipmap/flesh"
+            android:paddingBottom="@dimen/dp8"
             android:paddingLeft="@dimen/dp12"
             android:paddingRight="@dimen/dp28"
             android:paddingTop="@dimen/dp8"
-            android:paddingBottom="@dimen/dp8"
-            android:textSize="@dimen/sp14"
-            android:text="Iran" />
+            android:text="Iran"
+            android:textSize="@dimen/sp14"/>
 
         <LinearLayout
             android:id="@+id/rg_layout_center"
@@ -137,7 +137,7 @@
                 android:padding="@dimen/dp4"
                 android:textColor="@color/rg_black_register"
                 android:textSize="@dimen/sp14"
-                app:mask="###-###-####" />
+                app:mask="###-###-####"/>
 
         </LinearLayout>
 
@@ -150,11 +150,11 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dp12"
             android:background="@drawable/rg_background_button_start_register"
-            android:text="@string/rg_Start"
             android:gravity="center"
-            android:paddingTop="@dimen/dp4"
             android:paddingBottom="@dimen/dp4"
-            android:textColor="@color/rg_whit_background" />
+            android:paddingTop="@dimen/dp4"
+            android:text="@string/rg_Start"
+            android:textColor="@color/rg_whit_background"/>
 
     </RelativeLayout>
 
@@ -178,9 +178,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/dp4"
+            android:layout_marginEnd="@dimen/dp4"
             android:layout_marginLeft="@dimen/dp4"
             android:layout_marginRight="@dimen/dp4"
-            android:layout_marginEnd="@dimen/dp4"
             android:layout_marginStart="@dimen/dp4"
             android:layout_marginTop="@dimen/dp4"
             android:background="@drawable/rg_background_agreement2"
@@ -200,7 +200,7 @@
                     android:layout_height="@dimen/dp20"
                     android:layout_marginLeft="@dimen/dp4"
                     android:layout_marginRight="@dimen/dp4"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
 
                 <ImageView
                     android:id="@+id/rg_img_verify_connect"
@@ -210,15 +210,15 @@
                     android:layout_marginRight="@dimen/dp4"
                     android:src="@mipmap/check"
                     android:tint="@color/rg_text_verify"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/rg_txt_verify_connect"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
                     android:layout_toEndOf="@+id/rg_prg_verify_connect"
                     android:layout_toRightOf="@+id/rg_prg_verify_connect"
+                    android:gravity="center_vertical"
                     android:text="@string/rg_verify_register1"
                     android:textColor="@color/rg_text_dark_verify"
                     android:textSize="@dimen/sp13"/>
@@ -238,7 +238,7 @@
                     android:layout_height="@dimen/dp20"
                     android:layout_marginLeft="@dimen/dp4"
                     android:layout_marginRight="@dimen/dp4"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
 
                 <ImageView
                     android:id="@+id/rg_img_verify_sms"
@@ -248,16 +248,16 @@
                     android:layout_marginRight="@dimen/dp4"
                     android:src="@mipmap/check"
                     android:tint="@color/rg_text_verify"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/rg_txt_verify_sms"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:singleLine="true"
                     android:layout_toEndOf="@+id/rg_prg_verify_sms"
                     android:layout_toRightOf="@+id/rg_prg_verify_sms"
                     android:gravity="center_vertical"
+                    android:singleLine="true"
                     android:text="@string/rg_verify_register2"
                     android:textColor="@color/rg_text_verify"
                     android:textSize="@dimen/sp13"/>
@@ -266,16 +266,16 @@
                     android:id="@+id/rg_txt_verify_timer"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_toEndOf="@+id/rg_txt_verify_sms"
-                    android:layout_toRightOf="@+id/rg_txt_verify_sms"
-                    android:singleLine="true"
-                    android:text="05:00"
                     android:layout_marginLeft="@dimen/dp4"
                     android:layout_marginStart="@dimen/dp4"
+                    android:layout_toEndOf="@+id/rg_txt_verify_sms"
+                    android:layout_toRightOf="@+id/rg_txt_verify_sms"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="05:00"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp14"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
 
             </RelativeLayout>
 
@@ -293,7 +293,7 @@
                     android:layout_height="@dimen/dp20"
                     android:layout_marginLeft="@dimen/dp4"
                     android:layout_marginRight="@dimen/dp4"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
 
                 <ImageView
                     android:id="@+id/rg_img_verify_key"
@@ -303,7 +303,7 @@
                     android:layout_marginRight="@dimen/dp4"
                     android:src="@mipmap/check"
                     android:tint="@color/rg_text_verify"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/rg_txt_verify_key"
@@ -333,7 +333,7 @@
                     android:layout_height="@dimen/dp20"
                     android:layout_marginLeft="@dimen/dp4"
                     android:layout_marginRight="@dimen/dp4"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
 
                 <ImageView
                     android:id="@+id/rg_img_verify_server"
@@ -343,15 +343,15 @@
                     android:layout_marginRight="@dimen/dp4"
                     android:src="@mipmap/check"
                     android:tint="@color/rg_text_verify"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/rg_txt_verify_server"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight=".80"
                     android:layout_toEndOf="@+id/rg_prg_verify_server"
                     android:layout_toRightOf="@+id/rg_prg_verify_server"
+                    android:layout_weight=".80"
                     android:gravity="center_vertical"
                     android:text="@string/rg_verify_register4"
                     android:textColor="@color/rg_text_verify"
@@ -364,20 +364,23 @@
             android:id="@+id/txtAgreement_register"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp12"
+            android:layout_marginStart="@dimen/dp12"
             android:layout_marginTop="@dimen/dp4"
             android:fadeScrollbars="false"
             android:lineSpacingExtra="@dimen/dp4"
-            android:layout_marginLeft="@dimen/dp8"
-            android:layout_marginRight="@dimen/dp12"
-            android:layout_marginEnd="@dimen/dp8"
-            android:layout_marginStart="@dimen/dp12"
             android:overScrollMode="always"
-            android:padding="@dimen/dp4"
-            android:textSize="@dimen/sp14"
-            android:scrollbarSize="@dimen/dp4"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingRight="@dimen/dp8"
+            android:paddingStart="@dimen/dp8"
+            android:scrollbarSize="@dimen/dp8"
+            android:scrollbarStyle="outsideInset"
             android:scrollbarThumbVertical="@color/rg_start_background"
             android:scrollbars="vertical"
-            android:text="@string/rg_agreement_text_register" />
+            android:text="@string/rg_agreement_text_register"
+            android:textSize="@dimen/sp14"/>
     </LinearLayout>
 </LinearLayout>
 
