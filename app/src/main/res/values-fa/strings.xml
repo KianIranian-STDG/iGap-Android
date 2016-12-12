@@ -82,7 +82,6 @@
     <string name="rg_confirm_text_register">"لطفاً کد کشور خود را تأیید و شماره تلفن خود را وارد کنید."</string>
     <string name="rg_Start">"شروع"</string>
     <string name="rg_Select_Country">"یک کشور را انتخاب کنید."</string>
-    <string name="rg_agreement_title_register">"توافق"</string>
     <string name="rg_agreement_text_register">"بررسی دوبارهٔ شماره تلفن شما! ما قصد داریم از طریق پیامک کد تأییدیه دریافت کنیم."</string>
     <string name="rg_verify_register1">"در حال برقراری ارتباط"</string>
     <string name="rg_verify_register2">"در انتظار تأییدیهٔ پیامک"</string>
