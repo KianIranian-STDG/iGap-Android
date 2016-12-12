@@ -33,9 +33,11 @@ import com.iGap.adapter.items.RoomItem;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ServiceContact;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnActivityMainStart;
 import com.iGap.interfaces.OnChannelDelete;
 import com.iGap.interfaces.OnChannelLeft;
@@ -48,6 +50,7 @@ import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnConnectionChangeState;
 import com.iGap.interfaces.OnDraftMessage;
 import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnRefreshActivity;
@@ -107,7 +110,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.iGap.R.string.updating;
 
 public class ActivityMain extends ActivityEnhanced
-        implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetAction {
+        implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetAction, OnGroupAvatarResponse {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
@@ -153,6 +156,7 @@ public class ActivityMain extends ActivityEnhanced
         musicPlayer = new MusicPlayer(mediaLayout);
 
         G.helperNotificationAndBadge.cancelNotification();
+        G.onGroupAvatarResponse = this;
 
         G.onConvertToGroup = new OpenFragment() {
             @Override
@@ -1570,6 +1574,41 @@ public class ActivityMain extends ActivityEnhanced
 
     @Override
     public void onSetAction(long roomId, long userId, ProtoGlobal.ClientAction clientAction) {
+
+    }
+
+    //******* GroupAvatar
+
+    @Override
+    public void onAvatarAdd(final long roomId, ProtoGlobal.Avatar avatar) {
+
+        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyWithRoomId(roomId);
+                        //ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
+            }
+        });
+
+    }
+
+    @Override
+    public void onAvatarAddError() {
 
     }
 }

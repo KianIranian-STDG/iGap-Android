@@ -1,7 +1,5 @@
 package com.iGap.adapter.items;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -10,21 +8,18 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.interfaces.OnAvatarGet;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.iGap.module.TimeUtils;
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmAttachment;
-import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
-import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.File;
 import java.util.List;
 
 import io.realm.Realm;
@@ -86,26 +81,31 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         setAvatar(holder);
     }
 
-    private void setAvatar(ViewHolder holder) {
+    private void setAvatar(final ViewHolder holder) {
 
         HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
             @Override
-            public void onAvatarGet(String avatarPath) {
+            public void onAvatarGet(final String avatarPath) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                     }
                 });
             }
 
             @Override
-            public void onShowInitials(String initials, String color) {
-
+            public void onShowInitials(final String initials, final String color) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
             }
         });
 
-        String avatarPath = null;
+       /* String avatarPath = null;
         if (mContact.avatar != null && mContact.avatar.isValid() && mContact.avatar.getFile() != null && mContact.avatar.getFile().isValid()) {
             avatarPath = mContact.avatar.getFile().getLocalThumbnailPath();
         }
@@ -132,10 +132,10 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
                     (int) holder.image.getContext().getResources().getDimension(R.dimen.dp60),
                     mContact.initials, mContact.color));
-        }
+        }*/
     }
 
-    public void onRequestDownloadThumbnail(String token, boolean done) {
+  /*  public void onRequestDownloadThumbnail(String token, boolean done) {
         final String fileName = "thumb_" + token + "_" + mContact.avatar.getFile().getName();
         if (done) {
             Realm realm = Realm.getDefaultInstance();
@@ -158,7 +158,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
 
         new RequestFileDownload().download(token, 0, (int) mContact.avatar.getFile().getSmallThumbnail().getSize(),
                 selector, identity);
-    }
+    }*/
 
     @Override
     public ViewHolderFactory<? extends ViewHolder> getFactory() {
