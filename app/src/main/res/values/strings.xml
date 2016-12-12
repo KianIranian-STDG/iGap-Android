@@ -79,7 +79,6 @@
     <string name="rg_confirm_text_register">Please confirm your country code and enter your phone number.</string>
     <string name="rg_Start">Start</string>
     <string name="rg_Select_Country">Select a Country</string>
-    <string name="rg_agreement_title_register">Agreement</string>
     <string name="rg_agreement_text_register">Double checking your phone number! We\'re intended to get verification code via SMS.</string>
     <string name="rg_verify_register1">Connecting</string>
     <string name="rg_verify_register2">Waiting for SMS Verification</string>
