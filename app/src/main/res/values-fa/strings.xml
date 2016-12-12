@@ -70,9 +70,9 @@
     <string name="text_line_1_introduce_page5">"همه چیز رایگان است!"</string>
     <string name="text_line_2_introduce_page5">"بیش از این شما را خسته نکنیم! آی ‌گپ کاملاْ رایگان است! همین حالا دنیای خود را بسازید."</string>g>
 
-    <!-- //profile user -->
-    <string name="pu_title_profileUser">"اطلاعات شما"</string>
-    <string name="pu_desc_profileUser">"نام خود را وارد کنید وعکسی برای پروفایل خود بگذارید."</string>
+    <!-- Fill Profile User -->
+    <string name="pu_title_profileUser">"تکمیل پروفایل"</string>
+    <string name="pu_desc_profileUser">"نام مستعار خود را وارد کنید و برای خود عکس پروفایلی انتخاب کنید"</string>
     <string name="pu_addPhoto_profileUser">"عکس پروفایل"</string>
     <string name="pu_nikname_profileUser">"نام مستعار"</string>
     <string name="pu_Lets_Go">"ادامه"</string>
@@ -232,8 +232,8 @@
     <string name="array_Short">"کوتاه"</string>
     <string name="array_Long">"بلند"</string>
     <string name="array_Only_if_silent">"اگر فقط دستگاه در حالت بی‌صدا بود"</string>
-    <string name="array_From_Gallery">"از گالری"</string>
-    <string name="array_From_Camera">"از دوربین"</string>
+    <string name="array_From_Gallery">"گالری"</string>
+    <string name="array_From_Camera">"دوربین"</string>
     <string name="array_Delete_photo">"حذف عکس"</string>
     <string name="array_5_minutes">"۵ دقیقه"</string>
     <string name="array_10_minutes">"۱۰ دقیقه"</string>
@@ -262,9 +262,9 @@
     <string name="save_to_music_folder">"با موفقیت ذخیره کردن در پوشهٔ موسیقی"</string>
     <string name="no_comment">"دیدگاهی وجود ندارد."</string>
     <string name="comment">"دیدگاه"</string>
-    <string name="choose_picture">"انتخاب تصویر"</string>
+    <string name="choose_picture">"انتخاب تصویر از"</string>
     <string name="cansel">"لغو"</string>
-    <string name="from_camera">"از دوربین"</string>
+    <string name="from_camera">"دوربین"</string>
     <string name="please_check_your_camera">"لطفاً دوربین دستگاه خود را بررسی کنید."</string>
     <string name="delete_photo">"حذف عکس"</string>
     <string name="group_name">"نام گروه"</string>
@@ -501,7 +501,7 @@
     <string name="set_email">تنظیم و ویرایش ایمیل</string>
     <string name="delete_contact">حذف مخاطب</string>
     <string name="error_email">نشانی ایمیل نامعتبر</string>
-    <string name="do_you_want_delete_this">آیا می‌خواهید این را حذف کنید؟</string>
+    <string name="do_you_want_delete_this">آیا از حذف آیتم انتخاب شده اطمینان دارید ؟</string>
     <string name="active_session_title">بستن جلسه</string>
     <string name="active_session_content">آیا مطمئنید که می‌خواهید جلسه را ببندید؟</string>
     <string name="USER_VERIFY_GIVEN_USERNAME">هیچ کاربری با نام کابری ارائه شده ثبت نام نکرده است.</string>
@@ -582,7 +582,7 @@
     <string name="you_need_to_allow">باید اجازه دهید</string>
     <string name="TERMINATE">پایان</string>
     <string name="iGap_version">آی‌گپ برای اندروید</string>
-    <string name="do_you_want_left_this">آیا می‌خواهید این را ترک کنید؟</string>
+    <string name="do_you_want_left_this">آیااز ترک ایتم انتخاب شده اطمینان دارید؟</string>
     <string name="delete_group">حذف گروه</string>
     <string name="do_you_want_to_leave_this_group">آیا مطمئنید که می‌خواهید این گروه را ترک کنید؟</string>
     <string name="waiting_for_connection">در انتظار اتصال به سرور</string>
