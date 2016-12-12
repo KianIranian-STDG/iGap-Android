@@ -315,17 +315,17 @@
     <string name="last_msg_format_chat" formatted="false">"%s"</string>
 
     <!-- Toast -->
-    <string name="Toast_waiting_fot_get_info">"در انتظار دریافت اطلاعات"</string>
-    <string name="Toast_Location_Not_Found">"موقعیت یافت نشد."</string>
-    <string name="Toast_First_0">"نیازی به First 0 نیست."</string>
-    <string name="Toast_Enter_Phone_Number">"لطفاً شمارهٔ تماس خود را وارد کنید."</string>
-    <string name="Toast_Enter_Code">"لطفاً رمز را وارد کنید."</string>
-    <string name="Toast_Number_Block">"این شماره مسدود است."</string>
+    <string name="Toast_waiting_fot_get_info">"در انتظار اتصال و موقعیت یابی"</string>
+    <string name="Toast_Location_Not_Found">"موقعیت شما یافت نشد"</string>
+    <string name="Toast_First_0">"در ابتدای شماره نیاز به 0 نیست"</string>
+    <string name="Toast_Enter_Phone_Number">"لطفا شماره تلفن خود را بدون صفر ابتدایی وارد کنید"</string>
+    <string name="Toast_Enter_Code">"لطفا کد تایید را وارد نمایید"</string>
+    <string name="Toast_Number_Block">"شماره وارد شده مسدود شده است"</string>
     <string name="Toast_Invalid_nickname">"نام مستعار نامعتبر است. لطفاً نام مستعار را تغییر دهید."</string>
-    <string name="Toast_Write_NickName">"لطفاً نام مستعار خود را وارد کنید."</string>
+    <string name="Toast_Write_NickName">"لطفاً نام مستعار خود را وارد کنید"</string>
     <string name="d_of_d" formatted="false">"%d از %d"</string>
     <string name="add_to_contact">"افزودن به مخاطبین"</string>
-    <string name="resend_message">"ارسال دوبارهٔ پیام"</string>
+    <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">"کاربر مسدود شده است و امکان تأیید وجود ندارد."</string>
