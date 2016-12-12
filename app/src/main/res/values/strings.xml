@@ -418,8 +418,8 @@
     <string name="E_157">USER DELETE EXPIRED TOKEN</string>
     <string name="E_158">USER DELETE MAX TRY LOCK</string>
     <string name="time_out">can\'t connect to server</string>
-    
-    
+
+
     <string name="list_admin">List Admin</string>
     <string name="list_modereator">List Moderator</string>
     <string name="desc">Description</string>
@@ -644,5 +644,5 @@
     <string name="do_you_want_left_this">"Are you sure left from selected item ?"</string>
     <string name="do_you_want_delete_this">Are you sure deleting selected item ?</string>
     <string name="sure_delete_account">Are you sure deleting your account ?</string>
-
+    <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
 </resources>

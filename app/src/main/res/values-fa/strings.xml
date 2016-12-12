@@ -411,8 +411,8 @@
     <string name="E_157">تخریب اکانت : کد اعتبار ندارد</string>
     <string name="E_158">تخریب اکانت : تلاش بیش از اندازه</string>
     <string name="time_out">عدم امکان اتصال به سرور</string>
-    
-    
+
+
     <string name="resend_all_messages">"‫ارسال دوبارهٔ %d پیام"</string>
     <string name="if_you_are_away_for">"اگر دور باشید"</string>
     <string name="st_Gander">"جنسیت:"</string>
@@ -634,5 +634,5 @@
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ هجری شمسی</string>
     <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
-
+    <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
 </resources>

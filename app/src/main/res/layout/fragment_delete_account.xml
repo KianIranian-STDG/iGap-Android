@@ -137,6 +137,15 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/iGap_autofill_Destruction_Code"
+        android:textSize="@dimen/sp15"
+        android:textColor="@android:color/black"
+        android:layout_marginRight="@dimen/dp20"
+        android:layout_marginLeft="@dimen/dp20"
+        android:gravity="center"/>
 
     <RelativeLayout
         android:id="@+id/stda_layout_time"
@@ -145,7 +154,6 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/dp8"
         android:layout_marginRight="@dimen/dp52"
         android:layout_marginLeft="@dimen/dp52">
 
