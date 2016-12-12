@@ -227,41 +227,7 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/agp_ll_sheared_media"
-                            android:layout_width="@dimen/dp140"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingLeft="@dimen/dp12"
-                            android:paddingRight="@dimen/dp12"
 
-                            >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="@dimen/dp4"
-                                android:paddingStart="@dimen/dp4"
-                                android:singleLine="true"
-                                android:text="@string/shared_media"
-                                android:textColor="@color/black_register"
-                                android:textSize="@dimen/sp15"
-                                />
-
-                            <TextView
-                                android:id="@+id/agp_txt_number_of_shared_media"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingBottom="@dimen/dp12"
-                                android:paddingEnd="@dimen/dp4"
-                                android:paddingStart="@dimen/dp4"
-                                android:paddingTop="@dimen/dp4"
-                                android:singleLine="true"
-                                android:text="12"
-                                android:textColor="@color/gray_5c"
-                                android:textSize="@dimen/sp13"
-                                />
-                        </LinearLayout>
 
 
                     </LinearLayout>
@@ -349,6 +315,41 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/agp_ll_sheared_media"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/dp12"
+                        android:paddingRight="@dimen/dp12"
+
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:paddingEnd="@dimen/dp4"
+                            android:paddingStart="@dimen/dp4"
+                            android:singleLine="true"
+                            android:text="@string/shared_media"
+                            android:textColor="@color/green"
+                            android:textSize="@dimen/sp18"
+                            />
+
+                        <TextView
+                            android:id="@+id/agp_txt_number_of_shared_media"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/dp12"
+                            android:paddingEnd="@dimen/dp4"
+                            android:paddingStart="@dimen/dp4"
+                            android:paddingTop="@dimen/dp4"
+                            android:text=""
+                            android:textColor="@color/gray_5c"
+                            android:textSize="@dimen/sp13"
+                            />
+                    </LinearLayout>
 
                 </LinearLayout>
 

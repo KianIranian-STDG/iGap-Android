@@ -40,12 +40,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.fragments.FragmentListAdmin;
 import com.iGap.fragments.FragmentNotification;
@@ -84,6 +82,7 @@ import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
@@ -126,17 +125,15 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.id.fragmentContainer_group_profile;
@@ -258,7 +255,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     protected void onResume() {
         super.onResume();
 
-        txtNumberOfSharedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
+        ActivityShearedMedia.getCountOfSharedMedia(roomId, txtNumberOfSharedMedia.getText().toString(), new OnComplete() {
+            @Override public void complete(boolean result, final String messageOne, String MessageTow) {
+                txtNumberOfSharedMedia.post(new Runnable() {
+                    @Override public void run() {
+                        txtNumberOfSharedMedia.setText(messageOne);
+                    }
+                });
+            }
+        });
 
         LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
     }
@@ -427,7 +432,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         txtGroupDescription.setText(description);
 
         txtNumberOfSharedMedia = (TextView) findViewById(R.id.agp_txt_number_of_shared_media);
-        txtNumberOfSharedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
+
         txtMemberNumber = (TextView) findViewById(R.id.agp_txt_member_number);
         appBarLayout = (AppBarLayout) findViewById(R.id.agp_appbar);
 

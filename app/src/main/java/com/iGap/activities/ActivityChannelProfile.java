@@ -34,13 +34,11 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.fragments.FragmentListAdmin;
@@ -77,6 +75,7 @@ import com.iGap.module.AttachFile;
 import com.iGap.module.Contacts;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoChannelCheckUsername;
@@ -115,16 +114,14 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -145,6 +142,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private MaterialDesignTextView txtBack;
     private TextView titleToolbar;
     private TextView txtChannelName;
+    TextView txtSharedMedia;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -168,6 +166,22 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private LinearLayout lytNotification;
     private AttachFile attachFile;
     private long avatarId;
+
+    @Override protected void onResume() {
+
+        ActivityShearedMedia.getCountOfSharedMedia(roomId, txtSharedMedia.getText().toString(), new OnComplete() {
+            @Override public void complete(boolean result, final String messageOne, String MessageTow) {
+                txtSharedMedia.post(new Runnable() {
+                    @Override public void run() {
+                        txtSharedMedia.setText(messageOne);
+                    }
+                });
+            }
+        });
+
+        super.onResume();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,7 +233,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         realm.close();
         //=========Put Extra End
 
-        TextView txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);
+        txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);
         txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
         //memberNumber = (TextView) findViewById(R.id.txt_member_number);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting);
@@ -473,8 +487,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         txtChannelName.setText(title);
         txtChannelNameInfo.setText(title);
         txtChannelLink.setText(inviteLink);
-        //txtSharedMedia.setText(AdapterShearedMedia.getCountOfShearedMedia(roomId) + "");
-        txtSharedMedia.setText(AdapterShearedMedia.getCountOfSheareddMedia(roomId) + "");
+
         //memberNumber.setText(participantsCountLabel);
 
         attachFile = new AttachFile(this);

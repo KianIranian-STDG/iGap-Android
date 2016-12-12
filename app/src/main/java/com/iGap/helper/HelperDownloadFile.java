@@ -9,6 +9,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
@@ -97,6 +98,8 @@ public class HelperDownloadFile {
         public ProtoGlobal.RoomMessageType fileType;
         public long size = 0;
         public int attampOnError = 2;
+        public ProtoFileDownload.FileDownload.Selector selector;
+        public String path = "";
     }
 
     public interface UpdateListener {
@@ -105,7 +108,7 @@ public class HelperDownloadFile {
         void OnError(String token);
     }
 
-    public static void startDoanload(String token, String name, long size, ProtoGlobal.RoomMessageType fileType, UpdateListener update) {
+    public static void startDoanload(String token, String name, long size, ProtoFileDownload.FileDownload.Selector selector, ProtoGlobal.RoomMessageType fileType, UpdateListener update) {
 
         StructDownLoad item;
 
@@ -126,7 +129,18 @@ public class HelperDownloadFile {
             return;
         }
 
-        String tmpPath = G.DIR_TEMP + "/" + token + "_" + name;
+        item.selector = selector;
+
+        switch (item.selector) {
+            case FILE:
+                item.path = token + "_" + item.name;
+                break;
+            case SMALL_THUMBNAIL:
+                item.path = "thumb_" + item.token + "_" + AppUtils.suitableThumbFileName(item.name);
+                break;
+        }
+
+        String tmpPath = G.DIR_TEMP + "/" + item.path;
         File tmpFile = new File(tmpPath);
 
         if (tmpFile.exists()) {
@@ -158,27 +172,28 @@ public class HelperDownloadFile {
             return;
         }
 
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+        ProtoFileDownload.FileDownload.Selector selector = item.selector;
 
-        final String tmpPath = item.token + "_" + item.name;
-
-        String identity = item.token + '*' + selector.toString() + '*' + item.size + '*' + tmpPath + '*' + item.offset;
-
+        String identity = item.token + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset;
         new RequestFileDownload().download(item.token, item.offset, (int) item.size, selector, identity);
+
+
+
     }
 
     private static void moveTmpFileToOrginFolder(String token) {
 
         StructDownLoad item = list.get(token);
 
-        String Path = AndroidUtils.suitableAppFilePath(item.fileType) + "/" + token + "_" + item.name;
-
-        String tmpPath = G.DIR_TEMP + "/" + token + "_" + item.name;
-
-        try {
-            AndroidUtils.cutFromTemp(tmpPath, Path);
-        } catch (IOException e) {
-            e.printStackTrace();
+        switch (item.selector) {
+            case FILE:
+                String dirPath = AndroidUtils.suitableAppFilePath(item.fileType) + "/" + item.path;
+                String dirTmp = G.DIR_TEMP + "/" + item.path;
+                try {
+                    AndroidUtils.cutFromTemp(dirTmp, dirPath);
+                } catch (IOException e) {
+                }
+                break;
         }
     }
 
