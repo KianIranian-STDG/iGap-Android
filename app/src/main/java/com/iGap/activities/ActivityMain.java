@@ -37,8 +37,8 @@ import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ServiceContact;
-import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnActivityMainStart;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChannelDelete;
 import com.iGap.interfaces.OnChannelLeft;
 import com.iGap.interfaces.OnChatClearMessageResponse;
@@ -71,14 +71,10 @@ import com.iGap.module.SUID;
 import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SortRooms;
 import com.iGap.proto.ProtoClientGetRoom;
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.realm.RealmAvatar;
-import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
-import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -90,7 +86,6 @@ import com.iGap.request.RequestChannelDelete;
 import com.iGap.request.RequestChannelLeft;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestClientGetRoomList;
-import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupLeft;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -109,8 +104,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
 
-public class ActivityMain extends ActivityEnhanced
-        implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetAction, OnGroupAvatarResponse {
+public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetAction, OnGroupAvatarResponse {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
@@ -795,8 +789,9 @@ public class ActivityMain extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        mAdapter.remove(mAdapter.getPosition(item));
+                        if (mAdapter != null) {
+                            mAdapter.remove(mAdapter.getPosition(item));
+                        }
                     }
                 });
             }
@@ -1492,7 +1487,7 @@ public class ActivityMain extends ActivityEnhanced
         });
     }
 
-    private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
+    /*private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
         final String fileName = "thumb_" + token + "_" + name;
         if (done) {
             final Realm realm = Realm.getDefaultInstance();
@@ -1520,11 +1515,11 @@ public class ActivityMain extends ActivityEnhanced
 
         new RequestFileDownload().download(token, 0, smallSize,
                 selector, identity);
-    }
+    }*/
 
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-        Realm realm1 = Realm.getDefaultInstance();
+        /*Realm realm1 = Realm.getDefaultInstance();
         final long userId = realm1.where(RealmUserInfo.class).findFirst().getUserId();
         realm1.close();
         if (userId == user.getId()) {
@@ -1553,7 +1548,7 @@ public class ActivityMain extends ActivityEnhanced
             });
 
             realm.close();
-        }
+        }*/
     }
 
     @Override
@@ -1574,10 +1569,37 @@ public class ActivityMain extends ActivityEnhanced
 
     @Override
     public void onSetAction(long roomId, long userId, ProtoGlobal.ClientAction clientAction) {
+       /* if (mRoomId == roomId && this.userId != userId) {
+            if (chatType == ProtoGlobal.Room.Type.CHAT) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String action = HelperConvertEnumToString.convertActionEnum(clientAction);
+                        if (action != null) {
+                            txtLastSeen.setText(action);
+                        } else {
+                            txtLastSeen.setText(userStatus);
+                        }
+                    }
+                });
+            } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
+                final String actionText = HelperGetAction.getAction(roomId);
 
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (actionText != null) {
+                            txtLastSeen.setText(actionText);
+                        } else {
+                            txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
+                        }
+                    }
+                });
+            }
+        }*/
     }
 
-    //******* GroupAvatar
+    //******* GroupAvatar and ChannelAvatar
 
     @Override
     public void onAvatarAdd(final long roomId, ProtoGlobal.Avatar avatar) {
@@ -1589,19 +1611,13 @@ public class ActivityMain extends ActivityEnhanced
                     @Override
                     public void run() {
                         mAdapter.notifyWithRoomId(roomId);
-                        //ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
                     }
                 });
             }
 
             @Override
             public void onShowInitials(final String initials, final String color) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
+                //empty
             }
         });
 

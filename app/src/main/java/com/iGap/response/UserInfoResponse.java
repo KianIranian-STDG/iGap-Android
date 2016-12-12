@@ -7,6 +7,7 @@ import com.iGap.proto.ProtoUserInfo;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
+import com.iGap.realm.RealmUserInfo;
 
 import io.realm.Realm;
 
@@ -28,43 +29,56 @@ public class UserInfoResponse extends MessageHandler {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        G.handler.post(new Runnable() {
             @Override
-            public void execute(Realm realm) {
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                        .equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId())
-                        .findFirst();
+            public void run() {
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
 
-                if (realmRegisteredInfo == null) {
-                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, builder.getUser().getId());
-                }
+                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId()).findFirst();
+                        if (realmRegisteredInfo == null) {
+                            realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, builder.getUser().getId());
+                        }
 
-                RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar());
-                realmRegisteredInfo.setAvatarCount(builder.getUser().getAvatarCount());
-                realmRegisteredInfo.setColor(builder.getUser().getColor());
-                realmRegisteredInfo.setDisplayName(builder.getUser().getDisplayName());
-                realmRegisteredInfo.setFirstName(builder.getUser().getFirstName());
-                realmRegisteredInfo.setInitials(builder.getUser().getInitials());
-                realmRegisteredInfo.setLastSeen(builder.getUser().getLastSeen());
-                realmRegisteredInfo.setPhoneNumber(Long.toString(builder.getUser().getPhone()));
-                realmRegisteredInfo.setStatus(builder.getUser().getStatus().toString());
-                realmRegisteredInfo.setUsername(builder.getUser().getUsername());
-                realmRegisteredInfo.setMutual(builder.getUser().getMutual());
-                realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
+                        realmRegisteredInfo.setAvatarCount(builder.getUser().getAvatarCount());
+                        realmRegisteredInfo.setColor(builder.getUser().getColor());
+                        realmRegisteredInfo.setDisplayName(builder.getUser().getDisplayName());
+                        realmRegisteredInfo.setFirstName(builder.getUser().getFirstName());
+                        realmRegisteredInfo.setInitials(builder.getUser().getInitials());
+                        realmRegisteredInfo.setLastSeen(builder.getUser().getLastSeen());
+                        realmRegisteredInfo.setPhoneNumber(Long.toString(builder.getUser().getPhone()));
+                        realmRegisteredInfo.setStatus(builder.getUser().getStatus().toString());
+                        realmRegisteredInfo.setUsername(builder.getUser().getUsername());
+                        realmRegisteredInfo.setMutual(builder.getUser().getMutual());
+                        realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
-                if (G.onUserUpdateStatus != null) {
-                    G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), AppUtils.setStatsForUser(builder.getUser().getStatus().toString()));
-                }
+                        RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar());
 
+
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+
+                        if (builder.getUser().getId() == realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                            if (G.onUserInfoMyClient != null) {
+                                G.onUserInfoMyClient.onUserInfoMyClient(builder.getUser(), identity);
+                            }
+                        }
+
+                        if (G.onUserUpdateStatus != null) {
+                            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), AppUtils.setStatsForUser(builder.getUser().getStatus().toString()));
+                        }
+
+                        if (G.onUserInfoResponse != null) {
+                            G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
+                        }
+                    }
+                });
             }
         });
-        realm.close();
-
-        if (G.onUserInfoResponse != null) {
-            G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
-        }
-
     }
 
     @Override

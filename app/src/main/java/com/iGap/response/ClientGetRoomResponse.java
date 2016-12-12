@@ -33,32 +33,51 @@ public class ClientGetRoomResponse extends MessageHandler {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(final Realm realm) {
 
                 if (clientGetRoom.getRoom().getType() == ProtoGlobal.Room.Type.CHAT) {
 
                     new HelperGetUserInfo(new OnGetUserInfo() {
                         @Override
                         public void onGetUserInfo(ProtoGlobal.RegisteredUser registeredUser) {
-                            RealmRoom.putOrUpdate(clientGetRoom.getRoom());
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Realm realm1 = Realm.getDefaultInstance();
+                                    realm1.executeTransactionAsync(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmRoom.putOrUpdate(clientGetRoom.getRoom());
+                                        }
+                                    }, new OnSuccess() {
+                                        @Override
+                                        public void onSuccess() {
+                                            if (G.onClientGetRoomResponse != null) {
+                                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
+                                            }
+                                        }
+                                    });
+                                    realm1.close();
+                                }
+                            });
                         }
                     }).getUserInfo(clientGetRoom.getRoom().getChatRoomExtra().getPeer().getId());
 
                 } else {
                     RealmRoom.putOrUpdate(clientGetRoom.getRoom());
+
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (G.onClientGetRoomResponse != null) {
+                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
+                            }
+                        }
+                    }, 500);
                 }
             }
         });
         realm.close();
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.onClientGetRoomResponse != null) {
-                    G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
-                }
-            }
-        }, 500);
     }
 
     @Override

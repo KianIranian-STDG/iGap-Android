@@ -1,5 +1,6 @@
 package com.iGap.helper;
 
+import com.iGap.G;
 import com.iGap.interfaces.OnGetUserInfo;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.proto.ProtoGlobal;
@@ -10,6 +11,7 @@ public class HelperGetUserInfo implements OnUserInfoResponse {
 
     public HelperGetUserInfo(OnGetUserInfo onGetUserInfo) {
         this.onGetUserInfo = onGetUserInfo;
+        G.onUserInfoResponse = this;
     }
 
     public void getUserInfo(long userId) {

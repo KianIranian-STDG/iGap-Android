@@ -105,6 +105,7 @@ import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
+import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnHelperSetAction;
 import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnSetAction;
@@ -228,7 +229,7 @@ import static java.lang.Long.parseLong;
 
 public class ActivityChat extends ActivityEnhanced
         implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
-        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming {
+        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -3559,6 +3560,8 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
+        setAvatar();
+
         /*runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -4421,8 +4424,6 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
             } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
-
-                Log.i("WWW", "GroupSetActionResponse GROUP 3");
                 final String actionText = HelperGetAction.getAction(roomId);
 
                 runOnUiThread(new Runnable() {
@@ -4435,32 +4436,6 @@ public class ActivityChat extends ActivityEnhanced
                         }
                     }
                 });
-
-
-                /*runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Realm realm = Realm.getDefaultInstance();
-                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
-                        String name = "";
-                        if (realmRegisteredInfo != null) {
-                            name = realmRegisteredInfo.getDisplayName();
-                        }
-                        realm.close();
-
-
-                        String action = HelperConvertEnumToString.convertActionEnum(clientAction);
-                        if (action != null) {
-                            if (!name.isEmpty()) {
-                                txtLastSeen.setText(name + " is " + action);
-                            } else {
-                                txtLastSeen.setText(action);
-                            }
-                        } else {
-                            txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
-                        }
-                    }
-                });*/
             }
         }
     }
@@ -4630,5 +4605,39 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }, 100);
         }
+    }
+
+    //******* GroupAvatar and ChannelAvatar
+
+    @Override
+    public void onAvatarAdd(final long roomId, ProtoGlobal.Avatar avatar) {
+
+        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
+            }
+        });
+
+    }
+
+    @Override
+    public void onAvatarAddError() {
+
     }
 }

@@ -2,7 +2,6 @@ package com.iGap.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,20 +23,21 @@ import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnUserInfoMyClient;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.AndroidUtils;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
 import io.realm.Realm;
 
-public class FragmentDrawerMenu extends MenuFragment {
-    public static Bitmap decodeBitmapProfile = null;
+public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClient {
     public static TextView txtUserName;
     Context context;
-    private String pathImageDecode;
     private ImageView imgUserPhoto;
 
     @Override
@@ -47,12 +47,11 @@ public class FragmentDrawerMenu extends MenuFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.layout_menu, container, false);
         initLayoutMenu(view);
-
+        G.onUserInfoMyClient = this;
         return setupReveal(view);
     }
 
@@ -87,14 +86,14 @@ public class FragmentDrawerMenu extends MenuFragment {
 
 
         imgUserPhoto = (ImageView) v.findViewById(R.id.lm_imv_user_picture);
-
         txtUserName = (TextView) v.findViewById(R.id.lm_txt_user_name);
-
         TextView txtPhoneNumber = (TextView) v.findViewById(R.id.lm_txt_phone_number);
 
 
         txtUserName.setText(username);
         txtPhoneNumber.setText(phoneNumber);
+
+        new RequestUserInfo().userInfo(realmUserInfo.getUserId());
 
         setImage(realmUserInfo.getUserId());
         realm.close();
@@ -103,7 +102,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
                     @Override
                     public void Allow() {
@@ -126,9 +124,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                         .addToBackStack(null)
                         .replace(R.id.fragmentContainer, fragment)
                         .commit();
@@ -147,8 +143,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                         .addToBackStack(null)
                         .replace(R.id.fragmentContainer, fragment)
                         .commit();
@@ -168,8 +163,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                         .addToBackStack(null)
                         .replace(R.id.fragmentContainer, fragment)
                         .commit();
@@ -186,8 +180,7 @@ public class FragmentDrawerMenu extends MenuFragment {
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                         .addToBackStack(null)
                         .replace(R.id.fragmentContainer, fragment)
                         .commit();
@@ -199,11 +192,9 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutInviteFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT,
-                        "Hey Join iGap : https://www.igap.im/iGap.apk");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.im/iGap.apk");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
@@ -214,7 +205,6 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
                     @Override
                     public void Allow() {
@@ -231,11 +221,10 @@ public class FragmentDrawerMenu extends MenuFragment {
         layoutiGapFAQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //empty
             }
         });
     }
-
-    //TODO [Saeed Mozaffari] [2016-09-10 2:49 PM] -dar har vorud be barname decode kardane tasvir eshtebah ast.
 
     public void setImage(long userId) {
 
@@ -260,84 +249,6 @@ public class FragmentDrawerMenu extends MenuFragment {
                 });
             }
         });
-
-//        final Realm realm = Realm.getDefaultInstance();
-//        RealmResults<RealmAvatarPath> realmAvatarPaths =
-//                realm.where(RealmAvatarPath.class).findAll();
-//        realmAvatarPaths = realmAvatarPaths.sort("id", Sort.DESCENDING);
-//
-//        if (realmAvatarPaths.size() > 0) {
-//            pathImageDecode = realmAvatarPaths.first().getPathImage();
-//            decodeBitmapProfile = HelperDecodeFile.decodeFile(new File(pathImageDecode));
-//            imgUserPhoto.setImageBitmap(decodeBitmapProfile);
-//        } else {
-//            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-//            if (realmUserInfo.getUserInfo().getColor() == null) {
-//                imgUserPhoto.setImageBitmap(
-//                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-//                                (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp60),
-//                                " ", "#117f7f7f"));
-//            } else {
-//                imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-//                        (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
-//            }
-//        }
-
-       /* final Realm realm = Realm.getDefaultInstance();
-
-        RealmAvatar realmAvatar = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getLastAvatar();
-        if (realmAvatar != null) {
-
-            if (realmAvatar.getFile().getLocalFilePath() != null) {
-                final File imgFile = new File(realmAvatar.getFile().getLocalFilePath());
-                if (imgFile.exists()) {
-                    showInitials();
-                    HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
-                        @Override
-                        public void Allow() {
-//                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//                            imgUserPhoto.setImageBitmap(myBitmap);
-
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imgFile.getAbsolutePath()), imgUserPhoto);
-                        }
-                    });
-                } else {
-                    showInitials();
-                }
-
-            } else if (realmAvatar.getFile().getLocalThumbnailPath() != null) {
-                File imgFile = new File(realmAvatar.getFile().getLocalThumbnailPath());
-
-                if (imgFile.exists()) {
-//                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//                    imgUserPhoto.setImageBitmap(myBitmap);
-
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imgFile.getAbsolutePath()), imgUserPhoto);
-
-                } else {
-                    showInitials();
-                }
-            }
-        } else {
-            showInitials();
-        }
-
-        G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(ProtoGlobal.RegisteredUser user, String identity) {
-
-            }
-
-            @Override
-            public void onUserInfoTimeOut() {
-
-            }
-
-            @Override
-            public void onUserInfoError(int majorCode, int minorCode) {
-
-            }
-        };*/
 
         G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
             @Override
@@ -371,18 +282,22 @@ public class FragmentDrawerMenu extends MenuFragment {
                 });
             }
         };
-
         //realm.close();
     }
+    //**********
 
-    private void showInitials() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        imgUserPhoto.setImageBitmap(
-                HelperImageBackColor.drawAlphabetOnPicture(
-                        (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100)
-                        , realmUserInfo.getUserInfo().getInitials()
-                        , realmUserInfo.getUserInfo().getColor()));
-        realm.close();
+    @Override
+    public void onUserInfoMyClient(ProtoGlobal.RegisteredUser user, String identity) {
+        setImage(user.getId());
+    }
+
+    @Override
+    public void onUserInfoTimeOut() {
+
+    }
+
+    @Override
+    public void onUserInfoError(int majorCode, int minorCode) {
+
     }
 }
