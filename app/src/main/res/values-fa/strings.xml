@@ -47,29 +47,28 @@
     <string name="phone_number">"شماره تلفن"</string>
     <string name="Re_Phone_Verification">"تأیید شماره تلفن"</string>
 
-    <!-- check connect to internet Page
-    introduce app -->
-    <string name="text_i_introduce_page1">"آی"</string>
-    <string name="text_line_1_introduce_page1">"گپ"</string>
-    <string name="text_line_2_introduce_page1">"ارتباط نامحدود"</string>
-    <string name="text_line_3_introduce_page1">"اکنون دنیای خود را با آی‌گپ بسازید."</string>
+    <!-- Check connect to internet Page introduce app -->
+    <string name="text_i_introduce_page1">"گپ"</string>
+    <string name="text_line_1_introduce_page1">"آی"</string>
+    <string name="text_line_2_introduce_page1">"بی حد و مرز"</string>
+    <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آی گپ بسازید"</string>
 
-    <!-- page2 -->
+    <!-- Page 2 introduce app -->
     <string name="text_line_1_introduce_page2">"امنیت"</string>
-    <string name="text_line_2_introduce_page2">"آی‌گپ برقراری ارتباطی امن میان شما و دوستان یا خانواده‌تان را تضمین می‌کند. ما از الگوریتم‌های مخفی جدیدی برای حفظ حریم شخصی شما استفاده می‌کنیم."</string>
+    <string name="text_line_2_introduce_page2">"آی گپ ارتباط امن و مطمئن را بین شما و دوستان و یا خانواده خود را تضمین میکند ، آی گپ با استفاده از الگوریتم های رمزنگاری خود حریم خصوصی را برای کاربران خود فراهم میکند "</string>
 
-    <!-- page3 -->
+    <!-- Page 3 introduce app -->
     <string name="text_line_1_introduce_page3">"گفتگو"</string>
-    <string name="text_line_2_introduce_page3">"شما می‌توانید به صورت شخصی و یا گروهی گفتگو کنید و حتی کانال شخصی خود را بسازید و عضو بگیرید."</string>
+    <string name="text_line_2_introduce_page3">"شما میتوانید بصورت شخصی و یا گروهی به گفتگو بپردازید و یا کانال ساخته و در آن عضو بگیرید"</string>
 
-    <!-- page4 -->
+    <!-- Page 4 introduce app -->
     <string name="text_line_1_introduce_page4">"انتقال فایل"</string>
     <string name="text_line_2_introduce_page4">"شما می توانید هر فایلی را با هر پسوند و حجمی انتقال دهید. هر آنچه دوست دارید را با هر کس که می خواهید به اشتراک بگذارید."</string>
 
-    <!-- page5 -->
-    <string name="btn_start_page5">"همین حالا شروع کنید."</string>
+    <!-- Page 5 introduce app -->
+    <string name="btn_start_page5">"همین حالا شروع کنید"</string>
     <string name="text_line_1_introduce_page5">"همه چیز رایگان است!"</string>
-    <string name="text_line_2_introduce_page5">"بیش از این شما را خسته نکنیم! آی‌گپ کاملاْ رایگان است! همین حالا دنیای خود را بسازید."</string>
+    <string name="text_line_2_introduce_page5">"بیش از این شما را خسته نکنیم! آی ‌گپ کاملاْ رایگان است! همین حالا دنیای خود را بسازید."</string>g>
 
     <!-- //profile user -->
     <string name="pu_title_profileUser">"اطلاعات شما"</string>
