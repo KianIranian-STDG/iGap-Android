@@ -92,7 +92,6 @@ public class ActivityRegister extends ActivityEnhanced {
     private ProgressBar rg_prg_verify_connect, rg_prg_verify_sms, rg_prg_verify_generate, rg_prg_verify_register;
     private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate, rg_txt_verify_register, txtTimer;
     private ImageView rg_img_verify_connect, rg_img_verify_sms, rg_img_verify_generate, rg_img_verify_register;
-    private ViewGroup layout_agreement;
     private ViewGroup layout_verify;
     private String phoneNumber;
     //Array List for Store List of StructCountry Object
@@ -210,7 +209,6 @@ public class ActivityRegister extends ActivityEnhanced {
             }
         });
 
-        layout_agreement = (ViewGroup) findViewById(R.id.rg_layout_agreement);
         layout_verify = (ViewGroup) findViewById(R.id.rg_layout_verify_and_agreement);
 
         //==================================================================================================== read list of county from text file
@@ -449,8 +447,8 @@ public class ActivityRegister extends ActivityEnhanced {
                                         txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
                                         txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
 
-                                        layout_agreement.setVisibility(View.GONE);
-                                        layout_agreement.startAnimation(trans_x_out);
+                                        txtAgreement_register.setVisibility(View.GONE);
+                                        txtAgreement_register.startAnimation(trans_x_out);
                                         G.handler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
