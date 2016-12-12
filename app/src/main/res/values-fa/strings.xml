@@ -404,6 +404,15 @@
     <string name="E_212_1">"خطایی از سمت کلاینت: توضیحات اشتباه است."</string>
     <string name="E_213">"خطای درونی سرور"</string>
     <string name="E_214">"این کار مجاز نیست."</string>
+    <string name="E_154_1">کد نامعتبر:گرفتن کد</string>
+    <string name="E_154_2">کد نامعتبر:گرفتن دلیل</string>
+    <string name="E_155">تخریب اکانت : خطای داخلی سرور</string>
+    <string name="E_156">تخریب اکانت : کد اشتباه است</string>
+    <string name="E_157">تخریب اکانت : کد اعتبار ندارد</string>
+    <string name="E_158">تخریب اکانت : تلاش بیش از اندازه</string>
+    <string name="time_out">عدم امکان اتصال به سرور</string>
+    
+    
     <string name="resend_all_messages">"‫ارسال دوبارهٔ %d پیام"</string>
     <string name="if_you_are_away_for">"اگر دور باشید"</string>
     <string name="st_Gander">"جنسیت:"</string>
@@ -624,12 +633,6 @@
     <string name="pending">معلق</string>
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ هجری شمسی</string>
-    <string name="sure_delete_account">Are you sure deleting your account ?</string>
-    <string name="E_154_1">Bad payload: get token</string>
-    <string name="E_154_2">Bad payload: get reason</string>
-    <string name="E_155">USER_DELETE INTERNAL SERVER ERROR</string>
-    <string name="E_156">USER DELETE INVALID TOKEN</string>
-    <string name="E_157">USER DELETE EXPIRED TOKEN</string>
-    <string name="E_158">USER DELETE MAX TRY LOCK</string>
-    <string name="time_out">can\'t connect to server</string>
+    <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
+
 </resources>
