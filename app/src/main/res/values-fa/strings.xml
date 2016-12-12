@@ -17,7 +17,7 @@
     <string name="delete_text">"آیا مطمئنید که می خواهید این مخاطب را حذف کنید؟"</string>
     <string name="cancel">"لغو"</string>
     <string name="B_cancel">"لغو"</string>
-    <string name="B_skip">"رد کردن"</string>
+    <string name="B_skip">"بیخیال"</string>
     <string name="B_finish">"پایان"</string>
     <string name="ok">"تأیید"</string>
     <string name="B_ok">"تأیید"</string>
