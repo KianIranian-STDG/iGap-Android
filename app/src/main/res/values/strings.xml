@@ -76,19 +76,19 @@
 
     <!-- Register Page -->
     <string name="rg_title_register">Registration</string>
-    <string name="rg_confirm_text_register">Please confirm your country & country code and enter your phone number without first zero</string>
+    <string name="rg_confirm_text_register">Please confirm your country &amp; country code and enter your phone number without first zero</string>
     <string name="rg_Start">Let\'s Go</string>
     <string name="rg_Select_Country">Select a Country</string>
     <string name="rg_agreement_text_register">Re-Checking your phone number! We\'re send verification code to this number</string>
     <string name="rg_verify_register1">Connecting</string>
     <string name="rg_verify_register2">Verification</string>
     <string name="rg_verify_register3">Generating Secret Key</string>
-    <string name="rg_verify_register4">Final registering to the server</string>
+    <string name="rg_verify_register4">Final Registration</string>
     <string name="rg_verify_dialog_enter_code">iGap tries to detect sent SMS automatically; but probably you need to enter it manually, Please enter manually code or if not recive code try to resend it</string>
     <string name="rg_verify_dialog_try_code">Manually Enter</string>
     <string name="rg_verify_dialog_resend_code">Resend Code</string>
     <string name="search">Search</string>
-    <string name="Re_dialog_verify_number_part1">Verify your phone Number</string>
+    <string name="Re_dialog_verify_number_part1">You enter this number :</string>
     <string name="Re_dialog_verify_number_part2">Press OK, if this phone number is correct or simply modify it.</string>
     <string name="Re_Enter_Verify_Code_Please">Please enter verification code</string>
 
