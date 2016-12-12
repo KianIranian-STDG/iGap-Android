@@ -92,6 +92,7 @@ import com.iGap.interfaces.OnUserContactGetList;
 import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.interfaces.OnUserDelete;
 import com.iGap.interfaces.OnUserGetDeleteToken;
+import com.iGap.interfaces.OnUserInfoItemResponse;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserLogin;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
@@ -325,6 +326,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static OnRefreshActivity onRefreshActivity;
     public static OnGetUserInfo onGetUserInfo;
     public static OnFileDownloaded onFileDownloaded;
+    public static OnUserInfoItemResponse onUserInfoItemResponse;
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;

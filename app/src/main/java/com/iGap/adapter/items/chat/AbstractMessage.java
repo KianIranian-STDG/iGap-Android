@@ -46,7 +46,6 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestFileDownload;
-import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -108,15 +107,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void requestForUserInfo() {
-        if (!MessagesAdapter.usersInfoRequested.contains(mMessage.senderID)) {
-            RequestUserInfo requestUserInfo = new RequestUserInfo();
-            requestUserInfo.userInfo(Long.parseLong(mMessage.senderID));
+    /* private void requestForUserInfo() {
+         if (!MessagesAdapter.usersInfoRequested.contains(mMessage.senderID)) {
+             RequestUserInfo requestUserInfo = new RequestUserInfo();
+             requestUserInfo.userInfo(Long.parseLong(mMessage.senderID));
 
-            MessagesAdapter.usersInfoRequested.add(mMessage.senderID);
-        }
-    }
-
+             MessagesAdapter.usersInfoRequested.add(mMessage.senderID);
+         }
+     }
+ */
     @Override
     public void onRequestDownloadAvatar(long offset, int progress) {
         /*ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
@@ -207,13 +206,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
                     @Override
-                    public void onAvatarGet(String avatarPath) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalFilePath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                    public void onAvatarGet(final String avatarPath) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                            }
+                        });
                     }
 
                     @Override
-                    public void onShowInitials(String initials, String color) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalThumbnailPath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                    public void onShowInitials(final String initials, final String color) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            }
+                        });
                     }
                 });
 

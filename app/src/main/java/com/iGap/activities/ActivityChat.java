@@ -3589,7 +3589,8 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-        runOnUiThread(new Runnable() {
+
+        /*runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
@@ -3599,7 +3600,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 realm.close();
             }
-        });
+        });*/
     }
 
     @Override

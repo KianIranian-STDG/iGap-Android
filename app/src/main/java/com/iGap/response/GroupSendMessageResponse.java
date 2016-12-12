@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.iGap.G;
-import com.iGap.helper.HelperCheckUserInfoExist;
+import com.iGap.helper.HelperUserInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.realm.RealmClientCondition;
@@ -59,7 +59,8 @@ public class GroupSendMessageResponse extends MessageHandler {
                 //TODO [Saeed Mozaffari] [2016-11-13 7:40 PM] - AUTHOR_CHECK . niaz hast inja check beshe ke author user bud ya room? chon inja vase group hast va faghat user darim.
                 if (userId != roomMessage.getAuthor().getUser().getUserId() && builder.getResponse().getId().isEmpty()) {
                     // i'm the recipient
-                    HelperCheckUserInfoExist.checkUserInfoExist(roomMessage.getAuthor().getUser().getUserId());
+
+                    HelperUserInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                     RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId());
                     G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.GROUP, builder.getRoomId());
 
