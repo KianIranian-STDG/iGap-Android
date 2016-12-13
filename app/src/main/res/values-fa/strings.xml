@@ -428,7 +428,6 @@
     <string name="list_modereator">فهرست مدیران</string>
     <string name="desc">توضیحات</string>
     <string name="hello_blank_fragment">تست</string>
-    <string name="confirmation_code_text">لطفاً کد تأییدیه را وارد کنید.</string>
     <string name="receive_code_text">آیا پیام متنی دریافت نکردید؟</string>
     <string name="please_wait">منتظر باشید.</string>
     <string name="New_Chat">گفتگوی جدید</string>
@@ -636,6 +635,10 @@
     <string name="verify_time_out_message">"آی گپ بصورت خودکار پیام تایید را تشخیص میدهد یا شاید دریافت شده و شما میخواهید دستی وارد کنید، لطفا کد را دستی وارد کرده و یا در صورتی که دریافت نکردید درخواست ارسال مجدد کنید."</string>
     <string name="verify_invalid_code_message">متاسفیم ، کد تایید شما نامعتبر است ، لطفا کد صحیح را مجدد وارد نمایید.</string>
     <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
-    <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
-    <string name="Destruction_Code">Destruction</string>
+    
+    
+    <string name="Destruction_Code">تخریب</string>
+    <string name="confirmation_code_text">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
+    <string name="iGap_autofill_Destruction_Code">آی گپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست دستی وارد کنید.</string>
+    
 </resources>
