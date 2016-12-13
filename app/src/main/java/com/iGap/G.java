@@ -391,6 +391,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     }
 
     public static void getUserInfo() {
+
         //TODO [Saeed Mozaffari] [2016-10-15 1:51 PM] - nabayad har bar etella'ate khodam ro
         // begiram. agar ham digar account taghiri dadae bashe response hamun zaman miayad va man
         // ba accountam yeki misham
