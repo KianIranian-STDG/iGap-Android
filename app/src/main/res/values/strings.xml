@@ -132,7 +132,7 @@
     <string name="st_auto_download_wifi">auto download (wifi)</string>
     <string name="st_auto_download_roaming">auto download (roaming)</string>
     <string name="st_auto_gif">Autoplay GIFs</string>
-    <string name="st_save_to_gallery">Save to gallery</string>
+    <string name="st_save_to_gallery">Save to Gallery</string>
     <string name="st_title_support">Support</string>
     <string name="st_ask_question">Ask a Question</string>
     <string name="st_About_iGap">About iGap</string>
@@ -212,9 +212,9 @@
     <string name="shared_files">Shared Files</string>
     <string name="shared_links">Shared Links</string>
     <string name="shared_music">Shared Music</string>
-    <string name="save_to_Music">Save to music</string>
+    <string name="save_to_Music">Save to Music</string>
     <string name="show_all_media">Show all Media</string>
-    <string name="save_to_gallery">Save to gallery</string>
+    <string name="save_to_gallery">Save to Gallery</string>
     <string name="delete_from_gallery">Delete from Gallery</string>
     <string name="select_room">Select Room</string>
     <string name="edited">Edited</string>
@@ -244,7 +244,7 @@
     <string name="array_Only_if_silent">Only if it is silent</string>
     <string name="array_From_Gallery">Gallery</string>
     <string name="array_From_Camera">Camera</string>
-    <string name="array_Delete_photo">Delete photo</string>
+    <string name="array_Delete_photo">Delete Photo</string>
     <string name="array_5_minutes">5 Minutes</string>
     <string name="array_10_minutes">10 Minutes</string>
     <string name="array_30_minutes">30 Minutes</string>
@@ -425,7 +425,7 @@
     <string name="list_modereator">List Moderator</string>
     <string name="desc">Description</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="confirmation_code_text">Please enter the sent confirmation code.</string>
+
     <string name="receive_code_text">Do not receive a text message?</string>
     <string name="please_wait">Please wait.</string>
     <string name="New_Chat">New Chat</string>
@@ -647,6 +647,9 @@
     <string name="sure_delete_account">Are you sure deleting your account ?</string>
 
 
-    <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
+    
+    
     <string name="Destruction_Code">Destruction</string>
+    <string name="Destruction_Des">Now you try to Destruction your account your phone number is : </string>
+    <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
 </resources>
