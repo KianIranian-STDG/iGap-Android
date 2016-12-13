@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+      <!-- Check connect to internet Page introduce app -->
+    <string name="text_i_introduce_page1">"گپ"</string>
+    <string name="text_line_1_introduce_page1">"آی"</string>
+    <string name="text_line_2_introduce_page1">"بی حد و مرز"</string>
+    <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آی گپ بسازید."</string>
 
+    <!-- Page 2 introduce app -->
+    <string name="text_line_1_introduce_page2">"امنیت در آی گپ"</string>
+    <string name="text_line_2_introduce_page2">"آی گپ ارتباط امن و مطمئن را بین شما ، دوستان و خانواده را تضمین میکند ، آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد حریم خصوصی را برای کاربران خود فراهم کرده است. "</string>
+
+    <!-- Page 3 introduce app -->
+    <string name="text_line_1_introduce_page3">"گفتگو"</string>
+    <string name="text_line_2_introduce_page3">"شما میتوانید بصورت شخصی و یا گروهی به گفتگو بپردازید و یا کانال ساخته و در آن عضو بگیرید."</string>
+
+    <!-- Page 4 introduce app -->
+    <string name="text_line_1_introduce_page4">"انتقال فایل"</string>
+    <string name="text_line_2_introduce_page4">"شما می توانید هر فایلی را با هر پسوند و حجمی انتقال دهید. هر آنچه دوست دارید را با هر کس که می خواهید به اشتراک بگذارید."</string>
+
+    <!-- Page 5 introduce app -->
+    <string name="btn_start_page5">"همین حالا شروع کنید"</string>
+    <string name="text_line_1_introduce_page5">"همه چیز رایگان است!"</string>
+    <string name="text_line_2_introduce_page5">"بیش از این شما را خسته نکنیم! آی ‌گپ کاملاْ رایگان است! همین حالا دنیای خود را بسازید."</string>
+    
+    
     <string name="app_name">"آی‌گپ"</string>
     <string name="unmute_notification">"اعلانات را صدا دار کنید."</string>
     <string name="mute_notification">"اعلانات را بی صدا کنید."</string>
@@ -47,28 +70,7 @@
     <string name="phone_number">"شماره تلفن"</string>
     <string name="Re_Phone_Verification">"تأیید شماره تلفن"</string>
 
-    <!-- Check connect to internet Page introduce app -->
-    <string name="text_i_introduce_page1">"گپ"</string>
-    <string name="text_line_1_introduce_page1">"آی"</string>
-    <string name="text_line_2_introduce_page1">"بی حد و مرز"</string>
-    <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آی گپ بسازید."</string>
-
-    <!-- Page 2 introduce app -->
-    <string name="text_line_1_introduce_page2">"امنیت در آی گپ"</string>
-    <string name="text_line_2_introduce_page2">"آی گپ ارتباط امن و مطمئن را بین شما ، دوستان و خانواده را تضمین میکند ، آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد حریم خصوصی را برای کاربران خود فراهم کرده است. "</string>
-
-    <!-- Page 3 introduce app -->
-    <string name="text_line_1_introduce_page3">"گفتگو"</string>
-    <string name="text_line_2_introduce_page3">"شما میتوانید بصورت شخصی و یا گروهی به گفتگو بپردازید و یا کانال ساخته و در آن عضو بگیرید."</string>
-
-    <!-- Page 4 introduce app -->
-    <string name="text_line_1_introduce_page4">"انتقال فایل"</string>
-    <string name="text_line_2_introduce_page4">"شما می توانید هر فایلی را با هر پسوند و حجمی انتقال دهید. هر آنچه دوست دارید را با هر کس که می خواهید به اشتراک بگذارید."</string>
-
-    <!-- Page 5 introduce app -->
-    <string name="btn_start_page5">"همین حالا شروع کنید"</string>
-    <string name="text_line_1_introduce_page5">"همه چیز رایگان است!"</string>
-    <string name="text_line_2_introduce_page5">"بیش از این شما را خسته نکنیم! آی ‌گپ کاملاْ رایگان است! همین حالا دنیای خود را بسازید."</string>g>
+  >
 
     <!-- Fill Profile User -->
     <string name="pu_title_profileUser">"تکمیل پروفایل"</string>
