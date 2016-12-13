@@ -68,6 +68,29 @@
     <string name="Destruction_Des">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
     <string name="iGap_autofill_Destruction_Code">آی گپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست دستی وارد کنید.</string>
     
+    <!-- Message Type and Status -->
+    <string name="video_message">پیام ویدئویی</string>
+    <string name="file_message">پیام فایلی</string>
+    <string name="audio_message">پیغام صوتی</string>
+    <string name="image_message">پیام تصویری</string>
+    <string name="contact_message">پیام مخاطب</string>
+    <string name="gif_message">پیام متحرک</string>
+    <string name="voice_message">پیغام صوتی</string>
+    <string name="typing">درحال تایپ...</string>
+    <string name="sending_image">ارسال تصویر...</string>
+    <string name="capturing_image">درحال گرفتن تصویر</string>
+    <string name="sending_video">ارسال ویدئو...</string>
+    <string name="capturing_video">درحال رکورد ویدئو</string>
+    <string name="sending_audio">ارسال صوت...</string>
+    <string name="recording_voice">ضبط صدا</string>
+    <string name="sending_voice">ارسال صدا...</string>
+    <string name="sending_document">ارسال سند...</string>
+    <string name="sending_gif">ارسال تصویرمتحرک...</string>
+    <string name="sending_file">ارسال فایل...</string>
+    <string name="sending_location">ارسال موقعیت...</string>
+    <string name="choosing_contact">انتخاب مخاطب</string>
+    <string name="painting">درحال نقاشی...</string>
+    
     <!-- Public String -->
     <string name="search">"جستجو"</string>
     <string name="d_of_d" formatted="false">"%d از %d"</string>
@@ -484,27 +507,6 @@
     <string name="text_kick_admin">آیا مطمئنید که می‌خواهید این اَدمین را بیرون کنید؟</string>
     <string name="text_kick_moderator">آیا مطمئنید که می‌خواهید این مدیر را بیرون کنید؟</string>
     <string name="dialog_readonly_chat">متأسفانه امکان ارسال پیام در گفتگو برای شما وجود ندارد.</string>
-    <string name="video_message">پیام ویدئویی</string>
-    <string name="file_message">پیام فایلی</string>
-    <string name="audio_message">پیغام صوتی</string>
-    <string name="image_message">پیام تصویری</string>
-    <string name="contact_message">پیام مخاطب</string>
-    <string name="gif_message">پیام حاوی تصاویر متحرک</string>
-    <string name="typing">در حال تایپ</string>
-    <string name="sending_image">ارسال تصویر</string>
-    <string name="capturing_image">گرفتن تصویر</string>
-    <string name="sending_video">ارسال ویدئو</string>
-    <string name="capturing_video">گرفتن فیلم ویدئویی</string>
-    <string name="sending_audio">ارسال صوت</string>
-    <string name="recording_voice">ضبط صدا</string>
-    <string name="sending_voice">ارسال صدا</string>
-    <string name="sending_document">ارسال سند</string>
-    <string name="sending_gif">ارسال تصویر متحرک</string>
-    <string name="sending_file">ارسال فایل</string>
-    <string name="sending_location">ارسال موقعیت مکانی</string>
-    <string name="choosing_contact">انتخاب مخاطب</string>
-    <string name="painting">نقاشی</string>
-    <string name="voice_message">پیغام صوتی</string>
     <string name="delete_chat">حذف گفتگو</string>
     <string name="delete_account_text1">سایر</string>
     <string name="delete_account_text2">سایر</string>
