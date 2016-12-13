@@ -15,7 +15,7 @@
     <string name="text_line_2_introduce_page3">You can chat in private or groups and even create your own channel and add members.</string>
 
     <!-- Page 4 introduce app -->
-    <string name="text_line_1_introduce_page4">File Transfering</string>
+    <string name="text_line_1_introduce_page4">File Transferring</string>
     <string name="text_line_2_introduce_page4">You can transfer any file with any extension and size. Share anything you’d like to with whoever you want to.</string>
 
     <!-- Page 5 introduce app -->
@@ -51,7 +51,7 @@
     <string name="resend_message">Resend verification code</string>
     <string name="phone_number">Phone Number</string>
     <string name="Re_Phone_Verification">Phone Number Verification</string>
-    
+
     <!-- Toast -->
     <string name="Toast_waiting_fot_get_info">Connecting and get Info...</string>
     <string name="Toast_Location_Not_Found">Location not found.</string>
@@ -61,12 +61,12 @@
     <string name="Toast_Number_Block">This number is blocked</string>
     <string name="Toast_Invalid_nickname">Invalid Nickname,Please change it.</string>
     <string name="Toast_Write_NickName">Please enter your nickname</string>
-   
+
     <!-- Destruction -->
     <string name="sure_delete_account">Are you sure deleting your account ?</string>
     <string name="Destruction_Code">Destruction</string>
     <string name="Destruction_Des">Now you try to Destruction your account your phone number is : </string>
-    <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
+    <string name="iGap_autofill_Destruction_Code">iGap autoFill Destruction Code , if not autoFill , fill manually .</string>
 
     <!-- Message Type and Status -->
     <string name="video_message">Video Message</string>
@@ -428,6 +428,7 @@
     <string name="E_213">Internal Server Error</string>
     <string name="E_214">This operation is not permitted.</string>
     <string name="resend_all_messages" formatted="false">Resend %d messages</string>
+    <string name="resend_chat_message" formatted="false">Resend messages</string>
     <string name="if_you_are_away_for">If you\'re away for</string>
     <string name="st_Gander">Gender:</string>
     <string name="st_email">Email:</string>

@@ -3,6 +3,7 @@ package com.iGap.module;
 import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.request.RequestChannelSendMessage;
 import com.iGap.request.RequestChatSendMessage;
 import com.iGap.request.RequestGroupSendMessage;
 
@@ -11,20 +12,22 @@ import com.iGap.request.RequestGroupSendMessage;
  * useful for having callback from different activities
  */
 public class ChatSendMessageUtil implements OnChatSendMessageResponse {
-    RequestChatSendMessage requestChatSendMessage;
-    RequestGroupSendMessage requestGroupSendMessage;
+    private RequestChatSendMessage requestChatSendMessage;
+    private RequestGroupSendMessage requestGroupSendMessage;
+    private RequestChannelSendMessage requestChannelSendMessage;
 
-    ProtoGlobal.Room.Type roomType;
+    private ProtoGlobal.Room.Type roomType;
     private OnChatSendMessageResponse onChatSendMessageResponse;
 
-    public ChatSendMessageUtil newBuilder(ProtoGlobal.Room.Type roomType,
-                                          ProtoGlobal.RoomMessageType messageType, long roomId) {
+    public ChatSendMessageUtil newBuilder(ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageType messageType, long roomId) {
         this.roomType = roomType;
 
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage = new RequestChatSendMessage().newBuilder(messageType, roomId);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage = new RequestGroupSendMessage().newBuilder(messageType, roomId);
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage = new RequestChannelSendMessage().newBuilder(messageType, roomId);
         }
         return this;
     }
@@ -34,6 +37,8 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChatSendMessage.message(value);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.message(value);
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage.message(value);
         }
         return this;
     }
@@ -43,6 +48,8 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChatSendMessage.attachment(value);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.attachment(value);
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage.attachment(value);
         }
         return this;
     }
@@ -78,6 +85,8 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChatSendMessage.contact(value);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.contact(value);
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage.contact(value);
         }
         return this;
     }
@@ -96,6 +105,8 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChatSendMessage.contact(built);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.contact(built);
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage.contact(built);
         }
         return this;
     }
@@ -105,6 +116,8 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChatSendMessage.location(value);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.location(value);
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage.location(value);
         }
         return this;
     }
@@ -114,27 +127,30 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChatSendMessage.replyMessage(messageId);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.replyMessage(messageId);
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage.replyMessage(messageId);
         }
         return this;
     }
 
     public ChatSendMessageUtil location(double lat, double lon) {
-        ProtoGlobal.RoomMessageLocation.Builder location =
-                ProtoGlobal.RoomMessageLocation.newBuilder();
+        ProtoGlobal.RoomMessageLocation.Builder location = ProtoGlobal.RoomMessageLocation.newBuilder();
         location.setLat(lat);
         location.setLon(lon);
+
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage.location(location.build());
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.location(location.build());
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage.location(location.build());
         }
         return this;
     }
 
     public ChatSendMessageUtil forwardMessage(long roomId, long messageId) {
 
-        ProtoGlobal.RoomMessageForwardFrom.Builder forward =
-                ProtoGlobal.RoomMessageForwardFrom.newBuilder();
+        ProtoGlobal.RoomMessageForwardFrom.Builder forward = ProtoGlobal.RoomMessageForwardFrom.newBuilder();
         forward.setRoomId(roomId);
         forward.setMessageId(messageId);
 
@@ -142,6 +158,8 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChatSendMessage.forwardMessage(forward.build());
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.forwardMessage(forward.build());
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage.forwardMessage(forward.build());
         }
 
         return this;
@@ -157,25 +175,21 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.sendMessage(fakeMessageIdAsIdentity);
         } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-
+            requestChannelSendMessage.sendMessage(fakeMessageIdAsIdentity);
         }
     }
 
     @Override
-    public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status,
-                                String identity, ProtoGlobal.RoomMessage roomMessage) {
+    public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
         if (onChatSendMessageResponse != null) {
-            onChatSendMessageResponse.onMessageUpdate(roomId, messageId, status, identity,
-                    roomMessage);
+            onChatSendMessageResponse.onMessageUpdate(roomId, messageId, status, identity, roomMessage);
         }
     }
 
     @Override
-    public void onMessageReceive(long roomId, String message, ProtoGlobal.RoomMessageType messageType,
-                                 ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+    public void onMessageReceive(long roomId, String message, ProtoGlobal.RoomMessageType messageType, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
         if (onChatSendMessageResponse != null) {
-            onChatSendMessageResponse.onMessageReceive(roomId, message, messageType, roomMessage,
-                    roomType);
+            onChatSendMessageResponse.onMessageReceive(roomId, message, messageType, roomMessage, roomType);
         }
     }
 

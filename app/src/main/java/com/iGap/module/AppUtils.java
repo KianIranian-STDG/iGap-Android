@@ -301,11 +301,10 @@ public final class AppUtils {
         return messageText;
     }
 
-    public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount,
-                                                           final IResendMessage listener) {
+    public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount, final IResendMessage listener) {
         List<String> items = new ArrayList<>();
         List<Integer> itemsId = new ArrayList<>();
-        items.add(context.getString(R.string.resend_message));
+        items.add(context.getString(R.string.resend_chat_message));
         itemsId.add(0);
         if (failedMessagesCount > 1) {
             items.add(String.format(context.getString(R.string.resend_all_messages),

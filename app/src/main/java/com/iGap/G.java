@@ -16,7 +16,6 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 
@@ -470,9 +469,9 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
 
         G.onFileDownloadResponse = this;
 
-        DisplayMetrics metrics = G.context.getResources().getDisplayMetrics();
+        /*DisplayMetrics metrics = G.context.getResources().getDisplayMetrics();
         int densityDpi = (int) (metrics.density * 160f);
-        IMAGE_CORNER = (int) (densityDpi / Config.IMAGE_CORNER);
+        IMAGE_CORNER = (int) (densityDpi / Config.IMAGE_CORNER);*/
     }
 
 

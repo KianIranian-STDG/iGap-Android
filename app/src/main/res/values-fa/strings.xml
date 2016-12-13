@@ -440,9 +440,8 @@
     <string name="E_157">تخریب اکانت : کد اعتبار ندارد</string>
     <string name="E_158">تخریب اکانت : تلاش بیش از اندازه</string>
     <string name="time_out">عدم امکان اتصال به سرور</string>
-
-
     <string name="resend_all_messages">"‫ارسال دوبارهٔ %d پیام"</string>
+    <string name="resend_chat_message">"‫ارسال دوبارهٔ پیام"</string>
     <string name="if_you_are_away_for">"اگر دور باشید"</string>
     <string name="st_Gander">"جنسیت:"</string>
     <string name="st_email">"ایمیل:"</string>
