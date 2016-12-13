@@ -7,16 +7,13 @@ import com.iGap.request.RequestChatSendMessage;
 import com.iGap.request.RequestGroupSendMessage;
 
 /**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/5/2016.
- */
-
-/**
  * util for chat send messages
  * useful for having callback from different activities
  */
 public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     RequestChatSendMessage requestChatSendMessage;
     RequestGroupSendMessage requestGroupSendMessage;
+
     ProtoGlobal.Room.Type roomType;
     private OnChatSendMessageResponse onChatSendMessageResponse;
 
@@ -50,32 +47,23 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         return this;
     }
 
-    public ChatSendMessageUtil build(ProtoGlobal.Room.Type roomType, long roomId,
-                                     RealmRoomMessage message) {
-        ChatSendMessageUtil builder =
-                newBuilder(roomType, message.getMessageType(),
-                        roomId);
+    public ChatSendMessageUtil build(ProtoGlobal.Room.Type roomType, long roomId, RealmRoomMessage message) {
+        ChatSendMessageUtil builder = newBuilder(roomType, message.getMessageType(), roomId);
         if (message.getMessage() != null && !message.getMessage().isEmpty()) {
             builder.message(message.getMessage());
         }
-        if (message.getAttachment() != null
-                && message.getAttachment().getToken() != null
-                && !message.getAttachment().getToken().isEmpty()) {
+        if (message.getAttachment() != null && message.getAttachment().getToken() != null && !message.getAttachment().getToken().isEmpty()) {
             builder.attachment(message.getAttachment().getToken());
         }
         if (message.getRoomMessageContact() != null) {
-            builder.contact(message.getRoomMessageContact().getFirstName(),
-                    message.getRoomMessageContact().getLastName(),
-                    message.getRoomMessageContact().getPhones().get(0).getString());
+            builder.contact(message.getRoomMessageContact().getFirstName(), message.getRoomMessageContact().getLastName(), message.getRoomMessageContact().getPhones().get(0).getString());
         }
         if (message.getLocation() != null) {
-            builder.location(message.getLocation().getLocationLat(),
-                    message.getLocation().getLocationLong());
+            builder.location(message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
         }
 
         if (message.getForwardMessage() != null) {
-            builder.forwardMessage(message.getForwardMessage().getRoomId(),
-                    message.getForwardMessage().getMessageId());
+            builder.forwardMessage(message.getForwardMessage().getRoomId(), message.getForwardMessage().getMessageId());
         }
         if (message.getReplyTo() != null) {
             builder.replyMessage(message.getReplyTo().getMessageId());
@@ -168,6 +156,8 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChatSendMessage.sendMessage(fakeMessageIdAsIdentity);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.sendMessage(fakeMessageIdAsIdentity);
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+
         }
     }
 

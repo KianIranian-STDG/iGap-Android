@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
@@ -46,6 +47,8 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
+
+        holder.image.setCornerRadius(G.IMAGE_CORNER);
     }
 
     @Override

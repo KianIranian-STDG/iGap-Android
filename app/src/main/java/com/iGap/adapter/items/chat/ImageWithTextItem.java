@@ -108,6 +108,8 @@ public class ImageWithTextItem
     public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
+
+        holder.image.setCornerRadius(G.IMAGE_CORNER);
     }
 
     @Override

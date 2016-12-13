@@ -3,6 +3,7 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.ReserveSpaceRoundedImageView;
@@ -15,9 +16,6 @@ import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
- */
 public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
@@ -44,6 +42,8 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
+
+        holder.image.setCornerRadius(G.IMAGE_CORNER);
     }
 
     @Override
@@ -54,14 +54,11 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
             @Override
             public void onClick(View v) {
                 if (!isSelected()) {
-                    if (mMessage.status.equalsIgnoreCase(
-                            ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
                     }
-                    if (mMessage.status.equalsIgnoreCase(
-                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage,
-                                holder.getAdapterPosition());
+                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
                     } else {
                         messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
                     }

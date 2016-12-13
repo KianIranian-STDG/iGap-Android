@@ -16,6 +16,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 
@@ -131,6 +132,8 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static Typeface FONT_IGAP;
     public static Typeface HELETICBLK_TITR;
     public static List<String> downloadingTokens = new ArrayList<>();
+
+    public static int IMAGE_CORNER;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -439,8 +442,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
         YEKAN_FARSI = Typeface.createFromAsset(context.getAssets(), "fonts/yekan.ttf");
         YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
 
-        Realm.setDefaultConfiguration(
-                new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
 
         // Create global configuration and initialize ImageLoader with this config
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
@@ -467,7 +469,12 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
         setUserTextSize();
 
         G.onFileDownloadResponse = this;
+
+        DisplayMetrics metrics = G.context.getResources().getDisplayMetrics();
+        int densityDpi = (int) (metrics.density * 160f);
+        IMAGE_CORNER = (int) (densityDpi / Config.IMAGE_CORNER);
     }
+
 
     public void setFont() {
 
