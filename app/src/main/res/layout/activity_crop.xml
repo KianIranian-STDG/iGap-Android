@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layoutDirection="ltr">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black_register"
+                android:layoutDirection="ltr">
 
-    <ProgressBar
-        android:id="@+id/crop_prgWaiting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminate="true"
-        android:visibility="visible"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/pu_img_imageBefore"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/pu_layout_cancel_crop"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/pu_gallary"/>
+
+        <ProgressBar
+            android:id="@+id/crop_prgWaiting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:visibility="visible"/>
 
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp60"
-            android:background="@color/toolbar_background"
-            app:contentInsetLeft="0dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/toolbar_transparent"
             android:layoutDirection="ltr"
+            app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp">
 
 
@@ -40,7 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:theme="@style/MySearch"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:id="@+id/stfaq_allLayout_toolbar"
@@ -66,7 +78,7 @@
                             android:gravity="center"
                             android:text="@string/md_back_arrow"
                             android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp18" />
+                            android:textSize="@dimen/sp18"/>
                     </com.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
@@ -75,10 +87,11 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
+                        android:text="@string/photo"
                         android:textColor="@color/whit_background"
                         android:textSize="@dimen/sp16"
                         android:textStyle="bold"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                     <com.iGap.libs.rippleeffect.RippleView
                         android:id="@+id/pu_ripple_crop"
@@ -100,50 +113,35 @@
                             android:gravity="center"
                             android:text="@string/md_crop_button"
                             android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp18" />
+                            android:textSize="@dimen/sp18"/>
                     </com.iGap.libs.rippleeffect.RippleView>
                 </LinearLayout>
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#34a49f"/>
-
-        <ImageView
-            android:id="@+id/pu_img_imageBefore"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:cropToPadding="false"
-            android:forceHasOverlappingRendering="false"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/pu_gallary" />
-
         <LinearLayout
+            android:id="@+id/pu_layout_cancel_crop"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp60"
-            android:background="@color/toolbar_background">
+            android:layout_alignParentBottom="true"
+            android:background="@color/am_iconFab_black">
 
             <TextView
                 android:id="@+id/pu_txt_cancel_crop"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="start"
                 android:layout_weight=".5"
                 android:background="@android:color/transparent"
-                android:gravity="center"
+                android:gravity="center_vertical|left"
+                android:paddingLeft="@dimen/dp24"
+                android:paddingRight="@dimen/dp24"
                 android:text="@string/B_cancel"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp16"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@color/whit_background" />
 
             <TextView
                 android:id="@+id/pu_txt_set_crop"
@@ -151,14 +149,16 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
                 android:background="@android:color/transparent"
-                android:gravity="center"
+                android:gravity="center_vertical|right"
+                android:paddingLeft="@dimen/dp24"
+                android:paddingRight="@dimen/dp24"
                 android:text="@string/set"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp16"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

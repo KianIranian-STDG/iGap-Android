@@ -24,9 +24,12 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AvatarsAdapter;
 import com.iGap.adapter.items.AvatarItem;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.interfaces.OnFileDownloadResponse;
+import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatar;
@@ -36,6 +39,7 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestUserAvatarDelete;
 
 import java.io.File;
 
@@ -59,7 +63,15 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     private RecyclerView mRecyclerView;
     private AvatarsAdapter<AvatarItem> mAdapter;
 
+    public static OnComplete onComplete;
+
     public static View appBarLayout;
+
+    private int type;
+    private final int SETTING = 0;
+    private final int CONTACT = 1;
+    private final int GROUP = 2;
+    private long userId;
 
 
     From from = From.chat;
@@ -67,12 +79,14 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     public static final int mChatNumber = 1;
     public static final int mGroupNumber = 2;
     public static final int mChannelNumber = 3;
+    public static final int mSettingNumber = 4;
 
 
     public enum From {
         chat(mChatNumber),
         group(mGroupNumber),
-        channel(mChannelNumber);
+        channel(mChannelNumber),
+        setting(mSettingNumber);
 
         public int value;
 
@@ -100,6 +114,9 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     public void onDetach() {
         if (appBarLayout != null)
             appBarLayout.setVisibility(View.VISIBLE);
+
+        if (onComplete != null)
+            onComplete.complete(true, "", "");
 
         super.onDetach();
     }
@@ -156,6 +173,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                                 .remove(FragmentShowAvatars.this)
                                 .commit();
                         appBarLayout.setVisibility(View.VISIBLE);
+                        if (onComplete != null)
+                            onComplete.complete(true, "", "");
                     }
                 });
 
@@ -164,7 +183,22 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                 new RippleView.OnRippleCompleteListener() {
                     @Override
                     public void onComplete(RippleView rippleView) {
-                        showPopupMenu();
+
+                        switch (from) {
+                            case setting:
+                                showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                                break;
+                            case group:
+                                showPopupMenu(R.array.pop_up_menu_show_avatar);
+                                break;
+                            case channel:
+                                showPopupMenu(R.array.pop_up_menu_show_avatar);
+                                break;
+                            case chat:
+                                showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                                break;
+                        }
+
                     }
                 });
 
@@ -218,9 +252,11 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             // user exists in DB
             final RealmList<RealmAvatar> userAvatars = user.getAvatars();
 
+
             long identifier = SUID.id().get();
             for (RealmAvatar avatar : userAvatars) {
-                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));
+
+                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
                 identifier++;
             }
         }
@@ -239,7 +275,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
             long identifier = SUID.id().get();
             for (RealmAvatar avatar : userAvatars) {
-                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(identifier));
+                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
                 identifier++;
             }
         }
@@ -252,9 +288,9 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         return false;
     }
 
-    private void showPopupMenu() {
+    private void showPopupMenu(int r) {
         MaterialDialog dialog =
-                new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_avatar)
+                new MaterialDialog.Builder(getActivity()).items(r)
                         .contentColor(Color.BLACK)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
@@ -264,6 +300,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                                     saveToGallery();
                                 } else if (which == 1) {
 //
+                                    deletePhoto();
+
                                 }
                                 // TODO: 10/26/2016 [Alireza] implement delete
                         /*else if (which == 2) {
@@ -283,6 +321,34 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
         layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
         dialog.getWindow().setAttributes(layoutParams);
+    }
+
+    private void deletePhoto() {
+
+
+        G.onUserAvatarDelete = new OnUserAvatarDelete() {
+            @Override
+            public void onUserAvatarDelete(final long avatarId, final String token) {
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.remove(curerntItemPosition);
+                        mCount.setText(String.format(getString(R.string.d_of_d), curerntItemPosition, mAdapter.getAdapterItemCount()));
+                        HelperAvatar.avatarDelete(mPeerId, avatarId, HelperAvatar.AvatarType.USER, null);
+                    }
+                });
+            }
+
+            @Override
+            public void onUserAvatarDeleteError() {
+
+            }
+        };
+//        RealmAvatar realmAvatar = HelperAvatar.getLastAvatar(userId);
+
+        new RequestUserAvatarDelete().userAvatarDelete(mAdapter.getAdapterItems().get(curerntItemPosition).imageId);
+
     }
 
     private void showAllMedia() {

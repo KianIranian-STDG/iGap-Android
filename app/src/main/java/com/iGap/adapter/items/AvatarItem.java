@@ -33,9 +33,11 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
         implements IChatItemAvatar {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public RealmAttachment avatar;
+    public long imageId;
 
-    public AvatarItem setAvatar(RealmAttachment avatar) {
+    public AvatarItem setAvatar(RealmAttachment avatar, long id) {
         this.avatar = avatar;
+        this.imageId = id;
         return this;
     }
 

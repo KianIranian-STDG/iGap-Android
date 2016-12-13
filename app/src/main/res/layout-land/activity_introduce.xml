@@ -377,6 +377,7 @@
         android:background="@drawable/int_button_interduce"
         android:gravity="center"
         android:text="@string/btn_start_page5"
+        android:textAllCaps="false"
         android:textColor="@color/txt_start_page5"
         android:textSize="@dimen/sp16"
         android:visibility="gone" />

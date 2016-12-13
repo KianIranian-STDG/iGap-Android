@@ -15,17 +15,21 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.ImageHelper;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AttachFile;
 import com.iGap.module.HelperCopyFile;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityCrop extends ActivityEnhanced {
@@ -34,7 +38,7 @@ public class ActivityCrop extends ActivityEnhanced {
     private ImageView imgPic;
     private Uri uri;
     private TextView txtCancel, txtSet, txtCrop, txtAgreeImage;
-    private int idAvatar;
+    private long idAvatar;
     private String pathSaveImage;
     private String page;
     private String type;
@@ -44,6 +48,7 @@ public class ActivityCrop extends ActivityEnhanced {
     private File fileChat;
     private String result;
     private ProgressBar prgWaiting;
+    AttachFile attachFile;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -54,6 +59,8 @@ public class ActivityCrop extends ActivityEnhanced {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop);
+
+        attachFile = new AttachFile(this);
 
         prgWaiting = (ProgressBar) findViewById(R.id.crop_prgWaiting);
         imgPic = (ImageView) findViewById(R.id.pu_img_imageBefore);
@@ -128,7 +135,13 @@ public class ActivityCrop extends ActivityEnhanced {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                finish();
+                if (type.equals("camera") || type.equals("crop_camera")) {
+                    attachFile.requestTakePicture();
+
+                } else if (type.equals("gallery")) {
+                    attachFile.requestOpenGalleryForImageSingleSelect();
+                }
+
             }
         });
         txtCancel.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +155,7 @@ public class ActivityCrop extends ActivityEnhanced {
         txtSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (uri != null && type.equals("crop") || type.equals("gallery")) {
+                if (uri != null && type.equals("crop_camera") || type.equals("gallery")) {
                     pathImageUser = getRealPathFromURI(uri);
                     switch (page) {
                         case "NewGroup":
@@ -201,11 +214,32 @@ public class ActivityCrop extends ActivityEnhanced {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) { // result for crop
+
+        if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_TAKE_PICTURE) {
+            String filePath = null;
+            ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+            filePath = "file://" + AttachFile.imagePath;
+            uri = Uri.parse(filePath);
+            imgPic.setImageURI(uri);
+            Log.i("DDD", "avatarId : " + filePath);
+            Log.i("DDD", "exists : " + new File(filePath).exists());
+
+
+        } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_image_from_gallery_single_select) {
+            String filePath = null;
+            filePath = "file://" + AttachFile.getFilePathFromUri(data.getData());
+            uri = Uri.parse(filePath);
+            imgPic.setImageURI(uri);
+
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) { // result for crop
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
 
-                type = "crop";
+                if (type.equals("camera")) {
+                    type = "crop_camera";
+                } else {
+                    type = "gallery";
+                }
                 uri = result.getUri();
                 imgPic.setImageURI(uri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {

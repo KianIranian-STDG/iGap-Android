@@ -67,6 +67,7 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.IncomingSms;
+import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoFileDownload;
@@ -1085,13 +1086,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             @Override
                             public void Allow() {
 
-                                Realm realm = Realm.getDefaultInstance();
-
-                                if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
-                                    startDialog(R.array.profile_delete);
-                                } else {
-                                    startDialog(R.array.profile);
-                                }
+                                startDialog(R.array.profile);
 
                                 realm.close();
 
@@ -1106,6 +1101,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        FragmentShowAvatars.onComplete = new OnComplete() {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
+
+                showImage();
+
+            }
+        };
+
         circleImageView = (CircleImageView) findViewById(R.id.st_img_circleImage);
         RippleView rippleImageView = (RippleView) findViewById(R.id.st_ripple_circleImage);
         rippleImageView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -1113,20 +1117,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onComplete(RippleView rippleView) {
 
+
                 Realm realm = Realm.getDefaultInstance();
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
                     FragmentShowAvatars.appBarLayout = fab;
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat);
+
                     ActivitySetting.this.getSupportFragmentManager()
                             .beginTransaction()
                             .addToBackStack(null)
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .replace(st_layoutParent, fragment, null).commit();
+                            .replace(st_layoutParent, fragment, null)
+                            .commit();
                 }
                 realm.close();
             }
         });
+
 
         textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
         if (textLanguage.equals("English")) {

@@ -637,4 +637,5 @@
     <string name="verify_invalid_code_message">متاسفیم ، کد تایید شما نامعتبر است ، لطفا کد صحیح را مجدد وارد نمایید.</string>
     <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
     <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
+    <string name="Destruction_Code">Destruction</string>
 </resources>

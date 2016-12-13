@@ -253,6 +253,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static OnGroupRemoveUsername onGroupRemoveUsername;
     public static OnGroupRevokeLink onGroupRevokeLink;
 
+
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;

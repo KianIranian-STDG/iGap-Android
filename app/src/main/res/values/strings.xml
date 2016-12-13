@@ -648,4 +648,5 @@
 
 
     <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
+    <string name="Destruction_Code">Destruction</string>
 </resources>

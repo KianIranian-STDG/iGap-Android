@@ -367,10 +367,11 @@
         android:layout_marginBottom="@dimen/dp20"
         android:background="@drawable/int_button_interduce"
         android:gravity="center"
+        android:textAllCaps="false"
         android:text="@string/btn_start_page5"
         android:textColor="@color/txt_start_page5"
         android:textSize="@dimen/sp16"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 
     <TextView

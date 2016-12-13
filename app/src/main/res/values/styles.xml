@@ -44,7 +44,7 @@
 
     <style name="AppTheme22" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/toolbar_background</item>
+        <item name="colorPrimary">@color/black_register</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/toolbar_background</item>
 

@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:text="@string/fac_Add_Contact"
+                android:text="@string/Destruction_Code"
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/sp18"
                 android:textStyle="bold"
@@ -152,10 +152,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
         android:layout_gravity="center"
-        android:layout_marginRight="@dimen/dp52"
-        android:layout_marginLeft="@dimen/dp52">
+        android:layout_marginRight="@dimen/dp100"
+        android:layout_marginLeft="@dimen/dp100">
 
 
         <TextView
@@ -163,9 +162,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="01:00"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:textSize="@dimen/sp15"
             android:gravity="center"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp16"
             android:textColor="@color/toolbar_background"
 
             />
@@ -175,9 +178,8 @@
             android:layout_height="wrap_content"
             android:text="@string/please_wait"
             android:textSize="@dimen/sp15"
-            android:layout_toEndOf="@+id/stda_txt_time"
-            android:layout_toRightOf="@+id/stda_txt_time"
-            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:textColor="@android:color/black"
             android:padding="@dimen/dp12"
 
