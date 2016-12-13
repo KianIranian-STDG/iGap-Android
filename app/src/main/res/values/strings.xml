@@ -84,7 +84,6 @@
     <string name="rg_verify_register2">Verification</string>
     <string name="rg_verify_register3">Generating Secret Key</string>
     <string name="rg_verify_register4">Final Registration</string>
-    <string name="rg_verify_dialog_enter_code">iGap tries to detect SMS automatically, but probably you need to enter it manually, Please enter manually code or if not recive code try to resend it.</string>
     <string name="rg_verify_dialog_try_code">Manually Enter</string>
     <string name="rg_verify_dialog_resend_code">Resend Code</string>
     <string name="search">Search</string>
@@ -644,5 +643,16 @@
     <string name="do_you_want_left_this">"Are you sure left from selected item ?"</string>
     <string name="do_you_want_delete_this">Are you sure deleting selected item ?</string>
     <string name="sure_delete_account">Are you sure deleting your account ?</string>
+    <string name="E_154_1">Bad payload: get token</string>
+    <string name="E_154_2">Bad payload: get reason</string>
+    <string name="E_155">USER_DELETE INTERNAL SERVER ERROR</string>
+    <string name="E_156">USER DELETE INVALID TOKEN</string>
+    <string name="E_157">USER DELETE EXPIRED TOKEN</string>
+    <string name="E_158">USER DELETE MAX TRY LOCK</string>
+    <string name="time_out">can\'t connect to server</string>
+
+    <string name="verify_socket_message">You are login in account on other device and active now , iGap Send verification code via Notification Service in your account , Please check other device and enter manually verification code .</string>
+    <string name="verify_time_out_message">iGap tries to detect SMS automatically, but probably you need to enter it manually, Please enter manually code or if not recive code try to resend it.</string>
+    <string name="verify_invalid_code_message">Sorry , verification code is invalid , Please enter manually correct verification code .</string>
     <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
 </resources>

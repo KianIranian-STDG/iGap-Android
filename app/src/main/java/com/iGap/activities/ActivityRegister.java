@@ -110,6 +110,10 @@ public class ActivityRegister extends ActivityEnhanced {
     private Dialog dialog;
     private int digitCount;
 
+    public enum Reason {
+        SOCKET, TIME_OUT, INVALID_CODE
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -576,7 +580,7 @@ public class ActivityRegister extends ActivityEnhanced {
                                         txtTimerLand.setText("00:00");
                                         txtTimerLand.setVisibility(View.INVISIBLE);
                                     }
-                                    errorVerifySms(); // open rg_dialog for enter sms code
+                                    errorVerifySms(Reason.TIME_OUT); // open rg_dialog for enter sms code
                                 }
                             };
                         }
@@ -639,7 +643,7 @@ public class ActivityRegister extends ActivityEnhanced {
     }
 
     // error verify sms and open rg_dialog for enter sms code
-    private void errorVerifySms() { //when don't receive sms and open rg_dialog for enter code
+    private void errorVerifySms(Reason reason) { //when don't receive sms and open rg_dialog for enter code
 
         rg_prg_verify_sms.setVisibility(View.INVISIBLE);
         rg_img_verify_sms.setImageResource(R.mipmap.alert);
@@ -654,6 +658,16 @@ public class ActivityRegister extends ActivityEnhanced {
         dialog.setCanceledOnTouchOutside(false);
 
         final EditText edtEnterCodeVerify = (EditText) dialog.findViewById(R.id.rg_edt_dialog_verifyCode); //EditText For Enter sms cod
+
+        TextView txtShowReason = (TextView) dialog.findViewById(R.id.txt_show_reason);
+
+        if (reason == Reason.SOCKET) {
+            txtShowReason.setText(getResources().getString(R.string.verify_socket_message));
+        } else if (reason == Reason.TIME_OUT) {
+            txtShowReason.setText(getResources().getString(R.string.verify_time_out_message));
+        } else if (reason == Reason.INVALID_CODE) {
+            txtShowReason.setText(getResources().getString(R.string.verify_invalid_code_message));
+        }
 
         TextView btnCancel = (TextView) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -716,7 +730,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
                         } else if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {//verification with socket
 
-                            errorVerifySms(); // open rg_dialog for enter sms code
+                            errorVerifySms(Reason.SOCKET); // open rg_dialog for enter sms code
                             countDownTimer.cancel();
                         } else if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET) {//verification with sms and socket
 
@@ -869,7 +883,7 @@ public class ActivityRegister extends ActivityEnhanced {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            errorVerifySms();
+                            errorVerifySms(Reason.INVALID_CODE);
                         }
                     });
                 } else if (majorCode == 102 && minorCode == 2) {
@@ -920,7 +934,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             // Verification code is invalid
                             // TODO: 9/25/2016 Error 106 - USER_VERIFY_INVALID_CODE
-                            errorVerifySms();
+                            errorVerifySms(Reason.INVALID_CODE);
                         }
                     });
                 } else if (majorCode == 107) {

@@ -352,7 +352,7 @@ public class HelperAvatar {
 
         @Override
         public void onError() {
-
+            //TODO [Saeed Mozaffari] [2016-12-13 9:28 AM] - do something on download error (( hint : if was timeout reDownload file))
         }
     }
 }
