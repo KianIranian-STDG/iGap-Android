@@ -67,7 +67,7 @@
     <string name="Destruction_Code">Destruction</string>
     <string name="Destruction_Des">Now you try to Destruction your account your phone number is : </string>
     <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
-    
+
     <!-- Message Type and Status -->
     <string name="video_message">Video Message</string>
     <string name="file_message">File Message</string>
@@ -90,7 +90,7 @@
     <string name="sending_location">Sending Location...</string>
     <string name="choosing_contact">Choosing Contact</string>
     <string name="painting">Painting...</string>
-    
+
     <!-- Public String -->
     <string name="search">Search</string>
     <string name="d_of_d" formatted="false">%d of %d</string>
@@ -646,9 +646,6 @@
     <string name="st_data_shams">Shamsi Date</string>
     <string name="do_you_want_left_this">"Are you sure left from selected item ?"</string>
     <string name="do_you_want_delete_this">Are you sure deleting selected item ?</string>
-    
 
 
-    
-    
 </resources>

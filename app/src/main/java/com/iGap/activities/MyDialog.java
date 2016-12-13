@@ -2,13 +2,16 @@ package com.iGap.activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoGlobal;
@@ -106,7 +109,7 @@ public class MyDialog {
                     }
                 }
 
-                showDialogNotification(context, str0 + " ?", complete, "txtDeleteChat");
+                showDialogNotification(context, str0, complete, "txtDeleteChat");
 
                 dialog.cancel();
             }
@@ -122,42 +125,28 @@ public class MyDialog {
 
     public static void showDialogNotification(Context context, String Message, final OnComplete complete, final String result) {
 
-        final Dialog dialog = new Dialog(context);
-        // dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setTitle(context.getString(R.string.igap));
-        dialog.setContentView(R.layout.dialog_notification);
-        dialog.show();
 
-        TextView txtMessage = (TextView) dialog.findViewById(R.id.md_txt_message);
-        txtMessage.setText(Message);
+        new MaterialDialog.Builder(context)
+                .title(G.context.getResources().getString(R.string.igap))
+                .titleColor(G.context.getResources().getColor(R.color.toolbar_background))
+                .content(Message)
+                .positiveText(G.context.getResources().getString(R.string.B_ok))
+                .negativeText(G.context.getResources().getString(R.string.B_cancel))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (complete != null) complete.complete(true, result, "yes");
 
-        Button tvYes = (Button) dialog.findViewById(R.id.md_btn_yes);
-        tvYes.setOnClickListener(new View.OnClickListener() {
+                        dialog.cancel();
 
-            @Override
-            public void onClick(View v) {
-                if (complete != null) complete.complete(true, result, "yes");
-
-                dialog.cancel();
-            }
-        });
-
-        Button tvNo = (Button) dialog.findViewById(R.id.md_btn_no);
-        tvNo.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                dialog.cancel();
-            }
-        });
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        // lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.gravity = Gravity.CENTER;
-        dialog.getWindow().setAttributes(lp);
-        dialog.show();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 }

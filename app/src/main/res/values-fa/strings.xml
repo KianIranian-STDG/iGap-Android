@@ -22,7 +22,7 @@
     <string name="btn_start_page5">"همین حالا شروع کنید"</string>
     <string name="text_line_1_introduce_page5">"همه چیز رایگان است!"</string>
     <string name="text_line_2_introduce_page5">"بیش از این شما را خسته نکنیم! آی ‌گپ کاملاْ رایگان است! همین حالا دنیای خود را بسازید."</string>
-    
+
     <!-- Fill Profile User -->
     <string name="pu_title_profileUser">"تکمیل پروفایل"</string>
     <string name="pu_desc_profileUser">"نام مستعار خود را وارد کنید و برای خود عکس پروفایلی انتخاب کنید"</string>
@@ -51,7 +51,7 @@
     <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
     <string name="phone_number">"شماره تلفن"</string>
     <string name="Re_Phone_Verification">"تأیید شماره تلفن"</string>
-  
+
     <!-- Toast -->
     <string name="Toast_waiting_fot_get_info">"در انتظار اتصال و موقعیت یابی"</string>
     <string name="Toast_Location_Not_Found">"موقعیت شما یافت نشد"</string>
@@ -61,13 +61,13 @@
     <string name="Toast_Number_Block">"شماره وارد شده مسدود شده است"</string>
     <string name="Toast_Invalid_nickname">"نام مستعار نامعتبر است. لطفاً نام مستعار را تغییر دهید."</string>
     <string name="Toast_Write_NickName">"لطفاً نام مستعار خود را وارد کنید"</string>
-    
+
     <!-- Destruction -->
     <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
     <string name="Destruction_Code">تخریب</string>
     <string name="Destruction_Des">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
     <string name="iGap_autofill_Destruction_Code">آی گپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست دستی وارد کنید.</string>
-    
+
     <!-- Message Type and Status -->
     <string name="video_message">پیام ویدئویی</string>
     <string name="file_message">پیام فایلی</string>
@@ -90,7 +90,7 @@
     <string name="sending_location">ارسال موقعیت...</string>
     <string name="choosing_contact">انتخاب مخاطب</string>
     <string name="painting">درحال نقاشی...</string>
-    
+
     <!-- Public String -->
     <string name="search">"جستجو"</string>
     <string name="d_of_d" formatted="false">"%d از %d"</string>
@@ -355,7 +355,6 @@
     <string name="desc_public_channel">"کانال‌های عمومی ممکن است در نتایج جستجو ظاهر شوند، هرکس می‌تواند عضو آنها شود."</string>
     <string name="last_msg_format_chat" formatted="false">"%s"</string>
 
-    
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">"کاربر مسدود شده است و امکان تأیید وجود ندارد."</string>
@@ -642,7 +641,5 @@
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ هجری شمسی</string>
 
-    
 
-    
 </resources>
