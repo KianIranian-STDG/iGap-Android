@@ -68,6 +68,29 @@
     <string name="Destruction_Des">Now you try to Destruction your account your phone number is : </string>
     <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
     
+    <!-- Message Type and Status -->
+    <string name="video_message">Video Message</string>
+    <string name="file_message">File Message</string>
+    <string name="audio_message">Audio Message</string>
+    <string name="image_message">Image Message</string>
+    <string name="contact_message">Contact Message</string>
+    <string name="gif_message">Gif Message</string>
+    <string name="voice_message">Voice Message</string>
+    <string name="typing">Typing...</string>
+    <string name="sending_image">Sending Image...</string>
+    <string name="capturing_image">Capturing Image...</string>
+    <string name="sending_video">Sending Video...</string>
+    <string name="capturing_video">Capturing Video...</string>
+    <string name="sending_audio">Sending Audio...</string>
+    <string name="recording_voice">Recording Voice...</string>
+    <string name="sending_voice">Sending Voice...</string>
+    <string name="sending_document">Sending Document...</string>
+    <string name="sending_gif">Sending Gif...</string>
+    <string name="sending_file">Sending File...</string>
+    <string name="sending_location">Sending Location...</string>
+    <string name="choosing_contact">Choosing Contact</string>
+    <string name="painting">Painting...</string>
+    
     <!-- Public String -->
     <string name="search">Search</string>
     <string name="d_of_d" formatted="false">%d of %d</string>
@@ -478,33 +501,8 @@
     <string name="text_kick_admin">Are you sure to kick this admin?</string>
     <string name="text_kick_moderator">Are you sure to kick this moderator?</string>
     <string name="dialog_readonly_chat">Sorry, you cannot send any messages to this chat.</string>
-    <string name="video_message">Video Message</string>
-    <string name="file_message">File Message</string>
-    <string name="audio_message">Audio Message</string>
-    <string name="image_message">Image Message</string>
-    <string name="contact_message">Contact Message</string>
-    <string name="gif_message">Gif Message</string>
-    <string name="typing">typing</string>
-    <string name="sending_image">Sending Image</string>
-    <string name="capturing_image">Capturing Image</string>
-    <string name="sending_video">Sending Video</string>
-    <string name="capturing_video">Capturing Video</string>
-    <string name="sending_audio">Sending Audio</string>
-    <string name="recording_voice">Recording Voice</string>
-    <string name="sending_voice">Sending Voice</string>
-    <string name="sending_document">Sending Document</string>
-    <string name="sending_gif">Sending Gif</string>
-    <string name="sending_file">Sending File</string>
-    <string name="sending_location">Sending Location</string>
-    <string name="choosing_contact">Choosing Contact</string>
-    <string name="painting">Painting</string>
-    <string name="voice_message">Voice Message</string>
     <string name="to_delete_contact">to delete a contact</string>
     <string name="delete_chat">Delete Chat</string>
-    <string name="delete_account_text1">Other</string>
-    <string name="delete_account_text2">Other</string>
-    <string name="delete_account_text3">Other</string>
-    <string name="delete_account_text4">Other</string>
     <string name="capture_image">Capture Image</string>
     <string name="capture_video">Capture Video</string>
     <string name="set_gender">Set Gender</string>
