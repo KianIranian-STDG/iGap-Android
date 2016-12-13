@@ -638,7 +638,7 @@
     
     
     <string name="Destruction_Code">تخریب</string>
-    <string name="confirmation_code_text">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
+    <string name="Destruction_Des">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
     <string name="iGap_autofill_Destruction_Code">آی گپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست دستی وارد کنید.</string>
     
 </resources>
