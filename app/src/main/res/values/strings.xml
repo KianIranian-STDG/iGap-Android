@@ -62,9 +62,13 @@
     <string name="Toast_Invalid_nickname">Invalid Nickname,Please change it.</string>
     <string name="Toast_Write_NickName">Please enter your nickname</string>
    
+    <!-- Destruction -->
+    <string name="sure_delete_account">Are you sure deleting your account ?</string>
+    <string name="Destruction_Code">Destruction</string>
+    <string name="Destruction_Des">Now you try to Destruction your account your phone number is : </string>
+    <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
     
     <!-- Public String -->
-
     <string name="search">Search</string>
     <string name="d_of_d" formatted="false">%d of %d</string>
     <string name="add_to_contact">Add to Contact</string>
@@ -644,12 +648,9 @@
     <string name="st_data_shams">Shamsi Date</string>
     <string name="do_you_want_left_this">"Are you sure left from selected item ?"</string>
     <string name="do_you_want_delete_this">Are you sure deleting selected item ?</string>
-    <string name="sure_delete_account">Are you sure deleting your account ?</string>
+    
 
 
     
     
-    <string name="Destruction_Code">Destruction</string>
-    <string name="Destruction_Des">Now you try to Destruction your account your phone number is : </string>
-    <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
 </resources>
