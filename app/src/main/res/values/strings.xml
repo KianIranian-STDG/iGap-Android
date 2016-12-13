@@ -1,49 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">iGap</string>
-    <string name="unmute_notification">Unmute Notifications</string>
-    <string name="mute_notification">Mute Notifications</string>
-    <string name="chat">Chat</string>
-    <string name="group">Group</string>
-    <string name="channel">Channel</string>
-    <string name="igap">iGap</string>
-    <string name="igapChanel">iGap</string>
-    <string name="clear_history">Clear History</string>
-    <string name="clear_history_content">Are you sure to clear history?</string>
-    <string name="delete_chat_content">Are you sure to delete this chat?</string>
-    <string name="delete_text">Are you sure to delete this contact?</string>
-    <string name="cancel">Cancel</string>
-    <string name="B_cancel">Cancel</string>
-    <string name="B_skip">Skip</string>
-    <string name="B_finish">Finish</string>
-    <string name="ok">Ok</string>
-    <string name="B_ok">Ok</string>
-    <string name="set">Continue</string>
-    <string name="am_camera">Camera</string>
-    <string name="am_music">Music</string>
-    <string name="am_paint">Paint</string>
-    <string name="am_picture">Picture</string>
-    <string name="am_document">Document</string>
-    <string name="am_location">Location</string>
-    <string name="am_video">Video</string>
-    <string name="am_file">File</string>
-    <string name="am_contact">Contact</string>
-    <string name="just_wait_en">Just wait</string>
-    <string name="device_dosenot_camera_en">This device does not have a camera.</string>
-    <string name="do_you_want_to_turn_on_gps">Your GPS is off, do you want to turn it on?</string>
-    <string name="picture_is_saved_en">The Picture has Saved.</string>
-    <string name="select_picture_en">Select Picture</string>
-    <string name="cannot_load_data_en">Unable to load data.</string>
-    <string name="do_you_want_exit">Do you want to exit?</string>
-    <string name="slide_to_cancel_en">Slide to Cancel.</string>
-    <string name="video_duration" formatted="false">%s (%s)</string>
-
-    <!-- //mo
-    Toolbar
-    REGISTER PAGE -->
-    <string name="phone_number">Phone Number</string>
-    <string name="Re_Phone_Verification">Phone Number Verification</string>
-
     <!-- Check connect to internet Page introduce app -->
     <string name="text_i_introduce_page1">i</string>
     <string name="text_line_1_introduce_page1">GAP</string>
@@ -86,10 +42,69 @@
     <string name="rg_verify_register4">Final Registration</string>
     <string name="rg_verify_dialog_try_code">Manually Enter</string>
     <string name="rg_verify_dialog_resend_code">Resend Code</string>
-    <string name="search">Search</string>
     <string name="Re_dialog_verify_number_part1">You enter this number :</string>
     <string name="Re_dialog_verify_number_part2">Press OK, if this phone number is correct or simply modify it.</string>
     <string name="Re_Enter_Verify_Code_Please">Please enter verification code</string>
+    <string name="verify_socket_message">You are login in account on other device and active now , iGap Send verification code via Notification Service in your account , Please check other device and enter manually verification code .</string>
+    <string name="verify_time_out_message">iGap tries to detect SMS automatically, but probably you need to enter it manually, Please enter manually code or if not recive code try to resend it.</string>
+    <string name="verify_invalid_code_message">Sorry , verification code is invalid , Please enter manually correct verification code .</string>
+    <string name="resend_message">Resend verification code</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="Re_Phone_Verification">Phone Number Verification</string>
+    
+    <!-- Toast -->
+    <string name="Toast_waiting_fot_get_info">Connecting and get Info...</string>
+    <string name="Toast_Location_Not_Found">Location not found.</string>
+    <string name="Toast_First_0">Don\'t need 0 on first</string>
+    <string name="Toast_Enter_Phone_Number">Please enter your phone number without first zero</string>
+    <string name="Toast_Enter_Code">Please enter the verification code</string>
+    <string name="Toast_Number_Block">This number is blocked</string>
+    <string name="Toast_Invalid_nickname">Invalid Nickname,Please change it.</string>
+    <string name="Toast_Write_NickName">Please enter your nickname</string>
+   
+    
+    <!-- Public String -->
+
+    <string name="search">Search</string>
+    <string name="d_of_d" formatted="false">%d of %d</string>
+    <string name="add_to_contact">Add to Contact</string>
+    <string name="app_name">iGap</string>
+    <string name="unmute_notification">Unmute Notifications</string>
+    <string name="mute_notification">Mute Notifications</string>
+    <string name="chat">Chat</string>
+    <string name="group">Group</string>
+    <string name="channel">Channel</string>
+    <string name="igap">iGap</string>
+    <string name="igapChanel">iGap</string>
+    <string name="clear_history">Clear History</string>
+    <string name="clear_history_content">Are you sure to clear history?</string>
+    <string name="delete_chat_content">Are you sure to delete this chat?</string>
+    <string name="delete_text">Are you sure to delete this contact?</string>
+    <string name="cancel">Cancel</string>
+    <string name="B_cancel">Cancel</string>
+    <string name="B_skip">Skip</string>
+    <string name="B_finish">Finish</string>
+    <string name="ok">Ok</string>
+    <string name="B_ok">Ok</string>
+    <string name="set">Continue</string>
+    <string name="am_camera">Camera</string>
+    <string name="am_music">Music</string>
+    <string name="am_paint">Paint</string>
+    <string name="am_picture">Picture</string>
+    <string name="am_document">Document</string>
+    <string name="am_location">Location</string>
+    <string name="am_video">Video</string>
+    <string name="am_file">File</string>
+    <string name="am_contact">Contact</string>
+    <string name="just_wait_en">Just wait</string>
+    <string name="device_dosenot_camera_en">This device does not have a camera.</string>
+    <string name="do_you_want_to_turn_on_gps">Your GPS is off, do you want to turn it on?</string>
+    <string name="picture_is_saved_en">The Picture has Saved.</string>
+    <string name="select_picture_en">Select Picture</string>
+    <string name="cannot_load_data_en">Unable to load data.</string>
+    <string name="do_you_want_exit">Do you want to exit?</string>
+    <string name="slide_to_cancel_en">Slide to Cancel.</string>
+    <string name="video_duration" formatted="false">%s (%s)</string>
 
     <!-- setting -->
     <string name="st_Info">Info</string>
@@ -308,19 +323,6 @@
     <string name="desc_public_channel">Public Channels can be found in the results of search, anyone can join them.</string>
     <string name="last_msg_format_chat" formatted="false">%s</string>
 
-    <!-- Toast -->
-    <string name="Toast_waiting_fot_get_info">Connecting and get Info...</string>
-    <string name="Toast_Location_Not_Found">Location not found.</string>
-    <string name="Toast_First_0">Don\'t need 0 on first</string>
-    <string name="Toast_Enter_Phone_Number">Please enter your phone number without first zero</string>
-    <string name="Toast_Enter_Code">Please enter the verification code</string>
-    <string name="Toast_Number_Block">This number is blocked</string>
-    <string name="Toast_Invalid_nickname">Invalid Nickname,Please change it.</string>
-    <string name="Toast_Write_NickName">Please enter your nickname</string>
-    <string name="d_of_d" formatted="false">%d of %d</string>
-    <string name="add_to_contact">Add to Contact</string>
-    <string name="resend_message">Resend verification code</string>
-
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">User Verify Blocked User</string>
     <string name="Enter_Code">Waiting for Code</string>
@@ -456,7 +458,7 @@
     <string name="exactly">exactly</string>
     <string name="recently">recently</string>
     <string name="support">support</string>
-    <string name="service_notification">service notification</string>
+    <string name="service_notification">Notification Service</string>
     <string name="B_edit">Edit</string>
     <string name="left">Left</string>
     <string name="Channel_name">New Channel</string>
@@ -644,8 +646,6 @@
     <string name="do_you_want_delete_this">Are you sure deleting selected item ?</string>
     <string name="sure_delete_account">Are you sure deleting your account ?</string>
 
-    <string name="verify_socket_message">You are login in account on other device and active now , iGap Send verification code via Notification Service in your account , Please check other device and enter manually verification code .</string>
-    <string name="verify_time_out_message">iGap tries to detect SMS automatically, but probably you need to enter it manually, Please enter manually code or if not recive code try to resend it.</string>
-    <string name="verify_invalid_code_message">Sorry , verification code is invalid , Please enter manually correct verification code .</string>
+
     <string name="iGap_autofill_Destruction_Code">iGap autofill Destruction Code , if not autofill , fill manually .</string>
 </resources>
