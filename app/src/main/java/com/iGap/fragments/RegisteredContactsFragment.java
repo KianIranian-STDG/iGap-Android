@@ -374,7 +374,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
-                getActivity().runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
 
@@ -422,8 +422,10 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
                             realm.close();
                         }
+
                     }
                 });
+
             }
 
             @Override
@@ -457,7 +459,6 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
     public void updateChatAvatar(long userId) {
         int position = getPosition(contacts, userId);
-        Log.i("NNN", "set Avatar onAvatarDownload position : " + position);
         if (position != -1) {
             fastAdapter.notifyAdapterItemChanged(position);
         }
