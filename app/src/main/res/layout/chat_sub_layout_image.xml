@@ -88,7 +88,7 @@
                             android:layout_height="16dp"
                             android:layout_marginLeft="@dimen/dp4"
                             android:src="@drawable/ic_clock"
-                            android:tint="@color/green"/>
+                            android:tint="@color/white"/>
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
