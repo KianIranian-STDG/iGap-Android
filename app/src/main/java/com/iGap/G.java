@@ -378,7 +378,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     }
 
     @Override
-    public void onCreate() {
+    public void onCreate() { // comment
         super.onCreate();
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
