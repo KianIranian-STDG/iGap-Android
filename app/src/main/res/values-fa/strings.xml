@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-      <!-- Check connect to internet Page introduce app -->
+    <!-- Check connect to internet Page introduce app -->
     <string name="text_i_introduce_page1">"گپ"</string>
     <string name="text_line_1_introduce_page1">"آی"</string>
     <string name="text_line_2_introduce_page1">"بی حد و مرز"</string>
@@ -23,7 +23,55 @@
     <string name="text_line_1_introduce_page5">"همه چیز رایگان است!"</string>
     <string name="text_line_2_introduce_page5">"بیش از این شما را خسته نکنیم! آی ‌گپ کاملاْ رایگان است! همین حالا دنیای خود را بسازید."</string>
     
+    <!-- Fill Profile User -->
+    <string name="pu_title_profileUser">"تکمیل پروفایل"</string>
+    <string name="pu_desc_profileUser">"نام مستعار خود را وارد کنید و برای خود عکس پروفایلی انتخاب کنید"</string>
+    <string name="pu_addPhoto_profileUser">"عکس پروفایل"</string>
+    <string name="pu_nikname_profileUser">"نام مستعار"</string>
+    <string name="pu_Lets_Go">"ادامه"</string>
+
+    <!-- Register Page -->
+    <string name="rg_title_register">"ثبت نام"</string>
+    <string name="rg_confirm_text_register">"لطفا کشور ، کد کشور خود را تایید کنید و سپس تلفن خود را بدون صفر ابتدایی وارد کنید"</string>
+    <string name="rg_Start">"بزن بریم"</string>
+    <string name="rg_Select_Country">"کشور خود را انتخاب کنید"</string>
+    <string name="rg_agreement_text_register">"تایید نهایی تلفن شما ، ما قصد داریم کد فعال سازی را برای این شماره ارسال کنیم"</string>
+    <string name="rg_verify_register1">"در حال اتصال"</string>
+    <string name="rg_verify_register2">"منتظر کد تایید"</string>
+    <string name="rg_verify_register3">"تولید کلید امنیتی"</string>
+    <string name="rg_verify_register4">"ثبت نام نهایی"</string>
+    <string name="rg_verify_dialog_try_code">"دستی وارد کردم"</string>
+    <string name="rg_verify_dialog_resend_code">"ارسال مجدد کد تایید"</string>
+    <string name="Re_dialog_verify_number_part1">"شما شماره زیر را وارد کردید:</string>
+    <string name="Re_dialog_verify_number_part2">"اگر شماره تلفن صحیح است تایید کرده و در غیر اینصورت براحتی تغییرش دهید"</string>
+    <string name="Re_Enter_Verify_Code_Please">"لطفا کد تایید را دستی وارد کنید"</string>
+    <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید ، آی گپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به اکانت شما ارسال کرد ، لطفا دستگاه دیگر را چک کرده و کد را بصورت دستی وارد کنید.</string>
+    <string name="verify_time_out_message">"آی گپ بصورت خودکار پیام تایید را تشخیص میدهد یا شاید دریافت شده و شما میخواهید دستی وارد کنید، لطفا کد را دستی وارد کرده و یا در صورتی که دریافت نکردید درخواست ارسال مجدد کنید."</string>
+    <string name="verify_invalid_code_message">متاسفیم ، کد تایید شما نامعتبر است ، لطفا کد صحیح را مجدد وارد نمایید.</string>
+    <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
+    <string name="phone_number">"شماره تلفن"</string>
+    <string name="Re_Phone_Verification">"تأیید شماره تلفن"</string>
+  
+    <!-- Toast -->
+    <string name="Toast_waiting_fot_get_info">"در انتظار اتصال و موقعیت یابی"</string>
+    <string name="Toast_Location_Not_Found">"موقعیت شما یافت نشد"</string>
+    <string name="Toast_First_0">"در ابتدای شماره نیاز به 0 نیست"</string>
+    <string name="Toast_Enter_Phone_Number">"لطفا شماره تلفن خود را بدون صفر ابتدایی وارد کنید"</string>
+    <string name="Toast_Enter_Code">"لطفا کد تایید را وارد نمایید"</string>
+    <string name="Toast_Number_Block">"شماره وارد شده مسدود شده است"</string>
+    <string name="Toast_Invalid_nickname">"نام مستعار نامعتبر است. لطفاً نام مستعار را تغییر دهید."</string>
+    <string name="Toast_Write_NickName">"لطفاً نام مستعار خود را وارد کنید"</string>
     
+    <!-- Destruction -->
+    <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
+    <string name="Destruction_Code">تخریب</string>
+    <string name="Destruction_Des">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
+    <string name="iGap_autofill_Destruction_Code">آی گپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست دستی وارد کنید.</string>
+    
+    <!-- Public String -->
+    <string name="search">"جستجو"</string>
+    <string name="d_of_d" formatted="false">"%d از %d"</string>
+    <string name="add_to_contact">"افزودن به مخاطبین"</string>
     <string name="app_name">"آی‌گپ"</string>
     <string name="unmute_notification">"اعلانات را صدا دار کنید."</string>
     <string name="mute_notification">"اعلانات را بی صدا کنید."</string>
@@ -64,37 +112,6 @@
     <string name="slide_to_cancel_en">"برای لغو کردن بکشید و رها کنید."</string>
     <string name="video_duration" formatted="false">"%s (%s)"</string>
 
-    <!-- //mo
-    Toolbar
-    REGISTER PAGE -->
-    <string name="phone_number">"شماره تلفن"</string>
-    <string name="Re_Phone_Verification">"تأیید شماره تلفن"</string>
-
-  >
-
-    <!-- Fill Profile User -->
-    <string name="pu_title_profileUser">"تکمیل پروفایل"</string>
-    <string name="pu_desc_profileUser">"نام مستعار خود را وارد کنید و برای خود عکس پروفایلی انتخاب کنید"</string>
-    <string name="pu_addPhoto_profileUser">"عکس پروفایل"</string>
-    <string name="pu_nikname_profileUser">"نام مستعار"</string>
-    <string name="pu_Lets_Go">"ادامه"</string>
-
-    <!-- Register Page -->
-    <string name="rg_title_register">"ثبت نام"</string>
-    <string name="rg_confirm_text_register">"لطفا کشور ، کد کشور خود را تایید کنید و سپس تلفن خود را بدون صفر ابتدایی وارد کنید"</string>
-    <string name="rg_Start">"بزن بریم"</string>
-    <string name="rg_Select_Country">"کشور خود را انتخاب کنید"</string>
-    <string name="rg_agreement_text_register">"تایید نهایی تلفن شما ، ما قصد داریم کد فعال سازی را برای این شماره ارسال کنیم"</string>
-    <string name="rg_verify_register1">"در حال اتصال"</string>
-    <string name="rg_verify_register2">"منتظر کد تایید"</string>
-    <string name="rg_verify_register3">"تولید کلید امنیتی"</string>
-    <string name="rg_verify_register4">"ثبت نام نهایی"</string>
-    <string name="rg_verify_dialog_try_code">"دستی وارد کردم"</string>
-    <string name="rg_verify_dialog_resend_code">"ارسال مجدد کد تایید"</string>
-    <string name="search">"جستجو"</string>
-    <string name="Re_dialog_verify_number_part1">"شما شماره زیر را وارد کردید:</string>
-    <string name="Re_dialog_verify_number_part2">"اگر شماره تلفن صحیح است تایید کرده و در غیر اینصورت براحتی تغییرش دهید"</string>
-    <string name="Re_Enter_Verify_Code_Please">"لطفا کد تایید را دستی وارد کنید"</string>
 
     <!-- setting -->
     <string name="st_Info">"اطلاعات"</string>
@@ -315,18 +332,7 @@
     <string name="desc_public_channel">"کانال‌های عمومی ممکن است در نتایج جستجو ظاهر شوند، هرکس می‌تواند عضو آنها شود."</string>
     <string name="last_msg_format_chat" formatted="false">"%s"</string>
 
-    <!-- Toast -->
-    <string name="Toast_waiting_fot_get_info">"در انتظار اتصال و موقعیت یابی"</string>
-    <string name="Toast_Location_Not_Found">"موقعیت شما یافت نشد"</string>
-    <string name="Toast_First_0">"در ابتدای شماره نیاز به 0 نیست"</string>
-    <string name="Toast_Enter_Phone_Number">"لطفا شماره تلفن خود را بدون صفر ابتدایی وارد کنید"</string>
-    <string name="Toast_Enter_Code">"لطفا کد تایید را وارد نمایید"</string>
-    <string name="Toast_Number_Block">"شماره وارد شده مسدود شده است"</string>
-    <string name="Toast_Invalid_nickname">"نام مستعار نامعتبر است. لطفاً نام مستعار را تغییر دهید."</string>
-    <string name="Toast_Write_NickName">"لطفاً نام مستعار خود را وارد کنید"</string>
-    <string name="d_of_d" formatted="false">"%d از %d"</string>
-    <string name="add_to_contact">"افزودن به مخاطبین"</string>
-    <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
+    
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">"کاربر مسدود شده است و امکان تأیید وجود ندارد."</string>
@@ -633,14 +639,8 @@
     <string name="pending">معلق</string>
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ هجری شمسی</string>
-    <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید ، آی گپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به اکانت شما ارسال کرد ، لطفا دستگاه دیگر را چک کرده و کد را بصورت دستی وارد کنید.</string>
-    <string name="verify_time_out_message">"آی گپ بصورت خودکار پیام تایید را تشخیص میدهد یا شاید دریافت شده و شما میخواهید دستی وارد کنید، لطفا کد را دستی وارد کرده و یا در صورتی که دریافت نکردید درخواست ارسال مجدد کنید."</string>
-    <string name="verify_invalid_code_message">متاسفیم ، کد تایید شما نامعتبر است ، لطفا کد صحیح را مجدد وارد نمایید.</string>
-    <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
+
     
-    
-    <string name="Destruction_Code">تخریب</string>
-    <string name="Destruction_Des">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
-    <string name="iGap_autofill_Destruction_Code">آی گپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست دستی وارد کنید.</string>
+
     
 </resources>
