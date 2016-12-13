@@ -185,6 +185,13 @@ public class HelperAvatar {
             if (realmRegisteredInfo != null) {
                 initials = realmRegisteredInfo.getInitials();
                 color = realmRegisteredInfo.getColor();
+            } else {
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+                    if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
+                        initials = realmRoom.getInitials();
+                        color = realmRoom.getColor();
+                    }
+                }
             }
 
         } else if (avatarType == AvatarType.ROOM) {

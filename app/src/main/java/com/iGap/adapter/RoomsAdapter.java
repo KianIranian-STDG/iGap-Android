@@ -21,7 +21,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         setHasStableIds(true);
     }
 
-    public void downloadingAvatarThumbnail(String token) {
+   /* public void downloadingAvatarThumbnail(String token) {
         for (Item item : getAdapterItems()) {
             if (item.mInfo.getAvatar() != null && item.mInfo.getAvatar().getFile().getToken() != null && item.mInfo.getAvatar().getFile().getToken().equalsIgnoreCase(token)) {
                 item.onRequestDownloadAvatarThumbnail(token, true);
@@ -29,7 +29,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
                 break;
             }
         }
-    }
+    }*/
 
     public void updateChat(long chatId, Item item) {
         List<Item> items = getAdapterItems();

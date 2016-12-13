@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AvatarsAdapter;
-import com.iGap.adapter.RoomsAdapter;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.interfaces.OnAvatarGet;
@@ -19,18 +17,13 @@ import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.TimeUtils;
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmAttachment;
-import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
-import com.iGap.request.RequestFileDownload;
-import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -103,15 +96,15 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
     /**
      * request for avatar thumbnail
      */
-    private void requestForAvatarThumbnail(String token) {
+   /* private void requestForAvatarThumbnail(String token) {
         if (!AvatarsAdapter.hasThumbnailRequested(token)) {
             AvatarsAdapter.thumbnailRequests.add(token);
 
             onRequestDownloadAvatarThumbnail(token, false);
         }
-    }
+    }*/
 
-    public void onRequestDownloadAvatarThumbnail(String token, boolean done) {
+    /*public void onRequestDownloadAvatarThumbnail(String token, boolean done) {
         final String fileName = "thumb_" + token + "_" + mInfo.getAvatar().getFile().getName();
         if (done) {
             Realm realm = Realm.getDefaultInstance();
@@ -134,21 +127,21 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
 
         new RequestFileDownload().download(token, 0, (int) mInfo.getAvatar().getFile().getSmallThumbnail().getSize(),
                 selector, identity);
-    }
+    }*/
 
     @Override
     public void onRequestDownloadAvatar(long offset, int progress) {
 
     }
 
-    private void requestForUserInfo() {
+   /* private void requestForUserInfo() {
         if (!RoomsAdapter.userInfoAlreadyRequests.contains(mInfo.getOwnerId())) {
             RequestUserInfo requestUserInfo = new RequestUserInfo();
             requestUserInfo.userInfo(mInfo.getOwnerId());
 
             RoomsAdapter.userInfoAlreadyRequests.add(mInfo.getOwnerId());
         }
-    }
+    }*/
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) throws IllegalStateException {
