@@ -1,7 +1,5 @@
 package com.iGap.request;
 
-import android.util.Log;
-
 import com.iGap.module.StructListOfContact;
 import com.iGap.proto.ProtoUserContactsImport;
 
@@ -19,7 +17,7 @@ public class RequestUserContactImport {
         }
     }
 
-    public void contactImportAndGetReponse(ArrayList<StructListOfContact> itemContactList, boolean force) {
+    public void contactImportAndGetResponse(ArrayList<StructListOfContact> itemContactList, boolean force) {
 
         RequestWrapper requestWrapper = new RequestWrapper(106, contact(itemContactList, force), "identity");
         try {
@@ -36,8 +34,6 @@ public class RequestUserContactImport {
             String phone = itemContactList.get(i).getPhone();
             String first_name = itemContactList.get(i).getFirstName();
             String last_name = itemContactList.get(i).getLastName();
-            Log.i("OOO", "contactImport first_name : " + first_name);
-            Log.i("OOO", "contactImport phone : " + phone);
 
             ProtoUserContactsImport.UserContactsImport.Contact.Builder contact = ProtoUserContactsImport.UserContactsImport.Contact.newBuilder();
 

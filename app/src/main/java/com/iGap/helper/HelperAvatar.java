@@ -1,5 +1,7 @@
 package com.iGap.helper;
 
+import android.support.annotation.Nullable;
+
 import com.iGap.G;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
@@ -240,7 +242,7 @@ public class HelperAvatar {
      * @param avatarId   id avatar for delete from RealmAvatar
      */
 
-    public static void avatarDelete(final long ownerId, final long avatarId, final AvatarType avatarType, final OnAvatarDelete onAvatarDelete) {
+    public static void avatarDelete(final long ownerId, final long avatarId, final AvatarType avatarType, @Nullable final OnAvatarDelete onAvatarDelete) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransactionAsync(new Realm.Transaction() {
@@ -255,25 +257,29 @@ public class HelperAvatar {
             @Override
             public void onSuccess() {
 
-                getAvatar(ownerId, avatarType, new OnAvatarGet() {
-                    @Override
-                    public void onAvatarGet(String avatarPath) {
-                        onAvatarDelete.latestAvatarPath(avatarPath);
-                    }
+                if (onAvatarDelete != null) {
+                    getAvatar(ownerId, avatarType, new OnAvatarGet() {
+                        @Override
+                        public void onAvatarGet(String avatarPath) {
+                            onAvatarDelete.latestAvatarPath(avatarPath);
+                        }
 
-                    @Override
-                    public void onShowInitials(String initials, String color) {
-                        onAvatarDelete.showInitials(initials, color);
-                    }
-                });
+                        @Override
+                        public void onShowInitials(String initials, String color) {
+                            onAvatarDelete.showInitials(initials, color);
+                        }
+                    });
+                }
 
             }
         }, new Realm.Transaction.OnError() {
             @Override
             public void onError(Throwable error) {
-                String[] initials = showInitials(ownerId, avatarType);
-                if (initials != null) {
-                    onAvatarDelete.showInitials(initials[0], initials[1]);
+                if (onAvatarDelete != null) {
+                    String[] initials = showInitials(ownerId, avatarType);
+                    if (initials != null) {
+                        onAvatarDelete.showInitials(initials[0], initials[1]);
+                    }
                 }
             }
         });

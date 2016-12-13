@@ -34,6 +34,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -114,14 +115,16 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -167,12 +170,15 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private AttachFile attachFile;
     private long avatarId;
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
 
         ActivityShearedMedia.getCountOfSharedMedia(roomId, txtSharedMedia.getText().toString(), new OnComplete() {
-            @Override public void complete(boolean result, final String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, final String messageOne, String MessageTow) {
                 txtSharedMedia.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         txtSharedMedia.setText(messageOne);
                     }
                 });
@@ -1391,7 +1397,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, final String identity) {
-        if (Long.parseLong(identity) == roomId) {
+        if (identity != null && Long.parseLong(identity) == roomId) {
 
             if (!userExistInList(user.getId())) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
                 runOnUiThread(new Runnable() {

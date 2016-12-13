@@ -2,6 +2,7 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              android:id="@+id/chatSubLayoutImage"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
@@ -47,7 +48,8 @@
                     <com.iGap.module.ReserveSpaceRoundedImageView
                         android:id="@+id/thumbnail"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent"
+                        app:riv_corner_radius="@dimen/messageBox_cornerRadius"/>
 
                     <include
                         android:id="@+id/progress"
@@ -88,7 +90,7 @@
                             android:layout_height="16dp"
                             android:layout_marginLeft="@dimen/dp4"
                             android:src="@drawable/ic_clock"
-                            android:tint="@color/green"/>
+                            android:tint="@color/white"/>
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>

@@ -37,24 +37,26 @@
             android:id="@+id/chslr_txt_replay_from"
             style="@style/ChatMessages.EmojiTextView"
             android:layout_width="match_parent"
-            android:layout_marginBottom="-5dp"
-            android:layout_marginTop="-4dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:maxLines="1"
             android:text="SAMPLE TEXT"
             android:textColor="@color/colorOldBlack"
             android:textSize="@dimen/sp12"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:padding="0dp"/>
 
         <io.github.meness.emoji.EmojiTextView
             android:id="@+id/chslr_txt_replay_message"
             style="@style/ChatMessages.EmojiTextView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="-6dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="SAMPLE TEXT"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/sp14"/>
+            android:textSize="@dimen/sp14"
+            android:padding="0dp"/>
     </LinearLayout>
 </LinearLayout>
