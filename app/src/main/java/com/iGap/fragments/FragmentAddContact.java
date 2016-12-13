@@ -247,7 +247,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
         contacts.add(contact);
 
-        new RequestUserContactImport().contactImportAndGetReponse(contacts, true);
+        new RequestUserContactImport().contactImportAndGetResponse(contacts, true);
     }
 
     private void addToContactList(View view) {
