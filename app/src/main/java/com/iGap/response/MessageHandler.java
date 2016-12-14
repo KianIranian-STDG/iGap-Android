@@ -3,6 +3,8 @@ package com.iGap.response;
 import android.support.annotation.CallSuper;
 import android.util.Log;
 
+import com.iGap.WebSocketClient;
+
 public abstract class MessageHandler {
 
     public Object message;
@@ -22,6 +24,7 @@ public abstract class MessageHandler {
 
     @CallSuper
     public void timeOut() {
+        WebSocketClient.checkConnection();
         Log.i("MSGT", "MessageHandler timeOut : " + actionId + " || " + message);
         error();
     }

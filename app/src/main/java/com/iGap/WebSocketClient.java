@@ -96,8 +96,7 @@ public class WebSocketClient {
                     try {
                         if (finalWs != null) {
                             Log.i("SOC_WebSocket", "Connecting");
-                            HelperConnectionState.connectionState(
-                                    Config.ConnectionState.CONNECTING);
+                            HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                             finalWs.connect();
                         }
                     } catch (WebSocketException e) {
@@ -230,6 +229,15 @@ public class WebSocketClient {
         }
         return webSocketClient;
     }
+
+    public static boolean checkConnection() {
+        if (webSocketClient != null && webSocketClient.isOpen()) {
+            return true;
+        }
+        reconnect();
+        return false;
+    }
+
 
     /**
      * role back main data for preparation for reconnecting to socket

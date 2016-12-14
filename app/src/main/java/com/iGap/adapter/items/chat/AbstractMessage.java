@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.CallSuper;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -58,6 +59,7 @@ import io.meness.github.messageprogress.OnProgress;
 import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.iGap.G.context;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
@@ -285,6 +287,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
         LinearLayout frameLayout = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
+
+        ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
         if (messageText != null) {
@@ -294,7 +298,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
+            imgTick.setColorFilter(ContextCompat.getColor(context, R.color.white));
         } else {
+            imgTick.setColorFilter(ContextCompat.getColor(context, R.color.colorOldBlack));
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
 
@@ -317,6 +323,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout frameLayout = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.END;
 
+        ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
         if (messageText != null) {
@@ -326,7 +333,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
+            imgTick.setColorFilter(ContextCompat.getColor(context, R.color.white));
         } else {
+            imgTick.setColorFilter(ContextCompat.getColor(context, R.color.colorOldBlack));
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
 

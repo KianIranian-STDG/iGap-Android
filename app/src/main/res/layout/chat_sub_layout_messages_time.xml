@@ -34,5 +34,6 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginLeft="@dimen/dp4"
-        android:src="@drawable/ic_double_check"/>
+        android:src="@drawable/ic_double_check"
+        android:tint="@color/colorOldBlack"/>
 </LinearLayout>
