@@ -137,6 +137,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
             holder.mTimeMusic = MusicPlayer.musicTime;
         }
+        {
+            holder.musicSeekbar.setProgress(0);
+            holder.btnPlayMusic.setText(R.string.md_play_arrow);
+        }
 
         holder.mMessageID = mMessage.messageID;
     }
@@ -230,15 +234,14 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                         if (MusicPlayer.mp != null) {
                             MusicPlayer.playAndPause();
                         } else {
-                            MusicPlayer.startPlayer(mFilePath, ActivityChat.title, ActivityChat.mRoomId, true);
+                            MusicPlayer.startPlayer(mFilePath, ActivityChat.title, ActivityChat.mRoomId, true, mMessageID);
                         }
                     } else {
 
                         MusicPlayer.stopSound();
-                        MusicPlayer.messageId = mMessageID;
                         MusicPlayer.onCompleteChat = complete;
 
-                        MusicPlayer.startPlayer(mFilePath, ActivityChat.title, ActivityChat.mRoomId, true);
+                        MusicPlayer.startPlayer(mFilePath, ActivityChat.title, ActivityChat.mRoomId, true, mMessageID);
 
                         mTimeMusic = MusicPlayer.musicTime;
                     }

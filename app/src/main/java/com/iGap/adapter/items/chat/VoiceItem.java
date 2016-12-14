@@ -104,6 +104,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             holder.txt_Timer.setText(MusicPlayer.strTimer + "/" + MusicPlayer.musicTime);
 
             holder.mTimeMusic = MusicPlayer.musicTime;
+        } else {
+            holder.musicSeekbar.setProgress(0);
+            holder.btnPlayMusic.setText(R.string.md_play_arrow);
         }
 
         holder.mMessageID = mMessage.messageID;
@@ -211,15 +214,13 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                         if (MusicPlayer.mp != null) {
                             MusicPlayer.playAndPause();
                         } else {
-                            MusicPlayer.startPlayer(mFilePath, ActivityChat.title, ActivityChat.mRoomId, true);
+                            MusicPlayer.startPlayer(mFilePath, ActivityChat.title, ActivityChat.mRoomId, true, mMessageID);
                         }
                     } else {
 
                         MusicPlayer.stopSound();
-                        MusicPlayer.messageId = mMessageID;
                         MusicPlayer.onCompleteChat = complete;
-
-                        MusicPlayer.startPlayer(mFilePath, ActivityChat.title, ActivityChat.mRoomId, true);
+                        MusicPlayer.startPlayer(mFilePath, ActivityChat.title, ActivityChat.mRoomId, true, mMessageID);
 
                         mTimeMusic = MusicPlayer.musicTime;
                     }

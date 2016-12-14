@@ -15,8 +15,6 @@ public class RealmShearedMedia extends RealmObject {
 
     private byte[] roomMessage;
 
-    private String sharedMediaCount;
-
     private byte[] filter;
 
 
@@ -50,14 +48,6 @@ public class RealmShearedMedia extends RealmObject {
 
     public void setRoomId(long roomId) {
         this.roomId = roomId;
-    }
-
-    public String getSharedMediaCount() {
-        return sharedMediaCount;
-    }
-
-    public void setSharedMediaCount(String sharedMediaCount) {
-        this.sharedMediaCount = sharedMediaCount;
     }
 
 }

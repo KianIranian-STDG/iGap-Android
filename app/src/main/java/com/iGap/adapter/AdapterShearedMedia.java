@@ -439,7 +439,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         MyHoldersMusic holdersMusic = (MyHoldersMusic) holder;
 
-        MusicPlayer.startPlayer(holdersMusic.filePath, list.get(position).item.getAttachment().getName(), roomId, true);
+        MusicPlayer.startPlayer(holdersMusic.filePath, list.get(position).item.getAttachment().getName(), roomId, true, list.get(position).item.getMessageId() + "");
     }
 
     //****************************************************************************************************************

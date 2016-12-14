@@ -63,8 +63,7 @@ public class ImageHelper {
                         bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                     }
                 } catch (Exception e) {
-                    saveChange = true;
-                    bitmap = decodeFile(file);
+
                 }
 
 

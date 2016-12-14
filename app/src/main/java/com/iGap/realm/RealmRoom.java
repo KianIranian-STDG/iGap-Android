@@ -4,7 +4,6 @@ import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -25,6 +24,7 @@ public class RealmRoom extends RealmObject {
     private RealmRoomMessage lastMessage;
     private RealmRoomDraft draft;
     private long updatedTime;
+    private String sharedMediaCount = "";
     private String actionState;
 
     public long getUpdatedTime() {
@@ -116,7 +116,6 @@ public class RealmRoom extends RealmObject {
         realmRoomDraft.setReplyToMessageId(room.getDraft().getReplyTo());
 
         realmRoom.setDraft(realmRoomDraft);
-        realmRoom.setActionState(null);
 
         realm.close();
 
@@ -265,6 +264,14 @@ public class RealmRoom extends RealmObject {
 
     public void setAvatar(RealmAvatar avatar) {
         this.avatar = avatar;
+    }
+
+    public String getSharedMediaCount() {
+        return sharedMediaCount;
+    }
+
+    public void setSharedMediaCount(String sharedMediaCount) {
+        this.sharedMediaCount = sharedMediaCount;
     }
 
     public String getActionState() {

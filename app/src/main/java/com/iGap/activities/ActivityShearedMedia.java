@@ -32,7 +32,10 @@ import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoClientSearchRoomHistory;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmShearedMedia;
+import com.iGap.realm.RealmShearedMediaFields;
 import com.iGap.request.RequestClientSearchRoomHistory;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -570,7 +573,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         byte[] type = SerializationUtils.serialize(filter);
 
-        RealmResults<RealmShearedMedia> mediaList = realm.where(RealmShearedMedia.class).equalTo("roomId", roomId).equalTo("filter", type).findAllSorted("messageId", Sort.ASCENDING);
+        RealmResults<RealmShearedMedia> mediaList =
+            realm.where(RealmShearedMedia.class).equalTo(RealmShearedMediaFields.ROOM_ID, roomId).equalTo("filter", type).findAllSorted("messageId", Sort.ASCENDING);
 
         ArrayList<ProtoGlobal.RoomMessage> list = new ArrayList<>();
 
@@ -603,7 +607,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                 for (ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
 
-                    RealmShearedMedia mediaList = realm.where(RealmShearedMedia.class).equalTo("messageId", roomMessage.getMessageId()).equalTo("roomId", roomId).findFirst();
+                    RealmShearedMedia mediaList =
+                        realm.where(RealmShearedMedia.class).equalTo(RealmShearedMediaFields.MESSAGE_ID, roomMessage.getMessageId()).equalTo(RealmShearedMediaFields.ROOM_ID, roomId).findFirst();
 
                     if (mediaList == null) {
                         mediaList = realm.createObject(RealmShearedMedia.class);
@@ -740,6 +745,42 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     static int counts = 0;
 
+    public static void updateCountOfSharedMedia(OnComplete complete, long roomid) {
+
+        if (counts >= 7) {
+
+            totalCountItem = totalCountItem.trim();
+
+            if (totalCountItem.length() < 1) totalCountItem = G.context.getString(R.string.there_is_no_sheared_media);
+
+            if (complete != null) {
+                complete.complete(true, totalCountItem, "");
+            }
+
+            Realm realm = Realm.getDefaultInstance();
+
+            final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
+            if (room != null) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        room.setSharedMediaCount(totalCountItem);
+                    }
+                });
+            }
+
+            final RealmResults<RealmShearedMedia> realmShearedMedia = realm.where(RealmShearedMedia.class).equalTo(RealmShearedMediaFields.ROOM_ID, roomid).findAll();
+            if (realmShearedMedia != null) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        realmShearedMedia.deleteAllFromRealm();
+                    }
+                });
+            }
+
+            realm.close();
+        }
+    }
+
     public static void getCountOfSharedMedia(final long roomid, String text, final OnComplete complete) {
 
         counts = 0;
@@ -779,42 +820,28 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                             totalCountItem += "\n" + notDeletedCount + " " + G.context.getString(R.string.shared_links);
                             break;
                     }
-
-                    if (complete != null) {
-                        if (counts >= 7) complete.complete(true, totalCountItem, "");
-                    }
-
-                    Realm realm = Realm.getDefaultInstance();
-                    final RealmShearedMedia rsm = realm.where(RealmShearedMedia.class).equalTo("roomId", roomid).findFirst();
-                    if (rsm != null) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
-                                rsm.setSharedMediaCount(totalCountItem);
-                            }
-                        });
-                    }
-                    realm.close();
                 }
+
+                updateCountOfSharedMedia(complete, roomid);
+
             }
 
             @Override public void onError(int majorCode, int minorCode) {
                 counts++;
+                updateCountOfSharedMedia(complete, roomid);
             }
 
             @Override public void onTimeOut() {
                 counts++;
+                updateCountOfSharedMedia(complete, roomid);
             }
         };
 
         Realm realm = Realm.getDefaultInstance();
-        RealmShearedMedia rsm = realm.where(RealmShearedMedia.class).equalTo("roomId", roomid).findFirst();
-        if (rsm != null) {
-            if (rsm.getSharedMediaCount() != null) {
-                if (rsm.getSharedMediaCount().length() > 0) {
-                    if (complete != null) {
-                        complete.complete(true, rsm.getSharedMediaCount(), "");
-                    }
-                }
+        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
+        if (room != null) {
+            if (complete != null) {
+                complete.complete(true, room.getSharedMediaCount(), "");
             }
         }
         realm.close();

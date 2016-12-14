@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -183,21 +182,6 @@ import com.nightonke.boommenu.Types.ButtonType;
 import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -209,6 +193,18 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -235,7 +231,7 @@ public class ActivityChat extends ActivityEnhanced
     AttachFile attachFile;
     BoomMenuButton boomMenuButton;
     LinearLayout mediaLayout;
-    MusicPlayer musicPlayer;
+    public static MusicPlayer musicPlayer;
     LinearLayout ll_Search;
     Button btnCloseLayoutSearch;
     EditText edtSearchMessage;
@@ -302,6 +298,7 @@ public class ActivityChat extends ActivityEnhanced
     private long chatPeerId;
     private boolean isMuteNotification;
     private String userStatus;
+    public static OnComplete onMusicListener;
 
     //group
     private GroupChatRole groupRole;
@@ -394,10 +391,26 @@ public class ActivityChat extends ActivityEnhanced
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
 
+        mAdapter.notifyDataSetChanged();
+
+        onMusicListener = new OnComplete() {
+            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+
+                Log.e("ddd", "aaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+                mAdapter.notifyDataSetChanged();
+            }
+        };
+
         requestMessageHistory();
         setAvatar();
     }
 
+    @Override protected void onPause() {
+        super.onPause();
+
+        onMusicListener = null;
+    }
 
     boolean firstTimeGetHistory = false; //TODO [Saeed Mozaffari] [2016-11-10 12:47 PM] - hataman firstTimeGetHistory estefade nashavad chon eshtebah ast in ravesh
 
@@ -425,6 +438,7 @@ public class ActivityChat extends ActivityEnhanced
                 txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member));
             }
         };
+
 
         appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
 
@@ -2238,14 +2252,16 @@ public class ActivityChat extends ActivityEnhanced
             }
         }
 
+        if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            attachFile.requestGetPosition(complete);
+            return;
+        }
+
         if (resultCode == Activity.RESULT_OK) {
 
             HelperSetAction.sendCancel(messageId);
 
-            if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                attachFile.requestGetPosition(complete);
-                return;
-            }
+
             if (requestCode == AttachFile.request_code_contact_phone) {
                 latestUri = data.getData();
                 sendMessage(requestCode, "");
@@ -2260,15 +2276,17 @@ public class ActivityChat extends ActivityEnhanced
                 // latestFilePath = AttachFile.imagePath;
                 latestUri = null; // check
             } else {
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     if (data.getClipData() != null) { // multi select file
                         listPathString = attachFile.getClipData(data.getClipData());
-                    } else { // single file selected
-                        listPathString = new ArrayList<>();
-                        listPathString.add(getFilePathFromUri(data.getData()));
                     }
                 }
+
+                if (listPathString == null || listPathString.size() < 1) {
+                    listPathString = new ArrayList<>();
+                    listPathString.add(getFilePathFromUri(data.getData()));
+                }
+
             }
             latestRequestCode = requestCode;
 
@@ -3530,21 +3548,6 @@ public class ActivityChat extends ActivityEnhanced
         final long updateTime = TimeUtils.currentLocalTime();
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
         final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
-        if (userTriesReplay()) {
-            mAdapter.add(new VoiceItem(chatType, this).setMessage(
-                    new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                            null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID))).withIdentifier(SUID.id().get()));
-        } else {
-            if (isMessageWrote()) {
-                mAdapter.add(new VoiceItem(chatType, this).setMessage(
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                                null, savedPath, updateTime)).withIdentifier(SUID.id().get()));
-            } else {
-                mAdapter.add(new VoiceItem(chatType, this).setMessage(
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.RoomMessageType.VOICE, MyType.SendType.send,
-                                null, savedPath, updateTime)).withIdentifier(SUID.id().get()));
-            }
-        }
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -3565,11 +3568,30 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
+        realm.close();
+
         new UploadTask().execute(savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, mRoomId, getWrittenMessage());
+
+        StructMessageInfo messageInfo;
+
+        if (userTriesReplay()) {
+            messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
+                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+        } else {
+            if (isMessageWrote()) {
+                messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+            } else {
+                messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+            }
+        }
+
+        messageInfo.attachment.duration = duration;
+        mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo));
 
         scrollToEnd();
 
-        realm.close();
     }
 
     @Override

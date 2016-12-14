@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -40,12 +39,10 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestUserAvatarDelete;
-
-import java.io.File;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import java.io.File;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/26/2016.
@@ -245,17 +242,17 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
     private void fillListChatAvatar() {
 
-
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo user = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mPeerId).findFirst();
         if (user != null) {
             // user exists in DB
             final RealmList<RealmAvatar> userAvatars = user.getAvatars();
 
-
             long identifier = SUID.id().get();
-            for (RealmAvatar avatar : userAvatars) {
 
+            for (int i = userAvatars.size(); i > 0; i--) {
+
+                RealmAvatar avatar = userAvatars.get((i - 1));
                 mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
                 identifier++;
             }

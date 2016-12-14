@@ -22,6 +22,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activities.ActivityChat;
 import com.iGap.activities.ActivityMediaPlayer;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
@@ -192,10 +193,14 @@ public class MusicPlayer {
 
             if (!isShowMediaPlayer) {
 
-                try {
-                    notificationManager.notify(notificationId, notification);
-                } catch (RuntimeException e) {
-                }
+                handler.post(new Runnable() {
+                    @Override public void run() {
+                        try {
+                            notificationManager.notify(notificationId, notification);
+                        } catch (RuntimeException e) {
+                        }
+                    }
+                });
 
 
                 if (onCompleteChat != null) {
@@ -222,10 +227,16 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             if (!isShowMediaPlayer) {
-                try {
-                    notificationManager.notify(notificationId, notification);
-                } catch (RuntimeException e) {
-                }
+
+                handler.post(new Runnable() {
+                    @Override public void run() {
+                        try {
+                            notificationManager.notify(notificationId, notification);
+                        } catch (RuntimeException e) {
+                        }
+                    }
+                });
+
 
                 if (onCompleteChat != null) {
                     onCompleteChat.complete(true, "pause", "");
@@ -244,7 +255,7 @@ public class MusicPlayer {
                 updateProgress();
             }
         } else {
-            startPlayer(musicPath, roomName, roomId, false);
+            startPlayer(musicPath, roomName, roomId, false, messageId);
         }
     }
 
@@ -256,10 +267,20 @@ public class MusicPlayer {
             musicProgress = 0;
 
             if (!isShowMediaPlayer) {
-                try {
-                    notificationManager.notify(notificationId, notification);
-                } catch (RuntimeException e) {
-                }
+
+                handler.post(new Runnable() {
+                    @Override public void run() {
+                        try {
+                            notificationManager.notify(notificationId, notification);
+                        } catch (RuntimeException e) {
+                        }
+                    }
+                });
+
+
+
+
+
                 if (onCompleteChat != null) {
                     onCompleteChat.complete(true, "play", "");
                     onCompleteChat.complete(true, "updateTime", "00");
@@ -281,39 +302,44 @@ public class MusicPlayer {
 
     public static void nextMusic() {
         if (selectedMedia < mediaList.size()) {
-            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false);
+            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             selectedMedia++;
             if (onComplete != null) onComplete.complete(true, "update", "");
         } else {
-            startPlayer(mediaList.get(0).getAttachment().getLocalFilePath(), roomName, roomId, false);
+            startPlayer(mediaList.get(0).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(0).getMessageId() + "");
             selectedMedia = 1;
             if (onComplete != null) onComplete.complete(true, "update", "");
         }
+        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, "", "");
     }
 
     private static void nextRandomMusic() {
         Random r = new Random();
         selectedMedia = r.nextInt(mediaList.size());
-        startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false);
+        startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
         if (onComplete != null) onComplete.complete(true, "update", "");
+
+        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, "", "");
     }
 
     public static void previousMusic() {
 
         if (selectedMedia > 1) {
             selectedMedia--;
-            startPlayer(mediaList.get(selectedMedia - 1).getAttachment().getLocalFilePath(), roomName, roomId, false);
+            startPlayer(mediaList.get(selectedMedia - 1).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia - 1).getMessageId() + "");
 
             if (onComplete != null) onComplete.complete(true, "update", "");
         } else {
             int item = mediaList.size();
             if (item > 0) {
-                startPlayer(mediaList.get(item - 1).getAttachment().getLocalFilePath(), roomName, roomId, false);
+                startPlayer(mediaList.get(item - 1).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(item - 1).getMessageId() + "");
                 selectedMedia = item;
                 if (onComplete != null) onComplete.complete(true, "update", "");
             }
         }
+
+        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, "", "");
     }
 
     private static void closeLayoutMediaPlayer() {
@@ -323,18 +349,27 @@ public class MusicPlayer {
             mp.release();
             mp = null;
         }
-        try {
-            notificationManager.cancel(notificationId);
-        } catch (RuntimeException e) {
-        }
+
+        handler.post(new Runnable() {
+            @Override public void run() {
+                try {
+                    notificationManager.cancel(notificationId);
+                } catch (RuntimeException e) {
+                }
+            }
+        });
+
+
+
     }
 
-    public static void startPlayer(String musicPath, String roomName, long roomId, boolean updateList) {
+    public static void startPlayer(String musicPath, String roomName, long roomId, boolean updateList, String messageId) {
 
         MusicPlayer.musicPath = musicPath;
         MusicPlayer.roomName = roomName;
         mediaThumpnail = null;
         MusicPlayer.roomId = roomId;
+        MusicPlayer.messageId = messageId;
 
         Log.e("ddd", "roomId   " + roomId);
 
@@ -380,7 +415,7 @@ public class MusicPlayer {
                 musicName = musicPath.substring(musicPath.lastIndexOf("/") + 1);
                 txt_music_name.setText(musicName);
 
-                //  updateNotification();
+                updateNotification();
             } catch (Exception e) {
             }
         } else {
@@ -443,7 +478,7 @@ public class MusicPlayer {
 
                 musicName = musicPath.substring(musicPath.lastIndexOf("/") + 1);
                 txt_music_name.setText(musicName);
-                //   updateNotification();
+                updateNotification();
             } catch (Exception e) {
             }
         }
