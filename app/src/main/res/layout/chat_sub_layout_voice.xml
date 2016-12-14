@@ -44,6 +44,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp80"
                     android:gravity="center_vertical"
                     android:layoutDirection="ltr"
                     android:orientation="horizontal">

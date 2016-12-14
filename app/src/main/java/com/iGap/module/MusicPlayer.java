@@ -191,7 +191,12 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
 
             if (!isShowMediaPlayer) {
-                //   notificationManager.notify(notificationId, notification);
+
+                try {
+                    notificationManager.notify(notificationId, notification);
+                } catch (RuntimeException e) {
+                }
+
 
                 if (onCompleteChat != null) {
                     onCompleteChat.complete(true, "play", "");
@@ -217,7 +222,10 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             if (!isShowMediaPlayer) {
-                //   notificationManager.notify(notificationId, notification);
+                try {
+                    notificationManager.notify(notificationId, notification);
+                } catch (RuntimeException e) {
+                }
 
                 if (onCompleteChat != null) {
                     onCompleteChat.complete(true, "pause", "");
@@ -245,11 +253,13 @@ public class MusicPlayer {
         try {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
-            musicProgress = 100;
+            musicProgress = 0;
 
             if (!isShowMediaPlayer) {
-                //  notificationManager.notify(notificationId, notification);
-
+                try {
+                    notificationManager.notify(notificationId, notification);
+                } catch (RuntimeException e) {
+                }
                 if (onCompleteChat != null) {
                     onCompleteChat.complete(true, "play", "");
                     onCompleteChat.complete(true, "updateTime", "00");
@@ -350,7 +360,7 @@ public class MusicPlayer {
                         @Override
                         public void run() {
                             try {
-                                //     notificationManager.notify(notificationId, notification);
+                                notificationManager.notify(notificationId, notification);
                             } catch (RuntimeException e) {
                             }
                         }
@@ -392,7 +402,7 @@ public class MusicPlayer {
                         @Override
                         public void run() {
                             try {
-                                //   notificationManager.notify(notificationId, notification);
+                                notificationManager.notify(notificationId, notification);
                             } catch (RuntimeException e) {
                             }
                         }

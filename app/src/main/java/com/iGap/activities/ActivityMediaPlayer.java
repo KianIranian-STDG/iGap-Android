@@ -126,7 +126,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         super.onPause();
         MusicPlayer.isShowMediaPlayer = false;
         MusicPlayer.onComplete = null;
-        //   MusicPlayer.updateNotification();
+        MusicPlayer.updateNotification();
     }
 
     @Override
