@@ -91,24 +91,26 @@
     <string name="choosing_contact">انتخاب مخاطب</string>
     <string name="painting">درحال نقاشی...</string>
 
+    <!-- Action Box -->
+    <string name="log_out">خروج</string>
+    <string name="delete_account">حذف حساب کاربری</string>
+    <string name="mute_notification">"اطلاع رسانی بیصدا"</string>
+    <string name="unmute_notification">"اطلاع رسانی باصدا"</string>
+    <string name="clear_history">"پاک کردن تاریخچه"</string>
+    <string name="to_delete_chat">"حذف گفتگو"</string>
+    <string name="left_group">ترک گروه</string>
+    <string name="delete_group">حذف گروه</string>
+    
     <!-- Public String -->
-    <string name="search">"جستجو"</string>
-    <string name="d_of_d" formatted="false">"%d از %d"</string>
-    <string name="add_to_contact">"افزودن به مخاطبین"</string>
     <string name="app_name">"آی‌گپ"</string>
-    <string name="unmute_notification">"اعلانات را صدا دار کنید."</string>
-    <string name="mute_notification">"اعلانات را بی صدا کنید."</string>
     <string name="chat">"گفتگو"</string>
     <string name="group">"گروه"</string>
     <string name="channel">"کانال"</string>
     <string name="igap">"آی‌گپ"</string>
     <string name="igapChanel">"آی‌گپ"</string>
-    <string name="clear_history">"پاک کردن تاریخچهٔ گفتگو"</string>
-    <string name="clear_history_content">"آیا مطمئنید که می‌خواهید تاریخچهٔ گفتگو را پاک کنید؟"</string>
-    <string name="to_delete_chat">"حذف گفتگو"</string>
-    <string name="delete_chat_content">"آیا مطمئنید که می‌خواهید گفتگو را حذف کنید؟"</string>
-    <string name="to_delete_contact">"حذف مخاطب"</string>
-    <string name="delete_text">"آیا مطمئنید که می خواهید این مخاطب را حذف کنید؟"</string>
+    <string name="search">"جستجو"</string>
+    <string name="d_of_d" formatted="false">"%d از %d"</string>
+    <string name="add_to_contact">"افزودن به مخاطبین"</string>
     <string name="cancel">"انصراف"</string>
     <string name="B_cancel">"انصراف"</string>
     <string name="B_skip">"بیخیال"</string>
@@ -117,7 +119,7 @@
     <string name="B_ok">"تأیید"</string>
     <string name="set">"تأیید"</string>
     <string name="am_camera">"دوربین"</string>
-    <string name="am_music">"موسیقی"</string>
+    <string name="am_music">"صوت"</string>
     <string name="am_paint">"نقاشی"</string>
     <string name="am_picture">"تصویر"</string>
     <string name="am_document">"سند"</string>
@@ -125,6 +127,16 @@
     <string name="am_video">"ویدئو"</string>
     <string name="am_file">"فایل"</string>
     <string name="am_contact">"مخاطب"</string>
+
+    <string name="clear_history_content">"آیا مطمئنید که می‌خواهید تاریخچهٔ گفتگو را پاک کنید؟"</string>
+    
+    <string name="delete_chat_content">"آیا مطمئنید که می‌خواهید گفتگو را حذف کنید؟"</string>
+    <string name="to_delete_contact">"حذف مخاطب"</string>
+    <string name="delete_text">"آیا مطمئنید که می خواهید این مخاطب را حذف کنید؟"</string>
+   
+    
+    
+    
     <string name="just_wait_en">"منتظر باشید."</string>
     <string name="device_dosenot_camera_en">"این دستگاه دوربین ندارد."</string>
     <string name="do_you_want_to_turn_on_gps">"سیستم مکان‌یاب جهانی (GPS) شما خاموش است، آیا مایلید آن را روشن کنید؟"</string>
@@ -499,8 +511,7 @@
     <string name="unknown">ناشناس</string>
     <string name="add_to_list_contact">افزودن به مخاطبین</string>
     <string name="text_add_to_list_contact">آیا می‌خواهید این شماره تلفن را به مخاطبین خود بیفزایید؟</string>
-    <string name="log_out">خروج</string>
-    <string name="delete_account">حذف حساب کاربری</string>
+
     <string name="delete_account_text">آیا مطمئنید که می خواهید این حساب کاربری را حذف کنید؟</string>
     <string name="text_kick_admin">آیا مطمئنید که می‌خواهید این اَدمین را بیرون کنید؟</string>
     <string name="text_kick_moderator">آیا مطمئنید که می‌خواهید این مدیر را بیرون کنید؟</string>
@@ -581,7 +592,7 @@
     <string name="clear">پاک کردن</string>
     <string name="can_not_save_image">عدم امکان ذخیرهٔ تصویر</string>
     <string name="just_owner_can_delete">فقط دارندهٔ گروه می‌تواند حذف کند.</string>
-    <string name="left_group">ترک گروه</string>
+    
     <string name="shate_audio_file">به اشتراک گذاشتن فایل صوتی</string>
     <string name="last_seen">آخرین مشاهده</string>
     <string name="remove">حذف کردن</string>
@@ -598,7 +609,7 @@
     <string name="TERMINATE">پایان</string>
     <string name="iGap_version">آی‌گپ برای اندروید</string>
     <string name="do_you_want_left_this">آیااز ترک ایتم انتخاب شده اطمینان دارید؟</string>
-    <string name="delete_group">حذف گروه</string>
+    
     <string name="do_you_want_to_leave_this_group">آیا مطمئنید که می‌خواهید این گروه را ترک کنید؟</string>
     <string name="waiting_for_connection">در انتظار اتصال به سرور</string>
     <string name="picture_save_to_galary">"ذخیرهٔ تصویر در گالری"</string>
