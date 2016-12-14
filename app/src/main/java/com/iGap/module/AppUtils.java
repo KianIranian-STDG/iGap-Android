@@ -28,10 +28,6 @@ import io.realm.Sort;
 
 import static com.iGap.G.context;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/22/2016.
- */
-
 public final class AppUtils {
     private AppUtils() throws InstantiationException {
         throw new InstantiationException("This class is not for instantiation.");
