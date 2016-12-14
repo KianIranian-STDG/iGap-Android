@@ -94,6 +94,8 @@
     <!-- Action Box -->
     <string name="log_out">خروج</string>
     <string name="delete_account">حذف حساب کاربری</string>
+    <string name="mute">بی صدا</string>
+    <string name="unmute">با صدا</string>
     <string name="mute_notification">"اطلاع رسانی بیصدا"</string>
     <string name="unmute_notification">"اطلاع رسانی باصدا"</string>
     <string name="clear_history">"پاک کردن تاریخچه"</string>
@@ -102,12 +104,12 @@
     <string name="delete_group">حذف گروه</string>
     
     <!-- Public String -->
-    <string name="app_name">"آی‌گپ"</string>
+    <string name="app_name">"آی گپ"</string>
     <string name="chat">"گفتگو"</string>
     <string name="group">"گروه"</string>
     <string name="channel">"کانال"</string>
-    <string name="igap">"آی‌گپ"</string>
-    <string name="igapChanel">"آی‌گپ"</string>
+    <string name="igap">"آی گپ"</string>
+    <string name="igapChanel">"آی گپ"</string>
     <string name="search">"جستجو"</string>
     <string name="d_of_d" formatted="false">"%d از %d"</string>
     <string name="add_to_contact">"افزودن به مخاطبین"</string>
@@ -579,8 +581,7 @@
     <string name="share_video_file">به اشتراک گذاشتن فایل ویدئویی</string>
     <string name="share_file">به اشتراک گذاشتن فایل</string>
     <string name="text_copied">متن کپی شده</string>
-    <string name="unmute">با صدا</string>
-    <string name="mute">بی‌صدا</string>
+
     <string name="message">پیام</string>
     <string name="future_done">این قابلیت در آینده ارائه خواهد شد.</string>
     <string name="nick_name_not_exist">این نام مستعار وجود ندارد.</string>
