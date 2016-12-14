@@ -1,6 +1,7 @@
 package com.iGap.adapter.items;
 
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,7 +11,6 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
-import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
@@ -36,16 +36,12 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static android.view.View.GONE;
-
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/``016.
- */
+import static com.iGap.G.context;
 
 /**
  * chat item for main displaying chats
  */
-public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
-        implements IChatItemAvatar {
+public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public RealmRoom mInfo;
     public OnComplete mComplete;
@@ -85,63 +81,13 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             case CHAT:
                 return "";
             case CHANNEL:
-                return G.context.getString(R.string.fa_bullhorn);
+                return context.getString(R.string.fa_bullhorn);
             case GROUP:
-                return G.context.getString(R.string.md_users_social_symbol);
+                return context.getString(R.string.md_users_social_symbol);
             default:
                 return null;
         }
     }
-
-    /**
-     * request for avatar thumbnail
-     */
-   /* private void requestForAvatarThumbnail(String token) {
-        if (!AvatarsAdapter.hasThumbnailRequested(token)) {
-            AvatarsAdapter.thumbnailRequests.add(token);
-
-            onRequestDownloadAvatarThumbnail(token, false);
-        }
-    }*/
-
-    /*public void onRequestDownloadAvatarThumbnail(String token, boolean done) {
-        final String fileName = "thumb_" + token + "_" + mInfo.getAvatar().getFile().getName();
-        if (done) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, mInfo.getAvatar().getFile().getToken()).findFirst();
-                    attachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
-                }
-            });
-            realm.close();
-
-            return; // necessary
-        }
-
-        ProtoFileDownload.FileDownload.Selector selector =
-                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        String identity =
-                mInfo.getAvatar().getFile().getToken() + '*' + selector.toString() + '*' + mInfo.getAvatar().getFile().getSmallThumbnail().getSize() + '*' + fileName + '*' + 0;
-
-        new RequestFileDownload().download(token, 0, (int) mInfo.getAvatar().getFile().getSmallThumbnail().getSize(),
-                selector, identity);
-    }*/
-
-    @Override
-    public void onRequestDownloadAvatar(long offset, int progress) {
-
-    }
-
-   /* private void requestForUserInfo() {
-        if (!RoomsAdapter.userInfoAlreadyRequests.contains(mInfo.getOwnerId())) {
-            RequestUserInfo requestUserInfo = new RequestUserInfo();
-            requestUserInfo.userInfo(mInfo.getOwnerId());
-
-            RoomsAdapter.userInfoAlreadyRequests.add(mInfo.getOwnerId());
-        }
-    }*/
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) throws IllegalStateException {
@@ -154,6 +100,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             holder.lastMessageSender.setText(R.string.txt_draft);
             holder.lastMessageSender.setTextColor(Color.parseColor("#ff4644"));
             holder.lastMessage.setText(mInfo.getDraft().getMessage());
+            holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
         } else {
             if (mInfo.getLastMessage() != null) {
                 String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
@@ -173,39 +120,30 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                         holder.messageStatus.setVisibility(GONE);
                     }
 
-                 /*
-                 * here i get latest message from chat history with chatId and
-                 * get DisplayName with that . when login app client get latest
-                 * message for each group from server , if latest message that
-                 * send server and latest message that exist in client for that
-                 * room be different latest message sender showing will be wrong
-                 */
+                    /**
+                     * here i get latest message from chat history with chatId and
+                     * get DisplayName with that . when login app client get latest
+                     * message for each group from server , if latest message that
+                     * send server and latest message that exist in client for that
+                     * room be different latest message sender showing will be wrong
+                     */
 
                     String lastMessageSender = "";
                     if (mInfo.getLastMessage().isSenderMe()) {
                         lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                     } else {
                         Realm realm1 = Realm.getDefaultInstance();
-                        RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class)
-                                .equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.getId())
-                                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                        RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.getId()).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
                         if (!results.isEmpty()) {
                             RealmRoomMessage realmRoomMessage = results.first();
                             if (realmRoomMessage != null) {
-                                RealmRegisteredInfo realmRegisteredInfo =
-                                        realm1.where(RealmRegisteredInfo.class)
-                                                .equalTo(RealmRegisteredInfoFields.ID,
-                                                        realmRoomMessage.getUserId())
-                                                .findFirst();
+                                RealmRegisteredInfo realmRegisteredInfo = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessage.getUserId()).findFirst();
                                 if (realmRegisteredInfo != null) {
-
                                     if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
                                         lastMessageSender = " : " + realmRegisteredInfo.getDisplayName();
                                     } else {
                                         lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
                                     }
-
-
                                 }
                             }
                         }
@@ -220,7 +158,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                         holder.lastMessageSender.setVisibility(GONE);
                     }
 
-
                     holder.lastMessage.setVisibility(View.VISIBLE);
 
                     if (mInfo.getLastMessage() != null) {
@@ -233,6 +170,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                             if (tmp != null)
                                 _type = tmp;
                         } catch (NullPointerException e) {
+                            e.printStackTrace();
                         }
 
 
@@ -241,35 +179,45 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
                             if (tmp != null)
                                 _type = tmp;
                         } catch (NullPointerException e) {
+                            e.printStackTrace();
                         }
 
 
                         switch (_type) {
                             case VOICE:
+                                holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                                 holder.lastMessage.setText(R.string.voice_message);
                                 break;
                             case VIDEO:
+                                holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                                 holder.lastMessage.setText(R.string.video_message);
                                 break;
                             case FILE:
+                                holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                                 holder.lastMessage.setText(R.string.file_message);
                                 break;
                             case AUDIO:
+                                holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                                 holder.lastMessage.setText(R.string.audio_message);
                                 break;
                             case IMAGE:
+                                holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                                 holder.lastMessage.setText(R.string.image_message);
                                 break;
                             case CONTACT:
+                                holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                                 holder.lastMessage.setText(R.string.contact_message);
                                 break;
                             case GIF:
+                                holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                                 holder.lastMessage.setText(R.string.gif_message);
                                 break;
                             case LOCATION:
+                                holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                                 holder.lastMessage.setText(R.string.location_message);
                                 break;
                             default:
+                                holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
                                 holder.lastMessage.setText(lastMessage);
                                 break;
                         }
@@ -317,36 +265,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             }
         });
 
-        /*if (mInfo.getAvatar() != null && mInfo.getAvatar().getFile() != null) {
-
-            if (mInfo.getAvatar().getFile().isFileExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.getAvatar().getFile().getLocalFilePath()), holder.image);
-            } else if (mInfo.getAvatar().getFile().isThumbnailExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mInfo.getAvatar().getFile().getLocalThumbnailPath()), holder.image);
-
-            } else {
-                holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView
-                        .getContext()
-                        .getResources()
-                        .getDimension(R.dimen.dp60), mInfo.getInitials(), mInfo.getColor()));
-
-                if (mInfo.getType() != ProtoGlobal.Room.Type.CHAT) {
-                    if (mInfo.getAvatar().getFile().getToken() != null && !mInfo.getAvatar().getFile().getToken().isEmpty()) {
-                        requestForAvatarThumbnail(mInfo.getAvatar().getFile().getToken());
-                    }
-                } else {
-                    if (mInfo.getAvatar().getFile().getToken() != null && !mInfo.getAvatar().getFile().getToken().isEmpty()) {
-                        requestForAvatarThumbnail(mInfo.getAvatar().getFile().getToken());
-                    } else {
-                        requestForUserInfo();
-                    }
-                }
-            }
-        } else {
-            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mInfo.getInitials(), mInfo.getColor()));
-            requestForUserInfo();
-        }*/
-
         if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
             holder.chatIcon.setVisibility(GONE);
         } else if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
@@ -362,8 +280,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
         holder.name.setText(mInfo.getTitle());
 
         if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateTime() != 0) {
-            holder.lastSeen.setText(
-                    TimeUtils.toLocal(mInfo.getLastMessage().getUpdateTime(), G.ROOM_LAST_MESSAGE_TIME));
+            holder.lastSeen.setText(TimeUtils.toLocal(mInfo.getLastMessage().getUpdateTime(), G.ROOM_LAST_MESSAGE_TIME));
             holder.lastSeen.setVisibility(View.VISIBLE);
         } else {
             holder.lastSeen.setVisibility(GONE);
@@ -373,7 +290,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder>
             holder.unreadMessage.setVisibility(GONE);
         } else {
             holder.unreadMessage.setVisibility(View.VISIBLE);
-
             holder.unreadMessage.setText(Integer.toString(mInfo.getUnreadCount()));
 
             if (mInfo.getMute()) {
