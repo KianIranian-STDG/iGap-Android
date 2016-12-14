@@ -42,8 +42,11 @@
     <string name="md_check_box">\uf142</string>
     <string name="md_rate_star">\uf20f</string>
 
-    <string name="fa_bell_slash">&#xf1f6;</string>
-    <string name="fa_bell">&#xf0f3;</string>
+    <string name="muted">\f297</string>
+    <string name="unmuted">\f298</string>
+    <string name="clearhistory">\f1b5</string>
+    <string name="rubbish-bin">\f22e</string>
+    
     
     <string name="fa_bell_slash_o">&#xf1f7;</string>
     <string name="fa_bullhorn">&#xf0a1;</string>
