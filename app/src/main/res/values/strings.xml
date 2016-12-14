@@ -94,6 +94,8 @@
     <!-- Action Box -->
     <string name="log_out">Logout</string>
     <string name="delete_account">Delete Account</string>
+    <string name="mute">Mute</string>
+    <string name="unmute">Unmute</string>
     <string name="mute_notification">Mute Notify</string>
     <string name="unmute_notification">Un-mute Notify</string>
     <string name="clear_history">Clear History</string>
@@ -569,8 +571,7 @@
     <string name="share_video_file">Share video file</string>
     <string name="share_file">Share file</string>
     <string name="text_copied">Text Copied</string>
-    <string name="unmute">Unmute</string>
-    <string name="mute">Mute</string>
+
     <string name="message">Message</string>
     <string name="future_done">will be offered in the future</string>
     <string name="nick_name_not_exist">nick name not exist</string>
