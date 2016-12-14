@@ -70,13 +70,68 @@
                             android:layout_gravity="center"/>
                     </FrameLayout>
 
-                    <FrameLayout
+
+                    <LinearLayout
                         android:id="@+id/audioPlayerViewContainer"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="6dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
 
-                    </FrameLayout>
+                        <TextView
+                            android:id="@+id/cslv_txt_author"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp52"
+                            android:textSize="@dimen/sp14"
+                            android:text=""
+                            />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+
+                            android:gravity="left|center"
+                            >
+
+
+                            <Button
+                                android:id="@+id/csla_btn_play_music"
+                                android:layout_width="@dimen/dp40"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:gravity="center"
+                                android:text="@string/md_play_arrow"
+                                android:textColor="@color/green"
+                                android:textSize="@dimen/sp18"
+                                />
+
+
+                            <SeekBar
+                                android:id="@+id/csla_seekBar1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                />
+
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:id="@+id/csla_txt_timer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginLeft="@dimen/dp52"
+                            android:textSize="@dimen/sp12"
+                            android:text="00:00"
+                            android:textColor="@color/green"
+                            />
+
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 

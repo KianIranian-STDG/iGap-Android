@@ -754,29 +754,29 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     switch (type) {
                         case IMAGE:
                         case IMAGE_TEXT:
-                            totalCountItem += "\n" + G.context.getString(R.string.shared_image) + " " + notDeletedCount;
+                            totalCountItem += "\n" + notDeletedCount + " " + G.context.getString(R.string.shared_image);
                             break;
                         case VIDEO:
                         case VIDEO_TEXT:
-                            totalCountItem += "\n" + G.context.getString(R.string.shared_video) + " " + notDeletedCount;
+                            totalCountItem += "\n" + notDeletedCount + " " + G.context.getString(R.string.shared_video);
                             break;
                         case AUDIO:
                         case AUDIO_TEXT:
-                            totalCountItem += "\n" + G.context.getString(R.string.shared_audio) + " " + notDeletedCount;
+                            totalCountItem += "\n" + notDeletedCount + " " + G.context.getString(R.string.shared_audio);
                             break;
                         case VOICE:
-                            totalCountItem += "\n" + G.context.getString(R.string.shared_voice) + " " + notDeletedCount;
+                            totalCountItem += "\n" + notDeletedCount + " " + G.context.getString(R.string.shared_voice);
                             break;
                         case GIF:
                         case GIF_TEXT:
-                            totalCountItem += "\n" + G.context.getString(R.string.shared_gif) + " " + notDeletedCount;
+                            totalCountItem += "\n" + notDeletedCount + " " + G.context.getString(R.string.shared_gif);
                             break;
                         case FILE:
                         case FILE_TEXT:
-                            totalCountItem += "\n" + G.context.getString(R.string.shared_file) + " " + notDeletedCount;
+                            totalCountItem += "\n" + notDeletedCount + " " + G.context.getString(R.string.shared_file);
                             break;
                         default:
-                            totalCountItem += "\n" + G.context.getString(R.string.shared_links) + " " + notDeletedCount;
+                            totalCountItem += "\n" + notDeletedCount + " " + G.context.getString(R.string.shared_links);
                             break;
                     }
 

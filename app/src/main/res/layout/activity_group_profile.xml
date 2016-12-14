@@ -328,13 +328,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:paddingEnd="@dimen/dp4"
                             android:paddingStart="@dimen/dp4"
                             android:singleLine="true"
                             android:text="@string/shared_media"
-                            android:textColor="@color/green"
-                            android:textSize="@dimen/sp18"
+                            android:textColor="@color/black_register"
+                            android:textSize="@dimen/sp15"
                             />
 
                         <TextView

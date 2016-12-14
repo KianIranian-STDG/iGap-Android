@@ -242,7 +242,9 @@
                         android:textColor="@android:color/secondary_text_light"
                         android:textSize="@dimen/sp15"
                         android:layout_marginTop="@dimen/dp8"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:id="@+id/textView"
+                        />
 
                     <TextView
                         android:id="@+id/chi_txt_userName"
@@ -310,13 +312,12 @@
                         android:clickable="false"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingStart="@dimen/dp4"
-                        android:textColor="@color/green"
                         android:paddingRight="@dimen/dp4"
-                        android:gravity="center"
                         android:paddingEnd="@dimen/dp4"
                         android:text="@string/chi_shared_Media"
-                        android:textSize="@dimen/sp18"
                         android:layout_marginTop="@dimen/dp8"
+                        android:textColor="@android:color/secondary_text_light"
+                        android:textSize="@dimen/sp15"
                         android:textStyle="bold" />
 
                     <TextView

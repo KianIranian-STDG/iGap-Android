@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -25,9 +24,7 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
-
 import java.io.File;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityMediaPlayer extends ActivityEnhanced {
@@ -129,7 +126,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         super.onPause();
         MusicPlayer.isShowMediaPlayer = false;
         MusicPlayer.onComplete = null;
-        MusicPlayer.updateNotification();
+        //   MusicPlayer.updateNotification();
     }
 
     @Override
