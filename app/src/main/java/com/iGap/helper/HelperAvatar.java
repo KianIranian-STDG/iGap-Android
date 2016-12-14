@@ -125,7 +125,14 @@ public class HelperAvatar {
                                 }, new Realm.Transaction.OnSuccess() {
                                     @Override
                                     public void onSuccess() {
-                                        onAvatarGet.onAvatarGet(filepath);
+                                        Realm realm1 = Realm.getDefaultInstance();
+                                        for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).findAll()) {
+                                            if (realmAvatar1.getFile().getToken().equals(token)) {
+                                                onAvatarGet.onAvatarGet(filepath);
+                                                break;
+                                            }
+                                        }
+                                        realm1.close();
                                     }
                                 });
                                 realm.close();
@@ -341,7 +348,7 @@ public class HelperAvatar {
         }
 
         @Override
-        public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+        public void onFileDownload(String fileName, String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
             if (progress == 100) {
 
                 try {

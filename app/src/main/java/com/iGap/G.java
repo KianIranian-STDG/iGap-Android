@@ -81,20 +81,12 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static final String DIR_AUDIOS = DIR_APP + "/audios";
     public static final String DIR_DOCUMENT = DIR_APP + "/document";
     public static final String DIR_TEMP = DIR_APP + "/.temp";
-
-    public static final String DIR_SOUND_NOTIFICATION = DIR_TEMP;
-    public static final String DIR_CHAT_BACKGROUND = DIR_TEMP;
-    public static final String DIR_NEW_GROUP = DIR_TEMP;
-    public static final String DIR_NEW_CHANEL = DIR_TEMP;
-    public static final String DIR_ALL_IMAGE_USER_CONTACT = DIR_TEMP;
-    public static final String DIR_IMAGE_USER = DIR_TEMP;
-
-   /* public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/.sound";
+    public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/.sound";
     public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/chat_background";
     public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
     public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
     public static final String DIR_ALL_IMAGE_USER_CONTACT = DIR_APP + "/.all_image_user_contact";
-    public static final String DIR_IMAGE_USER = DIR_APP + "/.image_user";*/
+    public static final String DIR_IMAGE_USER = DIR_APP + "/.image_user";
 
     public static final String CHAT_MESSAGE_TIME = "H:mm";
     public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";

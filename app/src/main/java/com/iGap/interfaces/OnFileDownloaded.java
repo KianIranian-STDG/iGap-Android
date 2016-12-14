@@ -7,7 +7,7 @@ import com.iGap.proto.ProtoFileDownload;
  */
 
 public interface OnFileDownloaded {
-    void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress);
+    void onFileDownload(String fileName, String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress);
 
     void onError();
 }

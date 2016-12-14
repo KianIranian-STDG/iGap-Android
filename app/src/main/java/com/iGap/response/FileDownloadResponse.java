@@ -29,7 +29,8 @@ public class FileDownloadResponse extends MessageHandler {
         String token = identityParams[0];
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
         long fileSize = Long.parseLong(identityParams[2]);
-        String filePath = G.DIR_TEMP + "/" + identityParams[3];
+        String filename = identityParams[3];
+        String filePath = G.DIR_TEMP + "/" + filename;
         int previousOffset = Integer.parseInt(identityParams[4]);
         boolean avatarRequested = false;
         long userId = -1;
@@ -46,7 +47,7 @@ public class FileDownloadResponse extends MessageHandler {
         AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
         if (!avatarRequested) {
             if (G.onFileDownloaded != null) {
-                G.onFileDownloaded.onFileDownload(token, nextOffset, selector, (int) progress);
+                G.onFileDownloaded.onFileDownload(filename, token, nextOffset, selector, (int) progress);
             }
             G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, (int) progress);
         } else {
