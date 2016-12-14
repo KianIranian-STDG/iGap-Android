@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -78,6 +79,8 @@ public class ActivityRegister extends ActivityEnhanced {
     static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
     static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
     static final String KEY_SAVE_NAMECOUNTRY = "SAVE_NAMECOUNTRY";
+    static final String KEY_SAVE_REGEX = "KEY_SAVE_REGEX";
+    static final String KEY_SAVE_AGREEMENT = "KEY_SAVE_REGISTER";
     public static Button btnChoseCountry;
     public static EditText edtCodeNumber;
     public static MaskedEditText edtPhoneNumber;
@@ -167,6 +170,9 @@ public class ActivityRegister extends ActivityEnhanced {
             edtPhoneNumber.setMask(savedInstanceState.getString(KEY_SAVE_PHONENUMBER_MASK));
             edtPhoneNumber.setText(savedInstanceState.getString(KEY_SAVE_PHONENUMBER_NUMBER));
             btnChoseCountry.setText(savedInstanceState.getString(KEY_SAVE_NAMECOUNTRY));
+            txtAgreement_register.setText(savedInstanceState.getString(KEY_SAVE_AGREEMENT));
+            regex = (savedInstanceState.getString(KEY_SAVE_REGEX));
+            Log.i("TTTTT", "onSaveInstanceState22: ");
         } else {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
@@ -1158,6 +1164,10 @@ public class ActivityRegister extends ActivityEnhanced {
         savedInstanceState.putString(KEY_SAVE_PHONENUMBER_MASK, edtPhoneNumber.getMask());
         savedInstanceState.putString(KEY_SAVE_PHONENUMBER_NUMBER, edtPhoneNumber.getText().toString());
         savedInstanceState.putString(KEY_SAVE_NAMECOUNTRY, btnChoseCountry.getText().toString());
+        savedInstanceState.putString(KEY_SAVE_REGEX, regex);
+        savedInstanceState.putString(KEY_SAVE_AGREEMENT, txtAgreement_register.getText().toString());
+
+        Log.i("TTTTT", "onSaveInstanceState: ");
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }

@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoGlobal;
 
@@ -33,14 +34,24 @@ public class MyDialog {
         dialog.show();
         dialog.getWindow().setAttributes(layoutParams);
 
-        TextView txtMuteNotification =
-                (TextView) dialog.findViewById(R.id.cm_txt_mute_notification);
+        TextView txtMuteNotification = (TextView) dialog.findViewById(R.id.cm_txt_mute_notification);
+        MaterialDesignTextView iconMuteNotification = (MaterialDesignTextView) dialog.findViewById(R.id.cm_icon_mute_notification);
         TextView txtClearHistory = (TextView) dialog.findViewById(R.id.cm_txt_clear_history);
+        MaterialDesignTextView iconClearHistory = (MaterialDesignTextView) dialog.findViewById(R.id.cm_icon_clear_history);
         TextView txtDeleteChat = (TextView) dialog.findViewById(R.id.cm_txt_delete_chat);
+        MaterialDesignTextView iconDeleteChat = (MaterialDesignTextView) dialog.findViewById(R.id.cm_icon_delete_chat);
         TextView txtCancle = (TextView) dialog.findViewById(R.id.cm_txt_cancle);
 
-        txtMuteNotification.setText(isMute ? context.getString(R.string.unmute_notification)
-                : context.getString(R.string.mute_notification));
+        if (isMute) {
+            txtMuteNotification.setText(context.getString(R.string.unmute_notification));
+            iconMuteNotification.setText(context.getString(R.string.unmute));
+        } else {
+            txtMuteNotification.setText(context.getString(R.string.mute));
+
+        }
+
+//        txtMuteNotification.setText(isMute ? context.getString(R.string.unmute_notification)
+//                : context.getString(R.string.mute_notification));
 
         txtMuteNotification.setOnClickListener(new View.OnClickListener() {
             @Override

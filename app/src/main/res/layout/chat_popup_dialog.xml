@@ -1,40 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/dp240"
-    android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:layoutDirection="ltr"
-    android:orientation="vertical"
-    android:padding="@dimen/dp4">
+              android:layout_width="@dimen/dp240"
+              android:layout_height="wrap_content"
+              android:background="@android:color/white"
+              android:layoutDirection="ltr"
+              android:orientation="vertical"
+              android:padding="@dimen/dp4">
 
 
-    <TextView
-        android:id="@+id/cm_txt_mute_notification"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.iGap.module.MaterialDesignTextView
+            android:id="@+id/cm_icon_mute_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/muted"
+            fontPath="fonts/Flaticon.ttf"
+            android:layout_marginStart="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/black_register"
+            android:textSize="@dimen/sp15"
+            />
+
+        <TextView
+            android:id="@+id/cm_txt_mute_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp12"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:paddingStart="@dimen/dp28"
+            android:paddingLeft="@dimen/dp28"
+            android:paddingRight="@dimen/dp28"
+            android:paddingEnd="@dimen/dp28"
+            android:text="@string/mute_notification"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp14"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp12"
-        android:padding="@dimen/dp12"
-        android:text="@string/mute_notification"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp14"/>
+        >
 
-    <TextView
-        android:id="@+id/cm_txt_clear_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp12"
-        android:text="@string/clear_history"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp14"/>
+        <com.iGap.module.MaterialDesignTextView
+            fontPath="fonts/Flaticon.ttf"
+            android:id="@+id/cm_icon_clear_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/clearhistory"
+            android:textColor="@color/black_register"
+            android:textSize="@dimen/sp15"
+            />
 
-    <TextView
-        android:id="@+id/cm_txt_delete_chat"
+        <TextView
+            android:id="@+id/cm_txt_clear_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp12"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:paddingStart="@dimen/dp28"
+            android:paddingLeft="@dimen/dp28"
+            android:paddingRight="@dimen/dp28"
+            android:paddingEnd="@dimen/dp28"
+            android:text="@string/clear_history"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp14"/>
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp12"
-        android:text="@string/to_delete_chat"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/sp14"/>
+        android:layout_height="wrap_content">
+
+        <com.iGap.module.MaterialDesignTextView
+            fontPath="fonts/Flaticon.ttf"
+            android:id="@+id/cm_icon_delete_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/rubbish_bin"
+            android:textColor="@color/black_register"
+            android:textSize="@dimen/sp15"
+            />
+
+        <TextView
+            android:id="@+id/cm_txt_delete_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp12"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:paddingStart="@dimen/dp28"
+            android:paddingLeft="@dimen/dp28"
+            android:paddingRight="@dimen/dp28"
+            android:paddingEnd="@dimen/dp28"
+            android:layout_toEndOf="@+id/cm_icon_delete_chat"
+            android:layout_toRightOf="@+id/cm_icon_delete_chat"
+            android:text="@string/to_delete_chat"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp14"/>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/cm_txt_cancle"
