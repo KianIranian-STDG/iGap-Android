@@ -46,7 +46,8 @@
     <string name="unmuted">\uf298</string>
     <string name="clearhistory">\uf1b5</string>
     <string name="rubbish_bin">\uf22e</string>
-    
+    <string name="exit_app">\uf175</string>
+    <string name="delet_acc">\uf221/string>
     
     <string name="fa_bell_slash_o">&#xf1f7;</string>
     <string name="fa_bullhorn">&#xf0a1;</string>
