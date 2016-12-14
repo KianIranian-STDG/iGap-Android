@@ -91,19 +91,28 @@
     <string name="choosing_contact">Choosing Contact</string>
     <string name="painting">Painting...</string>
 
+    <!-- Action Box -->
+    <string name="log_out">Logout</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="mute_notification">Mute Notify</string>
+    <string name="unmute_notification">Un-mute Notify</string>
+    <string name="clear_history">Clear History</string>
+    <string name="delete_chat">Delete Chat</string>
+    <string name="left_group">Left Group</string>
+    <string name="delete_group">Delete Group</string>
+     
     <!-- Public String -->
     <string name="search">Search</string>
     <string name="d_of_d" formatted="false">%d of %d</string>
     <string name="add_to_contact">Add to Contact</string>
     <string name="app_name">iGap</string>
-    <string name="unmute_notification">Unmute Notifications</string>
-    <string name="mute_notification">Mute Notifications</string>
+
     <string name="chat">Chat</string>
     <string name="group">Group</string>
     <string name="channel">Channel</string>
     <string name="igap">iGap</string>
     <string name="igapChanel">iGap</string>
-    <string name="clear_history">Clear History</string>
+    
     <string name="clear_history_content">Are you sure to clear history?</string>
     <string name="delete_chat_content">Are you sure to delete this chat?</string>
     <string name="delete_text">Are you sure to delete this contact?</string>
@@ -496,14 +505,13 @@
     <string name="unknown">unknown</string>
     <string name="add_to_list_contact">Add to Contact List</string>
     <string name="text_add_to_list_contact">Do you want to add this phone number to your contacts?</string>
-    <string name="log_out">Logout</string>
-    <string name="delete_account">Delete Account</string>
+
     <string name="delete_account_text">Are you sure to delete your account?</string>
     <string name="text_kick_admin">Are you sure to kick this admin?</string>
     <string name="text_kick_moderator">Are you sure to kick this moderator?</string>
     <string name="dialog_readonly_chat">Sorry, you cannot send any messages to this chat.</string>
     <string name="to_delete_contact">to delete a contact</string>
-    <string name="delete_chat">Delete Chat</string>
+    
     <string name="capture_image">Capture Image</string>
     <string name="capture_video">Capture Video</string>
     <string name="set_gender">Set Gender</string>
@@ -574,7 +582,7 @@
     <string name="clear">Clear</string>
     <string name="can_not_save_image">Can\'t Save image</string>
     <string name="just_owner_can_delete">Just owner can delete</string>
-    <string name="left_group">left Group</string>
+   
     <string name="shate_audio_file">Share audio File</string>
     <string name="last_seen">Last Seen</string>
     <string name="remove">Remove</string>
@@ -590,7 +598,7 @@
     <string name="you_need_to_allow">"You need to allow"</string>
     <string name="TERMINATE">"TERMINATE"</string>
     <string name="iGap_version">"iGap for Android"</string>
-    <string name="delete_group">Delete Group</string>
+
     <string name="do_you_want_to_delete_this_group">Are you sure to delete this group?</string>
     <string name="do_you_want_to_leave_this_group">Are you sure to left this group?</string>
     <string name="waiting_for_connection">Waiting for Connecting to Server</string>
