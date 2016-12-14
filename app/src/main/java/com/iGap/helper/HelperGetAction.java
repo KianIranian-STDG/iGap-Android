@@ -1,7 +1,5 @@
 package com.iGap.helper;
 
-import android.util.Log;
-
 import com.iGap.Config;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -21,6 +19,25 @@ public class HelperGetAction {
         public ProtoGlobal.ClientAction action;
     }
 
+    public static String getAction(long roomId, ProtoGlobal.Room.Type type, ProtoGlobal.ClientAction clientAction) {
+        if (type == ProtoGlobal.Room.Type.CHAT) {
+            String action = HelperConvertEnumToString.convertActionEnum(clientAction);
+            if (action != null) {
+                return action;
+            }
+            return null;
+
+        } else if (type == ProtoGlobal.Room.Type.GROUP) {
+
+            final String actionText = HelperGetAction.getMultipleAction(roomId);
+            if (actionText != null) {
+                return actionText;
+            }
+            return null;
+        }
+        return null;
+    }
+
     /**
      * search structActions list for this roomId and return correct string for show in toolbar
      *
@@ -28,7 +45,7 @@ public class HelperGetAction {
      * @return text for show in toolbar
      */
 
-    public static String getAction(long roomId) {
+    private static String getMultipleAction(long roomId) {
 
         ProtoGlobal.ClientAction latestAction = getLatestAction(roomId);
         if (latestAction == null) {
@@ -74,13 +91,11 @@ public class HelperGetAction {
 
                 realm.close();
 
-                Log.i("QQQ", "concatenatedNames 1 : " + concatenatedNames);
-                concatenatedNames = concatenatedNames.substring(0, concatenatedNames.length() - 1);
-                Log.i("QQQ", "concatenatedNames 2 : " + concatenatedNames);
-
-                if (concatenatedNames.isEmpty()) {
+                if (concatenatedNames.isEmpty() || concatenatedNames.length() == 0) {
                     return null;
                 }
+                concatenatedNames = concatenatedNames.substring(0, concatenatedNames.length() - 1);
+
                 return concatenatedNames + " are " + HelperConvertEnumToString.convertActionEnum(latestAction);
             } else {
                 return count + " members are " + HelperConvertEnumToString.convertActionEnum(latestAction);

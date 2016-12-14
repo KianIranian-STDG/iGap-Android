@@ -34,6 +34,7 @@ import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ServiceContact;
@@ -1139,6 +1140,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+        G.onSetAction = this;
 
         getChatsList(mFirstRun);
 
@@ -1571,36 +1573,51 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         mAdapter.goToTop(roomId);
     }
 
-    @Override
-    public void onSetAction(long roomId, long userId, ProtoGlobal.ClientAction clientAction) {
-       /* if (mRoomId == roomId && this.userId != userId) {
-            if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String action = HelperConvertEnumToString.convertActionEnum(clientAction);
-                        if (action != null) {
-                            txtLastSeen.setText(action);
-                        } else {
-                            txtLastSeen.setText(userStatus);
-                        }
-                    }
-                });
-            } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
-                final String actionText = HelperGetAction.getAction(roomId);
+    ProtoGlobal.Room.Type type = null;
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (actionText != null) {
-                            txtLastSeen.setText(actionText);
-                        } else {
-                            txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
+    @Override
+    public void onSetAction(
+            final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
+
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mAdapter != null) {
+                    Realm realm = Realm.getDefaultInstance();
+
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(final Realm realm) {
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    List<RoomItem> items = mAdapter.getAdapterItems();
+                                    type = null;
+                                    for (int i = 0; i < items.size(); i++) {
+                                        if (items.get(i).getInfo().getId() == roomId) {
+                                            type = items.get(i).getInfo().getType();
+                                        }
+                                    }
+                                }
+                            });
+                            if (type != null) {
+                                String action = HelperGetAction.getAction(roomId, type, clientAction);
+                                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().setActionState(action);
+
+                            }
                         }
-                    }
-                });
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            mAdapter.notifyWithRoomId(roomId);
+                        }
+                    });
+                }
             }
-        }*/
+        });
+
     }
 
     //******* GroupAvatar and ChannelAvatar

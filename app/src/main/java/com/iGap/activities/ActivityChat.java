@@ -80,7 +80,6 @@ import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImageMessages;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCancelDownloadUpload;
-import com.iGap.helper.HelperConvertEnumToString;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperMimeType;
@@ -612,18 +611,38 @@ public class ActivityChat extends ActivityEnhanced
         getUserInfo();
         updateStatus();
         setUpEmojiPopup();
-        //checkAction();
+        checkAction();
 
         G.onHelperSetAction = new OnHelperSetAction() {
             @Override
             public void onAction(ProtoGlobal.ClientAction ClientAction) {
-                //HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
+                HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
             }
         };
 
     }
 
     private void checkAction() {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null && realmRoom.getActionState() != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (realmRoom.getActionState() != null) {
+                        txtLastSeen.setText(realmRoom.getActionState());
+                    } else if (chatType == CHAT) {
+                        txtLastSeen.setText(userStatus);
+                    } else if (chatType == GROUP) {
+                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
+                    }
+                }
+            });
+        }
+        realm.close();
+    }
+
+    /*private void checkAction() {
         // check action for room
         if ((mRoomId != 0) || (txtLastSeen != null)) {
             String action = HelperSetAction.checkExistAction(mRoomId);
@@ -631,7 +650,7 @@ public class ActivityChat extends ActivityEnhanced
                 txtLastSeen.setText(action);
             }
         }
-    }
+    }*/
 
     private void updateStatus() {
         G.onUpdateUserStatusInChangePage = new OnUpdateUserStatusInChangePage() {
@@ -1751,6 +1770,7 @@ public class ActivityChat extends ActivityEnhanced
             } else {
                 txtLastSeen.setText(status);
             }
+            checkAction();
         }
     }
 
@@ -4409,8 +4429,33 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onSetAction(long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
+    public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
+
         if (mRoomId == roomId && this.userId != userId) {
+            final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().setActionState(action);
+                }
+            });
+            realm.close();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (action != null) {
+                        txtLastSeen.setText(action);
+                    } else if (chatType == CHAT) {
+                        txtLastSeen.setText(userStatus);
+                    } else if (chatType == GROUP) {
+                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
+                    }
+                }
+            });
+        }
+
+        /*if (mRoomId == roomId && this.userId != userId) {
             if (chatType == ProtoGlobal.Room.Type.CHAT) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -4437,7 +4482,7 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
             }
-        }
+        }*/
     }
 
     @Override
@@ -4447,6 +4492,7 @@ public class ActivityChat extends ActivityEnhanced
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
                     setUserStatus(status, time);
                 }
             });

@@ -107,5 +107,44 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         return false;
     }
 
+    /*public void setAction(long roomId, ProtoGlobal.ClientAction clientAction) {
+        List<Item> items = getAdapterItems();
+        for (final Item chat : items) {
+            if (chat.mInfo.getId() == roomId) {
+                String action = HelperGetAction.getAction(chat.getInfo().getType(), clientAction);
+
+                if (action != null) {
+                    chat.getInfo().setActionState(action);
+                    notifyItemChanged(items.indexOf(chat));
+                } else {
+                    chat.getInfo().setActionState(null);
+                    notifyItemChanged(items.indexOf(chat));
+                }
+                break;
+            }
+        }
+    }*/
+
+    /*public void setAction(long roomId, ProtoGlobal.ClientAction clientAction) {
+        List<Item> items = getAdapterItems();
+        for (final Item chat : items) {
+            if (chat.mInfo.getId() == roomId) {
+                String action = HelperGetAction.getAction(chat.getInfo().getType(), clientAction);
+
+                if (action != null) {
+                    //chat.getInfo().setActionState(action);
+                    chat.action = action;
+                    notifyItemChanged(items.indexOf(chat));
+                } else {
+                    //chat.getInfo().setActionState(null);
+                    chat.action = null;
+                    notifyItemChanged(items.indexOf(chat));
+                }
+                break;
+            }
+        }
+    }*/
+
+
 
 }

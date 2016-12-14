@@ -25,6 +25,7 @@ public class RealmRoom extends RealmObject {
     private RealmRoomMessage lastMessage;
     private RealmRoomDraft draft;
     private long updatedTime;
+    private String actionState;
 
     public long getUpdatedTime() {
         if (getLastMessage() != null && getLastMessage().isValid()) {
@@ -115,6 +116,7 @@ public class RealmRoom extends RealmObject {
         realmRoomDraft.setReplyToMessageId(room.getDraft().getReplyTo());
 
         realmRoom.setDraft(realmRoomDraft);
+        realmRoom.setActionState(null);
 
         realm.close();
 
@@ -263,5 +265,13 @@ public class RealmRoom extends RealmObject {
 
     public void setAvatar(RealmAvatar avatar) {
         this.avatar = avatar;
+    }
+
+    public String getActionState() {
+        return actionState;
+    }
+
+    public void setActionState(String actionState) {
+        this.actionState = actionState;
     }
 }

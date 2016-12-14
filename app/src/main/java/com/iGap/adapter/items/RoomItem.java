@@ -45,6 +45,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public RealmRoom mInfo;
     public OnComplete mComplete;
+    public String action;
 
     public RoomItem setComplete(OnComplete complete) {
         this.mComplete = complete;
@@ -93,7 +94,16 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
     public void bindView(final ViewHolder holder, List payloads) throws IllegalStateException {
         super.bindView(holder, payloads);
 
-        if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
+        if (mInfo.getActionState() != null) {
+
+            holder.messageStatus.setVisibility(GONE);
+            holder.lastMessageSender.setVisibility(View.GONE);
+            holder.lastMessage.setVisibility(View.VISIBLE);
+
+            holder.lastMessage.setText(mInfo.getActionState());
+            holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+
+        } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
             holder.messageStatus.setVisibility(GONE);
             holder.lastMessage.setVisibility(View.VISIBLE);
             holder.lastMessageSender.setVisibility(View.VISIBLE);

@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -28,6 +29,7 @@ import com.iGap.activities.ActivityPaint;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.proto.ProtoGlobal;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,9 +38,6 @@ import java.util.Locale;
 
 import static com.iGap.G.onHelperSetAction;
 
-/**
- * Created by ali on 9/12/2016.
- */
 public class AttachFile {
 
     public static final int request_code_TAKE_PICTURE = 10;
