@@ -102,7 +102,7 @@
     <string name="to_delete_chat">"حذف گفتگو"</string>
     <string name="left_group">ترک گروه</string>
     <string name="delete_group">حذف گروه</string>
-    
+
     <!-- Public String -->
     <string name="app_name">"آی گپ"</string>
     <string name="chat">"گفتگو"</string>
@@ -131,14 +131,12 @@
     <string name="am_contact">"مخاطب"</string>
 
     <string name="clear_history_content">"آیا مطمئنید که می‌خواهید تاریخچهٔ گفتگو را پاک کنید؟"</string>
-    
+
     <string name="delete_chat_content">"آیا مطمئنید که می‌خواهید گفتگو را حذف کنید؟"</string>
     <string name="to_delete_contact">"حذف مخاطب"</string>
     <string name="delete_text">"آیا مطمئنید که می خواهید این مخاطب را حذف کنید؟"</string>
-   
-    
-    
-    
+
+
     <string name="just_wait_en">"منتظر باشید."</string>
     <string name="device_dosenot_camera_en">"این دستگاه دوربین ندارد."</string>
     <string name="do_you_want_to_turn_on_gps">"سیستم مکان‌یاب جهانی (GPS) شما خاموش است، آیا مایلید آن را روشن کنید؟"</string>
@@ -539,7 +537,7 @@
     <string name="USER_VERIFY_BLOCK">کاربر به دلیل درخواستش مسدود شده است.</string>
     <string name="convert_chat_to_group_content">آیا می‌خواهید این گفتگو را به گروه انتقال دهید؟</string>
     <string name="convert_chat_to_group_title">انتقال گفتگو به گروه</string>
-    <string name="minute_ago">یک دقیقه پیش</string>
+    <string name="minute_ago">دقیقه پیش</string>
     <string name="device">وسیله:</string>
     <string name="country">کشور:</string>
     <string name="create_time">ایجاد زمان:</string>
@@ -593,7 +591,7 @@
     <string name="clear">پاک کردن</string>
     <string name="can_not_save_image">عدم امکان ذخیرهٔ تصویر</string>
     <string name="just_owner_can_delete">فقط دارندهٔ گروه می‌تواند حذف کند.</string>
-    
+
     <string name="shate_audio_file">به اشتراک گذاشتن فایل صوتی</string>
     <string name="last_seen">آخرین مشاهده</string>
     <string name="remove">حذف کردن</string>
@@ -610,7 +608,7 @@
     <string name="TERMINATE">پایان</string>
     <string name="iGap_version">آی‌گپ برای اندروید</string>
     <string name="do_you_want_left_this">آیااز ترک ایتم انتخاب شده اطمینان دارید؟</string>
-    
+
     <string name="do_you_want_to_leave_this_group">آیا مطمئنید که می‌خواهید این گروه را ترک کنید؟</string>
     <string name="waiting_for_connection">در انتظار اتصال به سرور</string>
     <string name="picture_save_to_galary">"ذخیرهٔ تصویر در گالری"</string>
@@ -652,5 +650,13 @@
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ هجری شمسی</string>
     <string name="content_log_out">Are you sure log out from app?</string>
+
+    <string name="one_day">یک روز قبل</string>
+    <string name="two_day">دو روز قبل</string>
+    <string name="three_day">سه روز قبل</string>
+    <string name="four_day">چهار روز قبل</string>
+    <string name="five_day">پنج روز قبل</string>
+    <string name="six_day">شش روز قبل</string>
+    <string name="at">در</string>
 
 </resources>

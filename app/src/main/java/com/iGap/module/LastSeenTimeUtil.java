@@ -1,10 +1,12 @@
 package com.iGap.module;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 
@@ -33,12 +35,56 @@ public class LastSeenTimeUtil {
      */
     public static String computeTime(long userId, long lastSeen) {
         if (timeOut(lastSeen * DateUtils.SECOND_IN_MILLIS)) {
-            return TimeUtils.toLocal(lastSeen * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+            return computeDays(lastSeen);
         } else {
             hashMapLastSeen.put(userId, lastSeen);
             updateLastSeenTime();
             return getMinute(lastSeen);
         }
+    }
+
+    /**
+     * get millis and return days
+     *
+     * @param beforeMillis before time that user was online
+     * @return exactly time if is lower than one days otherwise return days
+     */
+
+    private static String computeDays(long beforeMillis) {
+
+        String time;
+        String exactlyTime = " " + G.context.getResources().getString(R.string.at) + " " + TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+        long currentMillis = System.currentTimeMillis();
+        int days = (int) ((currentMillis - (beforeMillis * DateUtils.SECOND_IN_MILLIS)) / DateUtils.DAY_IN_MILLIS);
+
+        switch (days) {
+            case 1:
+                time = G.context.getResources().getString(R.string.one_day) + exactlyTime;
+                break;
+            case 2:
+                time = G.context.getResources().getString(R.string.two_day) + exactlyTime;
+                break;
+            case 3:
+                time = G.context.getResources().getString(R.string.three_day) + exactlyTime;
+                break;
+            case 4:
+                time = G.context.getResources().getString(R.string.four_day) + exactlyTime;
+                break;
+            case 5:
+                time = G.context.getResources().getString(R.string.five_day) + exactlyTime;
+                break;
+            case 6:
+                time = G.context.getResources().getString(R.string.six_day) + exactlyTime;
+                break;
+            case 7:
+                time = G.context.getResources().getString(R.string.last_week);
+                break;
+            default:
+                time = TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                break;
+        }
+
+        return time;
     }
 
     /**
@@ -59,13 +105,14 @@ public class LastSeenTimeUtil {
             if (realmRegisteredInfo != null) {
                 String showLastSeen;
                 if (timeOut(value * DateUtils.SECOND_IN_MILLIS)) {
-                    showLastSeen = TimeUtils.toLocal(value * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                    showLastSeen = computeDays(value);
                     userIdList.add(userId);
                 } else {
                     showLastSeen = getMinute(value);
                 }
 //            if (realmRegisteredInfo != null && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
-                if (!realmRegisteredInfo.getStatus().equals("online")) {
+                Log.i("TTT", "realmRegisteredInfo.getStatus() : " + realmRegisteredInfo.getStatus());
+                if (!realmRegisteredInfo.getStatus().equals("online") || !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
                     if (G.onLastSeenUpdateTiming != null) {
                         G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
                     }

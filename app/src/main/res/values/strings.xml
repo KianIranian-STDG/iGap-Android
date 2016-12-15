@@ -102,7 +102,7 @@
     <string name="delete_chat">Delete Chat</string>
     <string name="left_group">Left Group</string>
     <string name="delete_group">Delete Group</string>
-     
+
     <!-- Public String -->
     <string name="search">Search</string>
     <string name="d_of_d" formatted="false">%d of %d</string>
@@ -114,7 +114,7 @@
     <string name="channel">Channel</string>
     <string name="igap">iGap</string>
     <string name="igapChanel">iGap</string>
-    
+
     <string name="clear_history_content">Are you sure to clear history?</string>
     <string name="delete_chat_content">Are you sure to delete this chat?</string>
     <string name="delete_text">Are you sure to delete this contact?</string>
@@ -513,7 +513,7 @@
     <string name="text_kick_moderator">Are you sure to kick this moderator?</string>
     <string name="dialog_readonly_chat">Sorry, you cannot send any messages to this chat.</string>
     <string name="to_delete_contact">to delete a contact</string>
-    
+
     <string name="capture_image">Capture Image</string>
     <string name="capture_video">Capture Video</string>
     <string name="set_gender">Set Gender</string>
@@ -583,7 +583,7 @@
     <string name="clear">Clear</string>
     <string name="can_not_save_image">Can\'t Save image</string>
     <string name="just_owner_can_delete">Just owner can delete</string>
-   
+
     <string name="shate_audio_file">Share audio File</string>
     <string name="last_seen">Last Seen</string>
     <string name="remove">Remove</string>
@@ -657,6 +657,14 @@
     <string name="do_you_want_left_this">"Are you sure left from selected item ?"</string>
     <string name="do_you_want_delete_this">Are you sure deleting selected item ?</string>
     <string name="content_log_out">Are you sure log out from app?</string>
+
+    <string name="one_day">one day ago</string>
+    <string name="two_day">two days ago</string>
+    <string name="three_day">three days ago</string>
+    <string name="four_day">four days ago</string>
+    <string name="five_day">five days ago</string>
+    <string name="six_day">six days ago</string>
+    <string name="at">at</string>
 
 
 </resources>
