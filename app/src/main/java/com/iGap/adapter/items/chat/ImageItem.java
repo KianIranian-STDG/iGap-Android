@@ -39,12 +39,9 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
+
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
-
-        //holder.image.setCornerRadius(G.IMAGE_CORNER);
         holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
-
-        holder.itemView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -87,9 +84,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
 
         public ViewHolder(View view) {
             super(view);
-
             image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
-            itemView.setVisibility(View.INVISIBLE);
         }
     }
 }

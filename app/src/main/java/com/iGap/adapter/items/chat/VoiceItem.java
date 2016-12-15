@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -93,7 +92,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         holder.txt_Timer.post(new Runnable() {
             @Override public void run() {
                 holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
-                Log.e("ddd", _st + "");
             }
         });
 

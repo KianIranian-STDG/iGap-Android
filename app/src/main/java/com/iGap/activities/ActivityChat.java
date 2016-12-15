@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -183,20 +182,6 @@ import com.nightonke.boommenu.Types.ButtonType;
 import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -208,6 +193,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -2252,8 +2248,7 @@ public class ActivityChat extends ActivityEnhanced
         return mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
 
@@ -2305,11 +2300,17 @@ public class ActivityChat extends ActivityEnhanced
             if (listPathString.size() == 1) {
                 showDraftLayout();
                 setDraftMessage(requestCode);
-            } else {
-                for (String path : listPathString) {
-                    sendMessage(requestCode, path);
+            } else if (listPathString.size() > 1) {
+                for (final String path : listPathString) {
+                    if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !path.toLowerCase().endsWith(".gif")) {
+                        String localpathNew = attachFile.saveGalaryPicToLoacal(path);
+                        sendMessage(requestCode, localpathNew);
+                    } else {
+                        sendMessage(requestCode, path);
+                    }
                 }
             }
+
 
             if (listPathString.size() == 1) {
 
@@ -2375,7 +2376,7 @@ public class ActivityChat extends ActivityEnhanced
                             }
                         });
                         thread.start();
-                    } else if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
+                    } else if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !listPathString.get(0).toLowerCase().endsWith(".gif")) {
                         Thread thread = new Thread(new Runnable() {
                             @Override public void run() {
                                 listPathString.set(0, attachFile.saveGalaryPicToLoacal(listPathString.get(0)));

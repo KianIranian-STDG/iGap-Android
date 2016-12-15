@@ -158,7 +158,7 @@ public class ActivityCrop extends ActivityEnhanced {
         txtSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (uri != null && type.equals("crop_camera") || type.equals("gallery")) {
+                if (uri != null && type.equals("crop_camera")) {
                     pathImageUser = getRealPathFromURI(uri);
                     switch (page) {
                         case "NewGroup":
@@ -230,7 +230,10 @@ public class ActivityCrop extends ActivityEnhanced {
 
         } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_image_from_gallery_single_select) {
             String filePath = null;
-            filePath = "file://" + AttachFile.getFilePathFromUri(data.getData());
+
+            filePath = attachFile.saveGalaryPicToLoacal(AttachFile.getFilePathFromUri(data.getData()));
+
+            //   filePath = "file://" + AttachFile.getFilePathFromUri(data.getData());
             uri = Uri.parse(filePath);
             imgPic.setImageURI(uri);
 
