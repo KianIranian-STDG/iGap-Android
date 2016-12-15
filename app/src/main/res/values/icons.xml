@@ -42,13 +42,14 @@
     <string name="md_check_box">\uf142</string>
     <string name="md_rate_star">\uf20f</string>
 
-    <string name="muted">\uf297</string>
-    <string name="unmuted">\uf298</string>
-    <string name="clearhistory">\uf1b5</string>
-    <string name="rubbish_bin">\uf22e</string>
-    <string name="exit_app">\uf175</string>
-    <string name="delet_acc">\uf221</string>
-    
+    <string name="md_muted">\uf297</string>
+    <string name="md_unMuted">\uf298</string>
+    <string name="md_clearHistory">\uf1b5</string>
+    <string name="md_rubbish_bin">\uf22e</string>
+    <string name="md_exit_app">\uf175</string>
+    <string name="md_delete_acc">\uf221</string>
+    <string name="md_go_back_left_arrow">\uf190</string>
+
     <string name="fa_bell_slash_o">&#xf1f7;</string>
     <string name="fa_bullhorn">&#xf0a1;</string>
     <string name="fa_close">&#xf00d;</string>

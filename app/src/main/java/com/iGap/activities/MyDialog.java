@@ -36,17 +36,19 @@ public class MyDialog {
 
         TextView txtMuteNotification = (TextView) dialog.findViewById(R.id.cm_txt_mute_notification);
         MaterialDesignTextView iconMuteNotification = (MaterialDesignTextView) dialog.findViewById(R.id.cm_icon_mute_notification);
+//        iconMuteNotification.setTypeface();
         TextView txtClearHistory = (TextView) dialog.findViewById(R.id.cm_txt_clear_history);
         MaterialDesignTextView iconClearHistory = (MaterialDesignTextView) dialog.findViewById(R.id.cm_icon_clear_history);
         TextView txtDeleteChat = (TextView) dialog.findViewById(R.id.cm_txt_delete_chat);
         MaterialDesignTextView iconDeleteChat = (MaterialDesignTextView) dialog.findViewById(R.id.cm_icon_delete_chat);
-        TextView txtCancle = (TextView) dialog.findViewById(R.id.cm_txt_cancle);
+        TextView txtCancel = (TextView) dialog.findViewById(R.id.cm_txt_cancle);
 
         if (isMute) {
-            txtMuteNotification.setText(context.getString(R.string.unmute_notification));
-            iconMuteNotification.setText(context.getString(R.string.unmute));
-        } else {
             txtMuteNotification.setText(context.getString(R.string.mute));
+            iconMuteNotification.setText(context.getString(R.string.md_muted));
+        } else {
+            txtMuteNotification.setText(context.getString(R.string.unmute));
+            iconMuteNotification.setText(context.getString(R.string.md_unMuted));
 
         }
 
@@ -78,6 +80,7 @@ public class MyDialog {
             } else {
 
                 txtDeleteChat.setText(context.getString(R.string.left) + " " + context.getString(R.string.group));
+                iconDeleteChat.setText(context.getString(R.string.md_go_back_left_arrow));
             }
         } else if (mType == ProtoGlobal.Room.Type.CHANNEL) {
 
@@ -90,6 +93,7 @@ public class MyDialog {
             } else {
 
                 txtDeleteChat.setText(context.getString(R.string.left) + " " + context.getString(R.string.channel));
+                iconDeleteChat.setText(context.getString(R.string.md_go_back_left_arrow));
             }
         }
 
@@ -126,7 +130,7 @@ public class MyDialog {
             }
         });
 
-        txtCancle.setOnClickListener(new View.OnClickListener() {
+        txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.cancel();

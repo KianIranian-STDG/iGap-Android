@@ -656,6 +656,7 @@
     <string name="st_data_shams">Shamsi Date</string>
     <string name="do_you_want_left_this">"Are you sure left from selected item ?"</string>
     <string name="do_you_want_delete_this">Are you sure deleting selected item ?</string>
+    <string name="content_log_out">Are you sure log out from app?</string>
 
 
 </resources>

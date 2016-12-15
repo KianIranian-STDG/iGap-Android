@@ -464,6 +464,48 @@
                         android:textStyle="normal"/>
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText"/>
+
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:orientation="horizontal"
+                    android:paddingEnd="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingStart="@dimen/dp16">
+
+                    <ToggleButton
+                        android:id="@+id/st_toggle_dataShams"
+                        android:layout_width="@dimen/dp44"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/st_switch_button"
+                        android:textOff=""
+                        android:textOn=""/>
+
+                    <TextView
+                        android:id="@+id/st_txt_st_toggle_dataShams"
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/st_data_shams"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp15"
+                        android:textStyle="normal"
+                        />
+
+
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -527,43 +569,6 @@
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal"/>
 
-                <RelativeLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
-                    android:orientation="horizontal"
-                    android:paddingEnd="@dimen/dp16"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
-                    android:paddingStart="@dimen/dp16">
-
-                    <ToggleButton
-                        android:id="@+id/st_toggle_dataShams"
-                        android:layout_width="@dimen/dp44"
-                        android:layout_height="@dimen/dp40"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
-
-                    <TextView
-                        android:id="@+id/st_txt_st_toggle_dataShams"
-                        fontPath="fonts/IRANSansMobile.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:gravity="center_vertical"
-                        android:paddingTop="@dimen/dp4"
-                        android:text="@string/st_data_shams"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/sp15"
-                        android:textStyle="normal"
-                        />
-
-
-                </RelativeLayout>
 
             </LinearLayout>
 
@@ -630,20 +635,39 @@
                     android:layout_height="1dp"
                     android:background="@color/background_editText"/>
 
-                <TextView
-                    android:id="@+id/st_txt_sticker"
-                    fontPath="fonts/IRANSansMobile.ttf"
+
+                <RelativeLayout
+                    android:id="@+id/stsp_layout_crop"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
+                    android:layout_height="@dimen/dp52"
                     android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
-                    android:paddingTop="@dimen/dp4"
-                    android:text="@string/st_stickers"
-                    android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp15"
-                    android:textStyle="normal"
-                    />
+                    android:paddingRight="@dimen/dp16">
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/st_crop"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal"/>
+
+                    <ToggleButton
+                        android:id="@+id/stsp_toggle_crop"
+                        android:layout_width="@dimen/dp44"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/st_switch_button"
+                        android:textOff=""
+                        android:textOn=""/>
+
+                </RelativeLayout>
+
 
                 <View
                     android:layout_width="match_parent"

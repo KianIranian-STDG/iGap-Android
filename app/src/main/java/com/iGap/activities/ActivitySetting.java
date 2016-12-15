@@ -44,7 +44,6 @@ import com.iGap.R;
 import com.iGap.fragments.FragmentDeleteAccount;
 import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
-import com.iGap.fragments.FragmentSticker;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
@@ -100,6 +99,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
 import static com.iGap.R.id.st_layoutParent;
+import static com.iGap.R.string.log_out;
 
 public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities, OnFileDownloadResponse {
 
@@ -988,7 +988,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 TextView txtLogOut = new TextView(ActivitySetting.this);
                 TextView txtDeleteAccount = new TextView(ActivitySetting.this);
 
-                txtLogOut.setText(getResources().getString(R.string.log_out));
+                txtLogOut.setText(getResources().getString(log_out));
                 txtDeleteAccount.setText(getResources().getString(R.string.delete_account));
 
                 txtLogOut.setTextColor(getResources().getColor(android.R.color.black));
@@ -1030,9 +1030,23 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 txtLogOut.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        HelperLogout.logout();
-                        popupWindow.dismiss();
 
+                        new MaterialDialog.Builder(ActivitySetting.this)
+                                .title(getResources().getString(R.string.log_out))
+                                .content(R.string.content_log_out)
+                                .positiveText(getResources().getString(R.string.B_ok))
+                                .negativeText(getResources().getString(R.string.B_cancel))
+                                .iconRes(R.mipmap.exit_to_app_button)
+                                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        HelperLogout.logout();
+                                        popupWindow.dismiss();
+                                    }
+                                })
+
+                                .show();
                     }
                 });
 
@@ -1044,6 +1058,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 .title(getResources().getString(R.string.delete_account))
                                 .content(getResources().getString(R.string.delete_account_text))
                                 .positiveText(getResources().getString(R.string.B_ok))
+                                .iconRes(R.mipmap.round_delete_button)
+                                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
                                 .negativeText(getResources().getString(R.string.B_cancel))
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
@@ -1122,7 +1138,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
                     FragmentShowAvatars.appBarLayout = fab;
 
-                    FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat);
+                    FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
 
                     ActivitySetting.this.getSupportFragmentManager()
                             .beginTransaction()
@@ -1342,17 +1358,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        txtSticker = (TextView) findViewById(R.id.st_txt_sticker);
-        txtSticker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentSticker fragmentSticker = new FragmentSticker();
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(st_layoutParent, fragmentSticker, null)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
 
         txtChatBackground = (TextView) findViewById(R.id.st_txt_chatBackground);
         txtChatBackground.setOnClickListener(new View.OnClickListener() {

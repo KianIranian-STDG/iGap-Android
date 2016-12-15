@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -39,10 +40,14 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestUserAvatarDelete;
+
+import java.io.File;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
-import java.io.File;
+
+import static com.iGap.R.id.count;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/26/2016.
@@ -156,7 +161,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
         // init fields
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mCount = (TextView) view.findViewById(R.id.count);
+        mCount = (TextView) view.findViewById(count);
         mToolbar = (LinearLayout) view.findViewById(R.id.toolbar);
         mAdapter = new AvatarsAdapter<>();
 
@@ -192,7 +197,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                                 showPopupMenu(R.array.pop_up_menu_show_avatar);
                                 break;
                             case chat:
-                                showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                                showPopupMenu(R.array.pop_up_menu_show_avatar);
                                 break;
                         }
 
@@ -201,6 +206,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
 
         if (from == From.chat) {
+            fillListChatAvatar();
+        } else if (from == From.setting) {
             fillListChatAvatar();
         } else if (from == From.group) {
             fillListGroupAvatar();
@@ -330,9 +337,27 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.remove(curerntItemPosition);
-                        mCount.setText(String.format(getString(R.string.d_of_d), curerntItemPosition, mAdapter.getAdapterItemCount()));
                         HelperAvatar.avatarDelete(mPeerId, avatarId, HelperAvatar.AvatarType.USER, null);
+
+                        int newCount;
+                        if (curerntItemPosition == 0) {
+                            newCount = curerntItemPosition + 1;
+                        } else {
+                            newCount = curerntItemPosition;
+                        }
+                        mAdapter.remove(curerntItemPosition);
+                        mCount.setText(String.format(getString(R.string.d_of_d), newCount, mAdapter.getAdapterItemCount()));
+
+                        if (mAdapter.getAdapterItemCount() == 0) {
+                            if (onComplete != null) onComplete.complete(true, "", "");
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+                            if (appBarLayout != null)
+                                appBarLayout.setVisibility(View.VISIBLE);
+
+                            if (G.onChangeUserPhotoListener != null) {
+                                G.onChangeUserPhotoListener.onChangePhoto(null);
+                            }
+                        }
                     }
                 });
             }

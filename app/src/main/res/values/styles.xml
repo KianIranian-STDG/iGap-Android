@@ -6,6 +6,11 @@
         <item name="colorPrimary">@color/green</item>
         <item name="colorPrimaryDark">@color/greenStatus</item>
         <item name="colorAccent">@color/green</item>
+        <item name="android:buttonStyle">@style/Button</item>
+    </style>
+
+    <style name="Button" parent="Widget.AppCompat.Button">
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="AppTheme.Widget"/>

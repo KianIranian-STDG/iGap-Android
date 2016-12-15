@@ -15,6 +15,7 @@
     <color name="gray_4c">#4c4c4c</color>
     <color name="gray_3c">#52838383</color>
     <color name="gray_5c">#7e7e7e</color>
+    <color name="gray_6c">#696969</color>
 
     <color name="am_iconFab_black">#000</color>
     <color name="white_s1">#fcfcfc</color>
@@ -55,6 +56,7 @@
     <color name="rg_error_red">#ff0000</color>
 
     <color name="pu_edtHintText">#cacaca</color>
+
 
     <!--REGISTER PAGE-->
 
