@@ -55,7 +55,6 @@ import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
-import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
 import com.iGap.interfaces.OnUserProfileSetEmailResponse;
@@ -79,7 +78,6 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserAvatarAdd;
-import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserProfileCheckUsername;
 import com.iGap.request.RequestUserProfileSetEmail;
 import com.iGap.request.RequestUserProfileSetGender;
@@ -1103,17 +1101,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             public void Allow() {
 
                                 startDialog(R.array.profile);
-
                                 realm.close();
 
                             }
                         });
-
-
                     }
                 });
-
-
             }
         });
 
@@ -1121,7 +1114,32 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
 
-                showImage();
+//                showImage();
+                long mAvatarId = 0;
+                if (messageOne != null && !messageOne.equals("")) {
+                    mAvatarId = Long.parseLong(messageOne);
+                }
+
+                HelperAvatar.avatarDelete(userId, mAvatarId, HelperAvatar.AvatarType.USER, new OnAvatarDelete() {
+                    @Override
+                    public void latestAvatarPath(final String avatarPath) {
+                        setImage(avatarPath);
+                    }
+
+                    @Override
+                    public void showInitials(final String initials, final String color) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+                                if (G.onChangeUserPhotoListener != null) {
+                                    G.onChangeUserPhotoListener.onChangePhoto(null);
+                                }
+                            }
+                        });
+                    }
+                });
+
 
             }
         };
@@ -1791,47 +1809,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             } else {
                                 Toast.makeText(ActivitySetting.this, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
                             }
-                        } else if (text.toString().equals(getResources().getString(R.string.array_Delete_photo))) {
-                            G.onUserAvatarDelete = new OnUserAvatarDelete() {
-                                @Override
-                                public void onUserAvatarDelete(final long avatarId, final String token) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            hideProgressBar();
-                                            HelperAvatar.avatarDelete(userId, avatarId, HelperAvatar.AvatarType.USER, new OnAvatarDelete() {
-                                                @Override
-                                                public void latestAvatarPath(final String avatarPath) {
-                                                    setImage(avatarPath);
-                                                }
-
-                                                @Override
-                                                public void showInitials(final String initials, final String color) {
-                                                    runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
-                                                            if (G.onChangeUserPhotoListener != null) {
-                                                                G.onChangeUserPhotoListener.onChangePhoto(null);
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onUserAvatarDeleteError() {
-                                    hideProgressBar();
-                                }
-                            };
-
-                            showProgressBar();
-                            RealmAvatar realmAvatar = HelperAvatar.getLastAvatar(userId);
-                            new RequestUserAvatarDelete().userAvatarDelete(realmAvatar.getId());
-
                         } else {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                             idAvatar = SUID.id().get();

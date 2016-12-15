@@ -24,7 +24,6 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AvatarsAdapter;
 import com.iGap.adapter.items.AvatarItem;
-import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnUserAvatarDelete;
@@ -117,8 +116,6 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         if (appBarLayout != null)
             appBarLayout.setVisibility(View.VISIBLE);
 
-        if (onComplete != null)
-            onComplete.complete(true, "", "");
 
         super.onDetach();
     }
@@ -175,8 +172,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                                 .remove(FragmentShowAvatars.this)
                                 .commit();
                         appBarLayout.setVisibility(View.VISIBLE);
-                        if (onComplete != null)
-                            onComplete.complete(true, "", "");
+
                     }
                 });
 
@@ -337,7 +333,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        HelperAvatar.avatarDelete(mPeerId, avatarId, HelperAvatar.AvatarType.USER, null);
+
+                        if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
 
                         int newCount;
                         if (curerntItemPosition == 0) {
@@ -349,14 +346,10 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                         mCount.setText(String.format(getString(R.string.d_of_d), newCount, mAdapter.getAdapterItemCount()));
 
                         if (mAdapter.getAdapterItemCount() == 0) {
-                            if (onComplete != null) onComplete.complete(true, "", "");
                             getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
                             if (appBarLayout != null)
                                 appBarLayout.setVisibility(View.VISIBLE);
 
-                            if (G.onChangeUserPhotoListener != null) {
-                                G.onChangeUserPhotoListener.onChangePhoto(null);
-                            }
                         }
                     }
                 });

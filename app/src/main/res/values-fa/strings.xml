@@ -651,6 +651,6 @@
     <string name="pending">معلق</string>
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ هجری شمسی</string>
-
+    <string name="content_log_out">Are you sure log out from app?</string>
 
 </resources>
