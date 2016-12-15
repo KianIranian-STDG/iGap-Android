@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,8 +18,11 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.ImageHelper;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
+import com.iGap.module.FileUtils;
 import com.iGap.module.HelperCopyFile;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
@@ -74,27 +76,31 @@ public class ActivityCrop extends ActivityEnhanced {
             id = bundle.getInt("ID");
         }
         if (uri != null) {
-            imgPic.setVisibility(View.INVISIBLE);
-            prgWaiting.setVisibility(View.VISIBLE);
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    String Path = getRealPathFromURI(uri);
+            //  imgPic.setVisibility(View.INVISIBLE);
+            //  prgWaiting.setVisibility(View.VISIBLE);
 
-                    final Bitmap rotateImage = ImageHelper.correctRotateImage(Path, false);
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(FileUtils.getPath(this, uri)), imgPic);
+            prgWaiting.setVisibility(View.GONE);
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            imgPic.setImageBitmap(rotateImage);
-                            imgPic.setVisibility(View.VISIBLE);
-                            prgWaiting.setVisibility(View.GONE);
-                        }
-                    });
-
-                }
-            });
-            thread.start();
+            //Thread thread = new Thread(new Runnable() {
+            //    @Override
+            //    public void run() {
+            //        String Path = getRealPathFromURI(uri);
+            //
+            //        final Bitmap rotateImage = ImageHelper.correctRotateImage(Path, false);
+            //
+            //        runOnUiThread(new Runnable() {
+            //            @Override
+            //            public void run() {
+            //                imgPic.setImageBitmap(rotateImage);
+            //                imgPic.setVisibility(View.VISIBLE);
+            //                prgWaiting.setVisibility(View.GONE);
+            //            }
+            //        });
+            //
+            //    }
+            //});
+            //thread.start();
 
         }
         RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);

@@ -2,7 +2,6 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.iGap.R;
 import com.iGap.helper.HelperRadius;
 import com.iGap.interfaces.IMessageItem;
@@ -11,7 +10,6 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
@@ -45,6 +43,8 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
 
         //holder.image.setCornerRadius(G.IMAGE_CORNER);
         holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+
+        holder.itemView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -89,6 +89,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
             super(view);
 
             image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
+            itemView.setVisibility(View.INVISIBLE);
         }
     }
 }

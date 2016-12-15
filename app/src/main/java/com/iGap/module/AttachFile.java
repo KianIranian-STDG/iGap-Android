@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,16 +21,15 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityExplorer;
 import com.iGap.activities.ActivityPaint;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.proto.ProtoGlobal;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -497,4 +497,21 @@ public class AttachFile {
 
         return filename;
     }
+
+    public String saveGalaryPicToLoacal(String galaryPath) {
+
+        String result = "";
+
+        if (galaryPath == null) return "";
+
+        Bitmap bitmap = ImageHelper.decodeFile(new File(galaryPath));
+
+        if (bitmap != null) {
+            result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE).getPath();
+            ImageHelper.SaveBitmapToFile(result, bitmap);
+        }
+
+        return result;
+    }
+
 }

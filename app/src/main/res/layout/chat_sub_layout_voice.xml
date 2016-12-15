@@ -82,6 +82,7 @@
                         <TextView
                             android:id="@+id/cslv_txt_author"
                             android:layout_width="wrap_content"
+                            android:singleLine="true"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp52"
                             android:textSize="@dimen/sp14"

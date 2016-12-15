@@ -98,7 +98,7 @@ public class ImageHelper {
         return bitmap;
     }
 
-    private static void SaveBitmapToFile(String filepath, Bitmap bitmap) {
+    public static void SaveBitmapToFile(String filepath, Bitmap bitmap) {
 
         FileOutputStream out = null;
         try {
@@ -128,23 +128,6 @@ public class ImageHelper {
         return retVal;
     }
 
-    public static void compressImage(String path) {
-
-        Bitmap b = decodeFile(new File(path));
-
-        try {
-            FileOutputStream out = new FileOutputStream(path);
-
-            if (b != null) {
-                b.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            } else {
-            }
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * decrease iamge size of file to request size

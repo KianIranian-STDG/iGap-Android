@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -183,21 +182,6 @@ import com.nightonke.boommenu.Types.ButtonType;
 import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -209,6 +193,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -2287,7 +2282,6 @@ public class ActivityChat extends ActivityEnhanced
 
                 listPathString = new ArrayList<>();
                 listPathString.add(AttachFile.imagePath);
-                // latestFilePath = AttachFile.imagePath;
                 latestUri = null; // check
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -2313,67 +2307,91 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1 && requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && (listPathString.size() == 1)) {
-                if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
-                    Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                    Uri uri = Uri.parse(listPathString.get(0));
-                    uri = android.net.Uri.parse("file://" + uri.getPath());
-                    intent.putExtra("IMAGE_CAMERA", uri.toString());
-                    intent.putExtra("TYPE", "gallery");
-                    intent.putExtra("PAGE", "chat");
+            if (listPathString.size() == 1) {
 
-                    startActivityForResult(intent, IntentRequests.REQ_CROP);
+                if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
 
+                    if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
+                        if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (prgWaiting != null) {
-                                prgWaiting.setVisibility(View.GONE);
-                            }
+                            listPathString.set(0, attachFile.saveGalaryPicToLoacal(listPathString.get(0)));
+
+                            Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+                            Uri uri = Uri.parse(listPathString.get(0));
+                            uri = android.net.Uri.parse("file://" + uri.getPath());
+                            intent.putExtra("IMAGE_CAMERA", uri.toString());
+                            intent.putExtra("TYPE", "gallery");
+                            intent.putExtra("PAGE", "chat");
+
+                            startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    if (prgWaiting != null) {
+                                        prgWaiting.setVisibility(View.GONE);
+                                    }
+                                }
+                            });
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    if (prgWaiting != null) {
+                                        prgWaiting.setVisibility(View.GONE);
+                                    }
+                                }
+                            });
+                            return;
                         }
-                    });
+                    } else if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
+
+                        ImageHelper.correctRotateImage(listPathString.get(0), true);
+
+                        Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+                        String path = "file://" + AttachFile.imagePath;
+                        intent.putExtra("IMAGE_CAMERA", path);
+                        intent.putExtra("TYPE", "camera");
+                        intent.putExtra("PAGE", "chat");
+                        startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                if (prgWaiting != null) {
+                                    prgWaiting.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                    }
                 } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (prgWaiting != null) {
-                                prgWaiting.setVisibility(View.GONE);
+
+                    if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
+
+                        Thread thread = new Thread(new Runnable() {
+                            @Override public void run() {
+                                ImageHelper.correctRotateImage(listPathString.get(0), true);
                             }
-                        }
-                    });
-                    return;
+                        });
+                        thread.start();
+                    } else if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
+                        Thread thread = new Thread(new Runnable() {
+                            @Override public void run() {
+                                listPathString.set(0, attachFile.saveGalaryPicToLoacal(listPathString.get(0)));
+                            }
+                        });
+                        thread.start();
+
+
+                    }
                 }
 
 
-            } else if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1 && requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
-                Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                String path = "file://" + AttachFile.imagePath;
-                intent.putExtra("IMAGE_CAMERA", path);
-                intent.putExtra("TYPE", "camera");
-                intent.putExtra("PAGE", "chat");
-                startActivityForResult(intent, IntentRequests.REQ_CROP);
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (prgWaiting != null) {
-                            prgWaiting.setVisibility(View.GONE);
-                        }
-                    }
-                });
-            } else if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ImageHelper.correctRotateImage(AttachFile.imagePath, true);
-                    }
-                });
-                thread.start();
+
+
+
+
             }
-
         }
     }
 
@@ -2494,8 +2512,8 @@ public class ActivityChat extends ActivityEnhanced
                 break;
             case AttachFile.request_code_TAKE_PICTURE:
 
-                filePath = AttachFile.imagePath;
-                resizeImage(filePath);
+                //  filePath = AttachFile.imagePath;
+                //   resizeImage(filePath);
 
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
@@ -2528,7 +2546,7 @@ public class ActivityChat extends ActivityEnhanced
             case AttachFile.requestOpenGalleryForImageMultipleSelect:
                 //filePath = getFilePathFromUri(uri);
                 if (!filePath.toLowerCase().endsWith(".gif")) {
-                    resizeImage(filePath);
+                    //   resizeImage(filePath);
 
                     if (isMessageWrote()) {
                         messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT;
@@ -3984,22 +4002,6 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    private void resizeImage(String pathSaveImage) {
-        Bitmap b = ImageHelper.decodeFile(new File(pathSaveImage));
-        try {
-            FileOutputStream out = new FileOutputStream(pathSaveImage);
-
-            if (b != null) {
-                b.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            } else {
-                Toast.makeText(ActivityChat.this, "", Toast.LENGTH_SHORT).show();
-            }
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void showDraftLayout() {
         ll_attach_text.setVisibility(View.VISIBLE);
