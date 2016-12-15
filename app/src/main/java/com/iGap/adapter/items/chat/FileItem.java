@@ -10,20 +10,16 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
-import com.iGap.module.AppUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
-
-import static com.iGap.module.AndroidUtils.suitablePath;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
@@ -54,7 +50,8 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
-        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.thumbnail);
+        //ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.thumbnail);
+        //holder.thumbnail.setImageResource(R.drawable.file_icon);
     }
 
     @Override
@@ -82,7 +79,20 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(mMessage.messageID)).findFirst();
         if (roomMessage != null) {
-            AppUtils.rightFileThumbnailIcon(holder.thumbnail, mMessage.messageType, roomMessage.getAttachment());
+            //AppUtils.rightFileThumbnailIcon(holder.thumbnail, mMessage.messageType, roomMessage.getAttachment());
+            //holder.thumbnail.setImageResource(R.drawable.file_icon);
+            holder.thumbnail.setVisibility(View.VISIBLE);
+            if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".pdf")) {
+                holder.thumbnail.setImageResource(R.drawable.pdf_icon);
+            } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".txt")) {
+                holder.thumbnail.setImageResource(R.drawable.txt_icon);
+            } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".exe")) {
+                holder.thumbnail.setImageResource(R.drawable.exe_icon);
+            } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".docs")) {
+                holder.thumbnail.setImageResource(R.drawable.docx_icon);
+            } else {
+                holder.thumbnail.setImageResource(R.drawable.file_icon);
+            }
         }
         realm.close();
     }

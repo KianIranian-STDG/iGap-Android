@@ -111,8 +111,10 @@ public class LastSeenTimeUtil {
                     showLastSeen = getMinute(value);
                 }
 //            if (realmRegisteredInfo != null && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
-                Log.i("TTT", "realmRegisteredInfo.getStatus() : " + realmRegisteredInfo.getStatus());
-                if (!realmRegisteredInfo.getStatus().equals("online") || !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
+                Log.i("TTT", "realmRegisteredInfo.getStatus() : " + realmRegisteredInfo.getStatus()); //
+                if (!realmRegisteredInfo.getStatus().equals("online")
+                        && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())
+                        && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
                     if (G.onLastSeenUpdateTiming != null) {
                         G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
                     }

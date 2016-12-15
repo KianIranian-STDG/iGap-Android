@@ -176,18 +176,23 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
                         _type = mInfo.getLastMessage().getMessageType();
 
                         try {
-                            tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
-                            if (tmp != null)
-                                _type = tmp;
+                            if (mInfo.getLastMessage().getReplyTo() != null) {
+                                tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
+                                if (tmp != null)
+                                    _type = tmp;
+                            }
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
 
 
                         try {
-                            tmp = mInfo.getLastMessage().getForwardMessage().getMessageType();
-                            if (tmp != null)
-                                _type = tmp;
+                            if (mInfo.getLastMessage().getForwardMessage() != null) {
+                                tmp = mInfo.getLastMessage().getForwardMessage().getMessageType();
+                                if (tmp != null)
+                                    _type = tmp;
+                            }
+
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
