@@ -360,13 +360,18 @@ public class HelperAvatar {
                 onDownload.onDownload(G.DIR_IMAGE_USER + "/" + fileName, token);
             } else {
                 // I don't use offset in getting thumbnail
-                String identity = realmAttachment.getToken()
-                        + '*' + selector.toString()
-                        + '*' + fileSize
-                        + '*' + fileName
-                        + '*' + offset;
+                try {
+                    String identity = realmAttachment.getToken()
+                            + '*' + selector.toString()
+                            + '*' + fileSize
+                            + '*' + fileName
+                            + '*' + offset;
 
-                new RequestFileDownload().download(realmAttachment.getToken(), offset, getFileSize(realmAttachment, selector), selector, identity);
+                    new RequestFileDownload().download(realmAttachment.getToken(), offset, getFileSize(realmAttachment, selector), selector, identity);
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
 

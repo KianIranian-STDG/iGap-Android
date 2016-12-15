@@ -302,6 +302,7 @@ public class ActivityChat extends ActivityEnhanced
     private long chatPeerId;
     private boolean isMuteNotification;
     private String userStatus;
+    private long userTime;
     public static OnComplete onMusicListener;
 
     //group
@@ -398,7 +399,8 @@ public class ActivityChat extends ActivityEnhanced
         mAdapter.notifyDataSetChanged();
 
         onMusicListener = new OnComplete() {
-            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
 
                 Log.e("ddd", "aaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
@@ -410,7 +412,8 @@ public class ActivityChat extends ActivityEnhanced
         setAvatar();
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
 
         onMusicListener = null;
@@ -650,7 +653,13 @@ public class ActivityChat extends ActivityEnhanced
                     if (realmRoom.getActionState() != null) {
                         txtLastSeen.setText(realmRoom.getActionState());
                     } else if (chatType == CHAT) {
-                        txtLastSeen.setText(userStatus);
+                        if (userStatus != null) {
+                            if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime));
+                            } else {
+                                txtLastSeen.setText(userStatus);
+                            }
+                        }
                     } else if (chatType == GROUP) {
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
                     }
@@ -1778,6 +1787,7 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setUserStatus(String status, long time) {
         userStatus = status;
+        userTime = time;
         if (status != null) {
             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                 /*String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
@@ -3580,14 +3590,14 @@ public class ActivityChat extends ActivityEnhanced
 
         if (userTriesReplay()) {
             messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 

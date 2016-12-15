@@ -55,7 +55,7 @@ import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnRefreshActivity;
-import com.iGap.interfaces.OnSetAction;
+import com.iGap.interfaces.OnSetActionInRoom;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OpenFragment;
 import com.iGap.libs.floatingAddButton.ArcMenu;
@@ -105,7 +105,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
 
-public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetAction, OnGroupAvatarResponse {
+public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
@@ -1140,7 +1140,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
-        G.onSetAction = this;
+        G.onSetActionInRoom = this;
 
         getChatsList(mFirstRun);
 
@@ -1576,8 +1576,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     ProtoGlobal.Room.Type type = null;
 
     @Override
-    public void onSetAction(
-            final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
+    public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
 
 
         runOnUiThread(new Runnable() {
@@ -1604,7 +1603,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             });
                             if (type != null) {
                                 String action = HelperGetAction.getAction(roomId, type, clientAction);
-                                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().setActionState(action);
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                if (realmRoom != null) {
+                                    realmRoom.setActionState(action);
+                                }
 
                             }
                         }

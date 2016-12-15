@@ -96,7 +96,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
         if (mInfo.getActionState() != null) {
 
-            holder.messageStatus.setVisibility(GONE);
+            //holder.messageStatus.setVisibility(GONE);
             holder.lastMessageSender.setVisibility(View.GONE);
             holder.lastMessage.setVisibility(View.VISIBLE);
 
