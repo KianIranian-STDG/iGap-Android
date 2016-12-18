@@ -55,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -182,6 +183,20 @@ import com.nightonke.boommenu.Types.ButtonType;
 import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -193,17 +208,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -2331,7 +2335,8 @@ public class ActivityChat extends ActivityEnhanced
                             startActivityForResult(intent, IntentRequests.REQ_CROP);
 
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     if (prgWaiting != null) {
                                         prgWaiting.setVisibility(View.GONE);
                                     }
@@ -2339,7 +2344,8 @@ public class ActivityChat extends ActivityEnhanced
                             });
                         } else {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     if (prgWaiting != null) {
                                         prgWaiting.setVisibility(View.GONE);
                                     }
@@ -2359,7 +2365,8 @@ public class ActivityChat extends ActivityEnhanced
                         startActivityForResult(intent, IntentRequests.REQ_CROP);
 
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 if (prgWaiting != null) {
                                     prgWaiting.setVisibility(View.GONE);
                                 }
@@ -2371,14 +2378,16 @@ public class ActivityChat extends ActivityEnhanced
                     if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
                         Thread thread = new Thread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 ImageHelper.correctRotateImage(listPathString.get(0), true);
                             }
                         });
                         thread.start();
                     } else if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !listPathString.get(0).toLowerCase().endsWith(".gif")) {
                         Thread thread = new Thread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 listPathString.set(0, attachFile.saveGalaryPicToLoacal(listPathString.get(0)));
                             }
                         });
@@ -2387,13 +2396,6 @@ public class ActivityChat extends ActivityEnhanced
 
                     }
                 }
-
-
-
-
-
-
-
 
 
             }
@@ -4493,6 +4495,13 @@ public class ActivityChat extends ActivityEnhanced
                     if (action != null) {
                         txtLastSeen.setText(action);
                     } else if (chatType == CHAT) {
+                        if (userStatus != null) {
+                            if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime));
+                            } else {
+                                txtLastSeen.setText(userStatus);
+                            }
+                        }
                         txtLastSeen.setText(userStatus);
                     } else if (chatType == GROUP) {
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
@@ -4589,11 +4598,13 @@ public class ActivityChat extends ActivityEnhanced
         @Override
         protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
-            MessagesAdapter.uploading.put(result.messageId, 0);
+            if (MessagesAdapter.uploading != null) {
+                MessagesAdapter.uploading.put(result.messageId, 0);
 
-            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+                G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
 
-            HelperSetAction.setActionFiles(mRoomId, result.messageId, getAction(result.messageType), chatType);
+                HelperSetAction.setActionFiles(mRoomId, result.messageId, getAction(result.messageType), chatType);
+            }
         }
     }
 

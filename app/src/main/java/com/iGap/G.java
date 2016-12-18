@@ -18,7 +18,6 @@ import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.widget.ImageView;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -35,7 +34,6 @@ import com.iGap.module.UploaderUtil;
 import com.iGap.module.enums.ConnectionMode;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmMigrationClass;
@@ -134,8 +132,6 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     public static Typeface FONT_IGAP;
     public static Typeface HELETICBLK_TITR;
     public static List<String> downloadingTokens = new ArrayList<>();
-    public static HashMap<ImageView, RealmAttachment> showImage = new HashMap<>();
-
 
     public static int IMAGE_CORNER;
 
@@ -389,7 +385,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     @Override
     public void onCreate() { // comment
         super.onCreate();
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(false).build()).build());
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
         SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
