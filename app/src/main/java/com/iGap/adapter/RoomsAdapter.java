@@ -107,6 +107,16 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         return false;
     }
 
+    public int getPosition(long chatId) {
+        List<Item> items = getAdapterItems();
+        for (final Item chat : items) {
+            if (chat.mInfo.getId() == chatId) {
+                return items.indexOf(chat);
+            }
+        }
+        return -1;
+    }
+
     /*public void setAction(long roomId, ProtoGlobal.ClientAction clientAction) {
         List<Item> items = getAdapterItems();
         for (final Item chat : items) {
@@ -144,7 +154,6 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
             }
         }
     }*/
-
 
 
 }

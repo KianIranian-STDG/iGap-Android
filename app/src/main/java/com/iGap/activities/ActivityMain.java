@@ -861,7 +861,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.remove(mAdapter.getPosition(item));
+                        if (mAdapter != null) {
+                            int pos = mAdapter.getPosition(roomId);
+                            if (pos != -1) {
+                                mAdapter.remove(pos);
+                            }
+                        }
                     }
                 });
             }
@@ -902,7 +907,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.remove(position);
+                        if (mAdapter != null) {
+                            int pos = mAdapter.getPosition(roomId);
+                            if (pos != -1) {
+                                mAdapter.remove(pos);
+                            }
+                        }
                     }
                 });
             }
@@ -979,11 +989,16 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         G.onChannelDelete = new OnChannelDelete() {
             @Override
-            public void onChannelDelete(long roomId) {
+            public void onChannelDelete(final long roomId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.remove(position);
+                        if (mAdapter != null) {
+                            int pos = mAdapter.getPosition(roomId);
+                            if (pos != -1) {
+                                mAdapter.remove(pos);
+                            }
+                        }
                     }
                 });
             }
@@ -1033,7 +1048,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         G.onChannelLeft = new OnChannelLeft() {
             @Override
             public void onChannelLeft(long roomId, long memberId) {
-                mAdapter.remove(position);
+                if (mAdapter != null) {
+                    int pos = mAdapter.getPosition(roomId);
+                    if (pos != -1) {
+                        mAdapter.remove(pos);
+                    }
+                }
             }
 
             @Override

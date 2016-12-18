@@ -55,10 +55,6 @@ public class ChannelLeftResponse extends MessageHandler {
                         realmClientCondition.deleteFromRealm();
                     }
 
-                    if (G.onGroupLeft != null) {
-                        G.onGroupLeft.onGroupLeft(roomId, builder.getMemberId());
-                    }
-
                     if (G.onChannelLeft != null) {
                         G.onChannelLeft.onChannelLeft(builder.getRoomId(), builder.getMemberId());
                     }
