@@ -76,20 +76,20 @@
     <string name="contact_message">پیام مخاطب</string>
     <string name="gif_message">پیام متحرک</string>
     <string name="voice_message">پیغام صوتی</string>
-    <string name="typing">درحال تایپ...</string>
-    <string name="sending_image">ارسال تصویر...</string>
+    <string name="typing">درحال تایپ</string>
+    <string name="sending_image">ارسال تصویر</string>
     <string name="capturing_image">درحال گرفتن تصویر</string>
-    <string name="sending_video">ارسال ویدئو...</string>
+    <string name="sending_video">ارسال ویدئو</string>
     <string name="capturing_video">درحال رکورد ویدئو</string>
-    <string name="sending_audio">ارسال صوت...</string>
+    <string name="sending_audio">ارسال صوت</string>
     <string name="recording_voice">ضبط صدا</string>
-    <string name="sending_voice">ارسال صدا...</string>
-    <string name="sending_document">ارسال سند...</string>
-    <string name="sending_gif">ارسال تصویرمتحرک...</string>
-    <string name="sending_file">ارسال فایل...</string>
-    <string name="sending_location">ارسال موقعیت...</string>
+    <string name="sending_voice">ارسال صدا</string>
+    <string name="sending_document">ارسال سند</string>
+    <string name="sending_gif">ارسال تصویرمتحرک</string>
+    <string name="sending_file">ارسال فایل</string>
+    <string name="sending_location">ارسال موقعیت</string>
     <string name="choosing_contact">انتخاب مخاطب</string>
-    <string name="painting">درحال نقاشی...</string>
+    <string name="painting">درحال نقاشی</string>
 
     <!-- Action Box -->
     <string name="log_out">خروج</string>

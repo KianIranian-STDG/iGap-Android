@@ -124,11 +124,11 @@
 
                         <com.wang.avi.AVLoadingIndicatorView
                             android:id="@+id/avi"
+                            style="@style/AVLoadingIndicatorView.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/dp8"
-                            style="@style/AVLoadingIndicatorView.Small"
                             android:layout_gravity="top"
+                            android:layout_marginLeft="@dimen/dp8"
                             app:indicatorColor="@color/white"
                             app:indicatorName="BallPulseIndicator"
                             />

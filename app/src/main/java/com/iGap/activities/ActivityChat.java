@@ -657,7 +657,9 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     if (realmRoom.getActionState() != null) {
                         txtLastSeen.setText(realmRoom.getActionState());
+                        avi.setVisibility(View.VISIBLE);
                     } else if (chatType == CHAT) {
+                        avi.setVisibility(View.GONE);
                         if (userStatus != null) {
                             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                                 txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime));
@@ -666,6 +668,7 @@ public class ActivityChat extends ActivityEnhanced
                             }
                         }
                     } else if (chatType == GROUP) {
+                        avi.setVisibility(View.GONE);
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
                     }
                 }
