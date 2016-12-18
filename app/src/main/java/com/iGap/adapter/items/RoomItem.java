@@ -27,6 +27,7 @@ import com.iGap.realm.enums.RoomType;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
 
@@ -99,11 +100,12 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             //holder.messageStatus.setVisibility(GONE);
             holder.lastMessageSender.setVisibility(View.GONE);
             holder.lastMessage.setVisibility(View.VISIBLE);
-
+            holder.avi.setVisibility(View.VISIBLE);
             holder.lastMessage.setText(mInfo.getActionState());
             holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
 
         } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
+            holder.avi.setVisibility(View.GONE);
             holder.messageStatus.setVisibility(GONE);
             holder.lastMessage.setVisibility(View.VISIBLE);
             holder.lastMessageSender.setVisibility(View.VISIBLE);
@@ -112,6 +114,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             holder.lastMessage.setText(mInfo.getDraft().getMessage());
             holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
         } else {
+            holder.avi.setVisibility(View.GONE);
             if (mInfo.getLastMessage() != null) {
                 String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
                 if (lastMessage == null) {
@@ -343,10 +346,12 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         protected TextView lastSeen;
         protected TextView unreadMessage;
         protected ImageView messageStatus;
+        private AVLoadingIndicatorView avi;
 
         public ViewHolder(View view) {
             super(view);
 
+            avi = (AVLoadingIndicatorView) view.findViewById(R.id.cs_avi);
             image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
             distanceColor = view.findViewById(R.id.cs_view_distance_color);
             chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);

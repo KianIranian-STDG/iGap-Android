@@ -128,7 +128,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="@dimen/dp8"
-                            android:layout_gravity="center"
+                            style="@style/AVLoadingIndicatorView.Small"
+                            android:layout_gravity="top"
                             app:indicatorColor="@color/white"
                             app:indicatorName="BallPulseIndicator"
                             />

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="@dimen/dp68"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layoutDirection="ltr">
 
 
@@ -103,9 +104,8 @@
 
                     <io.github.meness.emoji.EmojiTextView
                         android:id="@+id/cs_txt_last_message"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="left"
                         android:layoutDirection="ltr"
                         android:paddingBottom="1dp"
@@ -113,6 +113,18 @@
                         android:text="LAST MESSAGE"
                         android:textColor="#FF616161"
                         android:textSize="@dimen/sp13"/>
+
+                    <com.wang.avi.AVLoadingIndicatorView
+                        android:id="@+id/cs_avi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/dp8"
+                        style="@style/AVLoadingIndicatorView.Small"
+                        android:layout_gravity="top"
+                        android:visibility="gone"
+                        app:indicatorColor="@color/room_message_blue"
+                        app:indicatorName="BallPulseIndicator"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
