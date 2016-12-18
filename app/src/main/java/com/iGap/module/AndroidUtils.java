@@ -319,7 +319,7 @@ public final class AndroidUtils {
      * @return bytes
      * @throws IOException
      */
-    public static byte[] fileToBytes(FileUploadStructure uploadStructure) throws IOException, OutOfMemoryError {
+    public static byte[] fileToBytes(FileUploadStructure uploadStructure) throws IOException, OutOfMemoryError, RuntimeException {
         ByteBuffer byteBuffer = ByteBuffer.allocate((int) uploadStructure.fileSize);
         uploadStructure.fileChannel.read(byteBuffer);
 

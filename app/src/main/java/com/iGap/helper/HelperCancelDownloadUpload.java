@@ -27,7 +27,7 @@ public final class HelperCancelDownloadUpload {
         }
 
         for (String t : G.downloadingTokens) {
-            if (t.equalsIgnoreCase(token)) {
+            if (t != null && token != null && t.equalsIgnoreCase(token)) {
                 if (G.downloadingTokens.contains(token)) {
                     G.downloadingTokens.remove(token);
                 }

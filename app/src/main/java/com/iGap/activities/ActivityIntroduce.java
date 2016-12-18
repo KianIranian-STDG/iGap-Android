@@ -82,7 +82,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         HelperPermision.onDenyStorage = new OnGetPermision() {
             @Override
-            public void Allow() {
+            public void Allow() throws RuntimeException {
 
                 DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
                     @Override

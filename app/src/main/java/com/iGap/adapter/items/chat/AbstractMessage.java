@@ -548,7 +548,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
                 if (imageViewReservedSpace != null) {
                     int[] dimens = imageViewReservedSpace.reserveSpace(attachment.getWidth(), attachment.getHeight());
-                    ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
+                    if (dimens[0] != 0 && dimens[1] != 0) {
+                        ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
+                    }
                 }
             } else if (messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                 ReserveSpaceGifImageView imageViewReservedSpace = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);

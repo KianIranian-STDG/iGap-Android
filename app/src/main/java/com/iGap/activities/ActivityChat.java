@@ -2252,7 +2252,8 @@ public class ActivityChat extends ActivityEnhanced
         return mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo;
     }
 
-    @Override protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
 
@@ -4485,7 +4486,10 @@ public class ActivityChat extends ActivityEnhanced
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().setActionState(action);
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    if (realmRoom != null) {
+                        realmRoom.setActionState(action);
+                    }
                 }
             });
             realm.close();
@@ -4509,45 +4513,14 @@ public class ActivityChat extends ActivityEnhanced
                 }
             });
         }
-
-        /*if (mRoomId == roomId && this.userId != userId) {
-            if (chatType == ProtoGlobal.Room.Type.CHAT) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String action = HelperConvertEnumToString.convertActionEnum(clientAction);
-                        if (action != null) {
-                            txtLastSeen.setText(action);
-                        } else {
-                            txtLastSeen.setText(userStatus);
-                        }
-                    }
-                });
-            } else if (chatType == ProtoGlobal.Room.Type.GROUP) {
-                final String actionText = HelperGetAction.getAction(roomId);
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (actionText != null) {
-                            txtLastSeen.setText(actionText);
-                        } else {
-                            txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
-                        }
-                    }
-                });
-            }
-        }*/
     }
 
     @Override
     public void onUserUpdateStatus(long userId, final long time, final String status) {
-        Log.i("QQQ", "onUserUpdateStatus");
         if (chatType == CHAT && chatPeerId == userId) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     setUserStatus(status, time);
                 }
             });
@@ -4602,7 +4575,6 @@ public class ActivityChat extends ActivityEnhanced
                 MessagesAdapter.uploading.put(result.messageId, 0);
 
                 G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
-
                 HelperSetAction.setActionFiles(mRoomId, result.messageId, getAction(result.messageType), chatType);
             }
         }

@@ -3033,7 +3033,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
         hideProgressBar();
-        if (filePathAvatar != null) {
+        if (filePathAvatar == null) {
             HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath) {

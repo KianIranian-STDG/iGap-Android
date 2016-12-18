@@ -16,12 +16,15 @@ public class ReserveSpaceRoundedImageView extends RoundedImageView {
 
     public int[] reserveSpace(float width, float height) {
         final int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(getContext(), width, height);
-        Bitmap bitmap = Bitmap.createBitmap(dimens[0], dimens[1], Bitmap.Config.ARGB_4444);
-        setImageBitmap(bitmap);
+        if (dimens[0] != 0 && dimens[1] != 0) {
+            Bitmap bitmap = Bitmap.createBitmap(dimens[0], dimens[1], Bitmap.Config.ARGB_4444);
+            setImageBitmap(bitmap);
 
-        this.reservedWidth = dimens[0];
-        this.reservedHeight = dimens[1];
-        return dimens;
+            this.reservedWidth = dimens[0];
+            this.reservedHeight = dimens[1];
+            return dimens;
+        }
+        return new int[]{0, 0};
     }
 
     public ReserveSpaceRoundedImageView(Context context) {
