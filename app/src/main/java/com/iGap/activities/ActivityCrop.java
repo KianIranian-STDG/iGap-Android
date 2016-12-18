@@ -13,8 +13,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
@@ -24,10 +26,12 @@ import com.iGap.module.HelperCopyFile;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityCrop extends ActivityEnhanced {
@@ -105,7 +109,6 @@ public class ActivityCrop extends ActivityEnhanced {
         RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);
         txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
 
-        Log.i("VVBBBBBB", "onCreate: " + uri);
         if (uri != null && !uri.toString().equals("")) {
             rippleCrop.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
@@ -175,7 +178,7 @@ public class ActivityCrop extends ActivityEnhanced {
                         case "chat":
                             mediaStorageDir = new File(G.DIR_IMAGES);
                             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                            fileChat = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+                            fileChat = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
                             result = fileChat.toString();
                             HelperCopyFile.copyFile(pathImageUser, result);
                             break;

@@ -56,7 +56,7 @@ public class HelperCalander {
     }
 
     public static String milladyDate(long time) {
-        return TimeUtils.toLocal(time, "dd MMM yyyy");
+        return TimeUtils.toLocal(time, "dd_MM_yyyy");
     }
 
 }

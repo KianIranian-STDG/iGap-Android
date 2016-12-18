@@ -55,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -183,6 +184,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -194,17 +209,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -329,19 +333,23 @@ public class ActivityChat extends ActivityEnhanced
     private ProgressBar prgWaiting;
     private AVLoadingIndicatorView avi;
 
-    @Override protected void onStart() {
+    @Override
+    protected void onStart() {
         super.onStart();
 
         RealmRoomMessage.fetchMessages(mRoomId, new OnActivityChatStart() {
-            @Override public void resendMessage(RealmRoomMessage message) {
+            @Override
+            public void resendMessage(RealmRoomMessage message) {
                 G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
             }
 
-            @Override public void resendMessageNeedsUpload(RealmRoomMessage message) {
+            @Override
+            public void resendMessageNeedsUpload(RealmRoomMessage message) {
                 new UploadTask().execute(message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getRoomId(), message.getMessage());
             }
 
-            @Override public void sendSeenStatus(RealmRoomMessage message) {
+            @Override
+            public void sendSeenStatus(RealmRoomMessage message) {
                 G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
             }
         });
@@ -358,7 +366,8 @@ public class ActivityChat extends ActivityEnhanced
 
         final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
         updateUnreadCountRealm.executeTransactionAsync(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (room != null) {
                     room.setUnreadCount(0);
@@ -366,13 +375,15 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         }, new Realm.Transaction.OnSuccess() {
-            @Override public void onSuccess() {
+            @Override
+            public void onSuccess() {
                 updateUnreadCountRealm.close();
             }
         });
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
 
         activityChat = this;
@@ -389,7 +400,8 @@ public class ActivityChat extends ActivityEnhanced
         mAdapter.notifyDataSetChanged();
 
         onMusicListener = new OnComplete() {
-            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
 
                 Log.e("ddd", "aaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
@@ -401,7 +413,8 @@ public class ActivityChat extends ActivityEnhanced
         setAvatar();
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
 
         onMusicListener = null;
@@ -412,14 +425,15 @@ public class ActivityChat extends ActivityEnhanced
     private void getChatHistory() {
         Realm realm = Realm.getDefaultInstance();
         if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 0
-            || realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 1) {
+                || realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 1) {
             firstTimeGetHistory = true;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
         }
         realm.close();
     }
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         activityChatForFinish = this;
@@ -431,7 +445,8 @@ public class ActivityChat extends ActivityEnhanced
 
         //call from ActivityGroupProfile for update group member number
         onComplete = new OnComplete() {
-            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
                 txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member));
             }
         };
@@ -473,13 +488,15 @@ public class ActivityChat extends ActivityEnhanced
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         initAttach();
         complete = new OnComplete() {
-            @Override public void complete(boolean result, final String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, final String messageOne, String MessageTow) {
                 HelperSetAction.sendCancel(messageId);
 
                 Realm realm = Realm.getDefaultInstance();
                 final long id = SUID.id().get();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         String[] split = messageOne.split(",");
                         RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
                         messageLocation.setLocationLat(Double.parseDouble(split[0]));
@@ -503,7 +520,8 @@ public class ActivityChat extends ActivityEnhanced
                 realm.close();
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         Realm realm1 = Realm.getDefaultInstance();
                         RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
@@ -619,7 +637,8 @@ public class ActivityChat extends ActivityEnhanced
         checkAction();
 
         G.onHelperSetAction = new OnHelperSetAction() {
-            @Override public void onAction(ProtoGlobal.ClientAction ClientAction) {
+            @Override
+            public void onAction(ProtoGlobal.ClientAction ClientAction) {
                 HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
             }
         };
@@ -630,7 +649,8 @@ public class ActivityChat extends ActivityEnhanced
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null && realmRoom.getActionState() != null) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     if (realmRoom.getActionState() != null) {
                         txtLastSeen.setText(realmRoom.getActionState());
                         avi.setVisibility(View.VISIBLE);
@@ -665,7 +685,8 @@ public class ActivityChat extends ActivityEnhanced
 
     private void updateStatus() {
         G.onUpdateUserStatusInChangePage = new OnUpdateUserStatusInChangePage() {
-            @Override public void updateStatus(long peerId, String status, long lastSeen) {
+            @Override
+            public void updateStatus(long peerId, String status, long lastSeen) {
                 setUserStatus(status, lastSeen);
 
                 if (chatType == CHAT) {
@@ -686,15 +707,18 @@ public class ActivityChat extends ActivityEnhanced
 
     private void clearHistoryFromContactsProfileInterface() {
         G.onClearChatHistory = new OnClearChatHistory() {
-            @Override public void onClearChatHistory() {
+            @Override
+            public void onClearChatHistory() {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         mAdapter.clear();
                     }
                 });
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
 
             }
         };
@@ -702,9 +726,11 @@ public class ActivityChat extends ActivityEnhanced
 
     private void onDeleteChatFinishActivityInterface() {
         G.onDeleteChatFinishActivity = new OnDeleteChatFinishActivity() {
-            @Override public void onFinish() {
+            @Override
+            public void onFinish() {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() { //TODO [Saeed Mozaffari] [2016-10-15 4:19 PM] -
+                    @Override
+                    public void run() { //TODO [Saeed Mozaffari] [2016-10-15 4:19 PM] -
                         // runOnUiThread need here???
                         finish();
                     }
@@ -717,7 +743,8 @@ public class ActivityChat extends ActivityEnhanced
         final Realm realm = Realm.getDefaultInstance();
         final long messageId = SUID.id().get();
         realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
@@ -733,7 +760,8 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         }, new Realm.Transaction.OnSuccess() {
-            @Override public void onSuccess() {
+            @Override
+            public void onSuccess() {
                 RealmRoomMessage forwardedMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                 switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
                 scrollToEnd();
@@ -749,11 +777,13 @@ public class ActivityChat extends ActivityEnhanced
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
-            @Override public void onChatEditMessage(long roomId, final long messageId, long messageVersion, final String message, ProtoResponse.Response response) {
+            @Override
+            public void onChatEditMessage(long roomId, final long messageId, long messageVersion, final String message, ProtoResponse.Response response) {
                 if (mRoomId == roomId) {
                     // I'm in the room
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // update message text in adapter
                             mAdapter.updateMessageText(messageId, message);
                         }
@@ -761,14 +791,17 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
                 if (majorCode == 209 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_1), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -777,11 +810,13 @@ public class ActivityChat extends ActivityEnhanced
                     });
                 } else if (majorCode == 209 && minorCode == 2) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_2), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -790,11 +825,13 @@ public class ActivityChat extends ActivityEnhanced
                     });
                 } else if (majorCode == 209 && minorCode == 3) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_3), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -803,11 +840,13 @@ public class ActivityChat extends ActivityEnhanced
                     });
                 } else if (majorCode == 210) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_210), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -816,11 +855,13 @@ public class ActivityChat extends ActivityEnhanced
                     });
                 } else if (majorCode == 211) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_211), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -832,7 +873,8 @@ public class ActivityChat extends ActivityEnhanced
         };
 
         G.onChatDeleteMessageResponse = new OnChatDeleteMessageResponse() {
-            @Override public void onChatDeleteMessage(long deleteVersion, final long messageId, long roomId, ProtoResponse.Response response) {
+            @Override
+            public void onChatDeleteMessage(long deleteVersion, final long messageId, long roomId, ProtoResponse.Response response) {
                 Log.i("CLI_DELETE", "response.getId() 4 : " + response.getId());
                 if (response.getId().isEmpty()) { // another account deleted this message
 
@@ -847,7 +889,8 @@ public class ActivityChat extends ActivityEnhanced
                     // if deleted message is for current room clear from adapter
                     if (roomId == mRoomId) {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 // remove deleted message from adapter
                                 mAdapter.removeMessage(messageId);
 
@@ -863,14 +906,17 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
                 if (majorCode == 212 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -879,11 +925,13 @@ public class ActivityChat extends ActivityEnhanced
                     });
                 } else if (majorCode == 212 && minorCode == 2) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -892,11 +940,13 @@ public class ActivityChat extends ActivityEnhanced
                     });
                 } else if (majorCode == 213) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_213), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -905,11 +955,13 @@ public class ActivityChat extends ActivityEnhanced
                     });
                 } else if (majorCode == 214) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_214), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -1094,19 +1146,22 @@ public class ActivityChat extends ActivityEnhanced
         btnCancelSeningFile = (MaterialDesignTextView) findViewById(R.id.ac_btn_cancel_sending_file);
         btnCancelSeningFile.setTypeface(G.flaticon);
         btnCancelSeningFile.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 ll_attach_text.setVisibility(View.GONE);
 
                 if (edtChat.getText().length() == 0) {
 
                     layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                        @Override public void onAnimationEnd(Animator animation) {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
                             super.onAnimationEnd(animation);
                             layoutAttachBottom.setVisibility(View.VISIBLE);
                         }
                     }).start();
                     imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                        @Override public void onAnimationEnd(Animator animation) {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
                             super.onAnimationEnd(animation);
                             imvSendButton.setVisibility(View.GONE);
                         }
@@ -1149,7 +1204,8 @@ public class ActivityChat extends ActivityEnhanced
 
         RippleView rippleMenuButton = (RippleView) findViewById(R.id.chl_ripple_menu_button);
         rippleMenuButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 LinearLayout layoutDialog = new LinearLayout(ActivityChat.this);
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1237,7 +1293,8 @@ public class ActivityChat extends ActivityEnhanced
                     popupWindow.dismiss();
                 }
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override public void onDismiss() {
+                    @Override
+                    public void onDismiss() {
                         //TODO do sth here on dismiss
                     }
                 });
@@ -1247,7 +1304,8 @@ public class ActivityChat extends ActivityEnhanced
                 //                popupWindow.showAsDropDown(v);
 
                 text1.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         popupWindow.dismiss();
                         findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
                         ll_Search.setVisibility(View.VISIBLE);
@@ -1258,39 +1316,44 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
                 text2.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         new MaterialDialog.Builder(ActivityChat.this).title(R.string.clear_history)
-                            .content(R.string.clear_history_content)
-                            .positiveText(R.string.B_ok)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    onSelectRoomMenu("txtClearHistory", (int) mRoomId);
-                                }
-                            })
-                            .negativeText(R.string.B_cancel)
-                            .show();
+                                .content(R.string.clear_history_content)
+                                .positiveText(R.string.B_ok)
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        onSelectRoomMenu("txtClearHistory", (int) mRoomId);
+                                    }
+                                })
+                                .negativeText(R.string.B_cancel)
+                                .show();
                         popupWindow.dismiss();
                     }
                 });
                 text3.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         new MaterialDialog.Builder(ActivityChat.this).title(R.string.delete_chat)
-                            .content(R.string.delete_chat_content)
-                            .positiveText(R.string.B_ok)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
-                                }
-                            })
-                            .negativeText(R.string.B_cancel)
-                            .show();
+                                .content(R.string.delete_chat_content)
+                                .positiveText(R.string.B_ok)
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
+                                    }
+                                })
+                                .negativeText(R.string.B_cancel)
+                                .show();
                         popupWindow.dismiss();
                     }
                 });
                 text4.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         onSelectRoomMenu("txtMuteNotification", (int) mRoomId);
 
@@ -1301,7 +1364,8 @@ public class ActivityChat extends ActivityEnhanced
                                 iconMute.setVisibility(View.VISIBLE);
                                 text4.setText(getResources().getString(R.string.unmute_notification));
                                 realm.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
 
                                         realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setMute(true);
                                     }
@@ -1310,7 +1374,8 @@ public class ActivityChat extends ActivityEnhanced
                                 iconMute.setVisibility(View.GONE);
                                 text4.setText(getResources().getString(R.string.mute_notification));
                                 realm.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
 
                                         realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setMute(false);
                                     }
@@ -1322,21 +1387,23 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
                 text5.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         popupWindow.dismiss();
                         new MaterialDialog.Builder(ActivityChat.this).title(R.string.convert_chat_to_group_title)
-                            .content(R.string.convert_chat_to_group_content)
-                            .positiveText(R.string.B_ok)
-                            .negativeText(R.string.B_cancel)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    finish();
-                                    G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
+                                .content(R.string.convert_chat_to_group_content)
+                                .positiveText(R.string.B_ok)
+                                .negativeText(R.string.B_cancel)
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        finish();
+                                        G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
                     }
                 });
             }
@@ -1365,7 +1432,8 @@ public class ActivityChat extends ActivityEnhanced
         mAdapter = new MessagesAdapter<>(this, this, this);
 
         mAdapter.withFilterPredicate(new IItemAdapter.Predicate<AbstractMessage>() {
-            @Override public boolean filter(AbstractMessage item, CharSequence constraint) {
+            @Override
+            public boolean filter(AbstractMessage item, CharSequence constraint) {
                 return !item.mMessage.messageText.toLowerCase().contains(constraint.toString().toLowerCase());
             }
         });
@@ -1393,7 +1461,8 @@ public class ActivityChat extends ActivityEnhanced
                 scroolPosition++;
             }
             recyclerView.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     recyclerView.scrollToPosition(scroolPosition);
                 }
             }, 1500);
@@ -1403,7 +1472,8 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         imvBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
                     ActivityPopUpNotification.isGoingToChatFromPopUp = false;
                     Intent intent = new Intent(context, ActivityMain.class);
@@ -1415,7 +1485,8 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         rippleBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
                     ActivityPopUpNotification.isGoingToChatFromPopUp = false;
                     Intent intent = new Intent(context, ActivityMain.class);
@@ -1435,7 +1506,8 @@ public class ActivityChat extends ActivityEnhanced
         });*/
 
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (chatType == CHAT && chatPeerId != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast
                     // check for iGap message ==> chatPeerId == 134(alan baraye check kardane) ,
                     // waiting for userDetail proto
@@ -1459,13 +1531,15 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         lyt_user.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 imvUserPicture.performClick();
             }
         });
 
         imvSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 HelperSetAction.setCancel(mRoomId);
 
@@ -1489,7 +1563,8 @@ public class ActivityChat extends ActivityEnhanced
 
                         final Realm realm1 = Realm.getDefaultInstance();
                         realm1.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
                                 RealmClientCondition realmClientCondition = realm1.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
@@ -1514,7 +1589,8 @@ public class ActivityChat extends ActivityEnhanced
 
                         // I'm in the room
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 // update message text in adapter
                                 mAdapter.updateMessageText(parseLong(messageInfo.messageID), message);
                             }
@@ -1540,7 +1616,8 @@ public class ActivityChat extends ActivityEnhanced
                         final String identity = Long.toString(SUID.id().get());
 
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, parseLong(identity));
 
                                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
@@ -1555,7 +1632,7 @@ public class ActivityChat extends ActivityEnhanced
                                 // user wants to replay to a message
                                 if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
                                     RealmRoomMessage messageToReplay =
-                                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
+                                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
                                     if (messageToReplay != null) {
                                         roomMessage.setReplyTo(messageToReplay);
                                     }
@@ -1567,7 +1644,8 @@ public class ActivityChat extends ActivityEnhanced
 
                         if (roomMessage != null) {
                             realm.executeTransaction(new Realm.Transaction() {
-                                @Override public void execute(Realm realm) {
+                                @Override
+                                public void execute(Realm realm) {
                                     if (room != null) {
                                         room.setLastMessage(roomMessage);
                                     }
@@ -1598,13 +1676,15 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         imvAttachFileButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         boomMenuButton.boom();
                     }
                 }, 200);
@@ -1612,7 +1692,8 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         imvMicButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View view) {
+            @Override
+            public boolean onLongClick(View view) {
 
                 if (ContextCompat.checkSelfPermission(ActivityChat.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     HelperPermision.getMicroPhonePermision(ActivityChat.this, null);
@@ -1634,17 +1715,20 @@ public class ActivityChat extends ActivityEnhanced
         // to toggle between keyboard and emoji popup
         imvSmileButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 emojiPopup.toggle();
             }
         });
 
         edtChat.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(CharSequence text, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence text, int i, int i1, int i2) {
 
                 if (text.length() > 0) {
                     HelperSetAction.setActionTyping(mRoomId, chatType);
@@ -1656,33 +1740,38 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
                 if (ll_attach_text.getVisibility() == View.GONE) {
 
                     if (edtChat.getText().length() > 0) {
                         layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                            @Override public void onAnimationEnd(Animator animation) {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 layoutAttachBottom.setVisibility(View.GONE);
                             }
                         }).start();
                         imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                            @Override public void onAnimationEnd(Animator animation) {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 imvSendButton.setVisibility(View.VISIBLE);
                             }
                         }).start();
                     } else {
                         layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                            @Override public void onAnimationEnd(Animator animation) {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
 
                                 layoutAttachBottom.setVisibility(View.VISIBLE);
                             }
                         }).start();
                         imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                            @Override public void onAnimationEnd(Animator animation) {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 imvSendButton.setVisibility(View.GONE);
                             }
@@ -1717,7 +1806,8 @@ public class ActivityChat extends ActivityEnhanced
         txtMessageCounter = (TextView) findViewById(R.id.ac_txt_message_counter);
 
         btnUpMessage.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 if (selectedPosition > 0) {
                     deSelectMessage(selectedPosition);
@@ -1730,7 +1820,8 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         btnDownMessage.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (selectedPosition < messageCounter - 1) {
                     deSelectMessage(selectedPosition);
                     selectedPosition++;
@@ -1742,7 +1833,8 @@ public class ActivityChat extends ActivityEnhanced
         });
         final RippleView rippleClose = (RippleView) findViewById(R.id.chl_btn_close_ripple_search_message);
         rippleClose.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 deSelectMessage(selectedPosition);
                 edtSearchMessage.setText("");
             }
@@ -1751,7 +1843,8 @@ public class ActivityChat extends ActivityEnhanced
         ll_Search = (LinearLayout) findViewById(R.id.ac_ll_search_message);
         RippleView rippleBack = (RippleView) findViewById(R.id.chl_ripple_back);
         rippleBack.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 deSelectMessage(selectedPosition);
                 edtSearchMessage.setText("");
                 ll_Search.setVisibility(View.GONE);
@@ -1766,16 +1859,19 @@ public class ActivityChat extends ActivityEnhanced
         //btnCloseLayoutSearch.setTypeface(G.flaticon);
         edtSearchMessage = (EditText) findViewById(R.id.chl_edt_search_message);
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
 
                 mAdapter.filter(charSequence);
 
                 new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         messageCounter = mAdapter.getAdapterItemCount();
 
                         if (messageCounter > 0) {
@@ -1805,7 +1901,8 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
             }
         });
@@ -1814,7 +1911,8 @@ public class ActivityChat extends ActivityEnhanced
     private void initLayoutHashNavigation() {
 
         hashListener = new OnComplete() {
-            @Override public void complete(boolean result, String text, String messageId) {
+            @Override
+            public void complete(boolean result, String text, String messageId) {
 
                 searchHash.setHashString(text);
                 searchHash.setPosition(messageId);
@@ -1834,7 +1932,8 @@ public class ActivityChat extends ActivityEnhanced
 
         btnHashLayoutClose = (Button) findViewById(R.id.ac_btn_hash_close);
         btnHashLayoutClose.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 ll_navigateHash.setVisibility(View.GONE);
                 viewAttachFile.setVisibility(View.VISIBLE);
@@ -1846,14 +1945,16 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         btnUpHash.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 searchHash.upHash();
             }
         });
 
         btnDownHash.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 searchHash.downHash();
             }
         });
@@ -1948,7 +2049,8 @@ public class ActivityChat extends ActivityEnhanced
                     choserDialogText = getString(R.string.share_file);
                 } else {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             Toast.makeText(G.context, "File Not Downloaded Yet", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -1968,7 +2070,8 @@ public class ActivityChat extends ActivityEnhanced
             } else {
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         Toast.makeText(G.context, "File Not Downloaded Yet", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -1989,19 +2092,23 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         HelperAvatar.getAvatar(idForGetAvatar, type, new OnAvatarGet() {
-            @Override public void onAvatarGet(final String avatarPath) {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
                     }
                 });
             }
 
-            @Override public void onShowInitials(final String initials, final String color) {
+            @Override
+            public void onShowInitials(final String initials, final String color) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         imvUserPicture.setImageBitmap(
-                            com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                                com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
             }
@@ -2012,7 +2119,8 @@ public class ActivityChat extends ActivityEnhanced
         imvSmileButton.setText(drawableResourceId);
     }
 
-    @Override public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
         if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
         } else if (boomMenuButton.isOpen()) {
@@ -2031,7 +2139,8 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public boolean dispatchTouchEvent(MotionEvent event) {
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
 
         voiceRecord.dispatchTouchEvent(event);
 
@@ -2043,8 +2152,8 @@ public class ActivityChat extends ActivityEnhanced
         boomMenuButton = (BoomMenuButton) findViewById(R.id.am_boom);
 
         Drawable[] subButtonDrawables = new Drawable[3];
-        int[] drawablesResource = new int[] {
-            R.mipmap.am_camera, R.mipmap.am_music, R.mipmap.am_paint, R.mipmap.am_picture, R.mipmap.am_document, R.mipmap.am_location, R.mipmap.am_video, R.mipmap.am_file, R.mipmap.am_contact
+        int[] drawablesResource = new int[]{
+                R.mipmap.am_camera, R.mipmap.am_music, R.mipmap.am_paint, R.mipmap.am_picture, R.mipmap.am_document, R.mipmap.am_location, R.mipmap.am_video, R.mipmap.am_file, R.mipmap.am_contact
         };
         for (int i = 0; i < 3; i++)
             subButtonDrawables[i] = ContextCompat.getDrawable(G.context, drawablesResource[i]);
@@ -2058,30 +2167,31 @@ public class ActivityChat extends ActivityEnhanced
         BoomMenuButton.Builder bb = new BoomMenuButton.Builder();
 
         bb.addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_camera), subButtonColors[0], getResources().getString(R.string.am_camera))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture), subButtonColors[0], getResources().getString(R.string.am_picture))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_video), subButtonColors[0], getResources().getString(R.string.am_video))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_music), subButtonColors[0], getResources().getString(R.string.am_music))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document), subButtonColors[0], getResources().getString(R.string.am_document))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_file), subButtonColors[0], getResources().getString(R.string.am_file))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_paint), subButtonColors[0], getResources().getString(R.string.am_paint))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location), subButtonColors[0], getResources().getString(R.string.am_location))
-            .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0], getResources().getString(R.string.am_contact))
-            .autoDismiss(true)
-            .cancelable(true)
-            .duration(500)
-            .delay(10)
-            .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-            .subButtonTextColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black))
-            .button(ButtonType.CIRCLE)
-            .boom(BoomType.PARABOLA)
-            .place(PlaceType.CIRCLE_9_1)
-            .subButtonTextColor(ContextCompat.getColor(G.context, R.color.colorAccent))
-            .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-            .init(boomMenuButton);
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture), subButtonColors[0], getResources().getString(R.string.am_picture))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_video), subButtonColors[0], getResources().getString(R.string.am_video))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_music), subButtonColors[0], getResources().getString(R.string.am_music))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document), subButtonColors[0], getResources().getString(R.string.am_document))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_file), subButtonColors[0], getResources().getString(R.string.am_file))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_paint), subButtonColors[0], getResources().getString(R.string.am_paint))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location), subButtonColors[0], getResources().getString(R.string.am_location))
+                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0], getResources().getString(R.string.am_contact))
+                .autoDismiss(true)
+                .cancelable(true)
+                .duration(500)
+                .delay(10)
+                .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .subButtonTextColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black))
+                .button(ButtonType.CIRCLE)
+                .boom(BoomType.PARABOLA)
+                .place(PlaceType.CIRCLE_9_1)
+                .subButtonTextColor(ContextCompat.getColor(G.context, R.color.colorAccent))
+                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .init(boomMenuButton);
         boomMenuButton.setTextViewColor(getResources().getColor(R.color.am_iconFab_black));
 
         boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
-            @Override public void onClick(int buttonIndex) {
+            @Override
+            public void onClick(int buttonIndex) {
 
                 Log.i("TAG123", "onClick: " + buttonIndex);
 
@@ -2136,7 +2246,8 @@ public class ActivityChat extends ActivityEnhanced
         return mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo;
     }
 
-    @Override protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_CANCELED) {
@@ -2215,7 +2326,8 @@ public class ActivityChat extends ActivityEnhanced
                             startActivityForResult(intent, IntentRequests.REQ_CROP);
 
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     if (prgWaiting != null) {
                                         prgWaiting.setVisibility(View.GONE);
                                     }
@@ -2223,7 +2335,8 @@ public class ActivityChat extends ActivityEnhanced
                             });
                         } else {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     if (prgWaiting != null) {
                                         prgWaiting.setVisibility(View.GONE);
                                     }
@@ -2243,7 +2356,8 @@ public class ActivityChat extends ActivityEnhanced
                         startActivityForResult(intent, IntentRequests.REQ_CROP);
 
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 if (prgWaiting != null) {
                                     prgWaiting.setVisibility(View.GONE);
                                 }
@@ -2255,14 +2369,16 @@ public class ActivityChat extends ActivityEnhanced
                     if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
                         Thread thread = new Thread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 ImageHelper.correctRotateImage(listPathString.get(0), true);
                             }
                         });
                         thread.start();
                     } else if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !listPathString.get(0).toLowerCase().endsWith(".gif")) {
                         Thread thread = new Thread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 listPathString.set(0, attachFile.saveGalaryPicToLoacal(listPathString.get(0)));
                             }
                         });
@@ -2280,12 +2396,10 @@ public class ActivityChat extends ActivityEnhanced
 
         switch (requestCode) {
             case AttachFile.request_code_TAKE_PICTURE:
-                //                txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
                 txtFileNameForSend.setText(getString(R.string.image_selected_for_send));
                 break;
             case AttachFile.requestOpenGalleryForImageMultipleSelect:
                 if (listPathString.size() == 1) {
-                    //                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
                     if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
                         txtFileNameForSend.setText(getString(R.string.image_selected_for_send));
                     } else {
@@ -2303,7 +2417,6 @@ public class ActivityChat extends ActivityEnhanced
             case AttachFile.request_code_VIDEO_CAPTURED:
 
                 if (listPathString.size() == 1) {
-                    //                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
                     txtFileNameForSend.setText(getString(R.string.video_selected_for_send));
                 } else {
                     txtFileNameForSend.setText(listPathString.size() + getString(R.string.video_selected_for_send));
@@ -2312,7 +2425,6 @@ public class ActivityChat extends ActivityEnhanced
 
             case AttachFile.request_code_pic_audi:
                 if (listPathString.size() == 1) {
-                    //                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
                     txtFileNameForSend.setText(getString(R.string.audio_selected_for_send));
                 } else {
                     txtFileNameForSend.setText(listPathString.size() + getString(R.string.audio_selected_for_send));
@@ -2323,13 +2435,11 @@ public class ActivityChat extends ActivityEnhanced
                 break;
             case AttachFile.request_code_open_document:
                 if (listPathString.size() == 1) {
-                    //                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
                     txtFileNameForSend.setText(getString(R.string.file_selected_for_send));
                 }
                 break;
             case AttachFile.request_code_paint:
                 if (listPathString.size() == 1) {
-                    //                    txtFileNameForSend.setText(attachFile.getFileName(listPathString.get(0)));
                     txtFileNameForSend.setText(getString(R.string.pain_selected_for_send));
                 }
                 break;
@@ -2362,7 +2472,7 @@ public class ActivityChat extends ActivityEnhanced
         String fileName = null;
         long duration = 0;
         long fileSize = 0;
-        int[] imageDimens = { 0, 0 };
+        int[] imageDimens = {0, 0};
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
         StructMessageInfo messageInfo = null;
 
@@ -2378,11 +2488,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime);
+                            MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
             case AttachFile.request_code_TAKE_PICTURE:
@@ -2394,7 +2504,8 @@ public class ActivityChat extends ActivityEnhanced
                 fileSize = new File(filePath).length();
                 if (AndroidUtils.getImageDimens(filePath)[0] == 0 && AndroidUtils.getImageDimens(filePath)[1] == 0) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             Toast.makeText(G.context, "Picture Not Loaded", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -2408,11 +2519,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime);
+                            MyType.SendType.send, null, filePath, updateTime);
                 }
 
                 break;
@@ -2441,11 +2552,11 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime);
+                            MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
 
@@ -2464,11 +2575,11 @@ public class ActivityChat extends ActivityEnhanced
                 String videoFileMime = FileUtils.getMimeType(videoFile);
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime,
-                            filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime,
+                                    filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime);
+                            MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_pic_audi:
@@ -2485,8 +2596,8 @@ public class ActivityChat extends ActivityEnhanced
                 long songDuration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
 
                 messageInfo =
-                    StructMessageInfo.buildForAudio(messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath,
-                        songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
+                        StructMessageInfo.buildForAudio(messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath,
+                                songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_pic_file:
             case AttachFile.request_code_open_document:
@@ -2502,11 +2613,11 @@ public class ActivityChat extends ActivityEnhanced
                 String fileFileMime = FileUtils.getMimeType(fileFile);
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime,
-                            filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime,
+                                    filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime);
+                            MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_contact_phone:
@@ -2520,7 +2631,7 @@ public class ActivityChat extends ActivityEnhanced
                 messageType = ProtoGlobal.RoomMessageType.CONTACT;
                 // FIXME: 10/18/2016 [Alireza] lastName "" gozashtam jash, firstName esme kamele
                 messageInfo = StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, name, "", number,
-                    userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
+                        userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_paint:
                 fileName = new File(filePath).getName();
@@ -2533,11 +2644,11 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                        new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                            updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
                     messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime);
+                            MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
         }
@@ -2552,7 +2663,8 @@ public class ActivityChat extends ActivityEnhanced
         final StructMessageInfo finalMessageInfo = messageInfo;
         final long finalMessageId = messageId;
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, finalMessageId);
 
                 roomMessage.setMessageType(finalMessageType);
@@ -2643,7 +2755,8 @@ public class ActivityChat extends ActivityEnhanced
             ImageView thumbnail = (ImageView) mReplayLayout.findViewById(R.id.thumbnail);
             ImageView closeReplay = (ImageView) mReplayLayout.findViewById(R.id.cancelIcon);
             closeReplay.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     if (mReplayLayout != null) {
                         mReplayLayout.setTag(null);
                         mReplayLayout.setVisibility(View.GONE);
@@ -2701,7 +2814,8 @@ public class ActivityChat extends ActivityEnhanced
         btnCloseAppBarSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_close_layout);
         RippleView rippleCloseAppBarSelected = (RippleView) findViewById(R.id.chl_ripple_close_layout);
         rippleCloseAppBarSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 mAdapter.deselect();
                 toolbar.setVisibility(View.VISIBLE);
                 ll_AppBarSelected.setVisibility(View.GONE);
@@ -2715,7 +2829,8 @@ public class ActivityChat extends ActivityEnhanced
         btnReplaySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_replay_selected);
         RippleView rippleReplaySelected = (RippleView) findViewById(R.id.chl_ripple_replay_selected);
         rippleReplaySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 if (!mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
                     replay(mAdapter.getSelectedItems().iterator().next().mMessage);
                 }
@@ -2724,7 +2839,8 @@ public class ActivityChat extends ActivityEnhanced
         btnCopySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_copy_selected);
         RippleView rippleCopySelected = (RippleView) findViewById(R.id.chl_ripple_copy_selected);
         rippleCopySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 for (AbstractMessage messageID : mAdapter.getSelectedItems()) {////TODO [Saeed
                     // Mozaffari] [2016-09-13 6:39 PM] - code is wrong
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -2745,7 +2861,8 @@ public class ActivityChat extends ActivityEnhanced
         btnForwardSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_forward_selected);
         RippleView rippleForwardSelected = (RippleView) findViewById(R.id.chl_ripple_forward_selected);
         rippleForwardSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
                     startActivity(makeIntentForForwardMessages(getMessageStructFromSelectedItems()));
@@ -2756,10 +2873,12 @@ public class ActivityChat extends ActivityEnhanced
         btnDeleteSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_delete_selected);
         RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.chl_ripple_delete_selected);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         // get offline delete list , add new deleted list and update in
                         // client condition , then send request for delete message to server
                         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
@@ -2777,7 +2896,8 @@ public class ActivityChat extends ActivityEnhanced
                             realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
 
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     // remove deleted message from adapter
                                     mAdapter.removeMessage(parseLong(messageID.mMessage.messageID));
 
@@ -2839,7 +2959,8 @@ public class ActivityChat extends ActivityEnhanced
         btnUp = (Button) findViewById(R.id.chl_btn_up);
         btnUp.setTypeface(G.fontawesome);
         btnUp.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 int position = recyclerView.getAdapter().getItemCount();
                 if (position > 0) recyclerView.scrollToPosition(0);
@@ -2848,7 +2969,8 @@ public class ActivityChat extends ActivityEnhanced
 
         btnDown = (Button) findViewById(R.id.chl_btn_down);
         btnDown.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 int position = recyclerView.getAdapter().getItemCount();
                 if (position > 0) recyclerView.scrollToPosition(position - 1);
@@ -2857,7 +2979,8 @@ public class ActivityChat extends ActivityEnhanced
 
         txtChannelMute = (TextView) findViewById(R.id.chl_txt_mute_channel);
         txtChannelMute.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 isMute = !isMute;
                 if (isMute) {
                     txtChannelMute.setText(R.string.unmute);
@@ -2880,33 +3003,40 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setUpEmojiPopup() {
         emojiPopup = io.github.meness.emoji.EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-            @Override public void onEmojiBackspaceClicked(final View v) {
+            @Override
+            public void onEmojiBackspaceClicked(final View v) {
 
             }
         }).setOnEmojiClickedListener(new OnEmojiClickedListener() {
-            @Override public void onEmojiClicked(final Emoji emoji) {
+            @Override
+            public void onEmojiClicked(final Emoji emoji) {
 
             }
         }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-            @Override public void onEmojiPopupShown() {
+            @Override
+            public void onEmojiPopupShown() {
                 changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
             }
         }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-            @Override public void onKeyboardOpen(final int keyBoardHeight) {
+            @Override
+            public void onKeyboardOpen(final int keyBoardHeight) {
 
             }
         }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-            @Override public void onEmojiPopupDismiss() {
+            @Override
+            public void onEmojiPopupDismiss() {
                 changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
             }
         }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-            @Override public void onKeyboardClose() {
+            @Override
+            public void onKeyboardClose() {
                 emojiPopup.dismiss();
             }
         }).build(edtChat);
     }
 
-    @Override public void onConfigurationChanged(Configuration newConfig) {
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         checkIfOrientationChanged(newConfig);
     }
@@ -2954,7 +3084,8 @@ public class ActivityChat extends ActivityEnhanced
         Collections.sort(lastResultMessages, SortMessages.DESC);
 
         EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(lastResultMessages, mAdapter) {
-            @Override public void onLoadMore(EndlessRecyclerOnScrollListener listener, int page) {
+            @Override
+            public void onLoadMore(EndlessRecyclerOnScrollListener listener, int page) {
                 List<RealmRoomMessage> roomMessages = listener.loadMore(page);
                 ArrayList<StructMessageInfo> convertedMessages = new ArrayList<>();
                 for (RealmRoomMessage roomMessage : roomMessages) {
@@ -2963,7 +3094,8 @@ public class ActivityChat extends ActivityEnhanced
                 switchAddItem(convertedMessages, true);
             }
 
-            @Override public void onNoMore(EndlessRecyclerOnScrollListener listener) {
+            @Override
+            public void onNoMore(EndlessRecyclerOnScrollListener listener) {
                 requestMessageHistory();
             }
         };
@@ -3001,7 +3133,8 @@ public class ActivityChat extends ActivityEnhanced
         return null;
     }
 
-    @Override public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
+    @Override
+    public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
         Intent intent = new Intent(G.context, ActivityContactsProfile.class);
         intent.putExtra("peerId", parseLong(messageInfo.senderID));
         intent.putExtra("RoomId", mRoomId);
@@ -3017,13 +3150,14 @@ public class ActivityChat extends ActivityEnhanced
         getSupportFragmentManager().beginTransaction().addToBackStack("hello").replace(R.id.ac_ll_parent, fragment, null).commit();
     }
 
-    @Override public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
+    @Override
+    public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
 
         boolean clearMessage = false;
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmRoomMessage> realmRoomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
                 clearMessage = true;
@@ -3032,13 +3166,15 @@ public class ActivityChat extends ActivityEnhanced
             if (clearMessage) {
                 final long messageId = realmRoomMessage.getMessageId();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         realmRoomMessage.deleteFromRealm();
                     }
                 });
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         // remove deleted message from adapter
 
                         mAdapter.removeMessage(messageId);
@@ -3058,18 +3194,21 @@ public class ActivityChat extends ActivityEnhanced
 
     private void scrollToEnd() {
         recyclerView.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
             }
         }, 300);
     }
 
-    @Override public void onChatUpdateStatus(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
+    @Override
+    public void onChatUpdateStatus(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
 
         // I'm in the room
         if (mRoomId == roomId) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     // so update the message status ina adapter
                     mAdapter.updateMessageStatus(messageId, status);
                     Log.i(ActivityChat.class.getSimpleName(), status.toString());
@@ -3078,7 +3217,8 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) {
+    @Override
+    public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) {
         //   Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
         if (selectedCount > 0) {
             toolbar.setVisibility(View.GONE);
@@ -3098,13 +3238,15 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
+    @Override
+    public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
         if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
             // if was last message removed
             // update room last message
             final Realm realm = Realm.getDefaultInstance();
             realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
                     if (mAdapter.getAdapterItemCount() > 0) {
@@ -3115,19 +3257,22 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
             }, new Realm.Transaction.OnSuccess() {
-                @Override public void onSuccess() {
+                @Override
+                public void onSuccess() {
                     realm.close();
                 }
             });
         }
     }
 
-    @Override public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGlobal.RoomMessage roomMessage) {
+    @Override
+    public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGlobal.RoomMessage roomMessage) {
         // I'm in the room
         if (roomId == mRoomId) {
             // update message status in telegram
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     mAdapter.updateMessageIdAndStatus(messageId, identity, status);
                 }
             });
@@ -3138,9 +3283,11 @@ public class ActivityChat extends ActivityEnhanced
     public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
         Log.i(ActivityChat.class.getSimpleName(), "onMessageReceive called for group");
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         final Realm realm = Realm.getDefaultInstance();
                         final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
@@ -3150,7 +3297,8 @@ public class ActivityChat extends ActivityEnhanced
                                 if (roomId == mRoomId) {
                                     // I'm in the room, so unread messages count is 0. it means, I read all messages
                                     realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
+                                        @Override
+                                        public void execute(Realm realm) {
                                             RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                             if (room != null) {
                                                 room.setUnreadCount(0);
@@ -3167,7 +3315,8 @@ public class ActivityChat extends ActivityEnhanced
                                     // the message sender
                                     //Start ClientCondition OfflineSeen
                                     realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
+                                        @Override
+                                        public void execute(Realm realm) {
                                             final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                                             if (realmRoomMessage != null) {
@@ -3201,7 +3350,8 @@ public class ActivityChat extends ActivityEnhanced
                                     }
                                     // I'm not in the room, but I have to add 1 to unread messages count
                                     realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
+                                        @Override
+                                        public void execute(Realm realm) {
                                             RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                             if (room != null) {
                                                 room.setUnreadCount(room.getUnreadCount() + 1);
@@ -3227,15 +3377,18 @@ public class ActivityChat extends ActivityEnhanced
         }, 400);
     }
 
-    @Override public void onMessageFailed(long roomId, RealmRoomMessage message) {
+    @Override
+    public void onMessageFailed(long roomId, RealmRoomMessage message) {
         if (roomId == mRoomId) {
             mAdapter.updateMessageStatus(message.getMessageId(), ProtoGlobal.RoomMessageStatus.FAILED);
         }
     }
 
-    @Override public void onFileDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
+    @Override
+    public void onFileDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 // if thumbnail
                 if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
                     mAdapter.updateThumbnail(token);
@@ -3250,7 +3403,8 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onAvatarDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Realm realm = Realm.getDefaultInstance();
 
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
@@ -3266,14 +3420,17 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    @Override public void onError(int majorCode, int minorCode) {
+    @Override
+    public void onError(int majorCode, int minorCode) {
         if (majorCode == 713 && minorCode == 1) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3282,11 +3439,13 @@ public class ActivityChat extends ActivityEnhanced
             });
         } else if (majorCode == 713 && minorCode == 2) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3295,11 +3454,13 @@ public class ActivityChat extends ActivityEnhanced
             });
         } else if (majorCode == 713 && minorCode == 3) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3308,11 +3469,13 @@ public class ActivityChat extends ActivityEnhanced
             });
         } else if (majorCode == 713 && minorCode == 4) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3321,11 +3484,13 @@ public class ActivityChat extends ActivityEnhanced
             });
         } else if (majorCode == 713 && minorCode == 5) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3334,11 +3499,13 @@ public class ActivityChat extends ActivityEnhanced
             });
         } else if (majorCode == 714) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3347,11 +3514,13 @@ public class ActivityChat extends ActivityEnhanced
             });
         } else if (majorCode == 715) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3361,9 +3530,11 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onBadDownload(final String token) {
+    @Override
+    public void onBadDownload(final String token) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 // make item not downloaded
                 if (mAdapter != null) {
                     mAdapter.makeNotDownloaded(token);
@@ -3372,11 +3543,13 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    @Override public void onFileTimeOut(String identity) {
+    @Override
+    public void onFileTimeOut(String identity) {
         //empty
     }
 
-    @Override public void onVoiceRecordDone(final String savedPath) {
+    @Override
+    public void onVoiceRecordDone(final String savedPath) {
         Realm realm = Realm.getDefaultInstance();
         final long messageId = SUID.id().get();
         final long updateTime = TimeUtils.currentLocalTime();
@@ -3384,7 +3557,8 @@ public class ActivityChat extends ActivityEnhanced
         final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
 
                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
@@ -3409,14 +3583,14 @@ public class ActivityChat extends ActivityEnhanced
 
         if (userTriesReplay()) {
             messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
@@ -3426,11 +3600,13 @@ public class ActivityChat extends ActivityEnhanced
         scrollToEnd();
     }
 
-    @Override public void onVoiceRecordCancel() {
+    @Override
+    public void onVoiceRecordCancel() {
 
     }
 
-    @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+    @Override
+    public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
         setAvatar();
 
@@ -3447,19 +3623,23 @@ public class ActivityChat extends ActivityEnhanced
         });*/
     }
 
-    @Override public void onUserInfoTimeOut() {
+    @Override
+    public void onUserInfoTimeOut() {
 
     }
 
-    @Override public void onUserInfoError(int majorCode, int minorCode) {
+    @Override
+    public void onUserInfoError(int majorCode, int minorCode) {
 
     }
 
-    @Override public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages) {
+    @Override
+    public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages) {
         // I'm in the room
         if (roomId == mRoomId && firstTimeGetHistory) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Realm realm = Realm.getDefaultInstance();
 
                     List<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
@@ -3506,14 +3686,17 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onGetRoomHistoryError(int majorCode, int minorCode) {
+    @Override
+    public void onGetRoomHistoryError(int majorCode, int minorCode) {
         if (majorCode == 615 && minorCode == 1) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_1), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3522,11 +3705,13 @@ public class ActivityChat extends ActivityEnhanced
             });
         } else if (majorCode == 615 && minorCode == 2) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_2), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3535,11 +3720,13 @@ public class ActivityChat extends ActivityEnhanced
             });
         } else if (majorCode == 616) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_616), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3548,11 +3735,13 @@ public class ActivityChat extends ActivityEnhanced
             });
         } else if (majorCode == 617) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_617), Snackbar.LENGTH_LONG);
 
                     snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -3562,15 +3751,18 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onFileUploaded(final FileUploadStructure uploadStructure, final String identity) {
+    @Override
+    public void onFileUploaded(final FileUploadStructure uploadStructure, final String identity) {
 
         HelperSetAction.sendCancel(uploadStructure.messageId);
 
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         RealmAttachment.updateToken(uploadStructure.messageId, uploadStructure.token);
                     }
                 });
@@ -3582,20 +3774,23 @@ public class ActivityChat extends ActivityEnhanced
 
         // please bezar paeen bemoone :D
         new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId)
-            .attachment(uploadStructure.token)
-            .message(uploadStructure.text)
-            .sendMessage(Long.toString(uploadStructure.messageId));
+                .attachment(uploadStructure.token)
+                .message(uploadStructure.text)
+                .sendMessage(Long.toString(uploadStructure.messageId));
     }
 
-    @Override public void onFileUploading(FileUploadStructure uploadStructure, final String identity, final double progress) {
+    @Override
+    public void onFileUploading(FileUploadStructure uploadStructure, final String identity, final double progress) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 mAdapter.updateProgress(parseLong(identity), (int) progress);
             }
         });
     }
 
-    @Override public void onUploadStarted(FileUploadStructure struct) {
+    @Override
+    public void onUploadStarted(FileUploadStructure struct) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
         if (roomMessage != null) {
@@ -3629,7 +3824,8 @@ public class ActivityChat extends ActivityEnhanced
 
         isMuteNotification = !isMuteNotification;
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item).findFirst().setMute(isMuteNotification);
             }
         });
@@ -3645,9 +3841,11 @@ public class ActivityChat extends ActivityEnhanced
 
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override public void onChange(final RealmClientCondition element) {
+            @Override
+            public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
                         if (realmRoom.getLastMessage() != null) {
@@ -3675,7 +3873,8 @@ public class ActivityChat extends ActivityEnhanced
                         realmRoomMessages.deleteAllFromRealm();
 
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 if (mAdapter != null) {
                                     mAdapter.clear();
                                 }
@@ -3695,19 +3894,23 @@ public class ActivityChat extends ActivityEnhanced
         final long chatId = itemff;
 
         G.onChatDelete = new OnChatDelete() {
-            @Override public void onChatDelete(long roomId) {
+            @Override
+            public void onChatDelete(long roomId) {
 
             }
 
-            @Override public void onChatDeleteError(int majorCode, int minorCode) {
+            @Override
+            public void onChatDeleteError(int majorCode, int minorCode) {
 
                 if (majorCode == 218 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -3715,11 +3918,13 @@ public class ActivityChat extends ActivityEnhanced
                     });
                 } else if (majorCode == 219) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -3727,11 +3932,13 @@ public class ActivityChat extends ActivityEnhanced
                     });
                 } else if (majorCode == 220) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
+                                @Override
+                                public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -3744,9 +3951,11 @@ public class ActivityChat extends ActivityEnhanced
         final Realm realm = Realm.getDefaultInstance();
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override public void onChange(final RealmClientCondition element) {
+            @Override
+            public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(final Realm realm) {
+                    @Override
+                    public void execute(final Realm realm) {
                         if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, chatId).findFirst() == null) {
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
                             realmOfflineDelete.setOfflineDelete(chatId);
@@ -3770,13 +3979,15 @@ public class ActivityChat extends ActivityEnhanced
     private void showDraftLayout() {
         ll_attach_text.setVisibility(View.VISIBLE);
         layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(Animator animation) {
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 layoutAttachBottom.setVisibility(View.GONE);
             }
         }).start();
         imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(Animator animation) {
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 imvSendButton.setVisibility(View.VISIBLE);
             }
@@ -3802,7 +4013,8 @@ public class ActivityChat extends ActivityEnhanced
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (realmRoom != null) {
 
@@ -3869,7 +4081,8 @@ public class ActivityChat extends ActivityEnhanced
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
                     realmRoom.setDraft(null);
@@ -3896,7 +4109,8 @@ public class ActivityChat extends ActivityEnhanced
     private void draftForFile() { // this method not used because we don't have draft for file
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
                 RealmDraftFile realmDraftFile = realm.createObject(RealmDraftFile.class);
@@ -3985,29 +4199,32 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         setDraft();
         HelperNotificationAndBadge.isChatRoomNow = false;
         super.onStop();
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         // room id have to be set to default, otherwise I'm in the room always!
         mRoomId = -1;
         super.onDestroy();
     }
 
-    @Override public void onOpenClick(View view, StructMessageInfo message, int pos) {
+    @Override
+    public void onOpenClick(View view, StructMessageInfo message, int pos) {
         ProtoGlobal.RoomMessageType messageType = message.forwardedFrom != null ? message.forwardedFrom.getMessageType() : message.messageType;
         Realm realm = Realm.getDefaultInstance();
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
             showImage(message);
         } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT ||
-            messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class)
-                .equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token)
-                .findFirst()
-                .getLocalFilePath());
+                    .equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token)
+                    .findFirst()
+                    .getLocalFilePath());
             if (intent != null) {
                 try {
                     startActivity(intent);
@@ -4020,7 +4237,8 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
     }
 
-    @Override public void onContainerClick(View view, final StructMessageInfo message, int pos) {
+    @Override
+    public void onContainerClick(View view, final StructMessageInfo message, int pos) {
         @ArrayRes int itemsRes = 0;
         switch (message.messageType) {
             case TEXT:
@@ -4060,7 +4278,8 @@ public class ActivityChat extends ActivityEnhanced
             realm.close();
 
             new MaterialDialog.Builder(this).title(getString(R.string.messages)).negativeText(getString(R.string.cancel)).items(items).itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
                         // copy message
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -4071,9 +4290,11 @@ public class ActivityChat extends ActivityEnhanced
                         final Realm realmCondition = Realm.getDefaultInstance();
                         final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirstAsync();
                         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-                            @Override public void onChange(final RealmClientCondition element) {
+                            @Override
+                            public void onChange(final RealmClientCondition element) {
                                 realmCondition.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
                                         if (element != null) {
                                             if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
 
@@ -4088,7 +4309,8 @@ public class ActivityChat extends ActivityEnhanced
                                                 element.getOfflineDeleted().add(realmOfflineDelete);
 
                                                 runOnUiThread(new Runnable() {
-                                                    @Override public void run() {
+                                                    @Override
+                                                    public void run() {
                                                         // remove deleted message from adapter
                                                         mAdapter.removeMessage(parseLong(message.messageID));
 
@@ -4144,7 +4366,8 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onUploadCancel(View view, final StructMessageInfo message, final int pos) {
+    @Override
+    public void onUploadCancel(View view, final StructMessageInfo message, final int pos) {
 
         HelperSetAction.sendCancel(Long.parseLong(message.messageID));
 
@@ -4160,7 +4383,8 @@ public class ActivityChat extends ActivityEnhanced
 
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID)).findFirst();
                     if (roomMessage != null) {
                         // delete message from database
@@ -4172,10 +4396,12 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onDownloadCancel(View view, final StructMessageInfo message, final int pos) {
+    @Override
+    public void onDownloadCancel(View view, final StructMessageInfo message, final int pos) {
         if (HelperCancelDownloadUpload.cancelDownload(message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token)) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     // make item not downloaded
                     mAdapter.makeNotDownloaded(message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token);
                 }
@@ -4183,22 +4409,27 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onDownloadStart(View view, StructMessageInfo message, int pos) {
+    @Override
+    public void onDownloadStart(View view, StructMessageInfo message, int pos) {
         // empty
     }
 
-    @Override public void onFailedMessageClick(View view, final StructMessageInfo message, final int pos) {
+    @Override
+    public void onFailedMessageClick(View view, final StructMessageInfo message, final int pos) {
         final List<StructMessageInfo> failedMessages = mAdapter.getFailedMessages();
         new ResendMessage(this, new IResendMessage() {
-            @Override public void deleteMessage() {
+            @Override
+            public void deleteMessage() {
                 mAdapter.remove(pos);
             }
 
-            @Override public void resendMessage() {
+            @Override
+            public void resendMessage() {
                 mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
             }
 
-            @Override public void resendAllMessages() {
+            @Override
+            public void resendAllMessages() {
                 for (StructMessageInfo message : failedMessages) {
                     mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
                 }
@@ -4206,17 +4437,20 @@ public class ActivityChat extends ActivityEnhanced
         }, parseLong(message.messageID), failedMessages);
     }
 
-    @Override public void onReplyClick(RealmRoomMessage replyMessage) {
+    @Override
+    public void onReplyClick(RealmRoomMessage replyMessage) {
         recyclerView.scrollToPosition(mAdapter.findPositionByMessageId(replyMessage.getMessageId()));
     }
 
-    @Override public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
+    @Override
+    public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
 
         if (mRoomId == roomId && this.userId != userId) {
             final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                     if (realmRoom != null) {
                         realmRoom.setActionState(action);
@@ -4225,7 +4459,8 @@ public class ActivityChat extends ActivityEnhanced
             });
             realm.close();
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     if (action != null) {
                         avi.setVisibility(View.VISIBLE);
                         txtLastSeen.setText(action);
@@ -4248,19 +4483,23 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override public void onUserUpdateStatus(long userId, final long time, final String status) {
+    @Override
+    public void onUserUpdateStatus(long userId, final long time, final String status) {
         if (chatType == CHAT && chatPeerId == userId) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     setUserStatus(status, time);
                 }
             });
         }
     }
 
-    @Override public void onLastSeenUpdate(final long userId, final String time) {
+    @Override
+    public void onLastSeenUpdate(final long userId, final String time) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (chatType == CHAT && userId == chatPeerId) {
                     txtLastSeen.setText(time);
                 }
@@ -4269,7 +4508,8 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     public static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-        @Override protected FileUploadStructure doInBackground(Object... params) {
+        @Override
+        protected FileUploadStructure doInBackground(Object... params) {
             try {
                 String filePath = (String) params[0];
                 long messageId = (long) params[1];
@@ -4295,7 +4535,8 @@ public class ActivityChat extends ActivityEnhanced
             return null;
         }
 
-        @Override protected void onPostExecute(FileUploadStructure result) {
+        @Override
+        protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
 
             if (result != null) {
@@ -4334,7 +4575,7 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         return action;
-        }
+    }
 
     private class SearchHash {
 
@@ -4362,7 +4603,7 @@ public class ActivityChat extends ActivityEnhanced
                 if (mAdapter.getItem(i).mMessage.messageText.contains(hashString)) {
                     hashList.add(i);
                 }
-                }
+            }
 
             txtHashCounter.setText(curentHashposition + " / " + hashList.size());
 
@@ -4371,7 +4612,7 @@ public class ActivityChat extends ActivityEnhanced
             if (mAdapter.getItem(curentSelectedPosition).mMessage.view != null) {
                 ((FrameLayout) mAdapter.getItem(curentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
             }
-            }
+        }
 
         public void downHash() {
 
@@ -4380,7 +4621,7 @@ public class ActivityChat extends ActivityEnhanced
                 curentHashposition++;
                 txtHashCounter.setText(curentHashposition + " / " + hashList.size());
             }
-            }
+        }
 
         public void upHash() {
 
@@ -4389,7 +4630,7 @@ public class ActivityChat extends ActivityEnhanced
                 goToSelectedPosition(hashList.get(curentHashposition - 1));
                 txtHashCounter.setText(curentHashposition + " / " + hashList.size());
             }
-            }
+        }
 
         private void goToSelectedPosition(int position) {
 
@@ -4400,41 +4641,48 @@ public class ActivityChat extends ActivityEnhanced
             curentSelectedPosition = position;
 
             new Handler().postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     if (mAdapter.getItem(curentSelectedPosition).mMessage.view != null) {
                         ((FrameLayout) mAdapter.getItem(curentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
                     }
-                    }
+                }
             }, 100);
         }
-        }
+    }
 
     //******* GroupAvatar and ChannelAvatar
 
-    @Override public void onAvatarAdd(final long roomId, ProtoGlobal.Avatar avatar) {
+    @Override
+    public void onAvatarAdd(final long roomId, ProtoGlobal.Avatar avatar) {
 
         HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
-            @Override public void onAvatarGet(final String avatarPath) {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
                     }
                 });
             }
 
-            @Override public void onShowInitials(final String initials, final String color) {
+            @Override
+            public void onShowInitials(final String initials, final String color) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         imvUserPicture.setImageBitmap(
-                            com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                                com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
             }
         });
     }
 
-    @Override public void onAvatarAddError() {
+    @Override
+    public void onAvatarAddError() {
 
     }
-    }
+}
 

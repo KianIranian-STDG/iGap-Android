@@ -21,15 +21,18 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityExplorer;
 import com.iGap.activities.ActivityPaint;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.proto.ProtoGlobal;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -198,7 +201,7 @@ public class AttachFile {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
 
         if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
         } else {
             return null;
         }
