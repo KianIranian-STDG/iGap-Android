@@ -24,7 +24,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -49,13 +49,13 @@ import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.StructListOfContact;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
-import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
@@ -79,13 +79,15 @@ import com.iGap.request.RequestUserContactsDelete;
 import com.iGap.request.RequestUserContactsEdit;
 import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.io.File;
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
-import java.io.File;
-import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -138,12 +140,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         }
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
 
         ActivityShearedMedia.getCountOfSharedMedia(roomId, txtCountOfShearedMedia.getText().toString(), new OnComplete() {
-            @Override public void complete(boolean result, final String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, final String messageOne, String MessageTow) {
                 txtCountOfShearedMedia.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         txtCountOfShearedMedia.setText(messageOne);
                     }
                 });
@@ -721,106 +726,69 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         RippleView rippleMenu = (RippleView) findViewById(R.id.chi_ripple_menuPopup);
 
-        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener()
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                showPopUp();
+            }
+        });
+        vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                                               {
-                                                   @Override
-                                                   public void onComplete(RippleView rippleView) {
+                String phoneNumber = txtPhoneNumber.getText().toString();
+                showPopupPhoneNumber(vgPhoneNumber, phoneNumber);
+                //popUpMenu(R.menu.chi_popup_phone_number, v);
+            }
+        });
 
-                                                       showPopUp();
-                                                   }
-                                               }
+        vgSharedMedia = (ViewGroup) findViewById(R.id.chi_layout_SharedMedia);
 
-        );
-        vgPhoneNumber.setOnClickListener(new View.OnClickListener()
+        vgSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
+            @Override
+            public void onClick(View view) {
 
-                                         {
-                                             @Override
-                                             public void onClick(View v) {
+                Intent intent = new Intent(ActivityContactsProfile.this, ActivityShearedMedia.class);
+                intent.putExtra("RoomID", roomId);
+                startActivity(intent);
+            }
+        });
 
-                                                 String phoneNumber = txtPhoneNumber.getText().toString();
-                                                 showPopupPhoneNumber(vgPhoneNumber, phoneNumber);
-                                                 //popUpMenu(R.menu.chi_popup_phone_number, v);
-                                             }
-                                         }
+        txtBlockContact = (TextView) findViewById(R.id.chi_txt_blockContact);
 
-        );
+        txtBlockContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAlertDialog(getString(R.string.block_this_contact), getString(R.string.block), getString(R.string.cancel));
+            }
+        });
 
-        vgSharedMedia = (ViewGroup)
+        txtClearChat = (TextView) findViewById(R.id.chi_txt_clearChat);
 
-                findViewById(R.id.chi_layout_SharedMedia);
+        txtClearChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAlertDialog(getString(R.string.clear_this_chat), getString(R.string.clear), getString(R.string.cancel));
+            }
+        });
 
-        vgSharedMedia.setOnClickListener(new View.OnClickListener()
+        txtNotifyAndSound = (TextView) findViewById(R.id.chi_txtNotifyAndSound);
 
-                                         {// go to the ActivityMediaChanel
-                                             @Override
-                                             public void onClick(View view) {
-
-                                                 Intent intent = new Intent(ActivityContactsProfile.this, ActivityShearedMedia.class);
-                                                 intent.putExtra("RoomID", roomId);
-                                                 startActivity(intent);
-                                             }
-                                         }
-
-        );
-
-        txtBlockContact = (TextView)
-
-                findViewById(R.id.chi_txt_blockContact);
-
-        txtBlockContact.setOnClickListener(new View.OnClickListener()
-
-                                           {
-                                               @Override
-                                               public void onClick(View view) {
-                                                   showAlertDialog(getString(R.string.block_this_contact), getString(R.string.block), getString(R.string.cancel));
-                                               }
-                                           }
-
-        );
-
-        txtClearChat = (TextView)
-
-                findViewById(R.id.chi_txt_clearChat);
-
-        txtClearChat.setOnClickListener(new View.OnClickListener()
-
-                                        {
-                                            @Override
-                                            public void onClick(View view) {
-                                                showAlertDialog(getString(R.string.clear_this_chat), getString(R.string.clear), getString(R.string.cancel));
-                                            }
-                                        }
-
-        );
-
-        txtNotifyAndSound = (TextView)
-
-                findViewById(R.id.chi_txtNotifyAndSound);
-
-        txtNotifyAndSound.setOnClickListener(new View.OnClickListener()
-
-                                             {
-                                                 @Override
-                                                 public void onClick(View view) {
-
-                                                     // TODO: 9/3/2016 (molareza) go to NotifyAndSound page
-
-                                                     FragmentNotification fragmentNotification = new FragmentNotification();
-                                                     Bundle bundle = new Bundle();
-                                                     bundle.putString("PAGE", "CONTACT");
-                                                     bundle.putLong("ID", roomId);
-                                                     fragmentNotification.setArguments(bundle);
-                                                     getSupportFragmentManager().beginTransaction()
-                                                             .addToBackStack(null)
-                                                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
-                                                                     R.anim.slide_out_left)
-                                                             .replace(R.id.chi_layoutParent, fragmentNotification)
-                                                             .commit();
-                                                 }
-                                             }
-
-        );
+        txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentNotification fragmentNotification = new FragmentNotification();
+                Bundle bundle = new Bundle();
+                bundle.putString("PAGE", "CONTACT");
+                bundle.putLong("ID", roomId);
+                fragmentNotification.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction()
+                        .addToBackStack(null)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.chi_layoutParent, fragmentNotification)
+                        .commit();
+            }
+        });
 
         realm.close();
         getUserInfo(); // client should send request for get user info because need to update user online timing
@@ -834,11 +802,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         if (userStatus != null) {
             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
-                String status = G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser;
+                String status = LastSeenTimeUtil.computeTime(userId, time);
                 titleLastSeen.setText(status);
                 txtLastSeen.setText(status);
-
             } else {
                 titleLastSeen.setText(userStatus);
                 txtLastSeen.setText(userStatus);

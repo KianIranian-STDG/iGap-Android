@@ -1789,11 +1789,7 @@ public class ActivityChat extends ActivityEnhanced
         userTime = time;
         if (status != null) {
             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                /*String timeUser = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
-                txtLastSeen.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);*/
-
                 txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time));
-                //txtLastSeen.setText(LastSeenTimeUtil.computeTime(userId, time));
             } else {
                 txtLastSeen.setText(status);
             }
