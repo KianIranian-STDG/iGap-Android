@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -88,6 +89,9 @@ public class ActivityChatBackground extends ActivityEnhanced {
         rcvContent = (RecyclerView) findViewById(R.id.rcvContent);
         adapterChatBackgroundSetting = new AdapterChatBackground(items);
         rcvContent.setAdapter(adapterChatBackgroundSetting);
+        rcvContent.setDrawingCacheEnabled(true);
+        rcvContent.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        rcvContent.setItemViewCacheSize(100);
         rcvContent.setLayoutManager(new GridLayoutManager(ActivityChatBackground.this, spanCount));
         rcvContent.clearAnimation();
         setItem();

@@ -76,20 +76,20 @@
     <string name="contact_message">Contact Message</string>
     <string name="gif_message">Gif Message</string>
     <string name="voice_message">Voice Message</string>
-    <string name="typing">Typing...</string>
-    <string name="sending_image">Sending Image...</string>
-    <string name="capturing_image">Capturing Image...</string>
-    <string name="sending_video">Sending Video...</string>
-    <string name="capturing_video">Capturing Video...</string>
-    <string name="sending_audio">Sending Audio...</string>
-    <string name="recording_voice">Recording Voice...</string>
-    <string name="sending_voice">Sending Voice...</string>
-    <string name="sending_document">Sending Document...</string>
-    <string name="sending_gif">Sending Gif...</string>
-    <string name="sending_file">Sending File...</string>
-    <string name="sending_location">Sending Location...</string>
+    <string name="typing">Typing</string>
+    <string name="sending_image">Sending Image</string>
+    <string name="capturing_image">Capturing Image</string>
+    <string name="sending_video">Sending Video</string>
+    <string name="capturing_video">Capturing Video</string>
+    <string name="sending_audio">Sending Audio</string>
+    <string name="recording_voice">Recording Voice</string>
+    <string name="sending_voice">Sending Voice</string>
+    <string name="sending_document">Sending Document</string>
+    <string name="sending_gif">Sending Gif</string>
+    <string name="sending_file">Sending File</string>
+    <string name="sending_location">Sending Location</string>
     <string name="choosing_contact">Choosing Contact</string>
-    <string name="painting">Painting...</string>
+    <string name="painting">Painting</string>
 
     <!-- Action Box -->
     <string name="log_out">Logout</string>

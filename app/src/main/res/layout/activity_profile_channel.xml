@@ -266,7 +266,8 @@
                         android:gravity="left|center"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/dp8"
-                        android:paddingLeft="@dimen/dp8">
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingStart="@dimen/dp8">
 
                         <com.iGap.module.CircleImageView
                             android:layout_width="@dimen/dp48"

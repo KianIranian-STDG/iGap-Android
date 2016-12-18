@@ -183,6 +183,7 @@ import com.nightonke.boommenu.Types.ButtonType;
 import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.parceler.Parcels;
 
@@ -330,6 +331,7 @@ public class ActivityChat extends ActivityEnhanced
     public static Activity activityChatForFinish;
     private LinearLayout lyt_user;
     private ProgressBar prgWaiting;
+    private AVLoadingIndicatorView avi;
 
     @Override
     protected void onStart() {
@@ -435,6 +437,9 @@ public class ActivityChat extends ActivityEnhanced
         setContentView(R.layout.activity_chat);
         activityChatForFinish = this;
 
+        avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        avi.setVisibility(View.GONE);
+
         checkIfOrientationChanged(getResources().getConfiguration());
 
         //call from ActivityGroupProfile for update group member number
@@ -489,6 +494,7 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void complete(boolean result, final String messageOne, String MessageTow) {
                 HelperSetAction.sendCancel(messageId);
+
                 Realm realm = Realm.getDefaultInstance();
                 final long id = SUID.id().get();
                 realm.executeTransaction(new Realm.Transaction() {
@@ -1545,6 +1551,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 HelperSetAction.setCancel(mRoomId);
 
+
                 clearDraftRequest();
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
@@ -2256,6 +2263,7 @@ public class ActivityChat extends ActivityEnhanced
         if (resultCode == RESULT_CANCELED) {
             HelperSetAction.sendCancel(messageId);
 
+
             if (prgWaiting != null) {
                 prgWaiting.setVisibility(View.GONE);
             }
@@ -2269,6 +2277,7 @@ public class ActivityChat extends ActivityEnhanced
         if (resultCode == Activity.RESULT_OK) {
 
             HelperSetAction.sendCancel(messageId);
+
 
 
             if (requestCode == AttachFile.request_code_contact_phone) {
@@ -3789,6 +3798,7 @@ public class ActivityChat extends ActivityEnhanced
 
         HelperSetAction.sendCancel(uploadStructure.messageId);
 
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -4402,6 +4412,7 @@ public class ActivityChat extends ActivityEnhanced
 
         HelperSetAction.sendCancel(Long.parseLong(message.messageID));
 
+
         if (HelperCancelDownloadUpload.cancelUpload(Long.parseLong(message.messageID))) {
             // empty tag if selected message has been set
             if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
@@ -4493,6 +4504,7 @@ public class ActivityChat extends ActivityEnhanced
                 @Override
                 public void run() {
                     if (action != null) {
+                        avi.setVisibility(View.VISIBLE);
                         txtLastSeen.setText(action);
                     } else if (chatType == CHAT) {
                         if (userStatus != null) {
@@ -4502,8 +4514,10 @@ public class ActivityChat extends ActivityEnhanced
                                 txtLastSeen.setText(userStatus);
                             }
                         }
+                        avi.setVisibility(View.GONE);
                         txtLastSeen.setText(userStatus);
                     } else if (chatType == GROUP) {
+                        avi.setVisibility(View.GONE);
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
                     }
                 }

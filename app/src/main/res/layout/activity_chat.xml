@@ -50,11 +50,12 @@
                         android:gravity="center"
                         android:text="@string/md_back_arrow"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp18"/>
 
                 </com.iGap.libs.rippleeffect.RippleView>
 
                 <LinearLayout
+                    android:id="@+id/lyt_user"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -64,8 +65,7 @@
                     android:paddingEnd="0dp"
                     android:paddingLeft="@dimen/dp4"
                     android:paddingRight="0dp"
-                    android:paddingTop="@dimen/dp4"
-                    android:id="@+id/lyt_user">
+                    android:paddingTop="@dimen/dp4">
 
 
                     <LinearLayout
@@ -82,11 +82,11 @@
                             android:text="@string/fa_bell_slash_o"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/sp14"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile_Medium.ttf"
                             android:id="@+id/chl_txt_name"
+                            fontPath="fonts/IRANSansMobile_Medium.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="bottom"
@@ -105,18 +105,35 @@
                             android:paddingRight="@dimen/dp8"
                             android:text="@string/md_flaticon_volume_off_indicator"
                             android:textColor="@android:color/white"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/chl_txt_last_seen"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="top"
-                        android:singleLine="true"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp12" />
+                        android:orientation="horizontal">
 
+
+                        <TextView
+                            android:id="@+id/chl_txt_last_seen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:singleLine="true"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sp12"/>
+
+                        <com.wang.avi.AVLoadingIndicatorView
+                            android:id="@+id/avi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/dp8"
+                            android:layout_gravity="center"
+                            app:indicatorColor="@color/white"
+                            app:indicatorName="BallPulseIndicator"
+                            />
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <com.iGap.module.CircleImageView
@@ -149,7 +166,7 @@
                         android:gravity="center"
                         android:text="@string/md_show_more_button"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp18"/>
 
                 </com.iGap.libs.rippleeffect.RippleView>
             </LinearLayout>
@@ -315,7 +332,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/gray" />
+                    android:background="@color/gray"/>
 
             </LinearLayout>
 
@@ -326,6 +343,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#34a49f"/>
+
         <LinearLayout
             android:id="@+id/ac_ll_search_message"
             android:layout_width="match_parent"
@@ -366,7 +384,7 @@
                 android:padding="@dimen/dp8"
                 android:textColor="@color/white"
                 android:textColorHint="#dededd"
-                android:textCursorDrawable="@drawable/white_cursor_color" />
+                android:textCursorDrawable="@drawable/white_cursor_color"/>
 
             <com.iGap.libs.rippleeffect.RippleView
                 android:id="@+id/chl_btn_close_ripple_search_message"
@@ -398,7 +416,7 @@
             layout="@layout/music_layout_small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
     </com.iGap.module.MyAppBarLayout>
 
@@ -433,17 +451,17 @@
             android:layout_weight="1"
             android:paddingLeft="@dimen/dp12"
             android:singleLine="true"
-            android:text="New Text" />
+            android:text="New Text"/>
 
         <com.iGap.module.MaterialDesignTextView
             android:id="@+id/ac_btn_cancel_sending_file"
+            fontPath="fonts/Flaticon.ttf"
             android:layout_width="@dimen/dp40"
             android:layout_height="match_parent"
             android:background="@null"
             android:gravity="center_vertical"
             android:text="@string/md_close_button"
             android:textColor="@color/red"
-            fontPath="fonts/Flaticon.ttf"
             android:textSize="@dimen/sp18"/>
     </LinearLayout>
 
@@ -466,7 +484,7 @@
             android:background="@null"
             android:text="@string/md_expand_arrow"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp22" />
+            android:textSize="@dimen/sp22"/>
 
         <TextView
             android:id="@+id/ac_txt_message_counter"
@@ -478,7 +496,7 @@
             android:singleLine="true"
             android:text="0 of 0"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp16" />
+            android:textSize="@dimen/sp16"/>
 
         <Button
             android:id="@+id/ac_btn_message_down"
@@ -487,7 +505,7 @@
             android:background="@null"
             android:text="@string/md_downwards_arrow"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp22" />
+            android:textSize="@dimen/sp22"/>
     </LinearLayout>
 
     <LinearLayout
@@ -508,7 +526,7 @@
             android:background="@null"
             android:text="@string/md_expand_arrow"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp22" />
+            android:textSize="@dimen/sp22"/>
 
         <TextView
             android:id="@+id/ac_txt_hash_counter"
@@ -520,7 +538,7 @@
             android:singleLine="true"
             android:text="0 of 0"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp16" />
+            android:textSize="@dimen/sp16"/>
 
         <Button
             android:id="@+id/ac_btn_hash_down"
@@ -529,7 +547,7 @@
             android:background="@null"
             android:text="@string/md_downwards_arrow"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp22" />
+            android:textSize="@dimen/sp22"/>
 
 
         <Button
@@ -539,7 +557,7 @@
             android:layout_marginLeft="@dimen/dp60"
             android:text="close"
             android:textColor="@color/red"
-            android:textSize="@dimen/sp14" />
+            android:textSize="@dimen/sp14"/>
 
     </LinearLayout>
 
@@ -550,14 +568,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 
     <include
         android:id="@+id/layout_attach_file"
         layout="@layout/layout_attach_file"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
 
     <RelativeLayout
@@ -571,7 +589,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray" />
+            android:background="@color/gray"/>
 
         <LinearLayout
 
@@ -590,7 +608,7 @@
                 android:gravity="center"
                 android:text="@string/fa_chevron_up"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp20" />
+                android:textSize="@dimen/sp20"/>
 
 
             <TextView
@@ -601,7 +619,7 @@
                 android:gravity="center"
                 android:text="Mute"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp20" />
+                android:textSize="@dimen/sp20"/>
 
             <Button
                 android:id="@+id/chl_btn_down"
@@ -612,7 +630,7 @@
                 android:gravity="center"
                 android:text="@string/fa_chevron_down"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp20" />
+                android:textSize="@dimen/sp20"/>
         </LinearLayout>
 
     </RelativeLayout>
@@ -622,8 +640,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:indeterminate="true"
         android:layout_gravity="center"
+        android:indeterminate="true"
         android:visibility="gone"/>
 </com.iGap.module.NotTouchableCoordinatorLayout>
 

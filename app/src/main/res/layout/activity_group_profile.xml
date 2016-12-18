@@ -108,8 +108,8 @@
                     android:id="@+id/apg_parentLayoutCircleImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_gravity="center_horizontal"
+                    android:gravity="center"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/dp8"
                     app:layout_collapseMode="parallax">
@@ -226,8 +226,6 @@
                                 />
 
                         </LinearLayout>
-
-
 
 
                     </LinearLayout>
@@ -383,16 +381,16 @@
                         android:gravity="left|center"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/dp8"
+                        android:paddingEnd="@dimen/dp8"
                         android:paddingLeft="@dimen/dp8"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingStart="@dimen/dp8">
 
                         <com.iGap.module.CircleImageView
                             android:layout_width="@dimen/dp48"
                             android:layout_height="@dimen/dp48"
                             android:layout_marginLeft="@dimen/dp4"
-                            android:layout_marginStart="@dimen/dp8"
+                            android:layout_marginStart="@dimen/dp4"
                             android:scaleType="centerCrop"
                             android:src="@mipmap/add_chat_background3"/>
 
@@ -634,9 +632,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:background="@drawable/pu_circle_dialog_give_image_gallery"
         android:indeterminate="true"
-        android:layout_gravity="center"
         android:visibility="gone"/>
 
 </RelativeLayout>
