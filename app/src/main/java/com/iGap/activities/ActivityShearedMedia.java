@@ -34,6 +34,8 @@ import com.iGap.proto.ProtoClientSearchRoomHistory;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmShearedMedia;
 import com.iGap.realm.RealmShearedMediaFields;
 import com.iGap.request.RequestClientSearchRoomHistory;
@@ -579,7 +581,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         ArrayList<ProtoGlobal.RoomMessage> list = new ArrayList<>();
 
         for (RealmShearedMedia media : mediaList) {
-            list.add((ProtoGlobal.RoomMessage) SerializationUtils.deserialize(media.getRoomMessage()));
+
+            ProtoGlobal.RoomMessage _rm = (ProtoGlobal.RoomMessage) SerializationUtils.deserialize(media.getRoomMessage());
+
+            RealmRoomMessage _re = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, _rm.getMessageId()).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findFirst();
+
+            if (_re != null) list.add(_rm);
         }
 
         realm.close();
@@ -768,14 +775,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 });
             }
 
-            final RealmResults<RealmShearedMedia> realmShearedMedia = realm.where(RealmShearedMedia.class).equalTo(RealmShearedMediaFields.ROOM_ID, roomid).findAll();
-            if (realmShearedMedia != null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
-                        realmShearedMedia.deleteAllFromRealm();
-                    }
-                });
-            }
+            //final RealmResults<RealmShearedMedia> realmShearedMedia = realm.where(RealmShearedMedia.class).equalTo(RealmShearedMediaFields.ROOM_ID, roomid).findAll();
+            //if (realmShearedMedia != null) {
+            //    realm.executeTransaction(new Realm.Transaction() {
+            //        @Override public void execute(Realm realm) {
+            //            realmShearedMedia.deleteAllFromRealm();
+            //        }
+            //    });
+            //}
 
             realm.close();
         }

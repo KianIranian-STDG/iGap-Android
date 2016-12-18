@@ -3,6 +3,7 @@ package com.iGap.helper;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -11,12 +12,10 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.activities.ActivityChat;
 import com.iGap.activities.ActivityWebView;
 import com.iGap.module.SHP_SETTING;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,8 +48,9 @@ public class HelperUrl {
 //            Pattern.CASE_INSENSITIVE );
 ////**********************************************************************************************************
 
+    public static int LinkColor = Color.CYAN;
 
-    public static SpannableStringBuilder setUrlLink(String text, boolean withClickable, boolean withHash, String messageID) {
+    public static SpannableStringBuilder setUrlLink(String text, boolean withClickable, boolean withHash, String messageID, boolean withAtSign) {
 
         if (text == null)
             return null;
@@ -60,10 +60,10 @@ public class HelperUrl {
 
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(text);
 
+        if (withAtSign) strBuilder = analaysAtSign(strBuilder);
 
         if (withHash)
             strBuilder = analaysHash(strBuilder, messageID);
-
 
         Pattern urlPattern = Pattern.compile("(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
                 + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
@@ -131,9 +131,8 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
+                ds.linkColor = LinkColor;
                 super.updateDrawState(ds);
-                // ds.linkColor= Color.BLUE;
-                ds.setUnderlineText(false);
             }
 
         };
@@ -204,6 +203,79 @@ public class HelperUrl {
                     ActivityChat.hashListener.complete(true, text, messageID);
                 }
             }
+
+            @Override public void updateDrawState(TextPaint ds) {
+                ds.linkColor = LinkColor;
+                super.updateDrawState(ds);
+            }
+        };
+
+        builder.setSpan(clickableSpan, start, start + text.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    //*********************************************************************************************************
+
+    private static SpannableStringBuilder analaysAtSign(SpannableStringBuilder builder) {
+
+        if (builder == null) return builder;
+
+        String text = builder.toString();
+
+        if (text.length() < 1) return builder;
+
+        String s = "";
+        String tmp = "";
+        Boolean isAtSign = false;
+        int start = 0;
+        String enter = System.getProperty("line.separator");
+
+        for (int i = 0; i < text.length(); i++) {
+
+            s = text.substring(i, i + 1);
+            if (s.equals("@")) {
+                isAtSign = true;
+                tmp = "";
+                start = i;
+                continue;
+            }
+
+            if (isAtSign) {
+                if (s.equals("!") || s.equals("#") || s.equals("$") || s.equals("%") || s.equals("^") || s.equals("&") ||
+                    s.equals("(") || s.equals(")") || s.equals("-") || s.equals("+") || s.equals("=") || s.equals("!") ||
+                    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
+                    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
+                    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
+
+                    insertAtSignLink(tmp, builder, start);
+
+                    tmp = "";
+                    isAtSign = false;
+                } else {
+                    tmp += s;
+                }
+            }
+        }
+
+        if (isAtSign) {
+            if (!tmp.equals("")) insertAtSignLink(tmp, builder, start);
+        }
+
+        return builder;
+    }
+
+    private static void insertAtSignLink(final String text, SpannableStringBuilder builder, int start) {
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override public void onClick(View widget) {
+
+                Log.e("ddd", text);
+            }
+
+            @Override public void updateDrawState(TextPaint ds) {
+                ds.linkColor = LinkColor;
+                super.updateDrawState(ds);
+            }
+
         };
 
 

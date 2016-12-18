@@ -1,19 +1,15 @@
 package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
-import java.util.List;
-
 import io.github.meness.emoji.EmojiTextView;
+import java.util.List;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
@@ -50,34 +46,32 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
         setTextIfNeeded(holder.messageText, text);
 
-        if (!TextUtils.isEmpty(text) && !text.contains("#")) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!isSelected()) {
-                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                            return;
-                        }
-                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
-                        } else {
-                            messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
-                        }
-                    }
-                }
-            });
-
-            holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    holder.itemView.performLongClick();
-                    return false;
-                }
-            });
-
-
-
-        }
+        // TODO: 12/18/2016  nejati check this code later
+        //if (!TextUtils.isEmpty(text) && !text.contains("#") && !text.contains("@")) {
+        //    holder.messageText.setOnClickListener(new View.OnClickListener() {
+        //        @Override
+        //        public void onClick(View v) {
+        //            if (!isSelected()) {
+        //                if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+        //                    return;
+        //                }
+        //                if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+        //                    messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+        //                } else {
+        //                    messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+        //                }
+        //            }
+        //        }
+        //    });
+        //
+        //    holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
+        //        @Override
+        //        public boolean onLongClick(View v) {
+        //            holder.itemView.performLongClick();
+        //            return false;
+        //        }
+        //    });
+        //}
     }
 
     @Override

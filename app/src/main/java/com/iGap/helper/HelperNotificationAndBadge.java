@@ -300,8 +300,6 @@ public class HelperNotificationAndBadge {
                 .setContentTitle(context.getString(R.string.new_message_recicve))
                 .setContent(remoteViews)
                 .setContentIntent(pi)
-                .setAutoCancel(false)
-                .setOngoing(true)
                 .build();
 
         if (currentAlarm + delayAlarm < System.currentTimeMillis()) {

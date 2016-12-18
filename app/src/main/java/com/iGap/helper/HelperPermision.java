@@ -10,10 +10,8 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
 import com.iGap.R;
 import com.iGap.interfaces.OnGetPermision;
-
 import java.util.ArrayList;
 
 /**
@@ -382,8 +380,7 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                                  @NonNull int[] grantResults) {
+    public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         switch (requestCode) {
             case MY_PERMISSIONS_CAMERA:

@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:padding="@dimen/dp4"
+        android:maxLines="4"
         android:text="@string/contacts"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black"/>

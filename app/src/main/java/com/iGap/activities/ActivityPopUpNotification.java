@@ -654,7 +654,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
 
             TextView txtMessage = (TextView) layout.findViewById(R.id.slapn_txt_message);
-            txtMessage.setText(getTextOfMessageType(unreadList.get(position).getMessageType()));
+
+            String _txt = unreadList.get(position).getMessage();
+
+            if (_txt == null || _txt.length() == 0) _txt = getTextOfMessageType(unreadList.get(position).getMessageType());
+
+            txtMessage.setText(_txt);
 
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override

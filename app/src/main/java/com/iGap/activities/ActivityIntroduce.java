@@ -18,7 +18,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
@@ -31,10 +30,8 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
 import com.iGap.request.RequestInfoPage;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
-
-import java.util.Locale;
-
 import io.realm.Realm;
+import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityIntroduce extends ActivityEnhanced {
@@ -105,12 +102,13 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     }
                 };
 
-
-                new AlertDialog.Builder(ActivityIntroduce.this).setMessage("you have to get storage permision for continue")
+                if (G.isAppInFg) {
+                    new AlertDialog.Builder(ActivityIntroduce.this).setMessage("you have to get storage permision for continue").setCancelable(false)
                         .setPositiveButton(ActivityIntroduce.this.getString(R.string.ok), onOkListener)
                         .setNegativeButton(ActivityIntroduce.this.getString(R.string.cancel), onCancelListener)
                         .create()
                         .show();
+                }
             }
         };
 

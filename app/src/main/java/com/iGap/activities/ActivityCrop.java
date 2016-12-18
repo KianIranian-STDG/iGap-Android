@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -162,33 +161,21 @@ public class ActivityCrop extends ActivityEnhanced {
                     pathImageUser = getRealPathFromURI(uri);
                     switch (page) {
                         case "NewGroup":
-                            String timeStampGroup =
-                                    new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
-                                            new Date());
+                            String timeStampGroup = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
                             result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
                             HelperCopyFile.copyFile(pathImageUser, result);
 
                             break;
                         case "NewChanel":
-                            String timeStampChannel =
-                                    new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
-                                            new Date());
+                            String timeStampChannel = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
                             result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
                             HelperCopyFile.copyFile(pathImageUser, result);
 
                             break;
                         case "chat":
-                            mediaStorageDir = new File(
-                                    Environment.getExternalStoragePublicDirectory(
-                                            Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
-                            String timeStamp =
-                                    new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
-                                            new Date());
-                            fileChat = new File(mediaStorageDir.getPath()
-                                    + File.separator
-                                    + "IMG_"
-                                    + timeStamp
-                                    + ".jpg");
+                            mediaStorageDir = new File(G.DIR_IMAGES);
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                            fileChat = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
                             result = fileChat.toString();
                             HelperCopyFile.copyFile(pathImageUser, result);
                             break;
