@@ -40,6 +40,8 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
+import com.iGap.helper.HelperAvatar;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnUserAvatarGetList;
@@ -220,7 +222,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         imgUser = (CircleImageView) findViewById(R.id.chi_img_circleImage);
 
         //Set ContactAvatar
-        if (avatarPath != null) {
+       /* if (avatarPath != null) {
             File imgFile = new File(avatarPath);
             if (imgFile.exists()) {
 //                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
@@ -237,7 +239,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             imgUser.setImageBitmap(
                     com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100),
                             initials, color));
-        }
+        }*/
 
         imgUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -794,6 +796,31 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         getUserInfo(); // client should send request for get user info because need to update user online timing
         setUserStatus(userStatus, lastSeen);
         getAvatarList();
+        setAvatar();
+    }
+
+    private void setAvatar() {
+        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(final String avatarPath) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgUser);
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imgUser.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+                    }
+                });
+            }
+        });
     }
 
     private void setUserStatus(String userStatus, long time) {

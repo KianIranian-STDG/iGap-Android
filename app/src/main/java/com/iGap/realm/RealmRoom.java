@@ -4,6 +4,7 @@ import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -90,7 +91,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.setType(RoomType.CHANNEL);
                 realmRoom.setChannelRoom(RealmChannelRoom.convert(room.getChannelRoomExtra(), realmRoom.getChannelRoom(), realm));
                 realmRoom.getChannelRoom().setDescription(room.getChannelRoomExtra().getDescription());
-                realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getChannelRoomExtra().getAvatar()));
+                realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getChannelRoomExtra().getAvatar(), true));
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
@@ -102,7 +103,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.setType(RoomType.GROUP);
                 realmRoom.setGroupRoom(RealmGroupRoom.convert(room.getGroupRoomExtra(), realmRoom.getGroupRoom(), realm));
                 realmRoom.getGroupRoom().setDescription(room.getGroupRoomExtra().getDescription());
-                realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getGroupRoomExtra().getAvatar()));
+                realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getGroupRoomExtra().getAvatar(), true));
                 break;
         }
         //realmRoom.setLastMessage(RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId()));

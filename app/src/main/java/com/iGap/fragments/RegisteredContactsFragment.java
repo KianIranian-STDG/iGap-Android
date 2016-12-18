@@ -394,7 +394,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                         realmRegisteredInfo.setId(user.getId());
                                     }
 
-                                    RealmAvatar.put(user.getId(), user.getAvatar());
+                                    RealmAvatar.put(user.getId(), user.getAvatar(), true);
                                     realmRegisteredInfo.setUsername(user.getUsername());
                                     realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
                                     realmRegisteredInfo.setFirstName(user.getFirstName());

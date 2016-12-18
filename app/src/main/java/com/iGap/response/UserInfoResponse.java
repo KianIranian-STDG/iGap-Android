@@ -54,7 +54,7 @@ public class UserInfoResponse extends MessageHandler {
                         realmRegisteredInfo.setMutual(builder.getUser().getMutual());
                         realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
-                        RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar());
+                        RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar(), true);
 
 
                     }

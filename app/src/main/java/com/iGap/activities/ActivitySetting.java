@@ -1089,20 +1089,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 HelperPermision.getStoragePermision(ActivitySetting.this, new OnGetPermision() {
                     @Override
                     public void Allow() {
-
-
                         HelperPermision.getCamarePermision(ActivitySetting.this, new OnGetPermision() {
                             @Override
                             public void Allow() {
-
                                 startDialog(R.array.profile);
                                 realm.close();
-
                             }
                         });
                     }

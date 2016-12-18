@@ -9,6 +9,7 @@ import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnDownload;
 import com.iGap.interfaces.OnFileDownloaded;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
@@ -53,6 +54,7 @@ public class HelperAvatar {
                 String avatarPath = copyAvatar(src, avatar);
 
                 RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
+                realmAvatar.setUid(SUID.id().get());
                 realmAvatar.setOwnerId(ownerId);
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
 
@@ -168,7 +170,7 @@ public class HelperAvatar {
 
     public static RealmAvatar getLastAvatar(long ownerId) {
         Realm realm = Realm.getDefaultInstance();
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.UID, Sort.DESCENDING)) {
             if (avatar.getFile() != null) {
                 return avatar;
             }

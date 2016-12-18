@@ -48,7 +48,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                     realmRegisteredInfo.fillRegisteredUserInfo(registerUser, realmRegisteredInfo);
 
                     // because we have a realm just for avatars don't need to call put twice here
-                    RealmAvatar.put(registerUser.getId(), registerUser.getAvatar());
+                    RealmAvatar.put(registerUser.getId(), registerUser.getAvatar(), true);
 
                     RealmContacts listResponse = realm.createObject(RealmContacts.class);
                     listResponse.setId(registerUser.getId());
@@ -64,7 +64,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                     listResponse.setAvatarCount(registerUser.getAvatarCount());
                     listResponse.setCacheId(registerUser.getCacheId());
 
-                    listResponse.setAvatar(RealmAvatar.put(registerUser.getId(), registerUser.getAvatar()));
+                    listResponse.setAvatar(RealmAvatar.put(registerUser.getId(), registerUser.getAvatar(), true));
                 }
             }
         });
