@@ -41,8 +41,7 @@ public class HelperString {
     }
 
     private static String generate(int length) {
-        char[] chars =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+        char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
 
@@ -52,6 +51,26 @@ public class HelperString {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * create random string and convert currentTimeMillis to date
+     *
+     * @param length length for random string
+     * @return concatenated random string and converted date
+     */
+
+    public static String getRandomFileName(int length) {
+        char[] chars = "123456789".toCharArray();
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < length; i++) { // random string length is 10 now
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+
+        return HelperCalander.milladyDate(System.currentTimeMillis()) + "_" + sb.toString();
     }
 
     public static SecretKeySpec generateSymmetricKey(String key) {

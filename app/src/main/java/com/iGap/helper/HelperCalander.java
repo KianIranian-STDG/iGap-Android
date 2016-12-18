@@ -2,10 +2,12 @@ package com.iGap.helper;
 
 import android.content.SharedPreferences;
 import android.text.format.DateUtils;
+
 import com.iGap.G;
 import com.iGap.libs.CalendarTools;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
+
 import java.util.Calendar;
 
 /**
@@ -53,5 +55,8 @@ public class HelperCalander {
         return result;
     }
 
+    public static String milladyDate(long time) {
+        return TimeUtils.toLocal(time, "dd MMM yyyy");
+    }
 
 }

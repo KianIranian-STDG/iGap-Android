@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnVoiceRecord;
 
 import java.io.IOException;
@@ -90,7 +91,7 @@ public class VoiceRecord {
 
     private void startRecording() {
         final long currentTime = System.currentTimeMillis();
-        outputFile = G.DIR_AUDIOS + "/" + currentTime + ".mp3";
+        outputFile = G.DIR_AUDIOS + "/" + "record_" + HelperString.getRandomFileName(3) + ".mp3";
 
         if (mediaRecorder != null) {
             mediaRecorder.release();
