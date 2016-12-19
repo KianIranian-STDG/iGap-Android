@@ -223,6 +223,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
+        LinearLayout lytRight = (LinearLayout) holder.itemView.findViewById(R.id.lyt_right);
+        lytRight.setVisibility(View.GONE);
+
         if (messageText != null) {
             messageText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
@@ -260,6 +263,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
+        LinearLayout lytRight = (LinearLayout) holder.itemView.findViewById(R.id.lyt_right);
+        lytRight.setVisibility(View.VISIBLE);
+
         if (messageText != null) {
             messageText.setTextColor(Color.WHITE);
         }

@@ -36,4 +36,13 @@
         android:layout_marginLeft="@dimen/dp4"
         android:src="@drawable/ic_double_check"
         android:tint="@color/colorOldBlack"/>
+
+    <LinearLayout
+        android:id="@+id/lyt_right"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:visibility="gone">
+    </LinearLayout>
 </LinearLayout>
