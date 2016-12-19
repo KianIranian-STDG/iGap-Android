@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
-import android.util.Log;
 
 public class HelperImageBackColor {
 
@@ -69,42 +68,22 @@ public class HelperImageBackColor {
 
     public static Bitmap drawAlphabetOnPicture(int with, String text, String color) {
 
-        //        String alphabetName = getFirstAlphabetName(text);
         String alphabetName = text;
-
         String mColor = "#f4f4f4";
-        //
-        //        if (color != "" && color != null) {
-        //            mColor = color;
-        //        }
-
-        Log.i("CCC", "color : " + color);
-        Log.i("CCC", "text : " + text);
 
         if (color == null || color.equals("")) {
             color = "#7f7f7f7f";
         }
         if (text == null || text.equals("")) {
             alphabetName = " ";
-        } else {
-            //  alphabetName = text.replace(" ", "");
         }
 
-//        if (alphabetName.length() >= 2) {
-//            alphabetName = alphabetName.substring(0, 1) + "\u200b" + alphabetName.substring(1, 2);
-//        }
-
         Bitmap bitmap = Bitmap.createBitmap(with, with, Bitmap.Config.ARGB_8888);
-        //        bitmap.eraseColor(Color.parseColor(getColor(alphabetName)));
-//        bitmap.eraseColor(Color.parseColor(color));
-
-//        RadialGradient gradient = new RadialGradient(with, (with*1.5f), with,  0xFF333333, Color.parseColor(color), Shader.TileMode.CLAMP);
-        //LinearGradient gradient = new LinearGradient(0, 0, with/5, with*2f, new int[] {
-//        LinearGradient gradient = new LinearGradient(with, with*2f, with*2f, with, new int[] {
         /**
          * set gradient for circle image
          * set gradient color on LinearGradient
          */
+        //LinearGradient gradient = new LinearGradient(0, with, with, with * 2, new int[]{Color.parseColor(color), 0xFF333333}, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
         LinearGradient gradient = new LinearGradient(0, with, with, with * 2, new int[]{Color.parseColor(color), 0xFF333333}, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
         Paint p = new Paint();
         p.setDither(true);
@@ -113,20 +92,16 @@ public class HelperImageBackColor {
         Canvas c = new Canvas(bitmap);
         c.drawCircle(with / 2, with / 2, with / 2, p);
 
-
-        int fontsize = with / 3;
+        int fontSize = with / 3;
         Canvas cs = new Canvas(bitmap);
 
-        Paint textPaint =
-                new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
+        Paint textPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         textPaint.setMaskFilter(new BlurMaskFilter(1, BlurMaskFilter.Blur.SOLID));
         textPaint.setColor(Color.parseColor(mColor));
-        //        textPaint.setTypeface(G.robotoRegular);
         textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setTextSize(fontsize);
+        textPaint.setTextSize(fontSize);
         textPaint.setStyle(Paint.Style.FILL);
-        //        textPaint.setTypeface(G.arialBold);
-        cs.drawText(alphabetName, with / 2, with / 2 + fontsize / 3, textPaint);
+        cs.drawText(alphabetName, with / 2, with / 2 + fontSize / 3, textPaint);
 
         return bitmap;
     }
