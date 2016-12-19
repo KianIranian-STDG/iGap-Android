@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Shader;
 import android.util.Log;
 
 public class HelperImageBackColor {
@@ -94,7 +96,23 @@ public class HelperImageBackColor {
 
         Bitmap bitmap = Bitmap.createBitmap(with, with, Bitmap.Config.ARGB_8888);
         //        bitmap.eraseColor(Color.parseColor(getColor(alphabetName)));
-        bitmap.eraseColor(Color.parseColor(color));
+//        bitmap.eraseColor(Color.parseColor(color));
+
+//        RadialGradient gradient = new RadialGradient(with, (with*1.5f), with,  0xFF333333, Color.parseColor(color), Shader.TileMode.CLAMP);
+        //LinearGradient gradient = new LinearGradient(0, 0, with/5, with*2f, new int[] {
+//        LinearGradient gradient = new LinearGradient(with, with*2f, with*2f, with, new int[] {
+        /**
+         * set gradient for circle image
+         * set gradient color on LinearGradient
+         */
+        LinearGradient gradient = new LinearGradient(0, with, with, with * 2, new int[]{Color.parseColor(color), 0xFF333333}, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
+        Paint p = new Paint();
+        p.setDither(true);
+        p.setAntiAlias(true);
+        p.setShader(gradient);
+        Canvas c = new Canvas(bitmap);
+        c.drawCircle(with / 2, with / 2, with / 2, p);
+
 
         int fontsize = with / 3;
         Canvas cs = new Canvas(bitmap);

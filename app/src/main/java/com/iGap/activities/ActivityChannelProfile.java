@@ -1630,9 +1630,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 realmChannelRoom.setInviteLink(inviteLink);
                 realmChannelRoom.setInvite_token(inviteToken);
 
-                Log.i("CCCVVV", "exeActivityChannel inviteLink: " + inviteLink);
-                Log.i("CCCVVV", "exeActivityChannel inviteToken " + inviteToken);
-
             }
         });
         realm.close();
