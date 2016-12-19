@@ -2,12 +2,11 @@ package com.iGap.helper;
 
 import android.content.SharedPreferences;
 import android.text.format.DateUtils;
-
 import com.iGap.G;
+import com.iGap.R;
 import com.iGap.libs.CalendarTools;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
-
 import java.util.Calendar;
 
 /**
@@ -21,7 +20,7 @@ public class HelperCalander {
         CalendarTools convertTime = new CalendarTools();
         convertTime.GregorianToPersian(year, mounth, day);
 
-        return convertTime.getYear() + "/" + convertTime.getMonth() + "/" + convertTime.getDay();
+        return convertTime.getYear() + "/" + (Integer.parseInt(convertTime.getMonth()) + 1) + "/" + convertTime.getDay();
     }
 
     public static String getPersianCalander(long time) {
@@ -57,6 +56,53 @@ public class HelperCalander {
 
     public static String milladyDate(long time) {
         return TimeUtils.toLocal(time, "dd_MM_yyyy");
+    }
+
+    public static String getPersianMonthName(int month) {
+
+        String result = "";
+
+        switch (month) {
+
+            case 1:
+                result = G.context.getString(R.string.farvardin);
+                break;
+            case 2:
+                result = G.context.getString(R.string.ordibehst);
+                break;
+            case 3:
+                result = G.context.getString(R.string.khordad);
+                break;
+            case 4:
+                result = G.context.getString(R.string.tir);
+                break;
+            case 5:
+                result = G.context.getString(R.string.mordad);
+                break;
+            case 6:
+                result = G.context.getString(R.string.shahrivar);
+                break;
+            case 7:
+                result = G.context.getString(R.string.mehr);
+                break;
+            case 8:
+                result = G.context.getString(R.string.aban);
+                break;
+            case 9:
+                result = G.context.getString(R.string.azar);
+                break;
+            case 10:
+                result = G.context.getString(R.string.dey);
+                break;
+            case 11:
+                result = G.context.getString(R.string.bahman);
+                break;
+            case 12:
+                result = G.context.getString(R.string.esfand);
+                break;
+        }
+
+        return result;
     }
 
 }

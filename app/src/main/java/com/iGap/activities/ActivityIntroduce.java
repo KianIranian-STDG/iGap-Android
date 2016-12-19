@@ -51,42 +51,28 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private boolean registrationTry;
     private boolean enableRegistration = true;
     private ImageView logoIgap, logoSecurity, logoChat, transfer, boy;
-    private TextView txt_i_p1_l1, txt_p1_l1, txt_p1_l2, txt_p1_l3, txt_p2_l1, txt_p2_l2, txt_p3_l1,
-            txt_p3_l2, txt_p4_l1, txt_p4_l2, txt_p5_l1, txt_p5_l2, txtSkip;
+    private TextView txt_i_p1_l1, txt_p1_l1, txt_p1_l2, txt_p1_l3, txt_p2_l1, txt_p2_l2, txt_p3_l1, txt_p3_l2, txt_p4_l1, txt_p4_l2, txt_p5_l1, txt_p5_l2, txtSkip;
     private Button btnStart;
     private ViewGroup layout_test;
     private JustifiedTextView justifiedTextView;
     private String isoCode = "", countryName = "", pattern = "", regex = "", body = null;
     private int callingCode;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
+    @Override public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        HelperPermision.getStoragePermision(this, new OnGetPermision() {
-            @Override
-            public void Allow() {
-                HelperPermision.onDenyStorage = null;
-                goToProgram(savedInstanceState);
-            }
-        });
 
 
         HelperPermision.onDenyStorage = new OnGetPermision() {
-            @Override
-            public void Allow() throws RuntimeException {
+            @Override public void Allow() throws RuntimeException {
 
                 DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    @Override public void onClick(DialogInterface dialog, int which) {
                         HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermision() {
-                            @Override
-                            public void Allow() {
+                            @Override public void Allow() {
                                 HelperPermision.onDenyStorage = null;
                                 goToProgram(savedInstanceState);
                             }
@@ -95,22 +81,28 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 };
 
                 DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    @Override public void onClick(DialogInterface dialog, int which) {
                         HelperPermision.onDenyStorage = null;
                         finish();
                     }
                 };
 
-                if (G.isAppInFg) {
-                    new AlertDialog.Builder(ActivityIntroduce.this).setMessage("you have to get storage permision for continue").setCancelable(false)
-                        .setPositiveButton(ActivityIntroduce.this.getString(R.string.ok), onOkListener)
-                        .setNegativeButton(ActivityIntroduce.this.getString(R.string.cancel), onCancelListener)
-                        .create()
-                        .show();
-                }
+                new AlertDialog.Builder(ActivityIntroduce.this).setMessage("you have to get storage permision for continue")
+                    .setCancelable(false)
+                    .setPositiveButton(ActivityIntroduce.this.getString(R.string.ok), onOkListener)
+                    .setNegativeButton(ActivityIntroduce.this.getString(R.string.cancel), onCancelListener)
+                    .create()
+                    .show();
             }
         };
+
+        HelperPermision.getStoragePermision(this, new OnGetPermision() {
+            @Override public void Allow() {
+                HelperPermision.onDenyStorage = null;
+                goToProgram(savedInstanceState);
+            }
+        });
+
 
     }
 
@@ -140,8 +132,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         layout_test = (ViewGroup) findViewById(R.id.int_layout_test);
 
-        layout = new int[]{
-                R.layout.view_pager_introduce_1,
+        layout = new int[] {
+            R.layout.view_pager_introduce_1,
         };
 
         viewPager = (ViewPager) findViewById(R.id.int_viewPager_introduce);
@@ -173,8 +165,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             txt_p1_l3.setTypeface(G.YEKAN_FARSI);
         }
 
-        txt_p1_l2.setText(
-                Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page1)));
+        txt_p1_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page1)));
 
         logoSecurity = (ImageView) findViewById(R.id.int_img_security_introduce);
         txt_p2_l1 = (TextView) findViewById(R.id.int_txt_p2_l1);
@@ -189,8 +180,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             txt_p2_l2.setTypeface(G.YEKAN_FARSI);
         }
 
-        txt_p2_l2.setText(
-                Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page2)));
+        txt_p2_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page2)));
 
         logoChat = (ImageView) findViewById(R.id.int_img_chat_introduce);
         txt_p3_l1 = (TextView) findViewById(R.id.int_txt_p3_l1);
@@ -205,8 +195,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             txt_p3_l2.setTypeface(G.YEKAN_FARSI);
         }
 
-        txt_p3_l2.setText(
-                Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page3)));
+        txt_p3_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page3)));
 
         transfer = (ImageView) findViewById(R.id.int_img_transfer_introduce);
         txt_p4_l1 = (TextView) findViewById(R.id.int_txt_p4_l1);
@@ -221,16 +210,14 @@ public class ActivityIntroduce extends ActivityEnhanced {
             txt_p4_l2.setTypeface(G.YEKAN_FARSI);
         }
 
-        txt_p4_l2.setText(
-                Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page4)));
+        txt_p4_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page4)));
 
         boy = (ImageView) findViewById(R.id.int_img_boy_introduce);
         txt_p5_l1 = (TextView) findViewById(R.id.int_txt_p5_l1);
         txt_p5_l2 = (TextView) findViewById(R.id.int_txt_p5_l2);
 
         btnStart = (Button) findViewById(R.id.int_btnStart);
-        txt_p5_l2.setText(
-                Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page5)));
+        txt_p5_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page5)));
 
         if (Locale.getDefault().getLanguage().equals("en")) {
             txt_p5_l1.setTypeface(G.HELETICBLK_TITR);
@@ -243,23 +230,19 @@ public class ActivityIntroduce extends ActivityEnhanced {
         }
 
         btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 startRegistration();
             }
         });
 
         txtSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 startRegistration();
             }
         });
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(final int position, final float positionOffset,
-                                       final int positionOffsetPixels) { //set animation for all page
+            @Override public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) { //set animation for all page
 
                 circleButton.percentScroll(positionOffset, position);
 
@@ -367,12 +350,10 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 }
             }
 
-            @Override
-            public void onPageSelected(int position) {
+            @Override public void onPageSelected(int position) {
             }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+            @Override public void onPageScrollStateChanged(int state) {
             }
         });
 
@@ -389,8 +370,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         animator.setInterpolator(new LinearInterpolator());
         animator.setDuration(20000);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
+            @Override public void onAnimationUpdate(ValueAnimator animation) {
                 final float progress = (float) animation.getAnimatedValue();
                 assert backgroundOne != null;
                 final float width = backgroundOne.getWidth();
@@ -408,11 +388,9 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private void startRegistration() {
         registrationTry = true;
         Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (G.socketConnection) {
-                    if (body != null & enableRegistration & (!isoCode.equals("")
-                            || !locationFound)) {
+                    if (body != null & enableRegistration & (!isoCode.equals("") || !locationFound)) {
                         enableRegistration = false;
                         Intent intent = new Intent(G.context, ActivityRegister.class);
                         intent.putExtra("ISO_CODE", isoCode);
@@ -425,19 +403,13 @@ public class ActivityIntroduce extends ActivityEnhanced {
                         finish();
                     } else {
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 //                                Toast.makeText(G.context, "waiting fot get info", Toast.LENGTH_SHORT).show();
 
-                                final Snackbar snack =
-                                        Snackbar.make(findViewById(android.R.id.content),
-                                                getResources().getString(
-                                                        R.string.Toast_waiting_fot_get_info),
-                                                Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_waiting_fot_get_info), Snackbar.LENGTH_LONG);
 
                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
+                                    @Override public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });
@@ -448,16 +420,12 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     }
                 } else {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
 
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                    getResources().getString(R.string.waiting_for_connection),
-                                    Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.waiting_for_connection), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                                @Override public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -472,8 +440,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
     private void getInfo() {
         G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (G.isSecure) {
                     getTermsOfServiceBody();
                     //getInfoLocation();
@@ -488,9 +455,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private void getInfoLocation() {
 
         G.onReceiveInfoLocation = new OnReceiveInfoLocation() {
-            @Override
-            public void onReceive(String isoCodeR, final int callingCodeR,
-                                  final String countryNameR, String patternR, String regexR) {
+            @Override public void onReceive(String isoCodeR, final int callingCodeR, final String countryNameR, String patternR, String regexR) {
                 locationFound = true;
                 isoCode = isoCodeR;
                 callingCode = callingCodeR;
@@ -500,20 +465,15 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 autoRegistration();
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
                 if (majorCode == 500 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             locationFound = false;
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                    getResources().getString(R.string.Toast_Location_Not_Found),
-                                    Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Location_Not_Found), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                                @Override public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -531,25 +491,19 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         G.onReceivePageInfoTOS = new OnReceivePageInfoTOS() {
 
-            @Override
-            public void onReceivePageInfo(final String bodyR) {
+            @Override public void onReceivePageInfo(final String bodyR) {
                 body = bodyR;
                 getInfoLocation();
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
                 if (majorCode == 502 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                    getResources().getString(R.string.Toast_Location_Not_Found),
-                                    Snackbar.LENGTH_LONG);
+                        @Override public void run() {
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Location_Not_Found), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                                @Override public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -558,15 +512,11 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     });
                 } else if (majorCode == 503) {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                    getResources().getString(R.string.Toast_Location_Not_Found),
-                                    Snackbar.LENGTH_LONG);
+                        @Override public void run() {
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Location_Not_Found), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                                @Override public void onClick(View view) {
                                     snack.dismiss();
                                 }
                             });
@@ -583,8 +533,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private void autoRegistration() { // if before user try for registration now after get data automatically go to registration page
         if (registrationTry & enableRegistration) {
             runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     locationFound = false;
                     //                    Toast.makeText(G.context, "autoRegistration", Toast.LENGTH_SHORT).show();
                     //
@@ -604,8 +553,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         }
     }
 
-    private void animationInPage1(final ImageView logo, final ViewGroup txt1, final TextView txt2,
-                                  final TextView txt3) {
+    private void animationInPage1(final ImageView logo, final ViewGroup txt1, final TextView txt2, final TextView txt3) {
 
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 0, 1);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(logo, "scaleY", 0, 1);
@@ -623,21 +571,20 @@ public class ActivityIntroduce extends ActivityEnhanced {
         ObjectAnimator txt_scaleY3 = ObjectAnimator.ofFloat(txt3, "scaleY", 0, 1);
         final AnimatorSet scaleDown = new AnimatorSet();
         scaleDown.play(scaleX)
-                .with(scaleY)
-                .with(fade)
-                .with(txt_scaleX1)
-                .with(txt_scaleY1)
-                .with(txt_scaleX2)
-                .with(txt_scaleY2)
-                .with(txt_scaleX3)
-                .with(txt_scaleY3)
-                .with(txt_fade1)
-                .with(txt_fade2)
-                .with(txt_fade3);
+            .with(scaleY)
+            .with(fade)
+            .with(txt_scaleX1)
+            .with(txt_scaleY1)
+            .with(txt_scaleX2)
+            .with(txt_scaleY2)
+            .with(txt_scaleX3)
+            .with(txt_scaleY3)
+            .with(txt_fade1)
+            .with(txt_fade2)
+            .with(txt_fade3);
         scaleDown.setDuration(1000);
         scaleDown.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+            @Override public void onAnimationStart(Animator animation) {
                 logo.setVisibility(View.VISIBLE);
                 txt1.setVisibility(View.VISIBLE);
                 txt2.setVisibility(View.VISIBLE);
@@ -648,32 +595,27 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 invisibleItems(logo);
             }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
+            @Override public void onAnimationEnd(Animator animation) {
 
             }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+            @Override public void onAnimationCancel(Animator animation) {
 
             }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+            @Override public void onAnimationRepeat(Animator animation) {
 
             }
         });
 
         G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 scaleDown.start();
             }
         }, 1000);
     }
 
-    private void animationOutPage1(final ImageView logo, final ViewGroup txt1, final TextView txt2,
-                                   final TextView txt3) {
+    private void animationOutPage1(final ImageView logo, final ViewGroup txt1, final TextView txt2, final TextView txt3) {
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 1, 0);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(logo, "scaleY", 1, 0);
         ObjectAnimator fade = ObjectAnimator.ofFloat(logo, "alpha", 1, 0);
@@ -689,21 +631,20 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         final AnimatorSet scaleDown = new AnimatorSet();
         scaleDown.play(scaleX)
-                .with(scaleY)
-                .with(fade)
-                .with(txt_scaleX1)
-                .with(txt_scaleY1)
-                .with(txt_scaleX2)
-                .with(txt_scaleY2)
-                .with(txt_scaleX3)
-                .with(txt_scaleY3)
-                .with(txt_fade1)
-                .with(txt_fade2)
-                .with(txt_fade3);
+            .with(scaleY)
+            .with(fade)
+            .with(txt_scaleX1)
+            .with(txt_scaleY1)
+            .with(txt_scaleX2)
+            .with(txt_scaleY2)
+            .with(txt_scaleX3)
+            .with(txt_scaleY3)
+            .with(txt_fade1)
+            .with(txt_fade2)
+            .with(txt_fade3);
         scaleDown.setDuration(1000);
         scaleDown.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+            @Override public void onAnimationStart(Animator animation) {
                 logo.setVisibility(View.VISIBLE);
                 txt1.setVisibility(View.VISIBLE);
                 txt2.setVisibility(View.VISIBLE);
@@ -714,18 +655,15 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 invisibleItems(logo);
             }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
+            @Override public void onAnimationEnd(Animator animation) {
 
             }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+            @Override public void onAnimationCancel(Animator animation) {
 
             }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+            @Override public void onAnimationRepeat(Animator animation) {
 
             }
         });
@@ -747,20 +685,11 @@ public class ActivityIntroduce extends ActivityEnhanced {
             ObjectAnimator txt_scaleY1 = ObjectAnimator.ofFloat(txt1, "scaleY", 0, 1);
             ObjectAnimator txt_scaleY2 = ObjectAnimator.ofFloat(txt2, "scaleY", 0, 1);
             final AnimatorSet scaleDown = new AnimatorSet();
-            scaleDown.play(scaleX)
-                    .with(scaleY)
-                    .with(fade)
-                    .with(txt_scaleX1)
-                    .with(txt_scaleY1)
-                    .with(txt_scaleX2)
-                    .with(txt_scaleY2)
-                    .with(txt_fade1)
-                    .with(txt_fade2);
+            scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(txt_fade1).with(txt_fade2);
 
             scaleDown.setDuration(1000);
             scaleDown.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
+                @Override public void onAnimationStart(Animator animation) {
                     logo.setVisibility(View.VISIBLE);
                     txt1.setVisibility(View.VISIBLE);
                     txt2.setVisibility(View.VISIBLE);
@@ -768,33 +697,28 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     invisibleItems(logo);
                 }
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
+                @Override public void onAnimationEnd(Animator animation) {
 
                 }
 
-                @Override
-                public void onAnimationCancel(Animator animation) {
+                @Override public void onAnimationCancel(Animator animation) {
 
                 }
 
-                @Override
-                public void onAnimationRepeat(Animator animation) {
+                @Override public void onAnimationRepeat(Animator animation) {
 
                 }
             });
 
             G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     scaleDown.start();
                 }
             }, 1000);
         }
     }
 
-    private void animationInBoy(final ImageView logo, final TextView txt1, final TextView txt2,
-                                final Button start) {
+    private void animationInBoy(final ImageView logo, final TextView txt1, final TextView txt2, final Button start) {
 
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 0, 1);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(logo, "scaleY", 0, 1);
@@ -811,21 +735,20 @@ public class ActivityIntroduce extends ActivityEnhanced {
         ObjectAnimator btn_fade1 = ObjectAnimator.ofFloat(start, "alpha", 0, 1);
         final AnimatorSet scaleDown = new AnimatorSet();
         scaleDown.play(scaleX)
-                .with(scaleY)
-                .with(fade)
-                .with(txt_scaleX1)
-                .with(txt_scaleY1)
-                .with(txt_scaleX2)
-                .with(txt_scaleY2)
-                .with(btn_scaleX1)
-                .with(btn_scaleY1)
-                .with(btn_fade1)
-                .with(txt_fade1)
-                .with(txt_fade2);
+            .with(scaleY)
+            .with(fade)
+            .with(txt_scaleX1)
+            .with(txt_scaleY1)
+            .with(txt_scaleX2)
+            .with(txt_scaleY2)
+            .with(btn_scaleX1)
+            .with(btn_scaleY1)
+            .with(btn_fade1)
+            .with(txt_fade1)
+            .with(txt_fade2);
         scaleDown.setDuration(1000);
         scaleDown.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+            @Override public void onAnimationStart(Animator animation) {
                 logo.setVisibility(View.VISIBLE);
                 txt1.setVisibility(View.VISIBLE);
                 txt2.setVisibility(View.VISIBLE);
@@ -850,25 +773,21 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 txt_p4_l2.setVisibility(View.GONE);
             }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
+            @Override public void onAnimationEnd(Animator animation) {
 
             }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+            @Override public void onAnimationCancel(Animator animation) {
 
             }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+            @Override public void onAnimationRepeat(Animator animation) {
 
             }
         });
 
         G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 scaleDown.start();
             }
         }, 1000);
@@ -889,46 +808,33 @@ public class ActivityIntroduce extends ActivityEnhanced {
         ObjectAnimator txt_scaleY2 = ObjectAnimator.ofFloat(txt2, "scaleY", 1, 0);
 
         final AnimatorSet scaleDown = new AnimatorSet();
-        scaleDown.play(scaleX)
-                .with(scaleY)
-                .with(fade)
-                .with(txt_scaleX1)
-                .with(txt_scaleY1)
-                .with(txt_scaleX2)
-                .with(txt_scaleY2)
-                .with(txt_fade1)
-                .with(txt_fade2);
+        scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(txt_fade1).with(txt_fade2);
 
         scaleDown.setDuration(1000);
         scaleDown.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+            @Override public void onAnimationStart(Animator animation) {
 
                 invisibleItems(logo);
             }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
+            @Override public void onAnimationEnd(Animator animation) {
                 logo.setVisibility(View.GONE);
                 txt1.setVisibility(View.GONE);
                 txt2.setVisibility(View.GONE);
             }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+            @Override public void onAnimationCancel(Animator animation) {
 
             }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+            @Override public void onAnimationRepeat(Animator animation) {
 
             }
         });
         scaleDown.start();
     }
 
-    private void animationOutBoy(final ImageView logo, final TextView txt1, final TextView txt2,
-                                 final Button start) {
+    private void animationOutBoy(final ImageView logo, final TextView txt1, final TextView txt2, final Button start) {
 
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 1, 0);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(logo, "scaleY", 1, 0);
@@ -946,21 +852,20 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         AnimatorSet scaleDown = new AnimatorSet();
         scaleDown.play(scaleX)
-                .with(scaleY)
-                .with(fade)
-                .with(txt_scaleX)
-                .with(txt_scaleY)
-                .with(fade2)
-                .with(fade3)
-                .with(txt_scaleX2)
-                .with(txt_scaleY2)
-                .with(btn_scaleX2)
-                .with(btn_scaleY2)
-                .with(txt_fade1);
+            .with(scaleY)
+            .with(fade)
+            .with(txt_scaleX)
+            .with(txt_scaleY)
+            .with(fade2)
+            .with(fade3)
+            .with(txt_scaleX2)
+            .with(txt_scaleY2)
+            .with(btn_scaleX2)
+            .with(btn_scaleY2)
+            .with(txt_fade1);
         scaleDown.setDuration(1000);
         scaleDown.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+            @Override public void onAnimationStart(Animator animation) {
 
                 logoIgap.setVisibility(View.INVISIBLE);
                 logoSecurity.setVisibility(View.INVISIBLE);
@@ -981,21 +886,18 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 txt_p4_l2.setVisibility(View.GONE);
             }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
+            @Override public void onAnimationEnd(Animator animation) {
                 logo.setVisibility(View.GONE);
                 txt1.setVisibility(View.GONE);
                 txt2.setVisibility(View.GONE);
                 start.setVisibility(View.GONE);
             }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+            @Override public void onAnimationCancel(Animator animation) {
 
             }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+            @Override public void onAnimationRepeat(Animator animation) {
 
             }
         });

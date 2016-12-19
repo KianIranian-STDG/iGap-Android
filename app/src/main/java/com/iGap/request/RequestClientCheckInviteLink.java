@@ -11,6 +11,7 @@ public class RequestClientCheckInviteLink {
         builder.setInviteToken(inviteToken);
 
         RequestWrapper requestWrapper = new RequestWrapper(607, builder);
+
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

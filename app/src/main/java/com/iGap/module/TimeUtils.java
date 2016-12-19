@@ -17,9 +17,9 @@ package com.iGap.module;
  */
 
 import android.content.Context;
-
 import com.iGap.R;
-
+import com.iGap.helper.HelperCalander;
+import com.iGap.libs.CalendarTools;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -61,30 +61,37 @@ public final class TimeUtils {
     public static String getChatSettingsTimeAgo(Context context, Date comingDate) {
         Calendar current = Calendar.getInstance();
         Calendar date = Calendar.getInstance();
+        Calendar yesterday = getYesterdayCalendar();
         date.setTime(comingDate);
 
-        String output;
-        if (current.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)
-                && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
+        String output = "";
+
+        if (current.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR) && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
             output = context.getString(R.string.today);
-        } else if (getYesterdayCalendar().get(Calendar.DAY_OF_MONTH) == date.get(
-                Calendar.DAY_OF_MONTH)) {
+        } else if (yesterday.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR) && yesterday.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
             output = context.getString(R.string.yesterday);
-        } else //noinspection WrongConstant
-            if (current.get(Calendar.WEEK_OF_YEAR) == date.get(Calendar.WEEK_OF_YEAR) + 1
-                    && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
-                output = String.format("%1$s %2$s",
-                        new SimpleDateFormat("EEE", Locale.getDefault()).format(date.getTimeInMillis()),
-                        date.get(Calendar.DAY_OF_MONTH));
-            } else if (current.get(Calendar.YEAR) < date.get(Calendar.YEAR)) {
-                output = String.format("%1$s-%2$s-%3$s",
-                        new SimpleDateFormat("MM", Locale.getDefault()).format(date.getTimeInMillis()),
-                        date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.YEAR));
+        } else {
+
+            if (HelperCalander.isTimeHijri()) {
+
+                CalendarTools convertTime = new CalendarTools();
+                convertTime.GregorianToPersian(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+
+                output = convertTime.getYear() + " " + HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getDay();
             } else {
-                output = String.format("%1$s %2$s",
-                        new SimpleDateFormat("MMMM", Locale.getDefault()).format(
-                                date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
+                output = TimeUtils.toLocal(date.getTimeInMillis(), "dd MMM yyyy");
             }
+        }
+
+        //else //noinspection WrongConstant
+        //    if (current.get(Calendar.WEEK_OF_YEAR) == date.get(Calendar.WEEK_OF_YEAR) + 1 && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
+        //        output = String.format("%1$s %2$s", new SimpleDateFormat("EEE", Locale.getDefault()).format(date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
+        //    } else if (current.get(Calendar.YEAR) < date.get(Calendar.YEAR)) {
+        //        output = String.format("%1$s-%2$s-%3$s", new SimpleDateFormat("MM", Locale.getDefault()).format(date.getTimeInMillis()),
+        //            date.get(Calendar.DAY_OF_MONTH), date.get(Calendar.YEAR));
+        //    } else {
+        //        output = String.format("%1$s %2$s", new SimpleDateFormat("MMMM", Locale.getDefault()).format(date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
+        //    }
 
         return output;
     }

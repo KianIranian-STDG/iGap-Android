@@ -667,6 +667,18 @@
     <string name="five_day">five days ago</string>
     <string name="six_day">six days ago</string>
     <string name="at">at</string>
+    <string name="farvardin">FARVARDIN</string>
+    <string name="ordibehst">ORDIBEHESHT</string>
+    <string name="khordad">KHORDAD</string>
+    <string name="tir">TIR</string>
+    <string name="mordad">MORDAD</string>
+    <string name="shahrivar">SHAHRIVAR</string>
+    <string name="mehr">MEHR</string>
+    <string name="aban">ABAN</string>
+    <string name="azar">AZAR</string>
+    <string name="dey">DEY</string>
+    <string name="bahman">BAHMAN</string>
+    <string name="esfand">ESFAND</string>
     <string name="group_link_copy">copy</string>
     <string name="group_link_revoke">Change Link</string>
 
