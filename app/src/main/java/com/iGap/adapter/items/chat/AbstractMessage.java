@@ -22,7 +22,6 @@ import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IChatItemAttachment;
-import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnFileDownload;
@@ -61,10 +60,7 @@ import io.realm.Realm;
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
- */
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH>, IChatItemAvatar {
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
@@ -95,62 +91,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return this;
     }
 
-    private void requestForAvatar() {
-        // create new download attachment once with attachment token
-        if (mMessage.downloadAttachment == null) {
-            mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.senderAvatar.token);
-        }
-
-        // request thumbnail
-        if (!MessagesAdapter.avatarsRequested.contains(mMessage.senderID)) {
-            onRequestDownloadAvatar(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress);
-            // prevent from multiple requesting thumbnail
-            MessagesAdapter.avatarsRequested.add(mMessage.senderID);
-        }
-    }
-
-    /* private void requestForUserInfo() {
-         if (!MessagesAdapter.usersInfoRequested.contains(mMessage.senderID)) {
-             RequestUserInfo requestUserInfo = new RequestUserInfo();
-             requestUserInfo.userInfo(Long.parseLong(mMessage.senderID));
-
-             MessagesAdapter.usersInfoRequested.add(mMessage.senderID);
-         }
-     }
- */
-    @Override
-    public void onRequestDownloadAvatar(long offset, int progress) {
-        /*ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
-        String fileName = mMessage.downloadAttachment.token + "_" + mMessage.senderAvatar.name;
-        if (progress == 100) {
-            mMessage.senderAvatar.setLocalThumbnailPath(Long.parseLong(mMessage.senderID), G.DIR_IMAGE_USER + "/" + fileName);
-
-            try {
-                AndroidUtils.cutFromTemp(fileName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            // I don't use offset in getting thumbnail
-            String identity = mMessage.downloadAttachment.token
-                    + '*'
-                    + selector.toString()
-                    + '*'
-                    + mMessage.senderAvatar.largeThumbnail.size
-                    + '*'
-                    + fileName
-                    + '*'
-                    + mMessage.downloadAttachment.offset
-                    + "*"
-                    + Boolean.toString(true)
-                    + "*"
-                    + mMessage.senderID
-                    + "*"
-                    + type.toString();
-
-            new RequestFileDownload().download(mMessage.downloadAttachment.token, offset, (int) mMessage.senderAvatar.largeThumbnail.size, selector, identity);
-        }*/
-    }
 
     @Override
     public Item withIdentifier(long identifier) {
@@ -162,15 +102,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void bindView(final VH holder, List payloads) {
         super.bindView(holder, payloads);
 
-        mMessage.view = holder.itemView;  // this use for select foregroung in activity chat  for search item and hash item
+        /**
+         * this use for select foreground in activity chat for search item and hash item
+         */
 
-        //noinspection RedundantCast
+        mMessage.view = holder.itemView;
+
+        /**
+         * noinspection RedundantCast
+         */
         if (!isSelected() && ((FrameLayout) holder.itemView).getForeground() != null) {
-            //noinspection RedundantCast
+            /**
+             * noinspection RedundantCast
+             */
             ((FrameLayout) holder.itemView).setForeground(null);
         }
 
-        // only will be called when message layout is directional-base (e.g. single chat)
+        /**
+         * only will be called when message layout is directional-base (e.g. single chat)
+         */
         if (directionalBased) {
             if (mMessage.sendType == MyType.SendType.recvive) {
                 updateLayoutForReceive(holder);
@@ -184,7 +134,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
         }
 
-        // display 'edited' indicator beside message time if message was edited
+        /**
+         * display 'edited' indicator beside message time if message was edited
+         */
         if (holder.itemView.findViewById(R.id.txtEditedIndicator) != null) {
             if (mMessage.isEdited) {
                 holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.VISIBLE);
@@ -193,7 +145,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        // display user avatar only if chat type is GROUP
+        /**
+         * display user avatar only if chat type is GROUP
+         */
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
@@ -228,30 +182,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 });
 
-                /*if (mMessage.senderAvatar != null) {
-                    if (mMessage.senderAvatar.isFileExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalFilePath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
-                    } else if (mMessage.senderAvatar.isThumbnailExistsOnLocal()) {
-                        ImageLoader.getInstance()
-                                .displayImage(AndroidUtils.suitablePath(mMessage.senderAvatar.getLocalThumbnailPath()), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
-                    } else {
-                        ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
-                                com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials,
-                                        mMessage.senderColor));
-
-                        if (mMessage.senderAvatar.token != null && !mMessage.senderAvatar.token.isEmpty()) {
-                            requestForAvatar();
-                        } else {
-                            requestForUserInfo();
-                        }
-                    }
-                } else {
-                    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
-                            com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), mMessage.initials,
-                                    mMessage.senderColor));
-
-                    requestForUserInfo();
-                }*/
             } else {
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
             }
@@ -261,7 +191,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        // set message time
+        /**
+         * set message time
+         */
         if (holder.itemView.findViewById(R.id.cslr_txt_time) != null) {
             ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
         }
@@ -307,8 +239,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.START;
 
         ((CardView) holder.itemView.findViewById(R.id.contentContainer)).setCardBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_receiveColor));
-        // add main layout margin to prevent getting match parent completely
-        // set to mainContainer not itemView because of selecting item foreground
+        /**
+         * add main layout margin to prevent getting match parent completely
+         * set to mainContainer not itemView because of selecting item foreground
+         */
         ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp8);
         ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
         ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp8);
@@ -340,8 +274,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         ((CardView) holder.itemView.findViewById(R.id.contentContainer)).setCardBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_sendColor));
-        // add main layout margin to prevent getting match parent completely
-        // set to mainContainer not itemView because of selecting item foreground
+        /**
+         * add main layout margin to prevent getting match parent completely
+         * set to mainContainer not itemView because of selecting item foreground
+         */
         ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
         ((FrameLayout.LayoutParams) holder.itemView.findViewById(R.id.mainContainer).getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp8);
 
@@ -361,7 +297,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void replyMessageIfNeeded(VH holder) {
-        // set replay container visible if message was replayed, otherwise, gone it
+        /**
+         * set replay container visible if message was replayed, otherwise, gone it
+         */
         LinearLayout replayContainer = (LinearLayout) holder.itemView.findViewById(R.id.replayLayout);
         if (replayContainer != null) {
             TextView replyFrom = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from);
@@ -411,7 +349,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void forwardMessageIfNeeded(VH holder) {
-        // set forward container visible if message was forwarded, otherwise, gone it
+        /**
+         * set forward container visible if message was forwarded, otherwise, gone it
+         */
         LinearLayout forwardContainer = (LinearLayout) holder.itemView.findViewById(R.id.cslr_ll_forward);
         if (forwardContainer != null) {
             if (mMessage.forwardedFrom != null) {
@@ -542,7 +482,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void prepareAttachmentIfNeeded(final VH holder, final RealmAttachment attachment, final ProtoGlobal.RoomMessageType messageType) {
-        // runs if message has attachment
+        /**
+         * runs if message has attachment
+         */
         if (attachment != null) {
             if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
@@ -560,17 +502,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             }
 
-            // if file already exists, simply show the local one
+            /**
+             * if file already exists, simply show the local one
+             */
             if (attachment.isFileExistsOnLocalAndIsThumbnail()) {
-                // load file from local
+                /**
+                 * load file from local
+                 */
                 onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
             } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
                 onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
             } else {
-                // file doesn't exist on local, I check for a thumbnail
-                // if thumbnail exists, I load it into the view
+                /**
+                 * file doesn't exist on local, I check for a thumbnail
+                 * if thumbnail exists, I load it into the view
+                 */
                 if (attachment.isThumbnailExistsOnLocal()) {
-                    // load thumbnail from local
+                    /**
+                     * load thumbnail from local
+                     */
                     onLoadThumbnailFromLocal(holder, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
                     requestForThumbnail();
@@ -653,12 +603,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        // create new download attachment once with attachment token
+        /**
+         * create new download attachment once with attachment token
+         */
         if (mMessage.downloadAttachment == null) {
             mMessage.downloadAttachment = new StructDownloadAttachment(attachment);
         }
 
-        // make sure to not request multiple times by checking last offset with the new one
+        /**
+         * make sure to not request multiple times by checking last offset with the new one
+         */
         if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
             onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress, null);
             mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
@@ -704,13 +658,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else {
                 progress.withDrawable(R.drawable.ic_cancel, false);
 
-                // create new download attachment once with attachment token
+                /**
+                 * create new download attachment once with attachment token
+                 */
                 if (mMessage.downloadAttachment == null) {
                     mMessage.downloadAttachment = new StructDownloadAttachment(attachment);
                     progress.withProgress(mMessage.downloadAttachment.progress);
                 }
 
-                // make sure to not request multiple times by checking last offset with the new one
+                /**
+                 * make sure to not request multiple times by checking last offset with the new one
+                 */
                 if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
                     onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress, null);
                     mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
@@ -751,7 +709,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
 
                         onFileDownload.onFileDownloaded();
-
                         realm.close();
                     }
                 });
@@ -875,15 +832,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (mMessage.attachment == null) {
             return;
         }
-        // create new download attachment once with attachment token
+        /**
+         * create new download attachment once with attachment token
+         */
         if (mMessage.downloadAttachment == null) {
             mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token);
         }
 
-        // request thumbnail
+        /**
+         * request thumbnail
+         */
         if (!mMessage.downloadAttachment.thumbnailRequested) {
             onRequestDownloadThumbnail(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token, false, null);
-            // prevent from multiple requesting thumbnail
+            /**
+             * prevent from multiple requesting thumbnail
+             */
             mMessage.downloadAttachment.thumbnailRequested = true;
         }
     }
@@ -904,7 +867,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (mMessage.sendType == MyType.SendType.send) {
             ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel, false);
-            // update progress when user trying to upload or download
+            /**
+             * update progress when user trying to upload or download
+             */
             if (MessagesAdapter.uploading.containsKey(Long.parseLong(mMessage.messageID))) {
                 hideThumbnailIf(holder);
 
