@@ -44,7 +44,7 @@ public class RequestChannelSendMessage {
     }
 
     public RequestChannelSendMessage sendMessage(String fakeMessageIdAsIdentity) {
-        RequestWrapper requestWrapper = new RequestWrapper(201, channelSendMessage, fakeMessageIdAsIdentity);
+        RequestWrapper requestWrapper = new RequestWrapper(410, channelSendMessage, fakeMessageIdAsIdentity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

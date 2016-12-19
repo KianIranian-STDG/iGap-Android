@@ -979,13 +979,13 @@ public class ActivityChat extends ActivityEnhanced
             if (!messageInfo.isTimeMessage()) {
                 switch (messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType) {
                     case TEXT:
-                        if (chatType != CHANNEL) {
+                        //if (chatType != CHANNEL) {
                             if (!addTop) {
                                 mAdapter.add(new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(0, new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        }
+                        //}
                         break;
                     case IMAGE:
                         if (chatType != CHANNEL) {
@@ -1631,8 +1631,7 @@ public class ActivityChat extends ActivityEnhanced
 
                                 // user wants to replay to a message
                                 if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
-                                    RealmRoomMessage messageToReplay =
-                                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
+                                    RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
                                     if (messageToReplay != null) {
                                         roomMessage.setReplyTo(messageToReplay);
                                     }
