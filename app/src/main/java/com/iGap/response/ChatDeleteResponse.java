@@ -55,14 +55,14 @@ public class ChatDeleteResponse extends MessageHandler {
                 }
 
 
-
-
             }
         });
 
         realm.close();
 
-        G.onChatDelete.onChatDelete(builder.getRoomId());
+        if (G.onChatDelete != null) {
+            G.onChatDelete.onChatDelete(builder.getRoomId());
+        }
     }
 
     @Override

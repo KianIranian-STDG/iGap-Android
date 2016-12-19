@@ -147,15 +147,15 @@ public class RealmRoom extends RealmObject {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    RealmRoomDraft realmRoomDraft = realm.createObject(RealmRoomDraft.class);
+                    realmRoomDraft.setMessage(message);
+                    realmRoomDraft.setReplyToMessageId(replyToMessageId);
+                    realmRoom.setDraft(realmRoomDraft);
 
-                RealmRoomDraft realmRoomDraft = realm.createObject(RealmRoomDraft.class);
-                realmRoomDraft.setMessage(message);
-                realmRoomDraft.setReplyToMessageId(replyToMessageId);
-
-                realmRoom.setDraft(realmRoomDraft);
-
-                if (G.onDraftMessage != null) {
-                    G.onDraftMessage.onDraftMessage(roomId, message);
+                    if (G.onDraftMessage != null) {
+                        G.onDraftMessage.onDraftMessage(roomId, message);
+                    }
                 }
             }
         });
