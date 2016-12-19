@@ -658,5 +658,12 @@
     <string name="five_day">پنج روز قبل</string>
     <string name="six_day">شش روز قبل</string>
     <string name="at">در</string>
-
+    <string name="group_link_copy">کپی</string>
+    <string name="group_link_revoke">ابطال لینک</string>
+    <string name="group_link">لینک گروه</string>
+    <string name="normal_error">can\'t do it please try later</string>
+    <string name="channel_description">توضیح مختصر گروه</string>
+    <string name="channel_name">نام کانال</string>
+    <string name="delete_and_leave_channel">حذف و خارج شدن از گروه</string>
+    <string name="channel_delete">حذف کانال</string>
 </resources>

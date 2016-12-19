@@ -15,6 +15,10 @@ public class RealmGroupRoom extends RealmObject {
     private int avatarCount;
     private RealmNotificationSetting realmNotificationSetting;
     private RealmList<RealmMember> members;
+    private String invite_link;
+    private String invite_token;
+    private String username;
+
 
     /**
      * convert ProtoGlobal.GroupRoom to RealmGroupRoom
@@ -30,6 +34,9 @@ public class RealmGroupRoom extends RealmObject {
         realmGroupRoom.setRole(GroupChatRole.convert(room.getRole()));
         realmGroupRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
         realmGroupRoom.setDescription(room.getDescription());
+        realmGroupRoom.setInvite_link(room.getPrivateExtra().getInviteLink());
+        realmGroupRoom.setInvite_token(room.getPrivateExtra().getInviteToken());
+        realmGroupRoom.setUsername(room.getPublicExtra().getUsername());
         return realmGroupRoom;
     }
 
@@ -87,5 +94,29 @@ public class RealmGroupRoom extends RealmObject {
 
     public void setMembers(RealmList<RealmMember> members) {
         this.members = members;
+    }
+
+    public String getInvite_link() {
+        return invite_link;
+    }
+
+    public void setInvite_link(String invite_link) {
+        this.invite_link = invite_link;
+    }
+
+    public String getInvite_token() {
+        return invite_token;
+    }
+
+    public void setInvite_token(String invite_token) {
+        this.invite_token = invite_token;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

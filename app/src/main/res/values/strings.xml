@@ -316,6 +316,7 @@
     <string name="please_check_your_camera">Please Check your Camera.</string>
     <string name="delete_photo">Delete Photo</string>
     <string name="group_name">Group Name</string>
+    <string name="group_link">Group Link</string>
     <string name="save">Save</string>
     <string name="please_enter_group_name">Please enter group name.</string>
     <string name="group_description">Group Description</string>
@@ -458,6 +459,7 @@
     <string name="E_157">USER DELETE EXPIRED TOKEN</string>
     <string name="E_158">USER DELETE MAX TRY LOCK</string>
     <string name="time_out">can\'t connect to server</string>
+    <string name="normal_error">can\'t do it please try later</string>
 
 
     <string name="list_admin">List Admin</string>
@@ -665,6 +667,8 @@
     <string name="five_day">five days ago</string>
     <string name="six_day">six days ago</string>
     <string name="at">at</string>
+    <string name="group_link_copy">copy</string>
+    <string name="group_link_revoke">Change Link</string>
 
 
 </resources>

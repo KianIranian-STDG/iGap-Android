@@ -149,12 +149,13 @@
 
     <RelativeLayout
         android:id="@+id/stda_layout_time"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
-        android:layout_marginRight="@dimen/dp100"
-        android:layout_marginLeft="@dimen/dp100">
+        android:layout_marginStart="@dimen/dp24"
+        android:layout_marginLeft="@dimen/dp24"
+        >
 
 
         <TextView
@@ -162,26 +163,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="01:00"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:textSize="@dimen/sp15"
-            android:gravity="center"
-            android:layout_marginStart="@dimen/dp16"
-            android:layout_marginLeft="@dimen/dp16"
+            android:layout_toStartOf="@+id/stda_txt_text"
+            android:layout_toLeftOf="@+id/stda_txt_text"
             android:textColor="@color/toolbar_background"
-
             />
 
         <TextView
+            android:id="@+id/stda_txt_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/please_wait"
             android:textSize="@dimen/sp15"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
             android:textColor="@android:color/black"
             android:padding="@dimen/dp12"
+
 
             />
     </RelativeLayout>

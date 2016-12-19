@@ -9,23 +9,10 @@
                 tools:ignore="MissingPrefix"
     >
 
-    <ProgressBar
-        android:id="@+id/agp_prgWaiting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:background="@drawable/pu_circle_dialog_give_image_gallery"
-        android:indeterminate="true"
-        android:visibility="gone"
-        />
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/agp_prgWaiting"
-        android:layout_toEndOf="@+id/agp_prgWaiting"
         >
 
 
@@ -111,8 +98,6 @@
                         </LinearLayout>
 
 
-
-
                     </LinearLayout>
 
 
@@ -162,15 +147,15 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/layout_channel_link"
                             android:layout_width="@dimen/dp140"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingLeft="@dimen/dp12"
-                            android:paddingRight="@dimen/dp12"
-
-                            >
+                            android:paddingRight="@dimen/dp12">
 
                             <TextView
+                                android:id="@+id/layout_channel_link_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingEnd="@dimen/dp4"
@@ -594,6 +579,17 @@
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
+        <ProgressBar
+            android:id="@+id/agp_prgWaiting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:background="@drawable/pu_circle_dialog_give_image_gallery"
+            android:indeterminate="true"
+            android:visibility="gone"
+            />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/pch_fab_addToChannel"
             android:layout_width="wrap_content"
@@ -608,5 +604,6 @@
             app:layout_anchorGravity="bottom|right|end"/>
 
     </android.support.design.widget.CoordinatorLayout>
+
 
 </RelativeLayout>

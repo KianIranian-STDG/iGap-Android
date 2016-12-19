@@ -8,12 +8,12 @@
                 tools:ignore="MissingPrefix"
     >
 
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        >
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/agp_appbar"
@@ -196,9 +196,7 @@
                             android:layout_weight="1"
                             android:orientation="vertical"
                             android:paddingLeft="@dimen/dp12"
-                            android:paddingRight="@dimen/dp12"
-
-                            >
+                            android:paddingRight="@dimen/dp12">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -222,12 +220,41 @@
                                 android:singleLine="true"
                                 android:text=""
                                 android:textColor="@color/gray_5c"
-                                android:textSize="@dimen/sp13"
-                                />
+                                android:textSize="@dimen/sp13"/>
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="@dimen/dp140"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/dp12"
+                            android:paddingRight="@dimen/dp12">
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingEnd="@dimen/dp4"
+                                android:paddingStart="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text="@string/member"
+                                android:textColor="@color/black_register"
+                                android:textSize="@dimen/sp15"/>
+
+                            <TextView
+                                android:id="@+id/agp_txt_member_number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="@dimen/dp12"
+                                android:paddingEnd="@dimen/dp4"
+                                android:paddingStart="@dimen/dp4"
+                                android:paddingTop="@dimen/dp4"
+                                android:singleLine="true"
+                                android:text=""
+                                android:textColor="@color/gray_5c"
+                                android:textSize="@dimen/sp13"/>
+
+                        </LinearLayout>
                     </LinearLayout>
 
 
@@ -276,28 +303,30 @@
 
                         </LinearLayout>
 
+
                         <LinearLayout
+                            android:id="@+id/agp_ll_link"
                             android:layout_width="@dimen/dp140"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingLeft="@dimen/dp12"
-                            android:paddingRight="@dimen/dp12"
-
-                            >
+                            android:paddingRight="@dimen/dp12">
 
                             <TextView
+                                android:id="@+id/agp_txt_link_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingEnd="@dimen/dp4"
                                 android:paddingStart="@dimen/dp4"
                                 android:singleLine="true"
-                                android:text="@string/member"
+                                android:text="@string/group_link"
                                 android:textColor="@color/black_register"
-                                android:textSize="@dimen/sp15"/>
+                                android:textSize="@dimen/sp15"
+                                />
 
                             <TextView
-                                android:id="@+id/agp_txt_member_number"
-                                android:layout_width="wrap_content"
+                                android:id="@+id/agp_txt_link"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="@dimen/dp12"
                                 android:paddingEnd="@dimen/dp4"
@@ -309,7 +338,6 @@
                                 android:textSize="@dimen/sp13"/>
 
                         </LinearLayout>
-
 
                     </LinearLayout>
 
@@ -625,7 +653,6 @@
             app:layout_anchorGravity="bottom|right|end"/>
 
     </android.support.design.widget.CoordinatorLayout>
-
 
     <ProgressBar
         android:id="@+id/agp_prgWaiting_addContact"

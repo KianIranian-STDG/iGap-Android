@@ -2,6 +2,8 @@ package com.iGap.activities;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -71,6 +73,7 @@ import com.iGap.interfaces.OnGroupKickAdmin;
 import com.iGap.interfaces.OnGroupKickMember;
 import com.iGap.interfaces.OnGroupKickModerator;
 import com.iGap.interfaces.OnGroupLeft;
+import com.iGap.interfaces.OnGroupRevokeLink;
 import com.iGap.interfaces.OnGroupUpdateUsername;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
@@ -114,6 +117,7 @@ import com.iGap.request.RequestGroupKickAdmin;
 import com.iGap.request.RequestGroupKickMember;
 import com.iGap.request.RequestGroupKickModerator;
 import com.iGap.request.RequestGroupLeft;
+import com.iGap.request.RequestGroupRevokeLink;
 import com.iGap.request.RequestGroupUpdateUsername;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.AbstractAdapter;
@@ -145,7 +149,8 @@ import static com.iGap.realm.enums.RoomType.GROUP;
 /**
  * Created by android3 on 9/18/2016.
  */
-public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAvatarResponse, OnFileUploadForActivities, OnGroupAvatarDelete {
+public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAvatarResponse, OnFileUploadForActivities
+        , OnGroupAvatarDelete, OnGroupRevokeLink {
 
     LinearLayout layoutSetting;
     LinearLayout layoutSetAdmin;
@@ -174,6 +179,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private String title;
     private String description;
     private String initials;
+    private String link;
     private String color;
     private GroupChatRole role;
     private long noLastMessage;
@@ -213,6 +219,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
         role = realmGroupRoom.getRole();
+        link = realmGroupRoom.getInvite_link();
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -239,6 +246,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         G.uploaderUtil.setActivityCallbacks(this);
         G.onGroupAvatarResponse = this;
         G.onGroupAvatarDelete = this;
+        G.onGroupRevokeLink = this;
     }
 
     @Override
@@ -259,9 +267,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         super.onResume();
 
         ActivityShearedMedia.getCountOfSharedMedia(roomId, txtNumberOfSharedMedia.getText().toString(), new OnComplete() {
-            @Override public void complete(boolean result, final String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, final String messageOne, String MessageTow) {
                 txtNumberOfSharedMedia.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         txtNumberOfSharedMedia.setText(messageOne);
                     }
                 });
@@ -643,6 +653,47 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
 
         txtMemberNumber.setText(participantsCountLabel);
+
+        final TextView txtLinkTitle = (TextView) findViewById(R.id.agp_txt_link_title);
+        final TextView txtGroupLink = (TextView) findViewById(R.id.agp_txt_link);
+        txtGroupLink.setText(link);
+
+        ViewGroup ltLink = (ViewGroup) findViewById(R.id.agp_ll_link);
+        ltLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, txtLinkTitle);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.menu_item_group_link_profile, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        switch (item.getItemId()) {
+                            case R.id.menu_group_link_copy:
+                                String copy;
+                                copy = txtGroupLink.getText().toString();
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                                clipboard.setPrimaryClip(clip);
+
+                                break;
+                            case R.id.menu_group_link_revoke:
+                                showProgressBar();
+                                new RequestGroupRevokeLink().groupRevokeLink(roomId);
+                                break;
+                        }
+
+                        return true;
+                    }
+                });
+
+                popup.show(); //
+            }
+        });
 
         showAvatar();
         setUiIndependRole();
@@ -1178,6 +1229,71 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                 .addToBackStack(null)
                 .replace(fragmentContainer_group_profile, fragment).commit();
+    }
+
+    @Override
+    public void onGroupRevokeLink(long roomId, final String inviteLink, final String inviteToken) {
+        hideProgressBar();
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realmGroupRoom.setInvite_link(inviteLink);
+                realmGroupRoom.setInvite_token(inviteToken);
+
+            }
+        });
+
+        realm.close();
+
+    }
+
+    @Override
+    public void onError(int majorCode, int minorCode) {
+        hideProgressBar();
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                final Snackbar snack =
+                        Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.normal_error),
+                                Snackbar.LENGTH_LONG);
+
+                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
+            }
+        });
+    }
+
+    @Override
+    public void onTimeOut() {
+        hideProgressBar();
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                final Snackbar snack =
+                        Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.time_out),
+                                Snackbar.LENGTH_LONG);
+
+                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
+            }
+        });
     }
 
     private class CreatePopUpMessage {

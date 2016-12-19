@@ -1,6 +1,8 @@
 package com.iGap.activities;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +67,7 @@ import com.iGap.interfaces.OnChannelKickAdmin;
 import com.iGap.interfaces.OnChannelKickMember;
 import com.iGap.interfaces.OnChannelKickModerator;
 import com.iGap.interfaces.OnChannelLeft;
+import com.iGap.interfaces.OnChannelRevokeLink;
 import com.iGap.interfaces.OnChannelUpdateUsername;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
@@ -105,6 +109,7 @@ import com.iGap.request.RequestChannelKickAdmin;
 import com.iGap.request.RequestChannelKickMember;
 import com.iGap.request.RequestChannelKickModerator;
 import com.iGap.request.RequestChannelLeft;
+import com.iGap.request.RequestChannelRevokeLink;
 import com.iGap.request.RequestChannelUpdateUsername;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -133,7 +138,7 @@ import static com.iGap.module.AttachFile.imagePath;
 import static com.iGap.module.MusicPlayer.roomId;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
-public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities, OnChannelAvatarAdd, OnChannelAvatarDelete {
+public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
 
     private AppBarLayout appBarLayout;
     private TextView txtNameChannel, txtDescription, txtChannelLink, txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport, txtChannelNameInfo;
@@ -205,6 +210,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         G.onChannelDelete = this;
         G.onChannelLeft = this;
         G.onChannelEdit = this;
+        G.onChannelRevokeLink = this;
 
         //=========Put Extra Start
         Bundle extras = getIntent().getExtras();
@@ -493,6 +499,44 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         txtChannelName.setText(title);
         txtChannelNameInfo.setText(title);
         txtChannelLink.setText(inviteLink);
+        final TextView txtLinkTitle = (TextView) findViewById(R.id.layout_channel_link_title);
+        ViewGroup ltLink = (ViewGroup) findViewById(R.id.layout_channel_link);
+        ltLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final PopupMenu popup = new PopupMenu(ActivityChannelProfile.this, txtLinkTitle);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.menu_item_group_link_profile, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        switch (item.getItemId()) {
+                            case R.id.menu_group_link_copy:
+                                String copy;
+                                copy = txtChannelLink.getText().toString();
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                                clipboard.setPrimaryClip(clip);
+
+                                break;
+                            case R.id.menu_group_link_revoke:
+                                showProgressBar();
+                                new RequestChannelRevokeLink().channelRevokeLink(roomId);
+                                break;
+                        }
+
+                        return true;
+                    }
+                });
+
+                popup.show(); //
+            }
+        });
+
 
         //memberNumber.setText(participantsCountLabel);
 
@@ -1212,7 +1256,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     public void execute(Realm realm) {
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                         realmRoom.setTitle(username);
-                        Log.i("BBBB", "execute: " + username);
+                        Log.i("BBBBB", "execute: " + username);
                     }
                 });
                 //channel info
@@ -1570,13 +1614,72 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     //***time out and errors for either of this interfaces
 
     @Override
-    public void onError(int majorCode, int minorCode) {
+    public void onChannelRevokeLink(long roomId, final String inviteLink, final String inviteToken) {
 
+        hideProgressBar();
+
+        Realm realm = Realm.getDefaultInstance();
+
+        //channel info
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        final RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                realmChannelRoom.setInviteLink(inviteLink);
+                realmChannelRoom.setInvite_token(inviteToken);
+
+                Log.i("CCCVVV", "exeActivityChannel inviteLink: " + inviteLink);
+                Log.i("CCCVVV", "exeActivityChannel inviteToken " + inviteToken);
+
+            }
+        });
+        realm.close();
+    }
+
+    @Override
+    public void onError(int majorCode, int minorCode) {
+        hideProgressBar();
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                final Snackbar snack =
+                        Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.normal_error),
+                                Snackbar.LENGTH_LONG);
+
+                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
+            }
+        });
     }
 
     @Override
     public void onTimeOut() {
+        hideProgressBar();
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                final Snackbar snack =
+                        Snackbar.make(findViewById(android.R.id.content),
+                                getResources().getString(R.string.time_out),
+                                Snackbar.LENGTH_LONG);
 
+                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
+            }
+        });
     }
 
     private void showPopUp() {
@@ -1765,6 +1868,26 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
             new ActivityChannelProfile.UploadTask(prgWait, ActivityChannelProfile.this).execute(filePath, avatarId);
         }
+    }
+
+    private void showProgressBar() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWait.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
+    private void hideProgressBar() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWait.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
     }
 
 
