@@ -56,6 +56,7 @@ import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnRefreshActivity;
 import com.iGap.interfaces.OnSetActionInRoom;
+import com.iGap.interfaces.OnUpdateAvatar;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OpenFragment;
 import com.iGap.libs.floatingAddButton.ArcMenu;
@@ -105,7 +106,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
 
-public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse {
+public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
@@ -152,6 +153,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         G.helperNotificationAndBadge.cancelNotification();
         G.onGroupAvatarResponse = this;
+        G.onUpdateAvatar = this;
 
         G.onConvertToGroup = new OpenFragment() {
             @Override
@@ -1677,6 +1679,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public void onAvatarAddError() {
+
+    }
+
+    @Override
+    public void onUpdateAvatar(long roomId) {
 
     }
 }

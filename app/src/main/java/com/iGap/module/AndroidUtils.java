@@ -245,7 +245,7 @@ public final class AndroidUtils {
         File cutFrom = new File(G.DIR_TEMP + "/" + fileName);
 
         copyFile(cutFrom, cutTo);
-        deleteFile(cutFrom);
+        //deleteFile(cutFrom);
     }
 
     public static void cutFromTemp(String pathTmp, String newPath) throws IOException {
