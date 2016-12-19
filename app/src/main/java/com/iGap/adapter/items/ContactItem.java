@@ -85,7 +85,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
 
         HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
             @Override
-            public void onAvatarGet(final String avatarPath) {
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {

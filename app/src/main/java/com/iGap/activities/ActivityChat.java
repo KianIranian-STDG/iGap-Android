@@ -2093,7 +2093,7 @@ public class ActivityChat extends ActivityEnhanced
 
         HelperAvatar.getAvatar(idForGetAvatar, type, new OnAvatarGet() {
             @Override
-            public void onAvatarGet(final String avatarPath) {
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -4658,7 +4658,7 @@ public class ActivityChat extends ActivityEnhanced
 
         HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
             @Override
-            public void onAvatarGet(final String avatarPath) {
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

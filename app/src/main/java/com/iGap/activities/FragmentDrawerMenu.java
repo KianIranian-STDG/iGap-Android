@@ -230,7 +230,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
 
         HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
             @Override
-            public void onAvatarGet(final String avatarPath) {
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {

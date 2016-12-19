@@ -18,9 +18,12 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
@@ -261,29 +264,47 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             avatarType = HelperAvatar.AvatarType.ROOM;
         }
 
-        HelperAvatar.getAvatar(idForGetAvatar, avatarType, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath) {
-                G.handler.post(new Runnable() {
+
+        final RealmAvatar realmAvatar = getLastAvatar(idForGetAvatar);
+        if (realmAvatar != null) {
+            if (realmAvatar.getFile().isFileExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
+            } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
+            } else {
+                HelperAvatar.getAvatar1(idForGetAvatar, avatarType, new OnAvatarGet() {
                     @Override
-                    public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                    public void onAvatarGet(final String avatarPath, final long ownerId) {
+                        /*G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                            }
+                        });*/
+                    }
 
-
+                    @Override
+                    public void onShowInitials(final String initials, final String color) {
+                        /*G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            }
+                        });*/
                     }
                 });
-            }
 
-            @Override
-            public void onShowInitials(final String initials, final String color) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
+                String[] initials = showInitials(idForGetAvatar, avatarType);
+                if (initials != null) {
+                    holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
+                }
             }
-        });
+        } else {
+            String[] initials = showInitials(idForGetAvatar, avatarType);
+            if (initials != null) {
+                holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
+            }
+        }
 
         if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
             holder.chatIcon.setVisibility(GONE);
@@ -369,5 +390,63 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             lastSeen.setTypeface(G.arial);
             unreadMessage.setTypeface(G.arial);
         }
+    }
+
+    private RealmAvatar getLastAvatar(long ownerId) {
+        Realm realm = Realm.getDefaultInstance();
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.UID, Sort.DESCENDING)) {
+            if (avatar.getFile() != null) {
+                return avatar;
+            }
+        }
+        realm.close();
+        return null;
+    }
+
+    public static String[] showInitials(long ownerId, HelperAvatar.AvatarType avatarType) {
+        Realm realm = Realm.getDefaultInstance();
+        String initials = null;
+        String color = null;
+        if (avatarType == HelperAvatar.AvatarType.USER) {
+
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, ownerId).findFirst();
+            if (realmRegisteredInfo != null) {
+                initials = realmRegisteredInfo.getInitials();
+                color = realmRegisteredInfo.getColor();
+            } else {
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+                    if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
+                        initials = realmRoom.getInitials();
+                        color = realmRoom.getColor();
+                    }
+                }
+            }
+
+        } else if (avatarType == HelperAvatar.AvatarType.ROOM) {
+
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, ownerId).findFirst();
+            if (realmRoom != null) {
+                initials = realmRoom.getInitials();
+                color = realmRoom.getColor();
+            }
+        }
+        realm.close();
+
+        if (initials != null && color != null) {
+            return new String[]{initials, color};
+        }
+
+        return null;
+    }
+
+    private long getRoomId(long ownerId) {
+        Realm realm = Realm.getDefaultInstance();
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+            if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
+                return realmRoom.getId();
+            }
+        }
+        realm.close();
+        return ownerId;
     }
 }

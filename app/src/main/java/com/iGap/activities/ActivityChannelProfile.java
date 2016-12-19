@@ -556,7 +556,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             public void run() {
                 HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
                     @Override
-                    public void onAvatarGet(String avatarPath) {
+                    public void onAvatarGet(String avatarPath, long ownerId) {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgCircleImageView);
                     }
 

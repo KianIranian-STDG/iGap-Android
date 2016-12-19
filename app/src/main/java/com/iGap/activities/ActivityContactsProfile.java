@@ -802,7 +802,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private void setAvatar() {
         HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
             @Override
-            public void onAvatarGet(final String avatarPath) {
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

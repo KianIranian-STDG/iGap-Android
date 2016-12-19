@@ -96,14 +96,14 @@ public class HelperAvatar {
      * @param ownerId if is user set userId and if is room set roomId
      */
 
-    public static void getAvatar(long ownerId, AvatarType avatarType, final OnAvatarGet onAvatarGet) {
+    public static void getAvatar(final long ownerId, AvatarType avatarType, final OnAvatarGet onAvatarGet) {
 
         final RealmAvatar realmAvatar = getLastAvatar(ownerId);
         if (realmAvatar != null) {
             if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalFilePath());
+                onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalFilePath(), ownerId);
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalThumbnailPath());
+                onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalThumbnailPath(), ownerId);
             } else {
 
                 new AvatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
@@ -130,7 +130,7 @@ public class HelperAvatar {
                                         Realm realm1 = Realm.getDefaultInstance();
                                         for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).findAll()) {
                                             if (realmAvatar1.getFile().getToken().equals(token)) {
-                                                onAvatarGet.onAvatarGet(filepath);
+                                                onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
                                                 break;
                                             }
                                         }
@@ -269,7 +269,7 @@ public class HelperAvatar {
                 if (onAvatarDelete != null) {
                     getAvatar(ownerId, avatarType, new OnAvatarGet() {
                         @Override
-                        public void onAvatarGet(String avatarPath) {
+                        public void onAvatarGet(String avatarPath, long ownerId) {
                             onAvatarDelete.latestAvatarPath(avatarPath);
                         }
 
@@ -381,5 +381,85 @@ public class HelperAvatar {
         public void onError() {
             //TODO [Saeed Mozaffari] [2016-12-13 9:28 AM] - do something on download error (( hint : if was timeout reDownload file))
         }
+    }
+
+
+    //======================
+
+    public static void getAvatar1(final long ownerId, AvatarType avatarType, final OnAvatarGet onAvatarGet) {
+
+        final RealmAvatar realmAvatar = getLastAvatar(ownerId);
+        if (realmAvatar != null) {
+            if (realmAvatar.getFile().isFileExistsOnLocal()) {
+                onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalFilePath(), ownerId);
+            } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
+                onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalThumbnailPath(), ownerId);
+            } else {
+
+                new AvatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
+                    @Override
+                    public void onDownload(final String filepath, final String token) {
+
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).findAll()) {
+                                            if (realmAvatar1.getFile().getToken().equals(token)) {
+                                                realmAvatar1.getFile().setLocalThumbnailPath(filepath);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }, new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Realm realm1 = Realm.getDefaultInstance();
+                                        for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).findAll()) {
+                                            if (realmAvatar1.getFile().getToken().equals(token)) {
+                                                //onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
+                                                G.onUpdateAvatar.onUpdateAvatar(getRoomId(realmAvatar1.getOwnerId()));
+                                                break;
+                                            }
+                                        }
+                                        realm1.close();
+                                    }
+                                });
+                                realm.close();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
+
+                String[] initials = showInitials(ownerId, avatarType);
+                if (initials != null) {
+                    onAvatarGet.onShowInitials(initials[0], initials[1]);
+                }
+            }
+        } else {
+            String[] initials = showInitials(ownerId, avatarType);
+            if (initials != null) {
+                onAvatarGet.onShowInitials(initials[0], initials[1]);
+            }
+        }
+    }
+
+    private static long getRoomId(long ownerId) {
+        Realm realm = Realm.getDefaultInstance();
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+            if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
+                return realmRoom.getId();
+            }
+        }
+        realm.close();
+        return ownerId;
     }
 }

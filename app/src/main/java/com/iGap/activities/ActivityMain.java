@@ -18,6 +18,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1660,7 +1661,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
             @Override
-            public void onAvatarGet(final String avatarPath) {
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1683,7 +1684,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
     @Override
-    public void onUpdateAvatar(long roomId) {
-
+    public void onUpdateAvatar(final long roomId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("XXX", "roomId : " + roomId);
+                mAdapter.notifyWithRoomId(roomId);
+            }
+        });
     }
 }

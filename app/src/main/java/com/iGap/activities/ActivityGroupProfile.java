@@ -3123,7 +3123,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void showAvatar() {
         HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
             @Override
-            public void onAvatarGet(final String avatarPath) {
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -3152,7 +3152,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         if (filePathAvatar == null) {
             HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
                 @Override
-                public void onAvatarGet(final String avatarPath) {
+                public void onAvatarGet(final String avatarPath, long ownerId) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

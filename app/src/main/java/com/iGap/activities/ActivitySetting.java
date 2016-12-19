@@ -1760,7 +1760,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private void showImage() {
         HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
             @Override
-            public void onAvatarGet(final String avatarPath) {
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

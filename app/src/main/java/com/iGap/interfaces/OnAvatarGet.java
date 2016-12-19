@@ -10,7 +10,7 @@ public interface OnAvatarGet {
      *
      * @param avatarPath path for show image from that
      */
-    void onAvatarGet(String avatarPath);
+    void onAvatarGet(String avatarPath, long roomId);
 
     /**
      * call this method if avatarPath not exist
