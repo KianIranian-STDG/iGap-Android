@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -101,6 +100,7 @@ import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.interfaces.OnChatUpdateStatusResponse;
 import com.iGap.interfaces.OnClearChatHistory;
 import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
+import com.iGap.interfaces.OnClientJoinByUsername;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
@@ -173,6 +173,9 @@ import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatUpdateDraft;
 import com.iGap.request.RequestClientGetRoomHistory;
+import com.iGap.request.RequestClientJoinByUsername;
+import com.iGap.request.RequestClientSubscribeToRoom;
+import com.iGap.request.RequestClientUnsubscribeFromRoom;
 import com.iGap.request.RequestGroupDeleteMessage;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.iGap.request.RequestUserInfo;
@@ -184,20 +187,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -209,6 +198,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -336,6 +336,9 @@ public class ActivityChat extends ActivityEnhanced
     private LinearLayout lyt_user;
     private ProgressBar prgWaiting;
     private AVLoadingIndicatorView avi;
+    private Boolean isGoingFromUserLink = false;
+    private Boolean isNotJoin = false;
+    private String userName = "";
 
     @Override
     protected void onStart() {
@@ -395,6 +398,7 @@ public class ActivityChat extends ActivityEnhanced
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
 
+
         HelperNotificationAndBadge.isChatRoomNow = true;
 
         if (MusicPlayer.mp != null) {
@@ -415,14 +419,42 @@ public class ActivityChat extends ActivityEnhanced
 
         requestMessageHistory();
         setAvatar();
+
+        if (isGoingFromUserLink) {
+            new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
+        }
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
+        if (isGoingFromUserLink) {
+            new RequestClientUnsubscribeFromRoom().clientUnsubscribeFromRoom(mRoomId);
+        }
+
         onMusicListener = null;
     }
+
+    @Override protected void onStop() {
+        setDraft();
+        HelperNotificationAndBadge.isChatRoomNow = false;
+
+        if (isNotJoin) {
+
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findAll().deleteAllFromRealm();
+                }
+            });
+            realm.close();
+        }
+
+        super.onStop();
+    }
+
 
     boolean firstTimeGetHistory = false; //TODO [Saeed Mozaffari] [2016-11-10 12:47 PM] - hataman firstTimeGetHistory estefade nashavad chon eshtebah ast in ravesh
 
@@ -548,6 +580,47 @@ public class ActivityChat extends ActivityEnhanced
             mRoomId = extras.getLong("RoomId");
             isMuteNotification = extras.getBoolean("MUT");
             Log.i("CCC", "mRoomId : " + mRoomId);
+
+            isGoingFromUserLink = extras.getBoolean("GoingFromUserLink");
+            isNotJoin = extras.getBoolean("ISNotJoin");
+            userName = extras.getString("UserName");
+
+            if (isNotJoin) {
+
+                final LinearLayout layoutJoin = (LinearLayout) findViewById(R.id.ac_ll_join);
+
+                layoutJoin.setVisibility(View.VISIBLE);
+
+                layoutJoin.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View view) {
+
+                        G.onClientJoinByUsername = new OnClientJoinByUsername() {
+                            @Override public void onClientJoinByUsernameResponse() {
+
+                                isNotJoin = false;
+                                layoutJoin.setVisibility(View.GONE);
+
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override public void execute(Realm realm) {
+                                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setDeleted(false);
+                                    }
+                                });
+                                realm.close();
+                            }
+
+                            @Override public void onError(int majorCode, int minorCode) {
+
+                            }
+                        };
+
+                        new RequestClientJoinByUsername().clientJoinByUsername(userName);
+                    }
+                });
+            }
+
+
+
 
             messageId = extras.getLong("MessageId");
 
@@ -4202,12 +4275,6 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override
-    protected void onStop() {
-        setDraft();
-        HelperNotificationAndBadge.isChatRoomNow = false;
-        super.onStop();
-    }
 
     @Override
     protected void onDestroy() {

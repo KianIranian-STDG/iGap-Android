@@ -2,22 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:background="@color/background_editText"
-    android:layout_height="@dimen/dp100"
+    android:layout_height="@dimen/dp80"
     android:orientation="horizontal"
     >
 
 
   <com.iGap.module.CircleImageView
-      android:id="@+id/dal_img_room_picture"
+      android:id="@+id/daj_img_room_picture"
       android:layout_width="@dimen/dp60"
+      android:layout_margin="@dimen/dp12"
       android:layout_height="@dimen/dp60"
-      android:src="@drawable/emoji_1f3aa"
+      android:src="@mipmap/difaultimage"
 
       />
   <LinearLayout
       android:orientation="vertical"
-      android:padding="@dimen/dp6"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       >

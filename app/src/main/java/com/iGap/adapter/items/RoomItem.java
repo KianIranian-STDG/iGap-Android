@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
@@ -31,13 +30,11 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import java.util.List;
-
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.util.List;
 
 import static android.view.View.GONE;
 import static com.iGap.G.context;
@@ -414,7 +411,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
                 initials = realmRegisteredInfo.getInitials();
                 color = realmRegisteredInfo.getColor();
             } else {
-                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
                     if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
                         initials = realmRoom.getInitials();
                         color = realmRoom.getColor();
@@ -441,7 +438,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
     private long getRoomId(long ownerId) {
         Realm realm = Realm.getDefaultInstance();
-        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
             if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
                 return realmRoom.getId();
             }

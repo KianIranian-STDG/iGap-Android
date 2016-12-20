@@ -466,6 +466,31 @@
             android:textSize="@dimen/sp18"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ac_ll_join"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp48"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/dp48"
+        android:background="@color/green"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+
+        <TextView
+            android:id="@+id/ac_txt_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp18"
+            android:text="Join"
+            />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/ac_ll_message_navigation"

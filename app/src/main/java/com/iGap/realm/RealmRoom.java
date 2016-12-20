@@ -4,7 +4,6 @@ import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -27,6 +26,7 @@ public class RealmRoom extends RealmObject {
     private long updatedTime;
     private String sharedMediaCount = "";
     private String actionState;
+    private boolean isDeleted = false;
 
     public long getUpdatedTime() {
         if (getLastMessage() != null && getLastMessage().isValid()) {
@@ -35,6 +35,14 @@ public class RealmRoom extends RealmObject {
             }
         }
         return updatedTime;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public void setUpdatedTime(long updatedTime) {
@@ -78,6 +86,8 @@ public class RealmRoom extends RealmObject {
             realmRoom = realm.createObject(RealmRoom.class, room.getId());
             realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
         }
+
+        realmRoom.isDeleted = false;
 
         realmRoom.setColor(room.getColor());
         realmRoom.setInitials(room.getInitials());

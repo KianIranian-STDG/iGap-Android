@@ -2,8 +2,9 @@ package com.iGap.response;
 
 import android.support.annotation.CallSuper;
 import android.util.Log;
-
 import com.iGap.WebSocketClient;
+import com.iGap.helper.HelperError;
+import com.iGap.proto.ProtoError;
 
 public abstract class MessageHandler {
 
@@ -31,6 +32,14 @@ public abstract class MessageHandler {
 
     @CallSuper
     public void error() {
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        HelperError.showSnackMessage(HelperError.getErrorFromCode(majorCode, minorCode));
+
+
         Log.i("MSGE", "MessageHandler error : " + actionId + " || " + message);
     }
 }

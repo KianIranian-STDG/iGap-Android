@@ -1,13 +1,12 @@
 package com.iGap.helper;
 
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -15,16 +14,36 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.activities.ActivityWebView;
+import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnClientCheckInviteLink;
+import com.iGap.interfaces.OnClientJoinByInviteLink;
+import com.iGap.interfaces.OnClientResolveUsername;
+import com.iGap.module.AndroidUtils;
+import com.iGap.module.CircleImageView;
 import com.iGap.module.SHP_SETTING;
+import com.iGap.proto.ProtoClientResolveUsername;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.request.RequestClientCheckInviteLink;
+import com.iGap.request.RequestClientJoinByInviteLink;
+import com.iGap.request.RequestClientResolveUsername;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import io.realm.Realm;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.iGap.G.context;
 
 /**
  * Created by android3 on 11/26/2016.
@@ -292,7 +311,7 @@ public class HelperUrl {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override public void onClick(View widget) {
 
-                Log.e("ddd", text + "          atsign click");
+                checkUsernameAndGoToRoom(text);
             }
 
             @Override public void updateDrawState(TextPaint ds) {
@@ -304,9 +323,9 @@ public class HelperUrl {
         builder.setSpan(clickableSpan, start, start + text.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    //*********************************************************************************************************
+    //**************************************    invite by link *******************************************************************
 
-    private static void checkAndJoinToRoom(String token) {
+    private static void checkAndJoinToRoom(final String token) {
 
         Log.e("dddd", "token  " + token);
 
@@ -314,11 +333,11 @@ public class HelperUrl {
 
         G.onClientCheckInviteLink = new OnClientCheckInviteLink() {
             @Override public void onClientCheckInviteLinkResponse(ProtoGlobal.Room room) {
-                openDialogJoin(room);
+                openDialogJoin(room, token);
             }
 
             @Override public void onError(int majorCode, int minorCode) {
-                showErrorToUser(majorCode, minorCode);
+
             }
         };
 
@@ -330,143 +349,215 @@ public class HelperUrl {
 
     }
 
-    private static void openDialogJoin(ProtoGlobal.Room room) {
+    private static void openDialogJoin(final ProtoGlobal.Room room, final String token) {
 
         Log.e("dddddd", "  room    " + room);
 
-        DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
+        if (room == null) return;
+
+        String title = "do you want to join this ";
+        String memberNumber = "";
+
+        switch (room.getType()) {
+            case CHANNEL:
+                title += G.context.getString(R.string.channel);
+                memberNumber = room.getChannelRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member);
+                break;
+            case GROUP:
+                title += G.context.getString(R.string.group);
+                memberNumber = room.getGroupRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member);
+                break;
+            }
+
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(title)
+            .customView(R.layout.dialog_alert_join, true)
+            .positiveText("Join")
+            .negativeText(android.R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    joinToRoom(token, room);
+                }
+            })
+            .build();
+
+        final CircleImageView imageView = (CircleImageView) dialog.findViewById(R.id.daj_img_room_picture);
+
+        TextView txtRoomName = (TextView) dialog.findViewById(R.id.daj_txt_room_name);
+        txtRoomName.setText(room.getTitle());
+
+        TextView txtMemeberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
+        txtMemeberNumber.setText(memberNumber);
+
+        HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+            @Override public void onAvatarGet(final String avatarPath, long roomId) {
+
+                G.currentActivity.runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imageView);
+                        dialog.show();
+                    }
+                });
+            }
+
+            @Override public void onShowInitials(String initials, String color) {
 
             }
-        };
-
-        DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-
-            }
-        };
-
-        new AlertDialog.Builder(G.currentActivity).setMessage("Do You want to join to this room")
-            .setCancelable(false)
-            .setPositiveButton("Join", onOkListener)
-            .setNegativeButton(G.context.getString(R.string.cancel), onCancelListener)
-            .create()
-            .show();
+        });
     }
 
-    private static void showErrorToUser(int majorCode, int minorCode) {
-        Log.e("dddddd", "  error    " + majorCode + "  " + minorCode);
+    private static void joinToRoom(String token, final ProtoGlobal.Room room) {
 
-        //   629  1
+        G.onClientJoinByInviteLink = new OnClientJoinByInviteLink() {
+            @Override public void onClientJoinByInviteLinkResponse() {
 
-        if (majorCode == 5 && minorCode == 1) {
-            G.currentActivity.runOnUiThread(new Runnable() {
-                @Override public void run() {
-                    final Snackbar snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
+                RealmRoom.putOrUpdate(room);
 
-                    snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
+                Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+                intent.putExtra("RoomId", room.getId());
+                G.currentActivity.startActivity(intent);
+            }
+
+            @Override public void onError(int majorCode, int minorCode) {
+
+            }
+        };
+
+        new RequestClientJoinByInviteLink().clientJoinByInviteLink(token);
+    }
+
+    //************************************  go to room by userName   *********************************************************************
+
+    private static void checkUsernameAndGoToRoom(String userName) {
+
+        Log.e("ddd", userName + "          atsign click");
+
+        if (userName == null || userName.length() < 1) return;
+
+        // this methode check user name and if it is ok go to room
+        G.onClientResolveUsername = new OnClientResolveUsername() {
+            @Override public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
+
+                openChat(type, user, room);
+            }
+
+            @Override public void onError(int majorCode, int minorCode) {
+
+            }
+        };
+
+        new RequestClientResolveUsername().channelAddMessageReaction(userName);
+
+    }
+
+    private static void openChat(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
+
+        switch (type) {
+
+            case USER:
+                goToChat(user, room);
+                break;
+            case ROOM:
+                goToRoom(room);
+                break;
         }
     }
 
-    //public void popUpMenuSharedMedai() {
-    //
-    //    MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).items(R.array.pop_up_shared_media).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
-    //        @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-    //
-    //            offset = 0;
-    //
-    //            switch (which) {
-    //                case 0:
-    //                    fillListImage();
-    //                    break;
-    //                case 1:
-    //                    fillListVideo();
-    //                    break;
-    //                case 2:
-    //                    fillListAudio();
-    //                    break;
-    //                case 3:
-    //                    fillListVoice();
-    //                    break;
-    //                case 4:
-    //                    fillListGif();
-    //                    break;
-    //                case 5:
-    //                    fillListFile();
-    //                    break;
-    //                case 6:
-    //                    fillListLink();
-    //                    break;
-    //            }
-    //        }
-    //    }).show();
-    //
-    //    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-    //    layoutParams.copyFrom(dialog.getWindow().getAttributes());
-    //    layoutParams.width = (int) getResources().getDimension(R.dimen.dp220);
-    //    layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-    //
-    //    dialog.getWindow().setAttributes(layoutParams);
-    //}
-    //
-    //
-    //public void showCustomView() {
-    //    MaterialDialog dialog = new MaterialDialog.Builder(this)
-    //        .title(R.string.googleWifi)
-    //        .customView(R.layout.dialog_customview, true)
-    //        .positiveText(R.string.connect)
-    //        .negativeText(android.R.string.cancel)
-    //        .onPositive(new MaterialDialog.SingleButtonCallback() {
-    //            @Override
-    //            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-    //                showToast("Password: " + passwordInput.getText().toString());
-    //            }
-    //        }).build();
-    //
-    //    positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
-    //    //noinspection ConstantConditions
-    //    passwordInput = (EditText) dialog.getCustomView().findViewById(R.id.password);
-    //    passwordInput.addTextChangedListener(new TextWatcher() {
-    //        @Override
-    //        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-    //        }
-    //
-    //        @Override
-    //        public void onTextChanged(CharSequence s, int start, int before, int count) {
-    //            positiveAction.setEnabled(s.toString().trim().length() > 0);
-    //        }
-    //
-    //        @Override
-    //        public void afterTextChanged(Editable s) {
-    //        }
-    //    });
-    //
-    //    // Toggling the show password CheckBox will mask or unmask the password input EditText
-    //    CheckBox checkbox = (CheckBox) dialog.getCustomView().findViewById(R.id.showPassword);
-    //    checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-    //        @Override
-    //        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    //            passwordInput.setInputType(!isChecked ? InputType.TYPE_TEXT_VARIATION_PASSWORD : InputType.TYPE_CLASS_TEXT);
-    //            passwordInput.setTransformationMethod(!isChecked ? PasswordTransformationMethod.getInstance() : null);
-    //        }
-    //    });
-    //
-    //    int widgetColor = ThemeSingleton.get().widgetColor;
-    //    MDTintHelper.setTint(checkbox,
-    //        widgetColor == 0 ? ContextCompat.getColor(this, R.color.accent) : widgetColor);
-    //
-    //    MDTintHelper.setTint(passwordInput,
-    //        widgetColor == 0 ? ContextCompat.getColor(this, R.color.accent) : widgetColor);
-    //
-    //    dialog.show();
-    //    positiveAction.setEnabled(false); // disabled by default
-    //}
+    private static void goToChat(final ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
+
+        Long id = room.getChatRoomExtra().getPeer().getId();
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+
+        if (realmRoom != null) {
+            Intent intent = new Intent(context, ActivityChat.class);
+            intent.putExtra("RoomId", realmRoom.getId());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            G.currentActivity.startActivity(intent);
+        } else {
+
+            addchatToDatabase(user);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override public void run() {
+
+                    Intent intent = new Intent(context, ActivityChat.class);
+                    intent.putExtra("peerId", user.getId());
+                    intent.putExtra("RoomId", user.getId());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+
+                }
+            }, 600);
+        }
+
+        realm.close();
+    }
+
+    private static void addchatToDatabase(final ProtoGlobal.RegisteredUser user) {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
+                if (realmRegisteredInfo == null) {
+                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
+                    realmRegisteredInfo.setId(user.getId());
+                }
+                RealmAvatar.put(user.getId(), user.getAvatar(), true);
+                realmRegisteredInfo.setUsername(user.getUsername());
+                realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
+                realmRegisteredInfo.setFirstName(user.getFirstName());
+                realmRegisteredInfo.setLastName(user.getLastName());
+                realmRegisteredInfo.setDisplayName(user.getDisplayName());
+                realmRegisteredInfo.setInitials(user.getInitials());
+                realmRegisteredInfo.setColor(user.getColor());
+                realmRegisteredInfo.setStatus(user.getStatus().toString());
+                realmRegisteredInfo.setAvatarCount(user.getAvatarCount());
+                realmRegisteredInfo.setMutual(user.getMutual());
+            }
+        });
+
+        realm.close();
+    }
+
+    private static void goToRoom(final ProtoGlobal.Room room) {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+
+        if (realmRoom != null) {
+            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+            intent.putExtra("RoomId", room.getId());
+            intent.putExtra("GoingFromUserLink", true);
+            G.currentActivity.startActivity(intent);
+        } else {
+
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+
+                    RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room);
+                    realmRoom1.setDeleted(true);
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override public void onSuccess() {
+
+                    Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+                    intent.putExtra("RoomId", room.getId());
+                    intent.putExtra("GoingFromUserLink", true);
+                    intent.putExtra("ISNotJoin", true);
+                    G.currentActivity.startActivity(intent);
+                }
+            });
+        }
+
+        realm.close();
+
+    }
+
 
 }

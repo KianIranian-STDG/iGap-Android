@@ -12,6 +12,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.iGap.activities.ActivityShearedMedia;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperMimeType;
+import com.iGap.helper.HelperUrl;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MusicPlayer;
@@ -717,8 +719,9 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
             txtLink = (TextView) itemView.findViewById(R.id.smsll_txt_shared_link);
 
-            txtLink.setText(list.get(position).item.getMessage());
+            txtLink.setText(HelperUrl.setUrlLink(list.get(position).item.getMessage(), true, false, "", true));
 
+            txtLink.setMovementMethod(LinkMovementMethod.getInstance());
             messageProgress.setVisibility(View.GONE);
         }
     }
