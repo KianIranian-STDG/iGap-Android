@@ -49,6 +49,9 @@ public class MenuFragment extends Fragment {
     }
 
     public void onOpenMenu() {
+        if (ActivityMain.arcMenu != null && ActivityMain.arcMenu.isMenuOpened()) {
+            ActivityMain.arcMenu.toggleMenu();
+        }
 
         if (ActivityMain.appBarLayout != null) {
 
@@ -58,9 +61,7 @@ public class MenuFragment extends Fragment {
     }
 
 
-
     public void onCloseMenu() {
-
         if (ActivityMain.appBarLayout != null) {
 
             ((View) ActivityMain.appBarLayout).setEnabled(true);

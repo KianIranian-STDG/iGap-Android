@@ -467,6 +467,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             public void onComplete(RippleView rippleView) {
 
                 mLeftDrawerLayout.toggle();
+//                if (arcMenu.isShown()){
+//                    arcMenu.toggleMenu();
+//                }
             }
         });
     }
@@ -717,6 +720,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         mLeftDrawerLayout.toggle();
+//        if (arcMenu.isShown()){
+//            arcMenu.toggleMenu();
+//        }
         return false;
     }
 

@@ -293,7 +293,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 finish();
             }
         });
-        txtBack.setTypeface(G.flaticon);
         appBarLayout = (AppBarLayout) findViewById(R.id.pch_appbar);
         titleToolbar = (TextView) findViewById(R.id.pch_txt_titleToolbar);
         titleToolbar.setText("" + title);

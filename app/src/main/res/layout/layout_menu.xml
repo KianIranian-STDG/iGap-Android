@@ -117,7 +117,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
-                        android:padding="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp8"
                         android:text="@string/New_Chat"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
@@ -147,7 +150,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
-                        android:padding="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp8"
                         android:text="@string/New_Group"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
@@ -182,7 +188,10 @@
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
                         android:layout_marginTop="@dimen/dp4"
-                        android:padding="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp8"
                         android:text="@string/New_Chanel"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
@@ -220,7 +229,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
-                        android:padding="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp8"
                         android:text="@string/contacts"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
@@ -252,10 +264,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
-                        android:padding="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp8"
                         android:text="@string/Invite_Friends"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp14"/>
+                        android:textSize="@dimen/sp14"
+                        android:id="@+id/textView2"/>
 
                 </LinearLayout>
 
@@ -283,7 +299,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
-                        android:padding="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp8"
                         android:text="@string/chi_title_setting"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
@@ -313,10 +332,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp4"
                         android:layout_marginStart="@dimen/dp4"
-                        android:padding="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp8"
                         android:text="@string/iGap_FAQ"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp14"/>
+                        android:textSize="@dimen/sp14"
+                        android:id="@+id/textView3"/>
 
                 </LinearLayout>
             </LinearLayout>
