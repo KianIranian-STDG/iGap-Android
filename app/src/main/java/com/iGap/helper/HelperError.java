@@ -20,7 +20,7 @@ public class HelperError {
                 }
                 break;
             case 5:
-                if (minorCode == 1) error = "time out  server not response";
+                //if (minorCode == 1) error = "time out  server not response";
                 break;
             case 623:
                 if (minorCode == 1) error = G.context.getResources().getString(R.string.E_713_1);
