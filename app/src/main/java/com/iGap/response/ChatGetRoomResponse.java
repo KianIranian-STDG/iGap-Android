@@ -5,7 +5,6 @@ import com.iGap.proto.ProtoChatGetRoom;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
-
 import io.realm.Realm;
 
 public class ChatGetRoomResponse extends MessageHandler {
@@ -36,12 +35,11 @@ public class ChatGetRoomResponse extends MessageHandler {
          * hint : we can set another interface for another state.
          */
 
-        if (chatGetRoomResponse.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) {
+        if ((chatGetRoomResponse.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) || identity != null) {
 
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+                @Override public void execute(Realm realm) {
                     RealmRoom.putOrUpdate(chatGetRoomResponse.getRoom());
                 }
             });
@@ -51,6 +49,7 @@ public class ChatGetRoomResponse extends MessageHandler {
         } else {
             G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoom().getId());
         }
+
 
     }
 

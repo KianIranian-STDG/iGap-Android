@@ -2,7 +2,6 @@ package com.iGap.helper;
 
 import android.support.design.widget.Snackbar;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.WebSocketClient;
@@ -34,6 +33,13 @@ public class HelperError {
                 } else if (minorCode == 3)
                     error = G.context.getResources().getString(R.string.E_713_1);
                 break;
+            case 638:
+                if (minorCode == 1) error = G.context.getResources().getString(R.string.E_713_1);
+                break;
+            case 714:
+                if (minorCode == 1) error = G.context.getResources().getString(R.string.E_713_1);
+                break;
+
         }
 
         return error;

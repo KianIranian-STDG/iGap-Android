@@ -17,4 +17,17 @@ public class RequestChatGetRoom {
             e.printStackTrace();
         }
     }
+
+    public void chatGetRoomWithIdentity(long peerId) {
+
+        ProtoChatGetRoom.ChatGetRoom.Builder chatGetRoom = ProtoChatGetRoom.ChatGetRoom.newBuilder();
+        chatGetRoom.setPeerId(peerId);
+
+        RequestWrapper requestWrapper = new RequestWrapper(200, chatGetRoom, "Identity");
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 }

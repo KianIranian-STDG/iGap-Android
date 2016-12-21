@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -87,6 +86,7 @@ import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperSetAction;
+import com.iGap.helper.HelperUrl;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.IResendMessage;
@@ -192,20 +192,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -217,6 +203,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -449,11 +446,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         if (isNotJoin) {
 
+            //delete all  deleted row from datacase
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findAll().deleteAllFromRealm();
+                @Override public void execute(Realm realm) {
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll().deleteAllFromRealm();
                 }
             });
             realm.close();
@@ -603,29 +600,33 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 layoutJoin.setVisibility(View.VISIBLE);
 
                 layoutJoin.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    @Override public void onClick(View view) {
+
+                        HelperUrl.showIndeterminateProgressDialog();
 
                         G.onClientJoinByUsername = new OnClientJoinByUsername() {
-                            @Override
-                            public void onClientJoinByUsernameResponse() {
+                            @Override public void onClientJoinByUsernameResponse() {
 
                                 isNotJoin = false;
-                                layoutJoin.setVisibility(View.GONE);
+                                HelperUrl.dialogWaiting.dismiss();
+
+                                ActivityChat.this.runOnUiThread(new Runnable() {
+                                    @Override public void run() {
+                                        layoutJoin.setVisibility(View.GONE);
+                                    }
+                                });
 
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
+                                    @Override public void execute(Realm realm) {
                                         realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setDeleted(false);
                                     }
                                 });
                                 realm.close();
                             }
 
-                            @Override
-                            public void onError(int majorCode, int minorCode) {
-
+                            @Override public void onError(int majorCode, int minorCode) {
+                                HelperUrl.dialogWaiting.dismiss();
                             }
                         };
 

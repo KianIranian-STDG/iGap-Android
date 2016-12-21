@@ -22,6 +22,7 @@ import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.activities.ActivityWebView;
 import com.iGap.interfaces.OnAvatarGet;
+import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnClientCheckInviteLink;
 import com.iGap.interfaces.OnClientJoinByInviteLink;
 import com.iGap.interfaces.OnClientResolveUsername;
@@ -35,6 +36,7 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.request.RequestChatGetRoom;
 import com.iGap.request.RequestClientCheckInviteLink;
 import com.iGap.request.RequestClientJoinByInviteLink;
 import com.iGap.request.RequestClientResolveUsername;
@@ -73,8 +75,9 @@ public class HelperUrl {
     //            Pattern.CASE_INSENSITIVE );
     ////**********************************************************************************************************
 
-    public static int LinkColor = Color.CYAN;
+    public static int LinkColor = Color.GRAY;
     public static String igapSite = "igap.im/";
+    public static MaterialDialog dialogWaiting;
 
     public static SpannableStringBuilder setUrlLink(String text, boolean withClickable, boolean withHash, String messageID, boolean withAtSign) {
 
@@ -175,8 +178,6 @@ public class HelperUrl {
                     String token = url.substring(index + 1);
                     checkAndJoinToRoom(token);
                 }
-
-                Log.e("dddd", url);
             }
 
             @Override public void updateDrawState(TextPaint ds) {
@@ -327,36 +328,47 @@ public class HelperUrl {
 
     private static void checkAndJoinToRoom(final String token) {
 
-        Log.e("dddd", "token  " + token);
-
         if (token == null || token.length() < 0) return;
+
+        showIndeterminateProgressDialog();
 
         G.onClientCheckInviteLink = new OnClientCheckInviteLink() {
             @Override public void onClientCheckInviteLinkResponse(ProtoGlobal.Room room) {
+                dialogWaiting.dismiss();
                 openDialogJoin(room, token);
             }
 
             @Override public void onError(int majorCode, int minorCode) {
-
+                dialogWaiting.dismiss();
             }
         };
 
         new RequestClientCheckInviteLink().clientCheckInviteLink(token);
-
-        //1 check invite link   and if it is ok
-        //2 open dialog   with avatar and name     get avatar from helper getAvatar
-        // 3 btn join  and btn cancel    if join click add to data base
-
     }
 
     private static void openDialogJoin(final ProtoGlobal.Room room, final String token) {
 
-        Log.e("dddddd", "  room    " + room);
-
         if (room == null) return;
+
+        final Realm realm = Realm.getDefaultInstance();
+
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+
+        if (realmRoom == null) {
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+                    RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room);
+                    realmRoom1.setDeleted(true);
+                }
+            });
+        }
+
+        realm.close();
 
         String title = "do you want to join this ";
         String memberNumber = "";
+        final CircleImageView[] imageView = new CircleImageView[1];
 
         switch (room.getType()) {
             case CHANNEL:
@@ -367,51 +379,89 @@ public class HelperUrl {
                 title += G.context.getString(R.string.group);
                 memberNumber = room.getGroupRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member);
                 break;
-            }
+        }
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(title)
-            .customView(R.layout.dialog_alert_join, true)
-            .positiveText("Join")
-            .negativeText(android.R.string.cancel)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        final String finalMemberNumber = memberNumber;
+        final String finalTitle = title;
 
-                    joinToRoom(token, room);
-                }
-            })
-            .build();
+        G.currentActivity.runOnUiThread(new Runnable() {
+            @Override public void run() {
 
-        final CircleImageView imageView = (CircleImageView) dialog.findViewById(R.id.daj_img_room_picture);
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle)
+                    .customView(R.layout.dialog_alert_join, true)
+                    .positiveText("Join")
+                    .cancelable(false)
+                    .negativeText(android.R.string.cancel)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-        TextView txtRoomName = (TextView) dialog.findViewById(R.id.daj_txt_room_name);
-        txtRoomName.setText(room.getTitle());
+                            joinToRoom(token, room);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Realm realm = Realm.getDefaultInstance();
+                            final RealmRoom reamRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
 
-        TextView txtMemeberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
-        txtMemeberNumber.setText(memberNumber);
+                            if (reamRoom != null) {
+                                if (reamRoom.isDeleted()) {
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            reamRoom.deleteFromRealm();
+                                        }
+                                    });
+                                }
+                            }
 
-        HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
-            @Override public void onAvatarGet(final String avatarPath, long roomId) {
+                            realm.close();
+                        }
+                    })
+                    .build();
 
-                G.currentActivity.runOnUiThread(new Runnable() {
-                    @Override public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imageView);
-                        dialog.show();
+                imageView[0] = (CircleImageView) dialog.findViewById(R.id.daj_img_room_picture);
+
+                TextView txtRoomName = (TextView) dialog.findViewById(R.id.daj_txt_room_name);
+                txtRoomName.setText(room.getTitle());
+
+                TextView txtMemeberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
+                txtMemeberNumber.setText(finalMemberNumber);
+
+                dialog.show();
+
+                HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+                    @Override public void onAvatarGet(final String avatarPath, long roomId) {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
+                    }
+
+                    @Override public void onShowInitials(String initials, String color) {
+                        imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
-            }
-
-            @Override public void onShowInitials(String initials, String color) {
-
             }
         });
     }
 
     private static void joinToRoom(String token, final ProtoGlobal.Room room) {
 
+        showIndeterminateProgressDialog();
+
         G.onClientJoinByInviteLink = new OnClientJoinByInviteLink() {
             @Override public void onClientJoinByInviteLinkResponse() {
 
-                RealmRoom.putOrUpdate(room);
+                dialogWaiting.dismiss();
+
+                Realm realm = Realm.getDefaultInstance();
+                final RealmRoom reamRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+
+                if (reamRoom != null) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override public void execute(Realm realm) {
+                            reamRoom.setDeleted(false);
+                        }
+                    });
+                }
+
+                realm.close();
 
                 Intent intent = new Intent(G.currentActivity, ActivityChat.class);
                 intent.putExtra("RoomId", room.getId());
@@ -419,7 +469,7 @@ public class HelperUrl {
             }
 
             @Override public void onError(int majorCode, int minorCode) {
-
+                dialogWaiting.dismiss();
             }
         };
 
@@ -428,44 +478,42 @@ public class HelperUrl {
 
     //************************************  go to room by userName   *********************************************************************
 
-    private static void checkUsernameAndGoToRoom(String userName) {
-
-        Log.e("ddd", userName + "          atsign click");
+    private static void checkUsernameAndGoToRoom(final String userName) {
 
         if (userName == null || userName.length() < 1) return;
+
+        showIndeterminateProgressDialog();
 
         // this methode check user name and if it is ok go to room
         G.onClientResolveUsername = new OnClientResolveUsername() {
             @Override public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
-
-                openChat(type, user, room);
+                dialogWaiting.dismiss();
+                openChat(userName, type, user, room);
             }
 
             @Override public void onError(int majorCode, int minorCode) {
-
+                dialogWaiting.dismiss();
             }
         };
 
         new RequestClientResolveUsername().channelAddMessageReaction(userName);
-
     }
 
-    private static void openChat(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
+    private static void openChat(String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
 
         switch (type) {
-
             case USER:
-                goToChat(user, room);
+                goToChat(user);
                 break;
             case ROOM:
-                goToRoom(room);
+                goToRoom(username, room);
                 break;
         }
     }
 
-    private static void goToChat(final ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
+    private static void goToChat(final ProtoGlobal.RegisteredUser user) {
 
-        Long id = room.getChatRoomExtra().getPeer().getId();
+        Long id = user.getId();
 
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
@@ -475,89 +523,151 @@ public class HelperUrl {
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.currentActivity.startActivity(intent);
+
+            realm.close();
         } else {
 
-            addchatToDatabase(user);
+            showIndeterminateProgressDialog();
 
-            new Handler().postDelayed(new Runnable() {
-                @Override public void run() {
-
-                    Intent intent = new Intent(context, ActivityChat.class);
-                    intent.putExtra("peerId", user.getId());
-                    intent.putExtra("RoomId", user.getId());
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-
+            G.onChatGetRoom = new OnChatGetRoom() {
+                @Override public void onChatGetRoom(long roomId) {
+                    dialogWaiting.dismiss();
                 }
-            }, 600);
-        }
 
-        realm.close();
+                @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+                    addchatToDatabaseAndGoToChat(user, room.getId());
+                    dialogWaiting.dismiss();
+                }
+
+                @Override public void onChatGetRoomTimeOut() {
+                    dialogWaiting.dismiss();
+                }
+
+                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+                    dialogWaiting.dismiss();
+                }
+            };
+
+            new RequestChatGetRoom().chatGetRoomWithIdentity(user.getId());
+        }
     }
 
-    private static void addchatToDatabase(final ProtoGlobal.RegisteredUser user) {
+    public static void showIndeterminateProgressDialog() {
 
-        Realm realm = Realm.getDefaultInstance();
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
-
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
-                if (realmRegisteredInfo == null) {
-                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
-                    realmRegisteredInfo.setId(user.getId());
-                }
-                RealmAvatar.put(user.getId(), user.getAvatar(), true);
-                realmRegisteredInfo.setUsername(user.getUsername());
-                realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
-                realmRegisteredInfo.setFirstName(user.getFirstName());
-                realmRegisteredInfo.setLastName(user.getLastName());
-                realmRegisteredInfo.setDisplayName(user.getDisplayName());
-                realmRegisteredInfo.setInitials(user.getInitials());
-                realmRegisteredInfo.setColor(user.getColor());
-                realmRegisteredInfo.setStatus(user.getStatus().toString());
-                realmRegisteredInfo.setAvatarCount(user.getAvatarCount());
-                realmRegisteredInfo.setMutual(user.getMutual());
+        G.currentActivity.runOnUiThread(new Runnable() {
+            @Override public void run() {
+                dialogWaiting = new MaterialDialog.Builder(G.currentActivity).title(R.string.please_wait)
+                    .content(R.string.please_wait)
+                    .progress(true, 0)
+                    .cancelable(false)
+                    .progressIndeterminateStyle(false)
+                    .show();
             }
         });
-
-        realm.close();
     }
 
-    private static void goToRoom(final ProtoGlobal.Room room) {
+    private static void addchatToDatabaseAndGoToChat(final ProtoGlobal.RegisteredUser user, final long roomid) {
 
-        Realm realm = Realm.getDefaultInstance();
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+
+                final Realm realm = Realm.getDefaultInstance();
+
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+
+                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
+                        if (realmRegisteredInfo == null) {
+                            realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
+                            realmRegisteredInfo.setId(user.getId());
+                        }
+                        RealmAvatar.put(user.getId(), user.getAvatar(), true);
+                        realmRegisteredInfo.setUsername(user.getUsername());
+                        realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
+                        realmRegisteredInfo.setFirstName(user.getFirstName());
+                        realmRegisteredInfo.setLastName(user.getLastName());
+                        realmRegisteredInfo.setDisplayName(user.getDisplayName());
+                        realmRegisteredInfo.setInitials(user.getInitials());
+                        realmRegisteredInfo.setColor(user.getColor());
+                        realmRegisteredInfo.setStatus(user.getStatus().toString());
+                        realmRegisteredInfo.setAvatarCount(user.getAvatarCount());
+                        realmRegisteredInfo.setMutual(user.getMutual());
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
+
+                        Intent intent = new Intent(context, ActivityChat.class);
+                        intent.putExtra("peerId", user.getId());
+                        intent.putExtra("RoomId", roomid);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
+            }
+        });
+    }
+
+    private static void goToRoom(String username, final ProtoGlobal.Room room) {
+
+        final Realm realm = Realm.getDefaultInstance();
 
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
 
         if (realmRoom != null) {
-            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-            intent.putExtra("RoomId", room.getId());
-            intent.putExtra("GoingFromUserLink", true);
-            G.currentActivity.startActivity(intent);
+
+            if (realmRoom.isDeleted()) {
+                addRoomToDataBaseAndGoToRoom(username, room);
+            } else {
+                Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+                intent.putExtra("RoomId", room.getId());
+                G.currentActivity.startActivity(intent);
+            }
+
+            realm.close();
         } else {
 
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
-
-                    RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room);
-                    realmRoom1.setDeleted(true);
-                }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override public void onSuccess() {
-
-                    Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-                    intent.putExtra("RoomId", room.getId());
-                    intent.putExtra("GoingFromUserLink", true);
-                    intent.putExtra("ISNotJoin", true);
-                    G.currentActivity.startActivity(intent);
-                }
-            });
+            addRoomToDataBaseAndGoToRoom(username, room);
         }
-
-        realm.close();
-
     }
 
+    private static void addRoomToDataBaseAndGoToRoom(final String username, final ProtoGlobal.Room room) {
 
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+
+                final Realm realm = Realm.getDefaultInstance();
+
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+
+                        RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room);
+                        realmRoom1.setDeleted(true);                            // if in chat activity join to room set deleted goes to false
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
+
+                        Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+                        intent.putExtra("RoomId", room.getId());
+                        intent.putExtra("GoingFromUserLink", true);
+                        intent.putExtra("ISNotJoin", true);
+                        intent.putExtra("UserName", username);
+
+                        G.currentActivity.startActivity(intent);
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
+            }
+        });
+    }
 }
