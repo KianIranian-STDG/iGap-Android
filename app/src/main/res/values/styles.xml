@@ -179,4 +179,21 @@
         <item name="indicatorName">BallPulseIndicator</item>
     </style>
 
+
+    <style name="TextIconAppearance.menu" parent="android:TextAppearance">
+        <item name="fontPath">fonts/MaterialIcons-Regular.ttf</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/gray_4c</item>
+    </style>
+
+    <style name="TextIconAppearance.all" parent="android:TextAppearance">
+        <item name="fontPath">fonts/MaterialIcons-Regular.ttf</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="TextIconAppearance_toolbar" parent="android:TextAppearance">
+        <item name="fontPath">fonts/MaterialIcons-Regular.ttf</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
 </resources>

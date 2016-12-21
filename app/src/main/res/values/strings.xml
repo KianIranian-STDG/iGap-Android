@@ -462,8 +462,8 @@
     <string name="normal_error">can\'t do it please try later</string>
 
 
-    <string name="list_admin">List Admin</string>
-    <string name="list_modereator">List Moderator</string>
+    <string name="list_admin">Admin List</string>
+    <string name="list_modereator">Moderator List</string>
     <string name="desc">Description</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

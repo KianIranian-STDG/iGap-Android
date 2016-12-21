@@ -13,30 +13,30 @@
         android:padding="@dimen/dp20">
 
         <com.iGap.module.MaterialDesignTextView
-            fontPath="fonts/Flaticon.ttf"
+            android:textAppearance="@style/TextIconAppearance.all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginStart="@dimen/dp16"
             android:text="@string/md_right_arrow_button"
-            android:textSize="@dimen/sp18"/>
+            android:textSize="@dimen/sp22"/>
 
         <com.iGap.module.MaterialDesignTextView
-            fontPath="fonts/Flaticon.ttf"
+            android:textAppearance="@style/TextIconAppearance.all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp40"
             android:text="@string/md_round_info_button"
-            android:textSize="@dimen/sp18"/>
+            android:textSize="@dimen/sp22"/>
 
         <com.iGap.module.MaterialDesignTextView
-            fontPath="fonts/Flaticon.ttf"
+            android:textAppearance="@style/TextIconAppearance.all"
             android:id="@+id/popup_faq_reload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp40"
             android:text="@string/md_refresh_button"
-            android:textSize="@dimen/sp18"/>
+            android:textSize="@dimen/sp22"/>
 
     </LinearLayout>
 

@@ -73,13 +73,12 @@
 
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/pu_txt_agreeImage"
-                            fontPath="fonts/Flaticon.ttf"
+                            android:textAppearance="@style/TextIconAppearance_toolbar"
                             android:layout_width="@dimen/dp52"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:text="@string/md_back_arrow"
-                            android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp18"/>
+                            android:textColor="@color/whit_background"/>
                     </com.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
@@ -98,7 +97,7 @@
                         android:id="@+id/pu_ripple_crop"
                         rv_centered="true"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         app:rv_alpha="200"
                         app:rv_centered="true"
                         app:rv_rippleDuration="150"
@@ -107,14 +106,14 @@
 
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/pu_txt_crop"
-                            fontPath="fonts/Flaticon.ttf"
+                            android:textAppearance="@style/TextIconAppearance_toolbar"
                             android:layout_width="@dimen/dp52"
                             android:layout_height="match_parent"
                             android:layout_gravity="right"
                             android:gravity="center"
                             android:text="@string/md_crop_button"
-                            android:textColor="@color/whit_background"
-                            android:textSize="@dimen/sp18"/>
+                            android:textSize="@dimen/sp22"
+                            android:textColor="@color/whit_background"/>
                     </com.iGap.libs.rippleeffect.RippleView>
                 </LinearLayout>
 

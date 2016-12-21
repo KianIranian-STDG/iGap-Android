@@ -4,23 +4,78 @@
                 android:id="@+id/fch_root"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.iGap.fragments.FragmentCreateChannel"
                 android:background="@color/whit_background"
                 android:elevation="999dp"
+                tools:context="com.iGap.fragments.FragmentCreateChannel"
                 tools:ignore="MissingPrefix">
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/fch_backgroundToolbar"
         android:background="#34a49f"/>
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/fch_backgroundToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/toolbar_background"
+        android:layoutDirection="ltr"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/new_chanel"
+                android:textColor="@color/whit_background"
+                android:textSize="@dimen/sp18"
+                android:textStyle="bold"
+                android:visibility="visible"/>
+
+            <com.iGap.libs.rippleeffect.RippleView
+                rv_centered="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:rv_alpha="200"
+                app:rv_centered="true"
+                app:rv_rippleDuration="0"
+                app:rv_ripplePadding="5dp">
+
+                <com.iGap.module.MaterialDesignTextView
+                    android:id="@+id/fch_txt_back"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:text="@string/md_back_arrow"
+                    android:textColor="@color/whit_background"
+                    />
+
+            </com.iGap.libs.rippleeffect.RippleView>
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fch_backgroundToolbar"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/view">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -117,19 +172,30 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="@dimen/dp12"
                         android:paddingLeft="@dimen/dp8"
+                        android:paddingStart="@dimen/dp6"
                         android:text="@string/igapChanel"
                         android:textSize="@dimen/sp15"/>
 
-                    <EditText
-                        android:id="@+id/fch_edt_link"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/fch_txtInput_nikeName"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:hint="@string/your_link"
-                        android:textColorHint="@color/default_shadow_color"
-                        android:textSize="@dimen/sp15"/>
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/fch_edt_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:hint="@string/your_link"
+                            android:singleLine="true"
+                            android:textColorHint="@color/default_shadow_color"
+                            android:textSize="@dimen/sp15"/>
+
+                    </android.support.design.widget.TextInputLayout>
+
 
                 </LinearLayout>
             </LinearLayout>
@@ -153,6 +219,7 @@
                     android:textStyle="bold"/>
 
                 <TextView
+                    android:id="@+id/fch_txt_finish"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp20"
@@ -167,58 +234,14 @@
         </LinearLayout>
     </ScrollView>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/fch_backgroundToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
-        android:background="@color/toolbar_background"
-        android:layoutDirection="ltr"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        app:layout_collapseMode="pin"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:text="@string/new_chanel"
-                android:textColor="@color/whit_background"
-                android:textSize="@dimen/sp18"
-                android:textStyle="bold"
-                android:visibility="visible"/>
-
-            <com.iGap.libs.rippleeffect.RippleView
-                rv_centered="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="0"
-                app:rv_ripplePadding="5dp">
-
-                <com.iGap.module.MaterialDesignTextView
-                    android:id="@+id/fch_txt_back"
-                    fontPath="fonts/Flaticon.ttf"
-                    android:layout_width="@dimen/dp52"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:gravity="center"
-                    android:text="@string/md_back_arrow"
-                    android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18"/>
-
-            </com.iGap.libs.rippleeffect.RippleView>
-
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+    <ProgressBar
+        android:id="@+id/fch_prgWaiting_addContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:background="@drawable/pu_circle_dialog_give_image_gallery"
+        android:indeterminate="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

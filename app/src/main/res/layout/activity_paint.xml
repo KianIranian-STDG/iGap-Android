@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.95"
                 android:background="@drawable/frame_border"
-                android:layoutDirection="ltr"></FrameLayout>
+                android:layoutDirection="ltr"/>
         </LinearLayout>
     </LinearLayout>
 

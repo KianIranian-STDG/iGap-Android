@@ -46,14 +46,14 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_txt_back"
-                    fontPath="fonts/Flaticon.ttf"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18" />
+                    />
             </com.iGap.libs.rippleeffect.RippleView>
 
             <com.iGap.libs.rippleeffect.RippleView
@@ -69,13 +69,13 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_txt_set"
-                    fontPath="fonts/Flaticon.ttf"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/md_check_symbol"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18"
+                    android:textSize="@dimen/sp26"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"/>

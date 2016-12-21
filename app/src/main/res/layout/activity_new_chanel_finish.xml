@@ -45,14 +45,14 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/nclf_txt_back"
-                    fontPath="fonts/Flaticon.ttf"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18"/>
+                    />
 
             </com.iGap.libs.rippleeffect.RippleView>
 

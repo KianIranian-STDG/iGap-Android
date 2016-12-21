@@ -27,13 +27,13 @@
             app:rv_ripplePadding="5dp">
 
             <com.iGap.module.MaterialDesignTextView
-                fontPath="fonts/Flaticon.ttf"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/md_back_arrow"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp18"/>
+                />
 
         </com.iGap.libs.rippleeffect.RippleView>
 
@@ -52,7 +52,7 @@
             android:id="@+id/acqc_ripple_plus"
             rv_centered="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="0dp"
             app:rv_alpha="200"
             app:rv_centered="true"
@@ -60,13 +60,13 @@
             app:rv_ripplePadding="5dp">
 
             <com.iGap.module.MaterialDesignTextView
-                fontPath="fonts/Flaticon.ttf"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/md_add_plus_button"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp18"/>
+                android:textSize="32sp"/>
 
         </com.iGap.libs.rippleeffect.RippleView>
 

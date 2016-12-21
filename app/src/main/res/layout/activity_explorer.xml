@@ -47,13 +47,12 @@
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/ae_btn_back"
-                        fontPath="fonts/Flaticon.ttf"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_back_arrow"
-                        android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp18"/>
+                        android:textColor="@color/whit_background"/>
                 </com.iGap.libs.rippleeffect.RippleView>
 
                 <TextView

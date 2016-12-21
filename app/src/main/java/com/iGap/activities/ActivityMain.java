@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -93,13 +94,15 @@ import com.iGap.request.RequestGroupLeft;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
@@ -117,7 +120,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     public static MyAppBarLayout appBarLayout;
     private RecyclerView recyclerView;
     private RoomsAdapter<RoomItem> mAdapter;
-    private ArcMenu arcMenu;
+    public static ArcMenu arcMenu;
     private MaterialDesignTextView btnSearchAll;
     private int clickPosition = 0;
 
@@ -407,7 +410,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         RippleView rippleMenu = (RippleView) findViewById(R.id.cl_ripple_menu);
 
         btnSearchAll = (MaterialDesignTextView) findViewById(R.id.amr_btn_search);
-        btnSearchAll.setTypeface(G.flaticon);
 
         RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
         rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

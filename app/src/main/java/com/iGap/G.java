@@ -87,15 +87,9 @@ public class G extends MultiDexApplication {//implements OnFileDownloadResponse
     public static final String CHAT_MESSAGE_TIME = "H:mm";
     public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";
     public static Typeface neuroplp;
-    public static Typeface robotoBold;
     // list of actionId that can be doing without login
-    public static Typeface robotoLight;
-    public static Typeface robotoRegular;
-    public static Typeface arialBold;
     public static Typeface arial;
     public static Typeface iranSans;
-    public static Typeface verdana;
-    public static Typeface VerdanaBold;
     public static Typeface fontawesome;
     public static Typeface flaticon;
     public static Context context;
@@ -426,15 +420,9 @@ public class G extends MultiDexApplication {//implements OnFileDownloadResponse
         fillSecuringInterface();
         WebSocketClient.getInstance();
 
-        neuroplp = Typeface.createFromAsset(this.getAssets(), "fonts/neuropol.ttf");
-        robotoBold = Typeface.createFromAsset(getAssets(), "fonts/RobotoBold.ttf");
-        robotoLight = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
-        robotoRegular = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Regular.ttf");
-        arialBold = Typeface.createFromAsset(this.getAssets(), "fonts/arialbd.ttf");
+        neuroplp = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome.ttf");
         arial = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
         iranSans = Typeface.createFromAsset(this.getAssets(), "fonts/IRANSansMobile.ttf");
-        verdana = Typeface.createFromAsset(this.getAssets(), "fonts/Verdana.ttf");
-        VerdanaBold = Typeface.createFromAsset(this.getAssets(), "fonts/VerdanaBold.ttf");
         fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome.ttf");
         flaticon = Typeface.createFromAsset(this.getAssets(), "fonts/Flaticon.ttf");
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");

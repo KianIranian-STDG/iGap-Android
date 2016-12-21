@@ -33,7 +33,7 @@
                 app:rv_ripplePadding="5dp">
 
                 <com.iGap.module.MaterialDesignTextView
-                    fontPath="fonts/Flaticon.ttf"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
@@ -42,7 +42,7 @@
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
                     android:textColor="@color/whit_background"
-                    android:textSize="@dimen/sp18" />
+                    />
 
             </com.iGap.libs.rippleeffect.RippleView>
 
@@ -131,7 +131,7 @@
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/apn_btn_smile_button"
                 style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                fontPath="fonts/Flaticon.ttf"
+                android:textAppearance="@style/TextIconAppearance.all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp8"
@@ -164,7 +164,7 @@
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/apn_btn_mic"
                 style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                fontPath="fonts/Flaticon.ttf"
+                android:textAppearance="@style/TextIconAppearance.all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp8"

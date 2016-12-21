@@ -1239,6 +1239,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             public void onError(int majorCode, int minorCode) {
 
             }
+
+            @Override
+            public void onTimeOut() {
+
+            }
         };
 
 

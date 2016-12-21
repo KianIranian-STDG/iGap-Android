@@ -33,14 +33,14 @@
             app:rv_ripplePadding="5dp">
 
             <com.iGap.module.MaterialDesignTextView
-                fontPath="fonts/Flaticon.ttf"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
                 android:text="@string/md_back_arrow"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp18" />
+                />
         </com.iGap.libs.rippleeffect.RippleView>
 
         <TextView
@@ -65,14 +65,14 @@
             app:rv_ripplePadding="5dp">
 
             <com.iGap.module.MaterialDesignTextView
-                fontPath="fonts/Flaticon.ttf"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
                 android:text="@string/md_show_more_button"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp18" />
+                />
         </com.iGap.libs.rippleeffect.RippleView>
     </LinearLayout>
 
