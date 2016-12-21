@@ -354,7 +354,7 @@
     <string name="set_modereator">Set Moderator</string>
     <string name="set_kick">Kick</string>
     <string name="member_can_add_new_member">Members Can Add New Members</string>
-    <string name="notificaion_and_sound">Notifications and Sound</string>
+    <string name="notificaion_and_sound">Notifications and Sounds</string>
     <string name="your_link">Your Link</string>
     <string name="public_channel">Public Channel</string>
     <string name="private_channel">Private Channel</string>
@@ -550,7 +550,7 @@
     <string name="times">Times</string>
     <string name="info">Info</string>
     <string name="description">Description</string>
-    <string name="type_message">Type Message</string>
+    <string name="type_message">Type your message</string>
     <string name="place">Place</string>
     <string name="minutes">Minutes</string>
     <string name="channel_link">Channel Link</string>
@@ -641,7 +641,7 @@
     <string name="log_message">Log message</string>
     <string name="iranian_rials">Iranian Rials(IRR)</string>
     <string name="your_login_code_is">"Your login code is:"</string>
-    <string name="there_is_no_sheared_media">there is no sheared media</string>
+    <string name="there_is_no_sheared_media">there is no shared media</string>
     <string name="pending">Pending</string>
     <string name="completed">Completed</string>
     <!-- New String -->

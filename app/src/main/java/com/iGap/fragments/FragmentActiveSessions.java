@@ -282,8 +282,6 @@ public class FragmentActiveSessions extends Fragment {
                                         new RequestUserSessionLogout().userSessionLogout();
                                     }
                                 }).show();
-
-
                     } else {
                         new MaterialDialog.Builder(getActivity())
                                 .title(R.string.active_session_title)
@@ -302,13 +300,15 @@ public class FragmentActiveSessions extends Fragment {
                                 }).show();
                     }
                 } else {
-                    for (int i = 0; i < ((AdapterActiveSessionsHeader) item).getItem().size(); i++) {
-                        if (!((AdapterActiveSessionsHeader) item).getItem().get(i).isCurrent()) {
-                            new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessionsHeader) item).getItem().get(i).getSessionId());
+                    if (((AdapterActiveSessionsHeader) item).getItem().size() > 0) {
+                        for (int i = 0; i < ((AdapterActiveSessionsHeader) item).getItem().size(); i++) {
+                            if (!((AdapterActiveSessionsHeader) item).getItem().get(i).isCurrent()) {
+                                new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessionsHeader) item).getItem().get(i).getSessionId());
+                            }
                         }
+                    } else {
+                        v.setVisibility(View.GONE);
                     }
-
-
                 }
                 return false;
             }

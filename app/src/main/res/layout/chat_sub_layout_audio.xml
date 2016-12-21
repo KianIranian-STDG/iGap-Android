@@ -166,7 +166,8 @@
                                     >
 
 
-                                    <Button
+                                    <com.iGap.module.MaterialDesignTextView
+                                        android:textAppearance="@style/TextIconAppearance_toolbar"
                                         android:id="@+id/csla_btn_play_music"
                                         android:layout_width="@dimen/dp40"
                                         android:layout_height="match_parent"

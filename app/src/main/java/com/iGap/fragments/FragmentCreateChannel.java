@@ -137,14 +137,14 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if (!raPrivate.isChecked())
-                    new RequestChannelCheckUsername().channelCheckUsername(roomId, charSequence.toString());
+
 
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if (!raPrivate.isChecked())
+                    new RequestChannelCheckUsername().channelCheckUsername(roomId, editable.toString());
             }
         });
 
@@ -152,6 +152,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                setInviteLink();
                 setInviteLink();
             }
         });
@@ -207,8 +208,8 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                                     getActivity().getSupportFragmentManager()
                                             .beginTransaction()
                                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                            .addToBackStack(null)
-                                            .replace(fragmentContainer, fragment)
+
+                                            .replace(fragmentContainer, fragment, "contactGroup_fragment")
                                             .commitAllowingStateLoss();
                                     getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
                                     ActivityMain.mLeftDrawerLayout.closeDrawer();

@@ -224,7 +224,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
-                    android:text="@string/B_finish"
+                    android:text="@string/chi_NEXT_STEP"
                     android:textColor="@color/toolbar_background"
                     android:textSize="@dimen/sp15"
                     android:textStyle="bold"/>

@@ -103,7 +103,10 @@ public class ContactGroupFragment extends Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .remove(ContactGroupFragment.this)
+                        .commit();
             }
         });
 

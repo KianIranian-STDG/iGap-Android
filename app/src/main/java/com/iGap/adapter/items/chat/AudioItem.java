@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -191,7 +190,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         protected String mMessageID = "";
         protected String mTimeMusic = "";
 
-        protected Button btnPlayMusic;
+        protected TextView btnPlayMusic;
         protected SeekBar musicSeekbar;
         protected OnComplete complete;
         protected TextView txt_Timer;
@@ -205,7 +204,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
 
-            btnPlayMusic = (Button) view.findViewById(R.id.csla_btn_play_music);
+            btnPlayMusic = (TextView) view.findViewById(R.id.csla_btn_play_music);
             btnPlayMusic.setTypeface(G.flaticon);
             txt_Timer = (TextView) view.findViewById(R.id.csla_txt_timer);
             musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);

@@ -287,7 +287,6 @@
                             app:rv_color="@color/toolbar_background"
                             app:rv_rippleDuration="100"
                             app:rv_ripplePadding="5dp"
-
                             >
 
                             <com.iGap.module.MaterialDesignTextView

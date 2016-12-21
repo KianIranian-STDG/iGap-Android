@@ -31,6 +31,8 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.RoomsAdapter;
 import com.iGap.adapter.items.RoomItem;
+import com.iGap.fragments.ContactGroupFragment;
+import com.iGap.fragments.FragmentCreateChannel;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;
@@ -170,7 +172,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         getSupportFragmentManager()
                                 .beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(R.id.fragmentContainer, fragmentNewGroup)
+                                .replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment")
                                 .commitAllowingStateLoss();
                     }
                 });
@@ -519,8 +521,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 ActivityMain.this.getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
                         .commit();
                 arcMenu.toggleMenu();
             }
@@ -538,8 +539,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 ActivityMain.this.getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
                         .commit();
                 arcMenu.toggleMenu();
             }
@@ -1148,7 +1148,20 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     @Override
     public void onBackPressed() {
         SearchFragment myFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("Search_fragment");
-        if (myFragment != null && myFragment.isVisible()) {
+
+        FragmentNewGroup fragmentNeGroup = (FragmentNewGroup) getSupportFragmentManager().findFragmentByTag("newGroup_fragment");
+        FragmentCreateChannel fragmentCreateChannel = (FragmentCreateChannel) getSupportFragmentManager().findFragmentByTag("createChannel_fragment");
+        ContactGroupFragment fragmentContactGroup = (ContactGroupFragment) getSupportFragmentManager().findFragmentByTag("contactGroup_fragment");
+
+        if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
+            getSupportFragmentManager().beginTransaction().remove(fragmentNeGroup).commit();
+
+        } else if (fragmentCreateChannel != null && fragmentCreateChannel.isVisible()) {
+            getSupportFragmentManager().beginTransaction().remove(fragmentCreateChannel).commit();
+
+        } else if (fragmentContactGroup != null && fragmentContactGroup.isVisible()) {
+            getSupportFragmentManager().beginTransaction().remove(fragmentContactGroup).commit();
+        } else if (myFragment != null && myFragment.isVisible()) {
             getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
         } else if (mLeftDrawerLayout.isShownMenu()) {
             mLeftDrawerLayout.closeDrawer();
@@ -1692,4 +1705,5 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });
     }
+
 }

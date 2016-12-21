@@ -125,8 +125,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
                         .beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
                         .commit();
             }
         });
@@ -164,8 +163,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
                         .commit();
             }
         });

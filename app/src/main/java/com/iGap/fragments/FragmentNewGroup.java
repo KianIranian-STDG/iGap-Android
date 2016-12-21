@@ -400,8 +400,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                         fragmentCreateChannel.setArguments(bundle);
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .addToBackStack(null)
-                                .replace(fragmentContainer, fragmentCreateChannel)
+                                .replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment")
                                 .commitAllowingStateLoss();
                         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
 //                        getRoom(roomIdR, ProtoGlobal.Room.Type.CHANNEL);
@@ -651,8 +650,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                                     getActivity().getSupportFragmentManager()
                                             .beginTransaction()
                                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                            .addToBackStack(null)
-                                            .replace(fragmentContainer, fragment)
+                                            .replace(fragmentContainer, fragment, "contactGroup_fragment")
                                             .commitAllowingStateLoss();
                                     getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                                     ActivityMain.mLeftDrawerLayout.closeDrawer();
@@ -1023,8 +1021,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null)
-                .replace(fragmentContainer, fragment)
+                .replace(fragmentContainer, fragment, "contactGroup_fragment")
                 .commitAllowingStateLoss();
         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
         ActivityMain.mLeftDrawerLayout.closeDrawer();
