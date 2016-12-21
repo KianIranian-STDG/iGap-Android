@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -27,13 +28,15 @@ import com.iGap.activities.ActivityMediaPlayer;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 /**
  * Created by android3 on 10/2/2016.
@@ -143,7 +146,6 @@ public class MusicPlayer {
         txt_music_name = (TextView) layout.findViewById(R.id.mls_txt_music_name);
 
         btnPlayMusic = (Button) layout.findViewById(R.id.mls_btn_play_music);
-        btnPlayMusic.setTypeface(G.flaticon);
         btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,7 +154,6 @@ public class MusicPlayer {
         });
 
         btnCloseMusic = (Button) layout.findViewById(R.id.mls_btn_close);
-        btnCloseMusic.setTypeface(G.flaticon);
         btnCloseMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

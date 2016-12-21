@@ -21,8 +21,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.Spannable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -1194,6 +1196,30 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
+        final String finalChannelName = title;
+        positive.setEnabled(false);
+        edtUserName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!edtUserName.getText().toString().equals(finalChannelName)) {
+                    positive.setEnabled(true);
+                } else {
+                    positive.setEnabled(false);
+                }
+            }
+        });
+
+
         G.onChannelEdit = new OnChannelEdit() {
             @Override
             public void onChannelEdit(long roomId, String name, String description) {
@@ -1211,6 +1237,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 hideProgressBar();
             }
         };
+
 
         positive.setOnClickListener(new View.OnClickListener() {
             @Override
