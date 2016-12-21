@@ -403,7 +403,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.onSetAction = this;
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
-
+        G.uploaderUtil.setActivityCallbacks(this);
 
         HelperNotificationAndBadge.isChatRoomNow = true;
 
@@ -1642,9 +1642,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     return;
                 }
 
-                // if use click on edit message, the message's text will be put to the EditText
-                // i set the message object for that view's tag to obtain it here
-                // request message edit only if there is any changes to the message text
+                /**
+                 * if use click on edit message, the message's text will be put to the EditText
+                 * i set the message object for that view's tag to obtain it here
+                 * request message edit only if there is any changes to the message text
+                 */
+
                 if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
                     final StructMessageInfo messageInfo = (StructMessageInfo) edtChat.getTag();
                     final String message = getWrittenMessage();

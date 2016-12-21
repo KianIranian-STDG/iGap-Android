@@ -398,31 +398,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         popupWindow.dismiss();
                     }
                 });
-//                text3.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        new MaterialDialog.Builder(ActivityGroupProfile.this).title(
-//                                R.string.to_delete_chat)
-//                                .content(R.string.delete_chat_content)
-//                                .positiveText(R.string.B_ok)
-//                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                                    @Override
-//                                    public void onClick(@NonNull MaterialDialog dialog,
-//                                                        @NonNull DialogAction which) {
-//                                    }
-//                                })
-//                                .negativeText(R.string.B_cancel)
-//                                .show();
-//                        popupWindow.dismiss();
-//                    }
-//                });
             }
         });
-        //        btnMenu.setOnClickListener(new View.OnClickListener() {
-        //            @Override
-        //            public void onClick(View view) {
-        //            }
-        //        });
 
         layoutSetting = (LinearLayout) findViewById(R.id.agp_ll_seetting);
         layoutSetAdmin = (LinearLayout) findViewById(R.id.agp_ll_set_admin);

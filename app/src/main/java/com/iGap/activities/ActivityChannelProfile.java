@@ -44,6 +44,7 @@ import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroupProfile;
 import com.iGap.fragments.FragmentListAdmin;
 import com.iGap.fragments.FragmentNotification;
+import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperPermision;
@@ -125,9 +126,7 @@ import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
-import static com.iGap.activities.ActivitySetting.pathSaveImage;
 import static com.iGap.module.AttachFile.imagePath;
-import static com.iGap.module.MusicPlayer.roomId;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
 public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
@@ -155,6 +154,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private String participantsCountLabel;
     private String description;
     private String inviteLink;
+    private String pathSaveImage;
     private ChannelChatRole role;
     private long noLastMessage;
     private long userId;
@@ -166,6 +166,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private LinearLayout lytNotification;
     private AttachFile attachFile;
     private long avatarId;
+    private long roomId;
 
     @Override
     protected void onResume() {
@@ -191,6 +192,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_channel);
 
+        G.uploaderUtil.setActivityCallbacks(this);
         G.onChannelAddMember = this;
         G.onChannelKickMember = this;
         G.onChannelAddAdmin = this;
@@ -203,6 +205,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         G.onChannelLeft = this;
         G.onChannelEdit = this;
         G.onChannelRevokeLink = this;
+        G.onChannelAvatarAdd = this;
 
         //=========Put Extra Start
         Bundle extras = getIntent().getExtras();
@@ -342,7 +345,18 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         imgCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Realm realm = Realm.getDefaultInstance();
+                if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
+                    FragmentShowAvatars.appBarLayout = fab;
 
+                    FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
+                    ActivityChannelProfile.this.getSupportFragmentManager()
+                            .beginTransaction()
+                            .addToBackStack(null)
+                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                            .replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
+                }
+                realm.close();
             }
         });
 
@@ -1275,20 +1289,22 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     @Override
     public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
-        HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
-            @Override
-            public void onAvatarAdd(final String avatarPath) {
+        if (pathSaveImage != null) {
+            HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
+                @Override
+                public void onAvatarAdd(final String avatarPath) {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                        setImage(avatarPath);
-                    }
-                });
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideProgressBar();
+                            setImage(avatarPath);
+                        }
+                    });
 
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override
@@ -1327,10 +1343,9 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     @Override
     public void onFileUploaded(FileUploadStructure uploadStructure, String identity) {
-        if (Long.parseLong(identity) == avatarId) {
-            hideProgressBar();
-            new RequestChannelAvatarAdd().channelAvatarAdd(roomId, uploadStructure.token);
-        }
+        //if (Long.parseLong(identity) == avatarId) {
+        new RequestChannelAvatarAdd().channelAvatarAdd(roomId, uploadStructure.token);
+        //}
     }
 
     @Override
@@ -1773,9 +1788,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 case AttachFile.request_code_TAKE_PICTURE:
                     ImageHelper.correctRotateImage(imagePath, true);
                     filePath = imagePath;
+                    pathSaveImage = filePath;
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     filePath = AttachFile.getFilePathFromUri(data.getData());
+                    pathSaveImage = filePath;
                     break;
             }
 

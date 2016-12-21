@@ -207,6 +207,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             fillListChatAvatar();
         } else if (from == From.group) {
             fillListGroupAvatar();
+        } else if (from == From.channel) {
+            fillListGroupAvatar();
         }
 
 
