@@ -32,16 +32,12 @@ import com.iGap.module.Contacts;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
 import com.iGap.module.enums.ConnectionMode;
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
-import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestClientCondition;
-import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
@@ -70,7 +66,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-public class G extends MultiDexApplication implements OnFileDownloadResponse {
+public class G extends MultiDexApplication {//implements OnFileDownloadResponse
 
     public static final String FAQ = "http://www.digikala.com";
     public static final String POLICY = "http://www.digikala.com";
@@ -347,11 +343,11 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
 
                             RealmRegisteredInfo.putOrUpdate(user);
 
-                            if (G.onChangeUserPhotoListener != null) {
+                            /*if (G.onChangeUserPhotoListener != null) {
                                 G.onChangeUserPhotoListener.onChangeInitials(user.getInitials(), user.getColor());
                             }
-
-                            if (avatar != null && avatar.isValid()) {
+*/
+                            /*if (avatar != null && avatar.isValid()) {
                                 if (!avatar.getFile().isFileExistsOnLocal() && !avatar.getFile().isThumbnailExistsOnLocal()) {
                                     requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
                                 } else {
@@ -365,7 +361,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
                                         }
                                     }
                                 }
-                            }
+                            }*/
                         }
                     });
 
@@ -389,7 +385,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     @Override
     public void onCreate() { // comment
         super.onCreate();
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(false).build()).build());
 
         SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
@@ -473,11 +469,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
         }
         setUserTextSize();
 
-        G.onFileDownloadResponse = this;
-
-        /*DisplayMetrics metrics = G.context.getResources().getDisplayMetrics();
-        int densityDpi = (int) (metrics.density * 160f);
-        IMAGE_CORNER = (int) (densityDpi / Config.IMAGE_CORNER);*/
+        //G.onFileDownloadResponse = this;
     }
 
 
@@ -607,7 +599,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
         };
     }
 
-    private void sendWaitingRequestWrappers() {
+    public static void sendWaitingRequestWrappers() {
         for (RequestWrapper requestWrapper : RequestQueue.WAITING_REQUEST_WRAPPERS) {
             try {
                 RequestQueue.sendRequest(requestWrapper);
@@ -617,7 +609,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
         }
     }
 
-    private void login() { //TODO [Saeed Mozaffari] [2016-09-07 10:24 AM] - mitonim karhaie ke
+    public static void login() { //TODO [Saeed Mozaffari] [2016-09-07 10:24 AM] - mitonim karhaie ke
         // hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
 
         G.onUserLogin = new OnUserLogin() {
@@ -657,7 +649,7 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
         }, 1000);
     }
 
-    private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
+   /* private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
         final String fileName = "thumb_" + token + "_" + name;
         if (done) {
             final Realm realm = Realm.getDefaultInstance();
@@ -717,5 +709,5 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
     @Override
     public void onBadDownload(String token) {
         // empty
-    }
+    }*/
 }
