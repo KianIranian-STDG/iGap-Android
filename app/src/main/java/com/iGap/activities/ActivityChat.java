@@ -2382,7 +2382,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             } else if (listPathString.size() > 1) {
                 for (final String path : listPathString) {
                     if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !path.toLowerCase().endsWith(".gif")) {
-                        String localpathNew = attachFile.saveGalaryPicToLoacal(path);
+                        String localpathNew = attachFile.saveGalleryPicToLocal(path);
                         sendMessage(requestCode, localpathNew);
                     } else {
                         sendMessage(requestCode, path);
@@ -2397,7 +2397,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
                         if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
 
-                            listPathString.set(0, attachFile.saveGalaryPicToLoacal(listPathString.get(0)));
+                            listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
 
                             Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
                             Uri uri = Uri.parse(listPathString.get(0));
@@ -2462,7 +2462,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         Thread thread = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                listPathString.set(0, attachFile.saveGalaryPicToLoacal(listPathString.get(0)));
+                                listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
                             }
                         });
                         thread.start();

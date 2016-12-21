@@ -13,10 +13,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -162,6 +164,9 @@ public class AttachFile {
             @Override
             public void Allow() {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
                 Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
                 if (outPath != null) {
@@ -179,7 +184,11 @@ public class AttachFile {
     }
 
     private Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", getOutputMediaFile(type));
+        } else {
+            return Uri.fromFile(getOutputMediaFile(type));
+        }
     }
 
     private File getOutputMediaFile(int type) {
@@ -501,13 +510,13 @@ public class AttachFile {
         return filename;
     }
 
-    public String saveGalaryPicToLoacal(String galaryPath) {
+    public String saveGalleryPicToLocal(String galleryPath) {
 
         String result = "";
 
-        if (galaryPath == null) return "";
+        if (galleryPath == null) return "";
 
-        Bitmap bitmap = ImageHelper.decodeFile(new File(galaryPath));
+        Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
 
         if (bitmap != null) {
             result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE).getPath();

@@ -199,6 +199,16 @@
             android:enabled="true"
             android:exported="true"></service>
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="a8bb9474c4f59357347dbd3fd5707ca541e2a740"/>

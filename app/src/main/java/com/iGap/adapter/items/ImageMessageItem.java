@@ -87,20 +87,27 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
             return; // necessary
         }
 
-        ProtoFileDownload.FileDownload.Selector selector =
-                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        ProtoFileDownload.FileDownload.Selector selector;
+        long fileSize;
+        if (message.getAttachment().getSmallThumbnail() != null) {
+            selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+            fileSize = message.getAttachment().getSmallThumbnail().getSize();
+        } else {
+            selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+            fileSize = message.getAttachment().getLargeThumbnail().getSize();
+        }
+
         String identity = message.getAttachment().getToken()
                 + '*'
                 + selector.toString()
                 + '*'
-                + message.getAttachment().getSmallThumbnail().getSize()
+                + fileSize
                 + '*'
                 + fileName
                 + '*'
                 + 0;
 
-        new RequestFileDownload().download(token, 0,
-                (int) message.getAttachment().getSmallThumbnail().getSize(), selector, identity);
+        new RequestFileDownload().download(token, 0, (int) message.getAttachment().getSmallThumbnail().getSize(), selector, identity);
     }
 
     public void onLoadFromLocal(ViewHolder holder, String localPath) {

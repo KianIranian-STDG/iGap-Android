@@ -221,7 +221,7 @@ public class ActivityCrop extends ActivityEnhanced {
         } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_image_from_gallery_single_select) {
             String filePath = null;
 
-            filePath = attachFile.saveGalaryPicToLoacal(AttachFile.getFilePathFromUri(data.getData()));
+            filePath = attachFile.saveGalleryPicToLocal(AttachFile.getFilePathFromUri(data.getData()));
 
             //   filePath = "file://" + AttachFile.getFilePathFromUri(data.getData());
             uri = Uri.parse(filePath);
