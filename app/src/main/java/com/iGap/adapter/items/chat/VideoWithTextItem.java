@@ -21,9 +21,6 @@ import io.github.meness.emoji.EmojiTextView;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
- */
 public class VideoWithTextItem
         extends AbstractMessage<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
@@ -73,6 +70,11 @@ public class VideoWithTextItem
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
 
         holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+    }
+
+    @Override
+    protected void voteAction(ViewHolder holder) {
+        super.voteAction(holder);
     }
 
     @Override

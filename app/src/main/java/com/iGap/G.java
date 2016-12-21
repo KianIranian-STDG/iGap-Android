@@ -267,6 +267,9 @@ public class G extends MultiDexApplication implements OnFileDownloadResponse {
 
     public static ConcurrentHashMap<Long, RequestWrapper> currentUploadFiles = new ConcurrentHashMap<>();
 
+    public static ArrayList<Long> getViews = new ArrayList<>();
+
+
     public static void setUserTextSize() {
 
         SharedPreferences sharedPreferencesSetting = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);

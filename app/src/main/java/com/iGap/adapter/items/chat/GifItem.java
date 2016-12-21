@@ -21,9 +21,6 @@ import pl.droidsonroids.gif.GifDrawable;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
- */
 public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
@@ -120,6 +117,11 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void voteAction(ViewHolder holder) {
+        super.voteAction(holder);
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

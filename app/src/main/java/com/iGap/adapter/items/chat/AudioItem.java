@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -22,16 +23,15 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import io.github.meness.emoji.EmojiTextView;
+
 import java.io.File;
 import java.util.List;
+
+import io.github.meness.emoji.EmojiTextView;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static android.view.View.GONE;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
- */
 public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
@@ -167,6 +167,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.green));
         holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
         holder.fileName.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+    }
+
+    @Override
+    protected void voteAction(ViewHolder holder) {
+        super.voteAction(holder);
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {

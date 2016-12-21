@@ -13,7 +13,9 @@ public class RequestChannelAddMessageReaction {
         builder.setMessageId(messageId);
         builder.setReaction(roomMessageReaction);
 
-        RequestWrapper requestWrapper = new RequestWrapper(424, builder);
+        String identity = Long.toString(roomId) + '*' + Long.toString(messageId) + '*' + roomMessageReaction.toString();
+
+        RequestWrapper requestWrapper = new RequestWrapper(424, builder, identity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

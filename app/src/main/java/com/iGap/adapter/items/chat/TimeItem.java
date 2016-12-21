@@ -11,9 +11,6 @@ import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
 import java.util.List;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
- */
 public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
@@ -36,10 +33,12 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.text, mMessage.messageText);
-
-
     }
 
+    @Override
+    protected void voteAction(ViewHolder holder) {
+        super.voteAction(holder);
+    }
 
     @Override
     public ViewHolderFactory<? extends ViewHolder> getFactory() {

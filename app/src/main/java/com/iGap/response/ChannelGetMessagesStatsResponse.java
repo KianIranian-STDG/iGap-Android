@@ -3,6 +3,10 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoChannelGetMessagesStats;
 import com.iGap.proto.ProtoError;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
+
+import io.realm.Realm;
 
 public class ChannelGetMessagesStatsResponse extends MessageHandler {
 
@@ -22,7 +26,24 @@ public class ChannelGetMessagesStatsResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Builder builder = (ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Builder) message;
+        final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Builder builder = (ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Builder) message;
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for (final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : builder.getStatsList()) {
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, stats.getMessageId()).findFirst();
+                    if (realmRoomMessage != null) {
+                        realmRoomMessage.setVoteDown(Integer.parseInt(stats.getThumbsDownLabel()));
+                        realmRoomMessage.setVoteUp(Integer.parseInt(stats.getThumbsUpLabel()));
+                        realmRoomMessage.setViewsLabel(Integer.parseInt(stats.getViewsLabel()));
+                    }
+                }
+            }
+        });
+        realm.close();
+
         if (G.onChannelGetMessagesStats != null) {
             G.onChannelGetMessagesStats.onChannelGetMessagesStats(builder.getStatsList());
         }

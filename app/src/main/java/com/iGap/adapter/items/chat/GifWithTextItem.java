@@ -157,6 +157,11 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         });
     }
 
+    @Override
+    protected void voteAction(ViewHolder holder) {
+        super.voteAction(holder);
+    }
+
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
         public ViewHolder create(View v) {
             return new ViewHolder(v);

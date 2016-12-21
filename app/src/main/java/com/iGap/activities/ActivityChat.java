@@ -55,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -90,6 +91,8 @@ import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.IResendMessage;
 import com.iGap.interfaces.OnActivityChatStart;
 import com.iGap.interfaces.OnAvatarGet;
+import com.iGap.interfaces.OnChannelAddMessageReaction;
+import com.iGap.interfaces.OnChannelGetMessagesStats;
 import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatDeleteMessageResponse;
@@ -138,6 +141,7 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.VoiceRecord;
 import com.iGap.module.enums.LocalFileType;
+import com.iGap.proto.ProtoChannelGetMessagesStats;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
@@ -187,6 +191,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -198,17 +216,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -230,9 +237,7 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
-public class ActivityChat extends ActivityEnhanced
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>,
-        OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse {
+public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -574,6 +579,8 @@ public class ActivityChat extends ActivityEnhanced
         G.onFileDownloadResponse = this;
         G.onUserInfoResponse = this;
         G.onClientGetRoomHistoryResponse = this;
+        G.onChannelAddMessageReaction = this;
+        G.onChannelGetMessagesStats = this;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -1057,112 +1064,112 @@ public class ActivityChat extends ActivityEnhanced
                 switch (messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType) {
                     case TEXT:
                         //if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         //}
                         break;
                     case IMAGE:
                         // if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         //}
                         break;
                     case IMAGE_TEXT:
                         //if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         // }
                         break;
                     case VIDEO:
                         //  if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         //  }
                         break;
                     case VIDEO_TEXT:
                         // if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         // }
                         break;
                     case LOCATION:
                         // if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         //  }
                         break;
                     case FILE:
                     case FILE_TEXT:
                         //  if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         //  }
                         break;
                     case VOICE:
                         //  if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         //  }
                         break;
                     case AUDIO:
                     case AUDIO_TEXT:
                         // if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         //  }
                         break;
                     case CONTACT:
                         // if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         // }
                         break;
                     case GIF:
                         // if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         // }
                         break;
                     case GIF_TEXT:
                         // if (chatType != CHANNEL) {
-                            if (!addTop) {
-                                mAdapter.add(new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(0, new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         // }
                         break;
                     case LOG:
@@ -2564,10 +2571,10 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                            new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
                                     updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
                             MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
@@ -2595,10 +2602,10 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                            new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
                                     updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
                             MyType.SendType.send, null, filePath, updateTime);
                 }
 
@@ -2628,10 +2635,10 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (userTriesReplay()) {
                     messageInfo =
-                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                            new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
                                     updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
                             MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
@@ -2651,10 +2658,10 @@ public class ActivityChat extends ActivityEnhanced
                 String videoFileMime = FileUtils.getMimeType(videoFile);
                 if (userTriesReplay()) {
                     messageInfo =
-                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime,
+                            new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime,
                                     filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
                             MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
@@ -2672,7 +2679,7 @@ public class ActivityChat extends ActivityEnhanced
                 long songDuration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
 
                 messageInfo =
-                        StructMessageInfo.buildForAudio(messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath,
+                        StructMessageInfo.buildForAudio(mRoomId, messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath,
                                 songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_pic_file:
@@ -2688,26 +2695,20 @@ public class ActivityChat extends ActivityEnhanced
                 File fileFile = new File(filePath);
                 String fileFileMime = FileUtils.getMimeType(fileFile);
                 if (userTriesReplay()) {
-                    messageInfo =
-                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime,
-                                    filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime);
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_contact_phone:
                 if (latestUri == null) {
                     break;
                 }
-
                 ContactUtils contactUtils = new ContactUtils(getApplicationContext(), latestUri);
                 String name = contactUtils.retrieveName();
                 String number = contactUtils.retrieveNumber();
                 messageType = CONTACT;
-                // FIXME: 10/18/2016 [Alireza] lastName "" gozashtam jash, firstName esme kamele
-                messageInfo = StructMessageInfo.buildForContact(messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, name, "", number,
-                        userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
+                messageInfo = StructMessageInfo.buildForContact(mRoomId, messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, name, "", number, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_paint:
                 fileName = new File(filePath).getName();
@@ -2720,10 +2721,10 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (userTriesReplay()) {
                     messageInfo =
-                            new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
+                            new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
                                     updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
                             MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
@@ -3658,14 +3659,14 @@ public class ActivityChat extends ActivityEnhanced
         StructMessageInfo messageInfo;
 
         if (userTriesReplay()) {
-            messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
+            messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
                     RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
-                messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
+                messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
                         RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
-                messageInfo = new StructMessageInfo(Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
+                messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
                         RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
@@ -4752,6 +4753,43 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onAvatarAddError() {
 
+    }
+
+    //****** Channel Message Reaction
+
+    @Override
+    public void onVoteClick(final StructMessageInfo message, final int vote, final ProtoGlobal.RoomMessageReaction voteAction) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.updateVote(message.roomId, Long.parseLong(message.messageID), vote, voteAction);
+            }
+        });
+    }
+
+    @Override
+    public void onChannelAddMessageReaction(final long roomId, final long messageId, final int reactionCounterLabel, final ProtoGlobal.RoomMessageReaction reaction) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.updateVote(roomId, messageId, reactionCounterLabel, reaction);
+            }
+        });
+    }
+
+    @Override
+    public void onChannelGetMessagesStats(final List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> statsList) {
+
+        if (mAdapter != null) {
+            for (final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : statsList) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.updateMessageState(stats.getMessageId(), stats.getThumbsUpLabel(), stats.getThumbsDownLabel(), stats.getViewsLabel());
+                    }
+                });
+            }
+        }
     }
 }
 

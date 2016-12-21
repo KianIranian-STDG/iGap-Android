@@ -45,11 +45,14 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.iGap.request.RequestChannelAddMessageReaction;
+import com.iGap.request.RequestChannelGetMessagesStats;
 import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.meness.github.messageprogress.MessageProgress;
@@ -214,6 +217,83 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ((LinearLayout.LayoutParams) ((LinearLayout) messageText.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
             }
         }
+
+
+        /**
+         * show vote layout for channel otherwise hide layout
+         */
+        if (type == ProtoGlobal.Room.Type.CHANNEL) {
+            voteAction(holder);
+        } else {
+            LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
+            if (lytVote != null) {
+                lytVote.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @CallSuper
+    protected void voteAction(VH holder) {
+
+        LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
+        if (lytVote != null) {
+            getMessageState();
+
+            LinearLayout lytVoteUp = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_up);
+            LinearLayout lytVoteDown = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_down);
+            TextView txtVoteUp = (TextView) holder.itemView.findViewById(R.id.txt_vote_up);
+            TextView txtVoteDown = (TextView) holder.itemView.findViewById(R.id.txt_vote_down);
+            TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
+
+            lytVote.setVisibility(View.VISIBLE);
+            txtVoteUp.setText(mMessage.voteUp + "");
+            txtVoteDown.setText(mMessage.voteDown + "");
+            txtViewsLabel.setText(mMessage.viewsLabel + "");
+
+            lytVoteUp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_UP);
+                }
+            });
+
+            lytVoteDown.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_DOWN);
+                }
+            });
+        }
+    }
+
+    /**
+     * send vote action to RealmRoomMessage
+     *
+     * @param reaction Up or Down
+     */
+    private void voteSend(final ProtoGlobal.RoomMessageReaction reaction) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
+                if (realmRoomMessage != null) {
+                    new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction);
+                }
+            }
+        });
+        realm.close();
+    }
+
+    private void getMessageState() {
+        if (!G.getViews.contains(Long.parseLong(mMessage.messageID))) {
+            G.getViews.add(Long.parseLong(mMessage.messageID));
+            ArrayList<Long> messageId = new ArrayList<>();
+            messageId.add(Long.parseLong(mMessage.messageID));
+            new RequestChannelGetMessagesStats().channelGetMessagesStats(mMessage.roomId, messageId);
+        } else {
+            G.getViews.remove(Long.parseLong(mMessage.messageID));
+        }
     }
 
     @CallSuper
@@ -224,7 +304,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
         LinearLayout lytRight = (LinearLayout) holder.itemView.findViewById(R.id.lyt_right);
-        lytRight.setVisibility(View.GONE);
+        if (lytRight != null) {
+            lytRight.setVisibility(View.GONE);
+        }
 
         if (messageText != null) {
             messageText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
@@ -264,7 +346,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
         LinearLayout lytRight = (LinearLayout) holder.itemView.findViewById(R.id.lyt_right);
-        lytRight.setVisibility(View.VISIBLE);
+        if (lytRight != null) {
+            lytRight.setVisibility(View.VISIBLE);
+        }
 
         if (messageText != null) {
             messageText.setTextColor(Color.WHITE);

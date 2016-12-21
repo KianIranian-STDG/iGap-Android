@@ -13,9 +13,6 @@ import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
 import java.util.List;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
- */
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
@@ -37,6 +34,11 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         holder.name.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         holder.number.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         holder.image.setImageResource(R.drawable.green_contact);
+    }
+
+    @Override
+    protected void voteAction(ViewHolder holder) {
+        super.voteAction(holder);
     }
 
     @Override

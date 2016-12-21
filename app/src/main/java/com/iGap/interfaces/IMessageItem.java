@@ -3,11 +3,8 @@ package com.iGap.interfaces;
 import android.view.View;
 
 import com.iGap.module.StructMessageInfo;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
-
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/29/2016.
- */
 
 public interface IMessageItem {
     /**
@@ -28,4 +25,6 @@ public interface IMessageItem {
     void onFailedMessageClick(View view, StructMessageInfo message, int pos);
 
     void onReplyClick(RealmRoomMessage replyMessage);
+
+    void onVoteClick(StructMessageInfo message, int vote, ProtoGlobal.RoomMessageReaction reaction);
 }

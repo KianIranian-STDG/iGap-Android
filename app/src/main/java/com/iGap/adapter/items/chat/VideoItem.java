@@ -3,6 +3,7 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
 import com.iGap.R;
 import com.iGap.helper.HelperRadius;
 import com.iGap.interfaces.IMessageItem;
@@ -12,13 +13,11 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
- */
 public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
@@ -47,6 +46,11 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
 
         holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+    }
+
+    @Override
+    protected void voteAction(ViewHolder holder) {
+        super.voteAction(holder);
     }
 
     @Override

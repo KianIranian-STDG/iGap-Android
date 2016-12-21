@@ -3,7 +3,6 @@ package com.iGap.adapter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -98,8 +97,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     }
                 } else {
                     if (!(item instanceof TimeItem)) {
-
-                        Log.e("ddd", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                         if (!item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             v.performLongClick();
                         }
@@ -260,6 +257,50 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 int pos = items.indexOf(messageInfo);
                 messageInfo.mMessage.messageText = updatedText;
                 messageInfo.mMessage.isEdited = true;
+                set(pos, messageInfo);
+                break;
+            }
+        }
+    }
+
+    /**
+     * update message vote
+     *
+     * @param messageId
+     * @param roomId
+     */
+    public void updateVote(long roomId, long messageId, int vote, ProtoGlobal.RoomMessageReaction reaction) {
+        List<Item> items = getAdapterItems();
+        for (Item messageInfo : items) {
+            if (Long.toString(messageInfo.mMessage.roomId).equals(Long.toString(roomId)) && messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
+                int pos = items.indexOf(messageInfo);
+                if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                    messageInfo.mMessage.voteUp = vote;
+                } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
+                    messageInfo.mMessage.voteDown = vote;
+                }
+                set(pos, messageInfo);
+                break;
+            }
+        }
+    }
+
+    /**
+     * update message state
+     *
+     * @param messageId
+     * @param voteUp
+     * @param voteDown
+     * @param viewsLabel
+     */
+    public void updateMessageState(long messageId, String voteUp, String voteDown, String viewsLabel) {
+        List<Item> items = getAdapterItems();
+        for (Item messageInfo : items) {
+            if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
+                int pos = items.indexOf(messageInfo);
+                messageInfo.mMessage.voteUp = Integer.parseInt(voteUp);
+                messageInfo.mMessage.voteDown = Integer.parseInt(voteDown);
+                messageInfo.mMessage.viewsLabel = Integer.parseInt(viewsLabel);
                 set(pos, messageInfo);
                 break;
             }

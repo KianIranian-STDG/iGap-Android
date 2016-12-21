@@ -111,6 +111,11 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         holder.cslf_txt_file_size.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
     }
 
+    @Override
+    protected void voteAction(ViewHolder holder) {
+        super.voteAction(holder);
+    }
+
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
         public ViewHolder create(View v) {
             return new ViewHolder(v);

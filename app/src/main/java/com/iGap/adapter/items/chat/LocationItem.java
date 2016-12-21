@@ -13,9 +13,6 @@ import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 
 import java.util.List;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
- */
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
@@ -60,6 +57,11 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         super.updateLayoutForSend(holder);
         holder.myLocationLabel.setTextColor(Color.WHITE);
         holder.location.setTextColor(Color.WHITE);
+    }
+
+    @Override
+    protected void voteAction(ViewHolder holder) {
+        super.voteAction(holder);
     }
 
     @Override

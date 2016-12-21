@@ -45,6 +45,9 @@ public class RealmRoomMessage extends RealmObject {
     private boolean deleted;
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
+    private int voteUp;
+    private int voteDown;
+    private int seenCount;
 
     public long getUpdateOrCreateTime() {
         return updateTime >= createTime ? updateTime : createTime;
@@ -299,6 +302,30 @@ public class RealmRoomMessage extends RealmObject {
         this.deleted = deleted;
     }
 
+    public int getVoteUp() {
+        return voteUp;
+    }
+
+    public void setVoteUp(int voteUp) {
+        this.voteUp = voteUp;
+    }
+
+    public int getVoteDown() {
+        return voteDown;
+    }
+
+    public void setVoteDown(int voteDown) {
+        this.voteDown = voteDown;
+    }
+
+    public int getViewsLabel() {
+        return seenCount;
+    }
+
+    public void setViewsLabel(int seenCount) {
+        this.seenCount = seenCount;
+    }
+
     public RealmRoomMessage getForwardMessage() {
         return forwardMessage;
     }
@@ -414,4 +441,18 @@ public class RealmRoomMessage extends RealmObject {
         }
         realm.close();
     }
+
+    /**
+     * get latest count for vote and increase it
+     *
+     * @param reaction Up or Down
+     */
+    public void setVote(ProtoGlobal.RoomMessageReaction reaction, int voteCount) {
+        if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+            setVoteUp(voteCount);
+        } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
+            setVoteDown(voteCount);
+        }
+    }
+
 }

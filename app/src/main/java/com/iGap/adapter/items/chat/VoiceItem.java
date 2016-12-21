@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -24,10 +25,12 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import io.realm.Realm;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import io.realm.Realm;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 
@@ -141,6 +144,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
         holder.auther.setTextColor(holder.itemView.getResources().getColor(R.color.black90));
 
+    }
+
+    @Override
+    protected void voteAction(ViewHolder holder) {
+        super.voteAction(holder);
     }
 
     private MediaPlayer makeMediaPlayer(String filePath) {
