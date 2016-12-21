@@ -389,10 +389,22 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                     public void run() {
                         roomId = roomIdR;
                         createChannelRoom(roomIdR, inviteLink);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        prgWaiting.setVisibility(View.GONE);
+                        hideProgressBar();
+                        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
 
-                        getRoom(roomIdR, ProtoGlobal.Room.Type.CHANNEL);
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("ROOMID", roomIdR);
+                        bundle.putString("INVITE_LINK", inviteLink);
+                        bundle.putString("TOKEN", token);
+                        bundle.putBoolean("AVATAR", existAvatar);
+                        fragmentCreateChannel.setArguments(bundle);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .addToBackStack(null)
+                                .replace(fragmentContainer, fragmentCreateChannel)
+                                .commitAllowingStateLoss();
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+//                        getRoom(roomIdR, ProtoGlobal.Room.Type.CHANNEL);
                     }
                 });
             }

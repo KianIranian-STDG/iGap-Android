@@ -59,25 +59,25 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
 
         // init icon
         TextView txtIconNewGroup = (TextView) v.findViewById(R.id.lm_txt_icon_group);
-        txtIconNewGroup.setTypeface(G.flaticon);
+//        txtIconNewGroup.setTypeface(G.flaticon);
 
         TextView txtIconNewChat = (TextView) v.findViewById(R.id.lm_txt_icon_new_chat);
-        txtIconNewChat.setTypeface(G.flaticon);
+//        txtIconNewChat.setTypeface(G.flaticon);
 
         TextView txtIconNewChannel = (TextView) v.findViewById(R.id.lm_txt_icon_channel);
-        txtIconNewChannel.setTypeface(G.fontawesome);
+
 
         TextView txtIconContacts = (TextView) v.findViewById(R.id.lm_txt_icon_contacts);
-        txtIconContacts.setTypeface(G.flaticon);
+//        txtIconContacts.setTypeface(G.flaticon);
 
         TextView txtIconInviteFriends = (TextView) v.findViewById(R.id.lm_txt_icon_invite_friends);
-        txtIconInviteFriends.setTypeface(G.flaticon);
+//        txtIconInviteFriends.setTypeface(G.flaticon);
 
         TextView txtIconSetting = (TextView) v.findViewById(R.id.lm_txt_icon_setting);
-        txtIconSetting.setTypeface(G.flaticon);
+//        txtIconSetting.setTypeface(G.flaticon);
 
         TextView txtIconiGapFAQ = (TextView) v.findViewById(R.id.lm_txt_icon_igap_faq);
-        txtIconiGapFAQ.setTypeface(G.flaticon);
+//        txtIconiGapFAQ.setTypeface(G.flaticon);
 
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();

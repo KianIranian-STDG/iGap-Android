@@ -39,14 +39,14 @@
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/cl_btn_menu"
-                        fontPath="fonts/Flaticon.ttf"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:gravity="center"
                         android:text="@string/md_menu_button"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp28"/>
                 </com.iGap.libs.rippleeffect.RippleView>
 
 
@@ -75,14 +75,14 @@
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/amr_btn_search"
-                        fontPath="fonts/Flaticon.ttf"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:gravity="center"
                         android:text="@string/md_searching_magnifying_glass"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18" />
+                        android:textSize="@dimen/sp28"/>
                 </com.iGap.libs.rippleeffect.RippleView>
 
             </RelativeLayout>
@@ -141,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/channel_white"
+
             app:backgroundTint="@color/green"
             app:elevation="@dimen/dp6" />
 

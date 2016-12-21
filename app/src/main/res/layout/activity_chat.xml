@@ -35,7 +35,7 @@
                     android:id="@+id/chl_ripple_back_Button"
                     rv_centered="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="0dp"
                     app:rv_alpha="200"
                     app:rv_centered="true"
@@ -44,13 +44,13 @@
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/chl_imv_back_Button"
-                        fontPath="fonts/Flaticon.ttf"
                         android:layout_width="@dimen/dp60"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_back_arrow"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp18"/>
+                        />
 
                 </com.iGap.libs.rippleeffect.RippleView>
 
@@ -98,12 +98,12 @@
 
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/imgMutedRoom"
-                            fontPath="fonts/Flaticon.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="@dimen/dp8"
                             android:paddingRight="@dimen/dp8"
                             android:text="@string/md_flaticon_volume_off_indicator"
+                            android:textAppearance="@style/TextIconAppearance.all"
                             android:textColor="@android:color/white"
                             android:visibility="gone"/>
                     </LinearLayout>
@@ -124,12 +124,12 @@
 
                         <com.wang.avi.AVLoadingIndicatorView
                             android:id="@+id/avi"
+                            style="@style/AVLoadingIndicatorView.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="top"
                             android:layout_marginLeft="@dimen/dp8"
                             android:layout_marginStart="@dimen/dp8"
-                            style="@style/AVLoadingIndicatorView.Small"
-                            android:layout_gravity="top"
                             app:indicatorColor="@color/white"
                             app:indicatorName="BallPulseIndicator"
                             />
@@ -161,13 +161,13 @@
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/chl_imv_menu_button"
-                        fontPath="fonts/Flaticon.ttf"
                         android:layout_width="@dimen/dp48"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_show_more_button"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:textColor="@color/whit_background"
-                        android:textSize="@dimen/sp18"/>
+                        />
 
                 </com.iGap.libs.rippleeffect.RippleView>
             </LinearLayout>
@@ -201,19 +201,18 @@
 
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/chl_btn_close_layout"
-                            fontPath="fonts/Flaticon.ttf"
                             android:layout_width="@dimen/dp48"
                             android:layout_height="match_parent"
                             android:background="@null"
                             android:gravity="center"
                             android:text="@string/md_close_button"
+                            android:textAppearance="@style/TextIconAppearance.all"
                             android:textColor="@color/gray"
-                            android:textSize="@dimen/sp16"/>
+                            android:textSize="@dimen/sp26"/>
                     </com.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
                         android:id="@+id/chl_txt_number_of_selected"
-                        fontPath="fonts/Flaticon.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/dp8"
@@ -222,6 +221,7 @@
                         android:minWidth="@dimen/dp40"
                         android:singleLine="true"
                         android:text="0"
+                        android:textAppearance="@style/TextIconAppearance.all"
                         android:textSize="@dimen/sp18"/>
 
                     <LinearLayout
@@ -244,14 +244,14 @@
 
                             <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/chl_btn_replay_selected"
-                                fontPath="fonts/Flaticon.ttf"
                                 android:layout_width="@dimen/dp60"
                                 android:layout_height="match_parent"
                                 android:background="@null"
                                 android:gravity="center"
                                 android:text="@string/md_back_arrow_reply"
+                                android:textAppearance="@style/TextIconAppearance.all"
                                 android:textColor="@color/gray"
-                                android:textSize="@dimen/sp16"/>
+                                android:textSize="@dimen/sp26"/>
                         </com.iGap.libs.rippleeffect.RippleView>
 
                         <com.iGap.libs.rippleeffect.RippleView
@@ -267,14 +267,14 @@
 
                             <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/chl_btn_copy_selected"
-                                fontPath="fonts/Flaticon.ttf"
                                 android:layout_width="@dimen/dp60"
                                 android:layout_height="match_parent"
                                 android:background="@null"
                                 android:gravity="center"
                                 android:text="@string/md_copy"
+                                android:textAppearance="@style/TextIconAppearance.all"
                                 android:textColor="@color/gray"
-                                android:textSize="@dimen/sp18"/>
+                                android:textSize="@dimen/sp26"/>
                         </com.iGap.libs.rippleeffect.RippleView>
 
                         <com.iGap.libs.rippleeffect.RippleView
@@ -292,14 +292,14 @@
 
                             <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/chl_btn_forward_selected"
-                                fontPath="fonts/Flaticon.ttf"
                                 android:layout_width="@dimen/dp60"
                                 android:layout_height="match_parent"
                                 android:background="@null"
                                 android:gravity="center"
                                 android:text="@string/md_right_arrow_forward"
+                                android:textAppearance="@style/TextIconAppearance.all"
                                 android:textColor="@color/gray"
-                                android:textSize="@dimen/sp18"/>
+                                android:textSize="@dimen/sp26"/>
                         </com.iGap.libs.rippleeffect.RippleView>
                     </LinearLayout>
 
@@ -318,14 +318,14 @@
 
                         <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/chl_btn_delete_selected"
-                            fontPath="fonts/Flaticon.ttf"
                             android:layout_width="@dimen/dp60"
                             android:layout_height="match_parent"
                             android:background="@null"
                             android:gravity="center"
                             android:text="@string/md_rubbish_delete_file"
+                            android:textAppearance="@style/TextIconAppearance.all"
                             android:textColor="@color/gray"
-                            android:textSize="@dimen/sp18"/>
+                            android:textSize="@dimen/sp26"/>
                     </com.iGap.libs.rippleeffect.RippleView>
 
                 </LinearLayout>
@@ -364,12 +364,12 @@
                 app:rv_ripplePadding="5dp">
 
                 <com.iGap.module.MaterialDesignTextView
-                    fontPath="fonts/Flaticon.ttf"
                     android:layout_width="@dimen/dp60"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
+                    android:textAppearance="@style/TextIconAppearance.all"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp18"
 
@@ -399,12 +399,12 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_btn_clear_message_search"
-                    fontPath="fonts/Flaticon.ttf"
                     android:layout_width="@dimen/dp60"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
                     android:text="@string/md_close_button"
+                    android:textAppearance="@style/TextIconAppearance.all"
                     android:textColor="#dededd"
                     android:textSize="@dimen/sp14"/>
             </com.iGap.libs.rippleeffect.RippleView>
@@ -456,12 +456,12 @@
 
         <com.iGap.module.MaterialDesignTextView
             android:id="@+id/ac_btn_cancel_sending_file"
-            fontPath="fonts/Flaticon.ttf"
             android:layout_width="@dimen/dp40"
             android:layout_height="match_parent"
             android:background="@null"
             android:gravity="center_vertical"
             android:text="@string/md_close_button"
+            android:textAppearance="@style/TextIconAppearance.all"
             android:textColor="@color/red"
             android:textSize="@dimen/sp18"/>
     </LinearLayout>

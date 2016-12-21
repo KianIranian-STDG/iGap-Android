@@ -39,14 +39,13 @@
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/fcg_btn_back"
-                        fontPath="fonts/Flaticon.ttf"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
                         android:text="@string/md_back_arrow"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18"/>
+                        android:textColor="@android:color/white"/>
                 </com.iGap.libs.rippleeffect.RippleView>
 
                 <LinearLayout
@@ -96,14 +95,14 @@
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/fcg_btn_done"
-                        fontPath="fonts/Flaticon.ttf"
+                        android:textAppearance="@style/TextIconAppearance.all"
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18"/>
+                        android:textSize="@dimen/sp26"/>
                 </com.iGap.libs.rippleeffect.RippleView>
 
             </RelativeLayout>

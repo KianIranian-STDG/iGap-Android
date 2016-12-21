@@ -82,7 +82,7 @@
                     android:layout_width="@dimen/dp68"
                     android:layout_height="@dimen/dp68"
                     android:background="@drawable/circle_mic"
-                    fontPath="fonts/Flaticon.ttf"
+                    android:textAppearance="@style/TextIconAppearance.all"
                     android:gravity="center"
                     android:padding="@dimen/dp8"
                     android:text="@string/md_voice_message_microphone_button"

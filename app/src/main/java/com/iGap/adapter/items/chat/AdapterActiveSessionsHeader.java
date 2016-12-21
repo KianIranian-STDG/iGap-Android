@@ -15,18 +15,18 @@ public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessi
 
     public StructSessionsGetActiveList item;
 
-    public List<StructSessionsGetActiveList> itemList;
+    private List<StructSessionsGetActiveList> itemList;
 
-    public StructSessionsGetActiveList getItem() {
-        return item;
+    public List<StructSessionsGetActiveList> getItem() {
+        return itemList;
     }
 
     public AdapterActiveSessionsHeader(List<StructSessionsGetActiveList> item) {
         itemList = item;
     }
 
-    public void setItem(StructSessionsGetActiveList item) {
-        this.item = item;
+    public void setItem(List<StructSessionsGetActiveList> item) {
+        this.itemList = item;
     }
 
     //The unique ID for this type of item
@@ -71,7 +71,6 @@ public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessi
             super(view);
 
             root = (ViewGroup) view.findViewById(R.id.adph_rootLayout);
-
         }
     }
 }

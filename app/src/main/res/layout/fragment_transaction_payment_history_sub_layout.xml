@@ -72,7 +72,7 @@
 
     <com.iGap.module.MaterialDesignTextView
         android:id="@+id/ftphs_txt_icon_right_arrow"
-        fontPath="fonts/Flaticon.ttf"
+        android:textAppearance="@style/TextIconAppearance.all"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp8"

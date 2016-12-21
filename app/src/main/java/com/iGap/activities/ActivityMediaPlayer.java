@@ -12,10 +12,10 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -24,13 +24,15 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
+
 import java.io.File;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityMediaPlayer extends ActivityEnhanced {
 
-    Button btnReplay;
-    Button btnShuffle;
+    TextView btnReplay;
+    TextView btnShuffle;
     OnComplete onComplete;
     private TextView txt_MusicName;
     private TextView txt_MusicPlace;
@@ -41,7 +43,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
     private ImageView img_MusicImage;
     private ImageView img_RepeatOne;
     private ImageView img_MusicImage_default_icon;
-    private Button btnPlay;
+    private TextView btnPlay;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -194,7 +196,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
             }
         });
 
-        Button btnPrevious = (Button) findViewById(R.id.ml_btn_Previous_music);
+        TextView btnPrevious = (TextView) findViewById(R.id.ml_btn_Previous_music);
         btnPrevious.setTypeface(G.flaticon);
         btnPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +205,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
             }
         });
 
-        btnShuffle = (Button) findViewById(R.id.ml_btn_shuffel_music);
+        btnShuffle = (TextView) findViewById(R.id.ml_btn_shuffel_music);
         btnShuffle.setTypeface(G.flaticon);
         btnShuffle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,7 +216,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
 
         setShuffleButton();
 
-        btnReplay = (Button) findViewById(R.id.ml_btn_replay_music);
+        btnReplay = (TextView) findViewById(R.id.ml_btn_replay_music);
         btnReplay.setTypeface(G.flaticon);
         btnReplay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,7 +226,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         });
         setReplayButton();
 
-        btnPlay = (Button) findViewById(R.id.ml_btn_play_music);
+        btnPlay = (TextView) findViewById(R.id.ml_btn_play_music);
         btnPlay.setTypeface(G.flaticon);
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,7 +235,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
             }
         });
 
-        Button btnNextMusic = (Button) findViewById(R.id.ml_btn_forward_music);
+        TextView btnNextMusic = (TextView) findViewById(R.id.ml_btn_forward_music);
         btnNextMusic.setTypeface(G.flaticon);
         btnNextMusic.setOnClickListener(new View.OnClickListener() {
             @Override

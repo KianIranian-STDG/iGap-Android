@@ -35,7 +35,7 @@
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_smile_button"
                 style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                fontPath="fonts/Flaticon.ttf"
+                android:textAppearance="@style/TextIconAppearance.all"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
@@ -65,7 +65,7 @@
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_send_button"
                 style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
-                fontPath="fonts/Flaticon.ttf"
+                android:textAppearance="@style/TextIconAppearance.all"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
@@ -88,7 +88,7 @@
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_attach_button"
                     style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                    fontPath="fonts/Flaticon.ttf"
+                    android:textAppearance="@style/TextIconAppearance.all"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -108,7 +108,7 @@
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_mic_button"
                     style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                    fontPath="fonts/Flaticon.ttf"
+                    android:textAppearance="@style/TextIconAppearance.all"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
