@@ -82,6 +82,7 @@ import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCancelDownloadUpload;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
+import com.iGap.helper.HelperGetMessageState;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
@@ -422,13 +423,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         };
 
-        requestMessageHistory();
-        setAvatar();
-
         if (isGoingFromUserLink) {
             new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
         }
 
+        requestMessageHistory();
+        setAvatar();
     }
 
     @Override
@@ -442,7 +442,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         onMusicListener = null;
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         setDraft();
         HelperNotificationAndBadge.isChatRoomNow = false;
 
@@ -450,7 +451,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findAll().deleteAllFromRealm();
                 }
             });
@@ -478,6 +480,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         activityChatForFinish = this;
+
+        HelperGetMessageState.clearMessageViews();
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         avi.setVisibility(View.GONE);
@@ -599,24 +603,28 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 layoutJoin.setVisibility(View.VISIBLE);
 
                 layoutJoin.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         G.onClientJoinByUsername = new OnClientJoinByUsername() {
-                            @Override public void onClientJoinByUsernameResponse() {
+                            @Override
+                            public void onClientJoinByUsernameResponse() {
 
                                 isNotJoin = false;
                                 layoutJoin.setVisibility(View.GONE);
 
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
                                         realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setDeleted(false);
                                     }
                                 });
                                 realm.close();
                             }
 
-                            @Override public void onError(int majorCode, int minorCode) {
+                            @Override
+                            public void onError(int majorCode, int minorCode) {
 
                             }
                         };
@@ -625,8 +633,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 });
             }
-
-
 
 
             messageId = extras.getLong("MessageId");

@@ -20,6 +20,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperGetMessageState;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IChatItemAttachment;
 import com.iGap.interfaces.IMessageItem;
@@ -46,13 +47,11 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestChannelAddMessageReaction;
-import com.iGap.request.RequestChannelGetMessagesStats;
 import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.meness.github.messageprogress.MessageProgress;
@@ -221,9 +220,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         /**
          * show vote layout for channel otherwise hide layout
+         * also get message state for channel
          */
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             voteAction(holder);
+            HelperGetMessageState.getMessageState(mMessage.roomId, Long.parseLong(mMessage.messageID));
         } else {
             LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
             if (lytVote != null) {
@@ -237,7 +238,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
         if (lytVote != null) {
-            getMessageState();
+            //getMessageState();
 
             LinearLayout lytVoteUp = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_up);
             LinearLayout lytVoteDown = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_down);
@@ -285,7 +286,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         realm.close();
     }
 
-    private void getMessageState() {
+    /*private void getMessageState() {
         if (!G.getViews.contains(Long.parseLong(mMessage.messageID))) {
             G.getViews.add(Long.parseLong(mMessage.messageID));
             ArrayList<Long> messageId = new ArrayList<>();
@@ -294,7 +295,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else {
             G.getViews.remove(Long.parseLong(mMessage.messageID));
         }
-    }
+    }*/
 
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {

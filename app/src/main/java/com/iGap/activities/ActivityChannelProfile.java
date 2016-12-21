@@ -1358,8 +1358,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        prgWait.setVisibility(View.GONE);
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        hideProgressBar();
                         setImage(avatarPath);
                     }
                 });
@@ -1370,14 +1369,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     @Override
     public void onAvatarAddError() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                prgWait.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-        });
-
+        hideProgressBar();
     }
 
     //***On Avatar Delete
@@ -1412,8 +1404,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     @Override
     public void onFileUploaded(FileUploadStructure uploadStructure, String identity) {
         if (Long.parseLong(identity) == avatarId) {
-            prgWait.setVisibility(View.GONE);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            hideProgressBar();
             new RequestChannelAvatarAdd().channelAvatarAdd(roomId, uploadStructure.token);
         }
     }
@@ -1425,7 +1416,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     @Override
     public void onUploadStarted(FileUploadStructure struct) {
-
+        showProgressBar();
     }
 
     @Override
@@ -1436,8 +1427,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     @Override
     public void onFileTimeOut(String identity) {
         if (Long.parseLong(identity) == avatarId) {
-            prgWait.setVisibility(View.GONE);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            hideProgressBar();
         }
     }
 
@@ -1814,8 +1804,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            myActivityReference.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            prgWait.setVisibility(View.VISIBLE);
         }
 
         @Override

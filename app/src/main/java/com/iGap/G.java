@@ -66,7 +66,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-public class G extends MultiDexApplication {//implements OnFileDownloadResponse
+public class G extends MultiDexApplication {
 
     public static final String FAQ = "http://www.digikala.com";
     public static final String POLICY = "http://www.digikala.com";
@@ -256,9 +256,6 @@ public class G extends MultiDexApplication {//implements OnFileDownloadResponse
     public static boolean isNetworkRoaming;
 
     public static ConcurrentHashMap<Long, RequestWrapper> currentUploadFiles = new ConcurrentHashMap<>();
-
-    public static ArrayList<Long> getViews = new ArrayList<>();
-
 
     public static void setUserTextSize() {
 
@@ -560,7 +557,6 @@ public class G extends MultiDexApplication {//implements OnFileDownloadResponse
         G.onSecuring = new OnSecuring() {
             @Override
             public void onSecure() {
-                Log.i("FFF", "Secure");
                 login();
 
                 ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -631,71 +627,10 @@ public class G extends MultiDexApplication {//implements OnFileDownloadResponse
                     }
                     realm.close();
                 } else {
+                    Log.i("TTT", "Not Secure");
                     login();
                 }
             }
         }, 1000);
     }
-
-   /* private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
-        final String fileName = "thumb_" + token + "_" + name;
-        if (done) {
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
-                }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    String filePath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().getLocalThumbnailPath();
-                    if (G.onChangeUserPhotoListener != null) {
-                        G.onChangeUserPhotoListener.onChangePhoto(filePath);
-                    }
-                    realm.close();
-                }
-            });
-
-            return; // necessary
-        }
-
-        ProtoFileDownload.FileDownload.Selector selector =
-                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        String identity =
-                token + '*' + selector.toString() + '*' + smallSize + '*' + fileName + '*' + 0;
-
-        new RequestFileDownload().download(token, 0, smallSize,
-                selector, identity);
-    }
-
-    @Override
-    public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
-        Realm realm = Realm.getDefaultInstance();
-        if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
-            // requested thumbnail
-            RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst();
-            if (avatar != null) {
-                requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
-            }
-        } else {
-            // TODO: 11/22/2016 [Alireza] implement
-        }
-        realm.close();
-    }
-
-    @Override
-    public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
-        // empty
-    }
-
-    @Override
-    public void onError(int majorCode, int minorCode) {
-
-    }
-
-    @Override
-    public void onBadDownload(String token) {
-        // empty
-    }*/
 }
