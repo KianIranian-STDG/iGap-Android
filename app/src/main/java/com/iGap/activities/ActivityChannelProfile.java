@@ -21,11 +21,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.InputType;
 import android.text.Spannable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,7 +56,6 @@ import com.iGap.interfaces.OnChannelAddMember;
 import com.iGap.interfaces.OnChannelAddModerator;
 import com.iGap.interfaces.OnChannelAvatarAdd;
 import com.iGap.interfaces.OnChannelAvatarDelete;
-import com.iGap.interfaces.OnChannelCheckUsername;
 import com.iGap.interfaces.OnChannelDelete;
 import com.iGap.interfaces.OnChannelEdit;
 import com.iGap.interfaces.OnChannelGetMemberList;
@@ -68,7 +64,6 @@ import com.iGap.interfaces.OnChannelKickMember;
 import com.iGap.interfaces.OnChannelKickModerator;
 import com.iGap.interfaces.OnChannelLeft;
 import com.iGap.interfaces.OnChannelRevokeLink;
-import com.iGap.interfaces.OnChannelUpdateUsername;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnMenuClick;
@@ -83,7 +78,6 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
-import com.iGap.proto.ProtoChannelCheckUsername;
 import com.iGap.proto.ProtoChannelGetMemberList;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
@@ -101,7 +95,6 @@ import com.iGap.request.RequestChannelAddMember;
 import com.iGap.request.RequestChannelAddModerator;
 import com.iGap.request.RequestChannelAvatarAdd;
 import com.iGap.request.RequestChannelAvatarDelete;
-import com.iGap.request.RequestChannelCheckUsername;
 import com.iGap.request.RequestChannelDelete;
 import com.iGap.request.RequestChannelEdit;
 import com.iGap.request.RequestChannelGetMemberList;
@@ -110,7 +103,6 @@ import com.iGap.request.RequestChannelKickMember;
 import com.iGap.request.RequestChannelKickModerator;
 import com.iGap.request.RequestChannelLeft;
 import com.iGap.request.RequestChannelRevokeLink;
-import com.iGap.request.RequestChannelUpdateUsername;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -1187,100 +1179,32 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                         .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-        positive.setEnabled(false);
 
-        final String finalUserName = txtChannelNameInfo.getText().toString();
-        edtUserName.addTextChangedListener(new TextWatcher() {
+        G.onChannelEdit = new OnChannelEdit() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                new RequestChannelCheckUsername().channelCheckUsername(roomId, edtUserName.getText().toString());
-            }
-        });
-
-        G.onChannelCheckUsername = new OnChannelCheckUsername() {
-            @Override
-            public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
-                            if (!edtUserName.getText().toString().equals(finalUserName)) {
-                                positive.setEnabled(true);
-                            } else {
-                                positive.setEnabled(false);
-                            }
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("");
-                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.INVALID) {
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("INVALID");
-                            positive.setEnabled(false);
-                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("TAKEN");
-                            positive.setEnabled(false);
-                        }
-                    }
-                });
+            public void onChannelEdit(long roomId, String name, String description) {
+                hideProgressBar();
+                txtChannelNameInfo.setText(name);
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-
+                hideProgressBar();
             }
 
             @Override
             public void onTimeOut() {
-
+                hideProgressBar();
             }
         };
 
-
-        G.onChannelUpdateUsername = new OnChannelUpdateUsername() {
-            @Override
-            public void onChannelUpdateUsername(final long roomId, final String username) {
-                title = username;
-                titleToolbar.setText("" + title);
-                txtChannelNameInfo.setText("" + username);
-                titleToolbar.setText("" + username);
-                Realm realm = Realm.getDefaultInstance();
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        realmRoom.setTitle(username);
-                        Log.i("BBBBB", "execute: " + username);
-                    }
-                });
-                //channel info
-                realm.close();
-
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-                Log.i("VVV", "onError majorCode: " + majorCode);
-                Log.i("VVV", "onError minorCode: " + minorCode);
-            }
-        };
         positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                new RequestChannelUpdateUsername().channelUpdateUsername(roomId, edtUserName.getText().toString());
+                new RequestChannelEdit().channelEdit(roomId, edtUserName.getText().toString(), txtDescription.getText().toString());
                 dialog.dismiss();
+                showProgressBar();
             }
         });
 

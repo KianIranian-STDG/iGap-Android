@@ -104,11 +104,12 @@
                                 >
 
 
-                                <Button
+                                <TextView
                                     android:id="@+id/csla_btn_play_music"
                                     android:layout_width="@dimen/dp40"
                                     android:layout_height="match_parent"
                                     android:background="@null"
+                                    android:textAppearance="@style/TextIconAppearance.all"
                                     android:gravity="center"
                                     android:text="@string/md_play_arrow"
                                     android:textColor="@color/green"

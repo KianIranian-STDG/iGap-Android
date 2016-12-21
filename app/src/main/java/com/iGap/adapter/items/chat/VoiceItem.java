@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -172,7 +171,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ImageView thumbnail;
-        protected Button btnPlayMusic;
+        protected TextView btnPlayMusic;
         protected SeekBar musicSeekbar;
         protected OnComplete complete;
         protected TextView txt_Timer;
@@ -186,8 +185,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             auther = (TextView) view.findViewById(R.id.cslv_txt_author);
-            btnPlayMusic = (Button) view.findViewById(R.id.csla_btn_play_music);
-            btnPlayMusic.setTypeface(G.flaticon);
+            btnPlayMusic = (TextView) view.findViewById(R.id.csla_btn_play_music);
             txt_Timer = (TextView) view.findViewById(R.id.csla_txt_timer);
             musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);
 

@@ -205,7 +205,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             messageText.setTextSize(G.userTextSize);
 
             btnPlayMusic = (TextView) view.findViewById(R.id.csla_btn_play_music);
-            btnPlayMusic.setTypeface(G.flaticon);
+
             txt_Timer = (TextView) view.findViewById(R.id.csla_txt_timer);
             musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);
 

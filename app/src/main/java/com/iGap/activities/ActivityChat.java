@@ -1234,7 +1234,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);
         txtFileNameForSend = (TextView) findViewById(R.id.ac_txt_file_neme_for_sending);
         btnCancelSeningFile = (MaterialDesignTextView) findViewById(R.id.ac_btn_cancel_sending_file);
-        btnCancelSeningFile.setTypeface(G.flaticon);
         btnCancelSeningFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

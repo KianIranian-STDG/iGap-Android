@@ -51,6 +51,7 @@ public class FragmentActiveSessions extends Fragment {
     private List<IItem> items = new ArrayList<>();
     private ProgressBar prgWaiting;
     private FastItemAdapter fastItemAdapter;
+    private boolean isClearAdapter = false;
 
     public FragmentActiveSessions() {
         // Required empty public constructor
@@ -154,8 +155,11 @@ public class FragmentActiveSessions extends Fragment {
                                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 prgWaiting.setVisibility(View.GONE);
 
-                                int po = position + 1;
-                                fastItemAdapter.remove(po);
+                                if (!isClearAdapter) {
+                                    fastItemAdapter.remove(position);
+                                    isClearAdapter = true;
+                                }
+                                fastItemAdapter.remove(position);
                             }
                         });
                     }
@@ -300,14 +304,13 @@ public class FragmentActiveSessions extends Fragment {
                                 }).show();
                     }
                 } else {
+                    v.setVisibility(View.GONE);
                     if (((AdapterActiveSessionsHeader) item).getItem().size() > 0) {
                         for (int i = 0; i < ((AdapterActiveSessionsHeader) item).getItem().size(); i++) {
                             if (!((AdapterActiveSessionsHeader) item).getItem().get(i).isCurrent()) {
                                 new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessionsHeader) item).getItem().get(i).getSessionId());
                             }
                         }
-                    } else {
-                        v.setVisibility(View.GONE);
                     }
                 }
                 return false;
