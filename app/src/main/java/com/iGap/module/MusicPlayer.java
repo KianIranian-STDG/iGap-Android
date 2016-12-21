@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
@@ -62,8 +61,8 @@ public class MusicPlayer {
     public static boolean isShowMediaPlayer = false;
     public static int musicProgress = 0;
     private static LinearLayout layoutTripMusic;
-    private static Button btnPlayMusic;
-    private static Button btnCloseMusic;
+    private static TextView btnPlayMusic;
+    private static TextView btnCloseMusic;
     private static TextView txt_music_name;
     private static RemoteViews remoteViews;
     private static NotificationManager notificationManager;
@@ -145,7 +144,7 @@ public class MusicPlayer {
         txt_music_time_counter = (TextView) layout.findViewById(R.id.mls_txt_music_time_counter);
         txt_music_name = (TextView) layout.findViewById(R.id.mls_txt_music_name);
 
-        btnPlayMusic = (Button) layout.findViewById(R.id.mls_btn_play_music);
+        btnPlayMusic = (TextView) layout.findViewById(R.id.mls_btn_play_music);
         btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,7 +152,7 @@ public class MusicPlayer {
             }
         });
 
-        btnCloseMusic = (Button) layout.findViewById(R.id.mls_btn_close);
+        btnCloseMusic = (TextView) layout.findViewById(R.id.mls_btn_close);
         btnCloseMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
