@@ -84,42 +84,45 @@ public final class AppUtils {
     }
 
     public static void rightFileThumbnailIcon(ImageView view, ProtoGlobal.RoomMessageType messageType, @Nullable RealmAttachment attachment) {
-        switch (messageType) {
-            case VOICE:
-                view.setImageResource(R.drawable.microphone_icon);
-                break;
-            case AUDIO:
-            case AUDIO_TEXT:
-                view.setImageResource(R.drawable.green_music_note);
-            case FILE:
-            case FILE_TEXT:
-                if (attachment.getName().toLowerCase().endsWith(".pdf")) {
-                    view.setImageResource(R.drawable.pdf_icon);
-                } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
-                    view.setImageResource(R.drawable.txt_icon);
-                } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
-                    view.setImageResource(R.drawable.exe_icon);
-                } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
-                    view.setImageResource(R.drawable.docx_icon);
-                } else {
-                    view.setImageResource(R.drawable.file_icon);
-                }
-                break;
-            default:
-                if (attachment != null) {
-                    if (attachment.isFileExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(attachment.getLocalFilePath()), view);
-                    } else if (attachment.isThumbnailExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(attachment.getLocalThumbnailPath()), view);
+        if (messageType != null) {
+            switch (messageType) {
+                case VOICE:
+                    view.setImageResource(R.drawable.microphone_icon);
+                    break;
+                case AUDIO:
+                case AUDIO_TEXT:
+                    view.setImageResource(R.drawable.green_music_note);
+                case FILE:
+                case FILE_TEXT:
+                    if (attachment.getName().toLowerCase().endsWith(".pdf")) {
+                        view.setImageResource(R.drawable.pdf_icon);
+                    } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
+                        view.setImageResource(R.drawable.txt_icon);
+                    } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
+                        view.setImageResource(R.drawable.exe_icon);
+                    } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
+                        view.setImageResource(R.drawable.docx_icon);
+                    } else {
+                        view.setImageResource(R.drawable.file_icon);
+                    }
+                    break;
+                default:
+                    if (attachment != null) {
+                        if (attachment.isFileExistsOnLocal()) {
+                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(attachment.getLocalFilePath()), view);
+                        } else if (attachment.isThumbnailExistsOnLocal()) {
+                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(attachment.getLocalThumbnailPath()), view);
+                        } else {
+                            view.setVisibility(View.GONE);
+                            // TODO: 11/15/2016 [Alireza] request download bede
+                        }
                     } else {
                         view.setVisibility(View.GONE);
-                        // TODO: 11/15/2016 [Alireza] request download bede
                     }
-                } else {
-                    view.setVisibility(View.GONE);
-                }
-                break;
+                    break;
+            }
         }
+
     }
 
     /**

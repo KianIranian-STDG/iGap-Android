@@ -239,7 +239,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         if (userInfo != null)
             userId = userInfo.getUserId();
 
-        realm.close();
+        //realm.close();
         //=========Put Extra End
 
         txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);

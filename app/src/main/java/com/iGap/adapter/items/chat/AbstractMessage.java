@@ -44,6 +44,8 @@ import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestChannelAddMessageReaction;
@@ -238,7 +240,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
         if (lytVote != null) {
-            //getMessageState();
 
             LinearLayout lytVoteUp = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_up);
             LinearLayout lytVoteDown = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_down);
@@ -285,17 +286,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         });
         realm.close();
     }
-
-    /*private void getMessageState() {
-        if (!G.getViews.contains(Long.parseLong(mMessage.messageID))) {
-            G.getViews.add(Long.parseLong(mMessage.messageID));
-            ArrayList<Long> messageId = new ArrayList<>();
-            messageId.add(Long.parseLong(mMessage.messageID));
-            new RequestChannelGetMessagesStats().channelGetMessagesStats(mMessage.roomId, messageId);
-        } else {
-            G.getViews.remove(Long.parseLong(mMessage.messageID));
-        }
-    }*/
 
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
@@ -411,16 +401,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 Realm realm = Realm.getDefaultInstance();
-                RealmRegisteredInfo replayToInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.replayTo.getUserId()).findFirst();
-                if (replayToInfo != null) {
-                    replyFrom.setText(replayToInfo.getDisplayName());
+                if (type == ProtoGlobal.Room.Type.CHANNEL) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.replayTo.getRoomId()).findFirst();
+                    if (realmRoom != null) {
+                        replyFrom.setText(realmRoom.getTitle());
+                    }
+                } else {
+                    RealmRegisteredInfo replayToInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.replayTo.getUserId()).findFirst();
+                    if (replayToInfo != null) {
+                        replyFrom.setText(replayToInfo.getDisplayName());
+                    }
                 }
+
                 ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessage() : mMessage.replayTo.getForwardMessage().getMessage());
 
                 replayContainer.setVisibility(View.VISIBLE);
                 realm.close();
 
-                if (mMessage.isSenderMe()) {
+                if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
                     replayContainer.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
                     holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.colorOldBlack));
                     replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));

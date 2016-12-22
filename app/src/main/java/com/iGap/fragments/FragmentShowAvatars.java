@@ -230,7 +230,11 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                     super.onScrollStateChanged(recyclerView, newState);
 
                     curerntItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                    mCount.setText(String.format(getString(R.string.d_of_d), curerntItemPosition + 1, mAdapter.getAdapterItemCount()));
+                    try {
+                        mCount.setText(String.format(getString(R.string.d_of_d), curerntItemPosition + 1, mAdapter.getAdapterItemCount()));
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 

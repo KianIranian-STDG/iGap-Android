@@ -55,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -192,6 +193,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -203,20 +218,10 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
+import static com.iGap.R.id.replyFrom;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
@@ -2837,7 +2842,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             mReplayLayout = (LinearLayout) findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
-            TextView replayFrom = (TextView) mReplayLayout.findViewById(R.id.replyFrom);
+            TextView replayFrom = (TextView) mReplayLayout.findViewById(replyFrom);
             ImageView thumbnail = (ImageView) mReplayLayout.findViewById(R.id.thumbnail);
             ImageView closeReplay = (ImageView) mReplayLayout.findViewById(R.id.cancelIcon);
             closeReplay.setOnClickListener(new View.OnClickListener() {
@@ -2859,10 +2864,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message.getAttachment());
                 replayTo.setText(chatItem.messageText);
             }
-            RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(chatItem.senderID)).findFirst();
-            if (userInfo != null) {
-                replayFrom.setText(userInfo.getDisplayName());
+            if (chatType == CHANNEL) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.roomId).findFirst();
+                if (realmRoom != null) {
+                    replayFrom.setText(realmRoom.getTitle());
+                }
+            } else {
+                RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(chatItem.senderID)).findFirst();
+                if (userInfo != null) {
+                    replayFrom.setText(userInfo.getDisplayName());
+                }
             }
+
             realm.close();
             // I set tag to retrieve it later when sending message
             mReplayLayout.setTag(chatItem);
