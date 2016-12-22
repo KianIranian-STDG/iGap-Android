@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.widget.FrameLayout;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
@@ -26,11 +25,9 @@ import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
-
+import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
@@ -48,13 +45,25 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
 
-            if (item instanceof TimeItem)
+            if (item instanceof TimeItem) {
                 if (item.isSelected())
                     v.performLongClick();
+            } else {
+                if (iMessageItem != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
 
-            if (onChatMessageSelectionChanged != null) {
-                onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
+                    if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || item.mMessage.status.equalsIgnoreCase(
+                        ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+
+                        if (item.isSelected()) v.performLongClick();
+                        return true;
+                    }
+
+                    if (onChatMessageSelectionChanged != null) {
+                        onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
+                    }
+                }
             }
+
             return true;
         }
     };

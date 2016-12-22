@@ -115,8 +115,9 @@ public class HelperNotificationAndBadge {
                 s = " " + context.getString(R.string.chats);
             }
 
-            remoteViews.setTextViewText(R.id.ln_txt_message_notification,
-                    unreadMessageCount + context.getString(R.string.new_messages_from) + countUnicChat + s);
+            String str = String.format(" %d " + context.getString(R.string.new_messages_from) + " %d " + s, unreadMessageCount, countUnicChat);
+
+            remoteViews.setTextViewText(R.id.ln_txt_message_notification, str);
         }
 
         if (isFromOnRoom) {
@@ -255,7 +256,7 @@ public class HelperNotificationAndBadge {
             newmess = context.getString(R.string.new_messages);
         }
 
-        remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + newmess + chatCount);
+        remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + " " + newmess + " " + chatCount);
 
         if (unreadMessageCount == 1) {
             remoteViewsLarge.setViewVisibility(R.id.mln_btn_replay, View.VISIBLE);

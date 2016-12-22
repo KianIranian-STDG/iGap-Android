@@ -340,7 +340,7 @@
     <string name="please_enter_firstname_or_lastname">"لطفاً نام یا نام خانوادگی را وارد کنید."</string>
     <string name="new_chanel">"کانال جدید"</string>
     <string name="can_not_save_picture_pleas_try_again">"عدم توانایی در ذخیرهٔ تصویر، لطفاً دوباره تلاش کنید."</string>
-    <string name="chats">"گفتگوها"</string>
+    <string name="chats">"گفتگو"</string>
     <string name="contacts">"مخاطبین"</string>
     <string name="messages">"پیام‌ها"</string>
     <string name="show_message_count">"پیام‌های قابل نمایش"</string>
@@ -348,7 +348,7 @@
     <string name="new_messages_from">"پیام‌های جدید از"</string>
     <string name="from">"از"</string>
     <string name="new_message">"پیام جدید"</string>
-    <string name="new_messages">"پیام‌های جدید"</string>
+    <string name="new_messages">"پیام‌ جدید"</string>
     <string name="new_message_recicve">"پیام جدید دریافت شد."</string>
     <string name="my_Position_is">"موقعیت من:"</string>
     <string name="latitude">"عرض جغرافیایی:"</string>
@@ -650,7 +650,6 @@
     <string name="completed">کامل شده</string>
     <string name="st_data_shams">تاریخ هجری شمسی</string>
     <string name="content_log_out">Are you sure log out from app?</string>
-
     <string name="one_day">یک روز قبل</string>
     <string name="two_day">دو روز قبل</string>
     <string name="three_day">سه روز قبل</string>
@@ -666,4 +665,25 @@
     <string name="channel_name">نام کانال</string>
     <string name="delete_and_leave_channel">حذف و خارج شدن از گروه</string>
     <string name="channel_delete">حذف کانال</string>
+    <string name="please_enter_channel_name">"لطفاً نام کانال وارد کنید."</string>
+    <string name="new_channel">"کانال جدید"</string>
+    <string name="channel_left">"ترک کانال"</string>
+    <string name="please_enter_channel_description">"لطفاً توضیح مختصری برای کانال وارد کنید."</string>
+    <string name="txt_you">"شما : "</string>
+    <string name="farvardin">فروردین</string>
+    <string name="ordibehst">اردیبهشت</string>
+    <string name="khordad">خرداد</string>
+    <string name="tir">تیر</string>
+    <string name="mordad">مرداد</string>
+    <string name="shahrivar">شهریور</string>
+    <string name="mehr">مهر</string>
+    <string name="aban">آبان</string>
+    <string name="azar">آذر</string>
+    <string name="dey">دی</string>
+    <string name="bahman">بهمن</string>
+    <string name="esfand">اسفند</string>
+
+    <string name="txt_draft">Draft: </string>
+
+
 </resources>

@@ -29,7 +29,6 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -55,7 +54,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -136,7 +134,6 @@ import com.iGap.module.RecyclerViewPauseOnScrollListener;
 import com.iGap.module.ResendMessage;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
-import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.module.SortMessages;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
@@ -193,20 +190,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -218,6 +201,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -1540,9 +1534,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         // for their messages list
         layoutManager.setStackFromEnd(true);
         // set behavior to RecyclerView
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
-        params.setBehavior(new ShouldScrolledBehavior(layoutManager, mAdapter));
-        recyclerView.setLayoutParams(params);
+        //CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
+        //params.setBehavior(new ShouldScrolledBehavior(layoutManager, mAdapter));
+        //recyclerView.setLayoutParams(params);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
@@ -2302,7 +2296,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             attachFile.showDialogOpenCamera(toolbar, null);
                         }*/
                         if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
-                            attachFile.showDialogOpenCamera(toolbar, prgWaiting);
+                            attachFile.showDialogOpenCamera(toolbar, null);
                         } else {
                             attachFile.showDialogOpenCamera(toolbar, null);
                         }
@@ -2900,6 +2894,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             inflateReplayLayoutIntoStub(item == null ? messages.iterator().next().mMessage : item);
 
             ll_AppBarSelected.setVisibility(View.GONE);
+            findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
             toolbar.setVisibility(View.VISIBLE);
 
             mAdapter.deselect();
@@ -2950,6 +2945,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     mAdapter.deselect();
                     toolbar.setVisibility(View.VISIBLE);
                     ll_AppBarSelected.setVisibility(View.GONE);
+                    findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
                     // gone replay layout
                     if (mReplayLayout != null) {
                         mReplayLayout.setVisibility(View.GONE);
@@ -3331,9 +3327,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
 
             ll_AppBarSelected.setVisibility(View.VISIBLE);
+            findViewById(R.id.ac_green_line).setVisibility(View.GONE);
         } else {
             toolbar.setVisibility(View.VISIBLE);
             ll_AppBarSelected.setVisibility(View.GONE);
+            findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
         }
     }
 
