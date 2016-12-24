@@ -57,6 +57,8 @@ import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
+import com.iGap.interfaces.OnUserProfileGetEmail;
+import com.iGap.interfaces.OnUserProfileGetGender;
 import com.iGap.interfaces.OnUserProfileSetEmailResponse;
 import com.iGap.interfaces.OnUserProfileSetGenderResponse;
 import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
@@ -79,6 +81,8 @@ import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserProfileCheckUsername;
+import com.iGap.request.RequestUserProfileGetEmail;
+import com.iGap.request.RequestUserProfileGetGender;
 import com.iGap.request.RequestUserProfileSetEmail;
 import com.iGap.request.RequestUserProfileSetGender;
 import com.iGap.request.RequestUserProfileSetNickname;
@@ -139,14 +143,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private String nickName;
     private String userName;
     private String phoneName;
-    private ProtoGlobal.Gender gander;
-    private String email;
+    private ProtoGlobal.Gender userGender;
+    private String userEmail;
     private long userId;
     private long lastUploadedAvatarId;
     private IncomingSms smsReceiver;
     private String regex;
     public ProgressBar prgWait;
     private static String identityCurrent;
+    private TextView txtGander;
+    private TextView txtEmail;
 
     public static long getFolderSize(File dir) throws RuntimeException {
         long size = 0;
@@ -295,18 +301,63 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtNickName = (TextView) findViewById(R.id.st_txt_nikName);
         txtUserName = (TextView) findViewById(R.id.st_txt_userName);
         txtPhoneNumber = (TextView) findViewById(R.id.st_txt_phoneNumber);
+        txtGander = (TextView) findViewById(R.id.st_txt_gander);
+        txtEmail = (TextView) findViewById(R.id.st_txt_email);
         prgWait = (ProgressBar) findViewById(R.id.st_prgWaiting_addContact);
         prgWait.getIndeterminateDrawable()
                 .setColorFilter(getResources().getColor(R.color.toolbar_background),
                         android.graphics.PorterDuff.Mode.MULTIPLY);
+
+
+        G.onUserProfileGetGender = new OnUserProfileGetGender() {
+            @Override
+            public void onUserProfileGetGender(final ProtoGlobal.Gender gender) {
+
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                        realmUserInfo.setGender(gender);
+                        userGender = gender;
+                        txtGander.setText(userGender == ProtoGlobal.Gender.MALE ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
+                    }
+                });
+                realm.close();
+            }
+        };
+        new RequestUserProfileGetGender().userProfileGetGender();
+
+
+        G.onUserProfileGetEmail = new OnUserProfileGetEmail() {
+            @Override
+            public void onUserProfileGetEmail(final String email) {
+
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                        realmUserInfo.setEmail(email);
+                        userEmail = email;
+                        txtEmail.setText(email);
+                    }
+                });
+                realm.close();
+            }
+        };
+
+        new RequestUserProfileGetEmail().userProfileGetEmail();
+
+
         final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
             userId = realmUserInfo.getUserId();
             nickName = realmUserInfo.getUserInfo().getDisplayName();
             userName = realmUserInfo.getUserInfo().getUsername();
             phoneName = realmUserInfo.getUserInfo().getPhoneNumber();
-            gander = realmUserInfo.getGender();
-            email = realmUserInfo.getEmail();
+            userGender = realmUserInfo.getGender();
+            userEmail = realmUserInfo.getEmail();
         }
         if (nickName != null) {
             txtNickName.setText(nickName);
@@ -541,13 +592,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
 
-        final TextView txtGander = (TextView) findViewById(R.id.st_txt_gander);
-        if (gander == null || gander.getNumber() == -1 || gander == ProtoGlobal.Gender.UNKNOWN) {
+        if (userGender == null || userGender.getNumber() == -1 || userGender == ProtoGlobal.Gender.UNKNOWN) {
             txtGander.setText(getResources().getString(R.string.set_gender));
         } else {
-            txtGander.setText(gander == ProtoGlobal.Gender.MALE ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
+            txtGander.setText(userGender == ProtoGlobal.Gender.MALE ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
         }
-
         ViewGroup layoutGander = (ViewGroup) findViewById(R.id.st_layout_gander);
         layoutGander.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -635,11 +684,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        final TextView txtEmail = (TextView) findViewById(R.id.st_txt_email);
-        if (email == null) {
+        if (userEmail == null) {
             txtEmail.setText(getResources().getString(R.string.set_email));
         } else {
-            txtEmail.setText(email);
+            txtEmail.setText(userEmail);
         }
 
         ViewGroup ltEmail = (ViewGroup) findViewById(R.id.st_layout_email);
@@ -656,7 +704,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final EditText edtEmail = new EditText(ActivitySetting.this);
                 edtEmail.setHint(getResources().getString(R.string.set_email));
 
-                if (email == null) {
+                if (userEmail == null) {
                     edtEmail.setText("");
                 } else {
                     edtEmail.setText(txtEmail.getText().toString());
@@ -685,7 +733,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
 
-                final String finalEmail = email;
+                final String finalEmail = userEmail;
                 edtEmail.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1739,6 +1787,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         showImage();
     }
+
 
     // call this method for show image in enter to this activity
     private void showImage() {

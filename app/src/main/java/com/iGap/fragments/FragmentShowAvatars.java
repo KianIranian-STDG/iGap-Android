@@ -25,7 +25,9 @@ import com.iGap.R;
 import com.iGap.adapter.AvatarsAdapter;
 import com.iGap.adapter.items.AvatarItem;
 import com.iGap.helper.HelperSaveFile;
+import com.iGap.interfaces.OnChannelAvatarDelete;
 import com.iGap.interfaces.OnFileDownloadResponse;
+import com.iGap.interfaces.OnGroupAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.OnComplete;
@@ -33,11 +35,17 @@ import com.iGap.module.SUID;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
+import com.iGap.realm.RealmChannelRoom;
+import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.enums.ChannelChatRole;
+import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestChannelAvatarDelete;
+import com.iGap.request.RequestGroupAvatarDelete;
 import com.iGap.request.RequestUserAvatarDelete;
 
 import java.io.File;
@@ -73,6 +81,9 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     private final int CONTACT = 1;
     private final int GROUP = 2;
     private long userId;
+
+    private GroupChatRole roleGroup;
+    private ChannelChatRole roleChannel;
 
 
     From from = From.chat;
@@ -187,10 +198,18 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                                 showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
                                 break;
                             case group:
-                                showPopupMenu(R.array.pop_up_menu_show_avatar);
+                                if (roleGroup == GroupChatRole.OWNER || roleGroup == GroupChatRole.ADMIN) {
+                                    showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                                } else {
+                                    showPopupMenu(R.array.pop_up_menu_show_avatar);
+                                }
                                 break;
                             case channel:
-                                showPopupMenu(R.array.pop_up_menu_show_avatar);
+                                if (roleChannel == ChannelChatRole.OWNER || roleChannel == ChannelChatRole.ADMIN) {
+                                    showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                                } else {
+                                    showPopupMenu(R.array.pop_up_menu_show_avatar);
+                                }
                                 break;
                             case chat:
                                 showPopupMenu(R.array.pop_up_menu_show_avatar);
@@ -208,7 +227,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         } else if (from == From.group) {
             fillListGroupAvatar();
         } else if (from == From.channel) {
-            fillListGroupAvatar();
+            fillListChannelAvatar();
         }
 
 
@@ -272,6 +291,9 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
     private void fillListGroupAvatar() {
 
+        //group info
+
+
         Realm realm = Realm.getDefaultInstance();
         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
         if (room != null) {
@@ -286,8 +308,41 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             }
         }
 
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+        roleGroup = realmGroupRoom.getRole();
+
         realm.close();
     }
+
+
+    private void fillListChannelAvatar() {
+
+        //group info
+
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+        if (room != null) {
+            // user exists in DB
+
+            RealmResults<RealmAvatar> userAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll();
+
+            long identifier = SUID.id().get();
+            for (RealmAvatar avatar : userAvatars) {
+                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
+                identifier++;
+            }
+        }
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+        roleChannel = realmChannelRoom.getRole();
+
+        realm.close();
+    }
+
+
 
     private boolean deleteFromGallery(int itemPos) {
         // TODO: 10/26/2016 [Alireza] implement
@@ -305,8 +360,21 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                                 if (which == 0) {
                                     saveToGallery();
                                 } else if (which == 1) {
-//
-                                    deletePhoto();
+
+                                    switch (from) {
+                                        case setting:
+                                            deletePhotoSetting();
+                                            break;
+                                        case group:
+                                            deletePhotoGroup();
+                                            break;
+                                        case channel:
+                                            deletePhotoChannel();
+                                            break;
+                                        case chat:
+                                            deletePhotoChat();
+                                            break;
+                                    }
 
                                 }
                                 // TODO: 10/26/2016 [Alireza] implement delete
@@ -329,7 +397,103 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         dialog.getWindow().setAttributes(layoutParams);
     }
 
-    private void deletePhoto() {
+    private void deletePhotoChat() {
+
+
+    }
+
+    private void deletePhotoChannel() {
+
+        G.onChannelAvatarDelete = new OnChannelAvatarDelete() {
+            @Override
+            public void onChannelAvatarDelete(long roomId, final long avatarId) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
+
+                        int newCount;
+                        if (curerntItemPosition == 0) {
+                            newCount = curerntItemPosition + 1;
+                        } else {
+                            newCount = curerntItemPosition;
+                        }
+                        mAdapter.remove(curerntItemPosition);
+                        mCount.setText(String.format(getString(R.string.d_of_d), newCount, mAdapter.getAdapterItemCount()));
+
+                        if (mAdapter.getAdapterItemCount() == 0) {
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+                            if (appBarLayout != null)
+                                appBarLayout.setVisibility(View.VISIBLE);
+
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+
+            @Override
+            public void onTimeOut() {
+
+            }
+        };
+
+        new RequestChannelAvatarDelete().channelAvatarDelete(mPeerId, mAdapter.getAdapterItems().get(curerntItemPosition).imageId);
+
+
+    }
+
+    private void deletePhotoGroup() {
+
+        G.onGroupAvatarDelete = new OnGroupAvatarDelete() {
+            @Override
+            public void onDeleteAvatar(long roomId, final long avatarId) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
+
+                        int newCount;
+                        if (curerntItemPosition == 0) {
+                            newCount = curerntItemPosition + 1;
+                        } else {
+                            newCount = curerntItemPosition;
+                        }
+                        mAdapter.remove(curerntItemPosition);
+                        mCount.setText(String.format(getString(R.string.d_of_d), newCount, mAdapter.getAdapterItemCount()));
+
+                        if (mAdapter.getAdapterItemCount() == 0) {
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+                            if (appBarLayout != null)
+                                appBarLayout.setVisibility(View.VISIBLE);
+
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onDeleteAvatarError(int majorCode, int minorCode) {
+                Log.i("HHHHHHHH", "onDeleteAvatarError majorCode: " + majorCode);
+                Log.i("HHHHHHHH", "onDeleteAvatarError minorCode: " + minorCode);
+            }
+
+
+            @Override
+            public void onTimeOut() {
+                Log.i("HHHHHHHH", "onDeleteAvatarError: ");
+            }
+        };
+
+
+        new RequestGroupAvatarDelete().groupAvatarDelete(mPeerId, mAdapter.getAdapterItems().get(curerntItemPosition).imageId);
+    }
+
+    private void deletePhotoSetting() {
 
 
         G.onUserAvatarDelete = new OnUserAvatarDelete() {

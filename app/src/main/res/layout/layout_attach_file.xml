@@ -10,8 +10,10 @@
         android:id="@+id/chl_ll_attach"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
 
         <View
@@ -30,15 +32,18 @@
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_smile_button"
                 style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                android:textAppearance="@style/TextIconAppearance.all"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
                 android:gravity="bottom"
-                android:paddingBottom="@dimen/dp16"
-                android:paddingLeft="@dimen/dp4"
-                android:paddingRight="@dimen/dp4"
-                android:text="@string/md_emoticon_with_happy_face"/>
+                android:paddingBottom="@dimen/dp8"
+                android:paddingLeft="@dimen/dp8"
+                android:paddingRight="@dimen/dp8"
+                android:text="@string/md_emoticon_with_happy_face"
+                android:textAppearance="@style/TextIconAppearance.all"
+                android:textColor="@color/gray_6c"
+                android:textSize="@dimen/sp28"/>
+
 
             <io.github.meness.emoji.EmojiEditText
                 android:id="@+id/chl_edt_chat"
@@ -51,8 +56,6 @@
                 android:hint="@string/type_message"
                 android:lineSpacingMultiplier=".8"
                 android:maxLines="4"
-                android:paddingBottom="@dimen/dp4"
-                android:paddingRight="@dimen/dp4"
                 android:textColorHint="@color/light_gray"
                 app:emojiSize="26sp"
                 />
@@ -60,16 +63,14 @@
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_send_button"
                 style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
-                android:textAppearance="@style/TextIconAppearance.all"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
-                android:gravity="bottom"
-                android:paddingBottom="@dimen/dp16"
-                android:paddingLeft="@dimen/dp4"
-                android:paddingRight="@dimen/dp4"
+                android:gravity="bottom|end|right"
+                android:padding="@dimen/dp8"
                 android:text="@string/md_send_button"
-                android:textSize="@dimen/sp22"
+                android:textAppearance="@style/TextIconAppearance.all"
+                android:textSize="@dimen/sp28"
                 android:visibility="gone"/>
 
             <LinearLayout
@@ -83,13 +84,15 @@
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_attach_button"
                     style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                    android:textAppearance="@style/TextIconAppearance.all"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="@dimen/dp8"
                     android:rotation="135"
-                    android:text="@string/md_attachment_clip"/>
+                    android:text="@string/md_attachment_clip"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    android:textColor="@color/gray_6c"
+                    android:textSize="@dimen/sp28"/>
 
                 <com.nightonke.boommenu.BoomMenuButton
                     android:id="@+id/am_boom"
@@ -103,12 +106,14 @@
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_mic_button"
                     style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-                    android:textAppearance="@style/TextIconAppearance.all"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="@dimen/dp8"
-                    android:text="@string/md_voice_message_microphone_button"/>
+                    android:text="@string/md_voice_message_microphone_button"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    android:textColor="@color/gray_6c"
+                    android:textSize="@dimen/sp28"/>
 
 
             </LinearLayout>

@@ -76,12 +76,13 @@
                         android:textSize="@dimen/sp15"
                         android:textStyle="bold"/>
 
-                    <TextView
+                    <MultiAutoCompleteTextView
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:id="@+id/cs_txt_mute"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp4"
-                        android:text="@string/fa_bell_slash_o"
+                        android:text="@string/md_muted"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/sp14"/>
 

@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoUserProfileGetGender;
 
 public class UserProfileGetGenderResponse extends MessageHandler {
@@ -18,16 +19,24 @@ public class UserProfileGetGenderResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
         final ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder builder =
                 (ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder) message;
+
+        if (G.onUserProfileGetGender != null) {
+            G.onUserProfileGetGender.onUserProfileGetGender(builder.getGender());
+        }
+
     }
 
     @Override
     public void timeOut() {
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
     }
 }
 

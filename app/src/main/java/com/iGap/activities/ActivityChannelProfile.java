@@ -97,7 +97,6 @@ import com.iGap.request.RequestChannelAddAdmin;
 import com.iGap.request.RequestChannelAddMember;
 import com.iGap.request.RequestChannelAddModerator;
 import com.iGap.request.RequestChannelAvatarAdd;
-import com.iGap.request.RequestChannelAvatarDelete;
 import com.iGap.request.RequestChannelDelete;
 import com.iGap.request.RequestChannelEdit;
 import com.iGap.request.RequestChannelGetMemberList;
@@ -335,11 +334,9 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (HelperAvatar.checkExistAvatar(roomId)) {
-                    startDialogSelectPicture(R.array.profile);
-                } else {
-                    startDialogSelectPicture(R.array.profile_delete);
-                }
+
+                startDialogSelectPicture(R.array.profile);
+
             }
         });
 
@@ -554,6 +551,44 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         initRecycleView();
         channelGetMemberList();
         showAdminOrModeratorList();
+
+
+        FragmentShowAvatars.onComplete = new OnComplete() {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
+
+//                showImage();
+                long mAvatarId = 0;
+                if (messageOne != null && !messageOne.equals("")) {
+                    mAvatarId = Long.parseLong(messageOne);
+                }
+
+                final long finalMAvatarId = mAvatarId;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HelperAvatar.avatarDelete(roomId, finalMAvatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
+                            @Override
+                            public void latestAvatarPath(String avatarPath) {
+                                setImage(avatarPath);
+                            }
+
+                            @Override
+                            public void showInitials(final String initials, final String color) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        imgCircleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+
+            }
+        };
 
     }
 
@@ -990,13 +1025,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     } else {
                         Toast.makeText(ActivityChannelProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                     }
-                } else if (text.toString().equals(getString(R.string.delete_photo))) {
-
-                    RealmAvatar realmAvatar = HelperAvatar.getLastAvatar(roomId);
-                    if (realmAvatar != null) {
-                        new RequestChannelAvatarDelete().channelAvatarDelete(roomId, realmAvatar.getId());
-                    }
-
                 } else {
                     attachFile.requestOpenGalleryForImageSingleSelect();
                 }

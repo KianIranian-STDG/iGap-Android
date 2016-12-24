@@ -84,7 +84,7 @@ public class HelperImageBackColor {
          * set gradient color on LinearGradient
          */
         //LinearGradient gradient = new LinearGradient(0, with, with, with * 2, new int[]{Color.parseColor(color), 0xFF333333}, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
-        LinearGradient gradient = new LinearGradient(0, with / 3, (with * 5) / 3, with * 2, new int[]{Color.parseColor(color), 0xFF222222}, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
+        LinearGradient gradient = new LinearGradient(0, with / 3, (with * 5) / 3, with * 2, new int[]{Color.parseColor(color), 0xFF555555}, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
         Paint p = new Paint();
         p.setDither(true);
         p.setAntiAlias(true);

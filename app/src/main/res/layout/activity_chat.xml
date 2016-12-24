@@ -96,17 +96,16 @@
                             android:orientation="horizontal"
                             >
 
-                            <TextView
+                            <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/chl_txt_mute"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingLeft="@dimen/dp8"
                                 android:paddingRight="@dimen/dp8"
-                                android:text="@string/fa_bell_slash_o"
+                                android:text="@string/md_muted"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/sp14"
-                                android:visibility="gone"
-                                />
+                                android:visibility="gone"/>
 
                             <TextView
                                 android:id="@+id/chl_txt_name"

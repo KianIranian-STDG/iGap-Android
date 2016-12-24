@@ -558,14 +558,20 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         mAdapter.withOnClickListener(new FastAdapter.OnClickListener<RoomItem>() {
             @Override
             public boolean onClick(View v, IAdapter<RoomItem> adapter, RoomItem item, int position) {
+
                 if (ActivityMain.isMenuButtonAddShown) {
                     item.mComplete.complete(true, "closeMenuButton", "");
                 } else {
                     if (item.mInfo.isValid()) {
+
                         Intent intent = new Intent(ActivityMain.this, ActivityChat.class);
                         intent.putExtra("RoomId", item.mInfo.getId());
                         intent.putExtra("MUT", item.mInfo.getMute());
                         startActivity(intent);
+
+                        if (ActivityMain.arcMenu != null && ActivityMain.arcMenu.isMenuOpened()) {
+                            ActivityMain.arcMenu.toggleMenu();
+                        }
                     }
                 }
                 return false;

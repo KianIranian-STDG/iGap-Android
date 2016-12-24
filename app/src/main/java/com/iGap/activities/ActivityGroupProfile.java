@@ -108,7 +108,6 @@ import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
 import com.iGap.request.RequestGroupAddModerator;
 import com.iGap.request.RequestGroupAvatarAdd;
-import com.iGap.request.RequestGroupAvatarDelete;
 import com.iGap.request.RequestGroupCheckUsername;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupEdit;
@@ -504,13 +503,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Realm realm = Realm.getDefaultInstance();
 
-                    if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).count() > 0) {
-                        startDialogSelectPicture(R.array.profile_delete_group);
-                    } else {
-                        startDialogSelectPicture(R.array.profile);
-                    }
+                    startDialogSelectPicture(R.array.profile);
+
                 }
             });
 
@@ -671,6 +666,44 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 popup.show(); //
             }
         });
+
+
+        FragmentShowAvatars.onComplete = new OnComplete() {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
+
+//                showImage();
+                long mAvatarId = 0;
+                if (messageOne != null && !messageOne.equals("")) {
+                    mAvatarId = Long.parseLong(messageOne);
+                }
+
+                HelperAvatar.avatarDelete(roomId, mAvatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
+                    @Override
+                    public void latestAvatarPath(final String avatarPath) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void showInitials(final String initials, final String color) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            }
+                        });
+                    }
+                });
+
+
+            }
+        };
+
 
         showAvatar();
         setUiIndependRole();
@@ -1117,12 +1150,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             } else {
                                 Toast.makeText(ActivityGroupProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                             }
-                        } else if (which == 2) {
-                            showProgressBar();
-                            Realm realm = Realm.getDefaultInstance();
-                            new RequestGroupAvatarDelete().groupAvatarDelete(roomId, getLastAvatar().getId());
-                            realm.close();
                         }
+//                        else if (which == 2) {
+//                            showProgressBar();
+//                            Realm realm = Realm.getDefaultInstance();
+//                            new RequestGroupAvatarDelete().groupAvatarDelete(roomId, getLastAvatar().getId());
+//                            realm.close();
+//                        }
                     }
                 })
                 .show();
@@ -1253,6 +1287,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     @Override
     public void onTimeOut() {
+
+        Log.i("EEEE", "onTimeOut: ");
         hideProgressBar();
         G.handler.post(new Runnable() {
             @Override
@@ -3197,10 +3233,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     @Override
-    public void onDeleteAvatarError() {
-        hideProgressBar();
-    }
+    public void onDeleteAvatarError(int majorCode, int minorCode) {
 
+        Log.i("EEEE", "onDeleteAvatarError  majorCode: " + majorCode);
+        Log.i("EEEE", "onDeleteAvatarError  minorCode: " + minorCode);
+
+    }
     //***Show And Hide Progress
 
     private void showProgressBar() {

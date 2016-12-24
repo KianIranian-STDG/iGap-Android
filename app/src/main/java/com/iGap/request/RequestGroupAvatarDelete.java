@@ -6,8 +6,7 @@ public class RequestGroupAvatarDelete {
 
     public void groupAvatarDelete(long roomId, long id) {
 
-        ProtoGroupAvatarDelete.GroupAvatarDelete.Builder builder =
-                ProtoGroupAvatarDelete.GroupAvatarDelete.newBuilder();
+        ProtoGroupAvatarDelete.GroupAvatarDelete.Builder builder = ProtoGroupAvatarDelete.GroupAvatarDelete.newBuilder();
         builder.setRoomId(roomId);
         builder.setId(id);
 
