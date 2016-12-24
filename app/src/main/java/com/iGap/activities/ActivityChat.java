@@ -2228,14 +2228,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onBackPressed() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().deleteAllFromRealm();
-            }
-        });
-        realm.close();
 
         if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
