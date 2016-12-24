@@ -145,6 +145,15 @@ public class HelperNotificationAndBadge {
         }
     }
 
+    private void setOnTextClick(int resLayot, int indexItem) {
+
+        Intent intent = new Intent(context, ActivityChat.class);
+        intent.putExtra("RoomId", list.get(indexItem).roomId);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 10 + indexItem, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        ActivityPopUpNotification.isGoingToChatFromPopUp = true;
+        remoteViewsLarge.setOnClickPendingIntent(resLayot, pendingIntent);
+    }
+
     private void setRemoteViewsLarge() {
 
         if (unreadMessageCount == 1) {
@@ -153,6 +162,8 @@ public class HelperNotificationAndBadge {
             remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.GONE);
             remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.GONE);
             remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
+
+            setOnTextClick(R.id.ln_ll_message_a, 0);
 
             remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
             remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
@@ -164,6 +175,10 @@ public class HelperNotificationAndBadge {
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
+
+                setOnTextClick(R.id.ln_ll_message_a, 0);
+                setOnTextClick(R.id.ln_ll_message_b, 0);
+                setOnTextClick(R.id.ln_ll_message_c, 0);
 
                 remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
                 remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, "");
@@ -182,6 +197,9 @@ public class HelperNotificationAndBadge {
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.GONE);
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
 
+                setOnTextClick(R.id.ln_ll_message_a, 0);
+                setOnTextClick(R.id.ln_ll_message_b, 1);
+
                 remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
                 remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
                 remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, list.get(0).time);
@@ -198,6 +216,10 @@ public class HelperNotificationAndBadge {
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.VISIBLE);
+                setOnTextClick(R.id.ln_ll_message_a, 0);
+                setOnTextClick(R.id.ln_ll_message_b, 0);
+                setOnTextClick(R.id.ln_ll_message_c, 0);
+                setOnTextClick(R.id.ln_ll_message_d, 0);
 
                 remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
                 remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, "");
@@ -219,6 +241,10 @@ public class HelperNotificationAndBadge {
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
                 remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
+
+                setOnTextClick(R.id.ln_ll_message_a, 0);
+                setOnTextClick(R.id.ln_ll_message_b, 1);
+                setOnTextClick(R.id.ln_ll_message_c, 2);
 
                 remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
                 remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
@@ -531,6 +557,7 @@ public class HelperNotificationAndBadge {
                                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
                                 if (room != null) {
                                     item.name = room.getTitle() + " : ";
+                                    item.roomId = room.getId();
                                 }
 
                                 String text = "";
@@ -823,6 +850,7 @@ public class HelperNotificationAndBadge {
         String name = "";
         String message = "";
         String time = "";
+        long roomId;
     }
 
     private int checkSpecialNotification(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {

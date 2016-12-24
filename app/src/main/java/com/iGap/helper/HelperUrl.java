@@ -76,7 +76,8 @@ public class HelperUrl {
     ////**********************************************************************************************************
 
     public static int LinkColor = Color.GRAY;
-    public static String igapSite = "igap.im/";
+    public static String igapSite1 = "igap.im/";
+    public static String igapSite2 = "igap.net/";
     public static MaterialDialog dialogWaiting;
 
     public static SpannableStringBuilder setUrlLink(String text, boolean withClickable, boolean withHash, String messageID, boolean withAtSign) {
@@ -99,7 +100,7 @@ public class HelperUrl {
             int matchStart = matcher.start(1);
             int matchEnd = matcher.end();
 
-            if (strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite)) {
+            if (strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite1) || strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite2)) {
                 insertIgapLink(strBuilder, matchStart, matchEnd);
             } else {
                 insertLinkSpan(strBuilder, matchStart, matchEnd, withClickable);
@@ -177,6 +178,8 @@ public class HelperUrl {
                 if (index >= 0 && index < url.length() - 1) {
                     String token = url.substring(index + 1);
                     checkAndJoinToRoom(token);
+
+                    Log.e("ddd", "token = " + token);
                 }
             }
 

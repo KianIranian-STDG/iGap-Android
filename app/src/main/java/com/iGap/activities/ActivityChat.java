@@ -54,7 +54,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -191,20 +190,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -216,6 +201,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -296,14 +292,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private Button btnHashLayoutClose;
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
-    private static ProtoGlobal.Room.Type chatType;
+    private ProtoGlobal.Room.Type chatType;
+    private static ProtoGlobal.Room.Type chatTypeStatic;
     private long lastSeen;
-    public static long mRoomId = 0;
+    public long mRoomId = 0;
+    public static long mRoomIdStatic = 0;
     private Button btnUp;
     private Button btnDown;
     private TextView txtChannelMute;
     //popular (chat , group , channel)
-    public static String title;
+    public String title;
+    public static String titleStatic;
     private String initialize;
     private String color;
     private boolean isMute = false;
@@ -399,6 +398,34 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     protected void onResume() {
         super.onResume();
 
+        chatTypeStatic = chatType;
+        mRoomIdStatic = mRoomId;
+        titleStatic = title;
+
+        //call from ActivityGroupProfile for update group member number
+        onComplete = new OnComplete() {
+            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+                txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member));
+            }
+        };
+
+        musicPlayer = new MusicPlayer(mediaLayout);
+
+        G.clearMessagesUtil.setOnChatClearMessageResponse(this);
+        G.uploaderUtil.setActivityCallbacks(this);
+        G.onFileDownloadResponse = this;
+        G.onUserInfoResponse = this;
+        G.onClientGetRoomHistoryResponse = this;
+        G.onChannelAddMessageReaction = this;
+        G.onChannelGetMessagesStats = this;
+
+        activityChatForFinish = this;
+
+        Log.e("ddd", titleStatic + "   " + mRoomIdStatic + "    " + chatTypeStatic);
+
+        G.helperNotificationAndBadge.cancelNotification();
+        initCallbacks();
+
         activityChat = this;
         G.onSetAction = this;
         G.onUserUpdateStatus = this;
@@ -429,6 +456,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         //requestMessageHistory();
         setAvatar();
+
+        initLayoutHashNavigation();
     }
 
     @Override
@@ -478,7 +507,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        activityChatForFinish = this;
+
 
         HelperGetMessageState.clearMessageViews();
 
@@ -487,21 +516,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         checkIfOrientationChanged(getResources().getConfiguration());
 
-        //call from ActivityGroupProfile for update group member number
-        onComplete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
-                txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member));
-            }
-        };
+
 
         appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
 
         mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
         lyt_user = (LinearLayout) findViewById(R.id.lyt_user);
-        musicPlayer = new MusicPlayer(mediaLayout);
-
-        G.helperNotificationAndBadge.cancelNotification();
 
         // get sendByEnter action from setting value
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -531,6 +551,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         attachFile = new AttachFile(this);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         initAttach();
+
         complete = new OnComplete() {
             @Override
             public void complete(boolean result, final String messageOne, String MessageTow) {
@@ -576,14 +597,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }, 300);
             }
         };
-
-        G.clearMessagesUtil.setOnChatClearMessageResponse(this);
-        G.uploaderUtil.setActivityCallbacks(this);
-        G.onFileDownloadResponse = this;
-        G.onUserInfoResponse = this;
-        G.onClientGetRoomHistoryResponse = this;
-        G.onChannelAddMessageReaction = this;
-        G.onChannelGetMessagesStats = this;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -712,7 +725,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
         initComponent();
         initAppbarSelected();
-        initCallbacks();
+
         if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
             initLayotChannelFooter();
         }
@@ -1223,7 +1236,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void initComponent() {
 
         initLayoutSearchNavigation();
-        initLayoutHashNavigation();
 
         toolbar = (LinearLayout) findViewById(R.id.toolbar);
         MaterialDesignTextView imvBackButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_back_Button);
@@ -4739,7 +4751,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     MessagesAdapter.uploading.put(result.messageId, 0);
 
                     G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
-                    HelperSetAction.setActionFiles(mRoomId, result.messageId, getAction(result.messageType), chatType);
+                    HelperSetAction.setActionFiles(mRoomIdStatic, result.messageId, getAction(result.messageType), chatTypeStatic);
                 }
             }
         }

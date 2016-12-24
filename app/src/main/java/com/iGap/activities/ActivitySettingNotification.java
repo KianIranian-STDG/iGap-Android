@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -30,7 +29,6 @@ import com.iGap.module.SHP_SETTING;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySettingNotification extends AppCompatActivity {
@@ -813,7 +811,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         //============================================================================= In App Notification
 
         tgApp_sound = (ToggleButton) findViewById(R.id.stns_toggle_app_sound);
-        int appSound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
+        int appSound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_SOUND, 0);
         if (appSound == 1) {
             tgApp_sound.setChecked(true);
         } else {
@@ -839,7 +837,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         tgApp_Vibrate = (ToggleButton) findViewById(R.id.stns_toggle_app_vibrate);
-        int appVibrate = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
+        int appVibrate = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0);
         if (appVibrate == 1) {
             tgApp_Vibrate.setChecked(true);
         } else {
@@ -865,7 +863,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         tgApp_preview = (ToggleButton) findViewById(R.id.stns_toggle_app_preview);
-        int appPreview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);
+        int appPreview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0);
         if (appPreview == 1) {
             tgApp_preview.setChecked(true);
         } else {
@@ -891,7 +889,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         tgChat_sound = (ToggleButton) findViewById(R.id.stns_toggle_chat_sound);
-        int chat_cound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 1);
+        int chat_cound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0);
         if (chat_cound == 1) {
             tgChat_sound.setChecked(true);
         } else {
@@ -1146,10 +1144,10 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                 editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
                                 editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Default));
                                 editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_No_popup));
-                                editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
-                                editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
-                                editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);
-                                editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 1);
+                                editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 0);
+                                editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0);
+                                editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0);
+                                editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0);
                                 editor.putInt(SHP_SETTING.KEY_STNS_CONTACT_JOINED, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_PINNED_MESSAGE, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
