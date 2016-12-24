@@ -218,10 +218,10 @@ public final class AppUtils {
     public static long findLastMessageId(long roomId) {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
-        realm.close();
         if (!roomMessages.isEmpty()) {
             return roomMessages.first().getMessageId();
         }
+        realm.close();
         return 0;
     }
 

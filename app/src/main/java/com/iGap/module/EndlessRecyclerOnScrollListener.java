@@ -63,11 +63,10 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
             mLoading = true;
         } else {
-            if (mAdapter.getAdapterItemCount() == mMessagesList.size()
-                    && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0
-                    && !mAlreadyCalledOnNoMore) {
+            //if (mAdapter.getAdapterItemCount() == mMessagesList.size() && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {// && !mAlreadyCalledOnNoMore
+            if (mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {// && !mAlreadyCalledOnNoMore
                 onNoMore(this);
-                mAlreadyCalledOnNoMore = true;
+                //mAlreadyCalledOnNoMore = true;
             }
         }
     }

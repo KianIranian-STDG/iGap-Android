@@ -427,7 +427,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
         }
 
-        requestMessageHistory();
+        //requestMessageHistory();
         setAvatar();
     }
 
@@ -464,13 +464,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
 
-    boolean firstTimeGetHistory = false; //TODO [Saeed Mozaffari] [2016-11-10 12:47 PM] - hataman firstTimeGetHistory estefade nashavad chon eshtebah ast in ravesh
-
     private void getChatHistory() {
         Realm realm = Realm.getDefaultInstance();
         if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 0
-                || realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 1) {
-            firstTimeGetHistory = true;
+                || realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 1
+                || realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 2) {
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
         }
         realm.close();
@@ -2230,6 +2228,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onBackPressed() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().deleteAllFromRealm();
+            }
+        });
+        realm.close();
+
         if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
         } else if (boomMenuButton.isOpen()) {
@@ -3308,9 +3315,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         return messageInfos;
     }
 
+    private long latestMessageIdHistory;
+
     private void requestMessageHistory() {
-        long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
-        new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
+        //long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
+        long oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(0).mMessage.messageID);
+        if (latestMessageIdHistory != oldestMessageId) {
+            latestMessageIdHistory = oldestMessageId;
+            new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
+        }
     }
 
     private String getTimeSettingMessage(long comingDate) {
@@ -3834,7 +3847,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages) {
         // I'm in the room
-        if (roomId == mRoomId && firstTimeGetHistory) {
+        if (roomId == mRoomId) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -3879,8 +3892,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     realm.close();
                 }
             });
-
-            firstTimeGetHistory = false;
         }
     }
 
