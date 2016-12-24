@@ -62,7 +62,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             holder.txtIcon.setText(G.context.getString(R.string.md_users_social_symbol));
         } else if (item.roomType == ProtoGlobal.Room.Type.CHANNEL) {
             holder.txtIcon.setVisibility(View.VISIBLE);
-            holder.txtIcon.setText(G.context.getString(R.string.fa_bullhorn));
+            holder.txtIcon.setText(G.context.getString(R.string.md_channel_icon));
         }
     }
 

@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -95,14 +96,16 @@ import com.iGap.request.RequestGroupLeft;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
-import io.realm.Sort;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
@@ -427,7 +430,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         });
 
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
-        txtIgap.setTypeface(G.neuroplp);
 
         txtIgap.setTypeface(null, Typeface.BOLD);
         if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
@@ -438,7 +440,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             txtIgap.setText(updating);
         } else {
             txtIgap.setText(R.string.igap);
-            txtIgap.setTypeface(G.neuroplp, Typeface.NORMAL);
         }
 
         G.onConnectionChangeState = new OnConnectionChangeState() {
@@ -456,7 +457,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             txtIgap.setText(updating);
                         } else {
                             txtIgap.setText(R.string.igap);
-                            txtIgap.setTypeface(G.neuroplp, Typeface.NORMAL);
                         }
                     }
                 });

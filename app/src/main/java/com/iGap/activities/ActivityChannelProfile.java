@@ -25,6 +25,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,6 +60,7 @@ import com.iGap.interfaces.OnChannelAddMember;
 import com.iGap.interfaces.OnChannelAddModerator;
 import com.iGap.interfaces.OnChannelAvatarAdd;
 import com.iGap.interfaces.OnChannelAvatarDelete;
+import com.iGap.interfaces.OnChannelCheckUsername;
 import com.iGap.interfaces.OnChannelDelete;
 import com.iGap.interfaces.OnChannelEdit;
 import com.iGap.interfaces.OnChannelGetMemberList;
@@ -67,6 +69,7 @@ import com.iGap.interfaces.OnChannelKickMember;
 import com.iGap.interfaces.OnChannelKickModerator;
 import com.iGap.interfaces.OnChannelLeft;
 import com.iGap.interfaces.OnChannelRevokeLink;
+import com.iGap.interfaces.OnChannelUpdateUsername;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnMenuClick;
@@ -81,6 +84,7 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
+import com.iGap.proto.ProtoChannelCheckUsername;
 import com.iGap.proto.ProtoChannelGetMemberList;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
@@ -97,6 +101,7 @@ import com.iGap.request.RequestChannelAddAdmin;
 import com.iGap.request.RequestChannelAddMember;
 import com.iGap.request.RequestChannelAddModerator;
 import com.iGap.request.RequestChannelAvatarAdd;
+import com.iGap.request.RequestChannelCheckUsername;
 import com.iGap.request.RequestChannelDelete;
 import com.iGap.request.RequestChannelEdit;
 import com.iGap.request.RequestChannelGetMemberList;
@@ -105,6 +110,7 @@ import com.iGap.request.RequestChannelKickMember;
 import com.iGap.request.RequestChannelKickModerator;
 import com.iGap.request.RequestChannelLeft;
 import com.iGap.request.RequestChannelRevokeLink;
+import com.iGap.request.RequestChannelUpdateUsername;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -168,6 +174,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private AttachFile attachFile;
     private long avatarId;
     private long roomId;
+    private boolean isPrivate;
+    private String username;
 
     @Override
     protected void onResume() {
@@ -222,6 +230,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         color = realmRoom.getColor();
         role = realmChannelRoom.getRole();
         inviteLink = realmChannelRoom.getInviteLink();
+        isPrivate = realmChannelRoom.isPrivate();
+        username = realmChannelRoom.getUsername();
+
+        Log.i("BBBBBBBBBB", "onCreate: " + username);
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -502,42 +514,58 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         }
         txtChannelName.setText(title);
         txtChannelNameInfo.setText(title);
-        txtChannelLink.setText(inviteLink);
+
         final TextView txtLinkTitle = (TextView) findViewById(R.id.layout_channel_link_title);
+        if (isPrivate) {
+            txtChannelLink.setText(inviteLink);
+            txtLinkTitle.setText(getResources().getString(R.string.channel_link));
+
+        } else {
+            txtChannelLink.setText("iGap.net/" + username);
+            txtLinkTitle.setText(getResources().getString(R.string.st_username));
+        }
         ViewGroup ltLink = (ViewGroup) findViewById(R.id.layout_channel_link);
+
+
         ltLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final PopupMenu popup = new PopupMenu(ActivityChannelProfile.this, txtLinkTitle);
-                //Inflating the Popup using xml file
-                popup.getMenuInflater()
-                        .inflate(R.menu.menu_item_group_link_profile, popup.getMenu());
+                if (isPrivate) {
 
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
 
-                        switch (item.getItemId()) {
-                            case R.id.menu_group_link_copy:
-                                String copy;
-                                copy = txtChannelLink.getText().toString();
-                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                                clipboard.setPrimaryClip(clip);
+                    final PopupMenu popup = new PopupMenu(ActivityChannelProfile.this, txtLinkTitle);
+                    //Inflating the Popup using xml file
+                    popup.getMenuInflater()
+                            .inflate(R.menu.menu_item_group_link_profile, popup.getMenu());
 
-                                break;
-                            case R.id.menu_group_link_revoke:
-                                showProgressBar();
-                                new RequestChannelRevokeLink().channelRevokeLink(roomId);
-                                break;
+                    //registering popup with OnMenuItemClickListener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+
+                            switch (item.getItemId()) {
+                                case R.id.menu_group_link_copy:
+                                    String copy;
+                                    copy = txtChannelLink.getText().toString();
+                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                                    clipboard.setPrimaryClip(clip);
+
+                                    break;
+                                case R.id.menu_group_link_revoke:
+                                    showProgressBar();
+                                    new RequestChannelRevokeLink().channelRevokeLink(roomId);
+                                    break;
+                            }
+
+                            return true;
                         }
+                    });
 
-                        return true;
-                    }
-                });
-
-                popup.show(); //
+                    popup.show(); //
+                } else {
+                    editUsername();
+                }
             }
         });
 
@@ -590,6 +618,189 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         };
 
+    }
+
+    private void editUsername() {
+        final LinearLayout layoutUserName = new LinearLayout(ActivityChannelProfile.this);
+        layoutUserName.setOrientation(LinearLayout.VERTICAL);
+
+        final View viewUserName = new View(ActivityChannelProfile.this);
+        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
+        final EditText edtUserName = new EditText(ActivityChannelProfile.this);
+        edtUserName.setHint(getResources().getString(R.string.st_username));
+        edtUserName.setText(username);
+        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
+        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtUserName.setPadding(0, 8, 0, 8);
+        edtUserName.setSingleLine(true);
+        inputUserName.addView(edtUserName);
+        inputUserName.addView(viewUserName, viewParams);
+
+        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
+        }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutUserName.addView(inputUserName, layoutParams);
+
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
+                        .customView(layoutUserName, true)
+                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
+                        .build();
+
+        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+        positive.setEnabled(false);
+
+        final String finalUserName = inviteLink;
+        edtUserName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                new RequestChannelCheckUsername().channelCheckUsername(roomId, editable.toString());
+            }
+        });
+
+
+        G.onChannelCheckUsername = new OnChannelCheckUsername() {
+            @Override
+            public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
+
+                            if (!edtUserName.getText().toString().equals(finalUserName)) {
+                                positive.setEnabled(true);
+                            } else {
+                                positive.setEnabled(false);
+                            }
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("");
+
+
+                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.INVALID) {
+                            positive.setEnabled(false);
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("INVALID");
+
+                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("TAKEN");
+                            positive.setEnabled(false);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+
+            @Override
+            public void onTimeOut() {
+
+            }
+        };
+
+
+        G.onChannelUpdateUsername = new OnChannelUpdateUsername() {
+            @Override
+            public void onChannelUpdateUsername(final long roomId, final String username) {
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtChannelLink.setText("iGap.net/" + username);
+
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                realmRoom.getChannelRoom().setUsername(username);
+                            }
+                        });
+
+                        realm.close();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+        };
+
+        positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new RequestChannelUpdateUsername().channelUpdateUsername(roomId, edtUserName.getText().toString());
+                dialog.dismiss();
+            }
+        });
+
+
+        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                } else {
+                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
+
+        // check each word with server
+
+        dialog.show();
     }
 
     private void setAvatar() {

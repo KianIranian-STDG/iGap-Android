@@ -54,6 +54,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -190,6 +191,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -201,17 +216,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -279,8 +283,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private VoiceRecord voiceRecord;
     private boolean sendByEnter = false;
     private LinearLayout ll_navigate_Message;
-    private Button btnUpMessage;
-    private Button btnDownMessage;
+    private TextView btnUpMessage;
+    private TextView btnDownMessage;
     private MaterialDesignTextView txtClearMessageSearch;
     private TextView txtMessageCounter;
     private int messageCounter = 0;
@@ -295,10 +299,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private ProtoGlobal.Room.Type chatType;
     private static ProtoGlobal.Room.Type chatTypeStatic;
     private long lastSeen;
-    public long mRoomId = 0;
+    public static long mRoomId = 0;
     public static long mRoomIdStatic = 0;
-    private Button btnUp;
-    private Button btnDown;
+    private TextView btnUp;
+    private TextView btnDown;
     private TextView txtChannelMute;
     //popular (chat , group , channel)
     public String title;
@@ -1917,11 +1921,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void initLayoutSearchNavigation() {
 
         ll_navigate_Message = (LinearLayout) findViewById(R.id.ac_ll_message_navigation);
-        btnUpMessage = (Button) findViewById(R.id.ac_btn_message_up);
+        btnUpMessage = (TextView) findViewById(R.id.ac_btn_message_up);
         txtClearMessageSearch = (MaterialDesignTextView) findViewById(R.id.ac_btn_clear_message_search);
         btnUpMessage.setTypeface(G.flaticon);
-        btnDownMessage = (Button) findViewById(R.id.ac_btn_message_down);
-        btnDownMessage.setTypeface(G.flaticon);
+        btnDownMessage = (TextView) findViewById(R.id.ac_btn_message_down);
         txtMessageCounter = (TextView) findViewById(R.id.ac_txt_message_counter);
 
         btnUpMessage.setOnClickListener(new View.OnClickListener() {
@@ -3163,8 +3166,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         layoutAttach.setVisibility(View.GONE);
         layoutChannelFooter.setVisibility(View.VISIBLE);
 
-        btnUp = (Button) findViewById(R.id.chl_btn_up);
-        btnUp.setTypeface(G.fontawesome);
+        btnUp = (TextView) findViewById(R.id.chl_btn_up);
         btnUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -3174,7 +3176,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
 
-        btnDown = (Button) findViewById(R.id.chl_btn_down);
+        btnDown = (TextView) findViewById(R.id.chl_btn_down);
         btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

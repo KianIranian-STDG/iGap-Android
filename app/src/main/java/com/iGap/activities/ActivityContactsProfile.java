@@ -881,7 +881,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                 case 1:
                                     String copy;
                                     copy = txtPhoneNumber.getText().toString();
-
                                     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                                     ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
                                     clipboard.setPrimaryClip(clip);

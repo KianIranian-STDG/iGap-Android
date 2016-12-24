@@ -174,12 +174,13 @@
                 android:textSize="@dimen/sp14" />
         </LinearLayout>
 
-        <Button
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/acs_btn_close"
             android:layout_width="@dimen/dp40"
             android:layout_height="match_parent"
             android:background="@null"
-            android:text="@string/fa_close"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/md_close_button"
             android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/sp22"
             android:visibility="visible" />

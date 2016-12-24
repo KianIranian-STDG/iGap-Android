@@ -159,12 +159,13 @@
                 android:text="0"
                 android:textSize="@dimen/sp20" />
 
-            <Button
+            <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/asm_btn_forward_selected"
                 android:layout_width="@dimen/dp60"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:text="@string/fa_long_arrow_right"
+                android:text="@string/md_trending_flat"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/sp20" />
 

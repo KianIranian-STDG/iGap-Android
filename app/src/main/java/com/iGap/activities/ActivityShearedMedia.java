@@ -14,7 +14,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -240,7 +239,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         });
 
-        Button btnForwardSelected = (Button) findViewById(R.id.asm_btn_forward_selected);
+        TextView btnForwardSelected = (TextView) findViewById(R.id.asm_btn_forward_selected);
         btnForwardSelected.setTypeface(G.fontawesome);
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {

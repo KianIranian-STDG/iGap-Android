@@ -1,14 +1,19 @@
 package com.iGap.fragments;
 
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -22,14 +27,21 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityMain;
 import com.iGap.interfaces.OnChannelCheckUsername;
+import com.iGap.interfaces.OnChannelUpdateUsername;
 import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.proto.ProtoChannelCheckUsername;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.request.RequestChannelAvatarAdd;
 import com.iGap.request.RequestChannelCheckUsername;
+import com.iGap.request.RequestChannelUpdateUsername;
 import com.iGap.request.RequestClientGetRoom;
 
+import io.realm.Realm;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.iGap.R.id.fragmentContainer;
 
 /**
@@ -116,18 +128,131 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
             @Override
             public void onClick(View view) {
 
+
+                G.onChannelUpdateUsername = new OnChannelUpdateUsername() {
+                    @Override
+                    public void onChannelUpdateUsername(final long roomId, final String username) {
+
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                        realmRoom.getChannelRoom().setUsername(username);
+                                        realmRoom.getChannelRoom().setPrivate(false);
+                                    }
+                                });
+                                realm.close();
+                                getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
+                            }
+                        });
+
+
+                    }
+
+                    @Override
+                    public void onError(int majorCode, int minorCode) {
+                        hideProgressBar();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onTimeOut() {
+                        hideProgressBar();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+
+                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
+                            }
+                        });
+                    }
+                };
+
                 if ((raPrivate.isChecked() || edtLink.getText().toString().length() > 0) && roomId > 0) {
 
                     showProgressBar();
-                    getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
 
+                    if (raPrivate.isChecked()) {
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                realmRoom.getChannelRoom().setPrivate(true);
+
+                            }
+                        });
+                        realm.close();
+                        getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
+                    } else {
+
+                        String userName = edtLink.getText().toString().replace("iGap.net/", "");
+                        new RequestChannelUpdateUsername().channelUpdateUsername(roomId, userName);
+
+                    }
                 }
             }
         });
 
         txtInputLayout = (TextInputLayout) view.findViewById(R.id.fch_txtInput_nikeName);
-        edtLink = (EditText) view.findViewById(R.id.fch_edt_link);
+        txtInputLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (raPrivate.isChecked()) {
+                    final PopupMenu popup = new PopupMenu(getActivity(), view);
+                    //Inflating the Popup using xml file
+                    popup.getMenuInflater()
+                            .inflate(R.menu.menu_item_copy, popup.getMenu());
 
+                    //registering popup with OnMenuItemClickListener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.menu_link_copy:
+                                    String copy;
+                                    copy = edtLink.getText().toString();
+                                    ClipboardManager clipboard = (ClipboardManager) G.context.getSystemService(CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                                    clipboard.setPrimaryClip(clip);
+
+                                    break;
+                            }
+
+                            return true;
+                        }
+                    });
+
+                    popup.show(); //
+                }
+            }
+        });
+        edtLink = (EditText) view.findViewById(R.id.fch_edt_link);
+        edtLink.setText("iGap.net/");
+        Selection.setSelection(edtLink.getText(), edtLink.getText().length());
         edtLink.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -138,13 +263,22 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
 
-
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!raPrivate.isChecked())
-                    new RequestChannelCheckUsername().channelCheckUsername(roomId, editable.toString());
+
+                if (!editable.toString().contains("iGap.net/")) {
+                    edtLink.setText("iGap.net/");
+                    Selection.setSelection(edtLink.getText(), edtLink.getText().length());
+
+                }
+
+                if (!raPrivate.isChecked()) {
+
+                    String userName = edtLink.getText().toString().replace("iGap.net/", "");
+                    new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+                }
             }
         });
 
@@ -347,6 +481,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                 if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
 
                     txtFinish.setEnabled(true);
+                    txtFinish.setTextColor(getResources().getColor(R.color.toolbar_background));
                     txtInputLayout.setErrorEnabled(true);
                     txtInputLayout.setError("");
                 } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.INVALID) {

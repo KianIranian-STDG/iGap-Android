@@ -19,6 +19,7 @@ public class RealmChannelRoom extends RealmObject {
     //    private String invite_link;
     private String invite_token;
     private String username;
+    private boolean isPrivate;
 
     /**
      * convert ProtoGlobal.ChannelRoom to RealmChannelRoom
@@ -125,5 +126,13 @@ public class RealmChannelRoom extends RealmObject {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
     }
 }

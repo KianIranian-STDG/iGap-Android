@@ -168,17 +168,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingBottom="@dimen/dp12"
-                        android:paddingLeft="@dimen/dp8"
-                        android:paddingStart="@dimen/dp6"
-                        android:text="@string/igapChanel"
-                        android:textSize="@dimen/sp15"/>
-
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/fch_txtInput_nikeName"
                         android:layout_width="match_parent"

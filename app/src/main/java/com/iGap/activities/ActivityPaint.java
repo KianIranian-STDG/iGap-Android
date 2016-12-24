@@ -90,7 +90,6 @@ public class ActivityPaint extends ActivityEnhanced {
         setPaintColor();
 
         TextView tvclose = (TextView) findViewById(R.id.textView_close);
-        tvclose.setTypeface(G.fontawesome);
         tvclose.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -100,7 +99,6 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvRefesh = (TextView) findViewById(R.id.textView_new);
-        tvRefesh.setTypeface(G.fontawesome);
         tvRefesh.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -112,7 +110,6 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvSave = (TextView) findViewById(R.id.textView_save);
-        tvSave.setTypeface(G.fontawesome);
         tvSave.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -122,7 +119,6 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvSend = (TextView) findViewById(R.id.textView_send);
-        tvSend.setTypeface(G.fontawesome);
         tvSend.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -132,7 +128,6 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvEraser = (TextView) findViewById(R.id.textView_erase);
-        tvEraser.setTypeface(G.fontawesome);
         tvEraser.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -142,7 +137,6 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvPaint = (TextView) findViewById(R.id.textView_paintsize);
-        tvPaint.setTypeface(G.fontawesome);
         tvPaint.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -153,7 +147,6 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvColor = (TextView) findViewById(R.id.textView_color);
-        tvColor.setTypeface(G.fontawesome);
         tvColor.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -164,7 +157,6 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvSience = (TextView) findViewById(R.id.textView_sience);
-        tvSience.setTypeface(G.fontawesome);
         tvSience.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -179,7 +171,6 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvCamera = (TextView) findViewById(R.id.textView_camera);
-        tvCamera.setTypeface(G.fontawesome);
         tvCamera.setOnClickListener(new OnClickListener() {
 
             @Override

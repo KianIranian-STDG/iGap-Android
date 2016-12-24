@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterComment;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -279,7 +278,7 @@ public class ActivityComment extends ActivityEnhanced {
         private CircleImageView imvReplayPicture;
         private TextView txtReplayFrom;
         private TextView txtReplayMessage;
-        private Button btnCloseLayout;
+        private TextView btnCloseLayout;
 
         FragmentSubLayoutReplay(View subLayoutReplay) {
             this.subLayoutReplay = subLayoutReplay;
@@ -293,8 +292,7 @@ public class ActivityComment extends ActivityEnhanced {
             txtReplayFrom = (TextView) subLayoutReplay.findViewById(R.id.acs_txt_replay_from);
             txtReplayMessage = (TextView) subLayoutReplay.findViewById(R.id.acs_txt_replay_message);
 
-            btnCloseLayout = (Button) subLayoutReplay.findViewById(R.id.acs_btn_close);
-            btnCloseLayout.setTypeface(G.fontawesome);
+            btnCloseLayout = (TextView) subLayoutReplay.findViewById(R.id.acs_btn_close);
             btnCloseLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

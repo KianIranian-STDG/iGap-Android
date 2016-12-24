@@ -9,8 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.module.MaterialDesignTextView;
@@ -22,11 +22,13 @@ import com.iGap.realm.RealmRoomFields;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
-import io.realm.Realm;
-import io.realm.Sort;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySelectChat extends ActivityEnhanced {
@@ -61,7 +63,6 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 (MaterialDesignTextView) findViewById(R.id.amr_btn_search);
 
         TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
-        txtIgap.setTypeface(G.neuroplp);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override

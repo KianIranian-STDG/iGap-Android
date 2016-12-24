@@ -43,24 +43,26 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <TextView
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/textView_close"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.25"
             android:gravity="center"
-            android:text="@string/fa_chevron_down"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/md_arrow_down"
             android:textAlignment="gravity"
             android:textColor="@android:color/black"
             android:textSize="@dimen/sp26" />
 
-        <TextView
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/textView_new"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.25"
             android:gravity="center"
-            android:text="@string/fa_repeat"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/md_refresh_button"
             android:textAlignment="gravity"
             android:textColor="@color/red"
             android:textSize="@dimen/sp26" />
@@ -76,13 +78,14 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/sp26" />
 
-        <TextView
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/textView_send"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.25"
             android:gravity="center"
-            android:text="@string/fa_external_link"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/md_right_arrow_button1"
             android:textAlignment="gravity"
             android:textColor="@android:color/black"
             android:textSize="@dimen/sp26" />
@@ -113,46 +116,50 @@
             android:textColor="@color/layout_background_top_connectivity"
             android:textSize="@dimen/sp26" />
 
-        <TextView
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/textView_paintsize"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:gravity="center"
-            android:text="@string/paint"
+            android:text="@string/md_brush"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textAlignment="gravity"
             android:textColor="@color/green"
             android:textSize="@dimen/sp26" />
 
-        <TextView
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/textView_color"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:gravity="center"
-            android:text="@string/eyedropper"
+            android:text="@string/md_colorize"
             android:textAlignment="gravity"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@android:color/black"
             android:textSize="@dimen/sp26" />
 
-        <TextView
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/textView_sience"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:gravity="center"
-            android:text="@string/fa_picture"
+            android:text="@string/md_pic_library"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textAlignment="gravity"
             android:textColor="@android:color/holo_purple"
             android:textSize="@dimen/sp26" />
 
-        <TextView
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/textView_camera"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:gravity="center"
-            android:text="@string/fa_camera"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/md_camera_alt"
             android:textAlignment="gravity"
             android:textColor="@color/green"
             android:textSize="@dimen/sp26" />

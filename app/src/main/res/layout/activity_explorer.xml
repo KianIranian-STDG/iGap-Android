@@ -67,13 +67,14 @@
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp12"/>
 
-                <Button
+                <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/asm_btn_menu"
                     android:layout_width="@dimen/dp60"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:paddingTop="@dimen/dp12"
-                    android:text="@string/fa_ellipsis_v"
+                    android:text="@string/md_show_more_button"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp20"
                     android:visibility="gone" />

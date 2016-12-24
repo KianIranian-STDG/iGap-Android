@@ -31,6 +31,10 @@ public class ChannelUpdateUsernameResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+
+        if (G.onChannelUpdateUsername != null) {
+            G.onChannelUpdateUsername.onTimeOut();
+        }
     }
 
     @Override

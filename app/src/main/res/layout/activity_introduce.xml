@@ -169,7 +169,7 @@
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_2_introduce_page1"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp15"
                 android:visibility="gone"/>
 
             <TextView
@@ -185,7 +185,7 @@
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_3_introduce_page1"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp18"
+                android:textSize="@dimen/sp15"
                 android:visibility="gone"/>
         </LinearLayout>
         <!--page 1-->
@@ -204,7 +204,7 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:text="@string/text_line_1_introduce_page2"
                 android:textColor="@color/text_line1_igap_dark"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp15"
                 android:visibility="gone"/>
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -212,7 +212,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp12"
                 android:clickable="false"
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/dp4"
@@ -220,7 +220,7 @@
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_2_introduce_page2"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp15"
                 android:visibility="gone"/>
 
 
@@ -257,7 +257,7 @@
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_2_introduce_page3"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp15"
                 android:visibility="gone"/>
 
 
@@ -293,7 +293,7 @@
                 android:paddingRight="@dimen/dp24"
                 android:text="@string/text_line_2_introduce_page4"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp15"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -328,7 +328,7 @@
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_2_introduce_page5"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp15"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -364,7 +364,7 @@
         android:layout_above="@+id/int_layoutParentCircleImage"
         android:layout_centerInParent="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/dp20"
+        android:layout_marginBottom="@dimen/dp12"
         android:background="@drawable/int_button_interduce"
         android:gravity="center"
         android:textAllCaps="false"

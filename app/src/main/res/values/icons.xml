@@ -49,22 +49,15 @@
     <string name="md_delete_acc">\ue15d</string>
     <string name="md_go_back_left_arrow">\ue5c4</string>
     <string name="md_channel_icon">&#x61;</string>
+    <string name="md_trending_flat">\ue8e4</string>
+    <string name="md_arrow_down">\ue5cf</string>
+    <string name="md_arrow_up">\ue5ce</string>
+    <string name="md_camera_alt">\ue3b0</string>
+    <string name="md_colorize">\ue3b8</string>
+    <string name="md_brush">\ue3ae</string>
+    <string name="md_pic_library">\ue413</string>
 
-    <string name="fa_bullhorn">&#xf0a1;</string>
-    <string name="fa_close">&#xf00d;</string>
-    <string name="fa_ellipsis_v">&#xf142;</string>
-    <string name="fa_trash_o">&#xf014;</string>
-    <string name="fa_long_arrow_right">&#xf178;</string>
-    <string name="fa_chevron_down">&#xf078;</string>
-    <string name="fa_chevron_up">&#xf077;</string>
-    <string name="fa_arrow_down">&#xf063;</string>
-    <string name="fa_video_camera">&#xf03d;</string>
-    <string name="fa_pause">&#xf04c;</string>
-    <string name="fa_repeat">&#xf01e;</string>
-    <string name="fa_external_link">&#xf054;</string>
+
     <string name="fa_eraser">&#xf12d;</string>
-    <string name="eyedropper">&#xf1fb;</string>
-    <string name="fa_picture">&#xf03e;</string>
-    <string name="fa_camera">&#xf083;</string>
-    <string name="paint">&#xf1fc;</string>
+
 </resources>

@@ -33,7 +33,6 @@ import com.iGap.request.RequestInfoPage;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -165,19 +164,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
         txt_p1_l2 = (TextView) findViewById(R.id.int_txt_p1_l2);
         txt_p1_l3 = (TextView) findViewById(R.id.int_txt_p1_l3);
 
-        if (Locale.getDefault().getLanguage().equals("en")) {
-            txt_p1_l1.setTypeface(G.FONT_IGAP);
-            txt_i_p1_l1.setTypeface(G.FONT_IGAP);
-            txt_p1_l2.setTypeface(G.ARIAL_TEXT);
-            txt_p1_l3.setTypeface(G.ARIAL_TEXT);
-        } else {
-            txt_p1_l1.setTypeface(G.YEKAN_BOLD);
-            txt_p1_l1.setTextSize(getResources().getDimension(R.dimen.sp14));
-            txt_i_p1_l1.setTypeface(G.YEKAN_BOLD);
-            txt_i_p1_l1.setTextSize(getResources().getDimension(R.dimen.sp14));
-            txt_p1_l2.setTypeface(G.YEKAN_FARSI);
-            txt_p1_l3.setTypeface(G.YEKAN_FARSI);
-        }
 
         txt_p1_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page1)));
 
@@ -185,14 +171,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
         txt_p2_l1 = (TextView) findViewById(R.id.int_txt_p2_l1);
         txt_p2_l2 = (TextView) findViewById(R.id.int_txt_p2_l2);
 
-        if (Locale.getDefault().getLanguage().equals("en")) {
-            txt_p2_l1.setTypeface(G.HELETICBLK_TITR);
-            txt_p2_l2.setTypeface(G.ARIAL_TEXT);
-        } else {
-            txt_p2_l1.setTextSize(getResources().getDimension(R.dimen.sp14));
-            txt_p2_l1.setTypeface(G.YEKAN_BOLD);
-            txt_p2_l2.setTypeface(G.YEKAN_FARSI);
-        }
 
         txt_p2_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page2)));
 
@@ -200,14 +178,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
         txt_p3_l1 = (TextView) findViewById(R.id.int_txt_p3_l1);
         txt_p3_l2 = (TextView) findViewById(R.id.int_txt_p3_l2);
 
-        if (Locale.getDefault().getLanguage().equals("en")) {
-            txt_p3_l1.setTypeface(G.HELETICBLK_TITR);
-            txt_p3_l2.setTypeface(G.ARIAL_TEXT);
-        } else {
-            txt_p3_l1.setTextSize(getResources().getDimension(R.dimen.sp14));
-            txt_p3_l1.setTypeface(G.YEKAN_BOLD);
-            txt_p3_l2.setTypeface(G.YEKAN_FARSI);
-        }
 
         txt_p3_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page3)));
 
@@ -215,14 +185,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
         txt_p4_l1 = (TextView) findViewById(R.id.int_txt_p4_l1);
         txt_p4_l2 = (TextView) findViewById(R.id.int_txt_p4_l2);
 
-        if (Locale.getDefault().getLanguage().equals("en")) {
-            txt_p4_l1.setTypeface(G.HELETICBLK_TITR);
-            txt_p4_l2.setTypeface(G.ARIAL_TEXT);
-        } else {
-            txt_p4_l1.setTypeface(G.YEKAN_BOLD);
-            txt_p4_l1.setTextSize(getResources().getDimension(R.dimen.sp16));
-            txt_p4_l2.setTypeface(G.YEKAN_FARSI);
-        }
 
         txt_p4_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page4)));
 
@@ -233,15 +195,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
         btnStart = (Button) findViewById(R.id.int_btnStart);
         txt_p5_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page5)));
 
-        if (Locale.getDefault().getLanguage().equals("en")) {
-            txt_p5_l1.setTypeface(G.HELETICBLK_TITR);
-            txt_p5_l2.setTypeface(G.ARIAL_TEXT);
-        } else {
-            btnStart.setTypeface(G.YEKAN_FARSI);
-            txt_p5_l1.setTypeface(G.YEKAN_BOLD);
-            txt_p5_l1.setTextSize(getResources().getDimension(R.dimen.sp14));
-            txt_p5_l2.setTypeface(G.YEKAN_FARSI);
-        }
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {

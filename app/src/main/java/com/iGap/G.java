@@ -417,16 +417,10 @@ public class G extends MultiDexApplication {
         fillSecuringInterface();
         WebSocketClient.getInstance();
 
-        neuroplp = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome.ttf");
-        arial = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
         iranSans = Typeface.createFromAsset(this.getAssets(), "fonts/IRANSansMobile.ttf");
-        fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome.ttf");
         flaticon = Typeface.createFromAsset(this.getAssets(), "fonts/Flaticon.ttf");
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
-        HELETICBLK_TITR = Typeface.createFromAsset(context.getAssets(), "fonts/ar.ttf");
-        ARIAL_TEXT = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
-        YEKAN_FARSI = Typeface.createFromAsset(context.getAssets(), "fonts/yekan.ttf");
-        YEKAN_BOLD = Typeface.createFromAsset(context.getAssets(), "fonts/yekan_bold.ttf");
+
 
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
 
