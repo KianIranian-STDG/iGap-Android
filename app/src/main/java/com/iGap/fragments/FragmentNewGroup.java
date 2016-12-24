@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -48,6 +49,7 @@ import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupCreate;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AttachFile;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.LinedEditText;
@@ -1091,22 +1093,42 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
         if (requestCode == IntentRequests.REQ_CAMERA && resultCode == Activity.RESULT_OK) {// result for camera
 
-            Intent intent = new Intent(getActivity(), ActivityCrop.class);
-            if (uriIntent != null) {
-                intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                String path = AttachFile.mCurrentPhotoPath;
+                Intent intent = new Intent(getActivity(), ActivityCrop.class);
+                intent.putExtra("IMAGE_CAMERA", path);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", prefix);
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             } else {
-                Toast.makeText(G.context, R.string.can_not_save_picture_pleas_try_again, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), ActivityCrop.class);
+                if (uriIntent != null) {
+                    intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
+                    intent.putExtra("TYPE", "camera");
+                    intent.putExtra("PAGE", prefix);
+                    startActivityForResult(intent, IntentRequests.REQ_CROP);
+                } else {
+                    Toast.makeText(G.context, R.string.can_not_save_picture_pleas_try_again, Toast.LENGTH_SHORT).show();
+                }
             }
+
         } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == Activity.RESULT_OK) {// result for gallery
             if (data != null) {
-                Intent intent = new Intent(getActivity(), ActivityCrop.class);
-                intent.putExtra("IMAGE_CAMERA", data.getData().toString());
-                intent.putExtra("TYPE", "gallery");
-                intent.putExtra("PAGE", prefix);
-                startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Intent intent = new Intent(getActivity(), ActivityCrop.class);
+                    intent.putExtra("IMAGE_CAMERA", AttachFile.getClipData(data.getClipData()).get(0));
+                    intent.putExtra("TYPE", "gallery");
+                    intent.putExtra("PAGE", prefix);
+                    startActivityForResult(intent, IntentRequests.REQ_CROP);
+                } else {
+                    Intent intent = new Intent(getActivity(), ActivityCrop.class);
+                    intent.putExtra("IMAGE_CAMERA", data.getData().toString());
+                    intent.putExtra("TYPE", "gallery");
+                    intent.putExtra("PAGE", prefix);
+                    startActivityForResult(intent, IntentRequests.REQ_CROP);
+                }
+
             }
         } else if (requestCode == IntentRequests.REQ_CROP) {
 

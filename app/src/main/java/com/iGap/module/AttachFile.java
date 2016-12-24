@@ -570,7 +570,7 @@ public class AttachFile {
 
     //*************************************************************************************************************
 
-    public ArrayList<String> getClipData(ClipData clipData) {
+    public static ArrayList<String> getClipData(ClipData clipData) {
 
         if (clipData != null) {
             ArrayList<String> list = new ArrayList<>();

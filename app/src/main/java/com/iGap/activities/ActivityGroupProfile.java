@@ -143,6 +143,7 @@ import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.id.fragmentContainer_group_profile;
+import static com.iGap.activities.ActivitySetting.pathSaveImage;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
 /**
@@ -1091,16 +1092,27 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             long avatarId = SUID.id().get();
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
-                    ImageHelper.correctRotateImage(AttachFile.imagePath, true);
-                    filePath = AttachFile.imagePath;
-                    filePathAvatar = filePath;
-                    Log.i("DDD", "avatarId : " + avatarId);
-                    Log.i("DDD", "exists : " + new File(filePath).exists());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                        filePath = AttachFile.mCurrentPhotoPath;
+                        pathSaveImage = filePath;
+                    } else {
+                        ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                        filePath = AttachFile.imagePath;
+                        filePathAvatar = filePath;
+                    }
                     new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
-                    filePath = AttachFile.getFilePathFromUri(data.getData());
-                    filePathAvatar = filePath;
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        filePath = AttachFile.getClipData(data.getClipData()).get(0);
+                        filePathAvatar = filePath;
+                    } else {
+                        filePath = AttachFile.getFilePathFromUri(data.getData());
+                        filePathAvatar = filePath;
+                    }
+
                     new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
                     break;
             }

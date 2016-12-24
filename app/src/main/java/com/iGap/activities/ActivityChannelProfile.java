@@ -1853,13 +1853,28 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             long avatarId = SUID.id().get();
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
-                    ImageHelper.correctRotateImage(imagePath, true);
-                    filePath = imagePath;
-                    pathSaveImage = filePath;
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        ImageHelper.correctRotateImage(imagePath, true);
+                        filePath = AttachFile.mCurrentPhotoPath;
+                        pathSaveImage = filePath;
+                    } else {
+                        ImageHelper.correctRotateImage(imagePath, true);
+                        filePath = imagePath;
+                        pathSaveImage = filePath;
+                    }
+
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
-                    filePath = AttachFile.getFilePathFromUri(data.getData());
-                    pathSaveImage = filePath;
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        filePath = AttachFile.getClipData(data.getClipData()).get(0);
+                        pathSaveImage = filePath;
+                    } else {
+                        filePath = AttachFile.getFilePathFromUri(data.getData());
+                        pathSaveImage = filePath;
+                    }
+
                     break;
             }
 

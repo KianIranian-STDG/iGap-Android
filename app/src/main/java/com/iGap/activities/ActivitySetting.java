@@ -65,6 +65,7 @@ import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import com.iGap.interfaces.OnUserProfileUpdateUsername;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AttachFile;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.IncomingSms;
 import com.iGap.module.OnComplete;
@@ -1828,17 +1829,25 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) {
-                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                idAvatar = SUID.id().get();
-                                pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
-                                nameImageFile = new File(pathSaveImage);
-                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                uriIntent = Uri.fromFile(nameImageFile);
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                startActivityForResult(intent, IntentRequests.REQ_CAMERA);
-                                dialog.dismiss();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                try {
+                                    new AttachFile(ActivitySetting.this).dispatchTakePictureIntent();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             } else {
-                                Toast.makeText(ActivitySetting.this, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
+                                if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                    idAvatar = SUID.id().get();
+                                    pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
+                                    nameImageFile = new File(pathSaveImage);
+                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    uriIntent = Uri.fromFile(nameImageFile);
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                                    startActivityForResult(intent, IntentRequests.REQ_CAMERA);
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(ActivitySetting.this, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         } else {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -1858,25 +1867,46 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         if (requestCode == IntentRequests.REQ_CAMERA && resultCode == RESULT_OK) {// result for camera
 
-            Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
-            if (uriIntent != null) {
-
-                ImageHelper.correctRotateImage(pathSaveImage, true);
-
-                intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
+                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "setting");
                 intent.putExtra("ID", (int) (idAvatar + 1L));
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
+            } else {
+                Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
+                if (uriIntent != null) {
+
+                    ImageHelper.correctRotateImage(pathSaveImage, true);
+
+                    intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
+                    intent.putExtra("TYPE", "camera");
+                    intent.putExtra("PAGE", "setting");
+                    intent.putExtra("ID", (int) (idAvatar + 1L));
+                    startActivityForResult(intent, IntentRequests.REQ_CROP);
+                }
             }
+
         } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
-                Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
-                intent.putExtra("IMAGE_CAMERA", data.getData().toString());
-                intent.putExtra("TYPE", "gallery");
-                intent.putExtra("PAGE", "setting");
-                intent.putExtra("ID", (int) (idAvatar + 1L));
-                startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
+                    intent.putExtra("IMAGE_CAMERA", AttachFile.getClipData(data.getClipData()).get(0));
+                    intent.putExtra("TYPE", "gallery");
+                    intent.putExtra("PAGE", "setting");
+                    intent.putExtra("ID", (int) (idAvatar + 1L));
+                    startActivityForResult(intent, IntentRequests.REQ_CROP);
+                } else {
+                    Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
+                    intent.putExtra("IMAGE_CAMERA", data.getData().toString());
+                    intent.putExtra("TYPE", "gallery");
+                    intent.putExtra("PAGE", "setting");
+                    intent.putExtra("ID", (int) (idAvatar + 1L));
+                    startActivityForResult(intent, IntentRequests.REQ_CROP);
+                }
             }
         } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) { // save path image on data base ( realm )
 
