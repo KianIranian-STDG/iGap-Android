@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -21,13 +22,13 @@ import com.iGap.helper.ImageHelper;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
-import com.iGap.module.FileUtils;
 import com.iGap.module.HelperCopyFile;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -51,6 +52,7 @@ public class ActivityCrop extends ActivityEnhanced {
     private String result;
     private ProgressBar prgWaiting;
     AttachFile attachFile;
+    private String path;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -73,38 +75,23 @@ public class ActivityCrop extends ActivityEnhanced {
         final Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
 
-            uri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                path = bundle.getString("IMAGE_CAMERA");
+            } else {
+                uri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
+            }
+
             page = bundle.getString("PAGE");
             type = bundle.getString("TYPE");
             id = bundle.getInt("ID");
         }
-        if (uri != null) {
-            //  imgPic.setVisibility(View.INVISIBLE);
-            //  prgWaiting.setVisibility(View.VISIBLE);
-
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(FileUtils.getPath(this, uri)), imgPic);
+        if (uri != null || path != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), imgPic);
+            } else {
+                imgPic.setImageURI(uri);
+            }
             prgWaiting.setVisibility(View.GONE);
-
-            //Thread thread = new Thread(new Runnable() {
-            //    @Override
-            //    public void run() {
-            //        String Path = getRealPathFromURI(uri);
-            //
-            //        final Bitmap rotateImage = ImageHelper.correctRotateImage(Path, false);
-            //
-            //        runOnUiThread(new Runnable() {
-            //            @Override
-            //            public void run() {
-            //                imgPic.setImageBitmap(rotateImage);
-            //                imgPic.setVisibility(View.VISIBLE);
-            //                prgWaiting.setVisibility(View.GONE);
-            //            }
-            //        });
-            //
-            //    }
-            //});
-            //thread.start();
-
         }
         RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);
         txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
@@ -138,10 +125,15 @@ public class ActivityCrop extends ActivityEnhanced {
         RippleView rippleBack = (RippleView) findViewById(R.id.pu_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
+            public void onComplete(RippleView rippleView) throws IOException {
 
                 if (type.equals("camera") || type.equals("crop_camera")) {
-                    attachFile.requestTakePicture();
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        attachFile.dispatchTakePictureIntent();
+                    } else {
+                        attachFile.requestTakePicture();
+                    }
 
                 } else if (type.equals("gallery")) {
                     attachFile.requestOpenGalleryForImageSingleSelect();
@@ -160,43 +152,89 @@ public class ActivityCrop extends ActivityEnhanced {
         txtSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (uri != null && type.equals("crop_camera")) {
-                    pathImageUser = getRealPathFromURI(uri);
-                    switch (page) {
-                        case "NewGroup":
-                            String timeStampGroup = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                            result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
-                            HelperCopyFile.copyFile(pathImageUser, result);
 
-                            break;
-                        case "NewChanel":
-                            String timeStampChannel = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                            result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
-                            HelperCopyFile.copyFile(pathImageUser, result);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-                            break;
-                        case "chat":
-                            mediaStorageDir = new File(G.DIR_IMAGES);
-                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                            fileChat = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
-                            result = fileChat.toString();
-                            HelperCopyFile.copyFile(pathImageUser, result);
-                            break;
-                        default:
+                    if (path != null && type.equals("crop_camera")) {
+                        pathImageUser = path;
+                        switch (page) {
+                            case "NewGroup":
+                                String timeStampGroup = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                                result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
+                                HelperCopyFile.copyFile(pathImageUser, result);
 
-                            result = G.imageFile.toString() + "_" + id + ".jpg";
-                            HelperCopyFile.copyFile(pathImageUser, result);
-                            break;
+                                break;
+                            case "NewChanel":
+                                String timeStampChannel = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                                result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
+                                HelperCopyFile.copyFile(pathImageUser, result);
+
+                                break;
+                            case "chat":
+                                mediaStorageDir = new File(G.DIR_IMAGES);
+                                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                                fileChat = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
+                                result = fileChat.toString();
+                                HelperCopyFile.copyFile(pathImageUser, result);
+                                break;
+                            default:
+
+                                result = G.imageFile.toString() + "_" + id + ".jpg";
+                                HelperCopyFile.copyFile(pathImageUser, result);
+                                break;
+                        }
+                    } else {
+                        result = path;
                     }
-                } else {
-                    result = getRealPathFromURI(uri);
-                }
-                if (page != null) {
+                    if (page != null) {
 
-                    Intent data = new Intent();
-                    data.setData(Uri.parse(result));
-                    setResult(Activity.RESULT_OK, data);
-                    finish();
+                        Intent data = new Intent();
+                        data.setData(Uri.parse(result));
+                        setResult(Activity.RESULT_OK, data);
+                        finish();
+                    }
+
+                } else {
+
+                    if (uri != null && type.equals("crop_camera")) {
+                        pathImageUser = getRealPathFromURI(uri);
+                        switch (page) {
+                            case "NewGroup":
+                                String timeStampGroup = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                                result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
+                                HelperCopyFile.copyFile(pathImageUser, result);
+
+                                break;
+                            case "NewChanel":
+                                String timeStampChannel = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                                result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
+                                HelperCopyFile.copyFile(pathImageUser, result);
+
+                                break;
+                            case "chat":
+                                mediaStorageDir = new File(G.DIR_IMAGES);
+                                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                                fileChat = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
+                                result = fileChat.toString();
+                                HelperCopyFile.copyFile(pathImageUser, result);
+                                break;
+                            default:
+
+                                result = G.imageFile.toString() + "_" + id + ".jpg";
+                                HelperCopyFile.copyFile(pathImageUser, result);
+                                break;
+                        }
+                    } else {
+                        result = getRealPathFromURI(uri);
+                    }
+                    if (page != null) {
+
+                        Intent data = new Intent();
+                        data.setData(Uri.parse(result));
+                        setResult(Activity.RESULT_OK, data);
+                        finish();
+                    }
+
                 }
             }
         });
@@ -209,14 +247,20 @@ public class ActivityCrop extends ActivityEnhanced {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_TAKE_PICTURE) {
-            String filePath = null;
-            ImageHelper.correctRotateImage(AttachFile.imagePath, true);
-            filePath = "file://" + AttachFile.imagePath;
-            uri = Uri.parse(filePath);
-            imgPic.setImageURI(uri);
-            Log.i("DDD", "avatarId : " + filePath);
-            Log.i("DDD", "exists : " + new File(filePath).exists());
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Uri imageUri = Uri.parse(AttachFile.mCurrentPhotoPath);
+                imgPic.setImageURI(imageUri);
+                //File file = new File(imageUri.getPath());
+            } else {
+                String filePath = null;
+                ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                filePath = "file://" + AttachFile.imagePath;
+                uri = Uri.parse(filePath);
+                imgPic.setImageURI(uri);
+                Log.i("DDD", "avatarId : " + filePath);
+                Log.i("DDD", "exists : " + new File(filePath).exists());
+            }
 
         } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_image_from_gallery_single_select) {
             String filePath = null;

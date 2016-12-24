@@ -52,6 +52,7 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -173,7 +174,11 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                         ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
 
                 if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
-                    HelperPermision.getContactPermision(getActivity(), null);
+                    try {
+                        HelperPermision.getContactPermision(getActivity(), null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     FragmentAddContact fragment = FragmentAddContact.newInstance();
                     Bundle bundle = new Bundle();

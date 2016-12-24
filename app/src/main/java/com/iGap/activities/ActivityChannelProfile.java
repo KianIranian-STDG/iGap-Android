@@ -691,27 +691,31 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public boolean onClick(View v, IAdapter adapter, final ContactItemGroupProfile item, final int position) {
 
-                HelperPermision.getStoragePermision(ActivityChannelProfile.this, new OnGetPermision() {
-                    @Override
-                    public void Allow() {
-                        ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
-                        Intent intent = null;
+                try {
+                    HelperPermision.getStoragePermision(ActivityChannelProfile.this, new OnGetPermision() {
+                        @Override
+                        public void Allow() {
+                            ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
+                            Intent intent = null;
 
-                        if (contactItemGroupProfile.mContact.peerId == userId) {
-                            intent = new Intent(ActivityChannelProfile.this, ActivitySetting.class);
-                        } else {
-                            intent = new Intent(ActivityChannelProfile.this, ActivityContactsProfile.class);
-                            intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
-                            intent.putExtra("RoomId", roomId);
-                            intent.putExtra("enterFrom", GROUP.toString());
+                            if (contactItemGroupProfile.mContact.peerId == userId) {
+                                intent = new Intent(ActivityChannelProfile.this, ActivitySetting.class);
+                            } else {
+                                intent = new Intent(ActivityChannelProfile.this, ActivityContactsProfile.class);
+                                intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
+                                intent.putExtra("RoomId", roomId);
+                                intent.putExtra("enterFrom", GROUP.toString());
+                            }
+
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+                            finish();
                         }
-
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-
-                        finish();
-                    }
-                });
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
 
                 return false;
@@ -1020,13 +1024,21 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 if (text.toString().equals(getString(R.string.from_camera))) {
 
                     if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                        attachFile.requestTakePicture();
+                        try {
+                            attachFile.requestTakePicture();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         dialog.dismiss();
                     } else {
                         Toast.makeText(ActivityChannelProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    attachFile.requestOpenGalleryForImageSingleSelect();
+                    try {
+                        attachFile.requestOpenGalleryForImageSingleSelect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }).show();

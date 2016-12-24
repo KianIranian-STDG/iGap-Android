@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/notification_gradiant"
-    android:layoutDirection="ltr"
-    android:orientation="horizontal">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/gray_5c"
+              android:layoutDirection="ltr"
+              android:orientation="horizontal"
+    >
 
     <ImageView
         android:layout_width="@dimen/dp48"
@@ -37,9 +38,9 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="hasan : "
-                android:textColor="@color/gray_5c"
+                android:textColor="@color/white"
                 android:textDirection="ltr"
-                android:textSize="@dimen/sp16" />
+                android:textSize="@dimen/sp16"/>
 
             <TextView
                 android:id="@+id/ln_txt_a2"
@@ -49,10 +50,10 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="how are you"
-                android:textColor="@color/gray_5c"
+                android:textColor="@color/white"
 
                 android:textDirection="ltr"
-                android:textSize="@dimen/sp14" />
+                android:textSize="@dimen/sp14"/>
 
             <TextView
                 android:id="@+id/ln_txt_a3"
@@ -62,8 +63,8 @@
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true"
                 android:text="10:52"
-                android:textColor="@color/gray_5c"
-                android:textSize="@dimen/sp12" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp12"/>
 
         </LinearLayout>
 
@@ -80,9 +81,9 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="hasan : "
-                android:textColor="@color/gray_5c"
+                android:textColor="@color/white"
                 android:textDirection="ltr"
-                android:textSize="@dimen/sp16" />
+                android:textSize="@dimen/sp16"/>
 
             <TextView
                 android:id="@+id/ln_txt_b2"
@@ -92,10 +93,10 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="how are you"
-                android:textColor="@color/gray_5c"
+                android:textColor="@color/white"
 
                 android:textDirection="ltr"
-                android:textSize="@dimen/sp14" />
+                android:textSize="@dimen/sp14"/>
 
             <TextView
                 android:id="@+id/ln_txt_b3"
@@ -105,8 +106,8 @@
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true"
                 android:text="10:52"
-                android:textColor="@color/gray_5c"
-                android:textSize="@dimen/sp12" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp12"/>
 
         </LinearLayout>
 
@@ -123,9 +124,9 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="hasan : "
-                android:textColor="@color/gray_5c"
+                android:textColor="@color/white"
                 android:textDirection="ltr"
-                android:textSize="@dimen/sp16" />
+                android:textSize="@dimen/sp16"/>
 
             <TextView
                 android:id="@+id/ln_txt_c2"
@@ -135,10 +136,10 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="how are you"
-                android:textColor="@color/gray_5c"
+                android:textColor="@color/white"
 
                 android:textDirection="ltr"
-                android:textSize="@dimen/sp14" />
+                android:textSize="@dimen/sp14"/>
 
             <TextView
                 android:id="@+id/ln_txt_c3"
@@ -148,8 +149,8 @@
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true"
                 android:text="10:52"
-                android:textColor="@color/gray_5c"
-                android:textSize="@dimen/sp12" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp12"/>
 
         </LinearLayout>
 
@@ -166,9 +167,9 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="hasan : "
-                android:textColor="@color/gray_5c"
+                android:textColor="@color/white"
                 android:textDirection="ltr"
-                android:textSize="@dimen/sp16" />
+                android:textSize="@dimen/sp16"/>
 
             <TextView
                 android:id="@+id/ln_txt_d2"
@@ -178,10 +179,10 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="how are you"
-                android:textColor="@color/gray_5c"
+                android:textColor="@color/white"
 
                 android:textDirection="ltr"
-                android:textSize="@dimen/sp14" />
+                android:textSize="@dimen/sp14"/>
 
             <TextView
                 android:id="@+id/ln_txt_d3"
@@ -191,8 +192,8 @@
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true"
                 android:text="10:52"
-                android:textColor="@color/gray_5c"
-                android:textSize="@dimen/sp12" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp12"/>
 
         </LinearLayout>
 
@@ -202,15 +203,15 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
             android:text="..."
-            android:textColor="@color/gray_5c"
+            android:textColor="@color/white"
             android:textSize="@dimen/sp12"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginBottom="@dimen/dp8"
-            android:background="@color/gray_5c"
+            android:background="@color/white"
             ></LinearLayout>
 
         <LinearLayout
@@ -225,15 +226,15 @@
                 android:layout_height="@dimen/dp28"
                 android:gravity="top|center"
                 android:padding="@dimen/dp4"
-                android:src="@mipmap/reply_icon" />
+                android:src="@mipmap/reply_icon"/>
 
             <TextView
                 android:id="@+id/ln_txt_replay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/replay"
-                android:textColor="@color/gray_5c"
-                android:textSize="@dimen/sp14" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp14"/>
 
             <TextView
                 android:id="@+id/ln_txt_unread_message"
@@ -244,8 +245,8 @@
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true"
                 android:text="you have 10 new message"
-                android:textColor="@color/gray_5c"
-                android:textSize="@dimen/sp12" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp12"/>
 
         </LinearLayout>
 
@@ -259,6 +260,6 @@
         android:padding="@dimen/dp8"
 
 
-        android:src="@mipmap/cross" />
+        android:src="@mipmap/cross"/>
 
 </LinearLayout>

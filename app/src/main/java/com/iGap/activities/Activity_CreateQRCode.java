@@ -18,6 +18,7 @@ import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.libs.rippleeffect.RippleView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,12 +74,16 @@ public class Activity_CreateQRCode extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                HelperPermision.getStoragePermision(Activity_CreateQRCode.this, new OnGetPermision() {
-                    @Override
-                    public void Allow() {
-                        CreateBarcode();
-                    }
-                });
+                try {
+                    HelperPermision.getStoragePermision(Activity_CreateQRCode.this, new OnGetPermision() {
+                        @Override
+                        public void Allow() {
+                            CreateBarcode();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
 
             }

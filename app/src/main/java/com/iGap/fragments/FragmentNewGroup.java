@@ -221,7 +221,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         RippleView rippleCircleImage = (RippleView) view.findViewById(R.id.ng_ripple_circle_image);
         rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
+            public void onComplete(RippleView rippleView) throws IOException {
 
                 HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
                     @Override

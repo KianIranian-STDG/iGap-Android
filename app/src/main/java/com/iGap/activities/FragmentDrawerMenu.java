@@ -32,6 +32,7 @@ import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
+import java.io.IOException;
 
 import io.realm.Realm;
 
@@ -102,15 +103,19 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
         layoutUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
-                    @Override
-                    public void Allow() {
-                        Intent intent = new Intent(G.context, ActivitySetting.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        G.context.startActivity(intent);
-                        ActivityMain.mLeftDrawerLayout.closeDrawer();
-                    }
-                });
+                try {
+                    HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                        @Override
+                        public void Allow() {
+                            Intent intent = new Intent(G.context, ActivitySetting.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            G.context.startActivity(intent);
+                            ActivityMain.mLeftDrawerLayout.closeDrawer();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -203,15 +208,19 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
         layoutSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
-                    @Override
-                    public void Allow() {
-                        Intent intent = new Intent(G.context, ActivitySetting.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        ActivityMain.mLeftDrawerLayout.closeDrawer();
-                    }
-                });
+                try {
+                    HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                        @Override
+                        public void Allow() {
+                            Intent intent = new Intent(G.context, ActivitySetting.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            ActivityMain.mLeftDrawerLayout.closeDrawer();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

@@ -104,12 +104,16 @@ public class ActivityProfile extends ActivityEnhanced
             @Override
             public void onClick(View view) {
                 if (!existAvatar) {
-                    HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
-                        @Override
-                        public void Allow() {
-                            startDialog(); // this dialog show 2 way for choose image : gallery and camera
-                        }
-                    });
+                    try {
+                        HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
+                            @Override
+                            public void Allow() {
+                                startDialog(); // this dialog show 2 way for choose image : gallery and camera
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

@@ -66,6 +66,7 @@ import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -146,12 +147,16 @@ public class ActivityRegister extends ActivityEnhanced {
             }
         });
 
-        HelperPermision.getSmsPermision(ActivityRegister.this, new OnGetPermision() {
-            @Override
-            public void Allow() {
-                registerReceiver(smsReceiver, filter);
-            }
-        });
+        try {
+            HelperPermision.getSmsPermision(ActivityRegister.this, new OnGetPermision() {
+                @Override
+                public void Allow() {
+                    registerReceiver(smsReceiver, filter);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);

@@ -54,6 +54,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -190,6 +191,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -201,17 +216,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -448,7 +452,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             //delete all  deleted row from datacase
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll().deleteAllFromRealm();
                 }
             });
@@ -599,32 +604,37 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 layoutJoin.setVisibility(View.VISIBLE);
 
                 layoutJoin.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         HelperUrl.showIndeterminateProgressDialog();
 
                         G.onClientJoinByUsername = new OnClientJoinByUsername() {
-                            @Override public void onClientJoinByUsernameResponse() {
+                            @Override
+                            public void onClientJoinByUsernameResponse() {
 
                                 isNotJoin = false;
                                 HelperUrl.dialogWaiting.dismiss();
 
                                 ActivityChat.this.runOnUiThread(new Runnable() {
-                                    @Override public void run() {
+                                    @Override
+                                    public void run() {
                                         layoutJoin.setVisibility(View.GONE);
                                     }
                                 });
 
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
                                         realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setDeleted(false);
                                     }
                                 });
                                 realm.close();
                             }
 
-                            @Override public void onError(int majorCode, int minorCode) {
+                            @Override
+                            public void onError(int majorCode, int minorCode) {
                                 HelperUrl.dialogWaiting.dismiss();
                             }
                         };
@@ -1787,10 +1797,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public boolean onLongClick(View view) {
 
                 if (ContextCompat.checkSelfPermission(ActivityChat.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                    HelperPermision.getMicroPhonePermision(ActivityChat.this, null);
+                    try {
+                        HelperPermision.getMicroPhonePermision(ActivityChat.this, null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     if (ContextCompat.checkSelfPermission(ActivityChat.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        HelperPermision.getStoragePermision(ActivityChat.this, null);
+                        try {
+                            HelperPermision.getStoragePermision(ActivityChat.this, null);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         voiceRecord.setItemTag("ivVoice");
                         viewAttachFile.setVisibility(View.GONE);
@@ -2303,28 +2321,60 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         break;
                     case 1:
-                        attachFile.requestOpenGalleryForImageMultipleSelect();
+                        try {
+                            attachFile.requestOpenGalleryForImageMultipleSelect();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case 2:
-                        attachFile.requestOpenGalleryForVideoMultipleSelect();
+                        try {
+                            attachFile.requestOpenGalleryForVideoMultipleSelect();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case 3:
-                        attachFile.requestPickAudio();
+                        try {
+                            attachFile.requestPickAudio();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case 4:
-                        attachFile.requestOpenDocumentFolder();
+                        try {
+                            attachFile.requestOpenDocumentFolder();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case 5:
-                        attachFile.requestPickFile();
+                        try {
+                            attachFile.requestPickFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case 6:
-                        attachFile.requestPaint();
+                        try {
+                            attachFile.requestPaint();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case 7:
-                        attachFile.requestGetPosition(complete);
+                        try {
+                            attachFile.requestGetPosition(complete);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case 8:
-                        attachFile.requestPickContact();
+                        try {
+                            attachFile.requestPickContact();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                 }
             }
@@ -2350,7 +2400,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            attachFile.requestGetPosition(complete);
+            try {
+                attachFile.requestGetPosition(complete);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return;
         }
 
@@ -2405,25 +2459,47 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
                         if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
 
-                            listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
 
-                            Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                            Uri uri = Uri.parse(listPathString.get(0));
-                            uri = android.net.Uri.parse("file://" + uri.getPath());
-                            intent.putExtra("IMAGE_CAMERA", uri.toString());
-                            intent.putExtra("TYPE", "gallery");
-                            intent.putExtra("PAGE", "chat");
+                                Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+                                intent.putExtra("IMAGE_CAMERA", listPathString.get(0));
+                                intent.putExtra("TYPE", "gallery");
+                                intent.putExtra("PAGE", "chat");
 
-                            startActivityForResult(intent, IntentRequests.REQ_CROP);
+                                startActivityForResult(intent, IntentRequests.REQ_CROP);
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (prgWaiting != null) {
-                                        prgWaiting.setVisibility(View.GONE);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (prgWaiting != null) {
+                                            prgWaiting.setVisibility(View.GONE);
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            } else {
+                                listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
+
+                                Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+                                Uri uri = Uri.parse(listPathString.get(0));
+                                uri = android.net.Uri.parse("file://" + uri.getPath());
+                                intent.putExtra("IMAGE_CAMERA", uri.toString());
+                                intent.putExtra("TYPE", "gallery");
+                                intent.putExtra("PAGE", "chat");
+
+                                startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (prgWaiting != null) {
+                                            prgWaiting.setVisibility(View.GONE);
+                                        }
+                                    }
+                                });
+                            }
+
+
                         } else {
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -2437,23 +2513,48 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
                     } else if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
-                        ImageHelper.correctRotateImage(listPathString.get(0), true);
 
-                        Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                        String path = "file://" + AttachFile.imagePath;
-                        intent.putExtra("IMAGE_CAMERA", path);
-                        intent.putExtra("TYPE", "camera");
-                        intent.putExtra("PAGE", "chat");
-                        startActivityForResult(intent, IntentRequests.REQ_CROP);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (prgWaiting != null) {
-                                    prgWaiting.setVisibility(View.GONE);
+                            ImageHelper.correctRotateImage(listPathString.get(0), true);
+                            Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+                            String path = AttachFile.mCurrentPhotoPath;
+                            intent.putExtra("IMAGE_CAMERA", path);
+                            intent.putExtra("TYPE", "camera");
+                            intent.putExtra("PAGE", "chat");
+                            startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (prgWaiting != null) {
+                                        prgWaiting.setVisibility(View.GONE);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            ImageHelper.correctRotateImage(listPathString.get(0), true);
+
+                            Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
+
+                            String path = "file://" + AttachFile.imagePath;
+
+                            intent.putExtra("IMAGE_CAMERA", path);
+                            intent.putExtra("TYPE", "camera");
+                            intent.putExtra("PAGE", "chat");
+                            startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (prgWaiting != null) {
+                                        prgWaiting.setVisibility(View.GONE);
+                                    }
+                                }
+                            });
+                        }
+
+
                     }
                 } else {
 

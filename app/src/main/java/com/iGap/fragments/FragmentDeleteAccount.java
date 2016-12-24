@@ -33,6 +33,8 @@ import com.iGap.proto.ProtoUserDelete;
 import com.iGap.request.RequestUserDelete;
 import com.iGap.request.RequestUserGetDeleteToken;
 
+import java.io.IOException;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -76,12 +78,16 @@ public class FragmentDeleteAccount extends Fragment {
             }
         });
 
-        HelperPermision.getSmsPermision(getActivity(), new OnGetPermision() {
-            @Override
-            public void Allow() {
-                getActivity().registerReceiver(smsReceiver, filter);
-            }
-        });
+        try {
+            HelperPermision.getSmsPermision(getActivity(), new OnGetPermision() {
+                @Override
+                public void Allow() {
+                    getActivity().registerReceiver(smsReceiver, filter);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         super.onResume();
     }
 

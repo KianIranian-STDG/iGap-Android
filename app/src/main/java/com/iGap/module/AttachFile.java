@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,6 +16,8 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -36,9 +39,11 @@ import com.iGap.interfaces.OnGetPermision;
 import com.iGap.proto.ProtoGlobal;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static com.iGap.G.onHelperSetAction;
@@ -62,12 +67,14 @@ public class AttachFile {
 
 
     public static boolean isInAttach = false;
-    public static String imagePath = "";
     OnComplete complete;
     private Context context;
     private LocationManager locationManager;
     private ProgressDialog pd;
     private Boolean sendPosition = false;
+    public static String imagePath = "";
+    public static Uri imageUri;
+
     LocationListener locationListener = new LocationListener() {
 
         @Override
@@ -138,7 +145,7 @@ public class AttachFile {
         return path;
     }
 
-    public void requestPaint() {
+    public void requestPaint() throws IOException {
 
         HelperPermision.getStoragePermision(context, new OnGetPermision() {
             @Override
@@ -150,7 +157,7 @@ public class AttachFile {
         });
     }
 
-    public void requestTakePicture() {
+    public void requestTakePicture() throws IOException {
 
 
         PackageManager packageManager = context.getPackageManager();
@@ -162,25 +169,24 @@ public class AttachFile {
 
         HelperPermision.getCamarePermision(context, new OnGetPermision() {
             @Override
-            public void Allow() {
+            public void Allow() throws IOException {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                }
-                Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-
-                if (outPath != null) {
-                    imagePath = outPath.getPath();
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
-                    ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
-                    isInAttach = true;
+                    dispatchTakePictureIntent();
                 } else {
+                    Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
+                    if (outPath != null) {
+                        imagePath = outPath.getPath();
+                        imageUri = outPath;
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
+                        ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
+                        isInAttach = true;
+                    }
                 }
             }
         });
-
-
     }
 
     private Uri getOutputMediaFileUri(int type) {
@@ -190,6 +196,79 @@ public class AttachFile {
             return Uri.fromFile(getOutputMediaFile(type));
         }
     }
+
+    //=================================== Start Android 7
+    public static String mCurrentPhotoPath;
+
+    public void dispatchTakePictureIntent() throws IOException {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(G.context.getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                return;
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", createImageFile());
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                ((Activity) context).startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void onClickGallery() {
+        List<Intent> targets = new ArrayList<>();
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_PICK);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        List<ResolveInfo> candidates = context.getPackageManager().queryIntentActivities(intent, 0);
+
+        for (ResolveInfo candidate : candidates) {
+            String packageName = candidate.activityInfo.packageName;
+            if (!packageName.equals("com.google.android.apps.photos") && !packageName.equals("com.google.android.apps.plus") && !packageName.equals("com.android.documentsui")) {
+                Intent iWantThis = new Intent();
+                iWantThis.setType("image/*");
+                iWantThis.setAction(Intent.ACTION_PICK);
+                iWantThis.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                iWantThis.setPackage(packageName);
+                targets.add(iWantThis);
+            }
+        }
+        if (targets.size() > 0) {
+            Intent chooser = Intent.createChooser(targets.remove(0), "Select Picture");
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, targets.toArray(new Parcelable[targets.size()]));
+            ((Activity) context).startActivityForResult(chooser, request_code_image_from_gallery_single_select);
+        } else {
+            Intent intent1 = new Intent(Intent.ACTION_PICK);
+            intent1.setType("image/*");
+            ((Activity) context).startActivityForResult(Intent.createChooser(intent1, "Select Picture"), request_code_image_from_gallery_single_select);
+        }
+    }
+
+    //=================================== End Android 7
 
     private File getOutputMediaFile(int type) {
 
@@ -221,7 +300,7 @@ public class AttachFile {
     //*************************************************************************************************************
 
     //*************************************************************************************************************
-    public void requestOpenGalleryForImageMultipleSelect() {
+    public void requestOpenGalleryForImageMultipleSelect() throws IOException {
 
         //this code use for open galary for image and video together
         //Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
@@ -234,6 +313,8 @@ public class AttachFile {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
@@ -243,7 +324,7 @@ public class AttachFile {
     }
 
     //*************************************************************************************************************
-    public void requestOpenGalleryForVideoMultipleSelect() {
+    public void requestOpenGalleryForVideoMultipleSelect() throws IOException {
 
         HelperPermision.getStoragePermision(context, new OnGetPermision() {
             @Override
@@ -262,7 +343,7 @@ public class AttachFile {
     }
 
     //*************************************************************************************************************
-    public void requestOpenGalleryForImageSingleSelect() {
+    public void requestOpenGalleryForImageSingleSelect() throws IOException {
 
         HelperPermision.getStoragePermision(context, new OnGetPermision() {
             @Override
@@ -278,7 +359,7 @@ public class AttachFile {
     //*************************************************************************************************************
 
     //*************************************************************************************************************
-    public void requestVideoCapture() {
+    public void requestVideoCapture() throws IOException {
 
         PackageManager packageManager = context.getPackageManager();
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
@@ -308,8 +389,12 @@ public class AttachFile {
                         switch (which) {
                             case 0:
 
-                                requestTakePicture();
-                                onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_IMAGE);
+                                try {
+                                    requestTakePicture();
+                                    onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_IMAGE);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                                 dialog.dismiss();
 
                                 if (prgWaiting != null) {
@@ -318,8 +403,12 @@ public class AttachFile {
 
                                 break;
                             case 1:
-                                requestVideoCapture();
-                                onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_VIDEO);
+                                try {
+                                    requestVideoCapture();
+                                    onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_VIDEO);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                                 dialog.dismiss();
                                 break;
                         }
@@ -331,7 +420,7 @@ public class AttachFile {
 
     //*************************************************************************************************************
 
-    public void requestPickAudio() {
+    public void requestPickAudio() throws IOException {
         //Intent intent = new Intent();
         //intent.setActionTyping(Intent.ACTION_PICK);
         //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -353,7 +442,7 @@ public class AttachFile {
         });
     }
 
-    public void requestPickFile() {
+    public void requestPickFile() throws IOException {
         HelperPermision.getStoragePermision(context, new OnGetPermision() {
             @Override
             public void Allow() {
@@ -364,7 +453,7 @@ public class AttachFile {
         });
     }
 
-    public void requestPickContact() {
+    public void requestPickContact() throws IOException {
 
         HelperPermision.getContactPermision(context, new OnGetPermision() {
             @Override
@@ -380,7 +469,7 @@ public class AttachFile {
 
     }
 
-    public void requestGetPosition(OnComplete complete) {
+    public void requestGetPosition(OnComplete complete) throws IOException {
 
         this.complete = complete;
 
@@ -441,7 +530,7 @@ public class AttachFile {
         }
     }
 
-    public void requestOpenDocumentFolder() {
+    public void requestOpenDocumentFolder() throws IOException {
 
 
         HelperPermision.getStoragePermision(context, new OnGetPermision() {
@@ -512,18 +601,31 @@ public class AttachFile {
 
     public String saveGalleryPicToLocal(String galleryPath) {
 
-        String result = "";
 
-        if (galleryPath == null) return "";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            String result = "";
+            if (galleryPath == null) return "";
 
-        Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
+            Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
 
-        if (bitmap != null) {
-            result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE).getPath();
-            ImageHelper.SaveBitmapToFile(result, bitmap);
+            if (bitmap != null) {
+                result = galleryPath;
+                ImageHelper.SaveBitmapToFile(result, bitmap);
+            }
+
+            return result;
+        } else {
+            String result = "";
+            if (galleryPath == null) return "";
+
+            Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
+
+            if (bitmap != null) {
+                result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE).getPath();
+                ImageHelper.SaveBitmapToFile(result, bitmap);
+            }
+
+            return result;
         }
-
-        return result;
     }
-
 }

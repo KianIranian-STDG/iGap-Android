@@ -16,6 +16,8 @@ import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.libs.rippleeffect.RippleView;
 
+import java.io.IOException;
+
 /**
  * Created by android3 on 11/30/2016.
  */
@@ -219,16 +221,20 @@ public class Activity_QrPayment extends ActivityEnhanced {
                 @Override
                 public void onClick(View view) {
 
-                    HelperPermision.getCamarePermision(Activity_QrPayment.this, new OnGetPermision() {
-                        @Override
-                        public void Allow() {
-                            deSelectOtherView();
+                    try {
+                        HelperPermision.getCamarePermision(Activity_QrPayment.this, new OnGetPermision() {
+                            @Override
+                            public void Allow() {
+                                deSelectOtherView();
 
-                            togglePayViaQRCode(true);
+                                togglePayViaQRCode(true);
 
-                            startActivity(new Intent(Activity_QrPayment.this, Activity_payViaQRCode.class));
-                        }
-                    });
+                                startActivity(new Intent(Activity_QrPayment.this, Activity_payViaQRCode.class));
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
 
                 }

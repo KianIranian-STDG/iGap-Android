@@ -874,38 +874,42 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public boolean onClick(View v, IAdapter adapter, final ContactItemGroupProfile item, final int position) {
 
-                HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermision() {
-                    @Override
-                    public void Allow() {
-                        ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
-                        Intent intent = null;
+                try {
+                    HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermision() {
+                        @Override
+                        public void Allow() {
+                            ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
+                            Intent intent = null;
 
-                        if (contactItemGroupProfile.mContact.peerId == userID) {
-                            intent = new Intent(ActivityGroupProfile.this, ActivitySetting.class);
-                        } else {
-                            intent = new Intent(ActivityGroupProfile.this, ActivityContactsProfile.class);
+                            if (contactItemGroupProfile.mContact.peerId == userID) {
+                                intent = new Intent(ActivityGroupProfile.this, ActivitySetting.class);
+                            } else {
+                                intent = new Intent(ActivityGroupProfile.this, ActivityContactsProfile.class);
 
-                            long selectedChatRoomID = -1;
-                            Realm realm = Realm.getDefaultInstance();
-                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, contactItemGroupProfile.mContact.peerId).findFirst();
+                                long selectedChatRoomID = -1;
+                                Realm realm = Realm.getDefaultInstance();
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, contactItemGroupProfile.mContact.peerId).findFirst();
 
-                            if (realmRoom != null) {
-                                selectedChatRoomID = realmRoom.getId();
+                                if (realmRoom != null) {
+                                    selectedChatRoomID = realmRoom.getId();
+                                }
+
+
+                                intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
+                                intent.putExtra("RoomId", roomId);
+                                intent.putExtra("enterFrom", GROUP.toString());
                             }
 
+                            finish();
 
-                            intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
-                            intent.putExtra("RoomId", roomId);
-                            intent.putExtra("enterFrom", GROUP.toString());
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
                         }
-
-                        finish();
-
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-
-                    }
-                });
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
 
                 return false;
@@ -1142,10 +1146,18 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                         if (which == 0) {
-                            attachFile.requestOpenGalleryForImageSingleSelect();
+                            try {
+                                attachFile.requestOpenGalleryForImageSingleSelect();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } else if (which == 1) {
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                attachFile.requestTakePicture();
+                                try {
+                                    attachFile.requestTakePicture();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                                 dialog.dismiss();
                             } else {
                                 Toast.makeText(ActivityGroupProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();

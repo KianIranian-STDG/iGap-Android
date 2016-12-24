@@ -10,8 +10,11 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+
 import com.iGap.R;
 import com.iGap.interfaces.OnGetPermision;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -41,7 +44,7 @@ public class HelperPermision {
     public static OnGetPermision onDenyStorage;
 
     //************************************************************************************************************
-    public static void getCamarePermision(Context context, OnGetPermision onGetPermision) {
+    public static void getCamarePermision(Context context, OnGetPermision onGetPermision) throws IOException {
 
         if (checkApi()) {
             if (onGetPermision != null)
@@ -64,7 +67,7 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void getStoragePermision(Context context, OnGetPermision onGetPermision) {
+    public static void getStoragePermision(Context context, OnGetPermision onGetPermision) throws IOException {
 
         if (checkApi()) {
             if (onGetPermision != null)
@@ -104,7 +107,7 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void getContactPermision(Context context, OnGetPermision onGetPermision) {
+    public static void getContactPermision(Context context, OnGetPermision onGetPermision) throws IOException {
 
         if (checkApi()) {
             if (onGetPermision != null)
@@ -153,7 +156,7 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void getCalendarPermision(Context context, OnGetPermision onGetPermision) {
+    public static void getCalendarPermision(Context context, OnGetPermision onGetPermision) throws IOException {
 
         if (checkApi()) {
             if (onGetPermision != null)
@@ -193,7 +196,7 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void getLocationPermision(Context context, OnGetPermision onGetPermision) {
+    public static void getLocationPermision(Context context, OnGetPermision onGetPermision) throws IOException {
 
         if (checkApi()) {
             if (onGetPermision != null)
@@ -233,7 +236,7 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void getMicroPhonePermision(Context context, OnGetPermision onGetPermision) {
+    public static void getMicroPhonePermision(Context context, OnGetPermision onGetPermision) throws IOException {
 
         if (checkApi()) {
             if (onGetPermision != null)
@@ -256,7 +259,7 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void getPhonePermision(Context context, OnGetPermision onGetPermision) {
+    public static void getPhonePermision(Context context, OnGetPermision onGetPermision) throws IOException {
 
         if (checkApi()) {
             if (onGetPermision != null)
@@ -302,7 +305,7 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void getSmsPermision(Context context, OnGetPermision onGetPermision) {
+    public static void getSmsPermision(Context context, OnGetPermision onGetPermision) throws IOException {
 
         if (checkApi()) {
             if (onGetPermision != null)
@@ -380,7 +383,7 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) throws IOException {
 
         switch (requestCode) {
             case MY_PERMISSIONS_CAMERA:
@@ -412,7 +415,7 @@ public class HelperPermision {
 
     //************************************************************************************************************
 
-    private static void actionResultBack(int[] grantResults, OnGetPermision onGetPermision) {
+    private static void actionResultBack(int[] grantResults, OnGetPermision onGetPermision) throws IOException {
 
         boolean allOk = true;
         for (int i = 0; i < grantResults.length; i++) {

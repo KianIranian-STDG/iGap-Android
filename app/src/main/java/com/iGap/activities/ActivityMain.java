@@ -97,6 +97,7 @@ import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -344,12 +345,16 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         initDrawerMenu();
         //onDraftMessage();
 
-        HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermision() {
-            @Override
-            public void Allow() {
-                Contacts.FillRealmInviteFriend();
-            }
-        });
+        try {
+            HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermision() {
+                @Override
+                public void Allow() {
+                    Contacts.FillRealmInviteFriend();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

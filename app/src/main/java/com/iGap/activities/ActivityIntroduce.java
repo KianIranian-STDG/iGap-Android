@@ -18,6 +18,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
@@ -30,8 +31,11 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
 import com.iGap.request.RequestInfoPage;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
-import io.realm.Realm;
+
+import java.io.IOException;
 import java.util.Locale;
+
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityIntroduce extends ActivityEnhanced {
@@ -71,12 +75,17 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
                 DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which) {
-                        HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermision() {
-                            @Override public void Allow() {
-                                HelperPermision.onDenyStorage = null;
-                                goToProgram(savedInstanceState);
-                            }
-                        });
+                        try {
+                            HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermision() {
+                                @Override
+                                public void Allow() {
+                                    HelperPermision.onDenyStorage = null;
+                                    goToProgram(savedInstanceState);
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 };
 
@@ -96,12 +105,17 @@ public class ActivityIntroduce extends ActivityEnhanced {
             }
         };
 
-        HelperPermision.getStoragePermision(this, new OnGetPermision() {
-            @Override public void Allow() {
-                HelperPermision.onDenyStorage = null;
-                goToProgram(savedInstanceState);
-            }
-        });
+        try {
+            HelperPermision.getStoragePermision(this, new OnGetPermision() {
+                @Override
+                public void Allow() {
+                    HelperPermision.onDenyStorage = null;
+                    goToProgram(savedInstanceState);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }

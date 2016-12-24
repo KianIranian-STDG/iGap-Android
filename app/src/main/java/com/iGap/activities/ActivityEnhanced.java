@@ -7,13 +7,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.helper.HelperPermision;
 import com.iGap.module.AttachFile;
 import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.request.RequestUserUpdateStatus;
+
+import java.io.IOException;
 import java.util.Locale;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityEnhanced extends AppCompatActivity {
@@ -59,7 +63,11 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        HelperPermision.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        try {
+            HelperPermision.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

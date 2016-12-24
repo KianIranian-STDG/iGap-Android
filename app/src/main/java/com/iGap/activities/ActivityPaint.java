@@ -44,6 +44,7 @@ import com.iGap.module.ColorPiker;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -169,7 +170,11 @@ public class ActivityPaint extends ActivityEnhanced {
             @Override
             public void onClick(View arg0) {
                 captureimage = false;
-                attachFile.requestOpenGalleryForImageSingleSelect();
+                try {
+                    attachFile.requestOpenGalleryForImageSingleSelect();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -180,7 +185,11 @@ public class ActivityPaint extends ActivityEnhanced {
             @Override
             public void onClick(View arg0) {
                 captureimage = true;
-                attachFile.requestTakePicture();
+                try {
+                    attachFile.requestTakePicture();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

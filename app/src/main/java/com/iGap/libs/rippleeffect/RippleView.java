@@ -46,6 +46,8 @@ import android.widget.RelativeLayout;
 
 import com.iGap.R;
 
+import java.io.IOException;
+
 /**
  * RippleView custom layout
  * <p/>
@@ -174,7 +176,11 @@ public class RippleView extends RelativeLayout {
                     canvas.restore();
                 }
                 invalidate();
-                if (onCompletionListener != null) onCompletionListener.onComplete(this);
+                if (onCompletionListener != null) try {
+                    onCompletionListener.onComplete(this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return;
             } else {
                 canvasHandler.postDelayed(runnable, frameRate);
@@ -487,6 +493,6 @@ public class RippleView extends RelativeLayout {
      * Defines a callback called at the end of the Ripple effect
      */
     public interface OnRippleCompleteListener {
-        void onComplete(RippleView rippleView);
+        void onComplete(RippleView rippleView) throws IOException;
     }
 }
