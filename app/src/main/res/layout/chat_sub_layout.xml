@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="@dimen/dp68"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layoutDirection="ltr">
 
 
@@ -77,12 +77,12 @@
                         android:textStyle="bold"/>
 
                     <MultiAutoCompleteTextView
-                        android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:id="@+id/cs_txt_mute"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp4"
                         android:text="@string/md_muted"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/sp14"/>
 
@@ -117,12 +117,12 @@
 
                     <com.wang.avi.AVLoadingIndicatorView
                         android:id="@+id/cs_avi"
+                        style="@style/AVLoadingIndicatorView.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="top"
                         android:layout_marginLeft="@dimen/dp8"
                         android:layout_marginStart="@dimen/dp8"
-                        style="@style/AVLoadingIndicatorView.Small"
-                        android:layout_gravity="top"
                         android:visibility="gone"
                         app:indicatorColor="@color/room_message_blue"
                         app:indicatorName="BallPulseIndicator"
@@ -169,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="@dimen/dp4"
-                    android:background="@drawable/oval_green"
+                    android:background="@drawable/oval_red"
                     android:gravity="center"
                     android:minHeight="@dimen/dp24"
                     android:minWidth="@dimen/dp24"

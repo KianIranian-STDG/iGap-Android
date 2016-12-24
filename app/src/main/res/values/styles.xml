@@ -38,7 +38,7 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textDirection">firstStrong</item>
         <item name="android:layoutDirection">locale</item>
-        <item name="emojiSize">@dimen/dp32</item>
+        <item name="emojiSize">24dp</item>
         <item name="android:paddingBottom">@dimen/messageContainerPaddingBottom</item>
         <item name="android:paddingLeft">@dimen/messageContainerPaddingLeftRight</item>
         <item name="android:paddingRight">@dimen/messageContainerPaddingLeftRight</item>

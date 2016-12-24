@@ -342,7 +342,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             if (mInfo.getMute()) {
                 holder.unreadMessage.setBackgroundResource(R.drawable.oval_gray);
             } else {
-                holder.unreadMessage.setBackgroundResource(R.drawable.oval_green);
+                holder.unreadMessage.setBackgroundResource(R.drawable.oval_red);
             }
         }
 
