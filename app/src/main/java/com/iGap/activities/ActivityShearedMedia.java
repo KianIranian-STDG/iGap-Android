@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -39,7 +38,9 @@ import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmShearedMedia;
 import com.iGap.realm.RealmShearedMediaFields;
 import com.iGap.request.RequestClientSearchRoomHistory;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,10 +50,6 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -230,8 +227,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private void initAppbarSelected() {
 
-        TextView btnCloseAppBarSelected = (TextView) findViewById(R.id.asm_btn_close_layout);
-
         RippleView rippleCloseAppBarSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
         rippleCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
@@ -239,19 +234,18 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         });
 
-        TextView btnForwardSelected = (TextView) findViewById(R.id.asm_btn_forward_selected);
-        btnForwardSelected.setTypeface(G.fontawesome);
+        MaterialDesignTextView btnForwardSelected = (MaterialDesignTextView) findViewById(R.id.asm_btn_forward_selected);
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
+                Log.e("ddd", "forward");
             }
         });
 
-        TextView btnDeleteSelected = (TextView) findViewById(R.id.asm_btn_delete_selected);
         RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
-
+                Log.e("ddd", "delete");
             }
         });
 

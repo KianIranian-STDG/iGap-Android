@@ -2,10 +2,10 @@ package com.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AvatarsAdapter;
+import com.iGap.fragments.FragmentShowImageMessages;
 import com.iGap.interfaces.IChatItemAvatar;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.TouchImageView;
@@ -15,13 +15,11 @@ import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.IOException;
-import java.util.List;
-
 import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.realm.Realm;
+import java.io.IOException;
+import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
@@ -84,6 +82,11 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
             });
             realm.close();
 
+            if (FragmentShowImageMessages.onDownloadComplet != null) {
+                FragmentShowImageMessages.onDownloadComplet.complete(true, token, "");
+            }
+
+
             return; // necessary
         }
 
@@ -139,6 +142,10 @@ public class ImageMessageItem extends AbstractItem<ImageMessageItem, ImageMessag
 
             // remove from requests when downloading has finished
             AvatarsAdapter.removeFileRequest(message.getAttachment().getToken());
+
+            if (FragmentShowImageMessages.onDownloadComplet != null) {
+                FragmentShowImageMessages.onDownloadComplet.complete(true, message.getAttachment().getToken(), "");
+            }
 
             return; // necessary
         }

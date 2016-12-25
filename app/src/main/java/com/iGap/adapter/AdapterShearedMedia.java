@@ -246,7 +246,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
 
         messageProgress.withDrawable(R.drawable.ic_cancel, true);
 
-        ProtoGlobal.RoomMessage item = list.get(position).item;
+        final ProtoGlobal.RoomMessage item = list.get(position).item;
 
         HelperDownloadFile.startDoanload(item.getAttachment().getToken(), item.getAttachment().getName(), item.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE,
             item.getMessageType(), new HelperDownloadFile.UpdateListener() {

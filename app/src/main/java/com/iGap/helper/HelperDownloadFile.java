@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
@@ -12,8 +13,11 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
+import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
 
@@ -191,11 +195,30 @@ public class HelperDownloadFile {
                 String dirTmp = G.DIR_TEMP + "/" + item.path;
                 try {
                     AndroidUtils.cutFromTemp(dirTmp, dirPath);
+
+                    setToDataBaseAttachment(token, dirPath);
+
                 } catch (IOException e) {
                 }
                 break;
         }
     }
+
+    private static void setToDataBaseAttachment(final String token, final String name) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
+                if (attachment != null) {
+                    Log.e("ddd", "bbbbbbbbbbbbb      " + name);
+                    attachment.setLocalFilePath(name);
+                }
+            }
+        });
+        realm.close();
+    }
+
 
     private static void updateView(StructDownLoad item) {
 

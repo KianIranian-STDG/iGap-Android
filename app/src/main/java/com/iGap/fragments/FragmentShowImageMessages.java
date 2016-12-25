@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -28,6 +27,7 @@ import com.iGap.adapter.items.ImageMessageItem;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoFileDownload;
@@ -35,12 +35,10 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
-
-import java.io.File;
-import java.util.Date;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
+import java.io.File;
+import java.util.Date;
 
 import static com.iGap.R.id.recyclerView;
 import static com.iGap.module.MusicPlayer.roomId;
@@ -66,6 +64,9 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
 
     public static View appBarLayout;
 
+    public static OnComplete onDownloadComplet;
+
+
     public static FragmentShowImageMessages newInstance(long roomId, String selectedToken) {
         Bundle args = new Bundle();
         args.putLong(ARG_ROOM_ID, roomId);
@@ -74,6 +75,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
         FragmentShowImageMessages fragment = new FragmentShowImageMessages();
         fragment.setArguments(args);
         return fragment;
+
     }
 
     @Override
@@ -143,7 +145,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
                 });
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll();
+        RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllSorted(RealmRoomMessageFields.UPDATE_TIME);
         if (!roomMessages.isEmpty()) {
             // there is at least on history in DB
             long identifier = SUID.id().get();
