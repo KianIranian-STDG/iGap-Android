@@ -106,7 +106,7 @@ public class HelperAvatar {
                 onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalThumbnailPath(), ownerId);
             } else {
 
-                new AvatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
+                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
                     @Override
                     public void onDownload(final String filepath, final String token) {
 
@@ -298,24 +298,26 @@ public class HelperAvatar {
 
     private static class AvatarDownload implements OnFileDownloaded {
 
-        private static RealmAttachment realmAttachment;
-        private static ProtoFileDownload.FileDownload.Selector selector;
+        /*private static RealmAttachment realmAttachment;
+          private static ProtoFileDownload.FileDownload.Selector selector;
+        */
         private static OnDownload onDownload;
-        private static String fileName = "";
-        private static long fileSize = 0;
+        //private static String fileName = "";
+        //private static long fileSize = 0;
 
 
-        public AvatarDownload(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector, OnDownload onDownload) {
-            this.realmAttachment = realmAttachment;
+        //public AvatarDownload(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector, OnDownload onDownload) {
+
+        private void avatarDownload(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector, OnDownload onDownload) {
+
+           /* this.realmAttachment = realmAttachment;
             this.selector = selector;
+            this.onDownload = onDownload;*/
             this.onDownload = onDownload;
+            long fileSize = 0;
+            String fileName = "";
 
-            avatarDownload();
             G.onFileDownloaded = this;
-        }
-
-        private static void avatarDownload() {
-
             if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
                 fileName = realmAttachment.getToken() + "_" + realmAttachment.getName();
                 fileSize = realmAttachment.getSize();
@@ -350,7 +352,7 @@ public class HelperAvatar {
         }
 
         @Override
-        public void onFileDownload(String fileName, String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+        public void onFileDownload(String fileName, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
             if (progress == 100) {
 
                 try {
@@ -363,13 +365,13 @@ public class HelperAvatar {
             } else {
                 // I don't use offset in getting thumbnail
                 try {
-                    String identity = realmAttachment.getToken()
+                    String identity = token
                             + '*' + selector.toString()
                             + '*' + fileSize
                             + '*' + fileName
                             + '*' + offset;
 
-                    new RequestFileDownload().download(realmAttachment.getToken(), offset, getFileSize(realmAttachment, selector), selector, identity);
+                    new RequestFileDownload().download(token, offset, (int) fileSize, selector, identity);
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -396,7 +398,7 @@ public class HelperAvatar {
                 onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalThumbnailPath(), ownerId);
             } else {
 
-                new AvatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
+                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
                     @Override
                     public void onDownload(final String filepath, final String token) {
 

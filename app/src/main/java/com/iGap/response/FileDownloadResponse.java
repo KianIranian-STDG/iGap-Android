@@ -47,7 +47,7 @@ public class FileDownloadResponse extends MessageHandler {
         AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
         if (!avatarRequested) {
             if (G.onFileDownloaded != null) {
-                G.onFileDownloaded.onFileDownload(filename, token, nextOffset, selector, (int) progress);
+                G.onFileDownloaded.onFileDownload(filename, token, fileSize, nextOffset, selector, (int) progress);
             }
             G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, (int) progress);
         } else {
