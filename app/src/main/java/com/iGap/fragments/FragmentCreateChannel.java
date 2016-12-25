@@ -12,7 +12,6 @@ import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +34,6 @@ import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-import com.iGap.request.RequestChannelAvatarAdd;
 import com.iGap.request.RequestChannelCheckUsername;
 import com.iGap.request.RequestChannelUpdateUsername;
 import com.iGap.request.RequestClientGetRoom;
@@ -62,6 +60,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
     private String token;
     private boolean existAvatar;
     private ProgressBar prgWaiting;
+    private String pathSaveImage;
 
 
     public FragmentCreateChannel(
@@ -75,6 +74,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_channel, container, false);
+
     }
 
     @Override
@@ -87,7 +87,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
             roomId = getArguments().getLong("ROOMID");
             inviteLink = getArguments().getString("INVITE_LINK");
             token = getArguments().getString("TOKEN");
-            existAvatar = getArguments().getBoolean("AVATAR");
+
 
         }
 
@@ -242,7 +242,6 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
                                     break;
                             }
-
                             return true;
                         }
                     });
@@ -278,7 +277,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                     }
                     String userName = edtLink.getText().toString().replace("iGap.net/", "");
                     new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
-                    Log.i("CCCCCCC", "afterTextChanged: " + userName);
+
                 }
             }
         });
@@ -315,6 +314,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
             @Override
             public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
+
                 try {
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -322,33 +322,21 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                             public void run() {
 
                                 hideProgressBar();
-                                if (existAvatar) {
-                                    showProgressBar();
-                                    new RequestChannelAvatarAdd().channelAvatarAdd(roomId, token);
+                                Fragment fragment = ContactGroupFragment.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putLong("RoomId", roomId);
+                                bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
+                                bundle.putString("TYPE", type.toString());
+                                bundle.putBoolean("NewRoom", true);
+                                fragment.setArguments(bundle);
+                                getActivity().getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
 
-                                } else {
-                                    Fragment fragment = ContactGroupFragment.newInstance();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putLong("RoomId", roomId);
-
-                                    if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                        bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
-                                    } else {
-                                        bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
-                                    }
-                                    bundle.putString("TYPE", type.toString());
-                                    bundle.putBoolean("NewRoom", true);
-                                    fragment.setArguments(bundle);
-                                    getActivity().getSupportFragmentManager()
-                                            .beginTransaction()
-                                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-
-                                            .replace(fragmentContainer, fragment, "contactGroup_fragment")
-                                            .commitAllowingStateLoss();
-                                    getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
-                                    ActivityMain.mLeftDrawerLayout.closeDrawer();
-                                }
-
+                                        .replace(fragmentContainer, fragment, "contactGroup_fragment")
+                                        .commitAllowingStateLoss();
+                                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+                                ActivityMain.mLeftDrawerLayout.closeDrawer();
                             }
                         });
                     }

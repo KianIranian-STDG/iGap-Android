@@ -3166,36 +3166,59 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void compareMemberList(RealmList<RealmMember> memberList, List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> serverLiseMember) {
 
-        ArrayList<Long> b1 = new ArrayList<>();
-        for (RealmMember r : memberList) {
-            long a1 = r.getPeerId();
-            b1.add(a1);
-        }
+//        ArrayList<Long> b1 = new ArrayList<>();
+//        for (RealmMember r : memberList) {
+//            b1.add(r.getPeerId());
+//        }
+//
+//        ArrayList<Long> c1 = new ArrayList<>();
+//        for (int i = 0; i < memberList.size(); i++) {
+//            for (int j = 0; j < serverLiseMember.size(); j++) {
+//
+//                if (serverLiseMember.get(i).getUserId() == memberList.get(j).getPeerId()) {
+//                    c1.add(memberList.get(j).getPeerId());
+//                    break;
+//                }
+//            }
+//        }
+//
+//        b1.removeAll(c1);
+//        Realm realm = Realm.getDefaultInstance();
+//        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+//        RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+//        for (int i = 0; i < realmMembers.size(); i++) {
+//            for (int j = 0; j < b1.size(); j++) {
+//
+//                if (realmMembers.get(i).getPeerId() == b1.get(j)) {
+//                    realmMembers.get(i).deleteFromRealm();
+//                }
+//            }
+//        }
+//        realm.close();
 
-        ArrayList<Long> c1 = new ArrayList<>();
-        for (int i = 0; i < serverLiseMember.size(); i++) {
-            for (int j = 0; j < b1.size(); j++) {
 
-                if (serverLiseMember.get(i).getUserId() == memberList.get(j).getPeerId()) {
-                    c1.add(memberList.get(j).getPeerId());
-                    break;
-                }
-            }
-        }
-
-        b1.removeAll(c1);
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
-        for (int i = 0; i < realmMembers.size(); i++) {
-            for (int j = 0; j < b1.size(); j++) {
-
-                if (realmMembers.get(i).getPeerId() == b1.get(j)) {
-                    realmMembers.get(i).deleteFromRealm();
-                }
-            }
-        }
-        realm.close();
+//        Log.i("BBBBB", "start remove:");
+//        for (final RealmMember realmMember : memberList) {
+//            for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : serverLiseMember) {
+//                if (realmMember.getPeerId() != member.getUserId()) {
+//
+//                    Realm realm = Realm.getDefaultInstance();
+//                    realm.executeTransaction(new Realm.Transaction() {
+//                        @Override
+//                        public void execute(Realm realm) {
+//                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+//                            RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+//                            Log.i("BBBBB", "befor remove: " + realmMembers.size());
+//                            realmMembers.remove(realmMember);
+//                            Log.i("BBBBB", "after remove: " + realmMembers.size());
+//                        }
+//                    });
+//
+//
+//                    break;
+//                }
+//            }
+//        }
     }
 
     //********** Avatars

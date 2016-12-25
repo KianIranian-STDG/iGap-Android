@@ -262,8 +262,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         lytListModerator = (LinearLayout) findViewById(R.id.lyt_list_moderator);
         lytDeleteChannel = (LinearLayout) findViewById(R.id.lyt_delete_channel);
         lytNotification = (LinearLayout) findViewById(R.id.lyt_notification);
-        ViewGroup vgRootAddMember = (ViewGroup) findViewById(R.id.agp_root_layout_add_member);
 
+        ViewGroup vgRootAddMember = (ViewGroup) findViewById(R.id.agp_root_layout_add_member);
         if (role == ChannelChatRole.MEMBER) {
             vgRootAddMember.setVisibility(View.GONE);
         }

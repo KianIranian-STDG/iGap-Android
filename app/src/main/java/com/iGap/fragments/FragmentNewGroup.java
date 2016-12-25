@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,6 +105,8 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     private static ProtoGlobal.Room.Type type;
     private String token;
     private boolean existAvatar = false;
+    private String mInviteLink;
+    private boolean isChannel = false;
 
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
@@ -323,10 +326,13 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                     File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                     if (prefix.equals("NewChanel")) {
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        isChannel = true;
                         createChannel();
                     } else if (prefix.equals("ConvertToGroup")) {
+                        isChannel = false;
                         chatToGroup();
                     } else {
+                        isChannel = false;
                         createGroup();
                     }
                 } else {
@@ -389,23 +395,31 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        roomId = roomIdR;
                         createChannelRoom(roomIdR, inviteLink);
-                        hideProgressBar();
-                        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+                        mInviteLink = inviteLink;
+                        if (existAvatar) {
+//                            showProgressBar();
+                            mInviteLink = inviteLink;
+                            new RequestChannelAvatarAdd().channelAvatarAdd(roomIdR, token);
 
-                        Bundle bundle = new Bundle();
-                        bundle.putLong("ROOMID", roomIdR);
-                        bundle.putString("INVITE_LINK", inviteLink);
-                        bundle.putString("TOKEN", token);
-                        bundle.putBoolean("AVATAR", existAvatar);
-                        fragmentCreateChannel.setArguments(bundle);
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment")
-                                .commitAllowingStateLoss();
-                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                        } else {
+
+                            FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+                            hideProgressBar();
+                            Bundle bundle = new Bundle();
+                            bundle.putLong("ROOMID", roomIdR);
+                            bundle.putString("INVITE_LINK", inviteLink);
+                            bundle.putString("TOKEN", token);
+//                        bundle.putBoolean("AVATAR", existAvatar);
+//                        bundle.putString("PATHAVATAR", pathSaveImage);
+                            fragmentCreateChannel.setArguments(bundle);
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment")
+                                    .commitAllowingStateLoss();
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
 //                        getRoom(roomIdR, ProtoGlobal.Room.Type.CHANNEL);
+                        }
                     }
                 });
             }
@@ -935,6 +949,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
 
+        Log.i("VVVVVV", "onAvatarAdd: " + roomId);
         HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
             @Override
             public void onAvatarAdd(final String avatarPath) {
@@ -943,7 +958,13 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                     public void run() {
                         hideProgressBar();
                         setImage(avatarPath);
-                        startRoom();
+
+                        if (isChannel) {
+                            startChannelRoom(roomId);
+                        } else {
+                            startRoom();
+                        }
+
                     }
                 });
             }
@@ -1008,6 +1029,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     }
 
     private void startRoom() {
+
         Fragment fragment = ContactGroupFragment.newInstance();
         Bundle bundle = new Bundle();
         bundle.putLong("RoomId", roomId);
@@ -1028,6 +1050,22 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
         ActivityMain.mLeftDrawerLayout.closeDrawer();
     }
+
+    private void startChannelRoom(long roomId) {
+        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+        hideProgressBar();
+        Bundle bundle = new Bundle();
+        bundle.putLong("ROOMID", roomId);
+        bundle.putString("INVITE_LINK", mInviteLink);
+        bundle.putString("TOKEN", token);
+        fragmentCreateChannel.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                .replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment")
+                .commitAllowingStateLoss();
+        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+    }
+
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
 
