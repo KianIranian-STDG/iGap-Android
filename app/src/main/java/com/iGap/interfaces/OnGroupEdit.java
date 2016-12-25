@@ -11,4 +11,6 @@ public interface OnGroupEdit {
 
     void onError(int majorCode, int minorCode);
 
+    void onTimeOut();
+
 }

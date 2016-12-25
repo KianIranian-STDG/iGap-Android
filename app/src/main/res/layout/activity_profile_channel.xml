@@ -223,6 +223,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/agp_root_layout_add_member"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/gray_f2"
@@ -554,6 +555,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:gravity="center"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/dp8"
                     app:layout_collapseMode="parallax">
@@ -570,7 +572,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/dp4"
+                        android:text="svsavhispfauhvipushvfiuhvihvsvs"
                         android:textColor="@android:color/white"
+                        android:maxLength="24"
                         android:textSize="@dimen/sp16"
                         android:textStyle="bold"/>
 
@@ -598,7 +602,7 @@
             android:src="@mipmap/pu_camera"
             android:theme="@style/FabButton"
             android:tint="@color/gray"
-            app:fabSize="mini"
+            app:fabSize="normal"
             app:layout_anchor="@+id/pch_appbar"
             app:layout_anchorGravity="bottom|right|end"/>
 

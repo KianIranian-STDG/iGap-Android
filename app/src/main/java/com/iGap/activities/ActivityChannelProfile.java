@@ -264,6 +264,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         lytListModerator = (LinearLayout) findViewById(R.id.lyt_list_moderator);
         lytDeleteChannel = (LinearLayout) findViewById(R.id.lyt_delete_channel);
         lytNotification = (LinearLayout) findViewById(R.id.lyt_notification);
+        ViewGroup vgRootAddMember = (ViewGroup) findViewById(R.id.agp_root_layout_add_member);
+
+        if (role == ChannelChatRole.MEMBER) {
+            vgRootAddMember.setVisibility(View.GONE);
+        }
 
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -613,8 +618,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                         });
                     }
                 });
-
-
             }
         };
 
@@ -1353,6 +1356,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         editChannelRequest(txtChannelNameInfo.getText().toString(), dialogDesc);
+                        showProgressBar();
                     }
                 })
                 .negativeText(getString(R.string.cancel))
@@ -1418,19 +1422,19 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
         final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
-        final EditText edtUserName = new EditText(ActivityChannelProfile.this);
-        edtUserName.setHint(getResources().getString(R.string.st_username));
-        edtUserName.setText(txtChannelNameInfo.getText().toString());
-        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
-        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
-        edtUserName.setPadding(0, 8, 0, 8);
-        edtUserName.setSingleLine(true);
-        inputUserName.addView(edtUserName);
+        final EditText edtNameChannel = new EditText(ActivityChannelProfile.this);
+        edtNameChannel.setHint(getResources().getString(R.string.st_username));
+        edtNameChannel.setText(txtChannelNameInfo.getText().toString());
+        edtNameChannel.setTextColor(getResources().getColor(R.color.text_edit_text));
+        edtNameChannel.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtNameChannel.setPadding(0, 8, 0, 8);
+        edtNameChannel.setSingleLine(true);
+        inputUserName.addView(edtNameChannel);
         inputUserName.addView(viewUserName, viewParams);
 
         viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
+            edtNameChannel.setBackground(getResources().getDrawable(android.R.color.transparent));
         }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -1449,7 +1453,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         final String finalChannelName = title;
         positive.setEnabled(false);
-        edtUserName.addTextChangedListener(new TextWatcher() {
+        edtNameChannel.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -1462,7 +1466,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!edtUserName.getText().toString().equals(finalChannelName)) {
+                if (!edtNameChannel.getText().toString().equals(finalChannelName)) {
                     positive.setEnabled(true);
                 } else {
                     positive.setEnabled(false);
@@ -1473,19 +1477,38 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         G.onChannelEdit = new OnChannelEdit() {
             @Override
-            public void onChannelEdit(long roomId, String name, String description) {
-                hideProgressBar();
-                txtChannelNameInfo.setText(name);
+            public void onChannelEdit(final long roomId, final String name, final String description) {
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideProgressBar();
+                        txtChannelNameInfo.setText(name);
+                    }
+                });
+
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                hideProgressBar();
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideProgressBar();
+
+                    }
+                });
             }
 
             @Override
             public void onTimeOut() {
-                hideProgressBar();
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideProgressBar();
+                    }
+                });
+
             }
         };
 
@@ -1494,13 +1517,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public void onClick(View view) {
 
-                new RequestChannelEdit().channelEdit(roomId, edtUserName.getText().toString(), txtDescription.getText().toString());
+                new RequestChannelEdit().channelEdit(roomId, edtNameChannel.getText().toString(), txtDescription.getText().toString());
                 dialog.dismiss();
                 showProgressBar();
             }
         });
 
-        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        edtNameChannel.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
@@ -1519,18 +1542,18 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     //********** channel edit name and description
 
     private void editChannelResponse(long roomIdR, final String name, final String description) {
-        if (roomIdR == roomId) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    txtChannelNameInfo.setText(name);
-                    txtDescription.setText(description);
 
-                    prgWait.setVisibility(View.GONE);
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
-            });
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                hideProgressBar();
+                txtChannelNameInfo.setText(name);
+                txtDescription.setText(description);
+
+                prgWait.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
     }
 
     private void editChannelRequest(String name, String description) {

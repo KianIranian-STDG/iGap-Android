@@ -53,6 +53,8 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initComponent(view);
+
+
     }
 
     private void initComponent(final View view) {
@@ -66,6 +68,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                 changePage(rippleView);
             }
         });
+
 
 
         txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
@@ -293,6 +296,8 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                 try {
                     G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
                     addContactToServer();
+
+
                     changePage(view);
                     Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {

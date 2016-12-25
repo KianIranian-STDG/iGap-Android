@@ -12,6 +12,7 @@ import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -268,16 +269,16 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (!editable.toString().contains("iGap.net/")) {
-                    edtLink.setText("iGap.net/");
-                    Selection.setSelection(edtLink.getText(), edtLink.getText().length());
-
-                }
-
                 if (!raPrivate.isChecked()) {
 
+                    if (!editable.toString().contains("iGap.net/")) {
+                        edtLink.setText("iGap.net/");
+                        Selection.setSelection(edtLink.getText(), edtLink.getText().length());
+
+                    }
                     String userName = edtLink.getText().toString().replace("iGap.net/", "");
                     new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+                    Log.i("CCCCCCC", "afterTextChanged: " + userName);
                 }
             }
         });
@@ -286,7 +287,6 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                setInviteLink();
                 setInviteLink();
             }
         });
@@ -495,6 +495,11 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                     txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
                     txtInputLayout.setErrorEnabled(true);
                     txtInputLayout.setError("TAKEN");
+                } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.OCCUPYING_LIMIT_EXCEEDED) {
+                    txtFinish.setEnabled(false);
+                    txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
+                    txtInputLayout.setErrorEnabled(true);
+                    txtInputLayout.setError("OCCUPYING LIMIT EXCEEDED");
                 }
             }
         });

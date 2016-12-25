@@ -103,6 +103,7 @@
                                 android:paddingLeft="@dimen/dp8"
                                 android:paddingRight="@dimen/dp8"
                                 android:text="@string/md_muted"
+                                android:textAppearance="@style/TextIconAppearance_toolbar"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/sp14"
                                 android:visibility="gone"/>
@@ -129,6 +130,7 @@
                                 android:text="@string/md_flaticon_volume_off_indicator"
                                 android:textAppearance="@style/TextIconAppearance.all"
                                 android:textColor="@android:color/white"
+                                android:textSize="@dimen/sp14"
                                 android:visibility="gone"
                                 />
                         </LinearLayout>
@@ -244,7 +246,7 @@
                                 />
                         </com.iGap.libs.rippleeffect.RippleView>
 
-                        <TextView
+                        <com.iGap.module.MaterialDesignTextView
                             android:id="@+id/chl_txt_number_of_selected"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -576,11 +578,12 @@
             android:visibility="gone"
             >
 
-            <Button
+            <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/ac_btn_hash_up"
                 android:layout_width="@dimen/dp48"
                 android:layout_height="match_parent"
                 android:background="@null"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:text="@string/md_expand_arrow"
                 android:textColor="@color/green"
                 android:textSize="@dimen/sp22"
@@ -599,11 +602,12 @@
                 android:textSize="@dimen/sp16"
                 />
 
-            <Button
+            <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/ac_btn_hash_down"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="match_parent"
                 android:background="@null"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:text="@string/md_downwards_arrow"
                 android:textColor="@color/green"
                 android:textSize="@dimen/sp22"
@@ -700,7 +704,7 @@
                     android:text="@string/md_arrow_up"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp20"
-                    fontPath="fonts/fontawesome.ttf"
+
                     />
 
 
@@ -725,7 +729,6 @@
                     android:text="@string/md_arrow_down"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp20"
-                    fontPath="fonts/fontawesome.ttf"
                     />
             </LinearLayout>
 

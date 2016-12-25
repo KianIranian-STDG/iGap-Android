@@ -8,8 +8,6 @@ import com.iGap.realm.RealmRoomFields;
 
 import io.realm.Realm;
 
-import static com.iGap.module.MusicPlayer.roomId;
-
 public class ChannelEditResponse extends MessageHandler {
 
     public int actionId;
@@ -31,28 +29,33 @@ public class ChannelEditResponse extends MessageHandler {
         final ProtoChannelEdit.ChannelEditResponse.Builder builder = (ProtoChannelEdit.ChannelEditResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+                if (realmRoom != null) {
                     realmRoom.setTitle(builder.getName());
                     realmRoom.getChannelRoom().setDescription(builder.getDescription());
-                }
-            });
 
-            if (G.onChannelEdit != null) {
-                G.onChannelEdit.onChannelEdit(builder.getRoomId(), builder.getName(), builder.getDescription());
+                }
             }
-        }
+        });
+
         realm.close();
+
+        if (G.onChannelEdit != null) {
+            G.onChannelEdit.onChannelEdit(builder.getRoomId(), builder.getName(), builder.getDescription());
+        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        if (G.onChannelEdit != null) {
 
-        G.onChannelEdit.onTimeOut();
+            G.onChannelEdit.onTimeOut();
+        }
     }
 
     @Override

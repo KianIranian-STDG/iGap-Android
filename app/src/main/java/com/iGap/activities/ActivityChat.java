@@ -55,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -191,6 +192,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -202,17 +217,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -287,8 +291,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private int messageCounter = 0;
     private int selectedPosition = 0;
     private LinearLayout ll_navigateHash;
-    private Button btnUpHash;
-    private Button btnDownHash;
+    private TextView btnUpHash;
+    private TextView btnDownHash;
     private TextView txtHashCounter;
     private Button btnHashLayoutClose;
     private SearchHash searchHash;
@@ -1302,7 +1306,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         txt_mute = (TextView) findViewById(R.id.chl_txt_mute);
-        txt_mute.setTypeface(G.fontawesome);
+
 
         if (isMute) {
             txt_mute.setVisibility(View.VISIBLE);
@@ -1921,7 +1925,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         ll_navigate_Message = (LinearLayout) findViewById(R.id.ac_ll_message_navigation);
         btnUpMessage = (TextView) findViewById(R.id.ac_btn_message_up);
         txtClearMessageSearch = (MaterialDesignTextView) findViewById(R.id.ac_btn_clear_message_search);
-        btnUpMessage.setTypeface(G.flaticon);
         btnDownMessage = (TextView) findViewById(R.id.ac_btn_message_down);
         txtMessageCounter = (TextView) findViewById(R.id.ac_txt_message_counter);
 
@@ -2042,10 +2045,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         };
 
         ll_navigateHash = (LinearLayout) findViewById(R.id.ac_ll_hash_navigation);
-        btnUpHash = (Button) findViewById(R.id.ac_btn_hash_up);
-        btnUpHash.setTypeface(G.flaticon);
-        btnDownHash = (Button) findViewById(R.id.ac_btn_hash_down);
-        btnDownHash.setTypeface(G.flaticon);
+        btnUpHash = (TextView) findViewById(R.id.ac_btn_hash_up);
+        btnDownHash = (TextView) findViewById(R.id.ac_btn_hash_down);
         txtHashCounter = (TextView) findViewById(R.id.ac_txt_hash_counter);
 
         searchHash = new SearchHash();
@@ -3154,7 +3155,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
         txtNumberOfSelected = (TextView) findViewById(R.id.chl_txt_number_of_selected);
-        txtNumberOfSelected.setTypeface(G.fontawesome);
     }
 
     private ArrayList<Parcelable> getMessageStructFromSelectedItems() {

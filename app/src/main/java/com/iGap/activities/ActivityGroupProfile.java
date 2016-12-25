@@ -65,7 +65,6 @@ import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.interfaces.OnGroupAddModerator;
 import com.iGap.interfaces.OnGroupAvatarDelete;
 import com.iGap.interfaces.OnGroupAvatarResponse;
-import com.iGap.interfaces.OnGroupCheckUsername;
 import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupEdit;
 import com.iGap.interfaces.OnGroupGetMemberList;
@@ -74,7 +73,6 @@ import com.iGap.interfaces.OnGroupKickMember;
 import com.iGap.interfaces.OnGroupKickModerator;
 import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnGroupRevokeLink;
-import com.iGap.interfaces.OnGroupUpdateUsername;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -90,7 +88,6 @@ import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoGroupCheckUsername;
 import com.iGap.proto.ProtoGroupGetMemberList;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
@@ -108,7 +105,6 @@ import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
 import com.iGap.request.RequestGroupAddModerator;
 import com.iGap.request.RequestGroupAvatarAdd;
-import com.iGap.request.RequestGroupCheckUsername;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupEdit;
 import com.iGap.request.RequestGroupGetMemberList;
@@ -117,7 +113,6 @@ import com.iGap.request.RequestGroupKickMember;
 import com.iGap.request.RequestGroupKickModerator;
 import com.iGap.request.RequestGroupLeft;
 import com.iGap.request.RequestGroupRevokeLink;
-import com.iGap.request.RequestGroupUpdateUsername;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.AbstractAdapter;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -1741,73 +1736,118 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
             @Override
             public void afterTextChanged(Editable editable) {
-                new RequestGroupCheckUsername().GroupCheckUsername(roomId, edtUserName.getText().toString());
+                if (!edtUserName.getText().toString().equals(finalUserName)) {
+                    positive.setEnabled(true);
+                } else {
+                    positive.setEnabled(false);
+                }
             }
         });
 
-        G.onGroupCheckUsername = new OnGroupCheckUsername() {
+        G.onGroupEdit = new OnGroupEdit() {
             @Override
-            public void onGroupCheckUsername(final ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status status) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.AVAILABLE) {
-                            if (!edtUserName.getText().toString().equals(finalUserName)) {
-                                positive.setEnabled(true);
-                            } else {
-                                positive.setEnabled(false);
-                            }
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("");
-                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.INVALID) {
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("INVALID");
-                            positive.setEnabled(false);
-                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.TAKEN) {
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("TAKEN");
-                            positive.setEnabled(false);
-                        }
-                    }
-                });
+            public void onGroupEdit(long roomId, String name, String description) {
+                hideProgressBar();
+                txtGroupNameTitle.setText(name);
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
 
-            }
-        };
+                if (majorCode == 330 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_330_1),
+                                            Snackbar.LENGTH_LONG);
 
-        G.onGroupUpdateUsername = new OnGroupUpdateUsername() {
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 330 && minorCode == 2) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_330_2),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 330 && minorCode == 3) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_330_3),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                } else if (majorCode == 331) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Snackbar snack =
+                                    Snackbar.make(findViewById(android.R.id.content),
+                                            getResources().getString(R.string.E_331),
+                                            Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                            snack.show();
+                        }
+                    });
+                }
+            }
+
             @Override
-            public void onGroupUpdateUsername(final long roomId, final String username) {
+            public void onTimeOut() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        final Snackbar snack =
+                                Snackbar.make(findViewById(android.R.id.content),
+                                        getResources().getString(R.string.time_out),
+                                        Snackbar.LENGTH_LONG);
 
-                        title = username;
-                        txtGroupNameTitle.setText(username);
-                        txtGroupName.setText(username);
-                        txtGroupNameTitle.setText(username);
-                        Realm realm = Realm.getDefaultInstance();
-
-                        realm.executeTransaction(new Realm.Transaction() {
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                             @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                realmRoom.setTitle(username);
+                            public void onClick(View view) {
+                                snack.dismiss();
                             }
                         });
-                        //channel info
-                        realm.close();
+                        snack.show();
                     }
                 });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
             }
         };
 
@@ -1815,7 +1855,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onClick(View view) {
 
-                new RequestGroupUpdateUsername().groupUpdateUsername(roomId, edtUserName.getText().toString());
+                new RequestGroupEdit().groupEdit(roomId, edtUserName.getText().toString(), txtGroupDescription.getText().toString());
                 dialog.dismiss();
             }
         });
@@ -1935,6 +1975,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                                 }
                                             });
                                         }
+                                    }
+
+                                    @Override
+                                    public void onTimeOut() {
+
                                     }
                                 };
 

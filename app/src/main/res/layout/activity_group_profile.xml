@@ -108,7 +108,7 @@
                     android:id="@+id/apg_parentLayoutCircleImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/dp8"
@@ -128,7 +128,10 @@
                             android:id="@+id/agp_imv_group_avatar"
                             android:layout_width="@dimen/dp88"
                             android:layout_height="@dimen/dp88"
-                            android:src="@mipmap/empty"/>
+                            android:src="@mipmap/empty"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"/>
                     </com.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
@@ -137,6 +140,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:text=""
+                        android:maxLength="24"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/sp18"/>

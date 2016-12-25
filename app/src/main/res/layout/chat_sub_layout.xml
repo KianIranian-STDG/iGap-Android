@@ -76,7 +76,7 @@
                         android:textSize="@dimen/sp15"
                         android:textStyle="bold"/>
 
-                    <MultiAutoCompleteTextView
+                    <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/cs_txt_mute"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

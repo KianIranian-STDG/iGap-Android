@@ -57,8 +57,8 @@
     <dimen name="dp95">143dp</dimen>
 
 
-    <dimen name="design_fab_size_mini" tools:override="true">30pt</dimen>
-    <dimen name="design_fab_size_normal" tools:override="true">36pt</dimen>
-    <dimen name="design_fab_image_size" tools:override="true">36dp</dimen>
+    <dimen name="design_fab_size_mini" tools:override="true">34pt</dimen>
+    <dimen name="design_fab_size_normal" tools:override="true">40pt</dimen>
+    <dimen name="design_fab_image_size" tools:override="true">40dp</dimen>
 
 </resources>
