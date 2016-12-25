@@ -281,7 +281,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      * @param messageId
      * @param roomId
      */
-    public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction) {
+    public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction, long forwardedMessageId) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
             if (Long.toString(messageInfo.mMessage.roomId).equals(Long.toString(roomId)) && messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {

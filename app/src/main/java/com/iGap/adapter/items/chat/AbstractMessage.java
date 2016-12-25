@@ -274,9 +274,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
 
             lytVote.setVisibility(View.VISIBLE);
-            txtVoteUp.setText(mMessage.channelExtra.thumbsUp);
-            txtVoteDown.setText(mMessage.channelExtra.thumbsDown);
-            txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
+            if (mMessage.forwardedFrom != null) {
+                if (mMessage.forwardedFrom.getChannelExtra() != null) {
+                    txtVoteUp.setText(mMessage.forwardedFrom.getChannelExtra().getThumbsUp());
+                    txtVoteDown.setText(mMessage.forwardedFrom.getChannelExtra().getThumbsDown());
+                    txtViewsLabel.setText(mMessage.forwardedFrom.getChannelExtra().getViewsLabel());
+                }
+            } else {
+                txtVoteUp.setText(mMessage.channelExtra.thumbsUp);
+                txtVoteDown.setText(mMessage.channelExtra.thumbsDown);
+                txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
+            }
 
             lytVoteUp.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -308,7 +316,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
                 if (realmRoomMessage != null) {
                     if (mMessage.forwardedFrom != null) {
-                        new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.forwardedFrom.getRoomId(), Long.parseLong(mMessage.messageID), reaction);
+                        new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction, mMessage.forwardedFrom.getRoomId());
                     } else {
                         new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction);
                     }
