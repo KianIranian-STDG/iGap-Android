@@ -74,6 +74,12 @@ public class HelperFillLookUpClass {
         lookupMap.put(30126, "ProtoUserSessionTerminate.UserSessionTerminateResponse");
         lookupMap.put(127, "UserSessionLogout");
         lookupMap.put(30127, "ProtoUserSessionLogout.UserSessionLogoutResponse");
+        lookupMap.put(128, "UserContactsBlock");
+        lookupMap.put(30128, "ProtoUserContactsBlock.UserContactsBlockResponse");
+        lookupMap.put(129, "UserContactsUnblock");
+        lookupMap.put(30129, "ProtoUserContactsUnblock.UserContactsUnblockResponse");
+        lookupMap.put(130, "UserContactsGetBlockedList");
+        lookupMap.put(30130, "ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse");
 
 
         // Chat 2xx , 302xx
@@ -151,6 +157,8 @@ public class HelperFillLookUpClass {
         lookupMap.put(30323, "ProtoGroupRemoveUsername.GroupRemoveUsernameResponse");
         lookupMap.put(324, "GroupRevokeLink");
         lookupMap.put(30324, "ProtoGroupRevokeLink.GroupRevokeLinkResponse");
+        lookupMap.put(325, "GroupEditMessage");
+        lookupMap.put(30325, "ProtoGroupEditMessage.GroupEditMessageResponse");
 
         // Channel 4xx , 304xx
         lookupMap.put(400, "ChannelCreate");
@@ -203,6 +211,8 @@ public class HelperFillLookUpClass {
         lookupMap.put(30423, "ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse");
         lookupMap.put(424, "ChannelAddMessageReaction");
         lookupMap.put(30424, "ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse");
+        lookupMap.put(425, "ChannelEditMessage");
+        lookupMap.put(30425, "ProtoChannelEditMessage.ChannelEditMessageResponse");
 
         // Info 5xx , 305xx
         lookupMap.put(500, "Info.Location");

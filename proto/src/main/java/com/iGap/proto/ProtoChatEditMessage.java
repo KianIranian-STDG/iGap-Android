@@ -883,6 +883,16 @@ public final class ProtoChatEditMessage {
      */
     com.google.protobuf.ByteString
     getMessageBytes();
+
+    /**
+     * <code>optional .proto.RoomMessageType message_type = 6;</code>
+     */
+    int getMessageTypeValue();
+
+    /**
+     * <code>optional .proto.RoomMessageType message_type = 6;</code>
+     */
+    com.iGap.proto.ProtoGlobal.RoomMessageType getMessageType();
   }
   /**
    * Protobuf type {@code proto.ChatEditMessageResponse}
@@ -900,6 +910,7 @@ public final class ProtoChatEditMessage {
       messageId_ = 0L;
       messageVersion_ = 0L;
       message_ = "";
+      messageType_ = 0;
     }
 
     @java.lang.Override
@@ -959,6 +970,12 @@ public final class ProtoChatEditMessage {
               java.lang.String s = input.readStringRequireUtf8();
 
               message_ = s;
+              break;
+            }
+            case 48: {
+              int rawValue = input.readEnum();
+
+              messageType_ = rawValue;
               break;
             }
           }
@@ -1066,6 +1083,24 @@ public final class ProtoChatEditMessage {
       }
     }
 
+    public static final int MESSAGE_TYPE_FIELD_NUMBER = 6;
+    private int messageType_;
+
+    /**
+     * <code>optional .proto.RoomMessageType message_type = 6;</code>
+     */
+    public int getMessageTypeValue() {
+      return messageType_;
+    }
+
+    /**
+     * <code>optional .proto.RoomMessageType message_type = 6;</code>
+     */
+    public com.iGap.proto.ProtoGlobal.RoomMessageType getMessageType() {
+      com.iGap.proto.ProtoGlobal.RoomMessageType result = com.iGap.proto.ProtoGlobal.RoomMessageType.valueOf(messageType_);
+      return result == null ? com.iGap.proto.ProtoGlobal.RoomMessageType.UNRECOGNIZED : result;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1093,6 +1128,9 @@ public final class ProtoChatEditMessage {
       if (!getMessageBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, message_);
       }
+      if (messageType_ != com.iGap.proto.ProtoGlobal.RoomMessageType.TEXT.getNumber()) {
+        output.writeEnum(6, messageType_);
+      }
     }
 
     public int getSerializedSize() {
@@ -1119,6 +1157,10 @@ public final class ProtoChatEditMessage {
       if (!getMessageBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, message_);
       }
+      if (messageType_ != com.iGap.proto.ProtoGlobal.RoomMessageType.TEXT.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeEnumSize(6, messageType_);
+      }
       memoizedSize = size;
       return size;
     }
@@ -1127,7 +1169,7 @@ public final class ProtoChatEditMessage {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof com.iGap.proto.ProtoChatEditMessage.ChatEditMessageResponse)) {
         return super.equals(obj);
@@ -1148,6 +1190,7 @@ public final class ProtoChatEditMessage {
               == other.getMessageVersion());
       result = result && getMessage()
               .equals(other.getMessage());
+      result = result && messageType_ == other.messageType_;
       return result;
     }
 
@@ -1164,15 +1207,17 @@ public final class ProtoChatEditMessage {
       }
       hash = (37 * hash) + ROOM_ID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getRoomId());
+          getRoomId());
       hash = (37 * hash) + MESSAGE_ID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getMessageId());
+          getMessageId());
       hash = (37 * hash) + MESSAGE_VERSION_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getMessageVersion());
+          getMessageVersion());
       hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
       hash = (53 * hash) + getMessage().hashCode();
+      hash = (37 * hash) + MESSAGE_TYPE_FIELD_NUMBER;
+      hash = (53 * hash) + messageType_;
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1237,9 +1282,7 @@ public final class ProtoChatEditMessage {
               .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -1265,7 +1308,7 @@ public final class ProtoChatEditMessage {
             // @@protoc_insertion_point(builder_implements:proto.ChatEditMessageResponse)
             com.iGap.proto.ProtoChatEditMessage.ChatEditMessageResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return com.iGap.proto.ProtoChatEditMessage.internal_static_proto_ChatEditMessageResponse_descriptor;
       }
 
@@ -1307,6 +1350,8 @@ public final class ProtoChatEditMessage {
 
         message_ = "";
 
+        messageType_ = 0;
+
         return this;
       }
 
@@ -1338,6 +1383,7 @@ public final class ProtoChatEditMessage {
         result.messageId_ = messageId_;
         result.messageVersion_ = messageVersion_;
         result.message_ = message_;
+        result.messageType_ = messageType_;
         onBuilt();
         return result;
       }
@@ -1345,15 +1391,18 @@ public final class ProtoChatEditMessage {
       public Builder clone() {
         return (Builder) super.clone();
       }
+
       public Builder setField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+          Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(
               com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(
               com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
@@ -1365,12 +1414,12 @@ public final class ProtoChatEditMessage {
       }
       public Builder addRepeatedField(
               com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+          Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChatEditMessage.ChatEditMessageResponse) {
-          return mergeFrom((com.iGap.proto.ProtoChatEditMessage.ChatEditMessageResponse) other);
+          return mergeFrom((com.iGap.proto.ProtoChatEditMessage.ChatEditMessageResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1378,8 +1427,7 @@ public final class ProtoChatEditMessage {
       }
 
       public Builder mergeFrom(com.iGap.proto.ProtoChatEditMessage.ChatEditMessageResponse other) {
-        if (other == com.iGap.proto.ProtoChatEditMessage.ChatEditMessageResponse.getDefaultInstance())
-          return this;
+        if (other == com.iGap.proto.ProtoChatEditMessage.ChatEditMessageResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1395,6 +1443,9 @@ public final class ProtoChatEditMessage {
         if (!other.getMessage().isEmpty()) {
           message_ = other.message_;
           onChanged();
+        }
+        if (other.messageType_ != 0) {
+          setMessageTypeValue(other.getMessageTypeValue());
         }
         onChanged();
         return this;
@@ -1507,7 +1558,7 @@ public final class ProtoChatEditMessage {
        * <code>optional .proto.Response response = 1;</code>
        */
       public com.iGap.proto.ProtoResponse.Response.Builder getResponseBuilder() {
-
+        
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
@@ -1539,7 +1590,7 @@ public final class ProtoChatEditMessage {
         return responseBuilder_;
       }
 
-      private long roomId_;
+      private long roomId_ ;
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1550,7 +1601,7 @@ public final class ProtoChatEditMessage {
        * <code>optional uint64 room_id = 2;</code>
        */
       public Builder setRoomId(long value) {
-
+        
         roomId_ = value;
         onChanged();
         return this;
@@ -1559,13 +1610,13 @@ public final class ProtoChatEditMessage {
        * <code>optional uint64 room_id = 2;</code>
        */
       public Builder clearRoomId() {
-
+        
         roomId_ = 0L;
         onChanged();
         return this;
       }
 
-      private long messageId_;
+      private long messageId_ ;
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -1576,7 +1627,7 @@ public final class ProtoChatEditMessage {
        * <code>optional uint64 message_id = 3;</code>
        */
       public Builder setMessageId(long value) {
-
+        
         messageId_ = value;
         onChanged();
         return this;
@@ -1585,13 +1636,13 @@ public final class ProtoChatEditMessage {
        * <code>optional uint64 message_id = 3;</code>
        */
       public Builder clearMessageId() {
-
+        
         messageId_ = 0L;
         onChanged();
         return this;
       }
 
-      private long messageVersion_;
+      private long messageVersion_ ;
       /**
        * <code>optional uint64 message_version = 4;</code>
        */
@@ -1602,7 +1653,7 @@ public final class ProtoChatEditMessage {
        * <code>optional uint64 message_version = 4;</code>
        */
       public Builder setMessageVersion(long value) {
-
+        
         messageVersion_ = value;
         onChanged();
         return this;
@@ -1611,7 +1662,7 @@ public final class ProtoChatEditMessage {
        * <code>optional uint64 message_version = 4;</code>
        */
       public Builder clearMessageVersion() {
-
+        
         messageVersion_ = 0L;
         onChanged();
         return this;
@@ -1637,7 +1688,7 @@ public final class ProtoChatEditMessage {
        * <code>optional string message = 5;</code>
        */
       public com.google.protobuf.ByteString
-      getMessageBytes() {
+          getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b =
@@ -1656,7 +1707,7 @@ public final class ProtoChatEditMessage {
               java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
-        }
+  }
   
         message_ = value;
         onChanged();
@@ -1666,7 +1717,7 @@ public final class ProtoChatEditMessage {
        * <code>optional string message = 5;</code>
        */
       public Builder clearMessage() {
-
+        
         message_ = getDefaultInstance().getMessage();
         onChanged();
         return this;
@@ -1680,18 +1731,68 @@ public final class ProtoChatEditMessage {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
+
         message_ = value;
         onChanged();
         return this;
       }
+
+      private int messageType_ = 0;
+
+      /**
+       * <code>optional .proto.RoomMessageType message_type = 6;</code>
+       */
+      public int getMessageTypeValue() {
+        return messageType_;
+      }
+
+      /**
+       * <code>optional .proto.RoomMessageType message_type = 6;</code>
+       */
+      public Builder setMessageTypeValue(int value) {
+        messageType_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.RoomMessageType message_type = 6;</code>
+       */
+      public com.iGap.proto.ProtoGlobal.RoomMessageType getMessageType() {
+        com.iGap.proto.ProtoGlobal.RoomMessageType result = com.iGap.proto.ProtoGlobal.RoomMessageType.valueOf(messageType_);
+        return result == null ? com.iGap.proto.ProtoGlobal.RoomMessageType.UNRECOGNIZED : result;
+      }
+
+      /**
+       * <code>optional .proto.RoomMessageType message_type = 6;</code>
+       */
+      public Builder setMessageType(com.iGap.proto.ProtoGlobal.RoomMessageType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        messageType_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.RoomMessageType message_type = 6;</code>
+       */
+      public Builder clearMessageType() {
+
+        messageType_ = 0;
+        onChanged();
+        return this;
+      }
+
       public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
       public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -1710,12 +1811,12 @@ public final class ProtoChatEditMessage {
     }
 
     private static final com.google.protobuf.Parser<ChatEditMessageResponse>
-            PARSER = new com.google.protobuf.AbstractParser<ChatEditMessageResponse>() {
+        PARSER = new com.google.protobuf.AbstractParser<ChatEditMessageResponse>() {
       public ChatEditMessageResponse parsePartialFrom(
               com.google.protobuf.CodedInputStream input,
               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
               throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ChatEditMessageResponse(input, extensionRegistry);
+          return new ChatEditMessageResponse(input, extensionRegistry);
       }
     };
 
@@ -1738,37 +1839,39 @@ public final class ProtoChatEditMessage {
           internal_static_proto_ChatEditMessage_descriptor;
   private static final
   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_ChatEditMessage_fieldAccessorTable;
+      internal_static_proto_ChatEditMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_proto_ChatEditMessageResponse_descriptor;
   private static final
   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_ChatEditMessageResponse_fieldAccessorTable;
+      internal_static_proto_ChatEditMessageResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
   getDescriptor() {
     return descriptor;
   }
-
-  private static com.google.protobuf.Descriptors.FileDescriptor
+  private static  com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
+
   static {
     java.lang.String[] descriptorData = {
             "\n\025ChatEditMessage.proto\022\005proto\032\rRequest." +
-                    "proto\032\016Response.proto\"h\n\017ChatEditMessage" +
-                    "\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\017\n\007roo" +
-                    "m_id\030\002 \001(\004\022\022\n\nmessage_id\030\003 \001(\004\022\017\n\007messag" +
-                    "e\030\004 \001(\t\"\213\001\n\027ChatEditMessageResponse\022!\n\010r" +
-                    "esponse\030\001 \001(\0132\017.proto.Response\022\017\n\007room_i" +
-                    "d\030\002 \001(\004\022\022\n\nmessage_id\030\003 \001(\004\022\027\n\017message_v" +
-                    "ersion\030\004 \001(\004\022\017\n\007message\030\005 \001(\tB&\n\016com.iGa" +
-                    "p.protoB\024ProtoChatEditMessageb\006proto3"
+                    "proto\032\016Response.proto\032\014Global.proto\"h\n\017C" +
+                    "hatEditMessage\022\037\n\007request\030\001 \001(\0132\016.proto." +
+                    "Request\022\017\n\007room_id\030\002 \001(\004\022\022\n\nmessage_id\030\003" +
+                    " \001(\004\022\017\n\007message\030\004 \001(\t\"\271\001\n\027ChatEditMessag" +
+                    "eResponse\022!\n\010response\030\001 \001(\0132\017.proto.Resp" +
+                    "onse\022\017\n\007room_id\030\002 \001(\004\022\022\n\nmessage_id\030\003 \001(" +
+                    "\004\022\027\n\017message_version\030\004 \001(\004\022\017\n\007message\030\005 " +
+                    "\001(\t\022,\n\014message_type\030\006 \001(\0162\026.proto.RoomMe" +
+      "ssageTypeB&\n\016com.iGap.protoB\024ProtoChatEd",
+      "itMessageb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
             new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
               public com.google.protobuf.ExtensionRegistry assignDescriptors(
                       com.google.protobuf.Descriptors.FileDescriptor root) {
-                descriptor = root;
+            descriptor = root;
                 return null;
               }
             };
@@ -1777,21 +1880,23 @@ public final class ProtoChatEditMessage {
                     new com.google.protobuf.Descriptors.FileDescriptor[]{
                             com.iGap.proto.ProtoRequest.getDescriptor(),
                             com.iGap.proto.ProtoResponse.getDescriptor(),
+          com.iGap.proto.ProtoGlobal.getDescriptor(),
                     }, assigner);
     internal_static_proto_ChatEditMessage_descriptor =
-            getDescriptor().getMessageTypes().get(0);
+      getDescriptor().getMessageTypes().get(0);
     internal_static_proto_ChatEditMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_proto_ChatEditMessage_descriptor,
+        internal_static_proto_ChatEditMessage_descriptor,
         new java.lang.String[] { "Request", "RoomId", "MessageId", "Message", });
     internal_static_proto_ChatEditMessageResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChatEditMessageResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_ChatEditMessageResponse_descriptor,
-        new java.lang.String[] { "Response", "RoomId", "MessageId", "MessageVersion", "Message", });
+            internal_static_proto_ChatEditMessageResponse_descriptor,
+            new java.lang.String[] { "Response", "RoomId", "MessageId", "MessageVersion", "Message", "MessageType", });
     com.iGap.proto.ProtoRequest.getDescriptor();
     com.iGap.proto.ProtoResponse.getDescriptor();
+    com.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
