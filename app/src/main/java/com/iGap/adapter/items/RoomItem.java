@@ -391,7 +391,8 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
             mute = (TextView) view.findViewById(R.id.cs_txt_mute);
             messageStatus = (ImageView) view.findViewById(R.id.cslr_txt_tic);
-
+            lastSeen.setTypeface(G.arial);
+            unreadMessage.setTypeface(G.arial);
         }
     }
 

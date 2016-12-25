@@ -442,17 +442,32 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * set forward container visible if message was forwarded, otherwise, gone it
          */
         LinearLayout forwardContainer = (LinearLayout) holder.itemView.findViewById(R.id.cslr_ll_forward);
+        TextView txtForwardFrom = (TextView) holder.itemView.findViewById(R.id.cslr_txt_forward_from);
         if (forwardContainer != null) {
             if (mMessage.forwardedFrom != null) {
                 forwardContainer.setVisibility(View.VISIBLE);
                 Realm realm = Realm.getDefaultInstance();
+                /**
+                 * if forward message from chat or group , sender is user
+                 * but if message forwarded from channel sender is room
+                 */
                 RealmRegisteredInfo info = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom.getUserId()).findFirst();
                 if (info != null) {
-                    ((TextView) forwardContainer.findViewById(R.id.cslr_txt_forward_from)).setText(info.getDisplayName());
+                    txtForwardFrom.setText(info.getDisplayName());
                     if (mMessage.isSenderMe()) {
-                        ((TextView) forwardContainer.findViewById(R.id.cslr_txt_forward_from)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+                        txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                     } else {
-                        ((TextView) forwardContainer.findViewById(R.id.cslr_txt_forward_from)).setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
+                        txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
+                    }
+                } else {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
+                    if (realmRoom != null) {
+                        txtForwardFrom.setText(realmRoom.getTitle());
+                        if (mMessage.isSenderMe()) {
+                            txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+                        } else {
+                            txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
+                        }
                     }
                 }
                 realm.close();

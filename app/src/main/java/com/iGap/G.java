@@ -72,10 +72,10 @@ public class G extends MultiDexApplication {
     public static final String POLICY = "http://www.digikala.com";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";
-    public static final String DIR_IMAGES = DIR_APP + "/iGap_Images";
-    public static final String DIR_VIDEOS = DIR_APP + "/iGap_Videos";
-    public static final String DIR_AUDIOS = DIR_APP + "/iGap_Audios";
-    public static final String DIR_DOCUMENT = DIR_APP + "/iGap_Document";
+    public static final String DIR_IMAGES = DIR_APP + "/iGap Images";
+    public static final String DIR_VIDEOS = DIR_APP + "/iGap Videos";
+    public static final String DIR_AUDIOS = DIR_APP + "/iGap Audios";
+    public static final String DIR_DOCUMENT = DIR_APP + "/iGap Document";
     public static final String DIR_TEMP = DIR_APP + "/.temp";
     public static final String DIR_SOUND_NOTIFICATION = DIR_APP + "/.sound";
     public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/.chat_background";

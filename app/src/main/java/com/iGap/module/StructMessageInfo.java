@@ -7,6 +7,8 @@ import android.view.View;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
@@ -306,8 +308,20 @@ public class StructMessageInfo implements Parcelable {
             messageInfo.userInfo = StructRegisteredInfo.build(roomMessage.getRoomMessageContact());
         }
         if (roomMessage.getForwardMessage() != null) {
+
+            boolean showForward = false;
+
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, roomMessage.getForwardMessage().getUserId()).findFirst();
             if (userInfo != null) {
+                showForward = true;
+            } else {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getForwardMessage().getRoomId()).findFirst();
+                if (realmRoom != null) {
+                    showForward = true;
+                }
+            }
+
+            if (showForward) {
                 messageInfo.forwardedFrom = roomMessage.getForwardMessage();
                 if (roomMessage.getForwardMessage().getAttachment() != null) {
                     messageInfo.attachment = StructMessageAttachment.convert(roomMessage.getForwardMessage().getAttachment());
@@ -328,6 +342,12 @@ public class StructMessageInfo implements Parcelable {
 
         return messageInfo;
     }
+
+    private boolean showForwardMessage() {
+
+        return true;
+    }
+
 
     public boolean isSenderMe() {
         Realm realm = Realm.getDefaultInstance();
