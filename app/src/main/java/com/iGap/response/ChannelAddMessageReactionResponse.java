@@ -30,7 +30,7 @@ public class ChannelAddMessageReactionResponse extends MessageHandler {
         final ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse.Builder builder = (ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse.Builder) message;
         if (G.onChannelAddMessageReaction != null && identity != null) {
 
-            String[] identityParams = identity.split("\\*");
+            final String[] identityParams = identity.split("\\*");
             String roomId = identityParams[0];
             final String messageId = identityParams[1];
             final String messageReaction = identityParams[2];
@@ -54,13 +54,25 @@ public class ChannelAddMessageReactionResponse extends MessageHandler {
                     }
                     RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findFirst();
                     if (realmRoomMessage != null) {
-                        realmRoomMessage.setVote(reaction1, builder.getReactionCounterLabel());
+                        if (identityParams.length > 3) {
+                            /**
+                             * vote in chat or group to forwarded message from channel
+                             */
+                            realmRoomMessage.getForwardMessage().setVote(reaction1, builder.getReactionCounterLabel());
+                        } else {
+                            realmRoomMessage.setVote(reaction1, builder.getReactionCounterLabel());
+                        }
                     }
                 }
             });
             realm.close();
 
-            G.onChannelAddMessageReaction.onChannelAddMessageReaction(Long.parseLong(roomId), Long.parseLong(messageId), builder.getReactionCounterLabel(), reaction);
+            if (identityParams.length > 3) {
+                String forwardedMessageId = identityParams[3];
+                G.onChannelAddMessageReaction.onChannelAddMessageReaction(Long.parseLong(roomId), Long.parseLong(messageId), builder.getReactionCounterLabel(), reaction, Long.parseLong(forwardedMessageId));
+            } else {
+                G.onChannelAddMessageReaction.onChannelAddMessageReaction(Long.parseLong(roomId), Long.parseLong(messageId), builder.getReactionCounterLabel(), reaction, 0);
+            }
         }
     }
 

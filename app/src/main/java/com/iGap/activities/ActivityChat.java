@@ -4961,11 +4961,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }*/
 
     @Override
-    public void onChannelAddMessageReaction(final long roomId, final long messageId, final String reactionCounterLabel, final ProtoGlobal.RoomMessageReaction reaction) {
+    public void onChannelAddMessageReaction(final long roomId, final long messageId, final String reactionCounterLabel, final ProtoGlobal.RoomMessageReaction reaction, final long forwardedMessageId) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mAdapter.updateVote(roomId, messageId, reactionCounterLabel, reaction);
+                mAdapter.updateVote(roomId, messageId, reactionCounterLabel, reaction, forwardedMessageId);
             }
         });
     }
