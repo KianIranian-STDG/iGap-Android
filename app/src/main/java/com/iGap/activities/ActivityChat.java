@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -193,20 +192,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -218,6 +203,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -645,7 +641,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
-                                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setDeleted(false);
+                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+
+                                        if (realmRoom != null) {
+                                            realmRoom.setDeleted(false);
+                                            if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) realmRoom.setReadOnly(false);
+                                        }
                                     }
                                 });
                                 realm.close();
@@ -3271,22 +3272,30 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private ArrayList<StructMessageInfo> getLocalMessages() {
         Realm realm = Realm.getDefaultInstance();
-        ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
 
-        for (RealmRoomMessage realmRoomMessage : realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll()) {
-            if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
-                if (realmRoomMessage.getMessageId() != 0) {
-                    lastMessageId = realmRoomMessage.getMessageId();
-                    realmRoomMessages.add(realmRoomMessage);
-                }
-            }
-        }
+        //ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
+        //
+        //for (RealmRoomMessage realmRoomMessage : realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll()) {
+        //    if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
+        //        Log.e("ddd",realmRoomMessage.getMessageId()+"");
+        //        if (realmRoomMessage.getMessageId() != 0) {
+        //            lastMessageId = realmRoomMessage.getMessageId();
+        //
+        //
+        //
+        //
+        //            realmRoomMessages.add(realmRoomMessage);
+        //        }
+        //    }
+        //}
+        //
+        //Collections.sort(realmRoomMessages, SortMessages.ASC);
 
-        Collections.sort(realmRoomMessages, SortMessages.ASC);
+        RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
         List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
 
-        for (RealmRoomMessage message : realmRoomMessages) {
+        for (RealmRoomMessage message : results) {
             String timeString = getTimeSettingMessage(message.getCreateTime());
             if (!TextUtils.isEmpty(timeString)) {
                 RealmRoomMessage timeMessage = new RealmRoomMessage();
@@ -3877,52 +3886,71 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     }
 
-    @Override
-    public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages) {
+    @Override public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages, final int count) {
         // I'm in the room
+
+        Log.e("ddd", "onGetRoomHistory                 aaaaaaaaaaaaa");
+
         if (roomId == mRoomId) {
+            //runOnUiThread(new Runnable() {
+            //    @Override
+            //    public void run() {
+            //        final Realm realm = Realm.getDefaultInstance();
+            //
+            //        List<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
+            //        for (ProtoGlobal.RoomMessage roomMessage : messages) {
+            //            RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+            //
+            //
+            //
+            //            if (message != null && !message.isDeleted()) {
+            //                realmRoomMessages.add(message);
+            //            }
+            //        }
+            //
+            //        Collections.sort(realmRoomMessages, SortMessages.ASC);
+            //
+            //        final List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
+            //
+            //        for (RealmRoomMessage message : realmRoomMessages) {
+            //
+            //            Log.e("ddd","bbbbbbb   "+message.getMessageId()+"  "+message.getUpdateTime()+"   "+message.getCreateTime());
+            //
+            //            String timeString = getTimeSettingMessage(message.getCreateTime());
+            //            if (timeString != null) {
+            //                RealmRoomMessage timeMessage = new RealmRoomMessage();
+            //                timeMessage.setMessageId(message.getMessageId() - 1L);
+            //                // -1 means time message
+            //                timeMessage.setUserId(-1);
+            //                timeMessage.setMessage(timeString);
+            //                timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+            //                lastResultMessages.add(timeMessage);
+            //            }
+            //
+            //            lastResultMessages.add(message);
+            //        }
+            //
+            //        Collections.sort(lastResultMessages, SortMessages.DESC);
+            //
+            //        for (RealmRoomMessage roomMessage : lastResultMessages) {
+            //            if (lastMessageId != roomMessage.getMessageId()) { //TODO [Saeed Mozaffari] [2016-12-01 10:04 AM] - dar get room history akharim payam duplicate mishod. in shart ro gozashtam , behtare bardashte beshe
+            //                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), true);
+            //            }
+            //        }
+            //
+            //        realm.close();
+            //    }
+            //});
+
             runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Realm realm = Realm.getDefaultInstance();
+                @Override public void run() {
 
-                    List<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
-                    for (ProtoGlobal.RoomMessage roomMessage : messages) {
-                        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                    int position = recyclerView.getAdapter().getItemCount();
 
-                        if (message != null && !message.isDeleted()) {
-                            realmRoomMessages.add(message);
-                        }
-                    }
+                    mAdapter.clear();
+                    switchAddItem(getLocalMessages(), true);
 
-                    Collections.sort(realmRoomMessages, SortMessages.ASC);
-
-                    final List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
-
-                    for (RealmRoomMessage message : realmRoomMessages) {
-                        String timeString = getTimeSettingMessage(message.getCreateTime());
-                        if (timeString != null) {
-                            RealmRoomMessage timeMessage = new RealmRoomMessage();
-                            timeMessage.setMessageId(message.getMessageId() - 1L);
-                            // -1 means time message
-                            timeMessage.setUserId(-1);
-                            timeMessage.setMessage(timeString);
-                            timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                            lastResultMessages.add(timeMessage);
-                        }
-
-                        lastResultMessages.add(message);
-                    }
-
-                    Collections.sort(lastResultMessages, SortMessages.DESC);
-
-                    for (RealmRoomMessage roomMessage : lastResultMessages) {
-                        if (lastMessageId != roomMessage.getMessageId()) { //TODO [Saeed Mozaffari] [2016-12-01 10:04 AM] - dar get room history akharim payam duplicate mishod. in shart ro gozashtam , behtare bardashte beshe
-                            switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), true);
-                        }
-                    }
-
-                    realm.close();
+                    recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - position);
                 }
             });
         }
