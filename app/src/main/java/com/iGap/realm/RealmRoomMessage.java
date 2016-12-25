@@ -45,9 +45,14 @@ public class RealmRoomMessage extends RealmObject {
     private boolean deleted;
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
-    private int voteUp;
+
+    // for channel
+    /*private int voteUp;
     private int voteDown;
-    private int seenCount;
+    private int seenCount;*/
+
+    // for channel message should be exist in other rooms (forwarded message)
+    private RealmChannelExtra channelExtra;
 
     public long getUpdateOrCreateTime() {
         return updateTime >= createTime ? updateTime : createTime;
@@ -177,6 +182,16 @@ public class RealmRoomMessage extends RealmObject {
         message.setStatusVersion(input.getStatusVersion());
         message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
         message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
+
+        if (input.hasChannelExtra()) {
+            RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+            realmChannelExtra.setSignature(input.getChannelExtra().getSignature());
+            realmChannelExtra.setThumbsDown(input.getChannelExtra().getThumbsDownLabel());
+            realmChannelExtra.setThumbsUp(input.getChannelExtra().getThumbsUpLabel());
+            realmChannelExtra.setViewsLabel(input.getChannelExtra().getViewsLabel());
+            message.setChannelExtra(realmChannelExtra);
+        }
+
         realm.close();
 
         return message;
@@ -302,7 +317,7 @@ public class RealmRoomMessage extends RealmObject {
         this.deleted = deleted;
     }
 
-    public int getVoteUp() {
+    /*public int getVoteUp() {
         return voteUp;
     }
 
@@ -324,6 +339,14 @@ public class RealmRoomMessage extends RealmObject {
 
     public void setViewsLabel(int seenCount) {
         this.seenCount = seenCount;
+    }*/
+
+    public RealmChannelExtra getChannelExtra() {
+        return channelExtra;
+    }
+
+    public void setChannelExtra(RealmChannelExtra channelExtra) {
+        this.channelExtra = channelExtra;
     }
 
     public RealmRoomMessage getForwardMessage() {
@@ -447,11 +470,13 @@ public class RealmRoomMessage extends RealmObject {
      *
      * @param reaction Up or Down
      */
-    public void setVote(ProtoGlobal.RoomMessageReaction reaction, int voteCount) {
-        if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-            setVoteUp(voteCount);
-        } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
-            setVoteDown(voteCount);
+    public void setVote(ProtoGlobal.RoomMessageReaction reaction, String voteCount) {
+        if (getChannelExtra() != null) {
+            if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                getChannelExtra().setThumbsUp(voteCount);
+            } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
+                getChannelExtra().setThumbsDown(voteCount);
+            }
         }
     }
 

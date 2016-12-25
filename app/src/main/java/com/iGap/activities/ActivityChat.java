@@ -148,6 +148,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
+import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmClientCondition;
@@ -410,7 +411,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         //call from ActivityGroupProfile for update group member number
         onComplete = new OnComplete() {
-            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
                 txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member));
             }
         };
@@ -521,7 +523,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         avi.setVisibility(View.GONE);
 
         checkIfOrientationChanged(getResources().getConfiguration());
-
 
 
         appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
@@ -874,6 +875,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     forwardedMessage.setRoomId(mRoomId);
                     forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                     forwardedMessage.setUserId(userId);
+                    if (messageInfo.channelExtra != null) {
+                        forwardedMessage.setChannelExtra(RealmChannelExtra.convert(messageInfo.channelExtra));
+                    }
                 }
             }
         }, new Realm.Transaction.OnSuccess() {
@@ -3369,7 +3373,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         FragmentShowImageMessages.appBarLayout = appBarLayout;
 
         FragmentShowImageMessages.onDownloadComplet = new OnComplete() {
-            @Override public void complete(boolean result, String token, String MessageTow) {
+            @Override
+            public void complete(boolean result, String token, String MessageTow) {
 
                 for (int i = mAdapter.getAdapterItemCount(); i > 0; i--) {
 
@@ -4917,7 +4922,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     //****** Channel Message Reaction
 
-    @Override
+   /* @Override
     public void onVoteClick(final StructMessageInfo message, final int vote, final ProtoGlobal.RoomMessageReaction voteAction) {
         runOnUiThread(new Runnable() {
             @Override
@@ -4925,10 +4930,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 mAdapter.updateVote(message.roomId, Long.parseLong(message.messageID), vote, voteAction);
             }
         });
-    }
+    }*/
 
     @Override
-    public void onChannelAddMessageReaction(final long roomId, final long messageId, final int reactionCounterLabel, final ProtoGlobal.RoomMessageReaction reaction) {
+    public void onChannelAddMessageReaction(final long roomId, final long messageId, final String reactionCounterLabel, final ProtoGlobal.RoomMessageReaction reaction) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

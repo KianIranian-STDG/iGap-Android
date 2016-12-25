@@ -3,6 +3,7 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoChannelGetMessagesStats;
 import com.iGap.proto.ProtoError;
+import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 
@@ -35,9 +36,16 @@ public class ChannelGetMessagesStatsResponse extends MessageHandler {
                 for (final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : builder.getStatsList()) {
                     RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, stats.getMessageId()).findFirst();
                     if (realmRoomMessage != null) {
-                        realmRoomMessage.setVoteDown(Integer.parseInt(stats.getThumbsDownLabel()));
-                        realmRoomMessage.setVoteUp(Integer.parseInt(stats.getThumbsUpLabel()));
-                        realmRoomMessage.setViewsLabel(Integer.parseInt(stats.getViewsLabel()));
+
+                        RealmChannelExtra realmChannelExtra = realmRoomMessage.getChannelExtra();
+                        if (realmRoomMessage.getChannelExtra() == null) {
+                            realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+                        }
+
+                        realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
+                        realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
+                        realmChannelExtra.setViewsLabel(stats.getViewsLabel());
+                        realmRoomMessage.setChannelExtra(realmChannelExtra);
                     }
                 }
             }

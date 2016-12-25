@@ -61,9 +61,10 @@ public class StructMessageInfo implements Parcelable {
     public StructRegisteredInfo userInfo;
     public StructMessageAttachment senderAvatar;
     public long time;
-    public int voteUp;
+    /*public int voteUp;
     public int voteDown;
-    public int viewsLabel;
+    public int viewsLabel;*/
+    public StructChannelExtra channelExtra;
 
     public StructMessageInfo() {
     }
@@ -216,9 +217,10 @@ public class StructMessageInfo implements Parcelable {
         this.userInfo = in.readParcelable(StructRegisteredInfo.class.getClassLoader());
         this.senderAvatar = in.readParcelable(StructMessageAttachment.class.getClassLoader());
         this.time = in.readLong();
-        this.voteUp = in.readInt();
+        /*this.voteUp = in.readInt();
         this.voteDown = in.readInt();
-        this.viewsLabel = in.readInt();
+        this.viewsLabel = in.readInt();*/
+        this.channelExtra = Parcels.unwrap(in.readParcelable(StructChannelExtra.class.getClassLoader()));
     }
 
     public static StructMessageInfo buildForAudio(long roomId, long messageID, long senderID, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, long time, String messageText, String localThumbnailPath, String localFilePath, String songArtist, long songLength, long replayToMessageId) {
@@ -336,18 +338,18 @@ public class StructMessageInfo implements Parcelable {
         }
         messageInfo.replayTo = roomMessage.getReplyTo();
 
-        messageInfo.voteUp = roomMessage.getVoteUp();
+        /*messageInfo.voteUp = roomMessage.getVoteUp();
         messageInfo.voteDown = roomMessage.getVoteDown();
-        messageInfo.viewsLabel = roomMessage.getViewsLabel();
+        messageInfo.viewsLabel = roomMessage.getViewsLabel();*/
+
+        if (roomMessage.getChannelExtra() != null) {
+            messageInfo.channelExtra = StructChannelExtra.convert(roomMessage.getChannelExtra());
+        } else {
+            messageInfo.channelExtra = new StructChannelExtra();
+        }
 
         return messageInfo;
     }
-
-    private boolean showForwardMessage() {
-
-        return true;
-    }
-
 
     public boolean isSenderMe() {
         Realm realm = Realm.getDefaultInstance();
@@ -406,8 +408,9 @@ public class StructMessageInfo implements Parcelable {
         dest.writeParcelable(this.userInfo, flags);
         dest.writeParcelable(this.senderAvatar, flags);
         dest.writeLong(this.time);
-        dest.writeInt(this.voteUp);
+        /*dest.writeInt(this.voteUp);
         dest.writeInt(this.voteDown);
-        dest.writeInt(this.viewsLabel);
+        dest.writeInt(this.viewsLabel);*/
+        dest.writeParcelable(Parcels.wrap(this.channelExtra), flags);
     }
 }

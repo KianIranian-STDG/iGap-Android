@@ -54,13 +54,13 @@ public class ChannelAddMessageReactionResponse extends MessageHandler {
                     }
                     RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findFirst();
                     if (realmRoomMessage != null) {
-                        realmRoomMessage.setVote(reaction1, Integer.parseInt(builder.getReactionCounterLabel()));
+                        realmRoomMessage.setVote(reaction1, builder.getReactionCounterLabel());
                     }
                 }
             });
             realm.close();
 
-            G.onChannelAddMessageReaction.onChannelAddMessageReaction(Long.parseLong(roomId), Long.parseLong(messageId), Integer.parseInt(builder.getReactionCounterLabel()), reaction);
+            G.onChannelAddMessageReaction.onChannelAddMessageReaction(Long.parseLong(roomId), Long.parseLong(messageId), builder.getReactionCounterLabel(), reaction);
         }
     }
 

@@ -3,7 +3,6 @@ package com.iGap.interfaces;
 import android.view.View;
 
 import com.iGap.module.StructMessageInfo;
-import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 
 public interface IMessageItem {
@@ -26,5 +25,5 @@ public interface IMessageItem {
 
     void onReplyClick(RealmRoomMessage replyMessage);
 
-    void onVoteClick(StructMessageInfo message, int vote, ProtoGlobal.RoomMessageReaction reaction);
+    //void onVoteClick(StructMessageInfo message, String vote, ProtoGlobal.RoomMessageReaction reaction);
 }

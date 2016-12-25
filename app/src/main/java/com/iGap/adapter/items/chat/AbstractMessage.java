@@ -224,14 +224,40 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * show vote layout for channel otherwise hide layout
          * also get message state for channel
          */
-        if (type == ProtoGlobal.Room.Type.CHANNEL) {
-            voteAction(holder);
-            HelperGetMessageState.getMessageState(mMessage.roomId, Long.parseLong(mMessage.messageID));
+        if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
+            showVote(holder);
         } else {
-            LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
-            if (lytVote != null) {
-                lytVote.setVisibility(View.GONE);
+
+            if (mMessage.forwardedFrom != null) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
+                if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                    showVote(holder);
+                }
+            } else {
+                hideVote(holder);
             }
+        }
+    }
+
+    /**
+     * show vote views
+     *
+     * @param holder
+     */
+    private void showVote(VH holder) {
+        voteAction(holder);
+        HelperGetMessageState.getMessageState(mMessage.roomId, Long.parseLong(mMessage.messageID));
+    }
+
+    /**
+     * hide vote views
+     *
+     * @param holder
+     */
+    private void hideVote(VH holder) {
+        LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
+        if (lytVote != null) {
+            lytVote.setVisibility(View.GONE);
         }
     }
 
@@ -248,9 +274,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
 
             lytVote.setVisibility(View.VISIBLE);
-            txtVoteUp.setText(mMessage.voteUp + "");
-            txtVoteDown.setText(mMessage.voteDown + "");
-            txtViewsLabel.setText(mMessage.viewsLabel + "");
+            txtVoteUp.setText(mMessage.channelExtra.thumbsUp);
+            txtVoteDown.setText(mMessage.channelExtra.thumbsDown);
+            txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
 
             lytVoteUp.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -278,9 +304,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+
                 RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
                 if (realmRoomMessage != null) {
-                    new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction);
+                    if (mMessage.forwardedFrom != null) {
+                        new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.forwardedFrom.getRoomId(), Long.parseLong(mMessage.messageID), reaction);
+                    } else {
+                        new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction);
+                    }
                 }
             }
         });

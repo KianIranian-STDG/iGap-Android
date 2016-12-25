@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.widget.FrameLayout;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
@@ -25,9 +26,11 @@ import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FastItemAdapter;
-import io.realm.Realm;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
@@ -52,7 +55,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 if (iMessageItem != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
 
                     if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || item.mMessage.status.equalsIgnoreCase(
-                        ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
 
                         if (item.isSelected()) v.performLongClick();
                         return true;
@@ -278,15 +281,15 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      * @param messageId
      * @param roomId
      */
-    public void updateVote(long roomId, long messageId, int vote, ProtoGlobal.RoomMessageReaction reaction) {
+    public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
             if (Long.toString(messageInfo.mMessage.roomId).equals(Long.toString(roomId)) && messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
                 int pos = items.indexOf(messageInfo);
                 if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-                    messageInfo.mMessage.voteUp = vote;
+                    messageInfo.mMessage.channelExtra.thumbsUp = vote;
                 } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
-                    messageInfo.mMessage.voteDown = vote;
+                    messageInfo.mMessage.channelExtra.thumbsDown = vote;
                 }
                 set(pos, messageInfo);
                 break;
@@ -307,9 +310,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         for (Item messageInfo : items) {
             if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
                 int pos = items.indexOf(messageInfo);
-                messageInfo.mMessage.voteUp = Integer.parseInt(voteUp);
-                messageInfo.mMessage.voteDown = Integer.parseInt(voteDown);
-                messageInfo.mMessage.viewsLabel = Integer.parseInt(viewsLabel);
+                messageInfo.mMessage.channelExtra.thumbsUp = voteUp;
+                messageInfo.mMessage.channelExtra.thumbsDown = voteDown;
+                messageInfo.mMessage.channelExtra.viewsLabel = viewsLabel;
                 set(pos, messageInfo);
                 break;
             }

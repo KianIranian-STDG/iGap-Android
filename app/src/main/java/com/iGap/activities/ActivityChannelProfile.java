@@ -25,7 +25,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -233,7 +232,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         isPrivate = realmChannelRoom.isPrivate();
         username = realmChannelRoom.getUsername();
 
-        Log.i("BBBBBBBBBB", "onCreate: " + username);
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -621,6 +619,14 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         };
 
+
+        LinearLayout lyt = (LinearLayout) findViewById(R.id.lyt_signature);
+        lyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     private void editUsername() {
