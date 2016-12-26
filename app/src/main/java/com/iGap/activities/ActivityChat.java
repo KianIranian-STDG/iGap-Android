@@ -55,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -192,6 +193,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -203,17 +218,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -3345,7 +3349,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void requestMessageHistory() {
         //long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
-        long oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(0).mMessage.messageID);
+
+        long oldestMessageId;
+        if (mAdapter.getAdapterItems().size() > 0) {
+            oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(0).mMessage.messageID);
+        } else {
+            oldestMessageId = 0;
+        }
         if (latestMessageIdHistory != oldestMessageId) {
             latestMessageIdHistory = oldestMessageId;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
@@ -3386,8 +3396,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void complete(boolean result, String token, String MessageTow) {
 
                 for (int i = mAdapter.getAdapterItemCount(); i > 0; i--) {
-
-                    Log.e("ddd", mAdapter.getAdapterItem(i - 1).mMessage.attachment.name + "   " + i);
 
                     if (mAdapter.getAdapterItem(i - 1).mMessage.attachment.token.equals(token)) {
                         updateFiled.add(i - 1);
@@ -4483,12 +4491,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         Realm realm = Realm.getDefaultInstance();
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
             showImage(message);
-        } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT ||
-                messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == VIDEO_TEXT) {
-            Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class)
-                    .equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token)
-                    .findFirst()
-                    .getLocalFilePath());
+        } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == VIDEO_TEXT) {
+            Intent intent = HelperMimeType
+                    .appropriateProgram(realm.where(RealmAttachment.class)
+                            .equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token)
+                            .findFirst()
+                            .getLocalFilePath());
             if (intent != null) {
                 try {
                     startActivity(intent);

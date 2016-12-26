@@ -232,6 +232,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
                 if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                     showVote(holder);
+                } else {
+                    hideVote(holder);
                 }
             } else {
                 hideVote(holder);
@@ -316,7 +318,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
                 if (realmRoomMessage != null) {
                     if (mMessage.forwardedFrom != null) {
-                        new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction, mMessage.forwardedFrom.getRoomId());
+                        new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.forwardedFrom.getRoomId(), mMessage.forwardedFrom.getMessageId(), reaction, Long.parseLong(mMessage.messageID));
                     } else {
                         new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction);
                     }

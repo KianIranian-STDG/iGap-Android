@@ -46,20 +46,26 @@ public class ChannelAddMessageReactionResponse extends MessageHandler {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
+
                     ProtoGlobal.RoomMessageReaction reaction1 = null;
                     if (messageReaction.equals(ProtoGlobal.RoomMessageReaction.THUMBS_UP.toString())) {
                         reaction1 = ProtoGlobal.RoomMessageReaction.THUMBS_UP;
                     } else if (messageReaction.equals(ProtoGlobal.RoomMessageReaction.THUMBS_DOWN.toString())) {
                         reaction1 = ProtoGlobal.RoomMessageReaction.THUMBS_DOWN;
                     }
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findFirst();
-                    if (realmRoomMessage != null) {
-                        if (identityParams.length > 3) {
-                            /**
-                             * vote in chat or group to forwarded message from channel
-                             */
+
+                    /**
+                     * vote in chat or group to forwarded message from channel
+                     */
+                    if (identityParams.length > 3) {
+                        long messageId = Long.parseLong(identityParams[3]);
+                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                        if (realmRoomMessage != null && realmRoomMessage.getForwardMessage() != null) {
                             realmRoomMessage.getForwardMessage().setVote(reaction1, builder.getReactionCounterLabel());
-                        } else {
+                        }
+                    } else {
+                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findFirst();
+                        if (realmRoomMessage != null) {
                             realmRoomMessage.setVote(reaction1, builder.getReactionCounterLabel());
                         }
                     }

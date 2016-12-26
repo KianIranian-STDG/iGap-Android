@@ -41,11 +41,19 @@ public class ChannelGetMessagesStatsResponse extends MessageHandler {
                         if (realmRoomMessage.getChannelExtra() == null) {
                             realmChannelExtra = realm.createObject(RealmChannelExtra.class);
                         }
-
                         realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
                         realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
                         realmChannelExtra.setViewsLabel(stats.getViewsLabel());
-                        realmRoomMessage.setChannelExtra(realmChannelExtra);
+                        /**
+                         * if identity is exist message forwarded
+                         */
+                        if (identity != null) {
+                            if (realmRoomMessage.getChannelExtra() != null) {
+                                realmRoomMessage.getForwardMessage().setChannelExtra(realmChannelExtra);
+                            }
+                        } else {
+                            realmRoomMessage.setChannelExtra(realmChannelExtra);
+                        }
                     }
                 }
             }

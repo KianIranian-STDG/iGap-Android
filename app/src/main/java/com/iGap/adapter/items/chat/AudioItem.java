@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -21,9 +22,11 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import io.github.meness.emoji.EmojiTextView;
+
 import java.io.File;
 import java.util.List;
+
+import io.github.meness.emoji.EmojiTextView;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static android.view.View.GONE;
@@ -35,19 +38,23 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutAudio;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_audio;
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
-    @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
+    @Override
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
         if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
@@ -59,7 +66,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         }
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         if (mMessage.isSenderMe()) {
@@ -108,7 +116,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         }
 
         View audioBoxView = holder.itemView.findViewById(R.id.audioBox);
-        if ((mMessage.forwardedFrom != null && !TextUtils.isEmpty(mMessage.forwardedFrom.getForwardMessage().getMessage())) || !TextUtils.isEmpty(mMessage.messageText)) {
+        if ((mMessage.forwardedFrom != null
+                && mMessage.forwardedFrom.getForwardMessage() != null
+                && mMessage.forwardedFrom.getForwardMessage().getMessage() != null
+                && !TextUtils.isEmpty(mMessage.forwardedFrom.getForwardMessage().getMessage()))
+                || !TextUtils.isEmpty(mMessage.messageText)) {
             audioBoxView.setBackgroundResource(R.drawable.green_bg_rounded_corner);
         } else {
             audioBoxView.setBackgroundColor(Color.TRANSPARENT);
@@ -119,7 +131,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * st);
 
         holder.txt_Timer.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
                 Log.e("ddd", _st + "");
             }
@@ -141,7 +154,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         holder.mMessageID = mMessage.messageID;
     }
 
-    @Override protected void updateLayoutForSend(ViewHolder holder) {
+    @Override
+    protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
 
         if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
@@ -153,7 +167,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         holder.fileName.setTextColor(Color.WHITE);
     }
 
-    @Override protected void updateLayoutForReceive(ViewHolder holder) {
+    @Override
+    protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
         if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
@@ -207,7 +222,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);
 
             complete = new OnComplete() {
-                @Override public void complete(boolean result, String messageOne, final String MessageTow) {
+                @Override
+                public void complete(boolean result, String messageOne, final String MessageTow) {
 
                     if (messageOne.equals("play")) {
                         btnPlayMusic.setText(R.string.md_play_arrow);
@@ -215,7 +231,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                         btnPlayMusic.setText(R.string.md_pause_button);
                     } else if (messageOne.equals("updateTime")) {
                         txt_Timer.post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 txt_Timer.setText(MessageTow + "/" + mTimeMusic);
                                 musicSeekbar.setProgress(MusicPlayer.musicProgress);
                             }
@@ -225,7 +242,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             };
 
             btnPlayMusic.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                     if (mFilePath.length() < 1) return;
 
@@ -251,7 +269,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
             musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
 
-                @Override public boolean onTouch(View v, MotionEvent event) {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
 
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         if (mMessageID.equals(MusicPlayer.messageId)) {

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -35,17 +36,15 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.enums.RoomType;
-import io.realm.Realm;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.util.Date;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 import static com.iGap.R.id.recyclerView;
 import static com.iGap.module.MusicPlayer.roomId;
-
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/26/2016.
- */
 
 public class FragmentShowImageMessages extends Fragment implements OnFileDownloadResponse {
     private static final String ARG_ROOM_ID = "arg_room_id";
@@ -150,9 +149,20 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             // there is at least on history in DB
             long identifier = SUID.id().get();
             for (RealmRoomMessage roomMessage : roomMessages) {
-                ProtoGlobal.RoomMessageType messageType = roomMessage.getMessageType();
+                ProtoGlobal.RoomMessageType messageType;
+
+                if (roomMessage.getForwardMessage() != null) {
+                    messageType = roomMessage.getForwardMessage().getMessageType();
+                } else {
+                    messageType = roomMessage.getMessageType();
+                }
+
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                    mAdapter.add(new ImageMessageItem().setMessage(roomMessage).withIdentifier(identifier));
+                    if (roomMessage.getForwardMessage() != null) {
+                        mAdapter.add(new ImageMessageItem().setMessage(roomMessage.getForwardMessage()).withIdentifier(identifier));
+                    } else {
+                        mAdapter.add(new ImageMessageItem().setMessage(roomMessage).withIdentifier(identifier));
+                    }
                     identifier++;
                 }
             }
@@ -185,8 +195,10 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
 
             ImageMessageItem selectedItem = findByToken(mSelectedToken);
 
-            mFileName.setText(selectedItem.message.getAttachment().getName());
-            mMessageTime.setText(TimeUtils.getChatSettingsTimeAgo(getContext(), new Date(selectedItem.message.getUpdateTime())));
+            if (selectedItem != null) {
+                mFileName.setText(selectedItem.message.getAttachment().getName());
+                mMessageTime.setText(TimeUtils.getChatSettingsTimeAgo(getContext(), new Date(selectedItem.message.getUpdateTime())));
+            }
 
             preSelect();
         } else {
@@ -334,8 +346,7 @@ public class FragmentShowImageMessages extends Fragment implements OnFileDownloa
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                    getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override

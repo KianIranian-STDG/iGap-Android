@@ -278,21 +278,38 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     /**
      * update message vote
      *
-     * @param messageId
      * @param roomId
+     * @param messageId
+     * @param vote
+     * @param reaction
+     * @param mainMessageId when forward message from channel to another chats , make new messageId.
+     *                      mainMessageId is new messageId that created and messageId is for message
+     *                      that forwarded to another chats
      */
-    public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction, long forwardedMessageId) {
+    public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction, long mainMessageId) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
-            if (Long.toString(messageInfo.mMessage.roomId).equals(Long.toString(roomId)) && messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
-                int pos = items.indexOf(messageInfo);
-                if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-                    messageInfo.mMessage.channelExtra.thumbsUp = vote;
-                } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
-                    messageInfo.mMessage.channelExtra.thumbsDown = vote;
+            /**
+             * if not forwarded message update structure otherwise just notify position
+             * mainMessageId == 0 means that this message not forwarded
+             */
+            if (mainMessageId == 0) {
+                if (Long.toString(messageInfo.mMessage.roomId).equals(Long.toString(roomId)) && messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
+                    int pos = items.indexOf(messageInfo);
+                    if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                        messageInfo.mMessage.channelExtra.thumbsUp = vote;
+                    } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
+                        messageInfo.mMessage.channelExtra.thumbsDown = vote;
+                    }
+                    set(pos, messageInfo);
+                    break;
                 }
-                set(pos, messageInfo);
-                break;
+            } else {
+                if (messageInfo.mMessage.messageID.equals(Long.toString(mainMessageId))) {
+                    int pos = items.indexOf(messageInfo);
+                    set(pos, messageInfo);
+                    break;
+                }
             }
         }
     }
