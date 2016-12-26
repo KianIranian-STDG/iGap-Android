@@ -337,23 +337,15 @@ public class StructMessageInfo implements Parcelable {
             double lon = roomMessage.getLocation().getLocationLong();
             messageInfo.location = Double.toString(lat) + "," + Double.toString(lon);
         }
+
+        if (roomMessage.getLog() != null) {
+            messageInfo.senderID = "-1";
+            messageInfo.messageText = roomMessage.getLog().getType().toString();
+        }
+
         messageInfo.replayTo = roomMessage.getReplyTo();
-
-        /*messageInfo.voteUp = roomMessage.getVoteUp();
-        messageInfo.voteDown = roomMessage.getVoteDown();
-        messageInfo.viewsLabel = roomMessage.getViewsLabel();*/
-
         if (roomMessage.getChannelExtra() != null) {
             messageInfo.channelExtra = StructChannelExtra.convert(roomMessage.getChannelExtra());
-           /* StructChannelExtra structChannelExtra = new StructChannelExtra();
-            structChannelExtra.messageId = roomMessage.getChannelExtra().getMessageId();
-            if (showSignature(roomMessage.getRoomId())) {
-                structChannelExtra.signature = realmUserInfo.getUserInfo().getDisplayName();
-            }
-            structChannelExtra.thumbsUp = roomMessage.getChannelExtra().getThumbsUp();
-            structChannelExtra.thumbsDown = roomMessage.getChannelExtra().getThumbsDown();
-            structChannelExtra.viewsLabel = roomMessage.getChannelExtra().getViewsLabel();
-            messageInfo.channelExtra = structChannelExtra;*/
         } else {
             messageInfo.channelExtra = new StructChannelExtra();
         }
@@ -370,7 +362,7 @@ public class StructMessageInfo implements Parcelable {
         }
     }
 
-    public boolean isTimeMessage() {
+    public boolean isTimeOrLogMessage() {
         return senderID.equalsIgnoreCase("-1");
     }
 

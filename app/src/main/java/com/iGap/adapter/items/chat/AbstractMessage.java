@@ -136,7 +136,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-        if (!mMessage.isTimeMessage()) {
+        if (!mMessage.isTimeOrLogMessage()) {
             AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
         }
 
@@ -192,7 +192,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
             }
         } else {
-            if (!mMessage.isTimeMessage()) {
+            if (!mMessage.isTimeOrLogMessage()) {
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
             }
         }

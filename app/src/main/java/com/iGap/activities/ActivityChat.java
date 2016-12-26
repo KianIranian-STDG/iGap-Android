@@ -72,6 +72,7 @@ import com.iGap.adapter.items.chat.GifWithTextItem;
 import com.iGap.adapter.items.chat.ImageItem;
 import com.iGap.adapter.items.chat.ImageWithTextItem;
 import com.iGap.adapter.items.chat.LocationItem;
+import com.iGap.adapter.items.chat.LogItem;
 import com.iGap.adapter.items.chat.TextItem;
 import com.iGap.adapter.items.chat.TimeItem;
 import com.iGap.adapter.items.chat.VideoItem;
@@ -137,6 +138,7 @@ import com.iGap.module.ResendMessage;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
 import com.iGap.module.SortMessages;
+import com.iGap.module.StructChannelExtra;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
@@ -1103,7 +1105,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
-            if (!messageInfo.isTimeMessage()) {
+            if (!messageInfo.isTimeOrLogMessage()) {
                 switch (messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType) {
                     case TEXT:
                         //if (chatType != CHANNEL) {
@@ -1216,7 +1218,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         // }
                         break;
                     case LOG:
-                        // TODO: 9/15/2016 [Alireza Eskandarpour Shoferi] implement
+                        if (!addTop) {
+                            mAdapter.add(new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(0, new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         break;
                 }
             } else {
@@ -3860,8 +3866,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
 
-        realm.close();
-
         new UploadTask().execute(savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, mRoomId, getWrittenMessage());
 
         StructMessageInfo messageInfo;
@@ -3880,8 +3884,22 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         messageInfo.attachment.duration = duration;
-        mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo));
 
+        StructChannelExtra structChannelExtra = new StructChannelExtra();
+        structChannelExtra.messageId = messageId;
+        structChannelExtra.thumbsUp = "0";
+        structChannelExtra.thumbsDown = "0";
+        structChannelExtra.viewsLabel = "1";
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
+            structChannelExtra.signature = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName();
+        } else {
+            structChannelExtra.signature = "";
+        }
+        messageInfo.channelExtra = structChannelExtra;
+
+        mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo));
+        realm.close();
         scrollToEnd();
     }
 
