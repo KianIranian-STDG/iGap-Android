@@ -3,6 +3,7 @@ package com.iGap;
 import android.util.Log;
 
 import com.iGap.helper.HelperConnectionState;
+import com.iGap.helper.HelperSetAction;
 import com.iGap.response.HandleResponse;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -152,6 +153,7 @@ public class WebSocketClient {
      */
 
     private static void reconnect() {
+        HelperSetAction.clearAllActions();
         HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
         if (allowForReconnecting) {//&& (webSocketClient == null || !webSocketClient.isOpen())
             allowForReconnecting = false;

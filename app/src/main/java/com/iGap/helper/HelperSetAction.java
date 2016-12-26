@@ -3,10 +3,13 @@ package com.iGap.helper;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoom;
 import com.iGap.request.RequestChatSetAction;
 import com.iGap.request.RequestGroupSetAction;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
 
 public class HelperSetAction {
 
@@ -221,10 +224,20 @@ public class HelperSetAction {
         return null;
     }
 
-    public static String clearAllActions(long roomId) {
-
-        return null;
+    /**
+     * clear all actions from RealmRoom for all rooms
+     */
+    public static void clearAllActions() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+                    realmRoom.setActionState(null);
+                }
+            }
+        });
+        realm.close();
     }
-
 
 }
