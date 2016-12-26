@@ -20,6 +20,7 @@ public class RealmChannelRoom extends RealmObject {
     private String invite_token;
     private String username;
     private boolean isPrivate;
+    private boolean isSignature = false;
 
     /**
      * convert ProtoGlobal.ChannelRoom to RealmChannelRoom
@@ -134,5 +135,13 @@ public class RealmChannelRoom extends RealmObject {
 
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
+    }
+
+    public boolean isSignature() {
+        return isSignature;
+    }
+
+    public void setSignature(boolean signature) {
+        isSignature = signature;
     }
 }

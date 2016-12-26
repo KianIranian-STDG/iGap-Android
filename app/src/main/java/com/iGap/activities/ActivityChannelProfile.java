@@ -36,6 +36,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -68,6 +69,7 @@ import com.iGap.interfaces.OnChannelKickMember;
 import com.iGap.interfaces.OnChannelKickModerator;
 import com.iGap.interfaces.OnChannelLeft;
 import com.iGap.interfaces.OnChannelRevokeLink;
+import com.iGap.interfaces.OnChannelUpdateSignature;
 import com.iGap.interfaces.OnChannelUpdateUsername;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermision;
@@ -109,6 +111,7 @@ import com.iGap.request.RequestChannelKickMember;
 import com.iGap.request.RequestChannelKickModerator;
 import com.iGap.request.RequestChannelLeft;
 import com.iGap.request.RequestChannelRevokeLink;
+import com.iGap.request.RequestChannelUpdateSignature;
 import com.iGap.request.RequestChannelUpdateUsername;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -175,6 +178,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private long roomId;
     private boolean isPrivate;
     private String username;
+    private boolean isSignature;
 
     @Override
     protected void onResume() {
@@ -231,7 +235,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         inviteLink = realmChannelRoom.getInviteLink();
         isPrivate = realmChannelRoom.isPrivate();
         username = realmChannelRoom.getUsername();
-
+        isSignature = realmChannelRoom.isSignature();
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -266,6 +270,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         ViewGroup vgRootAddMember = (ViewGroup) findViewById(R.id.agp_root_layout_add_member);
         if (role == ChannelChatRole.MEMBER) {
             vgRootAddMember.setVisibility(View.GONE);
+        }
+
+        ViewGroup vgSignature = (ViewGroup) findViewById(R.id.agp_layout_signature);
+        if (role == ChannelChatRole.OWNER) {
+            vgSignature.setVisibility(View.VISIBLE);
         }
 
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
@@ -627,6 +636,79 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
             }
         });
+
+
+        TextView txtSignature = (TextView) findViewById(R.id.agp_txt_signature);
+        final ToggleButton toggleEnableSignature = (ToggleButton) findViewById(R.id.agp_toggle_signature);
+
+        if (isSignature) {
+            toggleEnableSignature.setChecked(true);
+        } else {
+            toggleEnableSignature.setChecked(false);
+        }
+
+        G.onChannelUpdateSignature = new OnChannelUpdateSignature() {
+            @Override
+            public void onChannelUpdateSignatureResponse(final long roomId, final boolean signature) {
+
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                        realmRoom.getChannelRoom().setSignature(signature);
+                    }
+                });
+
+                realm.close();
+
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+
+                        if (toggleEnableSignature.isChecked()) {
+                            toggleEnableSignature.setChecked(false);
+                        } else {
+                            toggleEnableSignature.setChecked(true);
+
+                        }
+
+                    }
+                });
+            }
+        };
+
+        txtSignature.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (toggleEnableSignature.isChecked()) {
+                    toggleEnableSignature.setChecked(false);
+                    new RequestChannelUpdateSignature().channelUpdateSignature(roomId, false);
+
+                } else {
+                    toggleEnableSignature.setChecked(true);
+                    new RequestChannelUpdateSignature().channelUpdateSignature(roomId, true);
+                }
+            }
+        });
+
+
     }
 
     private void editUsername() {
