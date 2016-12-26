@@ -649,7 +649,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                                         if (realmRoom != null) {
                                             realmRoom.setDeleted(false);
-                                            if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) realmRoom.setReadOnly(false);
+                                            if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP)
+                                                realmRoom.setReadOnly(false);
                                         }
                                     }
                                 });
@@ -1259,7 +1260,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         RippleView rippleBackButton = (RippleView) findViewById(R.id.chl_ripple_back_Button);
 
         final Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null) {
 
             iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
@@ -1777,6 +1778,29 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     }
                                 }
                             });
+                        }
+
+                        if (chatType == CHANNEL) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+                                    realmChannelExtra.setMessageId(parseLong(identity));
+                                    realmChannelExtra.setThumbsUp("0");
+                                    realmChannelExtra.setThumbsDown("0");
+                                    if (realmRoom.getChannelRoom().isSignature()) {
+                                        realmChannelExtra.setSignature(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName());
+                                    } else {
+                                        realmChannelExtra.setSignature("");
+                                    }
+                                    realmChannelExtra.setViewsLabel("1");
+                                    if (roomMessage != null) {
+                                        roomMessage.setChannelExtra(realmChannelExtra);
+                                    }
+                                }
+                            });
+
+
                         }
 
                         mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(SUID.id().get()));
@@ -3894,7 +3918,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     }
 
-    @Override public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages, final int count) {
+    @Override
+    public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages, final int count) {
         // I'm in the room
 
         Log.e("ddd", "onGetRoomHistory                 aaaaaaaaaaaaa");
@@ -3951,7 +3976,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             //});
 
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
 
                     int position = recyclerView.getAdapter().getItemCount();
 

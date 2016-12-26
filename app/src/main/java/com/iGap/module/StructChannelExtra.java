@@ -18,7 +18,8 @@ public class StructChannelExtra {
     public String thumbsUp = "0";
     public String thumbsDown = "0";
 
-    public static StructChannelExtra convert(RealmChannelExtra realmChannelExtra) {
+    public static StructChannelExtra
+    convert(RealmChannelExtra realmChannelExtra) {
         StructChannelExtra structChannelExtra = new StructChannelExtra();
 
         /*if (realmChannelExtra.getSignature().isEmpty()) {
