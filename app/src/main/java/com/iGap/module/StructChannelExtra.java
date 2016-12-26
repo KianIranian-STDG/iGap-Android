@@ -7,6 +7,7 @@ import org.parceler.Parcel;
 @Parcel
 public class StructChannelExtra {
 
+    public long messageId = 0;
     public String signature = "";
     public String viewsLabel = "1";
     public String thumbsUp = "0";

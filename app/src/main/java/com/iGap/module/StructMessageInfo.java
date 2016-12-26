@@ -279,7 +279,8 @@ public class StructMessageInfo implements Parcelable {
 
     public static StructMessageInfo convert(RealmRoomMessage roomMessage) {
         Realm realm = Realm.getDefaultInstance();
-        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        long userId = realmUserInfo.getUserId();
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.roomId = roomMessage.getRoomId();
         messageInfo.status = roomMessage.getStatus();
@@ -344,6 +345,15 @@ public class StructMessageInfo implements Parcelable {
 
         if (roomMessage.getChannelExtra() != null) {
             messageInfo.channelExtra = StructChannelExtra.convert(roomMessage.getChannelExtra());
+           /* StructChannelExtra structChannelExtra = new StructChannelExtra();
+            structChannelExtra.messageId = roomMessage.getChannelExtra().getMessageId();
+            if (showSignature(roomMessage.getRoomId())) {
+                structChannelExtra.signature = realmUserInfo.getUserInfo().getDisplayName();
+            }
+            structChannelExtra.thumbsUp = roomMessage.getChannelExtra().getThumbsUp();
+            structChannelExtra.thumbsDown = roomMessage.getChannelExtra().getThumbsDown();
+            structChannelExtra.viewsLabel = roomMessage.getChannelExtra().getViewsLabel();
+            messageInfo.channelExtra = structChannelExtra;*/
         } else {
             messageInfo.channelExtra = new StructChannelExtra();
         }

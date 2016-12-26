@@ -325,7 +325,10 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public void updateMessageState(long messageId, String voteUp, String voteDown, String viewsLabel) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
-            if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
+            if (messageInfo.mMessage.forwardedFrom != null && messageInfo.mMessage.forwardedFrom.getMessageId() == messageId) {
+                int pos = items.indexOf(messageInfo);
+                set(pos, messageInfo);
+            } else if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
                 int pos = items.indexOf(messageInfo);
                 messageInfo.mMessage.channelExtra.thumbsUp = voteUp;
                 messageInfo.mMessage.channelExtra.thumbsDown = voteDown;

@@ -42,6 +42,8 @@ import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
+import com.iGap.realm.RealmChannelExtra;
+import com.iGap.realm.RealmChannelExtraFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
@@ -227,7 +229,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
             showVote(holder);
         } else {
-
             if (mMessage.forwardedFrom != null) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
                 if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
@@ -248,7 +249,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      */
     private void showVote(VH holder) {
         voteAction(holder);
-        HelperGetMessageState.getMessageState(mMessage.roomId, Long.parseLong(mMessage.messageID));
+        if (mMessage.forwardedFrom != null) {
+            HelperGetMessageState.getMessageState(mMessage.forwardedFrom.getRoomId(), mMessage.forwardedFrom.getMessageId());
+        } else {
+            HelperGetMessageState.getMessageState(mMessage.roomId, Long.parseLong(mMessage.messageID));
+        }
     }
 
     /**
@@ -274,18 +279,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             TextView txtVoteUp = (TextView) holder.itemView.findViewById(R.id.txt_vote_up);
             TextView txtVoteDown = (TextView) holder.itemView.findViewById(R.id.txt_vote_down);
             TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
+            TextView txtSignature = (TextView) holder.itemView.findViewById(R.id.txt_signature);
 
             lytVote.setVisibility(View.VISIBLE);
             if (mMessage.forwardedFrom != null) {
-                if (mMessage.forwardedFrom.getChannelExtra() != null) {
-                    txtVoteUp.setText(mMessage.forwardedFrom.getChannelExtra().getThumbsUp());
-                    txtVoteDown.setText(mMessage.forwardedFrom.getChannelExtra().getThumbsDown());
-                    txtViewsLabel.setText(mMessage.forwardedFrom.getChannelExtra().getViewsLabel());
+                Realm realm = Realm.getDefaultInstance();
+                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst();
+                if (realmChannelExtra != null) {
+                    txtVoteUp.setText(realmChannelExtra.getThumbsUp());
+                    txtVoteDown.setText(realmChannelExtra.getThumbsDown());
+                    txtViewsLabel.setText(realmChannelExtra.getViewsLabel());
+                    txtSignature.setText(realmChannelExtra.getSignature());
                 }
+                realm.close();
             } else {
                 txtVoteUp.setText(mMessage.channelExtra.thumbsUp);
                 txtVoteDown.setText(mMessage.channelExtra.thumbsDown);
                 txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
+                txtSignature.setText(mMessage.channelExtra.signature);
             }
 
             lytVoteUp.setOnClickListener(new View.OnClickListener() {

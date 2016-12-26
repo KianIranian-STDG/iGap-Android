@@ -12,6 +12,28 @@
               android:paddingRight="@dimen/messageContainerPaddingLeftRight"
               android:paddingTop="@dimen/messageContainerPadding">
 
+
+    <LinearLayout
+        android:id="@+id/lyt_signature"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp4"
+        android:paddingRight="@dimen/dp4"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/txt_signature"
+            style="@style/ChatMessages.Time"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/room_message_gray"/>
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/lyt_see"
         android:layout_width="wrap_content"

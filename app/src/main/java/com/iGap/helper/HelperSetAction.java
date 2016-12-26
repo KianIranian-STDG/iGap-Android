@@ -220,4 +220,11 @@ public class HelperSetAction {
 
         return null;
     }
+
+    public static String clearAllActions(long roomId) {
+
+        return null;
+    }
+
+
 }

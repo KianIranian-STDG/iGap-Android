@@ -4,6 +4,7 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChannelGetMessagesStats;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmChannelExtra;
+import com.iGap.realm.RealmChannelExtraFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 
@@ -37,23 +38,34 @@ public class ChannelGetMessagesStatsResponse extends MessageHandler {
                     RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, stats.getMessageId()).findFirst();
                     if (realmRoomMessage != null) {
 
-                        RealmChannelExtra realmChannelExtra = realmRoomMessage.getChannelExtra();
+                        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, stats.getMessageId()).findFirst();
+                        if (realmChannelExtra != null) {
+                            realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
+                            realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
+                            realmChannelExtra.setViewsLabel(stats.getViewsLabel());
+                            realmRoomMessage.setChannelExtra(realmChannelExtra);
+                        }
+
+                       /* RealmChannelExtra realmChannelExtra = realmRoomMessage.getChannelExtra();
                         if (realmRoomMessage.getChannelExtra() == null) {
                             realmChannelExtra = realm.createObject(RealmChannelExtra.class);
                         }
                         realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
                         realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
                         realmChannelExtra.setViewsLabel(stats.getViewsLabel());
+                        realmRoomMessage.setChannelExtra(realmChannelExtra);*/
+
                         /**
                          * if identity is exist message forwarded
                          */
+                        /*
                         if (identity != null) {
                             if (realmRoomMessage.getChannelExtra() != null) {
                                 realmRoomMessage.getForwardMessage().setChannelExtra(realmChannelExtra);
                             }
                         } else {
                             realmRoomMessage.setChannelExtra(realmChannelExtra);
-                        }
+                        }*/
                     }
                 }
             }

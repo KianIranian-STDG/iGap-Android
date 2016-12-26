@@ -13,10 +13,19 @@ import io.realm.RealmObject;
         analyze = {RealmChannelExtra.class})
 public class RealmChannelExtra extends RealmObject {
 
+    private long messageId;
     private String signature;
     private String viewsLabel;
     private String thumbsUp;
     private String thumbsDown;
+
+    public long getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(long messageId) {
+        this.messageId = messageId;
+    }
 
     public String getSignature() {
         return signature;
@@ -54,6 +63,7 @@ public class RealmChannelExtra extends RealmObject {
     public static RealmChannelExtra convert(StructChannelExtra structChannelExtra) {
         Realm realm = Realm.getDefaultInstance();
         RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+        realmChannelExtra.setMessageId(structChannelExtra.messageId);
         realmChannelExtra.setSignature(structChannelExtra.signature);
         realmChannelExtra.setThumbsUp(structChannelExtra.thumbsUp);
         realmChannelExtra.setThumbsDown(structChannelExtra.thumbsDown);

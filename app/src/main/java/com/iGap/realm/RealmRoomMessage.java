@@ -185,6 +185,7 @@ public class RealmRoomMessage extends RealmObject {
 
         if (input.hasChannelExtra()) {
             RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+            realmChannelExtra.setMessageId(input.getMessageId());
             realmChannelExtra.setSignature(input.getChannelExtra().getSignature());
             realmChannelExtra.setThumbsDown(input.getChannelExtra().getThumbsDownLabel());
             realmChannelExtra.setThumbsUp(input.getChannelExtra().getThumbsUpLabel());
