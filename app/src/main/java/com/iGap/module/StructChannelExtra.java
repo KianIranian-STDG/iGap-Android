@@ -54,4 +54,21 @@ public class StructChannelExtra {
         realm.close();
         return name;
     }
+
+    public static StructChannelExtra makeDefaultStructure(long messageId, long roomId) {
+        StructChannelExtra structChannelExtra = new StructChannelExtra();
+        structChannelExtra.messageId = messageId;
+        structChannelExtra.thumbsUp = "0";
+        structChannelExtra.thumbsDown = "0";
+        structChannelExtra.viewsLabel = "1";
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
+            structChannelExtra.signature = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName();
+        } else {
+            structChannelExtra.signature = "";
+        }
+        realm.close();
+        return structChannelExtra;
+    }
 }

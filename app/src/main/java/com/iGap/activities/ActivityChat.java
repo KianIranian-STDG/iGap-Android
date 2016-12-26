@@ -2907,6 +2907,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         final long finalFileSize = fileSize;
         final int[] finalImageDimens = imageDimens;
 
+        messageInfo.channelExtra = StructChannelExtra.makeDefaultStructure(messageId, mRoomId);
+
         final StructMessageInfo finalMessageInfo = messageInfo;
         final long finalMessageId = messageId;
         realm.executeTransaction(new Realm.Transaction() {

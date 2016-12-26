@@ -449,8 +449,21 @@ public class G extends MultiDexApplication {
         setUserTextSize();
 
         //G.onFileDownloadResponse = this;
+
+        saveLogcatToFile(context);
     }
 
+    public static void saveLogcatToFile(Context context) {
+        String fileName = "logcat_" + System.currentTimeMillis() + ".txt";
+        new File(context.getExternalCacheDir(), fileName).mkdirs();
+        File outputFile = new File(context.getExternalCacheDir(), fileName);
+        try {
+            @SuppressWarnings("unused")
+            Process process = Runtime.getRuntime().exec("logcat -f " + outputFile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setFont() {
 

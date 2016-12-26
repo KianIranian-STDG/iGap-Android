@@ -188,7 +188,7 @@ public class WebSocketClient {
                 }
             }, Config.REPEAT_CONNECTION_CHECKING);
         } else {
-            /*
+            /**
              when connecting was successful and user login ,
              in user login response will be change
              allowForReconnecting=true and waitingForReconnecting=false
