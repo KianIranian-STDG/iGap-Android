@@ -25,16 +25,13 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
-import com.mikepenz.fastadapter.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
- */
 public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
     // contain sender id
     public static List<String> avatarsRequested = new ArrayList<>();

@@ -6,7 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.mikepenz.fastadapter.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+
 
 /**
  * scroll when adapter's items are not completely visible. in other words,

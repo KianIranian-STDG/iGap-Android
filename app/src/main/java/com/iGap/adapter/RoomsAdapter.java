@@ -3,16 +3,13 @@ package com.iGap.adapter;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import com.mikepenz.fastadapter.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
- */
 public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public static List<Long> userInfoAlreadyRequests = new ArrayList<>();
 

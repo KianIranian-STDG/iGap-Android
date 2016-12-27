@@ -3064,8 +3064,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
     }
 
-    public class StickyHeaderAdapter extends AbstractAdapter
-            implements StickyRecyclerHeadersAdapter {
+    public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecyclerHeadersAdapter {
         @Override
         public long getHeaderId(int position) {
             IItem item = getItem(position);
@@ -3130,6 +3129,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         @Override
         public int getAdapterPosition(IItem item) {
             return -1;
+        }
+
+        @Override
+        public int getAdapterPosition(long identifier) {
+            return 0;
         }
 
         @Override

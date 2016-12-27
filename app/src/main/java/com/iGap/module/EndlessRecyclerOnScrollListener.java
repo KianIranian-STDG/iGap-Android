@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.iGap.realm.RealmRoomMessage;
-import com.mikepenz.fastadapter.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private List<RealmRoomMessage> mMessagesList = new ArrayList<>();
     private boolean mAlreadyCalledOnNoMore;
 
-    public EndlessRecyclerOnScrollListener(List<RealmRoomMessage> messageList,
-                                           FastItemAdapter adapter) {
+    public EndlessRecyclerOnScrollListener(List<RealmRoomMessage> messageList, FastItemAdapter adapter) {
         mAdapter = adapter;
         mMessagesList = messageList;
     }

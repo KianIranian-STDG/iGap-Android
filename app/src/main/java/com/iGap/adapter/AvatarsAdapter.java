@@ -3,13 +3,10 @@ package com.iGap.adapter;
 import android.support.v4.util.ArrayMap;
 
 import com.iGap.adapter.items.AvatarItem;
-import com.mikepenz.fastadapter.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/6/2016.
- */
 public class AvatarsAdapter<Item extends AvatarItem> extends FastItemAdapter<Item> {
     public static ArrayMap<String, Integer> requestsProgress = new ArrayMap<>();
     public static ArrayMap<String, Long> requestsOffset = new ArrayMap<>();
