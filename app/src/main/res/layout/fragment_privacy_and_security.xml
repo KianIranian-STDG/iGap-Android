@@ -196,6 +196,7 @@
                 </LinearLayout>
             </LinearLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -207,14 +208,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingBottom="@dimen/dp16"
+
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:paddingTop="@dimen/dp12"
-                    android:text="@string/Security"
+                    android:text="@string/privacy"
                     android:textColor="@color/green"
                     android:textSize="@dimen/sp18"
                     android:textStyle="normal"/>
+
+
+                <TextView
+                    android:id="@+id/stps_txt_blocked_user"
+                    fontPath="fonts/IRANSansMobile.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical|start"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:text="@string/Block_Users"
+                    android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp16"
+                    android:textStyle="normal"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                >
 
                 <TextView
                     fontPath="fonts/IRANSansMobile.ttf"
@@ -230,6 +257,20 @@
                     android:textStyle="normal"
                     android:visibility="gone"/>
 
+                <TextView
+                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:text="@string/Security"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/sp18"
+                    android:textStyle="normal"
+                    android:id="@+id/textView4"
+                    />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"

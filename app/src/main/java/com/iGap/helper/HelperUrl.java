@@ -369,7 +369,7 @@ public class HelperUrl {
 
         realm.close();
 
-        String title = "do you want to join this ";
+        String title = G.context.getString(R.string.do_you_want_to_join_to_this);
         String memberNumber = "";
         final CircleImageView[] imageView = new CircleImageView[1];
 
@@ -391,8 +391,7 @@ public class HelperUrl {
             @Override public void run() {
 
                 final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle)
-                    .customView(R.layout.dialog_alert_join, true)
-                    .positiveText("Join")
+                    .customView(R.layout.dialog_alert_join, true).positiveText(R.string.join)
                     .cancelable(false)
                     .negativeText(android.R.string.cancel)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -460,6 +459,9 @@ public class HelperUrl {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override public void execute(Realm realm) {
                             reamRoom.setDeleted(false);
+                            if (reamRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                reamRoom.setReadOnly(false);
+                            }
                         }
                     });
                 }

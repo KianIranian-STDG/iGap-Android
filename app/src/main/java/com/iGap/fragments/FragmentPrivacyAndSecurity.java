@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -20,10 +19,8 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructSessionsGetActiveList;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileSetSelfRemove;
-
-import java.util.ArrayList;
-
 import io.realm.Realm;
+import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.R.id.st_layoutParent;
@@ -87,6 +84,22 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
             }
         });
+
+        TextView txtBlockedUser = (TextView) view.findViewById(R.id.stps_txt_blocked_user);
+        txtBlockedUser.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                FragmentBlockedUser fragmentBlockedUser = new FragmentBlockedUser();
+                getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .addToBackStack(null)
+                    .replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null)
+                    .commit();
+            }
+        });
+
+
 
         final TextView txtDestruction = (TextView) view.findViewById(R.id.stps_txt_Self_destruction);
         if (selfRemove != 0) {

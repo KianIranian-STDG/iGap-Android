@@ -682,7 +682,8 @@
     <string name="dey">دی</string>
     <string name="bahman">بهمن</string>
     <string name="esfand">اسفند</string>
-
+    <string name="join">عضویت</string>
+    <string name="do_you_want_to_join_to_this">"ایا میخواهید عضو شوید در این  "</string>
     <string name="txt_draft">Draft: </string>
 
     <string name="st_signature">امضا</string>

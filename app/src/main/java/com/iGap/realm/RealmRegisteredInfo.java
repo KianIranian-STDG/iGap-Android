@@ -2,7 +2,6 @@ package com.iGap.realm;
 
 import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoGlobal;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -23,7 +22,9 @@ public class RealmRegisteredInfo extends RealmObject {
     private String cacheId;
     private int lastSeen;
     private int avatarCount;
+
     private boolean mutual;
+    private boolean blockUser = false;
 
     public static RealmRegisteredInfo putOrUpdate(ProtoGlobal.RegisteredUser input) {
         Realm realm = Realm.getDefaultInstance();
@@ -154,6 +155,14 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public void setMutual(boolean mutual) {
         this.mutual = mutual;
+    }
+
+    public boolean isBlockUser() {
+        return blockUser;
+    }
+
+    public void setBlockUser(boolean blockUser) {
+        this.blockUser = blockUser;
     }
 
     public RealmList<RealmAvatar> getAvatars() {

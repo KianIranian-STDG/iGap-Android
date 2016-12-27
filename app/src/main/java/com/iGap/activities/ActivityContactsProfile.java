@@ -24,6 +24,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -77,19 +77,20 @@ import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatGetRoom;
 import com.iGap.request.RequestUserAvatarGetList;
 import com.iGap.request.RequestUserContactImport;
+import com.iGap.request.RequestUserContactsBlock;
 import com.iGap.request.RequestUserContactsDelete;
 import com.iGap.request.RequestUserContactsEdit;
+import com.iGap.request.RequestUserContactsUnblock;
 import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.File;
-import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
+import java.io.File;
+import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -107,6 +108,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private String color;
     private String enterFrom;
     private String userStatus;
+    private boolean isBlockUser = false;
+    private Realm mRealm;
+    RealmRegisteredInfo rrg;
 
     TextView txtCountOfShearedMedia;
 
@@ -160,17 +164,51 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         super.onResume();
     }
 
+    @Override protected void onStop() {
+        super.onStop();
+
+        if (rrg != null) {
+            rrg.removeChangeListeners();
+        }
+
+        if (mRealm != null) {
+            mRealm.close();
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_profile);
         final Realm realm = Realm.getDefaultInstance();
+
+        mRealm = Realm.getDefaultInstance();
+
+
         G.onUserUpdateStatus = this;
+
 
         Bundle extras = getIntent().getExtras();
         userId = extras.getLong("peerId");
         roomId = extras.getLong("RoomId");
         enterFrom = extras.getString("enterFrom");
+
+        rrg = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+
+        if (rrg != null) {
+
+            isBlockUser = rrg.isBlockUser();
+
+            rrg.addChangeListener(new RealmChangeListener<RealmModel>() {
+                @Override public void onChange(RealmModel element) {
+
+                    isBlockUser = rrg.isBlockUser();
+
+                    Log.e("ddd", "addChangeListener     " + element);
+                }
+            });
+        }
+
 
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
@@ -998,30 +1036,33 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutDialog.setOrientation(LinearLayout.VERTICAL);
         layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
-//        TextView text1 = new TextView(ActivityContactsProfile.this);
+        TextView text1 = new TextView(ActivityContactsProfile.this);
         TextView text2 = new TextView(ActivityContactsProfile.this);
         TextView text3 = new TextView(ActivityContactsProfile.this);
 
-//        text1.setTextColor(getResources().getColor(android.R.color.black));
+        text1.setTextColor(getResources().getColor(android.R.color.black));
         text2.setTextColor(getResources().getColor(android.R.color.black));
         text3.setTextColor(getResources().getColor(android.R.color.black));
-
-//        text1.setText(getResources().getString(R.string.Search));
+        if (isBlockUser) {
+            text1.setText(getString(R.string.un_block_user));
+        } else {
+            text1.setText(getString(R.string.block_user));
+        }
         text2.setText(getResources().getString(R.string.clear_history));
         text3.setText(getResources().getString(R.string.delete_contact));
 
         int dim20 = (int) getResources().getDimension(R.dimen.dp20);
         int dim12 = (int) getResources().getDimension(R.dimen.dp12);
 
-//        text1.setTextSize(14);
+        text1.setTextSize(14);
         text2.setTextSize(14);
         text3.setTextSize(14);
 
-//        text1.setPadding(dim20, dim12, dim12, dim20);
+        text1.setPadding(dim20, dim12, dim12, 0);
         text2.setPadding(dim20, dim12, dim20, dim12);
         text3.setPadding(dim20, 0, dim20, dim12);
 
-//        layoutDialog.addView(text1, params);
+        layoutDialog.addView(text1, params);
         layoutDialog.addView(text2, params);
         layoutDialog.addView(text3, params);
 
@@ -1048,12 +1089,12 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 (int) getResources().getDimension(R.dimen.dp32));
         //                popupWindow.showAsDropDown(v);
 
-//        text1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                popupWindow.dismiss();
-//            }
-//        });
+        text1.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                blockOrUnblockUser();
+                popupWindow.dismiss();
+            }
+        });
         text2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1110,6 +1151,19 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         new RequestUserAvatarGetList().userAddGetList(userId);
     }
+
+    private void blockOrUnblockUser() {
+
+        if (isBlockUser) {
+
+            new RequestUserContactsUnblock().userContactsUnblock(userId);
+        } else {
+
+            new RequestUserContactsBlock().userContactsBlock(userId);
+        }
+    }
+
+
 
     private void showAlertDialog(String message, String positive, String negitive) { // alert dialog for block or clear user
 

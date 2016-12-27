@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.R;
@@ -33,7 +32,6 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +47,8 @@ public class ShowCustomList extends Fragment {
     private boolean dialogShowing = false;
     private long lastId = 0;
     private int count = 0;
+    private boolean singleSelect = false;
+    private RippleView rippleDown;
 
     public static ShowCustomList newInstance(List<StructContactInfo> list, OnSelectedList onSelectedListResult) {
         onSelectedList = onSelectedListResult;
@@ -78,6 +78,8 @@ public class ShowCustomList extends Fragment {
             if (bundle.getLong("COUNT_MESSAGE") != 0) {
                 lastId = bundle.getLong("COUNT_MESSAGE");
             }
+
+            singleSelect = bundle.getBoolean("SINGLE_SELECT");
         }
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
@@ -94,7 +96,7 @@ public class ShowCustomList extends Fragment {
             }
         });
 
-        RippleView rippleDown = (RippleView) view.findViewById(R.id.fcg_ripple_done);
+        rippleDown = (RippleView) view.findViewById(R.id.fcg_ripple_done);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
@@ -130,7 +132,15 @@ public class ShowCustomList extends Fragment {
             public boolean onClick(View v, IAdapter adapter, ContactItemGroup item, int position) {
 
                 item.mContact.isSelected = !item.mContact.isSelected;
+
                 fastAdapter.notifyItemChanged(position);
+
+                if (singleSelect) {
+                    if (onSelectedList != null) {
+                        onSelectedList.getSelectedList(true, "", 0, getSelectedList());
+                    }
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
 
 //                refreshView();
 

@@ -1,6 +1,13 @@
 package com.iGap.response;
 
 import com.iGap.proto.ProtoUserContactsGetBlockedList;
+import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmContactsFields;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import java.util.List;
 
 public class UserContactsGetBlockedListResponse extends MessageHandler {
 
@@ -21,7 +28,59 @@ public class UserContactsGetBlockedListResponse extends MessageHandler {
         super.handler();
 
         ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.Builder builder = (ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.Builder) message;
-        builder.getUserList();
+        List<ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User> list = builder.getUserList();
+
+        Realm realm = Realm.getDefaultInstance();
+
+        // reset blocked user in RealmRegisteredInfo
+        RealmResults<RealmRegisteredInfo> results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
+        if (results != null) {
+            for (final RealmRegisteredInfo item : results) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        item.setBlockUser(false);
+                    }
+                });
+            }
+        }
+
+        // reset blocked user in RealmContacts
+        RealmResults<RealmContacts> resultsContacts = realm.where(RealmContacts.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
+        if (resultsContacts != null) {
+            for (final RealmContacts item : resultsContacts) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        item.setBlockUser(false);
+                    }
+                });
+            }
+        }
+
+        // add blocked user to RealmRegisteredInfo and  realmContacts
+        for (ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User user : list) {
+
+            final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getUserId()).findFirst();
+            if (realmRegisteredInfo != null) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        realmRegisteredInfo.setBlockUser(true);
+                    }
+                });
+            }
+
+            final RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, user.getUserId()).findFirst();
+            if (realmContacts != null) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        realmContacts.setBlockUser(true);
+                    }
+                });
+            }
+        }
+
+        realm.close();
+
+
     }
 
     @Override

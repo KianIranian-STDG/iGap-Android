@@ -17,6 +17,8 @@ public class RealmContacts extends RealmObject {
     private long last_seen;
     private int avatarCount;
     private RealmAvatar avatar;
+    private boolean blockUser = false;
+
 
     public long getId() {
         return id;
@@ -120,5 +122,13 @@ public class RealmContacts extends RealmObject {
 
     public void setAvatar(RealmAvatar avatar) {
         this.avatar = avatar;
+    }
+
+    public boolean isBlockUser() {
+        return blockUser;
+    }
+
+    public void setBlockUser(boolean blockUser) {
+        this.blockUser = blockUser;
     }
 }

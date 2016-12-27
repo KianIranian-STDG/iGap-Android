@@ -58,6 +58,16 @@
                 android:text="@string/last_seen_recently"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
                 android:textColor="#bbbbbb" />
+
+        <View
+            android:id="@+id/bottomLine"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray"
+            />
+
+
       </LinearLayout>
     </LinearLayout>
 
