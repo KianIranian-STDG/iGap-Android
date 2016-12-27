@@ -5,6 +5,7 @@ import com.iGap.G;
 import com.iGap.WebSocketClient;
 import com.iGap.helper.HelperConnectionState;
 import com.iGap.proto.ProtoConnectionSecuring;
+import com.neovisionaries.ws.client.WebSocket;
 
 public class ConnectionSymmetricKeyResponse extends MessageHandler {
 
@@ -35,7 +36,12 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
 
         } else if (statusNumber == Config.ACCEPT) {
             HelperConnectionState.connectionState(Config.ConnectionState.IGAP);
+
+            /**
+             * when secure is false set useMask true otherwise set false
+             */
             G.isSecure = true;
+            WebSocket.useMask = false;
 
             G.ivSize = builder.getSymmetricIvSize();
             String sm = builder.getSymmetricMethod();

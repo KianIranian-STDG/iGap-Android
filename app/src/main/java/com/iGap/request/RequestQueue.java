@@ -87,7 +87,6 @@ public class RequestQueue {
                     message = AESCrypt.encrypt(G.symmetricKey, message);
                     WebSocketClient.getInstance().sendBinary(message);
                     Log.i("SOC_REQ", "RequestQueue ********** sendRequest Secure successful **********");
-
                     // remove from waiting request wrappers while user logged-in and send request
                     WAITING_REQUEST_WRAPPERS.remove(requestWrapper);
                 } else {

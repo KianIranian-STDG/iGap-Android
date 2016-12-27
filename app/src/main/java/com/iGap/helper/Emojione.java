@@ -95,7 +95,7 @@ public abstract class Emojione {
         _shortNameToUnicode.put("dizzy_face", new String(new int[]{0x1f635}, 0, 1));
         _shortNameToUnicode.put("astonished", new String(new int[]{0x1f632}, 0, 1));
         _shortNameToUnicode.put("zipper_mouth", new String(new int[]{0x1f910}, 0, 1));
-        _shortNameToUnicode.put("mask", new String(new int[]{0x1f637}, 0, 1));
+        _shortNameToUnicode.put("isSecure", new String(new int[]{0x1f637}, 0, 1));
         _shortNameToUnicode.put("thermometer_face", new String(new int[]{0x1f912}, 0, 1));
         _shortNameToUnicode.put("head_bandage", new String(new int[]{0x1f915}, 0, 1));
         _shortNameToUnicode.put("sleeping", new String(new int[]{0x1f634}, 0, 1));

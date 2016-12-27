@@ -9,7 +9,6 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
-import com.neovisionaries.ws.client.WebSocketFrame;
 
 import java.io.IOException;
 import java.util.List;
@@ -66,7 +65,7 @@ public class WebSocketClient {
                 }
 
                 @Override
-                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                public void onDisconnected(WebSocket websocket, com.neovisionaries.ws.client.WebSocketFrame serverCloseFrame, com.neovisionaries.ws.client.WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                     Log.i("SOC_WebSocketD", "onDisconnected");
                     reconnect();
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
@@ -77,13 +76,6 @@ public class WebSocketClient {
                     Log.i("SOC_WebSocket", "onConnectError");
                     reconnect();
                     super.onConnectError(websocket, exception);
-                }
-
-                @Override
-                public void onMessageError(WebSocket websocket, WebSocketException cause,
-                                           List<WebSocketFrame> frames) throws Exception {
-                    Log.i("SOC_WebSocket", "onMessageError");
-                    super.onMessageError(websocket, cause, frames);
                 }
             });
         } catch (IOException e) {
@@ -250,7 +242,11 @@ public class WebSocketClient {
         G.canRunReceiver = true;
         G.symmetricKey = null;
         webSocketClient = null;
+        /**
+         * when secure is false set useMask true otherwise set false
+         */
         G.isSecure = false;
+        WebSocket.useMask = true;
         G.userLogin = false;
     }
 
