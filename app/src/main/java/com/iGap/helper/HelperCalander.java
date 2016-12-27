@@ -8,6 +8,7 @@ import com.iGap.libs.CalendarTools;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by android3 on 12/11/2016.
@@ -131,6 +132,73 @@ public class HelperCalander {
         }
 
         return out;
+    }
+
+    public static String getTimeForMainRoom(long time) {
+
+        Calendar current = Calendar.getInstance();
+        Calendar date = Calendar.getInstance();
+        date.setTime(new Date(time));
+
+        String output = "";
+
+        if (current.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR) && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
+
+            output = TimeUtils.toLocal(time, G.ROOM_LAST_MESSAGE_TIME);
+        } else if (current.get(Calendar.DAY_OF_YEAR) < (date.get(Calendar.DAY_OF_YEAR) + 7)) {
+
+            if (HelperCalander.isTimeHijri()) {
+                output = getPersianStringDay(date.get(Calendar.DAY_OF_WEEK));
+            } else {
+                output = TimeUtils.toLocal(date.getTimeInMillis(), "EEE");
+            }
+        } else {
+
+            if (HelperCalander.isTimeHijri()) {
+
+                CalendarTools convertTime = new CalendarTools();
+                convertTime.GregorianToPersian(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+
+                output = HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getDay();
+                output = HelperCalander.convertToUnicodeFarsiNumber(output);
+            } else {
+                output = TimeUtils.toLocal(date.getTimeInMillis(), "MMM dd");
+            }
+        }
+
+        return output;
+    }
+
+    private static String getPersianStringDay(int dayOfWeek) {
+
+        String result = "";
+
+        switch (dayOfWeek) {
+
+            case 1:
+                result = G.context.getString(R.string.sunday);
+                break;
+            case 2:
+                result = G.context.getString(R.string.monday);
+                break;
+            case 3:
+                result = G.context.getString(R.string.tuesday);
+                break;
+            case 4:
+                result = G.context.getString(R.string.wednesday);
+                break;
+            case 5:
+                result = G.context.getString(R.string.thursday);
+                break;
+            case 6:
+                result = G.context.getString(R.string.friday);
+                break;
+            case 7:
+                result = G.context.getString(R.string.saturday);
+                break;
+        }
+
+        return result;
     }
 
 }

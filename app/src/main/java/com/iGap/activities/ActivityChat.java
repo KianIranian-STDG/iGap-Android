@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -198,20 +197,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -223,6 +208,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -509,9 +505,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void getChatHistory() {
         Realm realm = Realm.getDefaultInstance();
-        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 0
-                || realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 1
-                || realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() == 2) {
+        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size() < 3) {
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
         }
         realm.close();
@@ -1143,6 +1137,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
+
+        if (prgWaiting != null) prgWaiting.setVisibility(View.GONE);
+
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
             if (!messageInfo.isTimeOrLogMessage()) {
@@ -3339,6 +3336,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
+        if (results.size() > 0) lastMessageId = results.get(0).getMessageId();
+
+
         List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
 
         for (RealmRoomMessage message : results) {
@@ -3406,6 +3406,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         if (latestMessageIdHistory != oldestMessageId) {
             latestMessageIdHistory = oldestMessageId;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
+            prgWaiting.setVisibility(View.VISIBLE);
         }
     }
 
@@ -3957,7 +3958,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages, final int count) {
         // I'm in the room
 
-        Log.e("ddd", "onGetRoomHistory                 aaaaaaaaaaaaa");
+        Log.e("ddd", "onGetRoomHistory                 aaaaaaaaaaaaa" + count);
+        prgWaiting.setVisibility(View.GONE);
 
         if (roomId == mRoomId) {
             //runOnUiThread(new Runnable() {
@@ -4014,12 +4016,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 @Override
                 public void run() {
 
-                    int position = recyclerView.getAdapter().getItemCount();
-
                     mAdapter.clear();
                     switchAddItem(getLocalMessages(), true);
 
-                    recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - position);
+                    if (count < recyclerView.getAdapter().getItemCount()) recyclerView.scrollToPosition(count);
+
+                    Log.e("ddd", mAdapter.getAdapterItemCount() + "   " + recyclerView.getAdapter().getItemCount());
+
+
+
                 }
             });
         }
@@ -4027,6 +4032,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onGetRoomHistoryError(int majorCode, int minorCode) {
+
+        prgWaiting.setVisibility(View.GONE);
+
         if (majorCode == 615 && minorCode == 1) {
             runOnUiThread(new Runnable() {
                 @Override

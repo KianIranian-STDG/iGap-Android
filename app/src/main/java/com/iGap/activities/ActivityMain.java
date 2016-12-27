@@ -25,7 +25,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -96,16 +95,14 @@ import com.iGap.request.RequestGroupLeft;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
@@ -711,10 +708,23 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     @Override
                     public void onSuccess() {
                         List<RoomItem> roomItems = new ArrayList<>();
-                        for (ProtoGlobal.Room room : rooms) {
-                            roomItems.add(new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
+                        //for (ProtoGlobal.Room room : rooms) {
+                        //    roomItems.add(new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
+                        //}
+                        //  Collections.sort(roomItems, SortRooms.DESC);
+
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override public void execute(Realm realm) {
+                                for (RealmRoom item : realm.where(RealmRoom.class).findAll()) {
+                                    item.setUpdatedTime(item.getLastMessage().getUpdateTime());
+                                }
+                            }
+                        });
+
+                        for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
+                            roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
                         }
-                        Collections.sort(roomItems, SortRooms.DESC);
+
                         mAdapter.add(roomItems);
 
                         // realm.close();

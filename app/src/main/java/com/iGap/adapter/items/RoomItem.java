@@ -8,16 +8,15 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.OnComplete;
-import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
@@ -32,13 +31,11 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import java.util.List;
-
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.util.List;
 
 import static android.view.View.GONE;
 import static com.iGap.G.context;
@@ -327,7 +324,8 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         holder.name.setText(mInfo.getTitle());
 
         if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateTime() != 0) {
-            holder.lastSeen.setText(TimeUtils.toLocal(mInfo.getLastMessage().getUpdateTime(), G.ROOM_LAST_MESSAGE_TIME));
+            holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateTime()));
+
             holder.lastSeen.setVisibility(View.VISIBLE);
         } else {
             holder.lastSeen.setVisibility(GONE);
