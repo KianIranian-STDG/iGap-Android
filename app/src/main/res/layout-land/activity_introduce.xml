@@ -54,7 +54,7 @@
             android:layout_alignParentStart="true"
             android:adjustViewBounds="false"
             android:scaleType="fitEnd"
-            android:src="@mipmap/sabz_lan"
+            android:src="@mipmap/sabz"
             app:layout_heightPercent="85%" />
         <!--page 1-->
         <ImageView

@@ -685,6 +685,6 @@
     <string name="do_you_want_to_join_to_this">"do you want to join this "</string>
     <string name="block_user">Block User</string>
     <string name="un_block_user">"UnBlock User"</string>
-
+    <string name="spam">Spam</string>
 
 </resources>

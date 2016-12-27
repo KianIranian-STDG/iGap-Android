@@ -6,11 +6,11 @@
              android:id="@+id/chatSubLayoutAudio"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
+             android:layoutDirection="ltr"
              android:layout_marginBottom="@dimen/dp4"
-             android:maxWidth="@dimen/chatBoxMaxWidth"
-    >
+             android:maxWidth="@dimen/chatBoxMaxWidth">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,8 +27,11 @@
             />
 
         <LinearLayout
+            android:id="@+id/middleLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/messageSenderAvatar"
+            android:layout_toRightOf="@+id/messageSenderAvatar"
             android:orientation="vertical">
 
 
@@ -167,13 +170,13 @@
 
 
                                     <com.iGap.module.MaterialDesignTextView
-                                        android:textAppearance="@style/TextIconAppearance_toolbar"
                                         android:id="@+id/csla_btn_play_music"
                                         android:layout_width="@dimen/dp40"
                                         android:layout_height="match_parent"
                                         android:background="@null"
                                         android:gravity="center"
                                         android:text="@string/md_play_arrow"
+                                        android:textAppearance="@style/TextIconAppearance_toolbar"
                                         android:textColor="@color/green"
                                         android:textSize="@dimen/sp18"
                                         />
@@ -226,7 +229,19 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <include layout="@layout/chat_sub_layout_messages_vote"/>
+
         </LinearLayout>
-    </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/middleLayout"
+            android:layout_alignStart="@+id/middleLayout"
+            android:layout_below="@+id/middleLayout">
+
+            <include layout="@layout/chat_sub_layout_messages_vote"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
 </FrameLayout>

@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/lyt_vote"
-              android:layout_width="match_parent"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_gravity="bottom|right"
               android:layout_marginTop="1dp"
-              android:gravity="left|center_vertical"
+              android:layoutDirection="ltr"
+              android:gravity="left|start|center_vertical"
               android:orientation="horizontal"
-              android:paddingBottom="@dimen/messageContainerPaddingLeftRight"
-              android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
-              android:paddingRight="@dimen/messageContainerPaddingLeftRight"
-              android:paddingTop="@dimen/messageContainerPadding">
+              android:paddingBottom="@dimen/dp8"
+              android:paddingTop="@dimen/dp8">
 
 
     <LinearLayout
@@ -30,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="18dp"
             android:layout_weight="1"
+            android:maxLength="25"
             android:gravity="center"
             android:textColor="@color/room_message_gray"/>
     </LinearLayout>
@@ -54,15 +53,15 @@
             android:text="0"
             android:textColor="@color/room_message_gray"/>
 
-        <ImageView
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/img_eye"
-            style="@style/ChatMessages.MaterialDesignTextView.Tick"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp4"
-            android:layout_weight="1"
-            android:src="@drawable/ic_eye"
-            android:tint="@color/room_message_gray"/>
+            android:textSize="@dimen/sp20"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/md_visibility"
+            android:textColor="@color/gray_6c"/>
 
     </LinearLayout>
 
@@ -87,15 +86,15 @@
             android:textColor="@color/room_message_gray"
             />
 
-        <ImageView
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/img_vote_down"
-            style="@style/ChatMessages.MaterialDesignTextView.Tick"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp4"
-            android:layout_weight="1"
-            android:src="@drawable/ic_thumb_down"
-            android:tint="@color/room_message_gray"/>
+            android:textSize="@dimen/sp20"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/md_thumb_down"
+            android:textColor="@color/gray_6c"/>
 
     </LinearLayout>
 
@@ -119,15 +118,15 @@
             android:text="0"
             android:textColor="@color/room_message_gray"/>
 
-        <ImageView
+        <com.iGap.module.MaterialDesignTextView
             android:id="@+id/img_vote_up"
-            style="@style/ChatMessages.MaterialDesignTextView.Tick"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp4"
-            android:layout_weight="1"
-            android:src="@drawable/ic_thumb_up"
-            android:tint="@color/room_message_gray"/>
+            android:textSize="@dimen/sp20"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/md_thumb_up"
+            android:textColor="@color/gray_6c"/>
 
     </LinearLayout>
 

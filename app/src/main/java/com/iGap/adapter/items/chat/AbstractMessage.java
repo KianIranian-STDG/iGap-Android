@@ -341,7 +341,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
-        LinearLayout frameLayout = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
+        ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
 
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
@@ -382,7 +382,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void updateLayoutForSend(VH holder) {
-        LinearLayout frameLayout = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
+        ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.END;
 
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);

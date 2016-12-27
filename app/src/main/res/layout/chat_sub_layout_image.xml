@@ -10,7 +10,7 @@
              android:maxWidth="@dimen/chatBoxMaxWidth"
              android:textDirection="firstStrong">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/mainContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,8 +26,11 @@
 
 
         <LinearLayout
+            android:id="@+id/middleLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/messageSenderAvatar"
+            android:layout_toRightOf="@+id/messageSenderAvatar"
             android:orientation="vertical">
 
 
@@ -102,9 +105,17 @@
                     </FrameLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-
-            <include layout="@layout/chat_sub_layout_messages_vote"/>
         </LinearLayout>
 
-    </LinearLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/middleLayout"
+            android:layout_alignStart="@+id/middleLayout"
+            android:layout_below="@+id/middleLayout">
+
+            <include layout="@layout/chat_sub_layout_messages_vote"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
 </FrameLayout>

@@ -36,8 +36,8 @@
             android:layout_height="0dp"
             android:layout_alignParentLeft="true"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@mipmap/sabz"
+            android:scaleType="fitEnd"
+            android:src="@mipmap/sabz_small"
             app:layout_heightPercent="83%"/>
         <!--page 1-->
         <ImageView
@@ -90,7 +90,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:foregroundGravity="center"
-            android:scaleType="center"
+            android:scaleType="centerInside"
             android:src="@mipmap/transfer"
             android:visibility="invisible"/>
 
@@ -141,8 +141,8 @@
                     android:layout_gravity="center"
                     android:paddingBottom="@dimen/dp4"
                     android:text="@string/text_i_introduce_page1"
-                    android:textColor="@color/country"
-                    android:textSize="@dimen/sp32"
+                    android:textColor="@color/text_line1_igap_dark"
+                    android:textSize="@dimen/sp26"
                     android:visibility="visible"/>
 
                 <TextView
@@ -152,7 +152,7 @@
                     android:layout_gravity="center"
                     android:gravity="center_horizontal"
                     android:text="@string/text_line_1_introduce_page1"
-                    android:textColor="@color/text_line2_lc__dark"
+                    android:textColor="@color/text_line1_igap_dark"
                     android:textSize="@dimen/sp26"
                     android:visibility="visible"/>
             </LinearLayout>
@@ -166,10 +166,11 @@
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/dp4"
                 android:paddingLeft="@dimen/dp28"
+                android:textStyle="bold"
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_2_introduce_page1"
-                android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp15"
+                android:textColor="@color/text_line1_igap_dark"
+                android:textSize="@dimen/sp18"
                 android:visibility="gone"/>
 
             <TextView
@@ -204,7 +205,8 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:text="@string/text_line_1_introduce_page2"
                 android:textColor="@color/text_line1_igap_dark"
-                android:textSize="@dimen/sp15"
+                android:textSize="@dimen/sp18"
+                android:textStyle="bold"
                 android:visibility="gone"/>
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -238,10 +240,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
                 android:layout_marginTop="@dimen/dp4"
                 android:text="@string/text_line_1_introduce_page3"
                 android:textColor="@color/text_line1_igap_dark"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp18"
                 android:visibility="gone"/>
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -273,11 +276,12 @@
                 android:id="@+id/int_txt_p4_l1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp16"
                 android:text="@string/text_line_1_introduce_page4"
                 android:textColor="@color/text_line1_igap_dark"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp18"
                 android:visibility="gone"/>
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -310,9 +314,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp12"
+                android:textStyle="bold"
                 android:text="@string/text_line_1_introduce_page5"
                 android:textColor="@color/text_line1_igap_dark"
-                android:textSize="@dimen/sp16"
+                android:textSize="@dimen/sp18"
                 android:visibility="gone"/>
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView

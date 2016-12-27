@@ -3,15 +3,15 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:id="@+id/chatSubLayoutFile"
-             android:layout_width="match_parent"
+             android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_marginBottom="@dimen/dp4"
              android:maxWidth="@dimen/chatBoxMaxWidth"
              android:textDirection="firstStrong">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/mainContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         tools:ignore="UselessParent">
@@ -24,8 +24,11 @@
             android:src="@mipmap/empty"/>
 
         <LinearLayout
+            android:id="@+id/middleLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/messageSenderAvatar"
+            android:layout_toRightOf="@+id/messageSenderAvatar"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
@@ -124,8 +127,17 @@
                     <include layout="@layout/chat_sub_layout_messages_time"/>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/middleLayout"
+            android:layout_alignStart="@+id/middleLayout"
+            android:layout_below="@+id/middleLayout">
 
             <include layout="@layout/chat_sub_layout_messages_vote"/>
-        </LinearLayout>
-    </LinearLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
 </FrameLayout>

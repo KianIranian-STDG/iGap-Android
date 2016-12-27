@@ -56,7 +56,11 @@
     <string name="md_colorize">\ue3b8</string>
     <string name="md_brush">\ue3ae</string>
     <string name="md_pic_library">\ue413</string>
+    <string name="md_thumb_down">\ue8db</string>
+    <string name="md_thumb_up">\ue8dc</string>
+    <string name="md_visibility">\ue8f4</string>
 
     <string name="md_eraser">&#x61;</string>
+
 
 </resources>
