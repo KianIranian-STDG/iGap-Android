@@ -938,8 +938,7 @@ import static com.neovisionaries.ws.client.WebSocketState.OPEN;
  * @see <a href="https://github.com/TakahikoKawasaki/nv-websocket-client">[GitHub] nv-websocket-client</a>
  */
 public class WebSocket {
-    //public static boolean isSecure;
-    public static boolean useMask;
+    public static boolean useMask = true;
     private static final long DEFAULT_CLOSE_DELAY = 10 * 1000L;
     private final WebSocketFactory mWebSocketFactory;
     private final SocketConnector mSocketConnector;

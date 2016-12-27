@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +112,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * this use for select foreground in activity chat for search item and hash item
          */
-
+        Log.i("WWW", "1");
         mMessage.view = holder.itemView;
 
         /**
@@ -123,7 +124,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              */
             ((FrameLayout) holder.itemView).setForeground(null);
         }
-
+        Log.i("WWW", "2");
         /**
          * only will be called when message layout is directional-base (e.g. single chat)
          */
@@ -135,11 +136,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-
+        Log.i("WWW", "3");
         if (!mMessage.isTimeOrLogMessage()) {
             AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
         }
-
+        Log.i("WWW", "4");
         /**
          * display 'edited' indicator beside message time if message was edited
          */
@@ -150,7 +151,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.GONE);
             }
         }
-
+        Log.i("WWW", "5");
         /**
          * display user avatar only if chat type is GROUP
          */
@@ -196,16 +197,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
             }
         }
-
+        Log.i("WWW", "6");
         /**
          * set message time
          */
         if (holder.itemView.findViewById(R.id.cslr_txt_time) != null) {
             ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
         }
-
+        Log.i("WWW", "7");
         replyMessageIfNeeded(holder);
+        Log.i("WWW", "8");
         forwardMessageIfNeeded(holder);
+        Log.i("WWW", "9");
 
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
@@ -213,14 +216,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
         realm.close();
-
+        Log.i("WWW", "10");
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         if (messageText != null) {
             if (messageText.getParent() instanceof LinearLayout) {
                 ((LinearLayout.LayoutParams) ((LinearLayout) messageText.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
             }
         }
-
+        Log.i("WWW", "11");
 
         /**
          * show vote layout for channel otherwise hide layout
@@ -240,6 +243,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 hideVote(holder);
             }
         }
+        Log.i("WWW", "12");
     }
 
     /**
@@ -367,6 +371,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.START;
 
         ((CardView) holder.itemView.findViewById(R.id.contentContainer)).setCardBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_receiveColor));
+
         /**
          * add main layout margin to prevent getting match parent completely
          * set to mainContainer not itemView because of selecting item foreground

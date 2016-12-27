@@ -1,5 +1,7 @@
 package com.iGap.response;
 
+import android.util.Log;
+
 import com.google.protobuf.ByteString;
 import com.iGap.AESCrypt;
 import com.iGap.G;
@@ -34,6 +36,7 @@ public class ConnectionSecuringResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+        Log.i("WWWWW", "ConnectionSecuringResponse");
         ProtoConnectionSecuring.ConnectionSecuringResponse.Builder builder = (ProtoConnectionSecuring.ConnectionSecuringResponse.Builder) message;
 
         String publicKey = builder.getPublicKey();

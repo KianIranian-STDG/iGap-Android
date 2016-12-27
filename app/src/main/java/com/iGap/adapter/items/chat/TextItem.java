@@ -2,6 +2,7 @@ package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
 
 import com.iGap.G;
@@ -42,6 +43,15 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
             text = mMessage.messageText;
         }
         setTextIfNeeded(holder.messageText, text);
+        Log.i("QQQ", "Bind");
+        //unbindView(holder);
+    }
+
+    @Override
+    public void unbindView(ViewHolder holder) {
+        super.unbindView(holder);
+        holder.messageText.setText(null);
+        Log.i("QQQ", "Unbind");
     }
 
     @Override

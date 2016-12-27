@@ -98,6 +98,7 @@ public class RequestQueue {
                 WebSocketClient.getInstance().sendBinary(message);
                 Log.i("SOC_REQ", "RequestQueue ********** sendRequest unSecure successful **********");
             }
+            Log.i("WWW", "requestWrapper.actionId : " + requestWrapper.actionId);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

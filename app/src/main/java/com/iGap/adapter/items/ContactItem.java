@@ -2,6 +2,7 @@ package com.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.iGap.G;
@@ -53,7 +54,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-
+        Log.i("WWW", "1");
         if (mContact.isHeader) {
             holder.topLine.setVisibility(View.VISIBLE);
         } else {
@@ -79,6 +80,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         realm.close();
 
         setAvatar(holder);
+        Log.i("WWW", "2****");
     }
 
     private void setAvatar(final ViewHolder holder) {
