@@ -317,7 +317,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.GROUP));
         } else if (mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-            typfaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcon_2.ttf");
+            typfaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
             holder.chatIcon.setTypeface(typfaceIcon);
             holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.CHANNEL));

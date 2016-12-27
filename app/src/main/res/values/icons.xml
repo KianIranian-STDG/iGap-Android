@@ -48,7 +48,7 @@
     <string name="md_exit_app">\ue879</string>
     <string name="md_delete_acc">\ue15d</string>
     <string name="md_go_back_left_arrow">\ue5c4</string>
-    <string name="md_channel_icon">&#x61;</string>
+    <string name="md_channel_icon">&#x62;</string>
     <string name="md_trending_flat">\ue8e4</string>
     <string name="md_arrow_down">\ue5cf</string>
     <string name="md_arrow_up">\ue5ce</string>
@@ -57,7 +57,6 @@
     <string name="md_brush">\ue3ae</string>
     <string name="md_pic_library">\ue413</string>
 
-
-    <string name="fa_eraser">&#xf12d;</string>
+    <string name="md_eraser">&#x61;</string>
 
 </resources>

@@ -155,6 +155,8 @@ import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
+import com.iGap.realm.RealmContacts;
+import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmDraftFile;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmOfflineDelete;
@@ -186,6 +188,7 @@ import com.iGap.request.RequestClientSubscribeToRoom;
 import com.iGap.request.RequestClientUnsubscribeFromRoom;
 import com.iGap.request.RequestGroupDeleteMessage;
 import com.iGap.request.RequestGroupUpdateDraft;
+import com.iGap.request.RequestUserContactsBlock;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -311,6 +314,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     //popular (chat , group , channel)
     private ArrayList<Integer> updateFiled = new ArrayList<>();
     public String title;
+    public String phoneNumber;
     public static String titleStatic;
     private String initialize;
     private String color;
@@ -675,6 +679,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             Realm realm = Realm.getDefaultInstance();
 
+
             //get userId . use in chat set action.
             userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
@@ -699,13 +704,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     chatPeerId = realmChatRoom.getPeerId();
 
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-
                     if (realmRegisteredInfo != null) {
                         title = realmRegisteredInfo.getDisplayName();
                         initialize = realmRegisteredInfo.getInitials();
                         color = realmRegisteredInfo.getColor();
                         lastSeen = realmRegisteredInfo.getLastSeen();
                         userStatus = realmRegisteredInfo.getStatus();
+                        phoneNumber = realmRegisteredInfo.getPhoneNumber();
                     } else {
                         title = realmRoom.getTitle();
                         initialize = realmRoom.getInitials();
@@ -736,7 +741,36 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     userStatus = realmRegisteredInfo.getStatus();
                 }
             }
+
+
+            final ViewGroup vgSpamUser = (ViewGroup) findViewById(R.id.layout_add_contact);
+            if (phoneNumber != null) {
+                RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phoneNumber)).findFirst();
+                if (realmContacts == null && chatType == CHAT) {
+
+                    vgSpamUser.setVisibility(View.VISIBLE);
+                }
+            }
+
+            TextView txtSpamUser = (TextView) findViewById(R.id.chat_txt_addContact);
+            txtSpamUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    new RequestUserContactsBlock().userContactsBlock(userId);
+                }
+            });
+
+
             realm.close();
+
+            TextView txtSpamClose = (TextView) findViewById(R.id.chat_txt_close);
+            txtSpamClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    vgSpamUser.setVisibility(View.GONE);
+                }
+            });
         }
         initComponent();
         initAppbarSelected();
@@ -1390,6 +1424,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 } else {
                     text3.setVisibility(View.GONE);
                     text5.setVisibility(View.GONE);
+
+                    if (chatType == CHANNEL) {
+                        text2.setVisibility(View.GONE);
+                    }
                 }
 
                 final Realm realm = Realm.getDefaultInstance();

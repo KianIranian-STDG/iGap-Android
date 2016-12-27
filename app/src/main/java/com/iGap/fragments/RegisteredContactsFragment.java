@@ -1,13 +1,10 @@
 package com.iGap.fragments;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +23,6 @@ import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
-import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -52,7 +48,6 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,28 +165,18 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             @Override
             public void onClick(View view) {
 
-                int permissionWriteContact =
-                        ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+                FragmentAddContact fragment = FragmentAddContact.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "add_contact");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                                R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .add(R.id.fragmentContainer, fragment)
+                        .commit();
 
-                if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
-                    try {
-                        HelperPermision.getContactPermision(getActivity(), null);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    FragmentAddContact fragment = FragmentAddContact.newInstance();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("TITLE", "add_contact");
-                    fragment.setArguments(bundle);
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                                    R.anim.slide_in_right, R.anim.slide_out_left)
-                            .addToBackStack(null)
-                            .add(R.id.fragmentContainer, fragment)
-                            .commit();
-                }
             }
         });
 

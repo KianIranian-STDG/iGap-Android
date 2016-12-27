@@ -17,7 +17,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -197,7 +196,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         });
 
         TextView btnPrevious = (TextView) findViewById(R.id.ml_btn_Previous_music);
-        btnPrevious.setTypeface(G.flaticon);
         btnPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,7 +204,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         });
 
         btnShuffle = (TextView) findViewById(R.id.ml_btn_shuffel_music);
-        btnShuffle.setTypeface(G.flaticon);
         btnShuffle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,7 +214,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         setShuffleButton();
 
         btnReplay = (TextView) findViewById(R.id.ml_btn_replay_music);
-        btnReplay.setTypeface(G.flaticon);
         btnReplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +223,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         setReplayButton();
 
         btnPlay = (TextView) findViewById(R.id.ml_btn_play_music);
-        btnPlay.setTypeface(G.flaticon);
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -236,7 +231,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         });
 
         TextView btnNextMusic = (TextView) findViewById(R.id.ml_btn_forward_music);
-        btnNextMusic.setTypeface(G.flaticon);
         btnNextMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

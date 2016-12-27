@@ -1,11 +1,12 @@
 package com.iGap.fragments;
 
-import android.content.ContentProviderOperation;
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperAddContact;
+import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
@@ -27,7 +30,10 @@ import com.iGap.module.StructListOfContact;
 import com.iGap.request.RequestUserContactImport;
 import com.iGap.request.RequestUserContactsGetList;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static com.iGap.G.context;
 
 public class FragmentAddContact extends android.support.v4.app.Fragment {
 
@@ -68,7 +74,6 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                 changePage(rippleView);
             }
         });
-
 
 
         txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
@@ -176,6 +181,14 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             }
         });
 
+        G.onContactImport = new OnUserContactImport() {
+            @Override
+            public void onContactImport() {
+                new RequestUserContactsGetList().userContactGetList();
+
+            }
+        };
+
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         rippleSet = (RippleView) view.findViewById(R.id.ac_ripple_set);
         rippleSet.setEnabled(false);
@@ -190,8 +203,18 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                addToContactList(rippleView);
+                                addContactToServer();
+                                final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+                                if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
+                                    try {
+                                        HelperPermision.getContactPermision(getActivity(), null);
 
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addToContactList(rippleView);
+                                }
                             }
                         })
                         .negativeText(R.string.B_cancel)
@@ -199,15 +222,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                G.onContactImport = new OnUserContactImport() {
-                                    @Override
-                                    public void onContactImport() {
-                                        new RequestUserContactsGetList().userContactGetList();
-                                        changePage(rippleView);
-                                    }
-                                };
-
-                                addContactToServer();
+                                dialog.dismiss();
                             }
                         })
                         .show();
@@ -216,7 +231,6 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
     }
 
     private void isEnableSetButton() {
-
 
         if ((edtFirstName.getText().toString().length() > 0 || edtLastName.getText().toString().length() > 0)
                 && edtPhoneNumber.getText().toString().length() > 0) {
@@ -257,53 +271,13 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         if (edtFirstName.getText().toString().length() > 0 || edtLastName.getText().toString().length() > 0) {
             if (edtPhoneNumber.getText().toString().length() > 0) {
 
-                String displayName = edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
-                String phone = edtPhoneNumber.getText().toString();
+                final String phone = edtPhoneNumber.getText().toString();
+                final String firstName = edtFirstName.getText().toString();
+                final String lastName = edtLastName.getText().toString();
+                String displayName = firstName + " " + lastName;
+                HelperAddContact.addContact(displayName, phone);
 
-                ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
-
-                ops.add(ContentProviderOperation.newInsert(
-                        ContactsContract.RawContacts.CONTENT_URI)
-                        .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-                        .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
-                        .build());
-
-                //------------------------------------------------------ Names
-                if (displayName != null) {
-                    ops.add(ContentProviderOperation.newInsert(
-                            ContactsContract.Data.CONTENT_URI)
-                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                            .withValue(ContactsContract.Data.MIMETYPE,
-                                    ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                            .withValue(
-                                    ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
-                                    displayName)
-                            .build());
-                }
-                //------------------------------------------------------ Mobile Number
-                if (phone != null) {
-                    ops.add(ContentProviderOperation.
-                            newInsert(ContactsContract.Data.CONTENT_URI)
-                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                            .withValue(ContactsContract.Data.MIMETYPE,
-                                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                            .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
-                            .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
-                                    ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-                            .build());
-                }
-
-                try {
-                    G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-                    addContactToServer();
-
-
-                    changePage(view);
-                    Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(G.context, getString(R.string.exception) + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                changePage(view);
 
             } else {
                 Toast.makeText(G.context, R.string.please_enter_phone_number, Toast.LENGTH_SHORT).show();

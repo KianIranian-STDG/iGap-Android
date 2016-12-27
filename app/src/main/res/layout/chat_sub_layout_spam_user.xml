@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+    <TextView
+        android:id="@+id/chat_txt_addContact"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Add Contact"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/sp16"
+        android:paddingStart="@dimen/dp20"
+        android:paddingLeft="@dimen/dp20"
+        android:paddingRight="@dimen/dp20"
+        android:paddingEnd="@dimen/dp20"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/toolbar_background"/>
+
+    <com.iGap.module.MaterialDesignTextView
+        android:id="@+id/chat_txt_close"
+        android:textAppearance="@style/TextIconAppearance.all"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/md_close_button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textSize="@dimen/sp22"
+        android:paddingStart="@dimen/dp20"
+        android:paddingLeft="@dimen/dp20"
+        android:paddingRight="@dimen/dp20"
+        android:paddingEnd="@dimen/dp20"
+        android:textColor="@color/red"
+        android:gravity="center_vertical"
+        />
+
+</RelativeLayout>

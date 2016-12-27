@@ -141,7 +141,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/channel_white"
-
             app:backgroundTint="@color/green"
             app:elevation="@dimen/dp6" />
 

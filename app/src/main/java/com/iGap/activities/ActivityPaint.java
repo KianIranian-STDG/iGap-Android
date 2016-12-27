@@ -16,6 +16,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -135,6 +136,8 @@ public class ActivityPaint extends ActivityEnhanced {
                 setPaintClear();
             }
         });
+        Typeface typefaceEraser = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
+        tvEraser.setTypeface(typefaceEraser);
 
         TextView tvPaint = (TextView) findViewById(R.id.textView_paintsize);
         tvPaint.setOnClickListener(new OnClickListener() {

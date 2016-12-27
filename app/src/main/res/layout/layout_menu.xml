@@ -172,7 +172,7 @@
 
                     <TextView
                         android:id="@+id/lm_txt_icon_channel"
-                        fontPath="fonts/MaterialIcon_2.ttf"
+                        fontPath="fonts/iGap_font.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"

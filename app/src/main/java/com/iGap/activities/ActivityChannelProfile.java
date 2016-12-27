@@ -276,7 +276,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         if (role == ChannelChatRole.OWNER) {
             vgSignature.setVisibility(View.VISIBLE);
         }
-
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -348,7 +347,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         //show option item just for owner
         imgPupupMenul.setVisibility(View.GONE);
-        rippleMenu.setVisibility(View.GONE);
+//        rippleMenu.setVisibility(View.GONE);
         /*if (role != ChannelChatRole.OWNER) {
             imgPupupMenul.setVisibility(View.GONE);
             rippleMenu.setVisibility(View.GONE);

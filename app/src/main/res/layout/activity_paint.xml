@@ -111,8 +111,9 @@
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:gravity="center"
-            android:text="@string/fa_eraser"
+            android:text="@string/md_eraser"
             android:textAlignment="gravity"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@color/layout_background_top_connectivity"
             android:textSize="@dimen/sp26" />
 

@@ -472,6 +472,14 @@
 
         </com.iGap.module.MyAppBarLayout>
 
+        <include
+            layout="@layout/chat_sub_layout_spam_user"
+            android:id="@+id/layout_add_contact"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:visibility="gone"
+
+            />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/chl_recycler_view_chat"
@@ -633,6 +641,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             />
+
 
         <android.support.v7.widget.ViewStubCompat
             android:id="@+id/replayLayoutStub"
