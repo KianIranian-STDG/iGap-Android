@@ -60,15 +60,13 @@ public class RealmChannelExtra extends RealmObject {
     }
 
 
-    public static RealmChannelExtra convert(StructChannelExtra structChannelExtra) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmChannelExtra convert(Realm realm, StructChannelExtra structChannelExtra) {
         RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
         realmChannelExtra.setMessageId(structChannelExtra.messageId);
         realmChannelExtra.setSignature(structChannelExtra.signature);
         realmChannelExtra.setThumbsUp(structChannelExtra.thumbsUp);
         realmChannelExtra.setThumbsDown(structChannelExtra.thumbsDown);
         realmChannelExtra.setViewsLabel(structChannelExtra.viewsLabel);
-        realm.close();
-        return null;
+        return realmChannelExtra;
     }
 }

@@ -627,16 +627,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         };
 
-
-        LinearLayout lyt = (LinearLayout) findViewById(R.id.lyt_signature);
-        lyt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-
         TextView txtSignature = (TextView) findViewById(R.id.agp_txt_signature);
         final ToggleButton toggleEnableSignature = (ToggleButton) findViewById(R.id.agp_toggle_signature);
 

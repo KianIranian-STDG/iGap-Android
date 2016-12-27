@@ -8,6 +8,7 @@ import com.iGap.request.RequestChatSetAction;
 import com.iGap.request.RequestGroupSetAction;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import io.realm.Realm;
 
@@ -125,17 +126,21 @@ public class HelperSetAction {
      */
 
     public static void sendCancel(long messageId) {
-        for (StructAction struct : structActions) {
-            if (struct.messageId == messageId) {
+        try {
+            for (StructAction struct : structActions) {
+                if (struct.messageId == messageId) {
 
-                if (struct.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
-                    new RequestGroupSetAction().groupSetAction(struct.roomId, ProtoGlobal.ClientAction.CANCEL, struct.randomKey);
-                } else {
-                    new RequestChatSetAction().chatSetAction(struct.roomId, ProtoGlobal.ClientAction.CANCEL, struct.randomKey);
+                    if (struct.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+                        new RequestGroupSetAction().groupSetAction(struct.roomId, ProtoGlobal.ClientAction.CANCEL, struct.randomKey);
+                    } else {
+                        new RequestChatSetAction().chatSetAction(struct.roomId, ProtoGlobal.ClientAction.CANCEL, struct.randomKey);
+                    }
+
+                    removeStruct(struct.randomKey);
                 }
-
-                removeStruct(struct.randomKey);
             }
+        } catch (ConcurrentModificationException e) {
+            e.printStackTrace();
         }
     }
 

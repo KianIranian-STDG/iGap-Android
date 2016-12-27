@@ -55,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -197,6 +198,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -208,17 +223,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -919,9 +923,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     forwardedMessage.setRoomId(mRoomId);
                     forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                     forwardedMessage.setUserId(userId);
-                    if (messageInfo.channelExtra != null) {
+                   /*if (messageInfo.channelExtra != null) {
                         forwardedMessage.setChannelExtra(RealmChannelExtra.convert(messageInfo.channelExtra));
-                    }
+                    }*/
                 }
             }
         }, new Realm.Transaction.OnSuccess() {
@@ -2745,21 +2749,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
     }
 
-    long latestMessageId = 0;
 
-    //TODO [Saeed Mozaffari] [2016-10-29 10:45 AM] - work on gps
     private void sendMessage(int requestCode, String filePath) {
         Realm realm = Realm.getDefaultInstance();
-        //RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-
         long messageId = SUID.id().get();
-        //        String filePath;
-        //        if (AttachFile.request_code_TAKE_PICTURE == requestCode) {
-        //            filePath = AttachFile.imagePath;
-        //        } else {
-        //            filePath = uri.toString();
-        //            Log.i("YYY", "filePath uri: " + filePath);
-        //        }
         final long updateTime = TimeUtils.currentLocalTime();
         ProtoGlobal.RoomMessageType messageType = null;
         String fileName = null;
@@ -2780,18 +2773,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     messageType = ProtoGlobal.RoomMessageType.IMAGE;
                 }
                 if (userTriesReplay()) {
-                    messageInfo =
-                            new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
             case AttachFile.request_code_TAKE_PICTURE:
-
-                //  filePath = AttachFile.imagePath;
-                //   resizeImage(filePath);
 
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
@@ -2811,21 +2798,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     messageType = ProtoGlobal.RoomMessageType.IMAGE;
                 }
                 if (userTriesReplay()) {
-                    messageInfo =
-                            new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
                 }
 
                 break;
 
             case AttachFile.requestOpenGalleryForImageMultipleSelect:
-                //filePath = getFilePathFromUri(uri);
                 if (!filePath.toLowerCase().endsWith(".gif")) {
-                    //   resizeImage(filePath);
-
                     if (isMessageWrote()) {
                         messageType = IMAGE_TEXT;
                     } else {
@@ -2844,18 +2825,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 imageDimens = AndroidUtils.getImageDimens(filePath);
 
                 if (userTriesReplay()) {
-                    messageInfo =
-                            new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
 
             case AttachFile.requestOpenGalleryForVideoMultipleSelect:
             case AttachFile.request_code_VIDEO_CAPTURED:
-                //filePath = getFilePathFromUri(uri);
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
                 duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath) / 1000;
@@ -2867,16 +2844,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 File videoFile = new File(filePath);
                 String videoFileMime = FileUtils.getMimeType(videoFile);
                 if (userTriesReplay()) {
-                    messageInfo =
-                            new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime,
-                                    filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime);
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_pic_audi:
-                //filePath = getFilePathFromUri(uri);
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
                 duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
@@ -2888,9 +2861,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 String songArtist = AndroidUtils.getAudioArtistName(filePath);
                 long songDuration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
 
-                messageInfo =
-                        StructMessageInfo.buildForAudio(mRoomId, messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath,
-                                songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
+                messageInfo = StructMessageInfo.buildForAudio(mRoomId, messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath, songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_pic_file:
             case AttachFile.request_code_open_document:
@@ -2930,12 +2901,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     messageType = ProtoGlobal.RoomMessageType.IMAGE;
                 }
                 if (userTriesReplay()) {
-                    messageInfo =
-                            new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath,
-                                    updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                            MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
         }
@@ -2947,7 +2915,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         final long finalFileSize = fileSize;
         final int[] finalImageDimens = imageDimens;
 
-        messageInfo.channelExtra = StructChannelExtra.makeDefaultStructure(messageId, mRoomId);
+        //messageInfo.channelExtra = StructChannelExtra.makeDefaultStructure(messageId, mRoomId);
 
         final StructMessageInfo finalMessageInfo = messageInfo;
         final long finalMessageId = messageId;
@@ -2964,6 +2932,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 roomMessage.setUserId(senderID);
                 roomMessage.setCreateTime(updateTime);
 
+                /**
+                 * make channel extra if room is channel
+                 */
+                if (chatType == CHANNEL) {
+                    roomMessage.setChannelExtra(RealmChannelExtra.convert(realm, StructChannelExtra.makeDefaultStructure(finalMessageId, mRoomId)));
+                }
+
                 if (finalMessageType == CONTACT) {
                     RealmRoomMessageContact realmRoomMessageContact = realm.createObject(RealmRoomMessageContact.class, SUID.id().get());
                     realmRoomMessageContact.setFirstName(finalMessageInfo.userInfo.firstName);
@@ -2971,10 +2946,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     realmRoomMessageContact.addPhone(finalMessageInfo.userInfo.phone);
                     roomMessage.setRoomMessageContact(realmRoomMessageContact);
                 }
-
-                // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
-                // in response to a message as replay, so after server done creating replay and
-                // forward options, modify this section and sending message as well.
 
                 if (finalMessageType != CONTACT) {
                     finalMessageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
@@ -2999,7 +2970,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 } else {
                     ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
                     if (finalMessageType == CONTACT) {
-                        // FIXME: 10/5/2016 [Alireza] retrieve last name
                         messageUtil.contact(finalMessageInfo.userInfo.firstName, finalMessageInfo.userInfo.lastName, finalMessageInfo.userInfo.phone);
                     }
                     messageUtil.sendMessage(Long.toString(finalMessageId));
@@ -4141,7 +4111,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
 
-        // please bezar paeen bemoone :D
+        /**
+         * this code should exist in under of other codes in this block
+         */
         new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId)
                 .attachment(uploadStructure.token)
                 .message(uploadStructure.text)

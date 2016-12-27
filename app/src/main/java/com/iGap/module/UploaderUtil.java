@@ -50,7 +50,6 @@ public class UploaderUtil implements OnFileUpload, OnFileUploadStatusResponse {
     public void OnFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection,
                                    String fileHashAsIdentity, ProtoResponse.Response response) {
         try {
-            Log.d("INJARO", "INJARO response:" + response);
             FileUploadStructure fileUploadStructure = getSelectedFile(fileHashAsIdentity);
             // getting bytes from file as server said
             byte[] bytesFromFirst =
