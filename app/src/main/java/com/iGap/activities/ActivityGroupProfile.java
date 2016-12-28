@@ -3220,8 +3220,35 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 //        realm.close();
 
 
-//        Log.i("BBBBB", "start remove:");
-//        for (final RealmMember realmMember : memberList) {
+        Log.i("BBBBB", "start remove:");
+
+
+        ArrayList<Long> b1 = new ArrayList<>();
+        for (RealmMember r : memberList) {
+            b1.add(r.getPeerId());
+        }
+
+        ArrayList<Long> c1 = new ArrayList<>();
+        for (int i = 0; i < memberList.size(); i++) {
+            for (int j = 0; j < serverLiseMember.size(); j++) {
+                if (memberList.get(i).getPeerId() == serverLiseMember.get(j).getUserId()) {
+                    c1.add(memberList.get(i).getPeerId());
+                    break;
+                }
+            }
+        }
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+
+            }
+        });
+
+
 //            for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : serverLiseMember) {
 //                if (realmMember.getPeerId() != member.getUserId()) {
 //
@@ -3241,7 +3268,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 //                    break;
 //                }
 //            }
-//        }
+
     }
 
     //********** Avatars

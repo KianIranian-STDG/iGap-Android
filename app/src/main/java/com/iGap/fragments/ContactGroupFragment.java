@@ -165,8 +165,15 @@ public class ContactGroupFragment extends Fragment {
                         }
                     };
 
-                    for (long peerId : getSelectedList()) {
-                        new RequestChannelAddMember().channelAddMember(roomId, peerId, 0);
+                    if (getSelectedList().size() > 0) {
+                        for (long peerId : getSelectedList()) {
+                            new RequestChannelAddMember().channelAddMember(roomId, peerId, 0);
+                        }
+                    } else {
+                        Intent intent = new Intent(G.context, ActivityChat.class);
+                        intent.putExtra("RoomId", ContactGroupFragment.this.roomId);
+                        startActivity(intent);
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                     }
 
                 }
@@ -333,8 +340,15 @@ public class ContactGroupFragment extends Fragment {
                             }
                         }
                     };
-                    for (long peerId : getSelectedList()) {
-                        new RequestGroupAddMember().groupAddMember(roomId, peerId, 0);
+                    if (getSelectedList().size() > 0) {
+                        for (long peerId : getSelectedList()) {
+                            new RequestGroupAddMember().groupAddMember(roomId, peerId, 0);
+                        }
+                    } else {
+                        Intent intent = new Intent(G.context, ActivityChat.class);
+                        intent.putExtra("RoomId", ContactGroupFragment.this.roomId);
+                        startActivity(intent);
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                     }
                 }
             }
