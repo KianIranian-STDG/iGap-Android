@@ -55,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -197,6 +198,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -208,17 +223,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -416,6 +420,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
                 txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member));
+
             }
         };
 
@@ -722,6 +727,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     groupRole = realmGroupRoom.getRole();
                     groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
+                    Log.i("BBBBBBB", "onCreate: " + groupParticipantsCountLabel);
                 } else if (realmRoom.getType() == CHANNEL) {
 
                     chatType = CHANNEL;
@@ -826,6 +832,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
+                        Log.i("BBBBBBB", "onCreate2222: " + groupParticipantsCountLabel);
                     }
                 }
             });
@@ -1349,6 +1356,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         } else if (chatType == GROUP) {
 
             if (groupParticipantsCountLabel != null) {
+                Log.i("BBBBBBB", "onCreate333: " + groupParticipantsCountLabel);
                 txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member));
             }
         } else if (chatType == CHANNEL) {
@@ -4820,6 +4828,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
+                        Log.i("BBBBBBB", "onCreate444444: " + groupParticipantsCountLabel);
                     }
                 }
             });

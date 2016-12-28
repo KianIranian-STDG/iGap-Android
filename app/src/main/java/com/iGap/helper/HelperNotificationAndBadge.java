@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.RemoteViews;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -36,11 +37,13 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.iGap.G.context;
 
@@ -488,38 +491,38 @@ public class HelperNotificationAndBadge {
                 break;
             case CHANNEL:
 
-//                if (realmRoom != null
-//                        && realmRoom.getChannelRoom() != null
-//                        && realmRoom.getChannelRoom().getRealmNotificationSetting() != null
-//                        && realmRoom.getChannelRoom().getRealmNotificationSetting().getLedColor() != -1) {
-//                    led = realmRoom.getChannelRoom().getRealmNotificationSetting().getLedColor();
-//                } else {
-//                    led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
-//                }
-//
-//                if (realmRoom != null
-//                        && realmRoom.getChannelRoom() != null
-//                        && realmRoom.getChannelRoom().getRealmNotificationSetting() != null
-//                        && realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1
-//                        ) {
-//
-//                    vibrator = realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate();
-//
-//                } else {
-//                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
-//                }
-//
-//                if (realmRoom != null
-//                        && realmRoom.getChannelRoom() != null
-//                        && realmRoom.getChannelRoom().getRealmNotificationSetting() != null
-//                        && realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
-//
-//                    sound = realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound();
-//                } else {
-//                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
-//                }
-//
-//                messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
+                if (realmRoom != null
+                        && realmRoom.getChannelRoom() != null
+                        && realmRoom.getChannelRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getChannelRoom().getRealmNotificationSetting().getLedColor() != -1) {
+                    led = realmRoom.getChannelRoom().getRealmNotificationSetting().getLedColor();
+                } else {
+                    led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
+                }
+
+                if (realmRoom != null
+                        && realmRoom.getChannelRoom() != null
+                        && realmRoom.getChannelRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1
+                        ) {
+
+                    vibrator = realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate();
+
+                } else {
+                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
+                }
+
+                if (realmRoom != null
+                        && realmRoom.getChannelRoom() != null
+                        && realmRoom.getChannelRoom().getRealmNotificationSetting() != null
+                        && realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
+
+                    sound = realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound();
+                } else {
+                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
+                }
+
+                messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
                 break;
         }
 

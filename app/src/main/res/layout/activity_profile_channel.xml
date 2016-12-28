@@ -94,10 +94,7 @@
                                 android:textColor="@color/gray_5c"
                                 android:textSize="@dimen/sp13"
                                 />
-
                         </LinearLayout>
-
-
                     </LinearLayout>
 
 
@@ -155,7 +152,7 @@
                             android:paddingRight="@dimen/dp12">
 
                             <TextView
-                                android:id="@+id/layout_channel_link_title"
+                                android:id="@+id/txt_channel_link_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingEnd="@dimen/dp4"

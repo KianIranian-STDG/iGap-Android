@@ -42,8 +42,8 @@ public class HelperMessageResponse {
                     /**
                      * show notification if this message isn't for another account
                      */
-                    if (roomMessage.getAuthor().getUser().getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
-                        G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, roomId);
+                    if (roomMessage.getAuthor().getUser().getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId() && !roomMessage.getLog().getType().toString().equals("ROOM_CREATED")) {
+                        G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHANNEL, roomId);
                     }
 
                 } else { // i'm the sender
@@ -93,7 +93,7 @@ public class HelperMessageResponse {
              * I already done everything after sending message
              */
             if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst() != null) {
-                G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHAT);
+                G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHANNEL);
             }
         } else {
             /**

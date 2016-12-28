@@ -410,8 +410,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                             bundle.putLong("ROOMID", roomIdR);
                             bundle.putString("INVITE_LINK", inviteLink);
                             bundle.putString("TOKEN", token);
-//                        bundle.putBoolean("AVATAR", existAvatar);
-//                        bundle.putString("PATHAVATAR", pathSaveImage);
                             fragmentCreateChannel.setArguments(bundle);
                             getActivity().getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)

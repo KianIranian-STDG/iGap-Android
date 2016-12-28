@@ -266,8 +266,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         lytListModerator = (LinearLayout) findViewById(R.id.lyt_list_moderator);
         lytDeleteChannel = (LinearLayout) findViewById(R.id.lyt_delete_channel);
         lytNotification = (LinearLayout) findViewById(R.id.lyt_notification);
-
+        final TextView txtLinkTitle = (TextView) findViewById(R.id.txt_channel_link_title);
         ViewGroup vgRootAddMember = (ViewGroup) findViewById(R.id.agp_root_layout_add_member);
+        ViewGroup ltLink = (ViewGroup) findViewById(R.id.layout_channel_link);
+
         if (role == ChannelChatRole.MEMBER) {
             vgRootAddMember.setVisibility(View.GONE);
         }
@@ -275,6 +277,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         ViewGroup vgSignature = (ViewGroup) findViewById(R.id.agp_layout_signature);
         if (role == ChannelChatRole.OWNER) {
             vgSignature.setVisibility(View.VISIBLE);
+        } else {
+            lytChannelName.setEnabled(false);
+            lytChannelDescription.setEnabled(false);
+            ltLink.setEnabled(false);
+
         }
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -526,7 +533,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         txtChannelName.setText(title);
         txtChannelNameInfo.setText(title);
 
-        final TextView txtLinkTitle = (TextView) findViewById(R.id.layout_channel_link_title);
+
         if (isPrivate) {
             txtChannelLink.setText(inviteLink);
             txtLinkTitle.setText(getResources().getString(R.string.channel_link));
@@ -535,7 +542,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             txtChannelLink.setText("iGap.net/" + username);
             txtLinkTitle.setText(getResources().getString(R.string.st_username));
         }
-        ViewGroup ltLink = (ViewGroup) findViewById(R.id.layout_channel_link);
+
 
 
         ltLink.setOnClickListener(new View.OnClickListener() {
@@ -2048,16 +2055,18 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     //*** show delete channel dialog
 
     private void deleteChannel() {
-        String str = context.getString(R.string.channel);
         String deleteText = "";
+        int title;
         if (role.equals(ChannelChatRole.OWNER)) {
             deleteText = context.getString(R.string.do_you_want_delete_this);
+            title = R.string.channel_delete;
         } else {
             deleteText = context.getString(R.string.do_you_want_left_this);
+            title = R.string.channel_left;
         }
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_delete)
-                .content(deleteText + " " + str + " ?")
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(title)
+                .content(deleteText)
                 .positiveText(R.string.B_ok)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override

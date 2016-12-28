@@ -248,7 +248,22 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     protected void onPause() {
 //        int me = setGroupParticipantLable();
         if (ActivityChat.onComplete != null) {
-            ActivityChat.onComplete.complete(true, txtMemberNumber.getText().toString(), "");
+
+            if (!txtMemberNumber.getText().toString().equals(participantsCountLabel)) {
+                ActivityChat.onComplete.complete(true, txtMemberNumber.getText().toString(), "");
+
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                        realmRoom.getGroupRoom().setParticipantsCountLabel(txtMemberNumber.getText().toString());
+                    }
+                });
+                realm.close();
+
+            }
+
         }
 
         LocalBroadcastManager.getInstance(ActivityGroupProfile.this).unregisterReceiver(reciverOnGroupChangeName);
@@ -1244,6 +1259,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 //    memberRealmAndRequest(list, countForShowLastMessage);
 
                 for (int i = 0; i < list.size(); i++) {
+
+                    Log.i("VVVVVVV", "getSelectedList: " + list.size());
                     new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, startMessageId);
                 }
 
@@ -2261,6 +2278,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         G.onGroupAddMember = new OnGroupAddMember() {
             @Override
             public void onGroupAddMember(final Long roomIdUser, final Long UserId) {
+
+                final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
