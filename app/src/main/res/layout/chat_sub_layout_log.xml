@@ -11,13 +11,11 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/dp12"
         android:background="@drawable/recangle_gray_tranceparent"
-        android:maxLines="1"
         android:paddingBottom="@dimen/dp4"
         android:paddingLeft="@dimen/dp24"
         android:paddingRight="@dimen/dp24"
         android:paddingTop="@dimen/dp4"
+        android:singleLine="true"
         android:text="Today"
-        android:textAllCaps="true"
-        android:textColor="@color/colorOldBlack"
-        android:textSize="@dimen/sp10"/>
+        />
 </FrameLayout>

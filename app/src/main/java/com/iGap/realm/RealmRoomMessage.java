@@ -3,6 +3,7 @@ package com.iGap.realm;
 import android.text.format.DateUtils;
 
 import com.iGap.adapter.MessagesAdapter;
+import com.iGap.helper.HelperLogMessage;
 import com.iGap.interfaces.OnActivityChatStart;
 import com.iGap.interfaces.OnActivityMainStart;
 import com.iGap.module.SUID;
@@ -38,6 +39,7 @@ public class RealmRoomMessage extends RealmObject {
     private long userId;
     private RealmRoomMessageLocation location;
     private RealmRoomMessageLog log;
+    private String logMessage;
     private RealmRoomMessageContact roomMessageContact;
     private boolean edited;
     private long createTime;
@@ -173,6 +175,7 @@ public class RealmRoomMessage extends RealmObject {
         }
         if (input.hasLog()) {
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
+            message.setLogMessage(HelperLogMessage.logMessage(input.getAuthor(), input.getLog()));
         }
         if (input.hasContact()) {
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
@@ -276,6 +279,14 @@ public class RealmRoomMessage extends RealmObject {
 
     public void setLog(RealmRoomMessageLog log) {
         this.log = log;
+    }
+
+    public String getLogMessage() {
+        return logMessage;
+    }
+
+    public void setLogMessage(String logMessage) {
+        this.logMessage = logMessage;
     }
 
     public RealmRoomMessageContact getRoomMessageContact() {
