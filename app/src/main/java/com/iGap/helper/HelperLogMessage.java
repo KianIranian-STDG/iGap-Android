@@ -1,5 +1,7 @@
 package com.iGap.helper;
 
+import com.iGap.G;
+import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
@@ -79,26 +81,26 @@ public class HelperLogMessage {
         String message = "";
 
         if (type == USER_JOINED) {
-            message = "user joined";
+            message = G.context.getResources().getString(R.string.USER_JOINED);
         } else if (type == USER_DELETED) {
-            message = "user deleted";
+            message = G.context.getResources().getString(R.string.USER_DELETED);
         } else if (type == ROOM_CREATED) {
-            message = "room created";
+            message = G.context.getResources().getString(R.string.ROOM_CREATED);
         } else if (type == MEMBER_ADDED) {
             //message = "member added";
-            message = "added";
+            message = G.context.getResources().getString(R.string.MEMBER_ADDED);
         } else if (type == MEMBER_KICKED) {
             //message = "member kicked";
-            message = "kicked";
+            message = G.context.getResources().getString(R.string.MEMBER_KICKED);
         } else if (type == MEMBER_LEFT) {
             //message = "member left";
-            message = "left";
+            message = G.context.getResources().getString(R.string.MEMBER_LEFT);
         } else if (type == ROOM_CONVERTED_TO_PUBLIC) {
-            message = "room converted to private";
+            message = G.context.getResources().getString(R.string.ROOM_CONVERTED_TO_PUBLIC);
         } else if (type == ROOM_CONVERTED_TO_PRIVATE) {
-            message = "room converted to private";
+            message = G.context.getResources().getString(R.string.ROOM_CONVERTED_TO_PRIVATE);
         } else if (type == MEMBER_JOINED_BY_INVITE_LINK) {
-            message = "member join by invite link";
+            message = G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK);
         }
 
         return message;

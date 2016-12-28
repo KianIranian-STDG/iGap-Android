@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityShearedMedia;
@@ -36,10 +37,12 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import io.meness.github.messageprogress.MessageProgress;
-import io.realm.Realm;
+
 import java.io.File;
 import java.util.ArrayList;
+
+import io.meness.github.messageprogress.MessageProgress;
+import io.realm.Realm;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -583,7 +586,7 @@ public class AdapterShearedMedia extends RecyclerView.Adapter<RecyclerView.ViewH
             itemView.findViewById(R.id.smsl_ll_video).setVisibility(View.VISIBLE);
 
             TextView txtVideoIcon = (TextView) itemView.findViewById(R.id.smsl_txt_video_icon);
-            txtVideoIcon.setTypeface(G.fontawesome);
+
 
             TextView txtVideoTime = (TextView) itemView.findViewById(R.id.smsl_txt_video_time);
             txtVideoTime.setText(AppUtils.humanReadableDuration(list.get(position).item.getAttachment().getDuration()));

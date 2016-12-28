@@ -752,7 +752,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             final ViewGroup vgSpamUser = (ViewGroup) findViewById(R.id.layout_add_contact);
             if (phoneNumber != null) {
                 RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phoneNumber)).findFirst();
-                if (realmContacts == null && chatType == CHAT) {
+                if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
 
                     vgSpamUser.setVisibility(View.VISIBLE);
                 }

@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
@@ -31,11 +32,13 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import java.util.List;
+
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.util.List;
 
 import static android.view.View.GONE;
 import static com.iGap.G.context;
@@ -48,7 +51,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
     public RealmRoom mInfo;
     public OnComplete mComplete;
     public String action;
-    private Typeface typfaceIcon;
+    private Typeface typeFaceIcon;
 
     public RoomItem setComplete(OnComplete complete) {
         this.mComplete = complete;
@@ -305,17 +308,17 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             }
         }
 
-        holder.chatIcon.setTypeface(typfaceIcon);
+        holder.chatIcon.setTypeface(typeFaceIcon);
         if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
             holder.chatIcon.setVisibility(GONE);
         } else if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
-            typfaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");
-            holder.chatIcon.setTypeface(typfaceIcon);
+            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");
+            holder.chatIcon.setTypeface(typeFaceIcon);
             holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.GROUP));
         } else if (mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-            typfaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
-            holder.chatIcon.setTypeface(typfaceIcon);
+            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
+            holder.chatIcon.setTypeface(typeFaceIcon);
             holder.chatIcon.setVisibility(View.VISIBLE);
             holder.chatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
 
@@ -389,8 +392,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
             mute = (TextView) view.findViewById(R.id.cs_txt_mute);
             messageStatus = (ImageView) view.findViewById(R.id.cslr_txt_tic);
-            lastSeen.setTypeface(G.arial);
-            unreadMessage.setTypeface(G.arial);
+
         }
     }
 

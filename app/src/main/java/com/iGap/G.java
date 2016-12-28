@@ -87,11 +87,9 @@ public class G extends MultiDexApplication {
 
     public static final String CHAT_MESSAGE_TIME = "H:mm";
     public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";
-    public static Typeface neuroplp;
     // list of actionId that can be doing without login
-    public static Typeface arial;
+
     public static Typeface iranSans;
-    public static Typeface fontawesome;
     public static Typeface flaticon;
     public static Context context;
     public static Handler handler;

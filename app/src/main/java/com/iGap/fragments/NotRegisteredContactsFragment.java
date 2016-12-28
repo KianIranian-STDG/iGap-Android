@@ -147,7 +147,6 @@ public class NotRegisteredContactsFragment extends Fragment {
         });
 
         TextView txtMenu = (TextView) view.findViewById(R.id.menu_txtBack);
-        txtMenu.setTypeface(G.fontawesome);
         txtMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

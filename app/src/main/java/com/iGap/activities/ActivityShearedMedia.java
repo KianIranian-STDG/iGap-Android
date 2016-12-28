@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -38,9 +39,7 @@ import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmShearedMedia;
 import com.iGap.realm.RealmShearedMediaFields;
 import com.iGap.request.RequestClientSearchRoomHistory;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -50,6 +49,10 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -250,7 +253,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         });
 
         txtNumberOfSelected = (TextView) findViewById(R.id.asm_txt_number_of_selected);
-        txtNumberOfSelected.setTypeface(G.fontawesome);
+
 
         ll_AppBarSelected = (LinearLayout) findViewById(R.id.asm_ll_appbar_selelected);
     }
