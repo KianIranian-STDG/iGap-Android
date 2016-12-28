@@ -6,6 +6,7 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import io.realm.Realm;
 
@@ -53,7 +54,10 @@ public class HelperGetAction {
         } else {
             int count = 0;
             StructAction latestStruct = null;
-            for (StructAction struct : structActions) {
+            //for (StructAction struct : structActions) {
+            Iterator<StructAction> iterator1 = structActions.iterator();
+            while (iterator1.hasNext()) {
+                StructAction struct = iterator1.next();
                 if (struct.roomId == roomId && struct.action == latestAction) {
                     latestStruct = struct;
                     count++;
@@ -80,7 +84,10 @@ public class HelperGetAction {
 
                 Realm realm = Realm.getDefaultInstance();
 
-                for (StructAction struct : structActions) {
+                //for (StructAction struct : structActions) {
+                Iterator<StructAction> iterator = structActions.iterator();
+                while (iterator.hasNext()) {
+                    StructAction struct = iterator.next();
                     if (struct.action == latestAction) {
                         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, struct.userId).findFirst();
                         if (realmRegisteredInfo != null) {
@@ -112,6 +119,10 @@ public class HelperGetAction {
      */
 
     private static ProtoGlobal.ClientAction getLatestAction(long roomId) {
+        //use this commented code
+        /*Iterator<StructAction> iterator = structActions.iterator();
+        while (iterator.hasNext()) {
+            StructAction struct = iterator.next();*/
         for (int i = (structActions.size() - 1); i >= 0; i--) {
             if (structActions.get(i).roomId == roomId) {
                 return structActions.get(i).action;
@@ -129,7 +140,10 @@ public class HelperGetAction {
      */
 
     public static void fillOrClearAction(long roomId, long userId, ProtoGlobal.ClientAction action) {
-
+        //use this commented code
+       /* Iterator<StructAction> iterator = structActions.iterator();
+        while (iterator.hasNext()) {
+            StructAction struct = iterator.next();*/
         if (action == ProtoGlobal.ClientAction.CANCEL) {
             for (int i = 0; i < structActions.size(); i++) {
                 if (structActions.get(i).roomId == roomId && structActions.get(i).userId == userId) {

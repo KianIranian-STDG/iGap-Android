@@ -4027,10 +4027,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     mAdapter.clear();
                     switchAddItem(getLocalMessages(), true);
 
-                    if (count < recyclerView.getAdapter().getItemCount()) recyclerView.scrollToPosition(count);
+                    if (count < recyclerView.getAdapter().getItemCount())
+                        recyclerView.scrollToPosition(count);
 
                     Log.e("ddd", mAdapter.getAdapterItemCount() + "   " + recyclerView.getAdapter().getItemCount());
-
 
 
                 }
@@ -4532,7 +4532,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         //&& new File(latestUri.toString()).exists()
-        if ((latestUri != null && new File(filePath).exists()) || (!latestFilePath.isEmpty() && new File(latestFilePath).exists())) {
+        if ((latestUri != null && new File(filePath).exists()) || (latestFilePath != null && !latestFilePath.isEmpty() && new File(latestFilePath).exists())) {
             showDraftLayout();
             RealmRoomDraft draft = realmRoom.getDraft();
 
@@ -4694,7 +4694,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
                         // edit message
                         // put message text to EditText
-                        if (!message.messageText.isEmpty()) {
+                        if (message.messageText != null && !message.messageText.isEmpty()) {
                             edtChat.setText(message.messageText);
                             edtChat.setSelection(0, edtChat.getText().length());
                             // put message object to edtChat's tag to obtain it later and

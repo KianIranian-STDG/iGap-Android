@@ -4,6 +4,7 @@ import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -27,6 +28,14 @@ public class RealmRoom extends RealmObject {
     private String sharedMediaCount = "";
     private String actionState;
     private boolean isDeleted = false;
+
+    public RealmRoom() {
+
+    }
+
+    public RealmRoom(long id) {
+        this.id = id;
+    }
 
     public long getUpdatedTime() {
         if (getLastMessage() != null && getLastMessage().isValid()) {

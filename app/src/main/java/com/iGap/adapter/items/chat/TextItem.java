@@ -47,12 +47,6 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         //unbindView(holder);
     }
 
-    @Override
-    public void unbindView(ViewHolder holder) {
-        super.unbindView(holder);
-        holder.messageText.setText(null);
-        Log.i("QQQ", "Unbind");
-    }
 
     @Override
     protected void voteAction(ViewHolder holder) {

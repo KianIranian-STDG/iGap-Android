@@ -374,12 +374,11 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.createObject(RealmRoom.class);
+                RealmRoom realmRoom = realm.createObject(RealmRoom.class, roomId);
 
                 RealmChannelRoom realmChannelRoom = realm.createObject(RealmChannelRoom.class);
                 realmChannelRoom.setInviteLink(inviteLink);
 
-                realmRoom.setId(roomId);
                 realmRoom.setChannelRoom(realmChannelRoom);
             }
         });
@@ -876,7 +875,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (new File(imagePath).exists()) {
+                if (imagePath != null && new File(imagePath).exists()) {
                     imgCircleImageView.setPadding(0, 0, 0, 0);
                     ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
                 } else {
