@@ -1,15 +1,13 @@
 package com.iGap.response;
 
+import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserAvatarGetList;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
-import com.iGap.realm.RealmRegisteredInfo;
-import com.iGap.realm.RealmRegisteredInfoFields;
-
+import com.iGap.realm.RealmAvatarFields;
 import io.realm.Realm;
-import io.realm.RealmList;
 
 public class UserAvatarGetListResponse extends MessageHandler {
 
@@ -29,26 +27,23 @@ public class UserAvatarGetListResponse extends MessageHandler {
         super.handler();
 
         Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class)
-                .equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(identity))
-                .findFirst();
-        final RealmList<RealmAvatar> realmAvatars = realmRegisteredInfo.getAvatars();
+        final long uesrId = Long.parseLong(identity);
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder userAvatarGetListResponse =
-                        (ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder) message;
+
+                // delete all avatar in roomid
+                realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, uesrId).findAll().deleteAllFromRealm();
+
+                ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder userAvatarGetListResponse = (ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder) message;
+
+                // add all list to realm avatar
                 for (ProtoGlobal.Avatar avatar : userAvatarGetListResponse.getAvatarList()) {
-
-                    RealmAvatar realmAvatar = RealmAvatar.convert(Long.parseLong(identity),
-                            RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
-
-                    if (!realmAvatars.contains(realmAvatar)) {
-                        realmAvatars.add(realmAvatar);
-
-                    }
-
+                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
+                    realmAvatar.setOwnerId(uesrId);
+                    realmAvatar.setUid(SUID.id().get());
+                    realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
                 }
             }
         });

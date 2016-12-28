@@ -81,7 +81,8 @@ public class FragmentBlockedUser extends Fragment {
                 });
 
                 Bundle bundle = new Bundle();
-                bundle.putBoolean("SINGLE_SELECT", true);
+                // if you want to have  single select in select list
+                //  bundle.putBoolean("SINGLE_SELECT", true);
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager()
                     .beginTransaction()

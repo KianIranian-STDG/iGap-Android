@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -27,15 +26,13 @@ import com.iGap.activities.ActivityMediaPlayer;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import java.io.File;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 
 /**
  * Created by android3 on 10/2/2016.
@@ -628,21 +625,22 @@ public class MusicPlayer {
             }
         }, 0, 1000);
 
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
+        if (amoungToupdate > 0) {
+            mTimer = new Timer();
+            mTimer.schedule(new TimerTask() {
 
-            @Override
-            public void run() {
+                @Override public void run() {
 
-                if (musicProgress < 100) {
-                    musicProgress++;
-                } else {
-                    stopTimer();
+                    if (musicProgress < 100) {
+                        musicProgress++;
+                    } else {
+                        stopTimer();
+                    }
                 }
-            }
 
-            ;
-        }, 0, (int) amoungToupdate);
+                ;
+            }, 0, (int) amoungToupdate);
+        }
     }
 
     private static void stopTimer() {

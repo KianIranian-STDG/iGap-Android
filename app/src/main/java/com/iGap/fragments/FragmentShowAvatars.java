@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -31,12 +30,9 @@ import com.iGap.interfaces.OnGroupAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.OnComplete;
-import com.iGap.module.SUID;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
-import com.iGap.realm.RealmChannelRoom;
-import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
@@ -45,14 +41,16 @@ import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChannelAvatarDelete;
+import com.iGap.request.RequestChannelAvatarGetList;
 import com.iGap.request.RequestGroupAvatarDelete;
+import com.iGap.request.RequestGroupAvatarGetList;
 import com.iGap.request.RequestUserAvatarDelete;
-
-import java.io.File;
-
+import com.iGap.request.RequestUserAvatarGetList;
 import io.realm.Realm;
-import io.realm.RealmList;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
+import java.io.File;
 
 import static com.iGap.R.id.count;
 
@@ -76,11 +74,9 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
     public static View appBarLayout;
 
-    private int type;
-    private final int SETTING = 0;
-    private final int CONTACT = 1;
-    private final int GROUP = 2;
-    private long userId;
+    private Realm mRealm;
+    private RealmResults<RealmAvatar> avatarList;
+
 
     private GroupChatRole roleGroup;
     private ChannelChatRole roleChannel;
@@ -110,6 +106,15 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             return value;
         }
     }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        if (avatarList != null) avatarList.removeChangeListeners();
+
+        if (mRealm != null) mRealm.close();
+    }
+
 
     public static FragmentShowAvatars newInstance(long peerId, From from) {
         Bundle args = new Bundle();
@@ -167,6 +172,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mRealm = Realm.getDefaultInstance();
+
         // init fields
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mCount = (TextView) view.findViewById(count);
@@ -219,16 +226,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                     }
                 });
 
-
-        if (from == From.chat) {
-            fillListChatAvatar();
-        } else if (from == From.setting) {
-            fillListChatAvatar();
-        } else if (from == From.group) {
-            fillListGroupAvatar();
-        } else if (from == From.channel) {
-            fillListChannelAvatar();
-        }
+        fillListAvatar(from);
 
 
         if (mAdapter.getAdapterItemCount() > 0) {
@@ -238,8 +236,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setItemViewCacheSize(20);
             mRecyclerView.setDrawingCacheEnabled(true);
-            LinearLayoutManager layoutManager =
-                    new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(layoutManager);
             mRecyclerView.setAdapter(mAdapter);
 
@@ -268,79 +265,109 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
     }
 
-    private void fillListChatAvatar() {
+    private void fillListAvatar(From from) {
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo user = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mPeerId).findFirst();
-        if (user != null) {
-            // user exists in DB
-            final RealmList<RealmAvatar> userAvatars = user.getAvatars();
+        boolean isRoomExist = false;
 
-            long identifier = SUID.id().get();
-
-            for (int i = userAvatars.size(); i > 0; i--) {
-
-                RealmAvatar avatar = userAvatars.get((i - 1));
-                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
-                identifier++;
-            }
+        switch (from) {
+            case chat:
+            case setting:
+                RealmRegisteredInfo user = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mPeerId).findFirst();
+                if (user != null) {
+                    new RequestUserAvatarGetList().userAddGetList(mPeerId);
+                    isRoomExist = true;
+                }
+                break;
+            case group:
+                RealmRoom roomGroup = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                if (roomGroup != null) {
+                    new RequestGroupAvatarGetList().groupAvatarGetList(mPeerId);
+                    isRoomExist = true;
+                    roleGroup = roomGroup.getGroupRoom().getRole();
+                }
+                break;
+            case channel:
+                RealmRoom roomChannel = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                if (roomChannel != null) {
+                    new RequestChannelAvatarGetList().channelAvatarGetList(mPeerId);
+                    isRoomExist = true;
+                    roleChannel = roomChannel.getChannelRoom().getRole();
+                }
+                break;
         }
 
-        realm.close();
-    }
+        if (isRoomExist) {
 
-    private void fillListGroupAvatar() {
+            avatarList = mRealm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING);
+            avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
+                @Override public void onChange(RealmResults<RealmAvatar> element) {
+                    mAdapter.clear();
+                    fillAdapterChat(avatarList);
 
-        //group info
+                    mCount.setText(String.format(getString(R.string.d_of_d), curerntItemPosition > 0 ? curerntItemPosition : 1, mAdapter.getAdapterItemCount()));
+                }
+            });
 
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
-        if (room != null) {
-            // user exists in DB
-
-            RealmResults<RealmAvatar> userAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll();
-
-            long identifier = SUID.id().get();
-            for (RealmAvatar avatar : userAvatars) {
-                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
-                identifier++;
-            }
+            fillAdapterChat(avatarList);
         }
 
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
-        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-        roleGroup = realmGroupRoom.getRole();
-
-        realm.close();
     }
 
+    private void fillAdapterChat(RealmResults<RealmAvatar> avatarList) {
 
-    private void fillListChannelAvatar() {
-
-        //group info
-
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
-        if (room != null) {
-            // user exists in DB
-
-            RealmResults<RealmAvatar> userAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll();
-
-            long identifier = SUID.id().get();
-            for (RealmAvatar avatar : userAvatars) {
-                mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
-                identifier++;
-            }
+        for (int i = 0; i < avatarList.size(); i++) {
+            RealmAvatar avatar = avatarList.get((i));
+            mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(100 + i));
         }
-
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
-        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-        roleChannel = realmChannelRoom.getRole();
-
-        realm.close();
     }
+
+    //private void fillListGroupAvatar() {
+    //    //group info
+    //    Realm realm = Realm.getDefaultInstance();
+    //    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+    //    if (room != null) {
+    //        // user exists in DB
+    //        RealmResults<RealmAvatar> userAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll();
+    //        long identifier = SUID.id().get();
+    //        for (RealmAvatar avatar : userAvatars) {
+    //            mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
+    //            identifier++;
+    //        }
+    //    }
+    //
+    //    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+    //    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+    //    roleGroup = realmGroupRoom.getRole();
+    //
+    //    realm.close();
+    //}
+    //
+    //
+    //private void fillListChannelAvatar() {
+    //
+    //    //group info
+    //
+    //
+    //    Realm realm = Realm.getDefaultInstance();
+    //    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+    //    if (room != null) {
+    //        // user exists in DB
+    //
+    //        RealmResults<RealmAvatar> userAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll();
+    //
+    //        long identifier = SUID.id().get();
+    //        for (RealmAvatar avatar : userAvatars) {
+    //            mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
+    //            identifier++;
+    //        }
+    //    }
+    //
+    //    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+    //    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+    //    roleChannel = realmChannelRoom.getRole();
+    //
+    //    realm.close();
+    //}
 
 
 

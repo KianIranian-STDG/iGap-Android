@@ -44,7 +44,6 @@ import com.iGap.helper.HelperAvatar;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatGetRoom;
-import com.iGap.interfaces.OnUserAvatarGetList;
 import com.iGap.interfaces.OnUserContactDelete;
 import com.iGap.interfaces.OnUserContactEdit;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -75,7 +74,6 @@ import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatGetRoom;
-import com.iGap.request.RequestUserAvatarGetList;
 import com.iGap.request.RequestUserContactImport;
 import com.iGap.request.RequestUserContactsBlock;
 import com.iGap.request.RequestUserContactsDelete;
@@ -833,7 +831,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         realm.close();
         getUserInfo(); // client should send request for get user info because need to update user online timing
         setUserStatus(userStatus, lastSeen);
-        getAvatarList();
+
         setAvatar();
     }
 
@@ -1136,21 +1134,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         });
     }
 
-    private void getAvatarList() {
-        G.onUserAvatarGetList = new OnUserAvatarGetList() {
-            @Override
-            public void onUserAvatarGetList() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
-            }
-        };
-
-        new RequestUserAvatarGetList().userAddGetList(userId);
-    }
 
     private void blockOrUnblockUser() {
 

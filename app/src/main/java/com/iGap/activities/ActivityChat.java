@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -198,20 +197,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -223,6 +208,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -410,6 +406,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     protected void onResume() {
         super.onResume();
+
 
         chatTypeStatic = chatType;
         mRoomIdStatic = mRoomId;
@@ -2334,12 +2331,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("ShowImageMessage");
 
         if (fragment != null) {
+
             getSupportFragmentManager().beginTransaction().remove(fragment).commit();
 
             for (int i = 0; i < updateFiled.size(); i++) {
                 mAdapter.notifyItemChanged(updateFiled.get(i));
             }
             updateFiled.clear();
+
+            G.onFileDownloadResponse = this;
+
         } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
         } else if (boomMenuButton.isOpen()) {
@@ -3445,17 +3446,28 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void showImage(final StructMessageInfo messageInfo) {
 
+        // for gone appbare
         FragmentShowImageMessages.appBarLayout = appBarLayout;
 
+        // when image download in fragment show imaga after finish update ui in chat layout
         FragmentShowImageMessages.onDownloadComplet = new OnComplete() {
             @Override
             public void complete(boolean result, String token, String MessageTow) {
 
                 for (int i = mAdapter.getAdapterItemCount(); i > 0; i--) {
 
-                    if (mAdapter.getAdapterItem(i - 1).mMessage.attachment.token.equals(token)) {
-                        updateFiled.add(i - 1);
-                        break;
+                    try {
+
+                        String _token = "";
+                        StructMessageInfo _smi = mAdapter.getAdapterItem(i - 1).mMessage;
+                        _token = _smi.forwardedFrom != null ? _smi.forwardedFrom.getAttachment().getToken() : _smi.attachment.token;
+
+                        if (_token.equals(token)) {
+                            updateFiled.add(i - 1);
+                            break;
+                        }
+                    } catch (NullPointerException e) {
+                        Log.e("dddd", " activity chat   FragmentShowImageMessages.onDownloadComplet   " + e);
                     }
                 }
             }

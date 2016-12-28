@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -142,7 +143,7 @@ public class ShowCustomList extends Fragment {
                     getActivity().getSupportFragmentManager().popBackStack();
                 }
 
-//                refreshView();
+                refreshView();
 
                 return false;
             }
@@ -157,17 +158,19 @@ public class ShowCustomList extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if (charSequence.length() > sizeTextEdittext) {
-                    String s = edtSearch.getText()
-                            .toString()
-                            .substring(sizeTextEdittext, charSequence.length());
-                    itemAdapter.filter(s);
-                } else {
-                    itemAdapter.filter("");
-                }
+                Log.e("ddd", charSequence + "  " + i + "   " + i1 + "   " + i2);
 
-                edtSearch.setSelection(edtSearch.getText().length());
-                //  fastAdapter.notifyDataSetChanged();
+                if (charSequence.length() + i + i1 + i2 > 0) itemAdapter.filter(charSequence);
+
+                //if (charSequence.length() > sizeTextEdittext) {
+                //    String s = edtSearch.getText().toString().substring(sizeTextEdittext, charSequence.length());
+                //    itemAdapter.filter(s);
+                //} else {
+                //    itemAdapter.filter("");
+                //}
+                //
+                //edtSearch.setSelection(edtSearch.getText().length());
+                //fastAdapter.notifyDataSetChanged();
 
             }
 
@@ -310,8 +313,8 @@ public class ShowCustomList extends Fragment {
         }
 
         txtNumberOfMember.setText(selectedNumber + " / " + size);
-        sizeTextEdittext = textString.length();
-        edtSearch.setText(textString);
+        // sizeTextEdittext = textString.length();
+        edtSearch.setText("");
     }
 
     private ArrayList<StructContactInfo> getSelectedList() {
