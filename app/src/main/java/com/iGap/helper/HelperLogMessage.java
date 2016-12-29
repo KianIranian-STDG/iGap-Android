@@ -69,6 +69,7 @@ public class HelperLogMessage {
         /**
          * final message
          */
+
         finalMessage = authorName + " " + logMessage + " " + targetName;
 
         realm.close();

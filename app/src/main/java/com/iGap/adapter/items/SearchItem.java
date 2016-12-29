@@ -115,7 +115,6 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             name = (CustomTextViewMedium) view.findViewById(R.id.sfsl_txt_contact_name);
             lastSeen = (EmojiTextView) view.findViewById(R.id.sfsl_txt_contact_lastseen);
             txtIcon = (TextView) view.findViewById(R.id.sfsl_txt_icon);
-            txtIcon.setTypeface(G.flaticon);
             txtTime = (TextView) view.findViewById(R.id.sfsl_txt_time);
         }
     }

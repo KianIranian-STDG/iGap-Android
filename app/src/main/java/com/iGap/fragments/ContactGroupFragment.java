@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -148,7 +149,8 @@ public class ContactGroupFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-
+                                    countAddMemberResponse++;
+                                    Log.i("CCCCCC", "onError: ");
                                 }
                             });
                         }
@@ -159,14 +161,15 @@ public class ContactGroupFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-
+                                    Log.i("CCCCCC", "onTimeOut: ");
                                 }
                             });
                         }
                     };
 
-                    if (getSelectedList().size() > 0) {
-                        for (long peerId : getSelectedList()) {
+                    ArrayList<Long> list = getSelectedList();
+                    if (list.size() > 0) {
+                        for (long peerId : list) {
                             new RequestChannelAddMember().channelAddMember(roomId, peerId, 0);
                         }
                     } else {
@@ -208,8 +211,8 @@ public class ContactGroupFragment extends Fragment {
 
                         @Override
                         public void onError(int majorCode, int minorCode) {
-
-                            G.onGroupAddMember.onGroupAddMember(-1l, -1l);
+                            countAddMemberResponse++;
+//                            G.onGroupAddMember.onGroupAddMember(-1l, -1l);
 
                             if (majorCode == 302 && minorCode == 1) {
                                 getActivity().runOnUiThread(new Runnable() {
@@ -340,8 +343,13 @@ public class ContactGroupFragment extends Fragment {
                             }
                         }
                     };
-                    if (getSelectedList().size() > 0) {
-                        for (long peerId : getSelectedList()) {
+                    /**
+                     * request add member for group
+                     *
+                     */
+                    ArrayList<Long> list = getSelectedList();
+                    if (list.size() > 0) {
+                        for (long peerId : list) {
                             new RequestGroupAddMember().groupAddMember(roomId, peerId, 0);
                         }
                     } else {
@@ -523,7 +531,6 @@ public class ContactGroupFragment extends Fragment {
     }
 
     private ArrayList<Long> getSelectedList() {
-
         ArrayList<Long> list = new ArrayList<>();
 
         for (int i = 0; i < contacts.size(); i++) {

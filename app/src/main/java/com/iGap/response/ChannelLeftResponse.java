@@ -12,8 +12,6 @@ import com.iGap.realm.RealmRoomMessageFields;
 
 import io.realm.Realm;
 
-import static com.iGap.module.MusicPlayer.roomId;
-
 public class ChannelLeftResponse extends MessageHandler {
 
     public int actionId;
@@ -39,18 +37,18 @@ public class ChannelLeftResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
                 if (realmRoom != null) {
                     realmRoom.deleteFromRealm();
                 }
 
                 if (!builder.getResponse().getId().isEmpty()) { // if own send request for left
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findFirst();
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findFirst();
                     if (realmRoomMessage != null) {
                         realmRoomMessage.deleteFromRealm();
                     }
 
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
                     if (realmClientCondition != null) {
                         realmClientCondition.deleteFromRealm();
                     }

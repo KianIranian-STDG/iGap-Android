@@ -124,12 +124,12 @@
 
 
             <LinearLayout
-                android:layoutDirection="ltr"
                 android:id="@+id/int_layout_test"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="-5dp"
+                android:layoutDirection="ltr"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -166,11 +166,11 @@
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/dp4"
                 android:paddingLeft="@dimen/dp28"
-                android:textStyle="bold"
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_2_introduce_page1"
                 android:textColor="@color/text_line1_igap_dark"
                 android:textSize="@dimen/sp18"
+                android:textStyle="bold"
                 android:visibility="gone"/>
 
             <TextView
@@ -186,7 +186,7 @@
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_3_introduce_page1"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp15"
+                android:textSize="@dimen/sp14"
                 android:visibility="gone"/>
         </LinearLayout>
         <!--page 1-->
@@ -214,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp12"
+                android:layout_marginTop="@dimen/dp4"
                 android:clickable="false"
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/dp4"
@@ -222,7 +222,7 @@
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_2_introduce_page2"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp15"
+                android:textSize="@dimen/sp14"
                 android:visibility="gone"/>
 
 
@@ -240,11 +240,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textStyle="bold"
                 android:layout_marginTop="@dimen/dp4"
                 android:text="@string/text_line_1_introduce_page3"
                 android:textColor="@color/text_line1_igap_dark"
                 android:textSize="@dimen/sp18"
+                android:textStyle="bold"
                 android:visibility="gone"/>
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -252,7 +252,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp8"
                 android:clickable="false"
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/dp4"
@@ -260,7 +260,7 @@
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_2_introduce_page3"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp15"
+                android:textSize="@dimen/sp14"
                 android:visibility="gone"/>
 
 
@@ -276,12 +276,12 @@
                 android:id="@+id/int_txt_p4_l1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp4"
                 android:text="@string/text_line_1_introduce_page4"
                 android:textColor="@color/text_line1_igap_dark"
                 android:textSize="@dimen/sp18"
+                android:textStyle="bold"
                 android:visibility="gone"/>
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -289,7 +289,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp8"
                 android:clickable="false"
                 android:gravity="center"
                 android:lineSpacingExtra="@dimen/dp4"
@@ -297,7 +297,7 @@
                 android:paddingRight="@dimen/dp24"
                 android:text="@string/text_line_2_introduce_page4"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp15"
+                android:textSize="@dimen/sp14"
                 android:visibility="gone"/>
 
         </LinearLayout>
@@ -313,11 +313,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp12"
-                android:textStyle="bold"
+                android:layout_marginTop="@dimen/dp4"
                 android:text="@string/text_line_1_introduce_page5"
                 android:textColor="@color/text_line1_igap_dark"
                 android:textSize="@dimen/sp18"
+                android:textStyle="bold"
                 android:visibility="gone"/>
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -333,18 +333,18 @@
                 android:paddingRight="@dimen/dp28"
                 android:text="@string/text_line_2_introduce_page5"
                 android:textColor="@color/text_line2_lc__dark"
-                android:textSize="@dimen/sp15"
+                android:textSize="@dimen/sp14"
                 android:visibility="gone"/>
 
         </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
-        android:layoutDirection="ltr"
         android:id="@+id/int_layoutParentCircleImage"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_below="@+id/int_layout_1"
+        android:layoutDirection="ltr"
         app:layout_heightPercent="8%"
         >
 
@@ -369,11 +369,11 @@
         android:layout_above="@+id/int_layoutParentCircleImage"
         android:layout_centerInParent="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/dp12"
+        android:layout_marginBottom="@dimen/dp4"
         android:background="@drawable/int_button_interduce"
         android:gravity="center"
-        android:textAllCaps="false"
         android:text="@string/btn_start_page5"
+        android:textAllCaps="false"
         android:textColor="@color/txt_start_page5"
         android:textSize="@dimen/sp16"
         android:visibility="gone"/>
@@ -383,8 +383,8 @@
         android:id="@+id/int_txt_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:layout_alignTop="@+id/int_layoutParentCircleImage"
         android:layout_marginTop="@dimen/dp4"
         android:background="@color/toolbar_background"
