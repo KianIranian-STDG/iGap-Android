@@ -133,8 +133,8 @@
                 android:layout_alignParentStart="true"
                 android:foregroundGravity="center"
                 android:gravity="center"
-                app:errorTextAppearance="@style/error_appearance"
-                app:hintTextAppearance="@color/red">
+                app:counterTextAppearance="@style/remove_error_appearance"
+                app:hintTextAppearance="@style/remove_error_appearance">
 
                 <com.iGap.module.EditTextAdjustPan
                     android:id="@+id/pu_edt_nikeName"
@@ -148,6 +148,7 @@
                     android:maxLines="1"
                     android:minWidth="104dp"
                     android:singleLine="true"
+                    app:errorTextAppearance="@style/remove_error_appearance"
                     android:textColor="@color/black_register"
                     android:textColorHint="@color/pu_edtHintText"
                     android:textSize="@dimen/sp14"/>

@@ -68,6 +68,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
     @Override public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        G.makeFolder();
 
         HelperPermision.onDenyStorage = new OnGetPermision() {
             @Override public void Allow() throws RuntimeException {

@@ -62,11 +62,11 @@
                         app:rv_ripplePadding="5dp">
 
                         <com.iGap.module.MaterialDesignTextView
-                            android:textAppearance="@style/TextIconAppearance_toolbar"
                             android:layout_width="@dimen/dp52"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:text="@string/md_back_arrow"
+                            android:textAppearance="@style/TextIconAppearance_toolbar"
                             android:textColor="@color/whit_background"
                             />
                     </com.iGap.libs.rippleeffect.RippleView>
@@ -83,17 +83,18 @@
                         app:rv_ripplePadding="5dp">
 
                         <com.iGap.module.MaterialDesignTextView
-                            android:textAppearance="@style/TextIconAppearance_toolbar"
                             android:layout_width="@dimen/dp52"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:text="@string/md_show_more_button"
+                            android:textAppearance="@style/TextIconAppearance_toolbar"
                             android:textColor="@color/whit_background"
                             />
 
                     </com.iGap.libs.rippleeffect.RippleView>
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
+
             <LinearLayout
                 android:id="@+id/st_parentLayoutCircleImage"
                 android:layout_width="wrap_content"
@@ -130,9 +131,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/dp4"
-                    android:text="AM"
                     android:maxLength="24"
                     android:singleLine="true"
+                    android:text="AM"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/sp15"
                     android:textStyle="bold"/>
@@ -481,16 +482,21 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
-                        android:id="@+id/st_toggle_dataShams"
-                        android:layout_width="@dimen/dp44"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
+                            android:id="@+id/st_toggle_dataShams"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/st_txt_st_toggle_dataShams"
@@ -647,8 +653,24 @@
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16">
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true">
 
+                        <ToggleButton
+                            android:id="@+id/stsp_toggle_crop"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/stsp_txt_crop"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
@@ -657,16 +679,6 @@
                         android:textSize="@dimen/sp18"
                         android:textStyle="normal"/>
 
-                    <ToggleButton
-                        android:id="@+id/stsp_toggle_crop"
-                        android:layout_width="@dimen/dp44"
-                        android:layout_height="@dimen/dp40"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
 
                 </RelativeLayout>
 
@@ -707,16 +719,22 @@
                     android:paddingStart="@dimen/dp16"
                     android:visibility="gone">
 
-                    <ToggleButton
-                        android:id="@+id/st_toggle_inAppBrowser"
-                        android:layout_width="@dimen/dp44"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
+                            android:id="@+id/st_toggle_inAppBrowser"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/st_txt_inAppBrowser"
@@ -751,17 +769,21 @@
                     android:paddingStart="@dimen/dp16"
                     android:visibility="gone">
 
-
-                    <ToggleButton
-                        android:id="@+id/st_toggle_sendEnter"
-                        android:layout_width="@dimen/dp44"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
+                            android:id="@+id/st_toggle_sendEnter"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
 
@@ -895,16 +917,21 @@
                     android:paddingStart="@dimen/dp16"
                     android:visibility="gone">
 
-                    <ToggleButton
-                        android:id="@+id/st_toggle_enableAnimation"
-                        android:layout_width="@dimen/dp44"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
+                            android:id="@+id/st_toggle_enableAnimation"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/st_txt_enableAnimation"
@@ -939,16 +966,21 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
-                        android:id="@+id/st_toggle_autoGif"
-                        android:layout_width="@dimen/dp44"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
+                            android:id="@+id/st_toggle_autoGif"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/st_txt_autoGif"
@@ -982,17 +1014,21 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
                         android:id="@+id/st_toggle_saveGallery"
                         android:layout_width="@dimen/dp44"
                         android:layout_height="@dimen/dp40"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
                         android:textOff=""
                         android:textOn=""/>
-
+                    </LinearLayout>
                     <TextView
                         android:id="@+id/st_txt_saveGallery"
                         fontPath="fonts/IRANSansMobile.ttf"

@@ -101,7 +101,6 @@ import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
-import static com.iGap.R.id.st_layoutParent;
 import static com.iGap.R.string.log_out;
 
 public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities, OnFileDownloadResponse {
@@ -160,15 +159,19 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (dir == null)
             return size;
 
-        for (File file : dir.listFiles()) {
-            if (file != null) {
-                if (file.isFile()) {
-                    size += file.length();
+        if (dir.listFiles() != null) {
+
+
+            for (File file : dir.listFiles()) {
+                if (file != null) {
+                    if (file.isFile()) {
+                        size += file.length();
+                    } else {
+                        size += getFolderSize(file);
+                    }
                 } else {
-                    size += getFolderSize(file);
+                    return size;
                 }
-            } else {
-                return size;
             }
         }
         return size;
@@ -976,21 +979,29 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         final ViewGroup viewGroup = (ViewGroup) findViewById(R.id.st_parentLayoutCircleImage);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            public void onOffsetChanged(AppBarLayout appBarLayout, final int verticalOffset) {
 
-                if (verticalOffset < -5) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (verticalOffset < -5) {
+                            viewGroup.animate().alpha(0).setDuration(500);
+                            titleToolbar.animate().alpha(1).setDuration(250);
+                            viewGroup.clearAnimation();
+                            titleToolbar.clearAnimation();
+                            titleToolbar.setVisibility(View.VISIBLE);
+                            viewGroup.setVisibility(View.GONE);
+                        } else {
 
-                    viewGroup.setVisibility(View.GONE);
-                    titleToolbar.setVisibility(View.VISIBLE);
-                    viewGroup.animate().alpha(0).setDuration(500);
-                    titleToolbar.animate().alpha(1).setDuration(250);
-                } else {
-
-                    titleToolbar.setVisibility(View.GONE);
-                    viewGroup.setVisibility(View.VISIBLE);
-                    titleToolbar.animate().alpha(0).setDuration(250);
-                    viewGroup.animate().alpha(1).setDuration(500);
-                }
+                            titleToolbar.animate().alpha(0).setDuration(250);
+                            viewGroup.animate().alpha(1).setDuration(500);
+                            viewGroup.clearAnimation();
+                            titleToolbar.clearAnimation();
+                            viewGroup.setVisibility(View.VISIBLE);
+                            titleToolbar.setVisibility(View.GONE);
+                        }
+                    }
+                });
             }
         });
         // button back in toolbar
@@ -1072,8 +1083,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        HelperLogout.logout();
                                         popupWindow.dismiss();
+                                        showProgressBar();
+                                        HelperLogout.logout();
+                                        hideProgressBar();
                                     }
                                 })
 
@@ -1186,14 +1199,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 Realm realm = Realm.getDefaultInstance();
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
                     FragmentShowAvatars.appBarLayout = fab;
-
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
-
                     ActivitySetting.this.getSupportFragmentManager()
                             .beginTransaction()
                             .addToBackStack(null)
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .replace(st_layoutParent, fragment, null)
+                            .replace(R.id.st_layoutParent, fragment, null)
                             .commit();
                 }
                 realm.close();
@@ -1331,20 +1342,54 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        //toggle crop
+
+        final TextView txtCrop = (TextView) findViewById(R.id.stsp_txt_crop);
+        final ToggleButton stsp_toggle_crop = (ToggleButton) findViewById(R.id.stsp_toggle_crop);
+
+        int checkedEnableCrop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0);
+        if (checkedEnableCrop == 1) {
+            stsp_toggle_crop.setChecked(true);
+        } else {
+            stsp_toggle_crop.setChecked(false);
+        }
+
+        txtCrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (stsp_toggle_crop.isChecked()) {
+                    stsp_toggle_crop.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_CROP, 0);
+                    editor.apply();
+                } else {
+                    stsp_toggle_crop.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_CROP, 1);
+                    editor.apply();
+                }
+            }
+        });
+
+
         TextView txtPrivacySecurity = (TextView) findViewById(R.id.st_txt_privacySecurity);
         txtPrivacySecurity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity = new FragmentPrivacyAndSecurity();
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(st_layoutParent, fragmentPrivacyAndSecurity, null)
+                getSupportFragmentManager()
+                        .beginTransaction()
                         .addToBackStack(null)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity, null)
                         .commit();
             }
         });
 
-        TextView txtDataShams = (TextView) findViewById(R.id.st_txt_st_toggle_dataShams);
+        final TextView txtDataShams = (TextView) findViewById(R.id.st_txt_st_toggle_dataShams);
         final ToggleButton toggleEnableDataShams = (ToggleButton) findViewById(R.id.st_toggle_dataShams);
+
         int checkedEnableDataShams = sharedPreferences.getInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 0);
         if (checkedEnableDataShams == 1) {
             toggleEnableDataShams.setChecked(true);
@@ -1355,7 +1400,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtDataShams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+//                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (toggleEnableDataShams.isChecked()) {

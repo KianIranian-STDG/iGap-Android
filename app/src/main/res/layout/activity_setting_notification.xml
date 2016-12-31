@@ -35,11 +35,11 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/stns_txt_back"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:layout_width="@dimen/dp48"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:textColor="@color/whit_background"
                     />
             </com.iGap.libs.rippleeffect.RippleView>
@@ -62,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#34a49f"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -101,31 +102,35 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-
-                    <ToggleButton
-                        android:id="@+id/stns_toggle_alert"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:gravity="start"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
 
+
+                        <ToggleButton
+                            android:id="@+id/stns_toggle_alert"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:gravity="start"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
-                        android:textSize="@dimen/sp16"
-                        android:gravity="center_vertical|start"
                         android:id="@+id/stns_txt_alert"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
+                        android:gravity="center_vertical|start"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_alert"
                         android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp16"
                         android:textStyle="normal"/>
 
                 </RelativeLayout>
@@ -143,25 +148,30 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
                         android:id="@+id/stns_toggle_messagePreview"
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
                         android:textOff=""
                         android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_messagePreview"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_messagePreview"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -182,7 +192,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -190,6 +199,7 @@
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_led_color"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -233,8 +243,8 @@
                         android:textStyle="normal"/>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_vibrate_message_text"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -271,8 +281,8 @@
                         android:textStyle="normal"/>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_popupNotification_message_text"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -309,8 +319,8 @@
                         android:textStyle="normal"/>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_sound_text"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -356,25 +366,32 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
-                        android:id="@+id/stns_toggle_alert_group"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+
+                        <ToggleButton
+                            android:id="@+id/stns_toggle_alert_group"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+
+                    </LinearLayout>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_alert_group"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_alert"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -397,26 +414,31 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-
-                    <ToggleButton
-                        android:id="@+id/stns_toggle_messagePreview_group"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
+                            android:id="@+id/stns_toggle_messagePreview_group"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+
+                    </LinearLayout>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_messagePreview_group"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_messagePreview"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -437,7 +459,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -445,6 +466,7 @@
                         android:gravity="center_vertical"
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_led_color"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -487,8 +509,8 @@
                         android:textStyle="normal"/>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_vibrate_group_text"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -525,8 +547,8 @@
                         android:textStyle="normal"/>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_popupNotification_group_text"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -563,8 +585,8 @@
                         android:textStyle="normal"/>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_sound_group_text"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -610,26 +632,30 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
-                        android:id="@+id/stns_toggle_app_sound"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
 
+                        <ToggleButton
+                            android:id="@+id/stns_toggle_app_sound"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_app_sound"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_in_app_sound"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -652,25 +678,31 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
-                        android:id="@+id/stns_toggle_app_vibrate"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
+                            android:id="@+id/stns_toggle_app_vibrate"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_app_vibrate"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_in_app_vibrate"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -695,26 +727,32 @@
                     android:paddingStart="@dimen/dp16">
 
 
-                    <ToggleButton
-                        android:id="@+id/stns_toggle_app_preview"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
 
+
+                        <ToggleButton
+                            android:id="@+id/stns_toggle_app_preview"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+
+                    </LinearLayout>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_app_preview"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_in_app_preview"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -737,25 +775,31 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
-                        android:id="@+id/stns_toggle_chat_sound"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
+                            android:id="@+id/stns_toggle_chat_sound"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+
+                    </LinearLayout>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_chat_sound"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_in_chat_sound"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -796,26 +840,30 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
-                        android:id="@+id/stns_toggle_Contact_joined"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
 
+                        <ToggleButton
+                            android:id="@+id/stns_toggle_Contact_joined"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_Contact_joined"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_Contact_joined_igap"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -838,25 +886,30 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
-                        android:id="@+id/stns_toggle_pinned_message"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
+                            android:id="@+id/stns_toggle_pinned_message"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
-                        android:paddingTop="@dimen/dp4"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_pinned_message"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_pinned_message"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -897,20 +950,25 @@
                     android:paddingRight="@dimen/dp16"
                     android:paddingStart="@dimen/dp16">
 
-                    <ToggleButton
-                        android:id="@+id/stns_toggle_keep_alive_service"
-                        android:layout_width="@dimen/dp40"
-                        android:layout_height="@dimen/dp40"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
+                            android:id="@+id/stns_toggle_keep_alive_service"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_title_keep_alive_service"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/st_keep_alive_service"
@@ -920,17 +978,17 @@
 
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_keep_alive_service"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/stns_txt_title_keep_alive_service"
+                        android:paddingEnd="@dimen/dp52"
+                        android:paddingRight="@dimen/dp52"
                         android:paddingTop="@dimen/dp4"
                         android:text="@string/st_text_keep_alive_service"
                         android:textColor="@color/cardview_dark_background"
                         android:textSize="@dimen/sp16"
-                        android:paddingEnd="@dimen/dp52"
-                        android:paddingRight="@dimen/dp52"
                         android:textStyle="normal"/>
 
 
@@ -954,21 +1012,26 @@
                     android:paddingStart="@dimen/dp16"
                     android:visibility="gone">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true">
 
                     <ToggleButton
                         android:id="@+id/stns_toggle_background_connection"
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
                         android:textOff=""
                         android:textOn=""/>
 
+                    </LinearLayout>
+
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_title_background_connection"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/st_background_connection"
@@ -977,16 +1040,16 @@
                         android:textStyle="normal"/>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_background_connection"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/stns_txt_title_background_connection"
+                        android:paddingEnd="@dimen/dp52"
+                        android:paddingRight="@dimen/dp52"
                         android:paddingTop="@dimen/dp4"
                         android:text="@string/st_text_background_connection"
                         android:textColor="@color/cardview_dark_background"
-                        android:paddingEnd="@dimen/dp52"
-                        android:paddingRight="@dimen/dp52"
                         android:textSize="@dimen/sp16"
                         android:textStyle="normal"/>
 
@@ -1010,25 +1073,30 @@
                     android:paddingStart="@dimen/dp16"
                     android:visibility="gone">
 
-                    <ToggleButton
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true">
+
+                        <ToggleButton
                         android:id="@+id/stns_badge_counter"
                         android:layout_width="@dimen/dp40"
                         android:layout_height="@dimen/dp40"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
                         android:background="@drawable/st_switch_button"
                         android:textOff=""
                         android:textOn=""/>
+                    </LinearLayout>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/stns_txt_badge_countent"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
-                        android:paddingTop="@dimen/dp4"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/dp4"
                         android:text="@string/st_badge_counter"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp16"
@@ -1066,8 +1134,8 @@
                         android:textStyle="normal"/>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:id="@+id/st_txt_Repeat_Notifications"
+                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"

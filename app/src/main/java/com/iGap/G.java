@@ -386,18 +386,8 @@ public class G extends MultiDexApplication {
 
         setFont();
 
-        new File(DIR_APP).mkdirs();
-        new File(DIR_IMAGES).mkdirs();
-        new File(DIR_VIDEOS).mkdirs();
-        new File(DIR_AUDIOS).mkdirs();
-        new File(DIR_DOCUMENT).mkdirs();
-        new File(DIR_SOUND_NOTIFICATION).mkdirs();
-        new File(DIR_CHAT_BACKGROUND).mkdirs();
-        new File(DIR_NEW_GROUP).mkdirs();
-        new File(DIR_NEW_CHANEL).mkdirs();
-        new File(DIR_ALL_IMAGE_USER_CONTACT).mkdirs();
-        new File(DIR_IMAGE_USER).mkdirs();
-        new File(DIR_TEMP).mkdirs();
+        makeFolder();
+
 
         chatBackground = new File(DIR_CHAT_BACKGROUND, "addChatBackground.jpg");
         IMAGE_NEW_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.jpg");
@@ -450,6 +440,21 @@ public class G extends MultiDexApplication {
         //G.onFileDownloadResponse = this;
 
         saveLogcatToFile(context);
+    }
+
+    public static void makeFolder() {
+        new File(DIR_APP).mkdirs();
+        new File(DIR_IMAGES).mkdirs();
+        new File(DIR_VIDEOS).mkdirs();
+        new File(DIR_AUDIOS).mkdirs();
+        new File(DIR_DOCUMENT).mkdirs();
+        new File(DIR_SOUND_NOTIFICATION).mkdirs();
+        new File(DIR_CHAT_BACKGROUND).mkdirs();
+        new File(DIR_NEW_GROUP).mkdirs();
+        new File(DIR_NEW_CHANEL).mkdirs();
+        new File(DIR_ALL_IMAGE_USER_CONTACT).mkdirs();
+        new File(DIR_IMAGE_USER).mkdirs();
+        new File(DIR_TEMP).mkdirs();
     }
 
     public static void saveLogcatToFile(Context context) {

@@ -12,7 +12,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -33,6 +35,7 @@ import com.iGap.proto.ProtoUserDelete;
 import com.iGap.request.RequestUserDelete;
 import com.iGap.request.RequestUserGetDeleteToken;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -48,6 +51,7 @@ public class FragmentDeleteAccount extends Fragment {
     private CountDownTimer countDownTimer;
     private String phone;
     private ViewGroup ltTime;
+    private ProgressBar prgWaiting;
 
     public FragmentDeleteAccount() {
         // Required empty public constructor
@@ -139,6 +143,7 @@ public class FragmentDeleteAccount extends Fragment {
         });
 
 
+        prgWaiting = (ProgressBar) view.findViewById(R.id.stda_prgWaiting_addContact);
         ltTime = (ViewGroup) view.findViewById(R.id.stda_layout_time);
 
         TextView txtPhoneNumber = (TextView) view.findViewById(R.id.stda_txt_phoneNumber);
@@ -169,7 +174,9 @@ public class FragmentDeleteAccount extends Fragment {
                                         G.onUserDelete = new OnUserDelete() {
                                             @Override
                                             public void onUserDeleteResponse() {
+                                                hideProgressBar();
                                                 HelperLogout.logout();
+                                                deleteRecursive(new File(G.DIR_APP));
                                             }
 
                                             @Override
@@ -284,7 +291,9 @@ public class FragmentDeleteAccount extends Fragment {
                                             }
                                         };
 
+                                        showProgressBar();
                                         new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
+
                                     }
                                 }
                             })
@@ -374,4 +383,34 @@ public class FragmentDeleteAccount extends Fragment {
         }
         super.onPause();
     }
+
+
+    void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+    }
+
+    private void showProgressBar() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWaiting.setVisibility(View.VISIBLE);
+                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
+    private void hideProgressBar() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                prgWaiting.setVisibility(View.GONE);
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
 }
