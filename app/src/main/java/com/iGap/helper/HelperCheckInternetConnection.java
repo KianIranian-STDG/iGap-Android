@@ -3,7 +3,6 @@ package com.iGap.helper;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import com.iGap.G;
 
 /**
@@ -12,12 +11,26 @@ import com.iGap.G;
 public class HelperCheckInternetConnection {
 
     public static boolean hasNetwork() {
-        ConnectivityManager cm =
-                ((ConnectivityManager) G.context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (networkInfo != null) {
+
+        try {
+            ConnectivityManager cm = (ConnectivityManager) G.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            if (netInfo != null && (netInfo.isConnectedOrConnecting() || netInfo.isAvailable())) {
+                return true;
+            }
+            netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+                return true;
+            } else {
+                netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
             return true;
         }
+
         return false;
     }
 }

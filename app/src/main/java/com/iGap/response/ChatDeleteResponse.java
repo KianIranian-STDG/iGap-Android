@@ -9,7 +9,8 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-
+import com.iGap.realm.RealmShearedMedia;
+import com.iGap.realm.RealmShearedMediaFields;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -53,6 +54,10 @@ public class ChatDeleteResponse extends MessageHandler {
                 if (realmRoomMessage != null) {
                     realmRoomMessage.deleteAllFromRealm();
                 }
+
+                // delte  file from realm sheared media
+                RealmResults<RealmShearedMedia> rs = realm.where(RealmShearedMedia.class).equalTo(RealmShearedMediaFields.ROOM_ID, roomId).findAll();
+                if (rs != null) rs.deleteAllFromRealm();
 
 
             }

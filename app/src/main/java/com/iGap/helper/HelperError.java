@@ -22,6 +22,12 @@ public class HelperError {
             case 5:
                 //if (minorCode == 1) error = "time out  server not response";
                 break;
+            case 617:
+                error = "";// G.context.getResources().getString(R.string.there_is_no_sheared_media);
+                break;
+            case 620:
+                error = "";// G.context.getResources().getString(R.string.there_is_no_sheared_media);
+                break;
             case 623:
                 if (minorCode == 1) error = G.context.getResources().getString(R.string.E_713_1);
                 break;

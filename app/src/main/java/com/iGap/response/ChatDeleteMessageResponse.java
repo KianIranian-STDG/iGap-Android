@@ -5,7 +5,8 @@ import com.iGap.proto.ProtoChatDeleteMessage;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineDelete;
-
+import com.iGap.realm.RealmShearedMedia;
+import com.iGap.realm.RealmShearedMediaFields;
 import io.realm.Realm;
 
 public class ChatDeleteMessageResponse extends MessageHandler {
@@ -41,10 +42,18 @@ public class ChatDeleteMessageResponse extends MessageHandler {
                         }
                     }
                 }
-                G.onChatDeleteMessageResponse.onChatDeleteMessage(chatDeleteMessage.getDeleteVersion()
-                        , chatDeleteMessage.getMessageId(), chatDeleteMessage.getRoomId(), chatDeleteMessage.getResponse());
+                G.onChatDeleteMessageResponse.onChatDeleteMessage(chatDeleteMessage.getDeleteVersion(), chatDeleteMessage.getMessageId(), chatDeleteMessage.getRoomId(),
+                    chatDeleteMessage.getResponse());
+
+                // delte  file from realm sheared media
+                RealmShearedMedia rs = realm.where(RealmShearedMedia.class).equalTo(RealmShearedMediaFields.MESSAGE_ID, chatDeleteMessage.getMessageId()).
+                    equalTo(RealmShearedMediaFields.ROOM_ID, chatDeleteMessage.getRoomId()).findFirst();
+
+                if (rs != null) rs.deleteFromRealm();
+
             }
         });
+
         realm.close();
     }
 

@@ -1,14 +1,12 @@
 package com.iGap.response;
 
 import android.text.format.DateUtils;
-
 import com.iGap.G;
 import com.iGap.proto.ProtoChatClearMessage;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 
 public class ChatClearMessageResponse extends MessageHandler {
@@ -50,6 +48,9 @@ public class ChatClearMessageResponse extends MessageHandler {
                 }
             }
         });
+
+        // TODO: 12/31/2016   nejati   is need delete realm sheared media item or not   in chat and group  clear message
+
 
         realm.close();
     }

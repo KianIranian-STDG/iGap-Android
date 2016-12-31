@@ -181,12 +181,6 @@
             android:theme="@style/AppThemeTranslucent"/>
 
         <receiver android:name=".module.IncomingSms"/>
-        <receiver android:name=".module.ReceiverInternet">
-            <intent-filter>
-                <action android:name="android.net.wifi.STATE_CHANGE"/>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-        </receiver>
 
         <activity android:name=".activities.ActivityChatBackground"/>
         <activity android:name=".activities.ActivityWebView"/>

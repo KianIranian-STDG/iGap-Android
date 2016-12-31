@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
@@ -55,14 +54,12 @@ import com.iGap.request.RequestChannelAddMessageReaction;
 import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.IOException;
-import java.util.List;
-
 import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.meness.github.messageprogress.OnProgress;
 import io.realm.Realm;
+import java.io.IOException;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;
@@ -399,7 +396,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (messageText != null) {
-            messageText.setTextColor(Color.WHITE);
+            messageText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 

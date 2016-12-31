@@ -9,7 +9,7 @@
               android:paddingBottom="@dimen/messageContainerPaddingBottom"
               android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
               android:paddingRight="@dimen/messageContainerPaddingLeftRight"
-              android:paddingTop="@dimen/messageContainerPadding">
+    >
 
     <TextView
         android:id="@+id/txtEditedIndicator"

@@ -20,16 +20,20 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityShearedMedia;
-import com.iGap.adapter.AdapterShearedMedia;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.TouchImageView;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAttachmentFields;
 import io.meness.github.messageprogress.MessageProgress;
+import io.realm.Realm;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -80,9 +84,7 @@ public class FragmentShowImage extends Fragment {
     @Override
     public void onDetach() {
         if (appBarLayout != null)
-
             appBarLayout.setVisibility(View.VISIBLE);
-        if (ActivityShearedMedia.onComplete != null) ActivityShearedMedia.onComplete.complete(true, "", "");
 
         super.onDetach();
     }
@@ -140,7 +142,7 @@ public class FragmentShowImage extends Fragment {
 
             @Override
             public void onComplete(RippleView rippleView) {
-                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                getActivity().onBackPressed();
             }
         });
 
@@ -256,7 +258,7 @@ public class FragmentShowImage extends Fragment {
     private void shareImage() {
         ProtoGlobal.RoomMessage media = mList.get(viewPager.getCurrentItem()).item;
         if (media != null) {
-            String path = AdapterShearedMedia.getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
+            String path = getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
             File file = new File(path);
             if (file.exists()) {
 
@@ -275,7 +277,7 @@ public class FragmentShowImage extends Fragment {
 
         ProtoGlobal.RoomMessage media = mList.get(viewPager.getCurrentItem()).item;
         if (media != null) {
-            String path = AdapterShearedMedia.getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
+            String path = getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
             File file = new File(path);
             if (file.exists()) {
                 HelperSaveFile.savePicToGallary(path);
@@ -312,13 +314,13 @@ public class FragmentShowImage extends Fragment {
 
             final ProtoGlobal.RoomMessage media = mList.get(position).item;
             if (media != null) {
-                String path = AdapterShearedMedia.getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
+                String path = getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
                 File file = new File(path);
                 if (file.exists()) {
                     touchImageView.setImageURI(Uri.fromFile(file));
                     progress.setVisibility(View.GONE);
                 } else {
-                    path = AdapterShearedMedia.getThumpnailPath(media.getAttachment().getToken(), media.getAttachment().getName());
+                    path = getThumpnailPath(media.getAttachment().getToken(), media.getAttachment().getName());
                     file = new File(path);
                     if (file.exists()) {
                         touchImageView.setImageURI(Uri.fromFile(file));
@@ -352,9 +354,11 @@ public class FragmentShowImage extends Fragment {
                                                     progress.withProgress(0);
                                                     progress.setVisibility(View.GONE);
 
-                                                    String path = AdapterShearedMedia.getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
+                                                    String path = getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
                                                     File file = new File(path);
                                                     touchImageView.setImageURI(Uri.fromFile(file));
+
+                                                    ActivityShearedMedia.downloadedList.add(media.getMessageId());
                                                 }
                                             }
                                         });
@@ -408,5 +412,40 @@ public class FragmentShowImage extends Fragment {
 
     }
 
+    public String getFilePath(String token, String fileName, ProtoGlobal.RoomMessageType messageType) {
+
+        String result = "";
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
+
+        if (attachment != null) {
+            if (attachment.getLocalFilePath() != null) result = attachment.getLocalFilePath();
+        }
+
+        if (result.length() < 1) result = AndroidUtils.suitableAppFilePath(messageType) + "/" + token + "_" + fileName;
+
+        realm.close();
+
+        return result;
+    }
+
+    public String getThumpnailPath(String token, String fileName) {
+
+        String result = "";
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
+
+        if (attachment != null) {
+            if (attachment.getLocalThumbnailPath() != null) result = attachment.getLocalThumbnailPath();
+        }
+
+        if (result.length() < 1) result = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(fileName);
+
+        realm.close();
+
+        return result;
+    }
 
 }

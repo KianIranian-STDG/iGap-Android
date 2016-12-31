@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -198,20 +197,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -223,6 +208,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -4003,9 +3999,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages, final int count) {
         // I'm in the room
 
-        Log.e("ddd", "onGetRoomHistory                 aaaaaaaaaaaaa" + count);
-        prgWaiting.setVisibility(View.GONE);
-
         if (roomId == mRoomId) {
             //runOnUiThread(new Runnable() {
             //    @Override
@@ -4061,6 +4054,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 @Override
                 public void run() {
 
+                    Log.e("ddd", "onGetRoomHistory                 aaaaaaaaaaaaa" + count);
+                    prgWaiting.setVisibility(View.GONE);
+
                     mAdapter.clear();
                     switchAddItem(getLocalMessages(), true);
 
@@ -4078,7 +4074,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     public void onGetRoomHistoryError(int majorCode, int minorCode) {
 
-        prgWaiting.setVisibility(View.GONE);
+        ActivityChat.this.runOnUiThread(new Runnable() {
+            @Override public void run() {
+                prgWaiting.setVisibility(View.GONE);
+            }
+        });
 
         if (majorCode == 615 && minorCode == 1) {
             runOnUiThread(new Runnable() {

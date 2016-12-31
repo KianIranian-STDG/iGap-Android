@@ -2,8 +2,8 @@ package com.iGap.response;
 
 import android.os.Handler;
 import android.os.Looper;
-
 import com.iGap.G;
+import com.iGap.activities.ActivityShearedMedia;
 import com.iGap.helper.HelperUserInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
@@ -15,9 +15,10 @@ import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupSendMessageResponse extends MessageHandler {
 
@@ -41,6 +42,18 @@ public class GroupSendMessageResponse extends MessageHandler {
         final ProtoGroupSendMessage.GroupSendMessageResponse.Builder builder = (ProtoGroupSendMessage.GroupSendMessageResponse.Builder) message;
         final ProtoGlobal.RoomMessage roomMessage = builder.getRoomMessage();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+
+        // add file to realm sheared media
+        String str = roomMessage.getMessageType().toString();
+        if (str.contains(ProtoGlobal.RoomMessageType.AUDIO.toString()) || str.contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) ||
+            str.contains(ProtoGlobal.RoomMessageType.FILE.toString()) || str.contains(ProtoGlobal.RoomMessageType.VOICE.toString()) ||
+            str.contains(ProtoGlobal.RoomMessageType.GIF.toString()) || str.contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+
+            List<ProtoGlobal.RoomMessage> rm = new ArrayList<ProtoGlobal.RoomMessage>();
+            rm.add(roomMessage);
+            ActivityShearedMedia.saveDataToLocal(rm, builder.getRoomId());
+        }
+
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
