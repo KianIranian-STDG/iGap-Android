@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -45,12 +44,10 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactGroupFragment extends Fragment {
     private FastAdapter fastAdapter;
@@ -399,14 +396,16 @@ public class ContactGroupFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if (charSequence.length() > sizeTextEditText) {
-                    String s = edtSearch.getText().toString().substring(sizeTextEditText, charSequence.length());
-                    itemAdapter.filter(s);
-                } else {
-                    itemAdapter.filter("");
-                }
+                if (charSequence.length() + i + i1 + i2 > 0) itemAdapter.filter(charSequence);
 
-                edtSearch.setSelection(edtSearch.getText().length());
+                //if (charSequence.length() > sizeTextEditText) {
+                //    String s = edtSearch.getText().toString().substring(sizeTextEditText, charSequence.length());
+                //    itemAdapter.filter(s);
+                //} else {
+                //    itemAdapter.filter("");
+                //}
+                //
+                //edtSearch.setSelection(edtSearch.getText().length());
             }
 
             @Override
@@ -514,20 +513,23 @@ public class ContactGroupFragment extends Fragment {
     }
 
     private void refreshView() {
-
+        int selectedNumber = 0;
         textString = "";
-
-        for (int i = 0; i < contacts.size(); i++) {
+        int size = contacts.size();
+        for (int i = 0; i < size; i++) {
             if (contacts.get(i).isSelected) {
                 textString += contacts.get(i).displayName + ",";
+                selectedNumber++;
             }
         }
 
         if (typeCreate.equals("CHANNEL")) {
             txtNumberOfMember.setVisibility(View.GONE);
         }
-        sizeTextEditText = textString.length();
-        edtSearch.setText(textString);
+        //  sizeTextEditText = textString.length();
+        txtNumberOfMember.setText(selectedNumber + "/" + participantsLimit + " " + getString(R.string.member));
+
+        edtSearch.setText("");
     }
 
     private ArrayList<Long> getSelectedList() {
