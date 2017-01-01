@@ -32,7 +32,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public void updateChat(long chatId, Item item) {
         List<Item> items = getAdapterItems();
         for (Item chat : items) {
-            if (chat.mInfo.getId() == chatId) {
+            if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == chatId) {
                 int pos = items.indexOf(chat);
                 remove(pos);
                 add(0, item);
@@ -45,7 +45,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         List<Item> items = getAdapterItems();
         Realm realm = Realm.getDefaultInstance();
         for (final Item chat : items) {
-            if (chat.mInfo.getId() == chatId) {
+            if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == chatId) {
                 final int pos = items.indexOf(chat);
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
@@ -64,7 +64,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         Item item = null;
         List<Item> items = getAdapterItems();
         for (Item chat : items) {
-            if (chat.mInfo.getId() == chatId) {
+            if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == chatId) {
                 item = chat;
                 break;
             }
@@ -75,7 +75,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public void notifyDraft(long chatId, final String draftMessage) {
         List<Item> items = getAdapterItems();
         for (final Item chat : items) {
-            if (chat.mInfo.getId() == chatId) {
+            if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == chatId) {
 
                 final int position = items.indexOf(chat);
 
@@ -89,7 +89,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public void notifyWithRoomId(long chatId) {
         List<Item> items = getAdapterItems();
         for (final Item chat : items) {
-            if (chat.mInfo.getId() == chatId) {
+            if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == chatId) {
                 notifyItemChanged(items.indexOf(chat));
             }
         }
@@ -98,7 +98,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public boolean existRoom(long roomId) {
         List<Item> items = getAdapterItems();
         for (final Item chat : items) {
-            if (chat.mInfo.getId() == roomId) {
+            if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == roomId) {
                 return true;
             }
         }
@@ -108,7 +108,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public int getPosition(long chatId) {
         List<Item> items = getAdapterItems();
         for (final Item chat : items) {
-            if (chat.mInfo.getId() == chatId) {
+            if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == chatId) {
                 return items.indexOf(chat);
             }
         }
@@ -122,8 +122,8 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
      * @param realmRoom
      * @return true if is valid and is exist otherwise return false
      */
-    public boolean checkValidationForRealm(RealmRoom realmRoom) {
-        if (realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted()) {
+    public boolean checkValidationForRealm(RoomItem roomItem, RealmRoom realmRoom) {
+        if (roomItem.isEnabled() && realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted()) {
             return true;
         }
         return false;
