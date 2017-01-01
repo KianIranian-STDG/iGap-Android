@@ -250,6 +250,8 @@ public class G extends MultiDexApplication {
     public static OnGroupRemoveUsername onGroupRemoveUsername;
     public static OnGroupRevokeLink onGroupRevokeLink;
     public static OnUpdateAvatar onUpdateAvatar;
+    public static OnUserContactsBlock onUserContactsBlock;
+    public static OnUserContactsUnBlock onUserContactsUnBlock;
 
 
     public static File chatBackground;

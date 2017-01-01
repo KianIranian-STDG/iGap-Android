@@ -115,6 +115,8 @@ import com.iGap.interfaces.OnHelperSetAction;
 import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
+import com.iGap.interfaces.OnUserContactsBlock;
+import com.iGap.interfaces.OnUserContactsUnBlock;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.interfaces.OnVoiceRecord;
@@ -189,6 +191,7 @@ import com.iGap.request.RequestClientUnsubscribeFromRoom;
 import com.iGap.request.RequestGroupDeleteMessage;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.iGap.request.RequestUserContactsBlock;
+import com.iGap.request.RequestUserContactsUnblock;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -357,6 +360,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private Boolean isGoingFromUserLink = false;
     private Boolean isNotJoin = false;
     private String userName = "";
+    private boolean blockUser = false;
 
     @Override
     protected void onStart() {
@@ -530,7 +534,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         checkIfOrientationChanged(getResources().getConfiguration());
 
-
         appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
 
         mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
@@ -617,7 +620,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         if (extras != null) {
             mRoomId = extras.getLong("RoomId");
             isMuteNotification = extras.getBoolean("MUT");
-            Log.i("CCC", "mRoomId : " + mRoomId);
 
             isGoingFromUserLink = extras.getBoolean("GoingFromUserLink");
             isNotJoin = extras.getBoolean("ISNotJoin");
@@ -628,13 +630,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 final LinearLayout layoutJoin = (LinearLayout) findViewById(R.id.ac_ll_join);
 
                 layoutJoin.setVisibility(View.VISIBLE);
-
                 layoutJoin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         HelperUrl.showIndeterminateProgressDialog();
-
                         G.onClientJoinByUsername = new OnClientJoinByUsername() {
                             @Override
                             public void onClientJoinByUsernameResponse() {
@@ -685,7 +684,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             Realm realm = Realm.getDefaultInstance();
 
-
             //get userId . use in chat set action.
             userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
@@ -728,7 +726,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     groupRole = realmGroupRoom.getRole();
                     groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
-                    Log.i("BBBBBBB", "onCreate: " + groupParticipantsCountLabel);
                 } else if (realmRoom.getType() == CHANNEL) {
 
                     chatType = CHANNEL;
@@ -749,28 +746,79 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
             }
 
-
+            //*****block or unBlock User Start
+            final TextView txtSpamUser = (TextView) findViewById(R.id.chat_txt_addContact);
+            RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
             final ViewGroup vgSpamUser = (ViewGroup) findViewById(R.id.layout_add_contact);
             if (phoneNumber != null) {
-                RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phoneNumber)).findFirst();
                 if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
-
                     vgSpamUser.setVisibility(View.VISIBLE);
                 }
             }
 
-            TextView txtSpamUser = (TextView) findViewById(R.id.chat_txt_addContact);
+            if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
+                final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                if (realmRegisteredInfo != null) {
+
+                    if (realmRegisteredInfo.isBlockUser()) {
+                        blockUser = true;
+                        txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                    } else {
+                        txtSpamUser.setText(getResources().getString(R.string.block_user));
+                    }
+
+                } else {
+                    final RealmContacts realmContact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+                    if (realmContact != null) {
+                        if (realmContact.isBlockUser()) {
+                            blockUser = true;
+                            txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                        } else {
+                            txtSpamUser.setText(getResources().getString(R.string.block_user));
+                        }
+                    }
+                }
+            }
+
             txtSpamUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (blockUser) {
+                        G.onUserContactsUnBlock = new OnUserContactsUnBlock() {
+                            @Override
+                            public void onUserContactsUnBlock(final long userId) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        blockUser = false;
+                                        if (userId == chatPeerId) {
+                                            txtSpamUser.setText(getResources().getString(R.string.block_user));
+                                        }
+                                    }
+                                });
+                            }
+                        };
+                        new RequestUserContactsUnblock().userContactsUnblock(chatPeerId);
+                    } else {
 
-                    new RequestUserContactsBlock().userContactsBlock(userId);
+                        G.onUserContactsBlock = new OnUserContactsBlock() {
+                            @Override
+                            public void onUserContactsBlock(final long userId) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        blockUser = true;
+                                        if (userId == chatPeerId) {
+                                            txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                                        }
+                                    }
+                                });
+                            }
+                        };
+                        new RequestUserContactsBlock().userContactsBlock(chatPeerId);
+                    }
                 }
             });
-
-
-            realm.close();
-
             TextView txtSpamClose = (TextView) findViewById(R.id.chat_txt_close);
             txtSpamClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -778,37 +826,81 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     vgSpamUser.setVisibility(View.GONE);
                 }
             });
+            //*****block or unBlock End
+
+            realm.close();
         }
+
         initComponent();
+
         initAppbarSelected();
 
-        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
+        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER)
+
+        {
             initLayotChannelFooter();
         }
 
-        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
+        if (
+
+                getIntent()
+
+                        != null &&
+
+                        getIntent()
+
+                                .
+
+                                        getExtras()
+
+                                != null &&
+
+                        getIntent()
+
+                                .
+
+                                        getExtras()
+
+                                .
+
+                                        getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE)
+
+                                != null)
+
+        {
             ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
 
             for (Parcelable messageInfo : messageInfos) {
                 sendForwardedMessage((StructMessageInfo) Parcels.unwrap(messageInfo));
             }
         }
+
         clearHistoryFromContactsProfileInterface();
+
         onDeleteChatFinishActivityInterface();
 
         getChatHistory();
+
         getDraft();
+
         getUserInfo();
+
         updateStatus();
+
         setUpEmojiPopup();
+
         checkAction();
 
-        G.onHelperSetAction = new OnHelperSetAction() {
-            @Override
-            public void onAction(ProtoGlobal.ClientAction ClientAction) {
-                HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
-            }
-        };
+        G.onHelperSetAction = new
+
+                OnHelperSetAction() {
+                    @Override
+                    public void onAction(ProtoGlobal.ClientAction ClientAction) {
+                        HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
+                    }
+                }
+
+        ;
     }
 
     private void checkAction() {
@@ -5063,6 +5155,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
             }, 100);
         }
+
     }
 
     //******* GroupAvatar and ChannelAvatar

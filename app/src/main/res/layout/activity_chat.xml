@@ -464,7 +464,7 @@
         </com.iGap.module.MyAppBarLayout>
 
         <include
-            layout="@layout/chat_sub_layout_spam_user"
+            layout="@layout/chat_sub_layout_block_user"
             android:id="@+id/layout_add_contact"
             android:layout_width="match_parent"
             android:layout_height="40dp"

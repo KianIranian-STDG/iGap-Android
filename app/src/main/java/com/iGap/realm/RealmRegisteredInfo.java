@@ -2,6 +2,7 @@ package com.iGap.realm;
 
 import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoGlobal;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -39,7 +40,6 @@ public class RealmRegisteredInfo extends RealmObject {
         registeredInfo.setStatus(input.getStatus().toString());
         registeredInfo.setAvatarCount(input.getAvatarCount());
         registeredInfo.setCacheId(input.getCacheId());
-        registeredInfo.setColor(input.getColor());
         registeredInfo.setColor(input.getColor());
         registeredInfo.setFirstName(input.getFirstName());
         registeredInfo.setInitials(input.getInitials());
