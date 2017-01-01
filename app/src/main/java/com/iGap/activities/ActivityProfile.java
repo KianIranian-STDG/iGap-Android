@@ -499,7 +499,9 @@ public class ActivityProfile extends ActivityEnhanced
         @Override
         protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
-            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+            if (result != null) {
+                G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
+            }
         }
     }
 

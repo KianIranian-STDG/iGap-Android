@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -95,14 +96,16 @@ import com.iGap.request.RequestGroupLeft;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
-import io.realm.Sort;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
@@ -714,7 +717,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         //  Collections.sort(roomItems, SortRooms.DESC);
 
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 for (RealmRoom item : realm.where(RealmRoom.class).findAll()) {
                                     item.setUpdatedTime(item.getLastMessage().getUpdateTime());
                                 }
@@ -810,13 +814,16 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
     private void deleteChat(final RoomItem item) {
+
+        //TODO [Saeed Mozaffari] [2017-01-01 1:30 PM] - for delete chat don't use from item because maybe another account delete this item and this client don't have item(item is null)
+
         G.onChatDelete = new OnChatDelete() {
             @Override
             public void onChatDelete(long roomId) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (mAdapter != null) {
+                        if (mAdapter != null && item != null) {
                             mAdapter.remove(mAdapter.getPosition(item));
                         }
                     }

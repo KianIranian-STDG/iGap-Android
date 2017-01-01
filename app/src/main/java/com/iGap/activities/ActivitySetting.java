@@ -161,7 +161,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         if (dir.listFiles() != null) {
 
-
             for (File file : dir.listFiles()) {
                 if (file != null) {
                     if (file.isFile()) {
