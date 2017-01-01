@@ -62,7 +62,8 @@ public class UserInfoResponse extends MessageHandler {
                     @Override
                     public void onSuccess() {
 
-                        if (builder.getUser().getId() == realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                        if (realmUserInfo != null && (builder.getUser().getId() == realmUserInfo.getUserId())) {
                             if (G.onUserInfoMyClient != null) {
                                 G.onUserInfoMyClient.onUserInfoMyClient(builder.getUser(), identity);
                             }

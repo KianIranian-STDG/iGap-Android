@@ -228,6 +228,11 @@ public class WebSocketClient {
         if (webSocketClient != null && webSocketClient.isOpen()) {
             return true;
         }
+        /**
+         * set allowForReconnecting = true; for allow that to reconnecting
+         */
+        waitingForReconnecting = false;
+        allowForReconnecting = true;
         reconnect();
         return false;
     }

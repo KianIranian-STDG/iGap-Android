@@ -7,7 +7,9 @@ import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -15,9 +17,8 @@ import com.iGap.R;
 
 import java.io.File;
 
-/**
- * Created by android3 on 9/7/2016.
- */
+import static com.iGap.G.context;
+
 public class HelperMimeType {
 
     /**
@@ -39,12 +40,19 @@ public class HelperMimeType {
         Intent intent = new Intent();
         intent.setAction(android.content.Intent.ACTION_VIEW);
 
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+
         if (path.endsWith(".txt")
                 || path.endsWith(".csv")
                 || path.endsWith(".xml")
                 || path.endsWith(".html")) {
 
-            intent.setDataAndType(Uri.fromFile(file), "text/*");
+            intent.setDataAndType(uri, "text/*");
         } else if (path.endsWith(".mp3")
                 || path.endsWith(".ogg")
                 || path.endsWith(".wma")
@@ -54,7 +62,7 @@ public class HelperMimeType {
                 || path.endsWith(".mid")
                 || path.endsWith(".midi")) {
 
-            intent.setDataAndType(Uri.fromFile(file), "audio/*");
+            intent.setDataAndType(uri, "audio/*");
         } else if (path.endsWith(".mp4")
                 || path.endsWith(".3gp")
                 || path.endsWith(".avi")
@@ -64,10 +72,10 @@ public class HelperMimeType {
                 || path.endsWith(".wmv")
                 || path.endsWith(".m4v")) {
 
-            intent.setDataAndType(Uri.fromFile(file), "video/*");
+            intent.setDataAndType(uri, "video/*");
         } else if (path.endsWith(".pdf")) {
 
-            intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+            intent.setDataAndType(uri, "application/pdf");
         } else if (path.endsWith(".jpg")
                 || path.endsWith(".bmp")
                 || path.endsWith(".png")
@@ -75,19 +83,19 @@ public class HelperMimeType {
                 || path.endsWith(".jpeg")
                 || path.endsWith(".tiff")) {
 
-            intent.setDataAndType(Uri.fromFile(file), "image/*");
+            intent.setDataAndType(uri, "image/*");
         } else if (path.endsWith(".apk")) {
 
-            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            intent.setDataAndType(uri, "application/vnd.android.package-archive");
         } else if (path.endsWith(".gz") || path.endsWith(".gz") || path.endsWith(".zip")) {
-            intent.setDataAndType(Uri.fromFile(file), "package/*");
+            intent.setDataAndType(uri, "package/*");
         } else if (path.endsWith(".ppt") || path.endsWith(".pptx")) {
 
-            intent.setDataAndType(Uri.fromFile(file), "application/vnd.ms-powerpoint");
+            intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
         } else if (path.endsWith(".xls") || path.endsWith(".xlsx")) {
-            intent.setDataAndType(Uri.fromFile(file), "application/vnd.ms-excel");
+            intent.setDataAndType(uri, "application/vnd.ms-excel");
         } else if (path.endsWith(".rtf")) {
-            intent.setDataAndType(Uri.fromFile(file), "application/rtf");
+            intent.setDataAndType(uri, "application/rtf");
         }
 
         return intent;
