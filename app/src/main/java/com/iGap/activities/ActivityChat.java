@@ -4678,9 +4678,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             Realm realm = Realm.getDefaultInstance();
             // if user clicked on any message which he wasn't its sender, remove edit item option
-            if (!message.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
-                items.remove(getString(R.string.edit_item_dialog));
+            if (chatType == CHANNEL) {
+                if (channelRole == ChannelChatRole.MEMBER) {
+                    items.remove(getString(R.string.edit_item_dialog));
+                }
+            } else {
+                if (!message.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
+                    items.remove(getString(R.string.edit_item_dialog));
+                }
             }
+
             realm.close();
 
             new MaterialDialog.Builder(this).title(getString(R.string.messages)).negativeText(getString(R.string.cancel)).items(items).itemsCallback(new MaterialDialog.ListCallback() {

@@ -479,7 +479,12 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                         }
                     });
                 } else {
-                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        }
+                    });
                     getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
                 }
 
