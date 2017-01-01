@@ -1,6 +1,7 @@
 package com.iGap.adapter;
 
 import com.iGap.adapter.items.RoomItem;
+import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -112,6 +113,20 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
             }
         }
         return -1;
+    }
+
+    /**
+     * check realm for detect that item is exist or changed
+     * info with another thread
+     *
+     * @param realmRoom
+     * @return true if is valid and is exist otherwise return false
+     */
+    public boolean checkValidationForRealm(RealmRoom realmRoom) {
+        if (realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted()) {
+            return true;
+        }
+        return false;
     }
 
     /*public void setAction(long roomId, ProtoGlobal.ClientAction clientAction) {

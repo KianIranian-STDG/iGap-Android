@@ -896,7 +896,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                                 mAdapter.remove(pos);
                             }
                         }*/
-                        mAdapter.remove(mAdapter.getPosition(item));
+                        if (mAdapter != null && item != null) {
+                            mAdapter.remove(mAdapter.getPosition(item));
+                        }
                     }
                 });
             }
@@ -937,7 +939,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.remove(position);
+                        if (mAdapter != null && item != null) {
+                            mAdapter.remove(position);
+                        }
                         /*if (mAdapter != null) {
                             int pos = mAdapter.getPosition(roomId);
                             if (pos != -1) {
@@ -1016,7 +1020,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
     }
 
-    private void deleteChannel(RoomItem item, final int position) {
+    private void deleteChannel(final RoomItem item, final int position) {
 
         G.onChannelDelete = new OnChannelDelete() {
             @Override
@@ -1024,7 +1028,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.remove(position);
+                        if (mAdapter != null && item != null) {
+                            mAdapter.remove(position);
+                        }
                         /*if (mAdapter != null) {
                             int pos = mAdapter.getPosition(roomId);
                             if (pos != -1) {

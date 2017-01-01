@@ -26,22 +26,19 @@ public class UserContactsDeleteResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoUserContactsDelete.UserContactsDeleteResponse.Builder builder =
-                (ProtoUserContactsDelete.UserContactsDeleteResponse.Builder) message;
+        ProtoUserContactsDelete.UserContactsDeleteResponse.Builder builder = (ProtoUserContactsDelete.UserContactsDeleteResponse.Builder) message;
         final long phone = builder.getPhone();
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmContacts realmUserContactsGetListResponse =
-                        realm.where(RealmContacts.class).equalTo("phone", phone).findFirst();
+                RealmContacts realmUserContactsGetListResponse = realm.where(RealmContacts.class).equalTo("phone", phone).findFirst();
                 if (realmUserContactsGetListResponse != null) {
                     realmUserContactsGetListResponse.deleteFromRealm();
                 }
 
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phone)
-                        .findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phone + "").findFirst();
                 if (realmRegisteredInfo != null) {
                     realmRegisteredInfo.setMutual(false);
                 }
