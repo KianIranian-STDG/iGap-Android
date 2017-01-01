@@ -344,7 +344,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         realmUserInfo.setEmail(email);
                         userEmail = email;
-                        txtEmail.setText(email);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                txtEmail.setText(email);
+                            }
+                        });
                     }
                 });
                 realm.close();

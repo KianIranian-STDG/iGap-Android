@@ -25,6 +25,7 @@ import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnFileDownloadResponse;
+import com.iGap.interfaces.OnUserContactGetList;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
@@ -39,6 +40,7 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatGetRoom;
+import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -77,9 +79,9 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.i("QQQ", "3 RegisteredContactsFragment");
         //set interface for get callback here
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
         prgWaiting.getIndeterminateDrawable()
@@ -206,24 +208,60 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
-        List<IItem> items = new ArrayList<>();
+        final List<IItem> items = new ArrayList<>();
         contacts = Contacts.retrieve(null);
-        for (StructContactInfo contact : contacts) {
-            items.add(new ContactItem().setContact(contact)
-                    .withIdentifier(100 + contacts.indexOf(contact)));
-        }
-        itemAdapter.add(items);
 
-        //so the headers are aware of changes
-        stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                decoration.invalidateHeaders();
+        if (contacts.size() == 0) {
+            /**
+             * if contacts size is zero send request for get contacts list
+             * for insuring that contacts not exist really or not
+             */
+            G.onUserContactGetList = new OnUserContactGetList() {
+                @Override
+                public void onContactGetList() {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (contacts != null && fastAdapter != null && itemAdapter != null) {
+                                for (StructContactInfo contact : contacts) {
+                                    items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+                                }
+                                itemAdapter.add(items);
+
+                                //so the headers are aware of changes
+                                stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                                    @Override
+                                    public void onChanged() {
+                                        decoration.invalidateHeaders();
+                                    }
+                                });
+
+                                //restore selections (this has to be done after the items were added
+                                fastAdapter.withSavedInstanceState(savedInstanceState);
+                            }
+                        }
+                    });
+                }
+            };
+
+            new RequestUserContactsGetList().userContactGetList();
+        } else {
+            for (StructContactInfo contact : contacts) {
+                items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
             }
-        });
+            itemAdapter.add(items);
 
-        //restore selections (this has to be done after the items were added
-        fastAdapter.withSavedInstanceState(savedInstanceState);
+            //so the headers are aware of changes
+            stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    decoration.invalidateHeaders();
+                }
+            });
+
+            //restore selections (this has to be done after the items were added
+            fastAdapter.withSavedInstanceState(savedInstanceState);
+        }
     }
 
     private void chatGetRoom(final long peerId) {

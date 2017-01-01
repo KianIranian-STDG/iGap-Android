@@ -287,6 +287,7 @@ public class G extends MultiDexApplication {
         G.onContactImport = new OnUserContactImport() {
             @Override
             public void onContactImport() {
+                Log.i("QQQ", "1 importContact");
                 getContactListFromServer();
             }
 
