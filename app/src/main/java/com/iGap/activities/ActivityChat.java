@@ -2962,6 +2962,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.FILE);
                 roomMessage.setUserId(senderID);
                 roomMessage.setCreateTime(updateTime);
+                if (userTriesReplay()) {
+                    if (finalMessageInfo != null && finalMessageInfo.replayTo != null) {
+                        roomMessage.setReplyTo(finalMessageInfo.replayTo);
+                    }
+                }
 
                 /**
                  * make channel extra if room is channel
