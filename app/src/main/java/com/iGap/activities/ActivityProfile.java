@@ -106,10 +106,22 @@ public class ActivityProfile extends ActivityEnhanced
             public void onClick(View view) {
                 if (!existAvatar) {
                     try {
+//                        HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
+//                            @Override
+//                            public void Allow() {
+//                                startDialog(); // this dialog show 2 way for choose image : gallery and camera
+//                            }
+//                        });
                         HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
                             @Override
-                            public void Allow() {
-                                startDialog(); // this dialog show 2 way for choose image : gallery and camera
+                            public void Allow() throws IOException {
+                                HelperPermision.getCamarePermision(ActivityProfile.this, new OnGetPermision() {
+                                    @Override
+                                    public void Allow() {
+                                        startDialog(); // this dialog show 2 way for choose image : gallery and camera
+
+                                    }
+                                });
                             }
                         });
                     } catch (IOException e) {

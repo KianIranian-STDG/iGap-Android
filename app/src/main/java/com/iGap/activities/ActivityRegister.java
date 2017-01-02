@@ -444,7 +444,7 @@ public class ActivityRegister extends ActivityEnhanced {
             @Override
             public void onClick(View v) {
 
-                if (edtPhoneNumber.getText().toString().length() > 0 && !regex.equals("") && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
+                if (edtPhoneNumber.getText().length() > 0 && !regex.equals("") && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
 
                     phoneNumber = edtPhoneNumber.getText().toString();
 
@@ -515,7 +515,15 @@ public class ActivityRegister extends ActivityEnhanced {
                     dialog.show();
                 } else {
 
-                    new MaterialDialog.Builder(ActivityRegister.this).title(R.string.phone_number).content(R.string.Toast_Enter_Phone_Number).positiveText(R.string.B_ok).show();
+                    if (regex.equals("")) {
+                        new MaterialDialog.Builder(ActivityRegister.this).title(R.string.phone_number).content("regex.equals(\"\")").positiveText(R.string.B_ok).show();
+
+                    } else if (edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
+                        new MaterialDialog.Builder(ActivityRegister.this).title(R.string.phone_number).content("matches(regex)").positiveText(R.string.B_ok).show();
+                    } else {
+
+                        new MaterialDialog.Builder(ActivityRegister.this).title(R.string.phone_number).content(R.string.Toast_Enter_Phone_Number).positiveText(R.string.B_ok).show();
+                    }
                 }
             }
         });

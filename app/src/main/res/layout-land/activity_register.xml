@@ -151,6 +151,7 @@
                 android:visibility="visible">
 
                 <com.uncopt.android.widget.text.justify.JustifiedTextView
+                    android:id="@+id/txtAgreement_register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
