@@ -1,6 +1,7 @@
 package com.iGap.response;
 
-import com.iGap.proto.ProtoUserProfileSetSelfRemove;
+import com.iGap.G;
+import com.iGap.proto.ProtoUserProfileGetSelfRemove;
 
 public class UserProfileGetSelfRemoveResponse extends MessageHandler {
 
@@ -18,10 +19,16 @@ public class UserProfileGetSelfRemoveResponse extends MessageHandler {
 
     @Override
     public void handler() {
-        ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder builder =
-                (ProtoUserProfileSetSelfRemove.UserProfileSetSelfRemoveResponse.Builder) message;
+        super.handler();
+        ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemoveResponse.Builder builder =
+                (ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemoveResponse.Builder) message;
 
         builder.getSelfRemove();
+
+        if (G.onUserProfileGetSelfRemove != null) {
+            G.onUserProfileGetSelfRemove.onUserSetSelfRemove(builder.getSelfRemove());
+        }
+
     }
 
     @Override

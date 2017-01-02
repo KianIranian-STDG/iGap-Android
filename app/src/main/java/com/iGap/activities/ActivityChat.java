@@ -3223,6 +3223,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         btnReplaySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_replay_selected);
         RippleView rippleReplaySelected = (RippleView) findViewById(R.id.chl_ripple_replay_selected);
+
+        if (chatType == CHANNEL) {
+            if (channelRole == ChannelChatRole.MEMBER) {
+                btnReplaySelected.setVisibility(View.GONE);
+            }
+        } else {
+            btnReplaySelected.setVisibility(View.VISIBLE);
+        }
         rippleReplaySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
@@ -3676,7 +3684,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             if (selectedCount > 1) {
                 btnReplaySelected.setVisibility(View.INVISIBLE);
             } else {
-                btnReplaySelected.setVisibility(View.VISIBLE);
+
+                if (chatType == CHANNEL) {
+                    if (channelRole == ChannelChatRole.MEMBER) {
+                        btnReplaySelected.setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    btnReplaySelected.setVisibility(View.VISIBLE);
+                }
             }
 
             ll_AppBarSelected.setVisibility(View.VISIBLE);
@@ -4772,6 +4787,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             if (chatType == CHANNEL) {
                 if (channelRole == ChannelChatRole.MEMBER) {
                     items.remove(getString(R.string.edit_item_dialog));
+                    items.remove(getString(R.string.replay_item_dialog));
+                    items.remove(getString(R.string.delete_item_dialog));
                 }
             } else {
                 if (!message.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
