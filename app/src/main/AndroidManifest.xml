@@ -151,18 +151,16 @@
         <activity
             android:name=".activities.ActivityIntroduce"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale">
-
-        </activity>
-        <activity
-            android:name=".activities.ActivityProfile"
-            android:configChanges="keyboard|keyboardHidden|screenSize|locale"
-            android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
+        </activity>
+        <activity
+            android:name=".activities.ActivityProfile"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale"
+            android:windowSoftInputMode="adjustPan|stateHidden">
         </activity>
         <activity android:name=".activities.ActivityCrop"/>
         <activity android:name=".activities.ActivitySettingNotification"/>
