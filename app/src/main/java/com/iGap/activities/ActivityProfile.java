@@ -35,6 +35,7 @@ import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AttachFile;
 import com.iGap.module.EditTextAdjustPan;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.proto.ProtoGlobal;
@@ -313,14 +314,21 @@ public class ActivityProfile extends ActivityEnhanced
     }
 
     public void useCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        pathImageUser = G.imageFile.toString() + "_" + 0 + ".jpg";
-        pathImageFromCamera = new File(pathImageUser);
-        uriIntent = Uri.fromFile(pathImageFromCamera);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
 
-        startActivityForResult(intent, IntentRequests.REQ_CAMERA);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                new AttachFile(ActivityProfile.this).dispatchTakePictureIntent();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            pathImageUser = G.imageFile.toString() + "_" + 0 + ".jpg";
+            pathImageFromCamera = new File(pathImageUser);
+            uriIntent = Uri.fromFile(pathImageFromCamera);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+            startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
+        }
     }
 
     //======================================================================================================dialog for choose image
@@ -379,15 +387,28 @@ public class ActivityProfile extends ActivityEnhanced
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == IntentRequests.REQ_CAMERA
+        if (requestCode == AttachFile.request_code_TAKE_PICTURE
                 && resultCode == RESULT_OK) {// result for camera
 
-            Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
-            intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
-            intent.putExtra("TYPE", "camera");
-            intent.putExtra("PAGE", "profile");
-            intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
-            startActivityForResult(intent, IntentRequests.REQ_CROP);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+                Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
+                intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
+                intent.putExtra("TYPE", "camera");
+                intent.putExtra("PAGE", "profile");
+                intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+            } else {
+                Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
+                intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
+                intent.putExtra("TYPE", "camera");
+                intent.putExtra("PAGE", "profile");
+                intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
+            }
+
+
         } else if (requestCode == IntentRequests.REQ_GALLERY
                 && resultCode == RESULT_OK) {// result for gallery
             Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);

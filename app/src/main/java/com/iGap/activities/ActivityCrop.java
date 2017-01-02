@@ -77,6 +77,8 @@ public class ActivityCrop extends ActivityEnhanced {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 path = bundle.getString("IMAGE_CAMERA");
+                String newPath = "file://" + path;
+                uri = Uri.parse(newPath);
             } else {
                 uri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
             }

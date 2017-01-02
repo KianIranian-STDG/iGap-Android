@@ -2181,7 +2181,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
         //btnCloseLayoutSearch = (Button) findViewById(R.id.ac_btn_close_layout_search_message);
-        //btnCloseLayoutSearch.setTypeface(G.flaticon);
         edtSearchMessage = (EditText) findViewById(R.id.chl_edt_search_message);
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
             @Override

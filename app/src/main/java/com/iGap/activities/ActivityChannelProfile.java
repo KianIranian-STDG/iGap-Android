@@ -136,7 +136,6 @@ import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
-import static com.iGap.module.AttachFile.imagePath;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
 public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
@@ -1325,10 +1324,19 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 if (text.toString().equals(getString(R.string.from_camera))) {
 
                     if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                        try {
-                            attachFile.requestTakePicture();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            try {
+                                new AttachFile(ActivityChannelProfile.this).dispatchTakePictureIntent();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            try {
+                                attachFile.requestTakePicture();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                         dialog.dismiss();
                     } else {
@@ -2178,12 +2186,12 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 case AttachFile.request_code_TAKE_PICTURE:
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        ImageHelper.correctRotateImage(imagePath, true);
+                        ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
                         filePath = AttachFile.mCurrentPhotoPath;
                         pathSaveImage = filePath;
                     } else {
-                        ImageHelper.correctRotateImage(imagePath, true);
-                        filePath = imagePath;
+                        ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                        filePath = AttachFile.imagePath;
                         pathSaveImage = filePath;
                     }
 

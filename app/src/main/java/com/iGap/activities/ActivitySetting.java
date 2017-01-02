@@ -1877,7 +1877,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) {
+                        if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) { // camera
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 try {
                                     new AttachFile(ActivitySetting.this).dispatchTakePictureIntent();
@@ -1885,6 +1885,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                     e.printStackTrace();
                                 }
                             } else {
+
                                 if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                                     idAvatar = SUID.id().get();
                                     pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
@@ -1892,7 +1893,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                     uriIntent = Uri.fromFile(nameImageFile);
                                     intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                    startActivityForResult(intent, IntentRequests.REQ_CAMERA);
+                                    startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
                                     dialog.dismiss();
                                 } else {
                                     Toast.makeText(ActivitySetting.this, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
@@ -1914,11 +1915,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == IntentRequests.REQ_CAMERA && resultCode == RESULT_OK) {// result for camera
+        if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
                 ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                Log.i("VVVVVV", "onActivityResult: " + AttachFile.mCurrentPhotoPath);
                 intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "setting");
@@ -1929,7 +1931,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 if (uriIntent != null) {
 
                     ImageHelper.correctRotateImage(pathSaveImage, true);
-
                     intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
                     intent.putExtra("TYPE", "camera");
                     intent.putExtra("PAGE", "setting");

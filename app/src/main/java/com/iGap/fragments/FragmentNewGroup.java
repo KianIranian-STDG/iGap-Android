@@ -9,11 +9,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -39,6 +41,7 @@ import com.iGap.activities.ActivityMain;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnChannelAvatarAdd;
 import com.iGap.interfaces.OnChannelCreate;
@@ -77,10 +80,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import io.realm.Realm;
 
+import static com.iGap.G.context;
 import static com.iGap.R.id.fragmentContainer;
+import static com.iGap.module.AttachFile.request_code_TAKE_PICTURE;
 import static com.iGap.module.MusicPlayer.roomId;
 
 public class FragmentNewGroup extends Fragment implements OnFileUploadForActivities, OnGroupAvatarResponse, OnChannelAvatarAdd {
@@ -100,13 +107,14 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     private int lastSpecialRequestsCursorPosition = 0;
     private String specialRequests;
 
-    private static ProgressBar prgWaiting;
-    private static long avatarId = 0;
+    public static ProgressBar prgWaiting;
+    public static long avatarId = 0;
     private static ProtoGlobal.Room.Type type;
     private String token;
     private boolean existAvatar = false;
     private String mInviteLink;
     private boolean isChannel = false;
+    public static String mCurrentPhotoPath;
 
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
@@ -154,20 +162,49 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                             }
                             case 1: {
 
-                                if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
-                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    if (prefix.equals("NewChanel")) {
-                                        uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                        try {
+//                                            new AttachFile(FragmentNewGroup.this.getActivity()).dispatchTakePictureIntent();
+                                            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                            // Ensure that there's a camera activity to handle the intent
+                                            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                                                // Create the File where the photo should go
+                                                File photoFile = null;
+                                                try {
+                                                    photoFile = createImageFile();
+                                                } catch (IOException ex) {
+                                                    // Error occurred while creating the File
+                                                    return;
+                                                }
+                                                // Continue only if the File was successfully created
+                                                if (photoFile != null) {
+                                                    uriIntent = FileProvider.getUriForFile(getActivity(), getActivity().getApplicationContext().getPackageName() + ".provider", createImageFile());
+                                                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                                                    startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
+                                                }
+                                            }
+
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
                                     } else {
-                                        uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
+
+                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                        if (prefix.equals("NewChanel")) {
+                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
+                                        } else {
+                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
+                                        }
+
+                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                                        startActivityForResult(intent, request_code_TAKE_PICTURE);
+                                        dialog.dismiss();
                                     }
 
-                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                    startActivityForResult(intent, IntentRequests.REQ_CAMERA);
-                                    dialog.dismiss();
                                 } else {
-                                    Toast.makeText(G.context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                                 }
                                 break;
                             }
@@ -1126,21 +1163,21 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     }
 
     //=======================result for picture
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == IntentRequests.REQ_CAMERA && resultCode == Activity.RESULT_OK) {// result for camera
+        if (requestCode == request_code_TAKE_PICTURE && resultCode == Activity.RESULT_OK) {// result for camera
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                String path = AttachFile.mCurrentPhotoPath;
                 Intent intent = new Intent(getActivity(), ActivityCrop.class);
-                intent.putExtra("IMAGE_CAMERA", path);
+                ImageHelper.correctRotateImage(mCurrentPhotoPath, true);
+                intent.putExtra("IMAGE_CAMERA", mCurrentPhotoPath);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", prefix);
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             } else {
+
                 Intent intent = new Intent(getActivity(), ActivityCrop.class);
                 if (uriIntent != null) {
                     intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
@@ -1148,9 +1185,10 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                     intent.putExtra("PAGE", prefix);
                     startActivityForResult(intent, IntentRequests.REQ_CROP);
                 } else {
-                    Toast.makeText(G.context, R.string.can_not_save_picture_pleas_try_again, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.can_not_save_picture_pleas_try_again, Toast.LENGTH_SHORT).show();
                 }
             }
+
 
         } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == Activity.RESULT_OK) {// result for gallery
             if (data != null) {
@@ -1208,5 +1246,22 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }

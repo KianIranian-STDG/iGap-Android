@@ -1102,6 +1102,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             long avatarId = SUID.id().get();
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
                         filePath = AttachFile.mCurrentPhotoPath;
@@ -1174,12 +1175,21 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                 e.printStackTrace();
                             }
                         } else if (which == 1) {
-                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                try {
-                                    attachFile.requestTakePicture();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) { // camera
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    try {
+                                        new AttachFile(ActivityGroupProfile.this).dispatchTakePictureIntent();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    try {
+                                        attachFile.requestTakePicture();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
+
                                 dialog.dismiss();
                             } else {
                                 Toast.makeText(ActivityGroupProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
@@ -3189,105 +3199,51 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void compareMemberList(final RealmList<RealmMember> memberList, final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> serverLiseMember) {
 
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                final ArrayList<Long> b1 = new ArrayList<>();
-//                for (RealmMember r : memberList) {
-//                    b1.add(r.getPeerId());
-//                    Log.i("CCCCC", "before compareMemberList: " + b1);
-//                }
-//                ArrayList<Long> c1 = new ArrayList<>();
-//                for (int i = 0; i < memberList.size(); i++) {
-//                    for (int j = 0; j < serverLiseMember.size(); j++) {
-//                        if (serverLiseMember.get(i).getUserId() == memberList.get(j).getPeerId()) {
-//                            c1.add(memberList.get(i).getPeerId());
-//                            break;
-//                        }
-//                    }
-//                }
-//                Log.i("CCCCC", "after test: ");
-//                b1.removeAll(c1);
-//
-//                for (int i = 0; i < b1.size(); i++) {
-//
-//                    Log.i("CCCCC", "after compareMemberList: " + b1.get(i));
-//                }
-//
-//                Realm realm = Realm.getDefaultInstance();
-//
-//                realm.executeTransaction(new Realm.Transaction() {
-//                    @Override
-//                    public void execute(Realm realm) {
-//
-//
-//                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-//                        RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
-//                        for (int i = 0; i < realmMembers.size(); i++) {
-//                            for (int j = 0; j < b1.size(); j++) {
-//
-//                                if (realmMembers.get(i).getPeerId() == b1.get(j)) {
-//                                    realmMembers.get(i).deleteFromRealm();
-//                                }
-//                            }
-//                        }
-//                    }
-//                });
-//                realm.close();
-//            }
-//        });
-//
-//        thread.start();
 
-//        Log.i("BBBBB", "start remove:");
-//
-//
-//        ArrayList<Long> b1 = new ArrayList<>();
-//        for (RealmMember r : memberList) {
-//            b1.add(r.getPeerId());
-//        }
-//
-//        ArrayList<Long> c1 = new ArrayList<>();
-//        for (int i = 0; i < memberList.size(); i++) {
-//            for (int j = 0; j < serverLiseMember.size(); j++) {
-//                if (memberList.get(i).getPeerId() == serverLiseMember.get(j).getUserId()) {
-//                    c1.add(memberList.get(i).getPeerId());
-//                    break;
-//                }
-//            }
-//        }
-//
-//        Realm realm = Realm.getDefaultInstance();
-//        realm.executeTransaction(new Realm.Transaction() {
-//            @Override
-//            public void execute(Realm realm) {
-//                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-//                RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
-//
-//            }
-//        });
+        final ArrayList<Long> b1 = new ArrayList<>();
+        for (RealmMember r : memberList) {
+            b1.add(r.getPeerId());
+        }
+        ArrayList<Long> c1 = new ArrayList<>();
+        for (int i = 0; i < memberList.size(); i++) {
+            for (int j = 0; j < serverLiseMember.size(); j++) {
+                if (serverLiseMember.get(j).getUserId() == memberList.get(i).getPeerId()) {
+                    c1.add(memberList.get(i).getPeerId());
+                    break;
+                }
+            }
+        }
+        b1.removeAll(c1);
+        Realm realm = Realm.getDefaultInstance();
 
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
 
-//            for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : serverLiseMember) {
-//                if (realmMember.getPeerId() != member.getUserId()) {
-//
-//                    Realm realm = Realm.getDefaultInstance();
-//                    realm.executeTransaction(new Realm.Transaction() {
-//                        @Override
-//                        public void execute(Realm realm) {
-//                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-//                            RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
-//                            Log.i("BBBBB", "befor remove: " + realmMembers.size());
-//                            realmMembers.remove(realmMember);
-//                            Log.i("BBBBB", "after remove: " + realmMembers.size());
-//                        }
-//                    });
-//
-//
-//                    break;
-//                }
-//            }
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+                for (int i = 0; i < realmMembers.size(); i++) {
+                    for (int j = 0; j < b1.size(); j++) {
 
+                        if (realmMembers.get(i).getPeerId() == b1.get(j)) {
+                            realmMembers.get(i).deleteFromRealm();
+                            itemAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+        });
+        realm.close();
+
+        final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+        for (int i = 0; i < b1.size(); i++) {
+            for (int j = 0; j < items.size(); j++) {
+                if (items.get(j).mContact.peerId == b1.get(i)) {
+                    itemAdapter.remove(i);
+                    itemAdapter.notifyDataSetChanged();
+                }
+            }
+        }
     }
 
     //********** Avatars
