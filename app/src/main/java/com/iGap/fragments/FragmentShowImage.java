@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
@@ -32,10 +33,13 @@ import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
-import java.util.ArrayList;
 
 public class FragmentShowImage extends Fragment {
 
@@ -47,20 +51,13 @@ public class FragmentShowImage extends Fragment {
     private ViewGroup ltImageName;
     private ViewPager viewPager;
 
-    private ArrayList<StructShowImage> mList;
     private int selectedFile = 0;
-    private int listSize = 0;
     private AdapterViewPager mAdapter;
-    private long peerId = 0;
-
-    class StructShowImage {
-
-        ProtoGlobal.RoomMessage item;
-        boolean isDownloading = false;
-    }
-
-
-
+    private RealmResults<RealmRoomMessage> mRealmList;
+    private Long mRoomid;
+    private String selectedFileToken = "";
+    private Realm mRealm;
+    private ArrayMap<Long, Boolean> downloadingList = new ArrayMap<>();
 
     public static View appBarLayout;
 
@@ -68,64 +65,59 @@ public class FragmentShowImage extends Fragment {
         return new FragmentShowImage();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getIntentData(this.getArguments())) initComponent(view);
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
 
-    @Override
-    public void onDetach() {
-        if (appBarLayout != null)
-            appBarLayout.setVisibility(View.VISIBLE);
+        if (appBarLayout != null) appBarLayout.setVisibility(View.VISIBLE);
 
-        super.onDetach();
+        if (mRealm != null) mRealm.close();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        if (appBarLayout != null)
-            appBarLayout.setVisibility(View.GONE);
+    @Override public void onAttach(Context context) {
+        if (appBarLayout != null) appBarLayout.setVisibility(View.GONE);
 
         super.onAttach(context);
     }
-
 
     private boolean getIntentData(Bundle bundle) {
 
         if (bundle != null) { // get a list of image
 
-            peerId = bundle.getLong("PeedId");
+            mRoomid = bundle.getLong("RoomId");
+            selectedFileToken = bundle.getString("SelectedImage");
 
-            ArrayList<ProtoGlobal.RoomMessage> list = (ArrayList<ProtoGlobal.RoomMessage>) bundle.getSerializable("listPic");
-            if (list == null) {
-                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-                return false;
-            }
-            if (list.size() < 1) {
+            if (mRoomid == null) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 return false;
             }
 
-            int si = bundle.getInt("SelectedImage");
-            if (si >= 0) selectedFile = si;
+            mRealm = Realm.getDefaultInstance();
 
-            mList = new ArrayList<>();
+            mRealmList = mRealm.where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomid)
+                .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.IMAGE.toString())
+                .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
-            for (int i = 0; i < list.size(); i++) {
-                StructShowImage sh = new StructShowImage();
-                sh.item = list.get(i);
-                mList.add(sh);
+            if (mRealmList.size() < 1) {
+                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                return false;
             }
 
-
+            for (int i = 0; i < mRealmList.size(); i++) {
+                if (selectedFileToken.equals(mRealmList.get(i).getAttachment().getToken())) {
+                    selectedFile = i;
+                    break;
+                }
+            }
 
             return true;
         } else {
@@ -140,8 +132,7 @@ public class FragmentShowImage extends Fragment {
         RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 getActivity().onBackPressed();
             }
         });
@@ -150,8 +141,7 @@ public class FragmentShowImage extends Fragment {
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 popUpMenuShowImage();
             }
         });
@@ -163,7 +153,6 @@ public class FragmentShowImage extends Fragment {
         txtImageDate = (TextView) view.findViewById(R.id.asi_txt_image_date);
         toolbarShowImage = (LinearLayout) view.findViewById(R.id.toolbarShowImage);
 
-
         initViewPager();
     }
 
@@ -173,54 +162,48 @@ public class FragmentShowImage extends Fragment {
 
         mAdapter = new AdapterViewPager();
         viewPager.setAdapter(mAdapter);
-        listSize = mList.size();
+
         viewPager.setCurrentItem(selectedFile);
 
-        txtImageNumber.setText(selectedFile + 1 + " " + getString(R.string.of) + " " + listSize);
-        if (mList.get(selectedFile).item.getAttachment() != null) {
-            txtImageName.setText(mList.get(selectedFile).item.getAttachment().getName());
+        txtImageNumber.setText(selectedFile + 1 + " " + getString(R.string.of) + " " + mRealmList.size());
+        if (mRealmList.get(selectedFile).getAttachment() != null) {
+            txtImageName.setText(mRealmList.get(selectedFile).getAttachment().getName());
         }
-        if (mList.get(selectedFile).item.getUpdateTime() != 0) {
-            txtImageDate.setText(TimeUtils.toLocal(mList.get(selectedFile).item.getUpdateTime(), G.CHAT_MESSAGE_TIME));
+        if (mRealmList.get(selectedFile).getUpdateTime() != 0) {
+            txtImageDate.setText(TimeUtils.toLocal(mRealmList.get(selectedFile).getUpdateTime(), G.CHAT_MESSAGE_TIME));
         }
 
         viewPager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
             }
         });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
 
-            @Override
-            public void onPageSelected(int position) {
-                ProtoGlobal.RoomMessage sharedMedia = mList.get(position).item;
+            @Override public void onPageSelected(int position) {
 
-                txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + listSize);
+                txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + mRealmList.size());
 
-                if (sharedMedia.getAttachment() != null) {
-                    txtImageName.setText(sharedMedia.getAttachment().getName());
+                if (mRealmList.get(position).getAttachment() != null) {
+                    txtImageName.setText(mRealmList.get(position).getAttachment().getName());
                 }
 
-                if (sharedMedia.getUpdateTime() != 0) {
-                    txtImageDate.setText(TimeUtils.toLocal(sharedMedia.getUpdateTime(), G.CHAT_MESSAGE_TIME));
+                if (mRealmList.get(position).getUpdateTime() != 0) {
+                    txtImageDate.setText(TimeUtils.toLocal(mRealmList.get(position).getUpdateTime(), G.CHAT_MESSAGE_TIME));
                 }
             }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+            @Override public void onPageScrollStateChanged(int state) {
 
             }
         });
 
         viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
-            @Override
-            public void transformPage(View view, float position) {
+            @Override public void transformPage(View view, float position) {
 
                 final float normalizedPosition = Math.abs(Math.abs(position) - 1);
                 view.setScaleX(normalizedPosition / 2 + 0.5f);
@@ -229,24 +212,17 @@ public class FragmentShowImage extends Fragment {
         });
     }
 
-
     public void popUpMenuShowImage() {
 
-        MaterialDialog dialog =
-                new MaterialDialog.Builder(getActivity())
-                        .items(R.array.pop_up_menu_show_image)
-                        .contentColor(Color.BLACK)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                if (which == 0) {
-                                    saveToGalary();
-                                } else if (which == 1) {
-                                    shareImage();
-                                }
-                            }
-                        })
-                        .show();
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                if (which == 0) {
+                    saveToGalary();
+                } else if (which == 1) {
+                    shareImage();
+                }
+            }
+        }).show();
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
@@ -256,9 +232,11 @@ public class FragmentShowImage extends Fragment {
     }
 
     private void shareImage() {
-        ProtoGlobal.RoomMessage media = mList.get(viewPager.getCurrentItem()).item;
-        if (media != null) {
-            String path = getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
+
+        RealmRoomMessage rm = mRealmList.get(viewPager.getCurrentItem());
+
+        if (rm != null) {
+            String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
             File file = new File(path);
             if (file.exists()) {
 
@@ -275,9 +253,9 @@ public class FragmentShowImage extends Fragment {
 
     private void saveToGalary() {
 
-        ProtoGlobal.RoomMessage media = mList.get(viewPager.getCurrentItem()).item;
-        if (media != null) {
-            String path = getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
+        RealmRoomMessage rm = mRealmList.get(viewPager.getCurrentItem());
+        if (rm != null) {
+            String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
             File file = new File(path);
             if (file.exists()) {
                 HelperSaveFile.savePicToGallary(path);
@@ -285,16 +263,13 @@ public class FragmentShowImage extends Fragment {
         }
     }
 
-
     private class AdapterViewPager extends PagerAdapter {
 
-        @Override
-        public int getCount() {
-            return mList.size();
+        @Override public int getCount() {
+            return mRealmList.size();
         }
 
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
+        @Override public boolean isViewFromObject(View view, Object object) {
             return view.equals(object);
         }
 
@@ -306,21 +281,22 @@ public class FragmentShowImage extends Fragment {
             final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
             final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
 
-            if (mList.get(position).isDownloading) {
+            if (downloadingList.containsKey(mRealmList.get(position).getMessageId())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
             } else {
                 progress.withDrawable(R.drawable.ic_download, true);
             }
 
-            final ProtoGlobal.RoomMessage media = mList.get(position).item;
-            if (media != null) {
-                String path = getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
+            final RealmRoomMessage rm = mRealmList.get(position);
+
+            if (rm != null) {
+                String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
                 File file = new File(path);
                 if (file.exists()) {
                     touchImageView.setImageURI(Uri.fromFile(file));
                     progress.setVisibility(View.GONE);
                 } else {
-                    path = getThumpnailPath(media.getAttachment().getToken(), media.getAttachment().getName());
+                    path = getThumpnailPath(rm.getAttachment().getToken(), rm.getAttachment().getName());
                     file = new File(path);
                     if (file.exists()) {
                         touchImageView.setImageURI(Uri.fromFile(file));
@@ -329,17 +305,18 @@ public class FragmentShowImage extends Fragment {
             }
 
             progress.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
 
-                    if (mList.get(position).isDownloading) {
-                        HelperDownloadFile.stopDownLoad(mList.get(position).item.getAttachment().getToken());
+                    if (downloadingList.containsKey(mRealmList.get(position).getMessageId())) {
+                        HelperDownloadFile.stopDownLoad(mRealmList.get(position).getAttachment().getToken());
                         progress.withDrawable(R.drawable.ic_download, true);
+                        downloadingList.remove(mRealmList.get(position).getMessageId());
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
+                        downloadingList.put(mRealmList.get(position).getMessageId(), true);
 
-                        HelperDownloadFile.startDoanload(mList.get(position).item.getAttachment().getToken(), mList.get(position).item.getAttachment().getName(),
-                            mList.get(position).item.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, mList.get(position).item.getMessageType(),
+                        HelperDownloadFile.startDoanload(mRealmList.get(position).getAttachment().getToken(), mRealmList.get(position).getAttachment().getName(),
+                            mRealmList.get(position).getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, mRealmList.get(position).getMessageType(),
                             new HelperDownloadFile.UpdateListener() {
                                 @Override public void OnProgress(String token, final int progres) {
 
@@ -353,12 +330,12 @@ public class FragmentShowImage extends Fragment {
                                                 } else {
                                                     progress.withProgress(0);
                                                     progress.setVisibility(View.GONE);
-
-                                                    String path = getFilePath(media.getAttachment().getToken(), media.getAttachment().getName(), media.getMessageType());
+                                                    downloadingList.remove(rm.getMessageId());
+                                                    String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
                                                     File file = new File(path);
                                                     touchImageView.setImageURI(Uri.fromFile(file));
 
-                                                    ActivityShearedMedia.downloadedList.add(media.getMessageId());
+                                                    ActivityShearedMedia.downloadedList.add(rm.getMessageId());
                                                 }
                                             }
                                         });
@@ -375,16 +352,11 @@ public class FragmentShowImage extends Fragment {
                                 }
                             });
                     }
-
-
-
-
                 }
             });
 
             touchImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
                     if (isShowToolbar) {
                         toolbarShowImage.animate().setDuration(150).alpha(0F).start();
                         ltImageName.setVisibility(View.GONE);
@@ -405,11 +377,9 @@ public class FragmentShowImage extends Fragment {
             return layout;
         }
 
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        @Override public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
-
     }
 
     public String getFilePath(String token, String fileName, ProtoGlobal.RoomMessageType messageType) {
@@ -447,5 +417,4 @@ public class FragmentShowImage extends Fragment {
 
         return result;
     }
-
 }

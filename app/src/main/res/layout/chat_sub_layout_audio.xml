@@ -12,7 +12,7 @@
 
     <RelativeLayout
         android:id="@+id/mainContainer"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/dp220"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         tools:ignore="UselessParent"
@@ -28,7 +28,7 @@
 
         <LinearLayout
             android:id="@+id/middleLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/messageSenderAvatar"
             android:layout_toRightOf="@+id/messageSenderAvatar"
@@ -84,8 +84,8 @@
 
                                 <com.makeramen.roundedimageview.RoundedImageView
                                     android:id="@+id/thumbnail"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_width="@dimen/dp48"
+                                    android:layout_height="@dimen/dp48"
                                     android:adjustViewBounds="true"
                                     android:scaleType="fitXY"
                                     android:src="@drawable/green_music_note"
@@ -95,8 +95,8 @@
                                 <include
                                     android:id="@+id/progress"
                                     layout="@layout/msg_progress_item"
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
+                                    android:layout_width="@dimen/dp40"
+                                    android:layout_height="@dimen/dp40"
                                     android:layout_gravity="center"
                                     />
                             </FrameLayout>
@@ -110,7 +110,7 @@
                                 android:text="3.2 mb"
                                 android:textAllCaps="true"
                                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                                android:textColor="@color/white"
+                                android:textColor="@color/black90"
                                 android:textSize="12sp"
                                 />
                         </LinearLayout>
@@ -130,13 +130,15 @@
 
                                 <TextView
                                     android:id="@+id/fileName"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ellipsize="middle"
                                     android:maxLines="1"
+                                    android:maxWidth="@dimen/dp160"
+                                    android:gravity="left"
                                     android:text="file_name.ext"
                                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                                    android:textColor="@android:color/white"
+                                    android:textColor="@android:color/black"
                                     android:textSize="@dimen/sp14"
                                     android:textStyle="bold"
                                     />
@@ -148,7 +150,7 @@
                                     android:maxLines="1"
                                     android:text="Artist"
                                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                                    android:textColor="@color/gray10"
+                                    android:textColor="@color/black90"
                                     />
 
                             </LinearLayout>
@@ -171,14 +173,14 @@
 
                                     <com.iGap.module.MaterialDesignTextView
                                         android:id="@+id/csla_btn_play_music"
-                                        android:layout_width="@dimen/dp40"
+                                        android:layout_width="@dimen/dp32"
                                         android:layout_height="match_parent"
                                         android:background="@null"
                                         android:gravity="center"
                                         android:text="@string/md_play_arrow"
                                         android:textAppearance="@style/TextIconAppearance_toolbar"
                                         android:textColor="@color/green"
-                                        android:textSize="@dimen/sp18"
+                                        android:textSize="@dimen/sp32"
                                         />
 
 
@@ -196,6 +198,7 @@
                                     android:id="@+id/csla_txt_timer"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:singleLine="true"
                                     android:layout_gravity="bottom"
                                     android:layout_marginLeft="@dimen/dp52"
                                     android:text="00:00"

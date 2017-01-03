@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:id="@+id/mainContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp220"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         tools:ignore="UselessParent">
@@ -24,7 +24,7 @@
             android:src="@mipmap/empty"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -60,7 +60,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="10dp"
-                            android:padding="10dp">
+                            android:layout_marginBottom="@dimen/dp6"
+                            android:padding="@dimen/dp4"
+                            >
 
                             <ImageView
                                 android:id="@+id/thumbnail"
@@ -89,7 +91,6 @@
                                 android:id="@+id/cslv_txt_author"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dp52"
                                 android:singleLine="true"
                                 android:text=""
                                 android:textSize="@dimen/sp14"
@@ -113,7 +114,7 @@
                                     android:gravity="center"
                                     android:text="@string/md_play_arrow"
                                     android:textColor="@color/green"
-                                    android:textSize="@dimen/sp18"
+                                    android:textSize="@dimen/sp32"
                                     />
 
 

@@ -1,13 +1,11 @@
 package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
-
-import org.parceler.Parcel;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmThumbnailRealmProxy;
 import io.realm.annotations.PrimaryKey;
+import org.parceler.Parcel;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/29/2016.
@@ -24,7 +22,7 @@ public class RealmThumbnail extends RealmObject {
     private int height;
     private String cacheId;
 
-    public static void create(long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
+    public static RealmThumbnail create(long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
         Realm realm = Realm.getDefaultInstance();
         RealmThumbnail realmThumbnail = realm.createObject(RealmThumbnail.class, id);
         realmThumbnail.setCacheId(thumbnail.getCacheId());
@@ -34,6 +32,8 @@ public class RealmThumbnail extends RealmObject {
         realmThumbnail.setMessageId(messageId);
 
         realm.close();
+
+        return realmThumbnail;
     }
 
     public long getId() {

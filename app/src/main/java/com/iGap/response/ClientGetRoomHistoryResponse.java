@@ -2,7 +2,6 @@ package com.iGap.response;
 
 import android.os.Handler;
 import com.iGap.G;
-import com.iGap.activities.ActivityShearedMedia;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
@@ -12,8 +11,6 @@ import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClientGetRoomHistoryResponse extends MessageHandler {
 
@@ -41,19 +38,6 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                 final Realm realm = Realm.getDefaultInstance();
 
                 final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
-
-                for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
-                    // add file to realm sheared media
-                    String str = roomMessage.getMessageType().toString();
-                    if (str.contains(ProtoGlobal.RoomMessageType.AUDIO.toString()) || str.contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) ||
-                        str.contains(ProtoGlobal.RoomMessageType.FILE.toString()) || str.contains(ProtoGlobal.RoomMessageType.VOICE.toString()) ||
-                        str.contains(ProtoGlobal.RoomMessageType.GIF.toString()) || str.contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-
-                        List<ProtoGlobal.RoomMessage> prm = new ArrayList<ProtoGlobal.RoomMessage>();
-                        prm.add(roomMessage);
-                        ActivityShearedMedia.saveDataToLocal(prm, Long.parseLong(identity));
-                    }
-                }
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {

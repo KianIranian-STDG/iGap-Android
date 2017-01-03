@@ -22,7 +22,8 @@
             android:paddingRight="@dimen/dp8"
             android:text="@string/md_play_arrow"
             android:textColor="@color/green"
-            android:textSize="@dimen/sp18" />
+            android:textSize="@dimen/sp32"
+            />
 
         <TextView
             android:id="@+id/mls_txt_music_name"
@@ -63,7 +64,8 @@
             android:text="@string/md_close_button"
             android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/sp14" />
+            android:textSize="@dimen/sp22"
+            />
 
     </LinearLayout>
 

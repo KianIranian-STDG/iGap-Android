@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentNewGroup;
@@ -23,18 +22,19 @@ import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.interfaces.OnUserInfoMyClient;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
-
-import io.realm.Realm;
 
 public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClient {
     public static TextView txtUserName;
@@ -141,18 +141,34 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
             @Override
             public void onClick(View view) {
 
-                Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "New Chat");
-                fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
+                try {
+                    HelperPermision.getContactPermision(getActivity(), new OnGetPermision() {
+                        @Override public void Allow() throws IOException {
 
-                ActivityMain.mLeftDrawerLayout.closeDrawer();
+                            if (G.isImportContactToServer == false) {
+                                sendContactToServer();
+                            } else {
+                                Fragment fragment = RegisteredContactsFragment.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("TITLE", "New Chat");
+                                fragment.setArguments(bundle);
+                                getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .addToBackStack(null)
+                                    .replace(R.id.fragmentContainer, fragment)
+                                    .commit();
+
+                                ActivityMain.mLeftDrawerLayout.closeDrawer();
+                            }
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
             }
         });
 
@@ -177,17 +193,34 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
         layoutContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "Contacts");
-                fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
-                ActivityMain.mLeftDrawerLayout.closeDrawer();
+
+                try {
+                    HelperPermision.getContactPermision(getActivity(), new OnGetPermision() {
+                        @Override public void Allow() throws IOException {
+
+                            if (G.isImportContactToServer == false) {
+                                sendContactToServer();
+                            } else {
+                                Fragment fragment = RegisteredContactsFragment.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("TITLE", "Contacts");
+                                fragment.setArguments(bundle);
+                                getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .addToBackStack(null)
+                                    .replace(R.id.fragmentContainer, fragment)
+                                    .commit();
+                                ActivityMain.mLeftDrawerLayout.closeDrawer();
+                            }
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
             }
         });
 
@@ -300,6 +333,18 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
 
     @Override
     public void onUserInfoTimeOut() {
+
+    }
+
+    private void sendContactToServer() {
+        G.onContactImport = new OnUserContactImport() {
+            @Override public void onContactImport() {
+                new RequestUserContactsGetList().userContactGetList();
+                G.isImportContactToServer = true;
+            }
+        };
+
+        Contacts.getListOfContact(true);
 
     }
 

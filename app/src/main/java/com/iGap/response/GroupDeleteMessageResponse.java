@@ -5,8 +5,6 @@ import com.iGap.proto.ProtoGroupDeleteMessage;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineDelete;
-import com.iGap.realm.RealmShearedMedia;
-import com.iGap.realm.RealmShearedMediaFields;
 import io.realm.Realm;
 
 public class GroupDeleteMessageResponse extends MessageHandler {
@@ -46,12 +44,6 @@ public class GroupDeleteMessageResponse extends MessageHandler {
                 }
                 G.onChatDeleteMessageResponse.onChatDeleteMessage(groupDeleteMessage.getDeleteVersion()
                         , groupDeleteMessage.getMessageId(), groupDeleteMessage.getRoomId(), groupDeleteMessage.getResponse());
-
-                // delte  file from realm sheared media
-                RealmShearedMedia rs = realm.where(RealmShearedMedia.class).equalTo(RealmShearedMediaFields.MESSAGE_ID, groupDeleteMessage.getMessageId()).
-                    equalTo(RealmShearedMediaFields.ROOM_ID, groupDeleteMessage.getRoomId()).findFirst();
-
-                if (rs != null) rs.deleteFromRealm();
 
 
 

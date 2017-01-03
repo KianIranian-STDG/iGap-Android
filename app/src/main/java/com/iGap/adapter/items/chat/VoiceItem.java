@@ -116,14 +116,13 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         super.updateLayoutForSend(holder);
 
         if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-            holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray10), PorterDuff.Mode.SRC_IN);
+            holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
         }
 
-        holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
-
-        holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.white));
+        holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
+        holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
         holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.black90));
-        holder.auther.setTextColor(holder.itemView.getResources().getColor(R.color.white));
+        holder.auther.setTextColor(holder.itemView.getResources().getColor(R.color.black90));
     }
 
     @Override

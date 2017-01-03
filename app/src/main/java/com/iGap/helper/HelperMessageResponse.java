@@ -1,7 +1,6 @@
 package com.iGap.helper;
 
 import com.iGap.G;
-import com.iGap.activities.ActivityShearedMedia;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmRoom;
@@ -12,8 +11,6 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * helper message response for get message and detect message is for
@@ -22,19 +19,6 @@ import java.util.List;
 public class HelperMessageResponse {
 
     public static void handleMessage(final long roomId, final ProtoGlobal.RoomMessage roomMessage, final ProtoResponse.Response response, final String identity) {
-
-        // add file to realm sheared media
-        String str = roomMessage.getMessageType().toString();
-        if (str.contains(ProtoGlobal.RoomMessageType.AUDIO.toString()) || str.contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) ||
-            str.contains(ProtoGlobal.RoomMessageType.FILE.toString()) || str.contains(ProtoGlobal.RoomMessageType.VOICE.toString()) ||
-            str.contains(ProtoGlobal.RoomMessageType.GIF.toString()) || str.contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-
-            List<ProtoGlobal.RoomMessage> rm = new ArrayList<ProtoGlobal.RoomMessage>();
-            rm.add(roomMessage);
-            ActivityShearedMedia.saveDataToLocal(rm, roomId);
-        }
-
-
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {

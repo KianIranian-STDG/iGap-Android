@@ -1,7 +1,6 @@
 package com.iGap.realm;
 
 import android.text.format.DateUtils;
-
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperLogMessage;
 import com.iGap.interfaces.OnActivityChatStart;
@@ -10,9 +9,6 @@ import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-
-import org.parceler.Parcel;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
@@ -21,6 +17,7 @@ import io.realm.RealmRoomMessageRealmProxy;
 import io.realm.Sort;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
+import org.parceler.Parcel;
 
 @Parcel(implementations = {RealmRoomMessageRealmProxy.class},
         value = Parcel.Serialization.BEAN,
@@ -47,6 +44,7 @@ public class RealmRoomMessage extends RealmObject {
     private boolean deleted;
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
+    private boolean showMessage = true;
 
     // for channel
     /*private int voteUp;
@@ -149,11 +147,24 @@ public class RealmRoomMessage extends RealmObject {
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
 
+        RealmRoomMessage message = putOrUpdate(input, roomId, true, realm);
+
+        message.setShowMessage(true);
+
+        realm.close();
+
+        return message;
+    }
+
+    public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId, boolean showMessage, Realm realm) {
+
+
         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, input.getMessageId()).findFirst();
 
         if (message == null) {
             message = realm.createObject(RealmRoomMessage.class, input.getMessageId());
             message.setRoomId(roomId);
+
 
             if (input.hasForwardFrom()) {
                 message.setForwardMessage(RealmRoomMessage.putOrUpdate(input.getForwardFrom(), roomId));
@@ -161,14 +172,25 @@ public class RealmRoomMessage extends RealmObject {
             if (input.hasReplyTo()) {
                 message.setReplyTo(RealmRoomMessage.putOrUpdate(input.getReplyTo(), roomId));
             }
+
+            message.setShowMessage(showMessage);
         }
+
         message.setMessage(input.getMessage());
         message.setStatus(input.getStatus().toString());
         message.setUserId(input.getAuthor().getUser().getUserId());
         message.setDeleted(input.getDeleted());
         message.setEdited(input.getEdited());
+
         if (input.hasAttachment()) {
             message.setAttachment(RealmAttachment.build(input.getAttachment(), AttachmentFor.MESSAGE_ATTACHMENT, input.getMessageType()));
+
+            if (message.getAttachment().getSmallThumbnail() == null) {
+                long smallId = SUID.id().get();
+                RealmThumbnail smallThumbnail = RealmThumbnail.create(smallId, message.getAttachment().getId(), input.getAttachment().getSmallThumbnail());
+                message.getAttachment().setSmallThumbnail(smallThumbnail);
+            }
+
         }
         if (input.hasLocation()) {
             message.setLocation(RealmRoomMessageLocation.build(input.getLocation()));
@@ -195,8 +217,6 @@ public class RealmRoomMessage extends RealmObject {
             realmChannelExtra.setViewsLabel(input.getChannelExtra().getViewsLabel());
             message.setChannelExtra(realmChannelExtra);
         }
-
-        realm.close();
 
         return message;
     }
@@ -327,6 +347,14 @@ public class RealmRoomMessage extends RealmObject {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public boolean isShowMessage() {
+        return showMessage;
+    }
+
+    public void setShowMessage(boolean showMessage) {
+        this.showMessage = showMessage;
     }
 
     /*public int getVoteUp() {
