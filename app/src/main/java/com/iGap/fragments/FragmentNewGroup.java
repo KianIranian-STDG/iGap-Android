@@ -516,41 +516,41 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     private void chatToGroup() {
         G.onChatConvertToGroup = new OnChatConvertToGroup() {
             @Override
-            public void onChatConvertToGroup(final long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
+            public void onChatConvertToGroup(long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
 
-                if (avatarExist) {
-                    new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
-//                    getActivity().runOnUiThread(new Runnable() {
+//                if (existAvatar) {
+//                    new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
+////                    getActivity().runOnUiThread(new Runnable() {
+////                        @Override
+////                        public void run() {
+////                            Realm realm = Realm.getDefaultInstance();
+////                            realm.executeTransaction(new Realm.Transaction() {
+////                                @Override
+////                                public void execute(Realm realm) {
+////                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, groomId).findFirst();
+////                                    realmRoom.setId(roomId);
+////                                    realmRoom.setType(RoomType.GROUP);
+////                                    realmRoom.setTitle(name);
+////                                    RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
+////                                    realmGroupRoom.setRole(GroupChatRole.OWNER);
+////                                    realmGroupRoom.setDescription(description);
+////                                    realmGroupRoom.setParticipantsCountLabel("2");
+////                                    realmRoom.setGroupRoom(realmGroupRoom);
+////                                    realmRoom.setChatRoom(null);
+////                                }
+////                            });
+////                            realm.close();
+////                        }
+////                    });
+//                } else {
+//                    G.handler.post(new Runnable() {
 //                        @Override
 //                        public void run() {
-//                            Realm realm = Realm.getDefaultInstance();
-//                            realm.executeTransaction(new Realm.Transaction() {
-//                                @Override
-//                                public void execute(Realm realm) {
-//                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, groomId).findFirst();
-//                                    realmRoom.setId(roomId);
-//                                    realmRoom.setType(RoomType.GROUP);
-//                                    realmRoom.setTitle(name);
-//                                    RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
-//                                    realmGroupRoom.setRole(GroupChatRole.OWNER);
-//                                    realmGroupRoom.setDescription(description);
-//                                    realmGroupRoom.setParticipantsCountLabel("2");
-//                                    realmRoom.setGroupRoom(realmGroupRoom);
-//                                    realmRoom.setChatRoom(null);
-//                                }
-//                            });
-//                            realm.close();
+//                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 //                        }
 //                    });
-                } else {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        }
-                    });
 //                    getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
-                }
+//                }
 
                 getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
             }
@@ -1004,7 +1004,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                         if (isChannel) {
                             startChannelRoom(roomId);
                         } else {
-                            startRoom();
+                            startRoom(roomId);
                         }
 
                     }
@@ -1070,8 +1070,8 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         hideProgressBar();
     }
 
-    private void startRoom() {
-
+    private void startRoom(long roomId) {
+        Log.i("ZZZZZZZZ", "000run: " + roomId);
         Fragment fragment = ContactGroupFragment.newInstance();
         Bundle bundle = new Bundle();
         bundle.putLong("RoomId", roomId);

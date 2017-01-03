@@ -3,6 +3,7 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoChatConvertToGroup;
 import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
@@ -10,8 +11,6 @@ import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 
 import io.realm.Realm;
-
-import static com.iGap.module.MusicPlayer.roomId;
 
 public class ChatConvertToGroupResponse extends MessageHandler {
 
@@ -38,11 +37,16 @@ public class ChatConvertToGroupResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                realmRoom.setId(roomId);
+                realmRoom.setId(builder.getRoomId());
                 realmRoom.setType(RoomType.GROUP);
                 realmRoom.setTitle(builder.getName());
                 RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
-                realmGroupRoom.setRole(GroupChatRole.OWNER);
+                if (builder.getRole() == ProtoGlobal.GroupRoom.Role.OWNER) {
+                    realmGroupRoom.setRole(GroupChatRole.OWNER);
+                } else {
+                    realmGroupRoom.setRole(GroupChatRole.MEMBER);
+
+                }
                 realmGroupRoom.setDescription(builder.getDescription());
                 realmGroupRoom.setParticipantsCountLabel("2");
                 realmRoom.setGroupRoom(realmGroupRoom);
