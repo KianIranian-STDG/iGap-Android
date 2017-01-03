@@ -55,6 +55,9 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.iGap.G.context;
+import static com.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
+
 public class ActivityProfile extends ActivityEnhanced
         implements OnUserAvatarResponse, OnFileUploadForActivities {
 
@@ -105,28 +108,8 @@ public class ActivityProfile extends ActivityEnhanced
             @Override
             public void onClick(View view) {
                 if (!existAvatar) {
-                    try {
-//                        HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
-//                            @Override
-//                            public void Allow() {
-//                                startDialog(); // this dialog show 2 way for choose image : gallery and camera
-//                            }
-//                        });
-                        HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
-                            @Override
-                            public void Allow() throws IOException {
-                                HelperPermision.getCamarePermision(ActivityProfile.this, new OnGetPermision() {
-                                    @Override
-                                    public void Allow() {
-                                        startDialog(); // this dialog show 2 way for choose image : gallery and camera
 
-                                    }
-                                });
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    startDialog();
                 }
             }
         });
@@ -282,7 +265,7 @@ public class ActivityProfile extends ActivityEnhanced
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Intent intent = new Intent(G.context, ActivityMain.class);
+                                        Intent intent = new Intent(context, ActivityMain.class);
                                         intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
                                         startActivity(intent);
                                         finish();
@@ -326,7 +309,6 @@ public class ActivityProfile extends ActivityEnhanced
     }
 
     public void useCamera() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
                 new AttachFile(ActivityProfile.this).dispatchTakePictureIntent();
@@ -346,9 +328,23 @@ public class ActivityProfile extends ActivityEnhanced
     //======================================================================================================dialog for choose image
 
     public void useGallery() {
-        Intent intent =
-                new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
+//        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
+
+        try {
+            HelperPermision.getStoragePermision(context, new OnGetPermision() {
+                @Override
+                public void Allow() {
+                    try {
+                        new AttachFile(ActivityProfile.this).requestOpenGalleryForImageSingleSelect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void startDialog() {
@@ -358,40 +354,60 @@ public class ActivityProfile extends ActivityEnhanced
                 .negativeText(getResources().getString(R.string.B_cancel))
                 .items(R.array.profile)
                 .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which,
-                                            CharSequence text) {
+                                   @Override
+                                   public void onSelection(final MaterialDialog dialog, View view, int which,
+                                                           CharSequence text) {
 
-                        switch (which) {
-                            case 0: {
-                                useGallery();
-                                dialog.dismiss();
-                                break;
+                                       switch (which) {
+                                           case 0: {
+                                               useGallery();
+                                               dialog.dismiss();
+                                               break;
 
-                            }
-                            case 1: {
-                                if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                    useCamera();
-                                    dialog.dismiss();
-                                } else {
-                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                            getResources().getString(R.string.please_check_your_camera),
-                                            Snackbar.LENGTH_LONG);
+                                           }
+                                           case 1: {
+                                               if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                                   try {
 
-                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
-                                }
-                                break;
-                            }
-                        }
-                    }
-                })
-                .show();
+                                                       HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
+                                                           @Override
+                                                           public void Allow() throws IOException {
+                                                               HelperPermision.getCamarePermision(ActivityProfile.this, new OnGetPermision() {
+                                                                   @Override
+                                                                   public void Allow() {
+                                                                       // this dialog show 2 way for choose image : gallery and camera
+                                                                       dialog.dismiss();
+                                                                       useCamera();
+                                                                   }
+                                                               });
+                                                           }
+                                                       });
+                                                   } catch (IOException e) {
+                                                       e.printStackTrace();
+                                                   }
+                                               } else {
+                                                   final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                                           getResources().getString(R.string.please_check_your_camera),
+                                                           Snackbar.LENGTH_LONG);
+
+                                                   snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                       @Override
+                                                       public void onClick(View view) {
+                                                           snack.dismiss();
+                                                       }
+                                                   });
+                                                   snack.show();
+                                               }
+                                               break;
+                                           }
+                                       }
+                                   }
+                               }
+
+                )
+                .
+
+                        show();
     }
 
     //======================================================================================================result from camera , gallery and crop
@@ -413,24 +429,24 @@ public class ActivityProfile extends ActivityEnhanced
 
             } else {
                 Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
-                intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
+                intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "profile");
                 intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             }
 
+        } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
+            if (data != null) {
+                Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
+                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                intent.putExtra("TYPE", "gallery");
+                intent.putExtra("PAGE", "profile");
+                intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
+            }
 
-        } else if (requestCode == IntentRequests.REQ_GALLERY
-                && resultCode == RESULT_OK) {// result for gallery
-            Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
-            intent.putExtra("IMAGE_CAMERA", data.getData().toString());
-            intent.putExtra("TYPE", "gallery");
-            intent.putExtra("PAGE", "profile");
-            intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));
-            startActivityForResult(intent, IntentRequests.REQ_CROP);
         } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) {
-
             if (data != null) {
                 pathImageUser = data.getData().toString();
             }
@@ -536,6 +552,7 @@ public class ActivityProfile extends ActivityEnhanced
                 G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
             }
         }
+
     }
 
     @Override

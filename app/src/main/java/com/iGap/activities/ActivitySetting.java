@@ -153,6 +153,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private static String identityCurrent;
     private TextView txtGander;
     private TextView txtEmail;
+    private AttachFile attachFile;
 
     public static long getFolderSize(File dir) throws RuntimeException {
         long size = 0;
@@ -1139,22 +1140,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    HelperPermision.getStoragePermision(ActivitySetting.this, new OnGetPermision() {
-                        @Override
-                        public void Allow() throws IOException {
-                            HelperPermision.getCamarePermision(ActivitySetting.this, new OnGetPermision() {
-                                @Override
-                                public void Allow() {
-                                    startDialog(R.array.profile);
-                                    realm.close();
-                                }
-                            });
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                startDialog(R.array.profile);
+
             }
         });
 
@@ -1876,37 +1864,60 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 .items(r)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                         if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) { // camera
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                try {
-                                    new AttachFile(ActivitySetting.this).dispatchTakePictureIntent();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
 
-                                if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                    idAvatar = SUID.id().get();
-                                    pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
-                                    nameImageFile = new File(pathSaveImage);
-                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    uriIntent = Uri.fromFile(nameImageFile);
-                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                    startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
-                                    dialog.dismiss();
-                                } else {
-                                    Toast.makeText(ActivitySetting.this, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
-                                }
+
+                            try {
+                                HelperPermision.getStoragePermision(ActivitySetting.this, new OnGetPermision() {
+                                    @Override
+                                    public void Allow() throws IOException {
+                                        HelperPermision.getCamarePermision(ActivitySetting.this, new OnGetPermision() {
+                                            @Override
+                                            public void Allow() {
+                                                dialog.dismiss();
+                                                useCamera();
+                                            }
+                                        });
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
                         } else {
-                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            idAvatar = SUID.id().get();
-                            startActivityForResult(intent, IntentRequests.REQ_GALLERY);
+                            try {
+                                new AttachFile(ActivitySetting.this).requestOpenGalleryForImageSingleSelect();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             dialog.dismiss();
                         }
                     }
                 }).show();
+    }
+
+    private void useCamera() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                new AttachFile(ActivitySetting.this).dispatchTakePictureIntent();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                idAvatar = SUID.id().get();
+                pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
+                nameImageFile = new File(pathSaveImage);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                uriIntent = Uri.fromFile(nameImageFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
+
+            } else {
+                Toast.makeText(ActivitySetting.this, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     //=====================================================================================result
@@ -1929,7 +1940,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             } else {
                 Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
                 if (uriIntent != null) {
-
                     ImageHelper.correctRotateImage(pathSaveImage, true);
                     intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
                     intent.putExtra("TYPE", "camera");
@@ -1939,24 +1949,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 }
             }
 
-        } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == RESULT_OK) {// result for gallery
+        } else if (requestCode == AttachFile.request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
-                    intent.putExtra("IMAGE_CAMERA", AttachFile.getClipData(data.getClipData()).get(0));
-                    intent.putExtra("TYPE", "gallery");
-                    intent.putExtra("PAGE", "setting");
-                    intent.putExtra("ID", (int) (idAvatar + 1L));
-                    startActivityForResult(intent, IntentRequests.REQ_CROP);
-                } else {
-                    Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
-                    intent.putExtra("IMAGE_CAMERA", data.getData().toString());
-                    intent.putExtra("TYPE", "gallery");
-                    intent.putExtra("PAGE", "setting");
-                    intent.putExtra("ID", (int) (idAvatar + 1L));
-                    startActivityForResult(intent, IntentRequests.REQ_CROP);
-                }
+                Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
+                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                intent.putExtra("TYPE", "gallery");
+                intent.putExtra("PAGE", "setting");
+                intent.putExtra("ID", (int) (idAvatar + 1L));
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
+
             }
         } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) { // save path image on data base ( realm )
 

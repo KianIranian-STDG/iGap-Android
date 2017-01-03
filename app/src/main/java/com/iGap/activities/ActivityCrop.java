@@ -80,7 +80,10 @@ public class ActivityCrop extends ActivityEnhanced {
                 String newPath = "file://" + path;
                 uri = Uri.parse(newPath);
             } else {
-                uri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
+//                uri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
+                path = bundle.getString("IMAGE_CAMERA");
+                String newPath = "file://" + path;
+                uri = Uri.parse(newPath);
             }
 
             page = bundle.getString("PAGE");

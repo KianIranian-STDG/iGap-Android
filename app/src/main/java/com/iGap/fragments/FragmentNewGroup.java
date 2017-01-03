@@ -63,12 +63,8 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmChannelRoom;
-import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
-import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.realm.enums.GroupChatRole;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChannelAvatarAdd;
 import com.iGap.request.RequestChannelCreate;
 import com.iGap.request.RequestChatConvertToGroup;
@@ -87,7 +83,9 @@ import io.realm.Realm;
 
 import static com.iGap.G.context;
 import static com.iGap.R.id.fragmentContainer;
+import static com.iGap.module.AttachFile.isInAttach;
 import static com.iGap.module.AttachFile.request_code_TAKE_PICTURE;
+import static com.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 import static com.iGap.module.MusicPlayer.roomId;
 
 public class FragmentNewGroup extends Fragment implements OnFileUploadForActivities, OnGroupAvatarResponse, OnChannelAvatarAdd {
@@ -115,6 +113,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     private String mInviteLink;
     private boolean isChannel = false;
     public static String mCurrentPhotoPath;
+    private AttachFile attachFile;
 
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
@@ -144,63 +143,52 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         }
     }
 
-    private void showDialogSelectGallary() {
+    private void showDialogSelectGallery() {
         new MaterialDialog.Builder(getActivity()).title(getString(R.string.choose_picture))
                 .negativeText(getString(R.string.cancel))
                 .items(R.array.profile)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
                         switch (which) {
                             case 0: {
-                                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                startActivityForResult(intent, IntentRequests.REQ_GALLERY);
-                                dialog.dismiss();
-                                break;
 
+                                try {
+                                    HelperPermision.getStoragePermision(context, new OnGetPermision() {
+                                        @Override
+                                        public void Allow() {
+                                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                            intent.setType("image/*");
+                                            startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                                            isInAttach = true;
+                                        }
+                                    });
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
                             }
                             case 1: {
 
                                 if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                    try {
 
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                        try {
-//                                            new AttachFile(FragmentNewGroup.this.getActivity()).dispatchTakePictureIntent();
-                                            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                            // Ensure that there's a camera activity to handle the intent
-                                            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                                                // Create the File where the photo should go
-                                                File photoFile = null;
-                                                try {
-                                                    photoFile = createImageFile();
-                                                } catch (IOException ex) {
-                                                    // Error occurred while creating the File
-                                                    return;
-                                                }
-                                                // Continue only if the File was successfully created
-                                                if (photoFile != null) {
-                                                    uriIntent = FileProvider.getUriForFile(getActivity(), getActivity().getApplicationContext().getPackageName() + ".provider", createImageFile());
-                                                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                                    startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
-                                                }
+                                        HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                                            @Override
+                                            public void Allow() throws IOException {
+                                                HelperPermision.getCamarePermision(getActivity(), new OnGetPermision() {
+                                                    @Override
+                                                    public void Allow() {
+                                                        // this dialog show 2 way for choose image : gallery and camera
+                                                        dialog.dismiss();
+                                                        useCamera();
+                                                    }
+                                                });
                                             }
-
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    } else {
-
-                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        if (prefix.equals("NewChanel")) {
-                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
-                                        } else {
-                                            uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
-                                        }
-
-                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                                        startActivityForResult(intent, request_code_TAKE_PICTURE);
-                                        dialog.dismiss();
+                                        });
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
 
                                 } else {
@@ -213,6 +201,46 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                     }
                 })
                 .show();
+    }
+
+    private void useCamera() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+//                                            new AttachFile(FragmentNewGroup.this.getActivity()).dispatchTakePictureIntent();
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Ensure that there's a camera activity to handle the intent
+                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    // Create the File where the photo should go
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                    } catch (IOException ex) {
+                        // Error occurred while creating the File
+                        return;
+                    }
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+                        uriIntent = FileProvider.getUriForFile(getActivity(), getActivity().getApplicationContext().getPackageName() + ".provider", createImageFile());
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                        startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (prefix.equals("NewChanel")) {
+                uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
+            } else {
+                uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
+            }
+
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+            startActivityForResult(intent, request_code_TAKE_PICTURE);
+        }
     }
 
     public void initComponent(View view) {
@@ -268,7 +296,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                 HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
                     @Override
                     public void Allow() {
-                        showDialogSelectGallary();
+                        showDialogSelectGallery();
                     }
                 });
 
@@ -440,8 +468,8 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
                         } else {
 
-                            FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
                             hideProgressBar();
+                            FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
                             Bundle bundle = new Bundle();
                             bundle.putLong("ROOMID", roomIdR);
                             bundle.putString("INVITE_LINK", inviteLink);
@@ -492,29 +520,28 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
                 if (avatarExist) {
                     new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Realm realm = Realm.getDefaultInstance();
-
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, groomId).findFirst();
-                                    realmRoom.setId(roomId);
-                                    realmRoom.setType(RoomType.GROUP);
-                                    realmRoom.setTitle(name);
-                                    RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
-                                    realmGroupRoom.setRole(GroupChatRole.OWNER);
-                                    realmGroupRoom.setDescription(description);
-                                    realmGroupRoom.setParticipantsCountLabel("2");
-                                    realmRoom.setGroupRoom(realmGroupRoom);
-                                    realmRoom.setChatRoom(null);
-                                }
-                            });
-                            realm.close();
-                        }
-                    });
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Realm realm = Realm.getDefaultInstance();
+//                            realm.executeTransaction(new Realm.Transaction() {
+//                                @Override
+//                                public void execute(Realm realm) {
+//                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, groomId).findFirst();
+//                                    realmRoom.setId(roomId);
+//                                    realmRoom.setType(RoomType.GROUP);
+//                                    realmRoom.setTitle(name);
+//                                    RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
+//                                    realmGroupRoom.setRole(GroupChatRole.OWNER);
+//                                    realmGroupRoom.setDescription(description);
+//                                    realmGroupRoom.setParticipantsCountLabel("2");
+//                                    realmRoom.setGroupRoom(realmGroupRoom);
+//                                    realmRoom.setChatRoom(null);
+//                                }
+//                            });
+//                            realm.close();
+//                        }
+//                    });
                 } else {
                     G.handler.post(new Runnable() {
                         @Override
@@ -522,33 +549,10 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         }
                     });
-                    getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
+//                    getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Realm realm = Realm.getDefaultInstance();
-
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, groomId).findFirst();
-                                realmRoom.setId(roomId);
-                                realmRoom.setType(RoomType.GROUP);
-                                realmRoom.setTitle(name);
-                                RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
-                                realmGroupRoom.setRole(GroupChatRole.OWNER);
-                                realmGroupRoom.setDescription(description);
-                                realmGroupRoom.setParticipantsCountLabel("2");
-                                realmRoom.setGroupRoom(realmGroupRoom);
-                                realmRoom.setChatRoom(null);
-                            }
-                        });
-                        realm.close();
-                        getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
-                    }
-                });
+                getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
             }
 
             @Override
@@ -680,7 +684,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                             @Override
                             public void run() {
 
-                                hideProgressBar();
                                 if (existAvatar) {
                                     showProgressBar();
                                     if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
@@ -1091,8 +1094,8 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     }
 
     private void startChannelRoom(long roomId) {
-        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
         hideProgressBar();
+        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
         Bundle bundle = new Bundle();
         bundle.putLong("ROOMID", roomId);
         bundle.putString("INVITE_LINK", mInviteLink);
@@ -1190,22 +1193,15 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
             }
 
 
-        } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == Activity.RESULT_OK) {// result for gallery
+        } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == Activity.RESULT_OK) {// result for gallery
             if (data != null) {
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Intent intent = new Intent(getActivity(), ActivityCrop.class);
-                    intent.putExtra("IMAGE_CAMERA", AttachFile.getClipData(data.getClipData()).get(0));
-                    intent.putExtra("TYPE", "gallery");
-                    intent.putExtra("PAGE", prefix);
-                    startActivityForResult(intent, IntentRequests.REQ_CROP);
-                } else {
-                    Intent intent = new Intent(getActivity(), ActivityCrop.class);
-                    intent.putExtra("IMAGE_CAMERA", data.getData().toString());
-                    intent.putExtra("TYPE", "gallery");
-                    intent.putExtra("PAGE", prefix);
-                    startActivityForResult(intent, IntentRequests.REQ_CROP);
-                }
+                Intent intent = new Intent(getActivity(), ActivityCrop.class);
+                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                intent.putExtra("TYPE", "gallery");
+                intent.putExtra("PAGE", prefix);
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
+
 
             }
         } else if (requestCode == IntentRequests.REQ_CROP) {
@@ -1243,7 +1239,8 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
             public void run() {
                 txtNextStep.setEnabled(true);
                 prgWaiting.setVisibility(View.GONE);
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (getActivity() != null)
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
     }

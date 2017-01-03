@@ -138,7 +138,6 @@ import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.id.fragmentContainer_group_profile;
-import static com.iGap.activities.ActivitySetting.pathSaveImage;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
 /**
@@ -1106,29 +1105,22 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
                         filePath = AttachFile.mCurrentPhotoPath;
-                        pathSaveImage = filePath;
+                        filePathAvatar = filePath;
                     } else {
                         ImageHelper.correctRotateImage(AttachFile.imagePath, true);
                         filePath = AttachFile.imagePath;
                         filePathAvatar = filePath;
                     }
-                    new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        filePath = AttachFile.getClipData(data.getClipData()).get(0);
-                        filePathAvatar = filePath;
-                    } else {
-                        filePath = AttachFile.getFilePathFromUri(data.getData());
-                        filePathAvatar = filePath;
-                    }
+                    filePath = AttachFile.getFilePathFromUri(data.getData());
+                    filePathAvatar = filePath;
 
-                    new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
                     break;
             }
 
-
+            new UploadTask(prgWait, ActivityGroupProfile.this).execute(filePath, avatarId);
         }
     }
 
@@ -1166,7 +1158,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 .items(r)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
                         if (which == 0) {
                             try {
@@ -1176,21 +1168,23 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             }
                         } else if (which == 1) {
                             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) { // camera
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                    try {
-                                        new AttachFile(ActivityGroupProfile.this).dispatchTakePictureIntent();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                } else {
-                                    try {
-                                        attachFile.requestTakePicture();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
 
-                                dialog.dismiss();
+                                try {
+                                    HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermision() {
+                                        @Override
+                                        public void Allow() throws IOException {
+                                            HelperPermision.getCamarePermision(ActivityGroupProfile.this, new OnGetPermision() {
+                                                @Override
+                                                public void Allow() {
+                                                    dialog.dismiss();
+                                                    useCamera();
+                                                }
+                                            });
+                                        }
+                                    });
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             } else {
                                 Toast.makeText(ActivityGroupProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                             }
@@ -1204,6 +1198,22 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     }
                 })
                 .show();
+    }
+
+    private void useCamera() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                new AttachFile(ActivityGroupProfile.this).dispatchTakePictureIntent();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                new AttachFile(ActivityGroupProfile.this).requestTakePicture();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //=============get last avatar

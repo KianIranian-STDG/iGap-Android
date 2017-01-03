@@ -15,8 +15,10 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -44,10 +46,12 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
 
 public class ContactGroupFragment extends Fragment {
     private FastAdapter fastAdapter;
@@ -79,6 +83,9 @@ public class ContactGroupFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        hideProgressBar(); // some times touch screen remind lock so this method do unlock
+
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -551,4 +558,28 @@ public class ContactGroupFragment extends Fragment {
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
+
+    private void showProgressBar() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+//                prgWaiting.setVisibility(View.VISIBLE);
+                if (getActivity() != null)
+                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
+    private void hideProgressBar() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+//                prgWaiting.setVisibility(View.GONE);
+                if (getActivity() != null)
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
 }

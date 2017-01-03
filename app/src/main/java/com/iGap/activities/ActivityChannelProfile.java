@@ -546,7 +546,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         }
 
 
-
         ltLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1320,37 +1319,60 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         new MaterialDialog.Builder(this).title(R.string.choose_picture).negativeText(R.string.cansel).items(r).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
-            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(getString(R.string.from_camera))) {
 
                     if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            try {
-                                new AttachFile(ActivityChannelProfile.this).dispatchTakePictureIntent();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            try {
-                                attachFile.requestTakePicture();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                        try {
+
+                            HelperPermision.getStoragePermision(ActivityChannelProfile.this, new OnGetPermision() {
+                                @Override
+                                public void Allow() throws IOException {
+                                    HelperPermision.getCamarePermision(ActivityChannelProfile.this, new OnGetPermision() {
+                                        @Override
+                                        public void Allow() {
+                                            // this dialog show 2 way for choose image : gallery and camera
+                                            dialog.dismiss();
+                                            useCamera();
+                                        }
+                                    });
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        dialog.dismiss();
+
+
                     } else {
                         Toast.makeText(ActivityChannelProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     try {
-                        attachFile.requestOpenGalleryForImageSingleSelect();
+                        new AttachFile(ActivityChannelProfile.this).requestOpenGalleryForImageSingleSelect();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }).show();
+    }
+
+    private void useCamera() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                new AttachFile(ActivityChannelProfile.this).dispatchTakePictureIntent();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                new AttachFile(ActivityChannelProfile.this).requestTakePicture();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //********** channel Add Member
@@ -2198,14 +2220,9 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        filePath = AttachFile.getClipData(data.getClipData()).get(0);
-                        pathSaveImage = filePath;
-                    } else {
-                        filePath = AttachFile.getFilePathFromUri(data.getData());
-                        pathSaveImage = filePath;
-                    }
 
+                    filePath = AttachFile.getFilePathFromUri(data.getData());
+                    pathSaveImage = filePath;
                     break;
             }
 
