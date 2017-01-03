@@ -5,11 +5,9 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-
+import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
 
 public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public static List<Long> userInfoAlreadyRequests = new ArrayList<>();
@@ -128,6 +126,26 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         }
         return false;
     }
+
+    public void removeItemFromAdapter(final Long roomid) {
+
+        List<Item> items = getAdapterItems();
+
+        for (int i = 0; i < items.size(); i++) {
+            try {
+                if (items.get(i).getInfo().getId() == roomid) {
+                    items.remove(i);
+                    notifyAdapterItemRemoved(i);
+                    break;
+                }
+            } catch (IllegalStateException e) {
+                items.remove(i);
+                notifyAdapterItemRemoved(i);
+            }
+        }
+    }
+
+
 
     /*public void setAction(long roomId, ProtoGlobal.ClientAction clientAction) {
         List<Item> items = getAdapterItems();

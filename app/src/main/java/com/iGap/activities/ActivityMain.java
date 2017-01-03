@@ -25,7 +25,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -96,16 +95,14 @@ import com.iGap.request.RequestGroupLeft;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
@@ -672,68 +669,50 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+
+                RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
+                for (int i = 0; i < list.size(); i++) {
+                    list.get(i).setDeleted(true);
+                }
+
+
                 for (ProtoGlobal.Room room : rooms) {
                     RealmRoom.putOrUpdate(room);
                 }
+
+                // delete messages and rooms that was deleteed
+                RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll();
+                for (RealmRoom item : deletedRoomsList) {
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll();
+                    item.deleteFromRealm();
+                }
+
+
+
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                final List<ProtoGlobal.Room> newRooms = new ArrayList<>();
-                for (ProtoGlobal.Room room : rooms) {
-                    if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).count() == 0) {
-                        newRooms.add(room);
-                        break;
-                    }
-                }
-                realm.executeTransactionAsync(new Realm.Transaction() {
+
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        // remove deleted rooms
-                        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                            boolean existed = false;
-                            for (ProtoGlobal.Room room : rooms) {
-                                if (room.getId() == realmRoom.getId()) {
-                                    existed = true;
-                                    break;
-                                }
-                            }
-                            if (!existed) {
-                                realmRoom.deleteFromRealm();
-                            }
+                        for (RealmRoom item : realm.where(RealmRoom.class).findAll()) {
+
+                            if (item.getLastMessage() != null) if (item.getLastMessage().getUpdateTime() > item.getUpdatedTime()) item.setUpdatedTime(item.getLastMessage().getUpdateTime());
                         }
-
-                        for (ProtoGlobal.Room room : newRooms) {
-                            RealmRoom.putOrUpdate(room);
-                        }
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        List<RoomItem> roomItems = new ArrayList<>();
-                        //for (ProtoGlobal.Room room : rooms) {
-                        //    roomItems.add(new RoomItem().setInfo(realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst()).withIdentifier(SUID.id().get()));
-                        //}
-                        //  Collections.sort(roomItems, SortRooms.DESC);
-
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                for (RealmRoom item : realm.where(RealmRoom.class).findAll()) {
-                                    item.setUpdatedTime(item.getLastMessage().getUpdateTime());
-                                }
-                            }
-                        });
-
-                        for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
-                            roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
-                        }
-
-                        mAdapter.add(roomItems);
-
-                        // realm.close();
                     }
                 });
+
+                List<RoomItem> roomItems = new ArrayList<>();
+
+                for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
+                    roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
+                }
+
+                mAdapter.add(roomItems);
+
+
             }
         });
     }
@@ -813,176 +792,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         });
     }
 
-    private void deleteChat(final RoomItem item) {
-
-        //TODO [Saeed Mozaffari] [2017-01-01 1:30 PM] - for delete chat don't use from item because maybe another account delete this item and this client don't have item(item is null)
-
-        G.onChatDelete = new OnChatDelete() {
-            @Override
-            public void onChatDelete(long roomId) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mAdapter != null && item != null) {
-                            mAdapter.remove(mAdapter.getPosition(item));
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onChatDeleteError(int majorCode, int minorCode) {
-
-                if (majorCode == 218 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                } else if (majorCode == 219) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                } else if (majorCode == 220) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-        };
-
-        new RequestChatDelete().chatDelete(item.getInfo().getId());
-    }
-
-    public void deleteGroup(final RoomItem item) {
-
-        G.onGroupDelete = new OnGroupDelete() {
-            @Override
-            public void onGroupDelete(final long roomId) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        /*if (mAdapter != null) {
-                            int pos = mAdapter.getPosition(roomId);
-                            if (pos != -1) {
-                                mAdapter.remove(pos);
-                            }
-                        }*/
-                        if (mAdapter != null && item != null) {
-                            mAdapter.remove(mAdapter.getPosition(item));
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void Error(int majorCode, int minorCode) {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-
-            }
-
-            @Override
-            public void onTimeOut() {
-
-            }
-        };
-
-        new RequestGroupDelete().groupDelete(item.getInfo().getId());
-    }
-
-    private void lefGroup(final RoomItem item, final int position) {
-
-        G.onGroupLeft = new OnGroupLeft() {
-            @Override
-            public void onGroupLeft(final long roomId, long memberId) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mAdapter != null && item != null) {
-                            mAdapter.remove(position);
-                        }
-                        /*if (mAdapter != null) {
-                            int pos = mAdapter.getPosition(roomId);
-                            if (pos != -1) {
-                                mAdapter.remove(pos);
-                            }
-                        }*/
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "lefGroup", Snackbar.LENGTH_LONG);
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-
-            }
-
-            @Override
-            public void onTimeOut() {
-
-            }
-        };
-
-        new RequestGroupLeft().groupLeft(item.getInfo().getId());
-    }
-
     /**
      * on select room menu
      *
-     * @param message  message text
+     * @param message message text
      * @param position position dfdfdfdf
      */
     private void onSelectRoomMenu(String message, int position, RoomItem item) {
@@ -997,22 +810,20 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                 if (item.mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
 
-                    deleteChat(item);
+                    new RequestChatDelete().chatDelete(item.getInfo().getId());
                 } else if (item.mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
+
                     if (item.mInfo.getGroupRoom().getRole() == GroupChatRole.OWNER) {
-
-                        deleteGroup(item);
+                        new RequestGroupDelete().groupDelete(item.getInfo().getId());
                     } else {
-
-                        lefGroup(item, position);
+                        new RequestGroupLeft().groupLeft(item.getInfo().getId());
                     }
                 } else if (item.mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                    // TODO: 11/22/2016 [Alireza] delete channel room
 
                     if (item.mInfo.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
-                        deleteChannel(item, position);
+                        new RequestChannelDelete().channelDelete(item.getInfo().getId());
                     } else {
-                        leftChannel(item, position);
+                        new RequestChannelLeft().channelLeft(item.getInfo().getId());
                     }
                 }
 
@@ -1020,133 +831,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
     }
 
-    private void deleteChannel(final RoomItem item, final int position) {
-
-        G.onChannelDelete = new OnChannelDelete() {
-            @Override
-            public void onChannelDelete(final long roomId) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mAdapter != null && item != null) {
-                            mAdapter.remove(position);
-                        }
-                        /*if (mAdapter != null) {
-                            int pos = mAdapter.getPosition(roomId);
-                            if (pos != -1) {
-                                mAdapter.remove(pos);
-                            }
-                        }*/
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            }
-
-            @Override
-            public void onTimeOut() {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-
-            }
-        };
-        new RequestChannelDelete().channelDelete(item.getInfo().getId());
-    }
-
-    private void leftChannel(RoomItem item, final int position) {
-
-        G.onChannelLeft = new OnChannelLeft() {
-            @Override
-            public void onChannelLeft(final long roomId, long memberId) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.remove(position);
-                       /* if (mAdapter != null) {
-                            int pos = mAdapter.getPosition(roomId);
-                            if (pos != -1) {
-                                mAdapter.remove(pos);
-                            }
-                        }*/
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            }
-
-            @Override
-            public void onTimeOut() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            }
-        };
-
-
-        new RequestChannelLeft().channelLeft(item.getInfo().getId());
-    }
-
-
     // FIXME: 9/6/2016 [Alireza Eskandarpour Shoferi] not to be on handler, but for fixing
     // securing for testing purposes
     // TODO ghable pak kardan, request ro bear jaye jaee ke invoke kardi
     private void testIsSecure() {
         new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (G.isSecure && G.userLogin) {
                     new RequestClientGetRoomList().clientGetRoomList();
                 } else {
@@ -1178,8 +868,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
     }
 
-    @Override
-    public void onBackPressed() {
+    @Override public void onBackPressed() {
         SearchFragment myFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("Search_fragment");
 
         FragmentNewGroup fragmentNeGroup = (FragmentNewGroup) getSupportFragmentManager().findFragmentByTag("newGroup_fragment");
@@ -1188,10 +877,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
             getSupportFragmentManager().beginTransaction().remove(fragmentNeGroup).commit();
-
         } else if (fragmentCreateChannel != null && fragmentCreateChannel.isVisible()) {
             getSupportFragmentManager().beginTransaction().remove(fragmentCreateChannel).commit();
-
         } else if (fragmentContactGroup != null && fragmentContactGroup.isVisible()) {
             getSupportFragmentManager().beginTransaction().remove(fragmentContactGroup).commit();
         } else if (myFragment != null && myFragment.isVisible()) {
@@ -1205,8 +892,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     private static boolean mFirstRun = true;
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
@@ -1224,8 +910,216 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         startService(new Intent(this, ServiceContact.class));
 
         mFirstRun = false;
-    }
 
+        G.onChannelDelete = new OnChannelDelete() {
+            @Override public void onChannelDelete(final long roomId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.removeItemFromAdapter(roomId);
+                    }
+                });
+            }
+
+            @Override public void onError(int majorCode, int minorCode) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+
+            }
+        };
+
+        G.onChannelLeft = new OnChannelLeft() {
+            @Override public void onChannelLeft(final long roomId, long memberId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.removeItemFromAdapter(roomId);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+        };
+
+        G.onGroupDelete = new OnGroupDelete() {
+            @Override public void onGroupDelete(final long roomId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.removeItemFromAdapter(roomId);
+                    }
+                });
+            }
+
+            @Override public void Error(int majorCode, int minorCode) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onTimeOut() {
+
+            }
+        };
+
+        G.onGroupLeft = new OnGroupLeft() {
+            @Override public void onGroupLeft(final long roomId, long memberId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.removeItemFromAdapter(roomId);
+                    }
+                });
+            }
+
+            @Override public void onError(int majorCode, int minorCode) {
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "lefGroup", Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+
+            }
+
+            @Override public void onTimeOut() {
+
+            }
+        };
+
+        G.onChatDelete = new OnChatDelete() {
+            @Override public void onChatDelete(final long roomId) {
+
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        mAdapter.removeItemFromAdapter(roomId);
+                    }
+                });
+            }
+
+            @Override public void onChatDeleteError(int majorCode, int minorCode) {
+
+                if (majorCode == 218 && minorCode == 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                        }
+                    });
+                } else if (majorCode == 219) {
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                        }
+                    });
+                } else if (majorCode == 220) {
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
+
+                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                @Override public void onClick(View view) {
+                                    snack.dismiss();
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        };
+    }
 
     @Override
     protected void onPause() {

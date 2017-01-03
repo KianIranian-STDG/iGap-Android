@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -37,7 +36,6 @@ import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.proto.ProtoGlobal;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -158,7 +156,6 @@ public class AttachFile {
     }
 
     public void requestTakePicture() throws IOException {
-
 
         PackageManager packageManager = context.getPackageManager();
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
@@ -601,22 +598,22 @@ public class AttachFile {
 
     public String saveGalleryPicToLocal(String galleryPath) {
 
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             String result = "";
             if (galleryPath == null) return "";
 
-            Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
+        if (galleryPath.contains(G.DIR_APP)) { // file one time send and compress
 
-            if (bitmap != null) {
-                result = galleryPath;
-                ImageHelper.SaveBitmapToFile(result, bitmap);
+            File file = new File(galleryPath);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                result = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file).getPath();
+            } else {
+                result = Uri.fromFile(file).getPath();
             }
 
             return result;
-        } else {
-            String result = "";
-            if (galleryPath == null) return "";
+        }
+
 
             Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
 
@@ -625,7 +622,8 @@ public class AttachFile {
                 ImageHelper.SaveBitmapToFile(result, bitmap);
             }
 
+        //  Log.e("ddd","result  "+result+"     "+galleryPath);
+
             return result;
-        }
     }
 }
