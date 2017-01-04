@@ -4,10 +4,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.iGap.realm.RealmRoomMessage;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +15,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private int mCurrentPage = 0;
     private FastItemAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private int mTotalItemsInPages = 50;
+    private int mTotalItemsInPages = 200;
     private int mVisibleThreshold = -1;
     private OrientationHelper mOrientationHelper;
     private boolean mIsOrientationHelperVertical;
