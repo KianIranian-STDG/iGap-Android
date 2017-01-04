@@ -3,19 +3,17 @@
               android:id="@+id/lyt_vote"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginTop="1dp"
-              android:layoutDirection="ltr"
+    android:layoutDirection="ltr"
               android:gravity="left|start|center_vertical"
               android:orientation="horizontal"
-              android:paddingBottom="@dimen/dp8"
-              android:paddingTop="@dimen/dp8">
+    android:paddingBottom="@dimen/dp12"
+    >
 
 
     <LinearLayout
         android:id="@+id/lyt_signature"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dp4"

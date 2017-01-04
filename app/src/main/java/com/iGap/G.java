@@ -231,8 +231,7 @@ public class G extends MultiDexApplication {
 
     public static int IMAGE_CORNER;
 
-    @Override
-    protected void attachBaseContext(Context base) {
+    @Override protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
@@ -356,12 +355,12 @@ public class G extends MultiDexApplication {
     public static OnUserContactsBlock onUserContactsBlock;
     public static OnUserContactsUnBlock onUserContactsUnBlock;
 
-
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;
     public static ConnectionMode connectionMode;
     public static boolean isNetworkRoaming;
+    public static boolean noNetwok;
 
     public static ConcurrentHashMap<Long, RequestWrapper> currentUploadFiles = new ConcurrentHashMap<>();
 
@@ -390,26 +389,21 @@ public class G extends MultiDexApplication {
     public static void importContact() {
 
         G.onContactImport = new OnUserContactImport() {
-            @Override
-            public void onContactImport() {
+            @Override public void onContactImport() {
                 getContactListFromServer();
             }
         };
-
 
         // this can be go in the activity for cheke permision in api 6+
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             Contacts.getListOfContact(true);
             isImportContactToServer = true;
         }
-
-
     }
 
     private static void getContactListFromServer() {
         G.onUserContactGetList = new OnUserContactGetList() {
-            @Override
-            public void onContactGetList() {
+            @Override public void onContactGetList() {
 
             }
         };
@@ -430,14 +424,12 @@ public class G extends MultiDexApplication {
         realm.close();
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 // fill own user info
                 if (userId == user.getId()) {
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
+                        @Override public void execute(Realm realm) {
                             RealmAvatar avatar = RealmAvatar.put(user.getId(), user.getAvatar(), true);
 
                             RealmRegisteredInfo.putOrUpdate(user);
@@ -468,21 +460,18 @@ public class G extends MultiDexApplication {
                 }
             }
 
-            @Override
-            public void onUserInfoTimeOut() {
+            @Override public void onUserInfoTimeOut() {
 
             }
 
-            @Override
-            public void onUserInfoError(int majorCode, int minorCode) {
+            @Override public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };
         new RequestUserInfo().userInfo(userId);
     }
 
-    @Override
-    public void onCreate() {
+    @Override public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
@@ -507,21 +496,23 @@ public class G extends MultiDexApplication {
 
         BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
+            @Override public void onReceive(Context context, Intent intent) {
                 if (HelperCheckInternetConnection.hasNetwork()) {
-
-                    Log.e("ddd", "onrecive    true       aaaa");
-
-                    if (G.canRunReceiver) {
-                        G.canRunReceiver = false;
-                        Log.e("ddd", "onrecive    true       bbbbbbb");
+                    Log.e("DDD", "Has Network");
+                    /*if (noNetwok) {
+                        Log.e("DDD", "Has Network 1");
+                        noNetwok = true;
+                        WebSocketClient.getInstance().disconnect();
+                    } else {
+                        Log.e("DDD", "Has Network 2");
                         WebSocketClient.allowForReconnecting = true;
                         WebSocketClient.getInstance();
-                    }
+                    }*/
+
+                    WebSocketClient.getInstance().disconnect();
                 } else {
-                    Log.e("ddd", "onrecive    false");
+                    noNetwok = true;
+                    Log.e("ddd", "No Network");
                     HelperConnectionState.connectionState(Config.ConnectionState.WAITING_FOR_NETWORK);
                     G.socketConnection = false;
                 }
@@ -543,8 +534,8 @@ public class G extends MultiDexApplication {
         flaticon = Typeface.createFromAsset(this.getAssets(), "fonts/Flaticon.ttf");
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
 
-
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
+        Realm.setDefaultConfiguration(
+            new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
 
         // Create global configuration and initialize ImageLoader with this config
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
@@ -595,8 +586,7 @@ public class G extends MultiDexApplication {
         new File(context.getExternalCacheDir(), fileName).mkdirs();
         File outputFile = new File(context.getExternalCacheDir(), fileName);
         try {
-            @SuppressWarnings("unused")
-            Process process = Runtime.getRuntime().exec("logcat -f " + outputFile.getAbsolutePath());
+            @SuppressWarnings("unused") Process process = Runtime.getRuntime().exec("logcat -f " + outputFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -611,54 +601,36 @@ public class G extends MultiDexApplication {
             case "فارسی":
                 setLocale("fa");
 
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
 
                 break;
             case "English":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("en");
                 break;
             case "العربی":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("ar");
 
                 break;
             case "Deutsch":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 setLocale("nl");
 
                 break;
             default:
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build());
+                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
                 break;
-
         }
     }
 
     public void setLocale(String lang) {
-
 
         Locale locale = new Locale(lang);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-
     }
 
     private void copyFromAsset() throws IOException {
@@ -699,8 +671,7 @@ public class G extends MultiDexApplication {
 
     private void fillSecuringInterface() {
         G.onSecuring = new OnSecuring() {
-            @Override
-            public void onSecure() {
+            @Override public void onSecure() {
                 login();
 
                 ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -741,11 +712,9 @@ public class G extends MultiDexApplication {
         // hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
 
         G.onUserLogin = new OnUserLogin() {
-            @Override
-            public void onLogin() {
+            @Override public void onLogin() {
                 G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         new RequestClientCondition().clientCondition();
                         getUserInfo();
                         importContact();
@@ -756,15 +725,13 @@ public class G extends MultiDexApplication {
                 });
             }
 
-            @Override
-            public void onLoginError(int majorCode, int minorCode) {
+            @Override public void onLoginError(int majorCode, int minorCode) {
 
             }
         };
 
         G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (G.isSecure) {
                     Realm realm = Realm.getDefaultInstance();
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();

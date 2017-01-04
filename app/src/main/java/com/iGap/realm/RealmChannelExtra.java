@@ -1,12 +1,10 @@
 package com.iGap.realm;
 
 import com.iGap.module.StructChannelExtra;
-
-import org.parceler.Parcel;
-
 import io.realm.Realm;
 import io.realm.RealmChannelExtraRealmProxy;
 import io.realm.RealmObject;
+import org.parceler.Parcel;
 
 @Parcel(implementations = {RealmChannelExtraRealmProxy.class},
         value = Parcel.Serialization.BEAN,
