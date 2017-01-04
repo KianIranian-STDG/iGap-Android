@@ -481,7 +481,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         initLayoutHashNavigation();
 
-        realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+        // realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
 
         //RealmChangeListener<RealmModel> changeListener = new RealmChangeListener<RealmModel>() {
         //    @Override public void onChange(RealmModel element) {
@@ -500,11 +500,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             // realmRegisteredInfo.addChangeListener(changeListener);
             // changeListener.onChange(realmRegisteredInfo);
 
-            if (realmRegisteredInfo.isBlockUser()) {
-                txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-                vgSpamUser.setVisibility(View.VISIBLE);
-            } else {
-                txtSpamUser.setText(getResources().getString(R.string.block_user));
+            if (realmRegisteredInfo.isShowSpamBar()) {
+                if (realmRegisteredInfo.isBlockUser()) {
+                    txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                    vgSpamUser.setVisibility(View.VISIBLE);
+                }
             }
         }
 
@@ -797,6 +797,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             txtSpamClose.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
                     vgSpamUser.setVisibility(View.GONE);
+                    //   realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    if (realmRegisteredInfo != null) {
+                        realmRegisteredInfo.setShowSpamBar(false);
+                    }
+
                 }
             });
 
@@ -804,36 +809,42 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
 
-            if (phoneNumber != null) {
-                if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
-                    vgSpamUser.setVisibility(View.VISIBLE);
-                }
-            }
+            realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
 
+            if (realmRegisteredInfo != null) if (realmRegisteredInfo.isShowSpamBar()) {
 
-            if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
-                final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-                if (realmRegisteredInfo != null) {
-
-                    if (realmRegisteredInfo.isBlockUser()) {
-                        blockUser = true;
-                        txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-                    } else {
-                        txtSpamUser.setText(getResources().getString(R.string.block_user));
+                if (phoneNumber != null) {
+                    if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
+                        vgSpamUser.setVisibility(View.VISIBLE);
                     }
+                }
 
-                } else {
-                    final RealmContacts realmContact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-                    if (realmContact != null) {
-                        if (realmContact.isBlockUser()) {
+                if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
+                    final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    if (realmRegisteredInfo != null) {
+
+                        if (realmRegisteredInfo.isBlockUser()) {
                             blockUser = true;
                             txtSpamUser.setText(getResources().getString(R.string.un_block_user));
                         } else {
                             txtSpamUser.setText(getResources().getString(R.string.block_user));
                         }
+                    } else {
+                        final RealmContacts realmContact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+                        if (realmContact != null) {
+                            if (realmContact.isBlockUser()) {
+                                blockUser = true;
+                                txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                            } else {
+                                txtSpamUser.setText(getResources().getString(R.string.block_user));
+                            }
+                        }
                     }
                 }
             }
+
+
+
 
             txtSpamUser.setOnClickListener(new View.OnClickListener() {
                 @Override

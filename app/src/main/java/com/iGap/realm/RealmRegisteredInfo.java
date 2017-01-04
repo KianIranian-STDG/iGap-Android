@@ -2,7 +2,6 @@ package com.iGap.realm;
 
 import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoGlobal;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -26,6 +25,7 @@ public class RealmRegisteredInfo extends RealmObject {
 
     private boolean mutual;
     private boolean blockUser = false;
+    private boolean showSpamBar = true;
 
     public static RealmRegisteredInfo putOrUpdate(ProtoGlobal.RegisteredUser input) {
         Realm realm = Realm.getDefaultInstance();
@@ -36,6 +36,7 @@ public class RealmRegisteredInfo extends RealmObject {
         }
 
         registeredInfo.setUsername(input.getUsername());
+        registeredInfo.setShowSpamBar(true);
         registeredInfo.setDisplayName(input.getDisplayName());
         registeredInfo.setStatus(input.getStatus().toString());
         registeredInfo.setAvatarCount(input.getAvatarCount());
@@ -163,6 +164,14 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public void setBlockUser(boolean blockUser) {
         this.blockUser = blockUser;
+    }
+
+    public boolean isShowSpamBar() {
+        return showSpamBar;
+    }
+
+    public void setShowSpamBar(boolean showSpamBar) {
+        this.showSpamBar = showSpamBar;
     }
 
     public RealmList<RealmAvatar> getAvatars() {

@@ -69,6 +69,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     private TextView mCount;
     private RecyclerView mRecyclerView;
     private AvatarsAdapter<AvatarItem> mAdapter;
+    private int avatarListSize = 0;
 
     public static OnComplete onComplete;
 
@@ -301,10 +302,13 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             avatarList = mRealm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING);
             avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
                 @Override public void onChange(RealmResults<RealmAvatar> element) {
-                    mAdapter.clear();
-                    fillAdapterChat(avatarList);
 
-                    mCount.setText(String.format(getString(R.string.d_of_d), curerntItemPosition > 0 ? curerntItemPosition : 1, mAdapter.getAdapterItemCount()));
+                    if (avatarListSize != element.size()) {
+                        mAdapter.clear();
+                        fillAdapterChat(avatarList);
+                        mCount.setText(String.format(getString(R.string.d_of_d), curerntItemPosition > 0 ? curerntItemPosition : 1, mAdapter.getAdapterItemCount()));
+                        mRecyclerView.scrollToPosition(curerntItemPosition);
+                    }
                 }
             });
 
@@ -315,7 +319,8 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
     private void fillAdapterChat(RealmResults<RealmAvatar> avatarList) {
 
-        for (int i = 0; i < avatarList.size(); i++) {
+        avatarListSize = avatarList.size();
+        for (int i = 0; i < avatarListSize; i++) {
             RealmAvatar avatar = avatarList.get((i));
             mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(100 + i));
         }

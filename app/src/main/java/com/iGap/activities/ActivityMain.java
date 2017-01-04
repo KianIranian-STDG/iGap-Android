@@ -73,7 +73,6 @@ import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.ShouldScrolledBehavior;
-import com.iGap.module.SortRooms;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
@@ -101,7 +100,6 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -706,7 +704,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                 List<RoomItem> roomItems = new ArrayList<>();
 
-                for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
+                for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.ASCENDING)) {
                     roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
                 }
 
@@ -857,11 +855,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             mAdapter.clear();
             Realm realm = Realm.getDefaultInstance();
             List<RoomItem> roomItems = new ArrayList<>();
-            for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME)) {
+            for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.ASCENDING)) {
                 roomItems.add(new RoomItem().setInfo(realmRoom).setComplete(ActivityMain.this).withIdentifier(SUID.id().get()));
             }
 
-            Collections.sort(roomItems, SortRooms.DESC);
 
             mAdapter.add(roomItems);
             //realm.close(); //TODO [Saeed Mozaffari] [2016-11-27 1:43 PM] - Check Close Realm

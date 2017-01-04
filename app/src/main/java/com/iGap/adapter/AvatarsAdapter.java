@@ -1,10 +1,8 @@
 package com.iGap.adapter;
 
 import android.support.v4.util.ArrayMap;
-
 import com.iGap.adapter.items.AvatarItem;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AvatarsAdapter<Item extends AvatarItem> extends FastItemAdapter<Item> {
@@ -60,7 +58,7 @@ public class AvatarsAdapter<Item extends AvatarItem> extends FastItemAdapter<Ite
                 int pos = getAdapterItems().indexOf(item);
 
                 item.onRequestDownloadThumbnail(token, true);
-                notifyAdapterDataSetChanged();
+                notifyItemChanged(pos);
                 break;
             }
         }
