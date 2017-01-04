@@ -608,7 +608,7 @@
     <string name="array_delete_photo_group">Delete Photo</string>
     <string name="to_delete_chat">Delete Chat</string>
     <string name="picture_save_to_galary">"picture saved to galary"</string>
-    <string name="my_location_title">My locationocation</string>
+    <string name="my_location_title">My Location</string>
     <string name="shared_image">Shared images</string>
     <string name="shared_video">Shared video</string>
     <string name="shared_audio">Shared audio</string>

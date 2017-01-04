@@ -21,6 +21,7 @@ import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperGetMessageState;
+import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IChatItemAttachment;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnAvatarGet;
@@ -81,7 +82,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     protected void setTextIfNeeded(TextView view, String msg) {
         if (!TextUtils.isEmpty(msg)) {
-            view.setText(msg);
+            if (mMessage.hasLinkInMessage) {
+                view.setText(HelperUrl.setUrlLink(msg, true, true, mMessage.messageID, true));
+                Log.e("ddd", "with link   ********************");
+            } else {
+                view.setText(msg);
+                Log.e("ddd", "without link   &&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+            }
+
+
             view.setVisibility(View.VISIBLE);
         } else {
             view.setVisibility(View.GONE);

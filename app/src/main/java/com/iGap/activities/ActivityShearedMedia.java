@@ -478,7 +478,17 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         txtSharedMedia.setText(R.string.shared_links);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL;
 
-        mNewList = loadLoackData(mFilter, ProtoGlobal.RoomMessageType.TEXT.toString());
+        mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+            equalTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.TEXT.toString()).
+            equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
+            findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+
+        changesize = mRealmList.size();
+
+        getDataFromServer(mFilter);
+        mListcount = mRealmList.size();
+
+        mNewList = addTimeToList(mRealmList);
         adapter = new LinkAdapter(ActivityShearedMedia.this, mNewList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityShearedMedia.this));
@@ -492,7 +502,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private ArrayList<StructShearedMedia> loadLoackData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter, String type) {
 
         mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-            equalTo(RealmRoomMessageFields.MESSAGE_TYPE, type).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+            contains(RealmRoomMessageFields.MESSAGE_TYPE, type).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         changesize = mRealmList.size();
 
@@ -1005,7 +1015,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 if (at.getLocalThumbnailPath() != null) result = at.getLocalThumbnailPath();
             }
 
-            Log.e("ddd", at + "                       +++++++++++++++++++");
 
             String name = at.getName();
             if (name == null) if (at.getLocalFilePath() != null) name = at.getLocalFilePath().substring(at.getLocalFilePath().lastIndexOf("/"), at.getLocalFilePath().length());
@@ -1537,8 +1546,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
-
-            Log.e("ddd", "srart***********************************");
         }
 
         public class ViewHolder extends mHolder {

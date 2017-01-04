@@ -327,6 +327,25 @@ public class HelperUrl {
         builder.setSpan(clickableSpan, start, start + text.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
+    //*********************************************************************************************************
+
+    public static boolean hasInMessageLink(String message) {
+        boolean result = false;
+
+        if (message.contains("#") || message.contains("@")) return true;
+
+        Pattern urlPattern = Pattern.compile("(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*" + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
+        Matcher matcher = urlPattern.matcher(message);
+        while (matcher.find()) {
+            result = true;
+        }
+
+        return result;
+    }
+
+
     //**************************************    invite by link *******************************************************************
 
     private static void checkAndJoinToRoom(final String token) {

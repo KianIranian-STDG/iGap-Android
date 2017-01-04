@@ -1,16 +1,13 @@
 package com.iGap.adapter.items.chat;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
 import java.util.List;
 
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
@@ -23,8 +20,8 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.name.setTextColor(Color.WHITE);
-        holder.number.setTextColor(Color.WHITE);
+        //  holder.name.setTextColor(Color.WHITE);
+        //  holder.number.setTextColor(Color.WHITE);
         holder.image.setImageResource(R.drawable.black_contact);
     }
 

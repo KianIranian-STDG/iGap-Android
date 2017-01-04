@@ -1,18 +1,15 @@
 package com.iGap.realm;
 
 import android.text.format.DateUtils;
-
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperLogMessage;
+import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.OnActivityChatStart;
 import com.iGap.interfaces.OnActivityMainStart;
 import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-
-import org.parceler.Parcel;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
@@ -21,6 +18,7 @@ import io.realm.RealmRoomMessageRealmProxy;
 import io.realm.Sort;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
+import org.parceler.Parcel;
 
 @Parcel(implementations = {RealmRoomMessageRealmProxy.class},
         value = Parcel.Serialization.BEAN,
@@ -35,6 +33,7 @@ public class RealmRoomMessage extends RealmObject {
     private long statusVersion;
     private String messageType;
     private String message;
+    private boolean hasMessageLink = false;
     private RealmAttachment attachment;
     private long userId;
     private RealmRoomMessageLocation location;
@@ -44,7 +43,7 @@ public class RealmRoomMessage extends RealmObject {
     private boolean edited;
     private long createTime;
     private long updateTime;
-    private boolean deleted;
+    private boolean deleted = false;
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
     private boolean showMessage = true;
@@ -180,6 +179,9 @@ public class RealmRoomMessage extends RealmObject {
         }
 
         message.setMessage(input.getMessage());
+
+        message.setHasMessageLink(HelperUrl.hasInMessageLink(input.getMessage()));
+
         message.setStatus(input.getStatus().toString());
         message.setUserId(input.getAuthor().getUser().getUserId());
         message.setDeleted(input.getDeleted());
@@ -278,6 +280,14 @@ public class RealmRoomMessage extends RealmObject {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public boolean getHasMessageLink() {
+        return hasMessageLink;
+    }
+
+    public void setHasMessageLink(boolean hasMessageLink) {
+        this.hasMessageLink = hasMessageLink;
     }
 
     public long getUserId() {

@@ -1,11 +1,9 @@
 package com.iGap.adapter.items.chat;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
@@ -15,11 +13,9 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
-import java.util.List;
-
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
+import java.util.List;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
@@ -114,8 +110,8 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.cslf_txt_file_name.setTextColor(Color.WHITE);
-        holder.cslf_txt_file_size.setTextColor(Color.WHITE);
+        //   holder.cslf_txt_file_name.setTextColor(Color.WHITE);
+        //  holder.cslf_txt_file_size.setTextColor(Color.WHITE);
     }
 
     @Override

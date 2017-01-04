@@ -3,7 +3,6 @@ package com.iGap.module;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
-
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
@@ -12,10 +11,8 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
-
-import org.parceler.Parcels;
-
 import io.realm.Realm;
+import org.parceler.Parcels;
 
 /**
  * chat message struct info
@@ -49,6 +46,7 @@ public class StructMessageInfo implements Parcelable {
     public String songArtist;
     public long songLength;
     public String messageText = "";
+    public boolean hasLinkInMessage = false;
     public String location;
     public String fileMime = "";
     public String filePic = "";
@@ -284,6 +282,7 @@ public class StructMessageInfo implements Parcelable {
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.roomId = roomMessage.getRoomId();
         messageInfo.status = roomMessage.getStatus();
+        messageInfo.hasLinkInMessage = roomMessage.getHasMessageLink();
         messageInfo.messageID = Long.toString(roomMessage.getMessageId());
         messageInfo.isEdited = roomMessage.isEdited();
         if (!roomMessage.isSenderMe()) {

@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -201,20 +200,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -226,6 +211,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -361,6 +357,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private Boolean isNotJoin = false;
     private String userName = "";
     private boolean blockUser = false;
+    ViewGroup vgSpamUser;
+    TextView txtSpamUser;
+    TextView txtSpamClose;
+    RealmRegisteredInfo realmRegisteredInfo;
+    Realm mRealm;
+
 
     @Override
     protected void onStart() {
@@ -478,6 +480,35 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         setAvatar();
 
         initLayoutHashNavigation();
+
+        realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+
+        //RealmChangeListener<RealmModel> changeListener = new RealmChangeListener<RealmModel>() {
+        //    @Override public void onChange(RealmModel element) {
+        //
+        //        Log.e("ddd","7777777777777777777777777777777777777777777");
+        //        if(realmRegisteredInfo.isBlockUser()){
+        //            txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+        //            vgSpamUser.setVisibility(View.VISIBLE);
+        //        }else {
+        //            txtSpamUser.setText(getResources().getString(R.string.block_user));
+        //        }
+        //    }
+        //};
+
+        if (realmRegisteredInfo != null) {
+            // realmRegisteredInfo.addChangeListener(changeListener);
+            // changeListener.onChange(realmRegisteredInfo);
+
+            if (realmRegisteredInfo.isBlockUser()) {
+                txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                vgSpamUser.setVisibility(View.VISIBLE);
+            } else {
+                txtSpamUser.setText(getResources().getString(R.string.block_user));
+            }
+        }
+
+
     }
 
     @Override
@@ -509,13 +540,24 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             realm.close();
         }
 
+        if (realmRegisteredInfo != null) {
+            realmRegisteredInfo.removeChangeListeners();
+        }
+
+        if (mRealm != null) mRealm.close();
+
         super.onStop();
     }
 
 
     private void getChatHistory() {
         Realm realm = Realm.getDefaultInstance();
-        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().size() < 3) {
+        if (realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
+            .equalTo(RealmRoomMessageFields.DELETED, false)
+            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
+            .findAll()
+            .size() < 3) {
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
         }
         realm.close();
@@ -526,7 +568,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-
+        mRealm = Realm.getDefaultInstance();
         HelperGetMessageState.clearMessageViews();
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
@@ -565,6 +607,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         prgWaiting.setVisibility(View.VISIBLE);
 
         lastDateCalendar.clear();
+
 
         attachFile = new AttachFile(this);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -747,14 +790,26 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
 
             //*****block or unBlock User Start
-            final TextView txtSpamUser = (TextView) findViewById(R.id.chat_txt_addContact);
+
+            vgSpamUser = (ViewGroup) findViewById(R.id.layout_add_contact);
+            txtSpamUser = (TextView) findViewById(R.id.chat_txt_addContact);
+            txtSpamClose = (TextView) findViewById(R.id.chat_txt_close);
+            txtSpamClose.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    vgSpamUser.setVisibility(View.GONE);
+                }
+            });
+
+
+
             RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-            final ViewGroup vgSpamUser = (ViewGroup) findViewById(R.id.layout_add_contact);
+
             if (phoneNumber != null) {
                 if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
                     vgSpamUser.setVisibility(View.VISIBLE);
                 }
             }
+
 
             if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
                 final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
@@ -819,14 +874,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 }
             });
-            TextView txtSpamClose = (TextView) findViewById(R.id.chat_txt_close);
-            txtSpamClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    vgSpamUser.setVisibility(View.GONE);
-                }
-            });
-            //*****block or unBlock End
 
             realm.close();
         }
@@ -3472,8 +3519,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         //
         //Collections.sort(realmRoomMessages, SortMessages.ASC);
 
-        RealmResults<RealmRoomMessage> results =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
+        RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
+            .equalTo(RealmRoomMessageFields.DELETED, false)
+            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
+            .findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
         if (results.size() > 0) lastMessageId = results.get(0).getMessageId();
 
@@ -4175,8 +4225,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     Realm realm = Realm.getDefaultInstance();
                     RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class)
-                        .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-                        .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
+                        .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false)
                         .findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
                     if (results.size() > 0) lastMessageId = results.get(0).getMessageId();

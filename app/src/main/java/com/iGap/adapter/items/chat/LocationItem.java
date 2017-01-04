@@ -1,16 +1,13 @@
 package com.iGap.adapter.items.chat;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
-
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
 import java.util.List;
 
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
@@ -55,8 +52,8 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.myLocationLabel.setTextColor(Color.WHITE);
-        holder.location.setTextColor(Color.WHITE);
+        //   holder.myLocationLabel.setTextColor(Color.WHITE);
+        //  holder.location.setTextColor(Color.WHITE);
     }
 
     @Override
