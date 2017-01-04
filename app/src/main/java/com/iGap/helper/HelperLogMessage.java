@@ -25,14 +25,14 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.USER_JOINED;
  */
 public class HelperLogMessage {
 
-    public static String logMessage(ProtoGlobal.RoomMessage.Author author, ProtoGlobal.RoomMessageLog messageLog) {
+    public static String logMessage(long roomId, ProtoGlobal.RoomMessage.Author author, ProtoGlobal.RoomMessageLog messageLog) {
 
         String authorName = "";
         String targetName = "";
         String logMessage;
         String finalMessage;
         Realm realm = Realm.getDefaultInstance();
-
+        ProtoGlobal.Room.Type typeRoom = null;
 
         /**
          * detect authorName
@@ -48,6 +48,11 @@ public class HelperLogMessage {
             if (realmRoom != null) {
                 authorName = realmRoom.getTitle();
             }
+        }
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            typeRoom = realmRoom.getType();
         }
 
         /**

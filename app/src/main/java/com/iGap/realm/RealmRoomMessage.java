@@ -1,6 +1,7 @@
 package com.iGap.realm;
 
 import android.text.format.DateUtils;
+
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperLogMessage;
 import com.iGap.interfaces.OnActivityChatStart;
@@ -9,6 +10,9 @@ import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
+
+import org.parceler.Parcel;
+
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
@@ -17,7 +21,6 @@ import io.realm.RealmRoomMessageRealmProxy;
 import io.realm.Sort;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
-import org.parceler.Parcel;
 
 @Parcel(implementations = {RealmRoomMessageRealmProxy.class},
         value = Parcel.Serialization.BEAN,
@@ -197,7 +200,7 @@ public class RealmRoomMessage extends RealmObject {
         }
         if (input.hasLog()) {
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
-            message.setLogMessage(HelperLogMessage.logMessage(input.getAuthor(), input.getLog()));
+            message.setLogMessage(HelperLogMessage.logMessage(roomId, input.getAuthor(), input.getLog()));
         }
         if (input.hasContact()) {
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
