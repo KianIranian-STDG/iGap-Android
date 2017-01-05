@@ -22,7 +22,7 @@ public class Config {
     public static final long LAST_SEEN_DELAY_CHECKING = (DateUtils.MINUTE_IN_MILLIS);
     public static final long GROUP_SHOW_ACTIONS_COUNT = 3;
     public static final long IMAGE_CORNER = 15;
-    public static String urlWebsocket = "wss://secure.igap.im/connect/"; // wss://secure.igap.im/wss/ , ws://nano.igap.im:7755 // ws://10.10.10.102:6708 , wss://secure.igap.im/connect/
+    public static String urlWebsocket = "wss://secure.igap.net/hybrid/";
 
     public enum ConnectionState {
         WAITING_FOR_NETWORK, CONNECTING, UPDATING, IGAP
