@@ -705,6 +705,11 @@
     <string name="ROOM_CONVERTED_TO_PUBLIC">"room converted to public"</string>
     <string name="ROOM_CONVERTED_TO_PRIVATE">"room converted to private"</string>
     <string name="MEMBER_JOINED_BY_INVITE_LINK">"member join by invite link"</string>
+
+    <string name="delete_account_text1">other</string>
+    <string name="delete_account_text2">other</string>
+    <string name="delete_account_text3">other</string>
+    <string name="delete_account_text4">other</string>
     <string name="channel_link_revoke">Revoke</string>
     <string name="channel_link_title_revoke">Invite Link</string>
     <string name="channel_link_hint_revoke">Channel Invite Link</string>

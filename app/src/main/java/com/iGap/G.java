@@ -22,6 +22,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.iGap.helper.HelperCheckInternetConnection;
 import com.iGap.helper.HelperConnectionState;
 import com.iGap.helper.HelperFillLookUpClass;
@@ -175,6 +177,16 @@ import javax.crypto.spec.SecretKeySpec;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class G extends MultiDexApplication {
+
+    private Tracker mTracker;
+
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            mTracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return mTracker;
+    }
 
     public static final String FAQ = "http://www.digikala.com";
     public static final String POLICY = "http://www.digikala.com";
@@ -473,7 +485,7 @@ public class G extends MultiDexApplication {
 
     @Override public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(false).build()).build());
 
         SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
