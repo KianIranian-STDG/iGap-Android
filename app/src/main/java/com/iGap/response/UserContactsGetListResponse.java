@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoGlobal;
@@ -13,7 +12,6 @@ import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
-
 import io.realm.Realm;
 
 public class UserContactsGetListResponse extends MessageHandler {
@@ -34,8 +32,7 @@ public class UserContactsGetListResponse extends MessageHandler {
     public void handler() {
         super.handler();
         Log.i("QQQ", "2 contactsGetList");
-        final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder =
-                (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
+        final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder = (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -46,6 +43,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
                     if (realmRegisteredInfo == null) {
                         realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
+                        realmRegisteredInfo.setShowSpamBar(true);
                     }
                     realmRegisteredInfo.fillRegisteredUserInfo(registerUser, realmRegisteredInfo);
 

@@ -33,10 +33,10 @@ public class RealmRegisteredInfo extends RealmObject {
         RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, input.getId()).findFirst();
         if (registeredInfo == null) {
             registeredInfo = realm.createObject(RealmRegisteredInfo.class, input.getId());
+            registeredInfo.setShowSpamBar(true);
         }
 
         registeredInfo.setUsername(input.getUsername());
-        registeredInfo.setShowSpamBar(true);
         registeredInfo.setDisplayName(input.getDisplayName());
         registeredInfo.setStatus(input.getStatus().toString());
         registeredInfo.setAvatarCount(input.getAvatarCount());

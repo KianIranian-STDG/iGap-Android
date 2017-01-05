@@ -78,6 +78,7 @@ import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentShowImageMessages;
+import com.iGap.fragments.MapFragment;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCancelDownloadUpload;
 import com.iGap.helper.HelperGetAction;
@@ -172,7 +173,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageContact;
 import com.iGap.realm.RealmRoomMessageFields;
-import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
@@ -362,6 +362,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     TextView txtSpamClose;
     RealmRegisteredInfo realmRegisteredInfo;
     Realm mRealm;
+    private boolean showSpamfromContact = false;
 
 
     @Override
@@ -421,6 +422,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         chatTypeStatic = chatType;
         mRoomIdStatic = mRoomId;
         titleStatic = title;
+
 
         //call from ActivityGroupProfile for update group member number
         onComplete = new OnComplete() {
@@ -504,6 +506,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (realmRegisteredInfo.isBlockUser()) {
                     txtSpamUser.setText(getResources().getString(R.string.un_block_user));
                     vgSpamUser.setVisibility(View.VISIBLE);
+                } else {
+                    txtSpamUser.setText(getResources().getString(R.string.block_user));
+                    if (!showSpamfromContact) vgSpamUser.setVisibility(View.GONE);
                 }
             }
         }
@@ -618,44 +623,50 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void complete(boolean result, final String messageOne, String MessageTow) {
                 HelperSetAction.sendCancel(messageId);
 
-                Realm realm = Realm.getDefaultInstance();
-                final long id = SUID.id().get();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        String[] split = messageOne.split(",");
-                        RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
-                        messageLocation.setLocationLat(Double.parseDouble(split[0]));
-                        messageLocation.setLocationLong(Double.parseDouble(split[1]));
+                Log.e("ddd", "locaton arive " + messageOne);
 
-                        RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, id);
-                        roomMessage.setLocation(messageLocation);
-                        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
-                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
-                        roomMessage.setRoomId(mRoomId);
-                        roomMessage.setUserId(userId);
-                        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                Intent intent = new Intent(ActivityChat.this, MapFragment.class);
+                startActivity(intent);
 
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-
-                        if (realmRoom != null) {
-                            realmRoom.setLastMessage(roomMessage);
-                        }
-                    }
-                });
-                realm.close();
-
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Realm realm1 = Realm.getDefaultInstance();
-                        RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
-                        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
-                        chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
-                        scrollToEnd();
-                        realm1.close();
-                    }
-                }, 300);
+                //
+                //Realm realm = Realm.getDefaultInstance();
+                //final long id = SUID.id().get();
+                //realm.executeTransaction(new Realm.Transaction() {
+                //    @Override
+                //    public void execute(Realm realm) {
+                //        String[] split = messageOne.split(",");
+                //        RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
+                //        messageLocation.setLocationLat(Double.parseDouble(split[0]));
+                //        messageLocation.setLocationLong(Double.parseDouble(split[1]));
+                //
+                //        RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, id);
+                //        roomMessage.setLocation(messageLocation);
+                //        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+                //        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
+                //        roomMessage.setRoomId(mRoomId);
+                //        roomMessage.setUserId(userId);
+                //        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                //
+                //        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                //
+                //        if (realmRoom != null) {
+                //            realmRoom.setLastMessage(roomMessage);
+                //        }
+                //    }
+                //});
+                //realm.close();
+                //
+                //G.handler.postDelayed(new Runnable() {
+                //    @Override
+                //    public void run() {
+                //        Realm realm1 = Realm.getDefaultInstance();
+                //        RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
+                //        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+                //        chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
+                //        scrollToEnd();
+                //        realm1.close();
+                //    }
+                //}, 300);
             }
         };
 
@@ -797,9 +808,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             txtSpamClose.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
                     vgSpamUser.setVisibility(View.GONE);
-                    //   realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                     if (realmRegisteredInfo != null) {
-                        realmRegisteredInfo.setShowSpamBar(false);
+
+                        mRealm.executeTransaction(new Realm.Transaction() {
+                            @Override public void execute(Realm realm) {
+                                realmRegisteredInfo.setShowSpamBar(false);
+                            }
+                        });
+
                     }
 
                 }
@@ -816,6 +832,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (phoneNumber != null) {
                     if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
                         vgSpamUser.setVisibility(View.VISIBLE);
+                        showSpamfromContact = true;
                     }
                 }
 

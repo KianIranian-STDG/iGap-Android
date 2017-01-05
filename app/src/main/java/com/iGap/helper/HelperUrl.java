@@ -604,6 +604,7 @@ public class HelperUrl {
                         if (realmRegisteredInfo == null) {
                             realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
                             realmRegisteredInfo.setId(user.getId());
+                            realmRegisteredInfo.setShowSpamBar(true);
                         }
                         RealmAvatar.put(user.getId(), user.getAvatar(), true);
                         realmRegisteredInfo.setUsername(user.getUsername());

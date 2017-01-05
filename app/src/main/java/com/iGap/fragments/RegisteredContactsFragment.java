@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -49,11 +48,9 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
 
 import static com.iGap.G.context;
 
@@ -417,9 +414,9 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                                     .equalTo(RealmRegisteredInfoFields.ID, user.getId())
                                                     .findFirst();
                                     if (realmRegisteredInfo == null) {
-                                        realmRegisteredInfo =
-                                                realm.createObject(RealmRegisteredInfo.class);
+                                        realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
                                         realmRegisteredInfo.setId(user.getId());
+                                        realmRegisteredInfo.setShowSpamBar(true);
                                     }
 
                                     RealmAvatar.put(user.getId(), user.getAvatar(), true);
