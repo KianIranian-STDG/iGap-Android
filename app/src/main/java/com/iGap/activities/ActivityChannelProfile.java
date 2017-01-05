@@ -151,6 +151,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private TextView titleToolbar;
     private TextView txtChannelName;
     TextView txtSharedMedia;
+    private EditText edtRevoke;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -551,37 +552,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             public void onClick(View view) {
 
                 if (isPrivate) {
-
-
-                    final PopupMenu popup = new PopupMenu(ActivityChannelProfile.this, txtLinkTitle);
-                    //Inflating the Popup using xml file
-                    popup.getMenuInflater()
-                            .inflate(R.menu.menu_item_group_link_profile, popup.getMenu());
-
-                    //registering popup with OnMenuItemClickListener
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        public boolean onMenuItemClick(MenuItem item) {
-
-                            switch (item.getItemId()) {
-                                case R.id.menu_group_link_copy:
-                                    String copy;
-                                    copy = txtChannelLink.getText().toString();
-                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                                    clipboard.setPrimaryClip(clip);
-
-                                    break;
-                                case R.id.menu_group_link_revoke:
-                                    showProgressBar();
-                                    new RequestChannelRevokeLink().channelRevokeLink(roomId);
-                                    break;
-                            }
-
-                            return true;
-                        }
-                    });
-
-                    popup.show(); //
+                    dialogRevoke();
                 } else {
                     editUsername();
                 }
@@ -706,6 +677,66 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         });
 
 
+    }
+
+    private void dialogRevoke() {
+
+        String link = txtChannelLink.getText().toString();
+
+        final LinearLayout layoutRevoke = new LinearLayout(ActivityChannelProfile.this);
+        layoutRevoke.setOrientation(LinearLayout.VERTICAL);
+
+        final View viewRevoke = new View(ActivityChannelProfile.this);
+        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        final TextInputLayout inputRevoke = new TextInputLayout(ActivityChannelProfile.this);
+        edtRevoke = new EditText(ActivityChannelProfile.this);
+        edtRevoke.setHint(getResources().getString(R.string.channel_link_hint_revoke));
+        edtRevoke.setText(link);
+        edtRevoke.setTextColor(getResources().getColor(R.color.text_edit_text));
+        edtRevoke.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtRevoke.setPadding(0, 8, 0, 8);
+        edtRevoke.setEnabled(false);
+        edtRevoke.setSingleLine(true);
+        inputRevoke.addView(edtRevoke);
+        inputRevoke.addView(viewRevoke, viewParams);
+
+        viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            edtRevoke.setBackground(getResources().getDrawable(android.R.color.transparent));
+        }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutRevoke.addView(inputRevoke, layoutParams);
+
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(ActivityChannelProfile.this)
+                        .title(getResources().getString(R.string.channel_link_title_revoke))
+                        .positiveText(getResources().getString(R.string.channel_link_revoke))
+                        .customView(layoutRevoke, true)
+                        .widgetColor(getResources().getColor(R.color.toolbar_background))
+                        .negativeText(getResources().getString(R.string.B_cancel))
+                        .neutralText(R.string.array_Copy)
+                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                String copy;
+                                copy = txtChannelLink.getText().toString();
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                                clipboard.setPrimaryClip(clip);
+                            }
+                        })
+                        .build();
+
+        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+        positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new RequestChannelRevokeLink().channelRevokeLink(roomId);
+            }
+        });
+        dialog.show();
     }
 
     private void editUsername() {
@@ -1968,6 +1999,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     public void onChannelRevokeLink(long roomId, final String inviteLink, final String inviteToken) {
 
         hideProgressBar();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                edtRevoke.setText("" + inviteLink);
+                txtChannelLink.setText("" + inviteLink);
+            }
+        });
 
         Realm realm = Realm.getDefaultInstance();
 

@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -316,12 +315,19 @@ public class ActivityProfile extends ActivityEnhanced
                 e.printStackTrace();
             }
         } else {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            pathImageUser = G.imageFile.toString() + "_" + 0 + ".jpg";
-            pathImageFromCamera = new File(pathImageUser);
-            uriIntent = Uri.fromFile(pathImageFromCamera);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-            startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
+//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            pathImageUser = G.imageFile.toString() + "_" + 0 + ".jpg";
+//            pathImageFromCamera = new File(pathImageUser);
+//            uriIntent = Uri.fromFile(pathImageFromCamera);
+//            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+//            startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
+
+            try {
+                new AttachFile(ActivityProfile.this).requestTakePicture();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -429,7 +435,7 @@ public class ActivityProfile extends ActivityEnhanced
 
             } else {
                 Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
-                intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
+                intent.putExtra("IMAGE_CAMERA", uriIntent);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "profile");
                 intent.putExtra("ID", (int) getIntent().getLongExtra(ARG_USER_ID, -1));

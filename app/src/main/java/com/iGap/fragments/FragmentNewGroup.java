@@ -1228,6 +1228,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
             public void run() {
                 txtNextStep.setEnabled(false);
                 prgWaiting.setVisibility(View.VISIBLE);
+                if (getActivity() != null)
                 getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });

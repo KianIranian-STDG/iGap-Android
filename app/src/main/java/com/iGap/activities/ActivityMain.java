@@ -22,9 +22,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -94,13 +96,15 @@ import com.iGap.request.RequestGroupLeft;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
@@ -874,6 +878,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
             getSupportFragmentManager().beginTransaction().remove(fragmentNeGroup).commit();
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         } else if (fragmentCreateChannel != null && fragmentCreateChannel.isVisible()) {
             getSupportFragmentManager().beginTransaction().remove(fragmentCreateChannel).commit();
         } else if (fragmentContactGroup != null && fragmentContactGroup.isVisible()) {

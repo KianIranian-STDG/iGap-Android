@@ -1931,7 +1931,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
                 ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
-                Log.i("VVVVVV", "onActivityResult: " + AttachFile.mCurrentPhotoPath);
                 intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "setting");
