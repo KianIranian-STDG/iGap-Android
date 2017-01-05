@@ -181,7 +181,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             }
         };
 
-        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.st_Language))
+        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.self_destructs))
                 .titleGravity(GravityEnum.START)
                 .titleColor(getResources().getColor(android.R.color.black))
                 .items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {

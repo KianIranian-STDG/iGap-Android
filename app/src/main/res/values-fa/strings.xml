@@ -709,5 +709,8 @@
     <string name="ROOM_CONVERTED_TO_PUBLIC">"تبدیل صفحه خصوصی به عموی"</string>
     <string name="ROOM_CONVERTED_TO_PRIVATE">"تبدیل صفحه عمومی به خصوصی"</string>
     <string name="MEMBER_JOINED_BY_INVITE_LINK">"اضافه شدن کاربر با دعوت "</string>
-
+    <string name="channel_link_revoke">ابطال</string>
+    <string name="channel_link_title_revoke">Invite Link</string>
+    <string name="channel_link_hint_revoke">Channel Invite Link</string>
+    <string name="self_destructs">Self Destructs</string>
 </resources>

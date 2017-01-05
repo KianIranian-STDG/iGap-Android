@@ -332,7 +332,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                 txtInputNewGroup.setHint(getResources().getString(R.string.new_channel));
                 break;
             case "ConvertToGroup":
-                txtInputNewGroup.setHint(getResources().getString(R.string.chat_to_group));
+                txtInputNewGroup.setHint(getResources().getString(R.string.group_name));
                 break;
             default:
                 txtInputNewGroup.setHint(getResources().getString(R.string.group_name));

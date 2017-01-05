@@ -46,7 +46,7 @@
     <string name="Re_dialog_verify_number_part2">Press OK, if this phone number is correct or simply modify it.</string>
     <string name="Re_Enter_Verify_Code_Please">Please enter verification code</string>
     <string name="verify_socket_message">You are login in account on other device and active now , iGap Send verification code via Notification Service in your account , Please check other device and enter manually verification code .</string>
-    <string name="verify_time_out_message">iGap tries to detect SMS automatically, but probably you need to enter it manually, Please enter manually code or if not recive code try to resend it.</string>
+    <string name="verify_time_out_message">iGap tries to detect SMS automatically, but probably you need to enter it manually, Please enter manually code or if not receive code try to resend it.</string>
     <string name="verify_invalid_code_message">Sorry , verification code is invalid , Please enter manually correct verification code .</string>
     <string name="resend_message">Resend verification code</string>
     <string name="phone_number">Phone Number</string>
@@ -490,7 +490,7 @@
     <string name="phone_selected_for_send">the phone number selected to send</string>
     <string name="crop_selected_for_send">the crop image selected to send</string>
     <string name="location_message">Location Message</string>
-    <string name="chat_to_group">Convert chat to the group.</string>
+    <string name="chat_to_group">Convert chat to the group</string>
     <string name="last_seen_at">last seen at</string>
     <string name="long_time_ago">long time ago</string>
     <string name="last_month">last month</string>
@@ -708,5 +708,6 @@
     <string name="channel_link_revoke">Revoke</string>
     <string name="channel_link_title_revoke">Invite Link</string>
     <string name="channel_link_hint_revoke">Channel Invite Link</string>
+    <string name="self_destructs">Self Destructs</string>
 
 </resources>
