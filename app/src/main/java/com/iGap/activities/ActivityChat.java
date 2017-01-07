@@ -2782,12 +2782,11 @@ public class ActivityChat extends ActivityEnhanced
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
-
+                                Uri uri = Uri.parse(listPathString.get(0));
                                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                                intent.putExtra("IMAGE_CAMERA", listPathString.get(0));
+                                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
                                 intent.putExtra("TYPE", "gallery");
                                 intent.putExtra("PAGE", "chat");
-
                                 startActivityForResult(intent, IntentRequests.REQ_CROP);
 
                                 runOnUiThread(new Runnable() {
@@ -2800,14 +2799,12 @@ public class ActivityChat extends ActivityEnhanced
                                 });
                             } else {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
-
                                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
                                 Uri uri = Uri.parse(listPathString.get(0));
-                                uri = Uri.parse("file://" + uri.getPath());
+                                uri = Uri.parse("file://" + AttachFile.getFilePathFromUri(data.getData()));
                                 intent.putExtra("IMAGE_CAMERA", uri.toString());
                                 intent.putExtra("TYPE", "gallery");
                                 intent.putExtra("PAGE", "chat");
-
                                 startActivityForResult(intent, IntentRequests.REQ_CROP);
 
                                 runOnUiThread(new Runnable() {

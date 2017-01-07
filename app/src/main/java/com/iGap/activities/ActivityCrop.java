@@ -79,11 +79,13 @@ public class ActivityCrop extends ActivityEnhanced {
                 path = bundle.getString("IMAGE_CAMERA");
                 String newPath = "file://" + path;
                 uri = Uri.parse(newPath);
+                Log.i("CCCCCCXX", "onCreate:21 " + path);
             } else {
 //                uri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
                 path = bundle.getString("IMAGE_CAMERA");
                 String newPath = "file://" + path;
                 uri = Uri.parse(newPath);
+                Log.i("CCCCCCXX", "onCreate 24: " + path);
             }
 
             page = bundle.getString("PAGE");

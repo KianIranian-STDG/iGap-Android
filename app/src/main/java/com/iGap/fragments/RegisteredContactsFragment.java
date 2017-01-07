@@ -1,6 +1,7 @@
 package com.iGap.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -32,6 +34,7 @@ import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
@@ -51,11 +54,14 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+
+import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;
 
 public class RegisteredContactsFragment extends Fragment implements OnFileDownloadResponse {
@@ -65,7 +71,8 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     private ViewGroup vgAddContact, vgRoot;
     private List<StructContactInfo> contacts;
     private RecyclerView rv;
-
+    private SharedPreferences sharedPreferences;
+    private boolean isImportContactList = false;
     private ProgressBar prgWaiting;
 
     public static RegisteredContactsFragment newInstance() {
@@ -84,17 +91,18 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 @Override
                 public void Allow() throws IOException {
 
-                    if (!G.isImportContactToServer) {
-                        G.onContactImport = new OnUserContactImport() {
-                            @Override
-                            public void onContactImport() {
-                                new RequestUserContactsGetList().userContactGetList();
-                                G.isImportContactToServer = true;
-                            }
-                        };
 
-                        Contacts.getListOfContact(true);
-                    }
+                    G.onContactImport = new OnUserContactImport() {
+                        @Override
+                        public void onContactImport() {
+
+                            new RequestUserContactsGetList().userContactGetList();
+                            G.isImportContactToServer = true;
+                        }
+                    };
+
+                    Contacts.getListOfContact(true);
+
                 }
             });
         } catch (IOException e) {
@@ -107,7 +115,24 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        importContactList();
+        sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        isImportContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, false);
+        if (!isImportContactList) {
+            try {
+                HelperPermision.getContactPermision(getActivity(), new OnGetPermision() {
+                    @Override
+                    public void Allow() throws IOException {
+                        importContactList();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, true);
+            editor.apply();
+        }
+
         //set interface for get callback here
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
