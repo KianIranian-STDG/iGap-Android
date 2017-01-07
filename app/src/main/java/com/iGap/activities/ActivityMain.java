@@ -633,6 +633,7 @@ public class ActivityMain extends ActivityEnhanced
                 }
 
                 for (ProtoGlobal.Room room : rooms) {
+                    Log.e("ddd", room.getTitle() + "   " + room.getLastMessage().getUpdateTime());
                     RealmRoom.putOrUpdate(room);
                 }
 
@@ -646,18 +647,10 @@ public class ActivityMain extends ActivityEnhanced
         }, new Realm.Transaction.OnSuccess() {
             @Override public void onSuccess() {
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
-                        for (RealmRoom item : realm.where(RealmRoom.class).findAll()) {
-
-                            if (item.getLastMessage() != null) if (item.getLastMessage().getUpdateTime() > item.getUpdatedTime()) item.setUpdatedTime(item.getLastMessage().getUpdateTime());
-                        }
-                    }
-                });
 
                 List<RoomItem> roomItems = new ArrayList<>();
 
-                for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.ASCENDING)) {
+                for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
                     roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
                 }
 
@@ -801,8 +794,17 @@ public class ActivityMain extends ActivityEnhanced
             mAdapter.clear();
             Realm realm = Realm.getDefaultInstance();
             List<RoomItem> roomItems = new ArrayList<>();
-            for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.ASCENDING)) {
-                roomItems.add(new RoomItem().setInfo(realmRoom).setComplete(ActivityMain.this).withIdentifier(SUID.id().get()));
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+                    for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
+                        if (Room.getLastMessage().getUpdateTime() > 0) Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
+                    }
+                }
+            });
+
+            for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
+                roomItems.add(new RoomItem().setInfo(realmRoom).setComplete(ActivityMain.this).withIdentifier(realmRoom.getId()));
             }
 
 
@@ -1321,6 +1323,7 @@ public class ActivityMain extends ActivityEnhanced
                         if (room != null) {
                             final int updatedUnreadCount = room.getUnreadCount() + 1;
                             room.setUnreadCount(updatedUnreadCount);
+                            room.setUpdatedTime(roomMessage.getUpdateTime());
                             realm.copyToRealmOrUpdate(room);
                         }
                     }

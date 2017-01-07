@@ -4,7 +4,6 @@ import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -135,6 +134,7 @@ public class RealmRoom extends RealmObject {
         }
         //realmRoom.setLastMessage(RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId()));
         realmRoom.setLastMessage(RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId()));
+        realmRoom.setUpdatedTime(room.getLastMessage().getUpdateTime());
 
         RealmRoomDraft realmRoomDraft = realmRoom.getDraft();
         if (realmRoomDraft == null) {
