@@ -77,8 +77,8 @@ import com.iGap.adapter.items.chat.TimeItem;
 import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
+import com.iGap.fragments.FragmentMap;
 import com.iGap.fragments.FragmentShowImageMessages;
-import com.iGap.fragments.MapFragment;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCancelDownloadUpload;
 import com.iGap.helper.HelperGetAction;
@@ -173,6 +173,7 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageContact;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
@@ -225,6 +226,7 @@ import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
+import static com.iGap.R.id.ac_ll_parent;
 import static com.iGap.R.id.replyFrom;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
@@ -597,7 +599,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             File f = new File(backGroundPath);
             if (f.exists()) {
                 Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                View chat = findViewById(R.id.ac_ll_parent);
+                View chat = findViewById(ac_ll_parent);
                 chat.setBackgroundDrawable(d);
             }
         }
@@ -618,55 +620,25 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         initAttach();
 
+        //after get position from gps
         complete = new OnComplete() {
             @Override
             public void complete(boolean result, final String messageOne, String MessageTow) {
                 HelperSetAction.sendCancel(messageId);
 
-                Log.e("ddd", "locaton arive " + messageOne);
+                String[] split = messageOne.split(",");
+                Double latitude = Double.parseDouble(split[0]);
+                Double longitude = Double.parseDouble(split[1]);
 
-                Intent intent = new Intent(ActivityChat.this, MapFragment.class);
-                startActivity(intent);
+                FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
 
-                //
-                //Realm realm = Realm.getDefaultInstance();
-                //final long id = SUID.id().get();
-                //realm.executeTransaction(new Realm.Transaction() {
-                //    @Override
-                //    public void execute(Realm realm) {
-                //        String[] split = messageOne.split(",");
-                //        RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
-                //        messageLocation.setLocationLat(Double.parseDouble(split[0]));
-                //        messageLocation.setLocationLong(Double.parseDouble(split[1]));
-                //
-                //        RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, id);
-                //        roomMessage.setLocation(messageLocation);
-                //        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
-                //        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
-                //        roomMessage.setRoomId(mRoomId);
-                //        roomMessage.setUserId(userId);
-                //        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                //
-                //        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                //
-                //        if (realmRoom != null) {
-                //            realmRoom.setLastMessage(roomMessage);
-                //        }
-                //    }
-                //});
-                //realm.close();
-                //
-                //G.handler.postDelayed(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        Realm realm1 = Realm.getDefaultInstance();
-                //        RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
-                //        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
-                //        chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
-                //        scrollToEnd();
-                //        realm1.close();
-                //    }
-                //}, 300);
+                getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
+                    .commit();
+
+
             }
         };
 
@@ -976,6 +948,47 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
 
         ;
+    }
+
+    public void sendPosition(final Double latitude, final Double longitude, String imagePath) {
+
+        Realm realm = Realm.getDefaultInstance();
+        final long id = SUID.id().get();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+
+                RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
+                messageLocation.setLocationLat(latitude);
+                messageLocation.setLocationLong(longitude);
+
+                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, id);
+                roomMessage.setLocation(messageLocation);
+                roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
+                roomMessage.setRoomId(mRoomId);
+                roomMessage.setUserId(userId);
+                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+
+                if (realmRoom != null) {
+                    realmRoom.setLastMessage(roomMessage);
+                }
+            }
+        });
+        realm.close();
+
+        G.handler.postDelayed(new Runnable() {
+            @Override public void run() {
+                Realm realm1 = Realm.getDefaultInstance();
+                RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
+                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+                chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
+                scrollToEnd();
+                realm1.close();
+            }
+        }, 300);
     }
 
     private void checkAction() {
@@ -1938,6 +1951,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     // update message text in database
                                     roomMessage.setMessage(message);
                                     roomMessage.setEdited(true);
+                                    roomMessage.setHasMessageLink(HelperUrl.hasInMessageLink(message));
                                 }
                             }
                         });
@@ -1981,7 +1995,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                                 roomMessage.setMessage(message);
                                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-
+                                roomMessage.setHasMessageLink(HelperUrl.hasInMessageLink(message));
                                 roomMessage.setRoomId(mRoomId);
 
                                 roomMessage.setUserId(senderId);
@@ -2401,15 +2415,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             case "TEXT":
                 intent.setType("text/plain");
-                intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.messageText);
+                intent.putExtra(Intent.EXTRA_TEXT, messageInfo.messageText);
                 break;
             case "CONTACT":
                 intent.setType("text/plain");
-                intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.userInfo.firstName + "\n" + messageInfo.userInfo.phone);
+                intent.putExtra(Intent.EXTRA_TEXT, messageInfo.userInfo.firstName + "\n" + messageInfo.userInfo.phone);
                 break;
             case "LOCATION":
                 intent.setType("text/plain");
-                intent.putExtra(android.content.Intent.EXTRA_TEXT, messageInfo.location);
+                intent.putExtra(Intent.EXTRA_TEXT, messageInfo.location);
                 break;
             case "VOICE":
             case "AUDIO":
@@ -2784,7 +2798,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
                                 Uri uri = Uri.parse(listPathString.get(0));
-                                uri = android.net.Uri.parse("file://" + uri.getPath());
+                                uri = Uri.parse("file://" + uri.getPath());
                                 intent.putExtra("IMAGE_CAMERA", uri.toString());
                                 intent.putExtra("TYPE", "gallery");
                                 intent.putExtra("PAGE", "chat");
@@ -3479,7 +3493,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private io.github.meness.emoji.EmojiPopup emojiPopup;
 
     private void setUpEmojiPopup() {
-        emojiPopup = io.github.meness.emoji.EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        emojiPopup = io.github.meness.emoji.EmojiPopup.Builder.fromRootView(findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override
             public void onEmojiBackspaceClicked(final View v) {
 
@@ -3682,7 +3696,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         };
 
         FragmentShowImageMessages fragment = FragmentShowImageMessages.newInstance(mRoomId, messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getToken() : messageInfo.attachment.token);
-        getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, fragment, "ShowImageMessage").commit();
+        getSupportFragmentManager().beginTransaction().replace(ac_ll_parent, fragment, "ShowImageMessage").commit();
     }
 
     @Override
