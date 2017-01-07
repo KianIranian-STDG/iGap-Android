@@ -103,6 +103,8 @@ public class SHP_SETTING {
     public static class Defaults {
         public static final int KEY_AUTOPLAY_GIFS = 1;
     }
+
+    public static final String KEY_GET_CONTACT = "KEY_GET_CONTACT";
 }
 
 

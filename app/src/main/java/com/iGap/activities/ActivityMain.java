@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -63,6 +64,7 @@ import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnRefreshActivity;
 import com.iGap.interfaces.OnSetActionInRoom;
 import com.iGap.interfaces.OnUpdateAvatar;
+import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OpenFragment;
 import com.iGap.libs.floatingAddButton.ArcMenu;
@@ -75,6 +77,7 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.OnComplete;
+import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
 import com.iGap.module.ShouldScrolledBehavior;
 import com.iGap.proto.ProtoClientGetRoom;
@@ -95,16 +98,19 @@ import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupLeft;
+import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
@@ -130,6 +136,7 @@ public class ActivityMain extends ActivityEnhanced
 
     private SharedPreferences sharedPreferences;
     private String cLanguage;
+    private boolean isGetContactList = false;
 
     private void scrollToTop() {
         recyclerView.postDelayed(new Runnable() {
@@ -158,6 +165,11 @@ public class ActivityMain extends ActivityEnhanced
 
         mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
+
+
+        importContactList();
+
+
 
         G.helperNotificationAndBadge.cancelNotification();
         G.onGroupAvatarResponse = this;
@@ -330,6 +342,41 @@ public class ActivityMain extends ActivityEnhanced
             });
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * import contact phone for first one
+     */
+    private void importContactList() {
+
+        G.onContactImport = new OnUserContactImport() {
+            @Override
+            public void onContactImport() {
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT, true);
+                editor.apply();
+
+                new RequestUserContactsGetList().userContactGetList();
+                G.isImportContactToServer = true;
+            }
+        };
+
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
+        if (!isGetContactList) {
+            try {
+                HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermision() {
+                    @Override
+                    public void Allow() throws IOException {
+                        Contacts.getListOfContact(true);
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

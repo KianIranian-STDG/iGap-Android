@@ -55,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -201,6 +202,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -212,17 +227,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -1902,6 +1906,13 @@ public class ActivityChat extends ActivityEnhanced
                     listPathString.clear();
                     ll_attach_text.setVisibility(View.GONE);
                     edtChat.setText("");
+
+                    Log.i("VVVVVVV", "onClick: " + userTriesReplay());
+                    if (mReplayLayout != null && userTriesReplay()) {
+                        mReplayLayout.setTag(null);
+                        mReplayLayout.setVisibility(View.GONE);
+                    }
+
                     return;
                 }
 
@@ -2715,6 +2726,11 @@ public class ActivityChat extends ActivityEnhanced
             if (requestCode == AttachFile.request_code_contact_phone) {
                 latestUri = data.getData();
                 sendMessage(requestCode, "");
+
+//                if (mReplayLayout != null && userTriesReplay()) {
+//                    mReplayLayout.setTag(null);
+//                    mReplayLayout.setVisibility(View.GONE);
+//                }
                 return;
             }
 
@@ -2746,10 +2762,15 @@ public class ActivityChat extends ActivityEnhanced
                     if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !path.toLowerCase().endsWith(".gif")) {
                         String localpathNew = attachFile.saveGalleryPicToLocal(path);
                         sendMessage(requestCode, localpathNew);
+
                     } else {
                         sendMessage(requestCode, path);
                     }
                 }
+//                if (mReplayLayout != null && userTriesReplay()) {
+//                    mReplayLayout.setTag(null);
+//                    mReplayLayout.setVisibility(View.GONE);
+//                }
             }
 
             if (listPathString.size() == 1) {
@@ -3186,6 +3207,11 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
         if (finalMessageType == CONTACT) {
             mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo));
+        }
+
+        if (mReplayLayout != null && userTriesReplay()) {
+            mReplayLayout.setTag(null);
+            mReplayLayout.setVisibility(View.GONE);
         }
 
         scrollToEnd();
