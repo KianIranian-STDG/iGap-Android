@@ -35,6 +35,7 @@ import com.iGap.adapter.RoomsAdapter;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.fragments.ContactGroupFragment;
 import com.iGap.fragments.FragmentCreateChannel;
+import com.iGap.fragments.FragmentDrawerMenu;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;

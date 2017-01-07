@@ -34,7 +34,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -42,6 +41,7 @@ import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.fragments.FragmentDeleteAccount;
+import com.iGap.fragments.FragmentDrawerMenu;
 import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.helper.HelperAvatar;
@@ -89,15 +89,13 @@ import com.iGap.request.RequestUserProfileSetGender;
 import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;

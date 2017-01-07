@@ -246,7 +246,9 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
-public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
+public class ActivityChat extends ActivityEnhanced
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse,
+        OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -559,12 +561,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void getChatHistory() {
         Realm realm = Realm.getDefaultInstance();
-        if (realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-            .equalTo(RealmRoomMessageFields.DELETED, false)
-            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-            .findAll()
-            .size() < 3) {
+        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().size() < 3) {
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
         }
         realm.close();
@@ -632,11 +629,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
 
-                getSupportFragmentManager().beginTransaction()
-                    .addToBackStack(null)
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
-                    .commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap).commit();
 
 
             }
@@ -778,12 +771,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             txtSpamUser = (TextView) findViewById(R.id.chat_txt_addContact);
             txtSpamClose = (TextView) findViewById(R.id.chat_txt_close);
             txtSpamClose.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     vgSpamUser.setVisibility(View.GONE);
                     if (realmRegisteredInfo != null) {
 
                         mRealm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 realmRegisteredInfo.setShowSpamBar(false);
                             }
                         });
@@ -799,33 +794,35 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
 
-            if (realmRegisteredInfo != null) if (realmRegisteredInfo.isShowSpamBar()) {
+            if (realmRegisteredInfo != null) {
+                if (realmRegisteredInfo.isShowSpamBar()) {
 
-                if (phoneNumber != null) {
-                    if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
-                        vgSpamUser.setVisibility(View.VISIBLE);
-                        showSpamfromContact = true;
-                    }
-                }
-
-                if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
-                    final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-                    if (realmRegisteredInfo != null) {
-
-                        if (realmRegisteredInfo.isBlockUser()) {
-                            blockUser = true;
-                            txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-                        } else {
-                            txtSpamUser.setText(getResources().getString(R.string.block_user));
+                    if (phoneNumber != null) {
+                        if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
+                            vgSpamUser.setVisibility(View.VISIBLE);
+                            showSpamfromContact = true;
                         }
-                    } else {
-                        final RealmContacts realmContact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-                        if (realmContact != null) {
-                            if (realmContact.isBlockUser()) {
+                    }
+
+                    if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
+                        final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                        if (realmRegisteredInfo != null) {
+
+                            if (realmRegisteredInfo.isBlockUser()) {
                                 blockUser = true;
                                 txtSpamUser.setText(getResources().getString(R.string.un_block_user));
                             } else {
                                 txtSpamUser.setText(getResources().getString(R.string.block_user));
+                            }
+                        } else {
+                            final RealmContacts realmContact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+                            if (realmContact != null) {
+                                if (realmContact.isBlockUser()) {
+                                    blockUser = true;
+                                    txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                                } else {
+                                    txtSpamUser.setText(getResources().getString(R.string.block_user));
+                                }
                             }
                         }
                     }
@@ -956,7 +953,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         final long id = SUID.id().get();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
                 messageLocation.setLocationLat(latitude);
@@ -980,7 +978,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         realm.close();
 
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Realm realm1 = Realm.getDefaultInstance();
                 RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
                 switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
@@ -1687,17 +1686,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     @Override
                     public void onClick(View view) {
 
-                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.clear_history)
-                                .content(R.string.clear_history_content)
-                                .positiveText(R.string.B_ok)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        onSelectRoomMenu("txtClearHistory", (int) mRoomId);
-                                    }
-                                })
-                                .negativeText(R.string.B_cancel)
-                                .show();
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                onSelectRoomMenu("txtClearHistory", (int) mRoomId);
+                            }
+                        }).negativeText(R.string.B_cancel).show();
                         popupWindow.dismiss();
                     }
                 });
@@ -1705,17 +1699,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     @Override
                     public void onClick(View view) {
 
-                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.delete_chat)
-                                .content(R.string.delete_chat_content)
-                                .positiveText(R.string.B_ok)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
-                                    }
-                                })
-                                .negativeText(R.string.B_cancel)
-                                .show();
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
+                            }
+                        }).negativeText(R.string.B_cancel).show();
                         popupWindow.dismiss();
                     }
                 });
@@ -1759,19 +1748,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     public void onClick(View view) {
 
                         popupWindow.dismiss();
-                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.convert_chat_to_group_title)
-                                .content(R.string.convert_chat_to_group_content)
-                                .positiveText(R.string.B_ok)
-                                .negativeText(R.string.B_cancel)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        finish();
-                                        dialog.dismiss();
-                                        G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
-                                    }
-                                })
-                                .show();
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                finish();
+                                dialog.dismiss();
+                                G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
+                            }
+                        }).show();
                     }
                 });
             }
@@ -1997,6 +1981,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                                 roomMessage.setHasMessageLink(HelperUrl.hasInMessageLink(message));
                                 roomMessage.setRoomId(mRoomId);
+                                roomMessage.setShowMessage(true);
 
                                 roomMessage.setUserId(senderId);
                                 roomMessage.setCreateTime(TimeUtils.currentLocalTime());
@@ -2518,8 +2503,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        imvUserPicture.setImageBitmap(
-                                com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
             }
@@ -2645,7 +2629,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         break;
                     case 2:
                         try {
-                            attachFile.requestOpenGalleryForImageSingleSelect();
+                            attachFile.requestOpenGalleryForVideoMultipleSelect();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -3141,6 +3125,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.FILE);
                 roomMessage.setUserId(senderID);
+                roomMessage.setShowMessage(true);
                 roomMessage.setCreateTime(updateTime);
                 if (userTriesReplay()) {
                     if (finalMessageInfo != null && finalMessageInfo.replayTo != null) {
@@ -3561,11 +3546,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         //
         //Collections.sort(realmRoomMessages, SortMessages.ASC);
 
-        RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-            .equalTo(RealmRoomMessageFields.DELETED, false)
-            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-            .findAllSorted(RealmRoomMessageFields.CREATE_TIME);
+        RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
         if (results.size() > 0) lastMessageId = results.get(0).getMessageId();
 
@@ -3705,8 +3686,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         boolean clearMessage = false;
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> realmRoomMessages =
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
                 clearMessage = true;
@@ -4266,9 +4246,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     prgWaiting.setVisibility(View.GONE);
 
                     Realm realm = Realm.getDefaultInstance();
-                    RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class)
-                        .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false)
-                        .findAllSorted(RealmRoomMessageFields.CREATE_TIME);
+                    RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
                     if (results.size() > 0) lastMessageId = results.get(0).getMessageId();
 
@@ -4410,10 +4388,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         /**
          * this code should exist in under of other codes in this block
          */
-        new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId)
-                .attachment(uploadStructure.token)
-                .message(uploadStructure.text)
-                .sendMessage(Long.toString(uploadStructure.messageId));
+        new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId).attachment(uploadStructure.token).message(uploadStructure.text).sendMessage(Long.toString(uploadStructure.messageId));
     }
 
     @Override
@@ -4858,11 +4833,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
             showImage(message);
         } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == VIDEO_TEXT) {
-            Intent intent = HelperMimeType
-                    .appropriateProgram(realm.where(RealmAttachment.class)
-                            .equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token)
-                            .findFirst()
-                            .getLocalFilePath());
+            Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token).findFirst().getLocalFilePath());
             if (intent != null) {
                 try {
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

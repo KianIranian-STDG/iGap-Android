@@ -1,4 +1,4 @@
-package com.iGap.activities;
+package com.iGap.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,22 +14,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.fragments.FragmentNewGroup;
-import com.iGap.fragments.RegisteredContactsFragment;
+import com.iGap.activities.ActivityMain;
+import com.iGap.activities.ActivitySetting;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnGetPermision;
-import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.interfaces.OnUserInfoMyClient;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.AndroidUtils;
-import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
@@ -60,25 +57,25 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
 
         // init icon
         TextView txtIconNewGroup = (TextView) v.findViewById(R.id.lm_txt_icon_group);
-//        txtIconNewGroup.setTypeface(G.flaticon);
+        //        txtIconNewGroup.setTypeface(G.flaticon);
 
         TextView txtIconNewChat = (TextView) v.findViewById(R.id.lm_txt_icon_new_chat);
-//        txtIconNewChat.setTypeface(G.flaticon);
+        //        txtIconNewChat.setTypeface(G.flaticon);
 
         TextView txtIconNewChannel = (TextView) v.findViewById(R.id.lm_txt_icon_channel);
 
 
         TextView txtIconContacts = (TextView) v.findViewById(R.id.lm_txt_icon_contacts);
-//        txtIconContacts.setTypeface(G.flaticon);
+        //        txtIconContacts.setTypeface(G.flaticon);
 
         TextView txtIconInviteFriends = (TextView) v.findViewById(R.id.lm_txt_icon_invite_friends);
-//        txtIconInviteFriends.setTypeface(G.flaticon);
+        //        txtIconInviteFriends.setTypeface(G.flaticon);
 
         TextView txtIconSetting = (TextView) v.findViewById(R.id.lm_txt_icon_setting);
-//        txtIconSetting.setTypeface(G.flaticon);
+        //        txtIconSetting.setTypeface(G.flaticon);
 
         TextView txtIconiGapFAQ = (TextView) v.findViewById(R.id.lm_txt_icon_igap_faq);
-//        txtIconiGapFAQ.setTypeface(G.flaticon);
+        //        txtIconiGapFAQ.setTypeface(G.flaticon);
 
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -128,47 +125,20 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
             }
         });
 
         LinearLayout layoutNewChat = (LinearLayout) v.findViewById(R.id.lm_ll_new_chat);
         layoutNewChat.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
-
-                try {
-                    HelperPermision.getContactPermision(getActivity(), new OnGetPermision() {
-                        @Override public void Allow() throws IOException {
-
-                            if (G.isImportContactToServer == false) {
-                                sendContactToServer();
-                            } else {
-                                Fragment fragment = RegisteredContactsFragment.newInstance();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("TITLE", "New Chat");
-                                fragment.setArguments(bundle);
-                                getActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                    .addToBackStack(null)
-                                    .replace(R.id.fragmentContainer, fragment)
-                                    .commit();
-
-                                ActivityMain.mLeftDrawerLayout.closeDrawer();
-                            }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-
+                Fragment fragment = RegisteredContactsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "New Chat");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                ActivityMain.mLeftDrawerLayout.closeDrawer();
             }
         });
 
@@ -181,11 +151,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
             }
         });
 
@@ -193,34 +159,12 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
         layoutContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                try {
-                    HelperPermision.getContactPermision(getActivity(), new OnGetPermision() {
-                        @Override public void Allow() throws IOException {
-
-                            if (G.isImportContactToServer == false) {
-                                sendContactToServer();
-                            } else {
-                                Fragment fragment = RegisteredContactsFragment.newInstance();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("TITLE", "Contacts");
-                                fragment.setArguments(bundle);
-                                getActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                    .addToBackStack(null)
-                                    .replace(R.id.fragmentContainer, fragment)
-                                    .commit();
-                                ActivityMain.mLeftDrawerLayout.closeDrawer();
-                            }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-
+                Fragment fragment = RegisteredContactsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "Contacts");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                ActivityMain.mLeftDrawerLayout.closeDrawer();
             }
         });
 
@@ -299,9 +243,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
                         if (imagePath == null || !new File(imagePath).exists()) {
                             Realm realm1 = Realm.getDefaultInstance();
                             RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
-                            imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-                                    (int) imgUserPhoto.getContext()
-                                            .getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
+                            imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
                             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgUserPhoto);
@@ -315,9 +257,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-                                (int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100),
-                                initials, color));
+                        imgUserPhoto.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgUserPhoto.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
                     }
                 });
             }
@@ -336,7 +276,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
 
     }
 
-    private void sendContactToServer() {
+    /*private void sendContactToServer() {
         G.onContactImport = new OnUserContactImport() {
             @Override public void onContactImport() {
                 new RequestUserContactsGetList().userContactGetList();
@@ -346,7 +286,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
 
         Contacts.getListOfContact(true);
 
-    }
+    }*/
 
     @Override
     public void onUserInfoError(int majorCode, int minorCode) {
