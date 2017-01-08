@@ -539,7 +539,7 @@ public class ActivityChat extends ActivityEnhanced
 
     private void getChatHistory() {
         Realm realm = Realm.getDefaultInstance();
-        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().size() < 3) {
+        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().size() < 3) {
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
         }
         realm.close();
@@ -2706,10 +2706,10 @@ public class ActivityChat extends ActivityEnhanced
                 latestUri = data.getData();
                 sendMessage(requestCode, "");
 
-//                if (mReplayLayout != null && userTriesReplay()) {
-//                    mReplayLayout.setTag(null);
-//                    mReplayLayout.setVisibility(View.GONE);
-//                }
+                //                if (mReplayLayout != null && userTriesReplay()) {
+                //                    mReplayLayout.setTag(null);
+                //                    mReplayLayout.setVisibility(View.GONE);
+                //                }
                 return;
             }
 
@@ -2746,10 +2746,10 @@ public class ActivityChat extends ActivityEnhanced
                         sendMessage(requestCode, path);
                     }
                 }
-//                if (mReplayLayout != null && userTriesReplay()) {
-//                    mReplayLayout.setTag(null);
-//                    mReplayLayout.setVisibility(View.GONE);
-//                }
+                //                if (mReplayLayout != null && userTriesReplay()) {
+                //                    mReplayLayout.setTag(null);
+                //                    mReplayLayout.setVisibility(View.GONE);
+                //                }
             }
 
             if (listPathString.size() == 1) {
@@ -3548,7 +3548,7 @@ public class ActivityChat extends ActivityEnhanced
         //
         //Collections.sort(realmRoomMessages, SortMessages.ASC);
 
-        RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
+        RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
         if (results.size() > 0) lastMessageId = results.get(0).getMessageId();
 
@@ -4248,7 +4248,7 @@ public class ActivityChat extends ActivityEnhanced
                     prgWaiting.setVisibility(View.GONE);
 
                     Realm realm = Realm.getDefaultInstance();
-                    RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
+                    RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
                     if (results.size() > 0) lastMessageId = results.get(0).getMessageId();
 
@@ -5145,7 +5145,13 @@ public class ActivityChat extends ActivityEnhanced
                 fileUploadStructure.openFile(filePath);
                 fileUploadStructure.text = messageText;
 
+                long time1 = System.currentTimeMillis();
+                Log.i("TTT", "Before Time 1 : " + time1);
                 byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                long time2 = System.currentTimeMillis();
+                Log.i("TTT", "Before Time 2 : " + time2);
+                Log.i("TTT", "difference millis : " + (time2 - time1));
+                Log.i("TTT", "difference second : " + (time2 - time1) / 1000);
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;

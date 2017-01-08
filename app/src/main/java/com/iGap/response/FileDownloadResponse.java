@@ -49,7 +49,9 @@ public class FileDownloadResponse extends MessageHandler {
             if (G.onFileDownloaded != null) {
                 G.onFileDownloaded.onFileDownload(filename, token, fileSize, nextOffset, selector, (int) progress);
             }
-            G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, (int) progress);
+            if (G.onFileDownloadResponse != null) {
+                G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, (int) progress);
+            }
         } else {
             G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, (int) progress, userId, roomType);
         }

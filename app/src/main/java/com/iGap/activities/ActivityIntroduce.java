@@ -18,7 +18,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
@@ -31,10 +30,8 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
 import com.iGap.request.RequestInfoPage;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
-
-import java.io.IOException;
-
 import io.realm.Realm;
+import java.io.IOException;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityIntroduce extends ActivityEnhanced {
@@ -79,6 +76,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                             HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermision() {
                                 @Override
                                 public void Allow() {
+                                    G.makeFolder();
                                     HelperPermision.onDenyStorage = null;
                                     goToProgram(savedInstanceState);
                                 }
@@ -109,6 +107,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             HelperPermision.getStoragePermision(this, new OnGetPermision() {
                 @Override
                 public void Allow() {
+                    G.makeFolder();
                     HelperPermision.onDenyStorage = null;
                     goToProgram(savedInstanceState);
                 }

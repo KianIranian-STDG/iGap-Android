@@ -31,9 +31,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterDialog;
@@ -65,13 +65,11 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-
+import io.realm.Realm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
@@ -569,7 +567,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             userRegister();
                             btnStart.setEnabled(false);
-                            countDownTimer = new CountDownTimer(1000 * 60, 1000) { // wait for verify sms
+                            countDownTimer = new CountDownTimer(Config.COUNTER_TIMER, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
 
                                 TextView txtTimerLand;
 

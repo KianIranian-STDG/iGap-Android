@@ -8,7 +8,6 @@ import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmUserInfo;
-
 import io.realm.Realm;
 
 public class UserInfoResponse extends MessageHandler {
@@ -75,6 +74,10 @@ public class UserInfoResponse extends MessageHandler {
 
                         if (G.onUserInfoResponse != null) {
                             G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
+                        }
+
+                        if (G.onUserInfoForAvatar != null) {
+                            G.onUserInfoForAvatar.onUserInfoForAvatar(builder.getUser());
                         }
                     }
                 });

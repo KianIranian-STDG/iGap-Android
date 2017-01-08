@@ -1,13 +1,13 @@
 package com.iGap.helper;
 
 import android.support.annotation.Nullable;
-
 import com.iGap.G;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnDownload;
 import com.iGap.interfaces.OnFileDownloaded;
+import com.iGap.interfaces.OnUserInfoForAvatar;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
@@ -21,13 +21,11 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.request.RequestFileDownload;
-
-import java.io.File;
-import java.io.IOException;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * helper avatar for add or delete avatars for user or room
@@ -70,7 +68,7 @@ public class HelperAvatar {
      * get temp address for source and get token and name
      * from avatar for file destination
      *
-     * @param src    temp address
+     * @param src temp address
      * @param avatar avatar that want copy
      * @return return destination path if copy was successfully
      */
@@ -246,9 +244,9 @@ public class HelperAvatar {
      * delete avatar and if another avatar is exist for this user
      * call latestAvatarPath latest avatar and if isn't exist call showInitials
      *
-     * @param ownerId    if is user set userId and if is room set roomId
+     * @param ownerId if is user set userId and if is room set roomId
      * @param avatarType set USER for user and ROOM for chat or group or channel
-     * @param avatarId   id avatar for delete from RealmAvatar
+     * @param avatarId id avatar for delete from RealmAvatar
      */
 
     public static void avatarDelete(final long ownerId, final long avatarId, final AvatarType avatarType, @Nullable final OnAvatarDelete onAvatarDelete) {
@@ -329,11 +327,7 @@ public class HelperAvatar {
                 fileSize = realmAttachment.getSmallThumbnail().getSize();
             }
 
-            String identity = realmAttachment.getToken()
-                    + '*' + selector.toString()
-                    + '*' + fileSize
-                    + '*' + fileName
-                    + '*' + 0;
+            String identity = realmAttachment.getToken() + '*' + selector.toString() + '*' + fileSize + '*' + fileName + '*' + 0;
 
             new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector, identity);
 
@@ -365,11 +359,7 @@ public class HelperAvatar {
             } else {
                 // I don't use offset in getting thumbnail
                 try {
-                    String identity = token
-                            + '*' + selector.toString()
-                            + '*' + fileSize
-                            + '*' + fileName
-                            + '*' + offset;
+                    String identity = token + '*' + selector.toString() + '*' + fileSize + '*' + fileName + '*' + offset;
 
                     new RequestFileDownload().download(token, offset, (int) fileSize, selector, identity);
                 } catch (IllegalStateException e) {
@@ -422,7 +412,6 @@ public class HelperAvatar {
                                         Realm realm1 = Realm.getDefaultInstance();
                                         for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).findAll()) {
                                             if (realmAvatar1.getFile().getToken().equals(token)) {
-                                                //onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
                                                 G.onUpdateAvatar.onUpdateAvatar(getRoomId(realmAvatar1.getOwnerId()));
                                                 break;
                                             }
@@ -454,6 +443,52 @@ public class HelperAvatar {
         }
     }
 
+   /* */
+
+    /**
+     * read from user and room db in local for find initials and color
+     *
+     * @param ownerId if is user set userId and if is room set roomId
+     * @return initials[0] , color[1]
+     *//*
+
+    public static String[] showInitials1(long ownerId, AvatarType avatarType) {
+        Realm realm = Realm.getDefaultInstance();
+        String initials = null;
+        String color = null;
+        if (avatarType == AvatarType.USER) {
+
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, ownerId).findFirst();
+            if (realmRegisteredInfo != null) {
+                initials = realmRegisteredInfo.getInitials();
+                color = realmRegisteredInfo.getColor();
+            } else {
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+                    if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
+                        new UserInfo().getUserInfo(ownerId);
+                        initials = realmRoom.getInitials();
+                        color = realmRoom.getColor();
+                    }
+                }
+            }
+
+        } else if (avatarType == AvatarType.ROOM) {
+
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, ownerId).findFirst();
+            if (realmRoom != null) {
+                initials = realmRoom.getInitials();
+                color = realmRoom.getColor();
+            }
+        }
+        realm.close();
+
+        if (initials != null && color != null) {
+            return new String[]{initials, color};
+        }
+
+        return null;
+    }*/
+
     private static long getRoomId(long ownerId) {
         Realm realm = Realm.getDefaultInstance();
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
@@ -463,5 +498,35 @@ public class HelperAvatar {
         }
         realm.close();
         return ownerId;
+    }
+
+    public static class UserInfo implements OnUserInfoForAvatar {
+
+        public void getUserInfo(long userId) {
+            G.onUserInfoForAvatar = this;
+            HelperUserInfo.needUpdateUser(userId, null);
+        }
+
+        @Override
+        public void onUserInfoForAvatar(final ProtoGlobal.RegisteredUser user) {
+
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+                        if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == user.getId()) {
+                            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
+                            if (realmRegisteredInfo != null) {
+                                realmRoom.setAvatar(getLastAvatar(realmRegisteredInfo.getId()));
+                            }
+                        }
+                    }
+                }
+            });
+            realm.close();
+
+            G.onUpdateAvatar.onUpdateAvatar(getRoomId(user.getId()));
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.iGap.helper;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestUserInfo;
-
 import io.realm.Realm;
 
 public class HelperUserInfo {
@@ -12,7 +11,7 @@ public class HelperUserInfo {
      * compare user cacheId , if was equal don't do anything
      * otherwise send request for get user info
      *
-     * @param userId  userId for get old cacheId from RealmRegisteredInfo
+     * @param userId userId for get old cacheId from RealmRegisteredInfo
      * @param cacheId new cacheId
      * @return return true if need update otherwise return false
      */
@@ -22,7 +21,7 @@ public class HelperUserInfo {
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
-        if (realmRegisteredInfo != null && realmRegisteredInfo.getCacheId().equals(cacheId)) {
+        if (realmRegisteredInfo != null && cacheId != null && realmRegisteredInfo.getCacheId().equals(cacheId)) {
             return false;
         }
         new RequestUserInfo().userInfo(userId);

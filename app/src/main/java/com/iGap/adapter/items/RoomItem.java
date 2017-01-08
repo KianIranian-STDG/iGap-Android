@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
@@ -32,13 +31,11 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import java.util.List;
-
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.util.List;
 
 import static android.view.View.GONE;
 import static com.iGap.G.context;
@@ -186,8 +183,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
                             try {
                                 if (mInfo.getLastMessage().getReplyTo() != null) {
                                     tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
-                                    if (tmp != null)
-                                        _type = tmp;
+                                    if (tmp != null) _type = tmp;
                                 }
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
@@ -197,8 +193,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
                             try {
                                 if (mInfo.getLastMessage().getForwardMessage() != null) {
                                     tmp = mInfo.getLastMessage().getForwardMessage().getMessageType();
-                                    if (tmp != null)
-                                        _type = tmp;
+                                    if (tmp != null) _type = tmp;
                                 }
 
                             } catch (NullPointerException e) {
@@ -421,6 +416,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             } else {
                 for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
                     if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
+                        new HelperAvatar.UserInfo().getUserInfo(ownerId);
                         initials = realmRoom.getInitials();
                         color = realmRoom.getColor();
                     }

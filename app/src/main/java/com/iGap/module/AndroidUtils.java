@@ -9,12 +9,11 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -115,12 +114,11 @@ public final class AndroidUtils {
      * get n bytes from file, starts from beginning
      *
      * @param uploadStructure FileUploadStructure
-     * @param bytesCount      total bytes
+     * @param bytesCount total bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getBytesFromStart(FileUploadStructure uploadStructure, int bytesCount)
-            throws IOException {
+    public static byte[] getBytesFromStart(FileUploadStructure uploadStructure, int bytesCount) throws IOException {
         // FileChannel has better performance than BufferedInputStream
         uploadStructure.fileChannel.position(0);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
@@ -136,8 +134,7 @@ public final class AndroidUtils {
 
     public static int getStatusBarHeight(Context context) {
         int result = 0;
-        int resourceId =
-                context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
@@ -170,12 +167,11 @@ public final class AndroidUtils {
      * get n bytes from file, starts from end
      *
      * @param uploadStructure FileUploadStructure
-     * @param bytesCount      total bytes
+     * @param bytesCount total bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getBytesFromEnd(FileUploadStructure uploadStructure, int bytesCount)
-            throws IOException {
+    public static byte[] getBytesFromEnd(FileUploadStructure uploadStructure, int bytesCount) throws IOException {
         // FileChannel has better performance than RandomAccessFile
         uploadStructure.fileChannel.position(uploadStructure.fileChannel.size() - bytesCount);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
@@ -193,13 +189,12 @@ public final class AndroidUtils {
      * get n bytes from specified offset
      *
      * @param uploadStructure FileUploadStructure
-     * @param offset          start reading from
-     * @param bytesCount      total reading bytes
+     * @param offset start reading from
+     * @param bytesCount total reading bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getNBytesFromOffset(FileUploadStructure uploadStructure, int offset,
-                                             int bytesCount) throws IOException {
+    public static byte[] getNBytesFromOffset(FileUploadStructure uploadStructure, int offset, int bytesCount) throws IOException {
         // FileChannel has better performance than RandomAccessFile
         uploadStructure.fileChannel.position(offset);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
@@ -219,11 +214,12 @@ public final class AndroidUtils {
      *
      * @param uploadStructure FileUploadStructure
      */
-    public static byte[] getFileHash(FileUploadStructure uploadStructure)
-            throws NoSuchAlgorithmException, IOException {
+    public static byte[] getFileHash(FileUploadStructure uploadStructure) throws NoSuchAlgorithmException, IOException {
         try {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+            Log.i("TTT", "Before Time 1A : " + System.currentTimeMillis());
             byte[] fileBytes = fileToBytes(uploadStructure);
+            Log.i("TTT", "Before Time 2A : " + System.currentTimeMillis());
             return sha256.digest(fileBytes);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -231,8 +227,7 @@ public final class AndroidUtils {
         return null;
     }
 
-    public static void cutFromTemp(ProtoGlobal.RoomMessageType messageType, String fileName)
-            throws IOException {
+    public static void cutFromTemp(ProtoGlobal.RoomMessageType messageType, String fileName) throws IOException {
         File cutTo = new File(suitableAppFilePath(messageType) + "/" + fileName);
         File cutFrom = new File(G.DIR_TEMP + "/" + fileName);
 
@@ -301,7 +296,7 @@ public final class AndroidUtils {
      * convert bytes to human readable length
      *
      * @param bytes bytes
-     * @param si    Boolean
+     * @param si Boolean
      * @return String
      */
     public static String humanReadableByteCount(long bytes, boolean si) {

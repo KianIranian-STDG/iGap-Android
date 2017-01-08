@@ -19,6 +19,10 @@ public class HelperError {
                     WebSocketClient.getInstance().disconnect();
                 }
                 break;
+
+            case 110:
+
+                break;
             case 5:
                 //if (minorCode == 1) error = "time out  server not response";
                 break;

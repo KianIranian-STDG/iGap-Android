@@ -115,6 +115,7 @@ import com.iGap.interfaces.OnUserContactsBlock;
 import com.iGap.interfaces.OnUserContactsUnBlock;
 import com.iGap.interfaces.OnUserDelete;
 import com.iGap.interfaces.OnUserGetDeleteToken;
+import com.iGap.interfaces.OnUserInfoForAvatar;
 import com.iGap.interfaces.OnUserInfoMyClient;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserLogin;
@@ -243,7 +244,8 @@ public class G extends MultiDexApplication {
 
     public static int IMAGE_CORNER;
 
-    @Override protected void attachBaseContext(Context base) {
+    @Override
+    protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
@@ -298,6 +300,7 @@ public class G extends MultiDexApplication {
     public static OnGroupLeft onGroupLeft;
     public static OnFileDownloadResponse onFileDownloadResponse;
     public static OnUserInfoResponse onUserInfoResponse;
+    public static OnUserInfoForAvatar onUserInfoForAvatar;
     public static OnUserAvatarResponse onUserAvatarResponse;
     public static OnGroupAvatarResponse onGroupAvatarResponse;
     public static OnChangeUserPhotoListener onChangeUserPhotoListener;
@@ -401,7 +404,8 @@ public class G extends MultiDexApplication {
     public static void importContact() {
 
         G.onContactImport = new OnUserContactImport() {
-            @Override public void onContactImport() {
+            @Override
+            public void onContactImport() {
                 getContactListFromServer();
             }
         };
@@ -415,7 +419,8 @@ public class G extends MultiDexApplication {
 
     private static void getContactListFromServer() {
         G.onUserContactGetList = new OnUserContactGetList() {
-            @Override public void onContactGetList() {
+            @Override
+            public void onContactGetList() {
 
             }
         };
@@ -436,12 +441,14 @@ public class G extends MultiDexApplication {
         realm.close();
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 // fill own user info
                 if (userId == user.getId()) {
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
                             RealmAvatar avatar = RealmAvatar.put(user.getId(), user.getAvatar(), true);
 
                             RealmRegisteredInfo.putOrUpdate(user);
@@ -472,18 +479,21 @@ public class G extends MultiDexApplication {
                 }
             }
 
-            @Override public void onUserInfoTimeOut() {
+            @Override
+            public void onUserInfoTimeOut() {
 
             }
 
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };
         new RequestUserInfo().userInfo(userId);
     }
 
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(false).build()).build());
 
@@ -508,7 +518,8 @@ public class G extends MultiDexApplication {
 
         BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 
-            @Override public void onReceive(Context context, Intent intent) {
+            @Override
+            public void onReceive(Context context, Intent intent) {
                 if (HelperCheckInternetConnection.hasNetwork()) {
                     Log.e("DDD", "Has Network");
                     /*if (noNetwok) {
@@ -546,8 +557,7 @@ public class G extends MultiDexApplication {
         flaticon = Typeface.createFromAsset(this.getAssets(), "fonts/Flaticon.ttf");
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
 
-        Realm.setDefaultConfiguration(
-            new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
 
         // Create global configuration and initialize ImageLoader with this config
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
@@ -683,7 +693,8 @@ public class G extends MultiDexApplication {
 
     private void fillSecuringInterface() {
         G.onSecuring = new OnSecuring() {
-            @Override public void onSecure() {
+            @Override
+            public void onSecure() {
                 login();
 
                 ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -724,9 +735,11 @@ public class G extends MultiDexApplication {
         // hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
 
         G.onUserLogin = new OnUserLogin() {
-            @Override public void onLogin() {
+            @Override
+            public void onLogin() {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         new RequestClientCondition().clientCondition();
                         getUserInfo();
                         importContact();
@@ -737,13 +750,15 @@ public class G extends MultiDexApplication {
                 });
             }
 
-            @Override public void onLoginError(int majorCode, int minorCode) {
+            @Override
+            public void onLoginError(int majorCode, int minorCode) {
 
             }
         };
 
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (G.isSecure) {
                     Realm realm = Realm.getDefaultInstance();
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
