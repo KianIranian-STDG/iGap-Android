@@ -194,12 +194,6 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void setDefaultMapPosition(LatLng latLng) {
-
-        CameraPosition camPos = new CameraPosition.Builder().target(latLng).zoom(16).bearing(0).tilt(0).build();
-
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camPos));
-    }
 
     //****************************************************************************************************
 
@@ -236,7 +230,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     public static void loadImageFromPosition(double latiude, double longitude, OnGetPicture listener) {
 
         String urlstr = "https://maps.googleapis.com/maps/api/staticmap?center=" + latiude + "," + longitude + "&zoom=16&size=480x240" +
-            "&maptype=roadmap&key=" + G.context.getString(R.string.google_maps_key);
+            "&markers=color:red%7Clabel:S%7C" + latiude + "," + longitude + "&maptype=roadmap&key=" + G.context.getString(R.string.google_maps_key);
 
         new DownloadImageTask(listener).execute(urlstr);
     }

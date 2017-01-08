@@ -61,7 +61,7 @@
                         <ImageView
                             android:layout_width="@dimen/dp240"
                             android:layout_height="@dimen/dp120"
-                            android:scaleType="centerCrop"
+                            android:scaleType="center"
                             android:id="@+id/csll_img_map_position"
                             />
 
