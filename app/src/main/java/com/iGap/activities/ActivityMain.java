@@ -887,7 +887,11 @@ public class ActivityMain extends ActivityEnhanced
                 @Override
                 public void execute(Realm realm) {
                     for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
-                        if (Room.getLastMessage().getUpdateTime() > 0) if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
+                        if (Room.getLastMessage() != null) {
+                            if (Room.getLastMessage().getUpdateTime() > 0) {
+                                if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
+                            }
+                        }
                     }
                 }
             });
