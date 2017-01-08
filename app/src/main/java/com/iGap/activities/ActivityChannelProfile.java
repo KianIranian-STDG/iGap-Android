@@ -285,7 +285,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         } else {
             lytChannelName.setEnabled(false);
             lytChannelDescription.setEnabled(false);
-            ltLink.setEnabled(false);
+//            ltLink.setEnabled(false);
         }
         if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
             fab.setVisibility(View.VISIBLE);
@@ -558,10 +558,14 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public void onClick(View view) {
 
-                if (isPrivate) {
-                    dialogRevoke();
+                if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
+                    if (isPrivate) {
+                        dialogRevoke();
+                    } else {
+                        editUsername();
+                    }
                 } else {
-                    editUsername();
+                    dialogCopyLink();
                 }
             }
         });
@@ -927,6 +931,59 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         // check each word with server
 
         dialog.show();
+    }
+
+    private void dialogCopyLink() {
+
+        String link = txtChannelLink.getText().toString();
+
+        final LinearLayout layoutChannelLink = new LinearLayout(ActivityChannelProfile.this);
+        layoutChannelLink.setOrientation(LinearLayout.VERTICAL);
+
+        final View viewRevoke = new View(ActivityChannelProfile.this);
+        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        final TextInputLayout inputChannelLink = new TextInputLayout(ActivityChannelProfile.this);
+        EditText edtLink = new EditText(ActivityChannelProfile.this);
+        edtLink.setHint(getResources().getString(R.string.channel_link_hint_revoke));
+        edtLink.setText(link);
+        edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
+        edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtLink.setPadding(0, 8, 0, 8);
+        edtLink.setEnabled(false);
+        edtLink.setSingleLine(true);
+        inputChannelLink.addView(edtLink);
+        inputChannelLink.addView(viewRevoke, viewParams);
+
+        viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            edtLink.setBackground(getResources().getDrawable(android.R.color.transparent));
+        }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutChannelLink.addView(inputChannelLink, layoutParams);
+
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(ActivityChannelProfile.this)
+                        .title(getResources().getString(R.string.channel_link))
+                        .positiveText(getResources().getString(R.string.array_Copy))
+                        .customView(layoutChannelLink, true)
+                        .widgetColor(getResources().getColor(R.color.toolbar_background))
+                        .negativeText(getResources().getString(R.string.B_cancel))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                String copy;
+                                copy = txtChannelLink.getText().toString();
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                                clipboard.setPrimaryClip(clip);
+                            }
+                        })
+                        .build();
+
+        dialog.show();
+
     }
 
     private void setAvatar() {
