@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoChannelGetMessagesStats;
 import com.iGap.proto.ProtoError;
@@ -7,7 +8,6 @@ import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmChannelExtraFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-
 import io.realm.Realm;
 
 public class ChannelGetMessagesStatsResponse extends MessageHandler {
@@ -28,6 +28,7 @@ public class ChannelGetMessagesStatsResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
+        Log.i("MMM", "ChannelGetMessagesStatsResponse message : " + message);
         final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Builder builder = (ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();

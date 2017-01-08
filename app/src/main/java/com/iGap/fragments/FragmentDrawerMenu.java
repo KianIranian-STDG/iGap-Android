@@ -174,7 +174,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.im/iGap.apk");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you !");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 ActivityMain.mLeftDrawerLayout.closeDrawer();
