@@ -406,6 +406,19 @@ public class HelperUrl {
 
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
 
+        if (realmRoom != null) {
+
+            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+            intent.putExtra("RoomId", room.getId());
+            G.currentActivity.startActivity(intent);
+
+            realm.close();
+
+            return;
+        }
+
+
+
         if (realmRoom == null) {
 
             realm.executeTransaction(new Realm.Transaction() {

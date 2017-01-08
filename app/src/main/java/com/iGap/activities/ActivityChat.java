@@ -1923,6 +1923,9 @@ public class ActivityChat extends ActivityEnhanced
                                     roomMessage.setEdited(true);
                                     roomMessage.setHasMessageLink(HelperUrl.hasInMessageLink(message));
                                 }
+
+                                RealmRoom rm = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                if (rm != null) rm.setUpdatedTime(TimeUtils.currentLocalTime());
                             }
                         });
 
@@ -1990,6 +1993,7 @@ public class ActivityChat extends ActivityEnhanced
                                 public void execute(Realm realm) {
                                     if (room != null) {
                                         room.setLastMessage(roomMessage);
+                                        room.setUpdatedTime(TimeUtils.currentLocalTime());
                                     }
                                 }
                             });
