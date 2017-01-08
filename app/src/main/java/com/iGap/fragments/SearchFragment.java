@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -38,10 +38,12 @@ import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
-import io.realm.Realm;
-import io.realm.RealmResults;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class SearchFragment extends Fragment {
 
@@ -398,54 +400,7 @@ public class SearchFragment extends Fragment {
 
                 @Override
                 public void onChatGetRoomError(int majorCode, int minorCode) {
-                    if (majorCode == 200) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_200), Snackbar.LENGTH_LONG);
 
-                                snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    }
-                    if (majorCode == 201) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_201), Snackbar.LENGTH_LONG);
-
-                                snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    }
-                    if (majorCode == 202) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_202), Snackbar.LENGTH_LONG);
-
-                                snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    }
                 }
             };
 

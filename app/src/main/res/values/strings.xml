@@ -413,6 +413,7 @@
     <string name="E_218">Bad payload: Invalid roomId</string>
     <string name="E_219">Internal Server Error</string>
     <string name="E_220">This operation is not permitted.</string>
+    <string name="E_300_1">Bad payload: Invalid description</string>
     <string name="E_300_2">Bad payload: Invalid description</string>
     <string name="E_301">Internal Server Error</string>
     <string name="E_610">Bad payload</string>
@@ -518,7 +519,7 @@
 
     <string name="capture_image">Capture Image</string>
     <string name="capture_video">Capture Video</string>
-    <string name="set_gender">Set Gender</string>
+    <string name="set_gender">Set Gander</string>
     <string name="set_email">Set Email</string>
     <string name="delete_contact">Delete Contact</string>
     <string name="error_email">Email is wrong</string>

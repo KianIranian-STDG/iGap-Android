@@ -3,6 +3,7 @@ package com.iGap.module;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.iGap.G;
 import com.iGap.realm.RealmContacts;
@@ -107,7 +108,8 @@ public class Contacts {
 
                         itemContact.setPhone(pCur.getString(pCur.getColumnIndex(
                                 ContactsContract.CommonDataKinds.Phone.NUMBER)));
-
+                        Log.i("BBBBB", "getListOfContact: " + pCur.getString(pCur.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER)));
 
                         /**
                          * this part filter phone contact
@@ -131,6 +133,7 @@ public class Contacts {
         for (int i = 0; i < contactList.size(); i++) {
 
             if (contactList.get(i).getPhone() != null) {
+
                 StructListOfContact itemContact = new StructListOfContact();
                 String[] sp = contactList.get(i).getDisplayName().split(" ");
                 if (sp.length == 1) {

@@ -29,7 +29,6 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -55,6 +54,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -201,6 +201,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -212,17 +226,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -1122,82 +1125,7 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                if (majorCode == 209 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_1), Snackbar.LENGTH_LONG);
 
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 209 && minorCode == 2) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_2), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 209 && minorCode == 3) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_3), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 210) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_210), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 211) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_211), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                }
             }
         };
 
@@ -1237,67 +1165,7 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                if (majorCode == 212 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
 
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 212 && minorCode == 2) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 213) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_213), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 214) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_214), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                }
             }
         };
     }
@@ -3962,112 +3830,6 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onError(int majorCode, int minorCode) {
-        if (majorCode == 713 && minorCode == 1) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 2) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 3) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 4) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 5) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 714) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 715) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        }
     }
 
     @Override
@@ -4296,74 +4058,6 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onGetRoomHistoryError(int majorCode, int minorCode) {
 
-        ActivityChat.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                prgWaiting.setVisibility(View.GONE);
-            }
-        });
-
-        if (majorCode == 615 && minorCode == 1) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_1), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 615 && minorCode == 2) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_2), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 616) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_616), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 617) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_617), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    //                    snack.show();
-                }
-            });
-        }
     }
 
     @Override
@@ -4515,50 +4209,6 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void onChatDeleteError(int majorCode, int minorCode) {
-
-                if (majorCode == 218 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                } else if (majorCode == 219) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                } else if (majorCode == 220) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                }
             }
         };
 

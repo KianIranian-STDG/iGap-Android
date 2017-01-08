@@ -419,6 +419,7 @@
     <string name="E_218">"خطایی از کلاینت: شناسهٔ روم اشتباه است."</string>
     <string name="E_219">"خطای درونی سرور"</string>
     <string name="E_220">"این کار مجاز نیست."</string>
+    <string name="E_300_1">Bad payload: Invalid description</string>
     <string name="E_300_2">"خطایی از سمت کلاینت: توضیحات اشتباه است."</string>
     <string name="E_301">"خطای درونی سرور"</string>
     <string name="E_610">"خطایی از سمت کلاینت"</string>

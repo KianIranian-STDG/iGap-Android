@@ -18,7 +18,6 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -34,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -81,14 +81,16 @@ import com.iGap.request.RequestUserContactsEdit;
 import com.iGap.request.RequestUserContactsUnblock;
 import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.io.File;
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
-import java.io.File;
-import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -353,60 +355,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                             @Override
                             public void onChatGetRoomError(int majorCode, int minorCode) {
-                                if (majorCode == 200) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_200),
-                                                            Snackbar.LENGTH_LONG);
 
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
-                                if (majorCode == 201) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_201),
-                                                            Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
-                                if (majorCode == 202) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack =
-                                                    Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_202),
-                                                            Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
                             }
                         };
 
@@ -623,87 +572,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                                                       @Override
                                                       public void onContactEditError(int majorCode, int minorCode) {
-                                                          if (majorCode == 124 && minorCode == 1) {
-                                                              runOnUiThread(new Runnable() {
-                                                                  @Override
-                                                                  public void run() {
-                                                                      final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                                                              getResources().getString(R.string.E_124_1), Snackbar.LENGTH_LONG);
 
-                                                                      snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                                          @Override
-                                                                          public void onClick(View view) {
-                                                                              snack.dismiss();
-                                                                          }
-                                                                      });
-                                                                      snack.show();
-                                                                  }
-                                                              });
-                                                          } else if (majorCode == 124 && minorCode == 2) {
-                                                              runOnUiThread(new Runnable() {
-                                                                  @Override
-                                                                  public void run() {
-                                                                      final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                                                              getResources().getString(R.string.E_124_2), Snackbar.LENGTH_LONG);
-
-                                                                      snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                                          @Override
-                                                                          public void onClick(View view) {
-                                                                              snack.dismiss();
-                                                                          }
-                                                                      });
-                                                                      snack.show();
-                                                                  }
-                                                              });
-                                                          } else if (majorCode == 124 && minorCode == 3) {
-                                                              runOnUiThread(new Runnable() {
-                                                                  @Override
-                                                                  public void run() {
-                                                                      final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                                                              getResources().getString(R.string.E_124_3), Snackbar.LENGTH_LONG);
-
-                                                                      snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                                          @Override
-                                                                          public void onClick(View view) {
-                                                                              snack.dismiss();
-                                                                          }
-                                                                      });
-                                                                      snack.show();
-                                                                  }
-                                                              });
-                                                          } else if (majorCode == 124 && minorCode == 4) {
-                                                              runOnUiThread(new Runnable() {
-                                                                  @Override
-                                                                  public void run() {
-                                                                      final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                                                              getResources().getString(R.string.E_124_4), Snackbar.LENGTH_LONG);
-
-                                                                      snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                                          @Override
-                                                                          public void onClick(View view) {
-                                                                              snack.dismiss();
-                                                                          }
-                                                                      });
-                                                                      snack.show();
-                                                                  }
-                                                              });
-                                                          } else if (majorCode == 125) {
-                                                              runOnUiThread(new Runnable() {
-                                                                  @Override
-                                                                  public void run() {
-                                                                      final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                                                              getResources().getString(R.string.E_125), Snackbar.LENGTH_LONG);
-
-                                                                      snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                                          @Override
-                                                                          public void onClick(View view) {
-                                                                              snack.dismiss();
-                                                                          }
-                                                                      });
-                                                                      snack.show();
-                                                                  }
-                                                              });
-                                                          }
                                                       }
                                                   };
                                               }
@@ -1262,39 +1131,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                if (majorCode == 122 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_122), Snackbar.LENGTH_LONG);
 
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 123) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_123), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                }
             }
         };
         new RequestUserContactsDelete().contactsDelete(phone);
@@ -1337,52 +1174,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             @Override
             public void onChatDeleteError(int majorCode, int minorCode) {
 
-                if (majorCode == 218 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                } else if (majorCode == 219) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
-
-                            snack.setAction("CANCEL", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                } else if (majorCode == 220) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack =
-                                    Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                }
             }
         };
         final Realm realm = Realm.getDefaultInstance();
