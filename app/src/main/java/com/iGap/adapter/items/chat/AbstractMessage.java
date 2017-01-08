@@ -84,10 +84,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (!TextUtils.isEmpty(msg)) {
             if (mMessage.hasLinkInMessage) {
                 view.setText(HelperUrl.setUrlLink(msg, true, true, mMessage.messageID, true));
-                Log.e("ddd", "with link   ********************");
             } else {
                 view.setText(msg);
-                Log.e("ddd", "without link   &&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             }
 
 

@@ -10,6 +10,7 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
 import org.parceler.Parcels;
@@ -47,7 +48,8 @@ public class StructMessageInfo implements Parcelable {
     public long songLength;
     public String messageText = "";
     public boolean hasLinkInMessage = false;
-    public String location;
+    public RealmRoomMessageLocation location;
+
     public String fileMime = "";
     public String filePic = "";
     public String filePath = "";
@@ -332,9 +334,7 @@ public class StructMessageInfo implements Parcelable {
             }
         }
         if (roomMessage.getLocation() != null) {
-            double lat = roomMessage.getLocation().getLocationLat();
-            double lon = roomMessage.getLocation().getLocationLong();
-            messageInfo.location = Double.toString(lat) + "," + Double.toString(lon);
+            messageInfo.location = roomMessage.getLocation();
         }
 
         if (roomMessage.getLog() != null) {

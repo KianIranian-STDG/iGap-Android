@@ -142,8 +142,15 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             holder.txt_Timer.setText(MusicPlayer.strTimer + "/" + MusicPlayer.musicTime);
 
             holder.mTimeMusic = MusicPlayer.musicTime;
-        }
-        {
+
+            if (MusicPlayer.mp != null) {
+                if (MusicPlayer.mp.isPlaying()) {
+                    holder.btnPlayMusic.setText(R.string.md_pause_button);
+                } else {
+                    holder.btnPlayMusic.setText(R.string.md_play_arrow);
+                }
+            }
+        } else {
             holder.musicSeekbar.setProgress(0);
             holder.btnPlayMusic.setText(R.string.md_play_arrow);
         }
@@ -161,7 +168,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
         holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
         holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.black90));
-        holder.fileName.setTextColor(Color.BLACK);
     }
 
     @Override

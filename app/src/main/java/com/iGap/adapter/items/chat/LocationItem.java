@@ -1,14 +1,23 @@
 package com.iGap.adapter.items.chat;
 
+import android.graphics.Bitmap;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
+import com.iGap.G;
 import com.iGap.R;
+import com.iGap.fragments.FragmentMap;
 import com.iGap.interfaces.IMessageItem;
+import com.iGap.module.AndroidUtils;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoomMessageLocation;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import io.realm.Realm;
 import java.util.List;
+
+import static com.iGap.R.id.ac_ll_parent;
 
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
@@ -27,33 +36,81 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         return R.layout.chat_sub_layout_location;
     }
 
-    @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    @Override public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        RealmRoomMessageLocation item = null;
+
         if (mMessage.forwardedFrom != null) {
-            if (!TextUtils.isEmpty(mMessage.forwardedFrom.getLocation().toString())) {
-                holder.location.setText(mMessage.forwardedFrom.getLocation().toString());
+            if (mMessage.forwardedFrom.getLocation() != null) {
+                item = mMessage.forwardedFrom.getLocation();
             }
         } else {
-            if (!TextUtils.isEmpty(mMessage.location)) {
-                holder.location.setText(mMessage.location);
+            if (mMessage.location != null) {
+                item = mMessage.location;
             }
         }
+
+        if (item != null) {
+
+            if (item.getImagePath() != null) {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(item.getImagePath()), holder.imgMapPosition);
+            } else {
+                FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
+                    @Override public void getBitmap(Bitmap bitmap) {
+                        holder.imgMapPosition.setImageBitmap(bitmap);
+
+                        final String savedPath = FragmentMap.saveBitmapToFile(bitmap);
+
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override public void execute(Realm realm) {
+                                mMessage.location.setImagePath(savedPath);
+                            }
+                        });
+                        realm.close();
+                    }
+                });
+            }
+
+            final RealmRoomMessageLocation finalItem = item;
+            final RealmRoomMessageLocation finalItem1 = item;
+            holder.imgMapPosition.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem1.getLocationLong(), FragmentMap.Mode.seePosition);
+                    //  if (G.currentActivity instanceof FragmentActivity) {
+                    // ((AppCompatActivity) mContext).getSupportFragmentManager()
+                    FragmentActivity activity = (FragmentActivity) G.currentActivity;
+                    activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
+                        .commit();
+                    //   }
+
+                }
+            });
+        }
+
+
+
+
+
+
+
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
-        holder.myLocationLabel.setTextColor(holder.itemView.getResources().getColor(R.color.gray));
-        holder.location.setTextColor(holder.itemView.getResources().getColor(R.color.gray));
+
     }
 
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        //   holder.myLocationLabel.setTextColor(Color.WHITE);
-        //  holder.location.setTextColor(Color.WHITE);
+
     }
 
     @Override
@@ -73,13 +130,14 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected TextView location;
-        protected TextView myLocationLabel;
+
+        ImageView imgMapPosition;
+
         public ViewHolder(View view) {
             super(view);
 
-            location = (TextView) view.findViewById(R.id.location);
-            myLocationLabel = (TextView) view.findViewById(R.id.myLocationLabel);
+            imgMapPosition = (ImageView) view.findViewById(R.id.csll_img_map_position);
+
         }
     }
 }

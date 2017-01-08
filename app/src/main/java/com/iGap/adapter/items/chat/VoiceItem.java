@@ -101,6 +101,16 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             holder.txt_Timer.setText(MusicPlayer.strTimer + "/" + MusicPlayer.musicTime);
 
             holder.mTimeMusic = MusicPlayer.musicTime;
+
+            if (MusicPlayer.mp != null) {
+                if (MusicPlayer.mp.isPlaying()) {
+                    holder.btnPlayMusic.setText(R.string.md_pause_button);
+                } else {
+                    holder.btnPlayMusic.setText(R.string.md_play_arrow);
+                }
+            }
+
+
         } else {
             holder.musicSeekbar.setProgress(0);
             holder.btnPlayMusic.setText(R.string.md_play_arrow);

@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -202,20 +201,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -227,6 +212,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -951,7 +947,7 @@ public class ActivityChat extends ActivityEnhanced
         ;
     }
 
-    public void sendPosition(final Double latitude, final Double longitude, String imagePath) {
+    public void sendPosition(final Double latitude, final Double longitude, final String imagePath) {
 
         Realm realm = Realm.getDefaultInstance();
         final long id = SUID.id().get();
@@ -963,6 +959,7 @@ public class ActivityChat extends ActivityEnhanced
                 RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
                 messageLocation.setLocationLat(latitude);
                 messageLocation.setLocationLong(longitude);
+                messageLocation.setImagePath(imagePath);
 
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, id);
                 roomMessage.setLocation(messageLocation);
@@ -2419,7 +2416,7 @@ public class ActivityChat extends ActivityEnhanced
                 break;
             case "LOCATION":
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, messageInfo.location);
+                intent.putExtra(Intent.EXTRA_TEXT, messageInfo.location.getLocationLat() + " " + messageInfo.location.getLocationLong());
                 break;
             case "VOICE":
             case "AUDIO":

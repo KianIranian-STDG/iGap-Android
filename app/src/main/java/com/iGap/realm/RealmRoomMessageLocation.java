@@ -2,13 +2,11 @@ package com.iGap.realm;
 
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoGlobal;
-
-import org.parceler.Parcel;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmRoomMessageLocationRealmProxy;
 import io.realm.annotations.PrimaryKey;
+import org.parceler.Parcel;
 
 @Parcel(implementations = {RealmRoomMessageLocationRealmProxy.class},
         value = Parcel.Serialization.BEAN,
@@ -16,6 +14,7 @@ import io.realm.annotations.PrimaryKey;
 public class RealmRoomMessageLocation extends RealmObject {
     private double locationLat;
     private double locationLong;
+    private String imagePath;
     @PrimaryKey
     private long id;
 
@@ -56,5 +55,13 @@ public class RealmRoomMessageLocation extends RealmObject {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

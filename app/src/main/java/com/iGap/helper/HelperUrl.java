@@ -101,11 +101,28 @@ public class HelperUrl {
             int matchEnd = matcher.end();
 
             if (strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite1) || strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite2)) {
-                insertIgapLink(strBuilder, matchStart, matchEnd);
+                //  insertIgapLink(strBuilder, matchStart, matchEnd);
             } else {
                 insertLinkSpan(strBuilder, matchStart, matchEnd, withClickable);
             }
         }
+
+        String[] list = text.toLowerCase().split(" ");
+
+        int count = 0;
+
+        for (int i = 0; i < list.length; i++) {
+
+            String str = list[i];
+
+            if (str.contains(igapSite1) || str.contains(igapSite2)) {
+                insertIgapLink(strBuilder, count, count + str.length());
+            }
+            count += str.length() + 1;
+        }
+
+
+
 
         return strBuilder;
     }
@@ -177,7 +194,14 @@ public class HelperUrl {
                 int index = url.lastIndexOf("/");
                 if (index >= 0 && index < url.length() - 1) {
                     String token = url.substring(index + 1);
-                    checkAndJoinToRoom(token);
+
+                    if (url.toLowerCase().contains("join")) {
+                        checkAndJoinToRoom(token);
+                    } else {
+                        checkUsernameAndGoToRoom(token);
+                    }
+
+
 
                     Log.e("ddd", "token = " + token);
                 }
@@ -332,7 +356,11 @@ public class HelperUrl {
     public static boolean hasInMessageLink(String message) {
         boolean result = false;
 
+        message = message.toLowerCase();
+
         if (message.contains("#") || message.contains("@")) return true;
+
+        if (message.contains(igapSite1) || message.contains(igapSite2)) return true;
 
         Pattern urlPattern = Pattern.compile("(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*" + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
             Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);

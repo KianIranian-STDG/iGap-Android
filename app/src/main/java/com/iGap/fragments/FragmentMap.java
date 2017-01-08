@@ -2,10 +2,14 @@ package com.iGap.fragments;
 
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.iGap.G;
@@ -22,6 +27,7 @@ import com.iGap.activities.ActivityChat;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -148,6 +154,47 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
 
         mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+
+        if (mode == Mode.sendPosition) {
+
+            mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                @Override public void onCameraChange(CameraPosition cameraPosition) {
+
+                }
+            });
+
+            mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+                @Override public void onMyLocationChange(Location location) {
+
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+
+                    Log.e("ddd", latitude + "   " + longitude);
+
+                    LatLng loc = new LatLng(latitude, longitude);
+
+                    mMap.clear();
+
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 16));
+
+                    mMap.addMarker(new MarkerOptions().position(loc).title("position"));
+                }
+            });
+        }
+    }
+
+    private void setDefaultMapPosition(LatLng latLng) {
+
+        CameraPosition camPos = new CameraPosition.Builder().target(latLng).zoom(16).bearing(0).tilt(0).build();
+
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camPos));
+    }
+
+    //****************************************************************************************************
+
+    public interface OnGetPicture {
+
+        void getBitmap(Bitmap bitmap);
     }
 
     public static String saveBitmapToFile(Bitmap bitmap) {
@@ -173,5 +220,41 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         }
 
         return result;
+    }
+
+    public static void loadImageFromPosition(double latiude, double longitude, OnGetPicture listener) {
+
+        String urlstr = "https://maps.googleapis.com/maps/api/staticmap?center=" + latiude + "," + longitude + "&zoom=16&size=480x240" +
+            "&maptype=roadmap&key=" + G.context.getString(R.string.google_maps_key);
+
+        new DownloadImageTask(listener).execute(urlstr);
+    }
+
+    private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        OnGetPicture listener;
+
+        public DownloadImageTask(OnGetPicture listener) {
+            this.listener = listener;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+
+            if (listener != null) {
+                listener.getBitmap(result);
+            }
+        }
     }
 }
