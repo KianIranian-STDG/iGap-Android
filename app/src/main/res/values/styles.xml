@@ -42,7 +42,7 @@
 
         <item name="android:paddingLeft">@dimen/messageContainerPaddingLeftRight</item>
         <item name="android:paddingRight">@dimen/messageContainerPaddingLeftRight</item>
-        <item name="android:paddingTop">@dimen/messageContainerPadding</item>
+        <!-- <item name="android:paddingTop">@dimen/messageContainerPadding</item>  -->
     </style>
 
     <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>
