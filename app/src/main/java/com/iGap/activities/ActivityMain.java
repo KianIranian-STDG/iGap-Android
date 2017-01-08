@@ -177,6 +177,7 @@ public class ActivityMain extends ActivityEnhanced
                 HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermision() {
                     @Override
                     public void Allow() throws IOException {
+                        Log.i("CCCCCCC", "ActivityMain Allow: " + isGetContactList);
                         importContactList();
                     }
                 });
@@ -375,17 +376,6 @@ public class ActivityMain extends ActivityEnhanced
         initFloatingButtonCreateNew();
         initDrawerMenu();
         //onDraftMessage();
-
-        try {
-            HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermision() {
-                @Override
-                public void Allow() {
-                    Contacts.FillRealmInviteFriend();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 

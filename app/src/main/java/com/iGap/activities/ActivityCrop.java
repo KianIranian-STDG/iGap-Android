@@ -256,8 +256,8 @@ public class ActivityCrop extends ActivityEnhanced {
         if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Uri imageUri = Uri.parse(AttachFile.mCurrentPhotoPath);
-                imgPic.setImageURI(imageUri);
+                uri = Uri.parse(AttachFile.mCurrentPhotoPath);
+                imgPic.setImageURI(uri);
                 //File file = new File(imageUri.getPath());
             } else {
                 String filePath = null;
@@ -265,16 +265,15 @@ public class ActivityCrop extends ActivityEnhanced {
                 filePath = "file://" + AttachFile.imagePath;
                 uri = Uri.parse(filePath);
                 imgPic.setImageURI(uri);
-                Log.i("DDD", "avatarId : " + filePath);
-                Log.i("DDD", "exists : " + new File(filePath).exists());
+
             }
 
         } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_image_from_gallery_single_select) {
             String filePath = null;
 
-            filePath = attachFile.saveGalleryPicToLocal(AttachFile.getFilePathFromUri(data.getData()));
+//            filePath = AttachFile.getFilePathFromUri(data.getData());
 
-            //   filePath = "file://" + AttachFile.getFilePathFromUri(data.getData());
+            filePath = "file://" + AttachFile.getFilePathFromUri(data.getData());
             uri = Uri.parse(filePath);
             imgPic.setImageURI(uri);
 

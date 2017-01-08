@@ -86,28 +86,18 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     }
 
     private void importContactList() {
-        try {
-            HelperPermision.getContactPermision(getActivity(), new OnGetPermision() {
-                @Override
-                public void Allow() throws IOException {
 
+        G.onContactImport = new OnUserContactImport() {
+            @Override
+            public void onContactImport() {
 
-                    G.onContactImport = new OnUserContactImport() {
-                        @Override
-                        public void onContactImport() {
+                new RequestUserContactsGetList().userContactGetList();
+                G.isImportContactToServer = true;
+            }
+        };
 
-                            new RequestUserContactsGetList().userContactGetList();
-                            G.isImportContactToServer = true;
-                        }
-                    };
+        Contacts.getListOfContact(true);
 
-                    Contacts.getListOfContact(true);
-
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -122,6 +112,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 HelperPermision.getContactPermision(getActivity(), new OnGetPermision() {
                     @Override
                     public void Allow() throws IOException {
+                        Log.i("CCCCCCC", "fragment Allow: " + isImportContactList);
                         importContactList();
                     }
                 });

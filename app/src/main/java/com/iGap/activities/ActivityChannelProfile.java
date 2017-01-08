@@ -237,6 +237,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         isPrivate = realmChannelRoom.isPrivate();
         username = realmChannelRoom.getUsername();
         isSignature = realmChannelRoom.isSignature();
+        fab = (FloatingActionButton) findViewById(R.id.pch_fab_addToChannel);
 
         Log.i("CCCCCVV", "onCreate: " + isPrivate);
         try {
@@ -279,13 +280,19 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         ViewGroup vgSignature = (ViewGroup) findViewById(R.id.agp_layout_signature);
         if (role == ChannelChatRole.OWNER) {
+
             vgSignature.setVisibility(View.VISIBLE);
         } else {
             lytChannelName.setEnabled(false);
             lytChannelDescription.setEnabled(false);
             ltLink.setEnabled(false);
-
         }
+        if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
+            fab.setVisibility(View.VISIBLE);
+        } else {
+            fab.setVisibility(View.GONE);
+        }
+
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -363,7 +370,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             rippleMenu.setVisibility(View.GONE);
         }*/
 
-        fab = (FloatingActionButton) findViewById(R.id.pch_fab_addToChannel);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
