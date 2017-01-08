@@ -55,7 +55,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -202,20 +201,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -227,6 +212,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -313,7 +309,7 @@ public class ActivityChat extends ActivityEnhanced
     private ProtoGlobal.Room.Type chatType;
     private static ProtoGlobal.Room.Type chatTypeStatic;
     private long lastSeen;
-    public static long mRoomId = 0;
+    public long mRoomId = 0;
     public static long mRoomIdStatic = 0;
     private TextView btnUp;
     private TextView btnDown;
@@ -426,7 +422,6 @@ public class ActivityChat extends ActivityEnhanced
     protected void onResume() {
         super.onResume();
 
-
         chatTypeStatic = chatType;
         mRoomIdStatic = mRoomId;
         titleStatic = title;
@@ -453,7 +448,6 @@ public class ActivityChat extends ActivityEnhanced
 
         activityChatForFinish = this;
 
-        Log.e("ddd", titleStatic + "   " + mRoomIdStatic + "    " + chatTypeStatic);
 
         G.helperNotificationAndBadge.cancelNotification();
         initCallbacks();
@@ -491,24 +485,8 @@ public class ActivityChat extends ActivityEnhanced
 
         initLayoutHashNavigation();
 
-        // realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-
-        //RealmChangeListener<RealmModel> changeListener = new RealmChangeListener<RealmModel>() {
-        //    @Override public void onChange(RealmModel element) {
-        //
-        //        Log.e("ddd","7777777777777777777777777777777777777777777");
-        //        if(realmRegisteredInfo.isBlockUser()){
-        //            txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-        //            vgSpamUser.setVisibility(View.VISIBLE);
-        //        }else {
-        //            txtSpamUser.setText(getResources().getString(R.string.block_user));
-        //        }
-        //    }
-        //};
 
         if (realmRegisteredInfo != null) {
-            // realmRegisteredInfo.addChangeListener(changeListener);
-            // changeListener.onChange(realmRegisteredInfo);
 
             if (realmRegisteredInfo.isShowSpamBar()) {
                 if (realmRegisteredInfo.isBlockUser()) {
@@ -551,10 +529,6 @@ public class ActivityChat extends ActivityEnhanced
                 }
             });
             realm.close();
-        }
-
-        if (realmRegisteredInfo != null) {
-            realmRegisteredInfo.removeChangeListeners();
         }
 
         if (mRealm != null) mRealm.close();

@@ -26,7 +26,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -102,15 +101,13 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
@@ -302,6 +299,7 @@ public class ActivityMain extends ActivityEnhanced
                                 Realm realm = Realm.getDefaultInstance();
 
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+
 
                                 if (!mAdapter.existRoom(room.getId())) {
                                     mAdapter.add(0, new RoomItem().setInfo(realmRoom).withIdentifier(SUID.id().get()));
@@ -889,8 +887,7 @@ public class ActivityMain extends ActivityEnhanced
                 @Override
                 public void execute(Realm realm) {
                     for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
-                        if (Room.getLastMessage().getUpdateTime() > 0)
-                            Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
+                        if (Room.getLastMessage().getUpdateTime() > 0) if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
                     }
                 }
             });
@@ -1465,7 +1462,6 @@ public class ActivityMain extends ActivityEnhanced
                         if (room != null) {
                             final int updatedUnreadCount = room.getUnreadCount() + 1;
                             room.setUnreadCount(updatedUnreadCount);
-                            room.setUpdatedTime(roomMessage.getUpdateTime());
                             realm.copyToRealmOrUpdate(room);
                         }
                     }

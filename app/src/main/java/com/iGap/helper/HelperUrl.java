@@ -389,6 +389,8 @@ public class HelperUrl {
             }
 
             @Override public void onError(int majorCode, int minorCode) {
+                Log.e("ddd", majorCode + "   " + minorCode);
+
                 dialogWaiting.dismiss();
             }
         };

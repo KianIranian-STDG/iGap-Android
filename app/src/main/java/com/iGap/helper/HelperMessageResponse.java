@@ -80,9 +80,11 @@ public class HelperMessageResponse {
                     if (room.getLastMessage() != null) {
                         if (room.getLastMessage().getMessageId() < roomMessage.getMessageId()) {
                             room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, roomId));
+                            room.setUpdatedTime(roomMessage.getUpdateTime());
                         }
                     } else {
                         room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, roomId));
+                        room.setUpdatedTime(roomMessage.getUpdateTime());
                     }
                 }
             }

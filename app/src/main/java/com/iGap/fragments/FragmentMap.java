@@ -3,13 +3,14 @@ package com.iGap.fragments;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.iGap.G;
 import com.iGap.R;
@@ -50,6 +52,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     private Double latitude;
     private Double longitude;
     private Mode mode;
+    Marker marker;
 
     public enum Mode {
         sendPosition,
@@ -152,7 +155,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
 
         LatLng latLng = new LatLng(latitude, longitude);
 
-        mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
+        marker = mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
 
         if (mode == Mode.sendPosition) {
@@ -160,24 +163,32 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                 @Override public void onCameraChange(CameraPosition cameraPosition) {
 
+                    Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+
+                    LatLng mapCenter = mMap.getProjection().fromScreenLocation(new Point(size.x / 2, size.y / 2));
+                    latitude = mapCenter.latitude;
+                    longitude = mapCenter.longitude;
+
+                    if (marker != null) {
+                        marker.remove();
+                    }
+
+                    marker = mMap.addMarker(new MarkerOptions().position(mapCenter).title("position"));
                 }
             });
 
-            mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-                @Override public void onMyLocationChange(Location location) {
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override public void onMapClick(LatLng latLng) {
 
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
+                    latitude = latLng.latitude;
+                    longitude = latLng.longitude;
 
-                    Log.e("ddd", latitude + "   " + longitude);
-
-                    LatLng loc = new LatLng(latitude, longitude);
-
-                    mMap.clear();
-
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 16));
-
-                    mMap.addMarker(new MarkerOptions().position(loc).title("position"));
+                    if (marker != null) {
+                        marker.remove();
+                    }
+                    marker = mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
                 }
             });
         }
