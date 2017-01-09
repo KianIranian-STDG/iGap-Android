@@ -2,7 +2,6 @@ package com.iGap.helper;
 
 import android.support.design.widget.Snackbar;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.WebSocketClient;
@@ -249,16 +248,13 @@ public class HelperError {
                 break;
 
             case 500:
-                if (minorCode == 1)
-                    error = G.context.getResources().getString(R.string.Toast_Location_Not_Found);
+                if (minorCode == 1) error = G.context.getResources().getString(R.string.Toast_Location_Not_Found);
                 break;
             case 502:
-                if (minorCode == 1)
-                    error = G.context.getResources().getString(R.string.Toast_Location_Not_Found);
+                if (minorCode == 1) error = G.context.getResources().getString(R.string.Toast_Location_Not_Found);
                 break;
             case 503:
-                if (minorCode == 1)
-                    error = G.context.getResources().getString(R.string.Toast_Location_Not_Found);
+                if (minorCode == 1) error = G.context.getResources().getString(R.string.Toast_Location_Not_Found);
                 break;
 
             case 610:
@@ -303,8 +299,7 @@ public class HelperError {
                     error = G.context.getResources().getString(R.string.E_713_1);
                 } else if (minorCode == 2) {
                     error = G.context.getResources().getString(R.string.E_713_1);
-                } else if (minorCode == 3)
-                    error = G.context.getResources().getString(R.string.E_713_1);
+                } else if (minorCode == 3) error = G.context.getResources().getString(R.string.E_713_1);
                 break;
             case 638:
                 if (minorCode == 1) error = G.context.getResources().getString(R.string.E_713_1);
@@ -327,6 +322,9 @@ public class HelperError {
                 break;
             case 715:
                 error = G.context.getResources().getString(R.string.E_715);
+                break;
+            case 99999: // client errors
+                error = "Offset is negative";
                 break;
 
         }
