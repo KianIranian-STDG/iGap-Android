@@ -26,7 +26,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -102,22 +101,18 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.string.updating;
 
-public class ActivityMain extends ActivityEnhanced
-        implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse,
-        OnUpdateAvatar {
+public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
@@ -207,10 +202,7 @@ public class ActivityMain extends ActivityEnhanced
                         bundle.putString("TYPE", "ConvertToGroup");
                         bundle.putLong("ROOMID", roomId);
                         fragmentNewGroup.setArguments(bundle);
-                        getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment")
-                                .commitAllowingStateLoss();
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment").commitAllowingStateLoss();
                     }
                 });
             }
@@ -386,10 +378,7 @@ public class ActivityMain extends ActivityEnhanced
             @Override
             public void onComplete(RippleView rippleView) {
                 Fragment fragment = SearchFragment.newInstance();
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "Search_fragment")
-                        .commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
             }
         });
 
@@ -463,11 +452,7 @@ public class ActivityMain extends ActivityEnhanced
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
 
                 arcMenu.toggleMenu();
 
@@ -485,11 +470,7 @@ public class ActivityMain extends ActivityEnhanced
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
-                ActivityMain.this.getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                ActivityMain.this.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 arcMenu.toggleMenu();
             }
         });
@@ -503,11 +484,7 @@ public class ActivityMain extends ActivityEnhanced
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
-                ActivityMain.this.getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                ActivityMain.this.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 arcMenu.toggleMenu();
             }
         });
@@ -690,64 +667,67 @@ public class ActivityMain extends ActivityEnhanced
     }
 
     private void clearHistory(RoomItem item) {
-        final RoomItem chatInfo = mAdapter.getAdapterItem(mAdapter.getPosition(item));
-        final long chatId = chatInfo.mInfo.getId();
+        int itemPosition = mAdapter.getPosition(item);
+        if (itemPosition != -1) {
+            final RoomItem chatInfo = mAdapter.getAdapterItem(itemPosition);
+            final long chatId = chatInfo.mInfo.getId();
 
-        // make request for clearing messages
-        final Realm realm = Realm.getDefaultInstance();
+            // make request for clearing messages
+            final Realm realm = Realm.getDefaultInstance();
 
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
-        realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override
-            public void onChange(final RealmClientCondition element) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
+            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
+            realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
+                @Override
+                public void onChange(final RealmClientCondition element) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
-                        if (realmRoom.getLastMessage() != null) {
-                            element.setClearId(realmRoom.getLastMessage().getMessageId());
+                            if (realmRoom.getLastMessage() != null) {
+                                element.setClearId(realmRoom.getLastMessage().getMessageId());
 
-                            G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
-                        }
-
-                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
-                        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-                            if (realmRoomMessage != null) {
-                                // delete chat history message
-                                realmRoomMessage.deleteFromRealm();
+                                G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
                             }
-                        }
 
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
-                        if (room != null) {
-                            room.setUnreadCount(0);
-                            room.setLastMessage(null);
-                        }
-                        // finally delete whole chat history
-                        realmRoomMessages.deleteAllFromRealm();
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mAdapter != null) {
-                                    mAdapter.updateChat(chatId, convertToChatItem(chatId));
+                            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
+                            for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                                if (realmRoomMessage != null) {
+                                    // delete chat history message
+                                    realmRoomMessage.deleteFromRealm();
                                 }
                             }
-                        });
-                    }
-                });
 
-                element.removeChangeListeners();
-                realm.close();
-            }
-        });
+                            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
+                            if (room != null) {
+                                room.setUnreadCount(0);
+                                room.setLastMessage(null);
+                            }
+                            // finally delete whole chat history
+                            realmRoomMessages.deleteAllFromRealm();
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (mAdapter != null) {
+                                        mAdapter.updateChat(chatId, convertToChatItem(chatId));
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                    element.removeChangeListeners();
+                    realm.close();
+                }
+            });
+        }
     }
 
     /**
      * on select room menu
      *
-     * @param message  message text
+     * @param message message text
      * @param position position dfdfdfdf
      */
     private void onSelectRoomMenu(String message, int position, RoomItem item) {
@@ -1271,8 +1251,7 @@ public class ActivityMain extends ActivityEnhanced
 
             boolean clearMessage = false;
 
-            RealmResults<RealmRoomMessage> realmRoomMessages =
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
             for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                 if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
                     clearMessage = true;

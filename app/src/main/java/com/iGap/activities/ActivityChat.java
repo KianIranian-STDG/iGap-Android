@@ -1095,10 +1095,11 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void onSuccess() {
                 RealmRoomMessage forwardedMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
-                scrollToEnd();
-                chatSendMessageUtil.build(chatType, forwardedMessage.getRoomId(), forwardedMessage);
-
+                if (forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
+                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
+                    scrollToEnd();
+                    chatSendMessageUtil.build(chatType, forwardedMessage.getRoomId(), forwardedMessage);
+                }
                 realm.close();
             }
         });

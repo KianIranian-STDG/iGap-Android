@@ -23,9 +23,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
-import android.text.Spannable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,7 +36,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -123,16 +120,14 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -141,13 +136,11 @@ import static com.iGap.realm.enums.RoomType.GROUP;
 public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
 
     private AppBarLayout appBarLayout;
-    private TextView txtNameChannel, txtDescription, txtChannelLink, txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport, txtChannelNameInfo;
+    private TextView txtDescription, txtChannelLink, txtChannelNameInfo;
     private MaterialDesignTextView imgPupupMenul;
     private de.hdodenhof.circleimageview.CircleImageView imgCircleImageView;
     private FloatingActionButton fab;
     private PopupWindow popupWindow;
-    private Spannable wordToSpan;
-    private MaterialDesignTextView txtBack;
     private TextView titleToolbar;
     private TextView txtChannelName;
     TextView txtSharedMedia;
@@ -239,7 +232,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         isSignature = realmChannelRoom.isSignature();
         fab = (FloatingActionButton) findViewById(R.id.pch_fab_addToChannel);
 
-        Log.i("CCCCCVV", "onCreate: " + isPrivate);
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -261,7 +253,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);
         txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
-        //memberNumber = (TextView) findViewById(R.id.txt_member_number);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting);
         LinearLayout lytSharedMedia = (LinearLayout) findViewById(R.id.lyt_shared_media);
         LinearLayout lytChannelName = (LinearLayout) findViewById(R.id.lyt_channel_name);
@@ -285,7 +276,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         } else {
             lytChannelName.setEnabled(false);
             lytChannelDescription.setEnabled(false);
-//            ltLink.setEnabled(false);
         }
         if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
             fab.setVisibility(View.VISIBLE);
@@ -321,7 +311,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         });
 
-        txtBack = (MaterialDesignTextView) findViewById(R.id.pch_txt_back);
         final RippleView rippleBack = (RippleView) findViewById(R.id.pch_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -1878,9 +1867,9 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     @Override
     public void onFileTimeOut(String identity) {
-        if (Long.parseLong(identity) == avatarId) {
+        //if (Long.parseLong(identity) == avatarId) {
             hideProgressBar();
-        }
+        //}
     }
 
     //***User Info

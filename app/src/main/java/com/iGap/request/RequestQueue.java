@@ -1,7 +1,6 @@
 package com.iGap.request;
 
 import android.util.Log;
-
 import com.iGap.AESCrypt;
 import com.iGap.Config;
 import com.iGap.G;
@@ -12,7 +11,7 @@ import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoRequest;
 import com.iGap.proto.ProtoResponse;
-
+import com.neovisionaries.ws.client.WebSocket;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.GeneralSecurityException;
@@ -23,8 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RequestQueue {
 
-    public static final CopyOnWriteArrayList<RequestWrapper> WAITING_REQUEST_WRAPPERS =
-            new CopyOnWriteArrayList<>();
+    public static final CopyOnWriteArrayList<RequestWrapper> WAITING_REQUEST_WRAPPERS = new CopyOnWriteArrayList<>();
 
     public static synchronized void sendRequest(RequestWrapper... requestWrappers) throws IllegalAccessException {
         int length = requestWrappers.length;
@@ -85,7 +83,10 @@ public class RequestQueue {
             if (G.isSecure) {
                 if (G.userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
                     message = AESCrypt.encrypt(G.symmetricKey, message);
-                    WebSocketClient.getInstance().sendBinary(message);
+                    WebSocket webSocket = WebSocketClient.getInstance();
+                    if (webSocket != null) {
+                        webSocket.sendBinary(message);
+                    }
                     Log.i("SOC_REQ", "RequestQueue ********** sendRequest Secure successful **********");
                     // remove from waiting request wrappers while user logged-in and send request
                     WAITING_REQUEST_WRAPPERS.remove(requestWrapper);
