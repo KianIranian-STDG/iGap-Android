@@ -290,7 +290,7 @@ public class HelperError {
                 error = G.context.getResources().getString(R.string.E_616);
                 break;
             case 617:
-                error = G.context.getResources().getString(R.string.E_617);
+                error = "";// G.context.getResources().getString(R.string.E_617);
                 break;
             case 620:
                 error = "";// G.context.getResources().getString(R.string.there_is_no_sheared_media);

@@ -36,6 +36,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -120,14 +121,16 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -279,8 +282,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         }
         if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
             fab.setVisibility(View.VISIBLE);
+            ltLink.setVisibility(View.VISIBLE);
         } else {
             fab.setVisibility(View.GONE);
+            ltLink.setVisibility(View.GONE);
         }
 
         lytListAdmin.setOnClickListener(new View.OnClickListener() {

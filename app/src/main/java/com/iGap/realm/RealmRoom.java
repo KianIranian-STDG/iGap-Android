@@ -4,6 +4,7 @@ import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -113,7 +114,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getChannelRoom().setInviteLink(room.getChannelRoomExtra().getPrivateExtra().getInviteLink());
                 realmRoom.getChannelRoom().setInvite_token(room.getChannelRoomExtra().getPrivateExtra().getInviteToken());
                 realmRoom.getChannelRoom().setUsername(room.getChannelRoomExtra().getPublicExtra().getUsername());
-
+                realmRoom.getChannelRoom().setPrivate(room.getChannelRoomExtra().hasPrivateExtra());
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
