@@ -715,5 +715,11 @@
     <string name="channel_link_title_revoke">Invite Link</string>
     <string name="channel_link_hint_revoke">Channel Invite Link</string>
     <string name="self_destructs">Self Destructs</string>
+    <string name="channel_title_convert_to_private">Convert channel to private</string>
+    <string name="channel_text_convert_to_private">Do you want Convert channel to private?</string>
+    <string name="channel_title_convert_to_public">Convert channel to public</string>
+    <string name="channel_text_convert_to_public">Do you want Convert channel to public?</string>
+    <string name="channel_title_channel_set_username">Set Username</string>
+
 
 </resources>
