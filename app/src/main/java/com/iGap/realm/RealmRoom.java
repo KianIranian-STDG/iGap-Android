@@ -4,7 +4,6 @@ import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -62,7 +61,9 @@ public class RealmRoom extends RealmObject {
     }
 
     public void setLastMessage(RealmRoomMessage lastMessage) {
-        setUpdatedTime(lastMessage.getUpdateOrCreateTime());
+        if (lastMessage != null) {
+            setUpdatedTime(lastMessage.getUpdateOrCreateTime());
+        }
         this.lastMessage = lastMessage;
     }
 
