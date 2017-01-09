@@ -71,6 +71,7 @@ import com.iGap.adapter.items.chat.ImageItem;
 import com.iGap.adapter.items.chat.ImageWithTextItem;
 import com.iGap.adapter.items.chat.LocationItem;
 import com.iGap.adapter.items.chat.LogItem;
+import com.iGap.adapter.items.chat.ProgressWaiting;
 import com.iGap.adapter.items.chat.TextItem;
 import com.iGap.adapter.items.chat.TimeItem;
 import com.iGap.adapter.items.chat.VideoItem;
@@ -3482,16 +3483,32 @@ public class ActivityChat extends ActivityEnhanced
     private void requestMessageHistory() {
         //long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
 
-        long oldestMessageId;
+        long oldestMessageId = 0;
         if (mAdapter.getAdapterItems().size() > 0) {
-            oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(0).mMessage.messageID);
+            if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) {
+                if (mAdapter.getAdapterItems().size() > 1) oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(1).mMessage.messageID);
+            } else {
+                oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(0).mMessage.messageID);
+            }
+
         } else {
             oldestMessageId = 0;
         }
         if (latestMessageIdHistory != oldestMessageId) {
             latestMessageIdHistory = oldestMessageId;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
-            prgWaiting.setVisibility(View.VISIBLE);
+
+            if (!(mAdapter.getAdapterItem(0) instanceof ProgressWaiting))
+
+            {
+                recyclerView.post(new Runnable() {
+                    @Override public void run() {
+                        mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                    }
+                });
+            }
+
+
         }
     }
 
@@ -4019,8 +4036,7 @@ public class ActivityChat extends ActivityEnhanced
                 @Override
                 public void run() {
 
-                    Log.e("ddd", "onGetRoomHistory                 aaaaaaaaaaaaa" + count + "  " + mAdapter.getAdapterItemCount());
-                    prgWaiting.setVisibility(View.GONE);
+                    if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
 
                     Realm realm = Realm.getDefaultInstance();
                     RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
@@ -4070,10 +4086,10 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onGetRoomHistoryError(int majorCode, int minorCode) {
-        ActivityChat.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                prgWaiting.setVisibility(View.GONE);
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+
+                if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
             }
         });
     }

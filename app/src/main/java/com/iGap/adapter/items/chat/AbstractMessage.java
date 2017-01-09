@@ -109,7 +109,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         /**
          * this use for select foreground in activity chat for search item and hash item
+         *
          */
+
+        if (holder instanceof ProgressWaiting.ViewHolder) return;
+
         mMessage.view = holder.itemView;
 
         /**
@@ -336,7 +340,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE
+            || messageType == ProtoGlobal.RoomMessageType.VIDEO
+            || messageType == ProtoGlobal.RoomMessageType.GIF
+            || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
             imgTick.setColorFilter(ContextCompat.getColor(context, R.color.white));
         } else {
@@ -379,7 +386,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO ||
+            messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
             imgTick.setColorFilter(ContextCompat.getColor(context, R.color.white));
         } else {

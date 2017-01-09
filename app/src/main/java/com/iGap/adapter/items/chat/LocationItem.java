@@ -3,13 +3,14 @@ package com.iGap.adapter.items.chat;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentMap;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessageLocation;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -55,6 +56,9 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
             if (item.getImagePath() != null) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(item.getImagePath()), holder.imgMapPosition);
+                //holder.imgMapPosition.setCornerRadius(HelperRadius.computeRadius(item.getImagePath()));
+                Log.e("ddddd", item.getImagePath());
+
             } else {
                 FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
                     @Override public void getBitmap(Bitmap bitmap) {
@@ -62,10 +66,24 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
                         final String savedPath = FragmentMap.saveBitmapToFile(bitmap);
 
+                        Log.e("ddddd", savedPath + "             ddddddddddddddd");
+
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
-                                mMessage.location.setImagePath(savedPath);
+
+                                if (mMessage.forwardedFrom != null) {
+                                    if (mMessage.forwardedFrom.getLocation() != null) {
+                                        mMessage.forwardedFrom.getLocation().setImagePath(savedPath);
+                                    }
+                                } else {
+                                    if (mMessage.location != null) {
+                                        mMessage.location.setImagePath(savedPath);
+                                    }
+                                }
+
+
+
                             }
                         });
                         realm.close();
@@ -131,12 +149,14 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imgMapPosition;
+        ReserveSpaceRoundedImageView imgMapPosition;
 
         public ViewHolder(View view) {
             super(view);
 
-            imgMapPosition = (ImageView) view.findViewById(R.id.csll_img_map_position);
+            imgMapPosition = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
+
+            imgMapPosition.reserveSpace(G.context.getResources().getDimension(R.dimen.dp240), G.context.getResources().getDimension(R.dimen.dp120));
 
         }
     }

@@ -26,13 +26,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
+import com.iGap.helper.HelperString;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Timestamp;
-import java.util.Calendar;
 
 import static com.iGap.R.id.mf_fragment_map_view;
 
@@ -111,20 +110,30 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             btnSendPosition.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
 
-                    mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                        @Override public void onSnapshotReady(Bitmap bitmap) {
+                    try {
+                        mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                            @Override public void onSnapshotReady(Bitmap bitmap) {
 
-                            String path = saveBitmapToFile(bitmap);
+                                String path = saveBitmapToFile(bitmap);
 
-                            close();
+                                close();
 
-                            if (path.length() > 0) {
+                                if (path.length() > 0) {
 
-                                ActivityChat activity = (ActivityChat) getActivity();
-                                activity.sendPosition(latitude, longitude, path);
+                                    ActivityChat activity = (ActivityChat) getActivity();
+                                    activity.sendPosition(latitude, longitude, path);
+                                }
                             }
-                        }
-                    });
+                        });
+                    } catch (Exception e) {
+                        Log.e("ddd", "fragment map   " + e.toString());
+                        close();
+                        ActivityChat activity = (ActivityChat) getActivity();
+                        activity.sendPosition(latitude, longitude, null);
+                    }
+
+
+
                 }
             });
         } else if (mode == Mode.seePosition) {
@@ -209,15 +218,11 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         try {
             if (bitmap == null) return result;
 
-            Calendar calendar = Calendar.getInstance();
-            java.util.Date now = calendar.getTime();
-            Timestamp tsTemp = new Timestamp(now.getTime());
-            String ts = tsTemp.toString();
-
-            File file = new File(G.DIR_TEMP, ts + ".jpg");
+            String fileName = "location_" + HelperString.getRandomFileName(3) + ".png";
+            File file = new File(G.DIR_TEMP, fileName);
 
             OutputStream fOut = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
 
             result = file.getPath();
         } catch (FileNotFoundException e) {
