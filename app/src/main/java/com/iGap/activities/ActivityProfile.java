@@ -207,31 +207,6 @@ public class ActivityProfile extends ActivityEnhanced
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         }
                     });
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: 9/25/2016 Error 112 - USER_PROFILE_SET_NICKNAME_BAD_PAYLOAD
-                            //Invalid nickname
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                    getResources().getString(R.string.Toast_Invalid_nickname),
-                                    Snackbar.LENGTH_LONG);
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-
-                        }
-                    });
-                } else if (majorCode == 113) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: 9/25/2016 Error 113 - USER_PROFILE_SET_NICKNAME_INTERNAL_SERVER_ERROR
-                        }
-                    });
                 }
             }
         };

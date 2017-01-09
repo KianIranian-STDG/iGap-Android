@@ -247,6 +247,20 @@ public class HelperError {
             case 337:
                 if (minorCode == 1) error = G.context.getResources().getString(R.string.E_337);
                 break;
+
+            case 500:
+                if (minorCode == 1)
+                    error = G.context.getResources().getString(R.string.Toast_Location_Not_Found);
+                break;
+            case 502:
+                if (minorCode == 1)
+                    error = G.context.getResources().getString(R.string.Toast_Location_Not_Found);
+                break;
+            case 503:
+                if (minorCode == 1)
+                    error = G.context.getResources().getString(R.string.Toast_Location_Not_Found);
+                break;
+
             case 610:
                 error = G.context.getResources().getString(R.string.E_610);
                 break;

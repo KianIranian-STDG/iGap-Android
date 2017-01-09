@@ -18,6 +18,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
@@ -30,8 +31,10 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
 import com.iGap.request.RequestInfoPage;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
-import io.realm.Realm;
+
 import java.io.IOException;
+
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityIntroduce extends ActivityEnhanced {
@@ -437,14 +440,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
                             locationFound = false;
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Location_Not_Found), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
                         }
                     });
                 }
@@ -464,33 +459,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             }
 
             @Override public void onError(int majorCode, int minorCode) {
-                if (majorCode == 502 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Location_Not_Found), Snackbar.LENGTH_LONG);
 
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 503) {
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.Toast_Location_Not_Found), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                }
             }
         };
 

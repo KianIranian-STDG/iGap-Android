@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityMain;
@@ -29,9 +30,11 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import io.realm.Realm;
+
 import java.io.File;
 import java.io.IOException;
+
+import io.realm.Realm;
 
 public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClient {
     public static TextView txtUserName;
@@ -57,25 +60,25 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
 
         // init icon
         TextView txtIconNewGroup = (TextView) v.findViewById(R.id.lm_txt_icon_group);
-        //        txtIconNewGroup.setTypeface(G.flaticon);
+        //
 
         TextView txtIconNewChat = (TextView) v.findViewById(R.id.lm_txt_icon_new_chat);
-        //        txtIconNewChat.setTypeface(G.flaticon);
+        //
 
         TextView txtIconNewChannel = (TextView) v.findViewById(R.id.lm_txt_icon_channel);
 
 
         TextView txtIconContacts = (TextView) v.findViewById(R.id.lm_txt_icon_contacts);
-        //        txtIconContacts.setTypeface(G.flaticon);
+        //
 
         TextView txtIconInviteFriends = (TextView) v.findViewById(R.id.lm_txt_icon_invite_friends);
-        //        txtIconInviteFriends.setTypeface(G.flaticon);
+
 
         TextView txtIconSetting = (TextView) v.findViewById(R.id.lm_txt_icon_setting);
-        //        txtIconSetting.setTypeface(G.flaticon);
+
 
         TextView txtIconiGapFAQ = (TextView) v.findViewById(R.id.lm_txt_icon_igap_faq);
-        //        txtIconiGapFAQ.setTypeface(G.flaticon);
+
 
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();

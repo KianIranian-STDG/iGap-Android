@@ -645,7 +645,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        if (userEmail == null) {
+        if (userEmail == null || userEmail.equals("")) {
             txtEmail.setText(getResources().getString(R.string.set_email));
         } else {
             txtEmail.setText(userEmail);
@@ -665,7 +665,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final EditText edtEmail = new EditText(ActivitySetting.this);
                 edtEmail.setHint(getResources().getString(R.string.set_email));
 
-                if (userEmail == null) {
+                if (txtEmail == null || txtEmail.getText().toString().equals(getResources().getString(R.string.set_email))) {
                     edtEmail.setText("");
                 } else {
                     edtEmail.setText(txtEmail.getText().toString());
@@ -765,7 +765,25 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     @Override
                     public void Error(int majorCode, int minorCode) {
-
+                        if (majorCode == 114 && minorCode == 1) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    inputEmail.setErrorEnabled(true);
+                                    positive.setEnabled(false);
+                                    inputEmail.setError("" + getResources().getString(R.string.error_email));
+                                }
+                            });
+                        } else if (majorCode == 115) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    inputEmail.setErrorEnabled(true);
+                                    positive.setEnabled(false);
+                                    inputEmail.setError("" + getResources().getString(R.string.error_email));
+                                }
+                            });
+                        }
                     }
                 };
 
