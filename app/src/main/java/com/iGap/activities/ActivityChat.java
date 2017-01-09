@@ -54,7 +54,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -201,20 +200,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -226,6 +211,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -1832,6 +1828,7 @@ public class ActivityChat extends ActivityEnhanced
                     if (!message.isEmpty()) {
                         final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         final String identity = Long.toString(SUID.id().get());
+                        final long currentTime = TimeUtils.currentLocalTime();
 
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
@@ -1846,7 +1843,7 @@ public class ActivityChat extends ActivityEnhanced
                                 roomMessage.setShowMessage(true);
 
                                 roomMessage.setUserId(senderId);
-                                roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+                                roomMessage.setCreateTime(currentTime);
 
                                 // user wants to replay to a message
                                 if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
@@ -1866,7 +1863,7 @@ public class ActivityChat extends ActivityEnhanced
                                 public void execute(Realm realm) {
                                     if (room != null) {
                                         room.setLastMessage(roomMessage);
-                                        room.setUpdatedTime(TimeUtils.currentLocalTime());
+                                        //room.setUpdatedTime(currentTime);
                                     }
                                 }
                             });
@@ -3049,6 +3046,7 @@ public class ActivityChat extends ActivityEnhanced
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
                 if (realmRoom != null) {
                     realmRoom.setLastMessage(roomMessage);
+                    //realmRoom.setUpdatedTime(roomMessage.getUpdateOrCreateTime());
                 }
             }
         });
@@ -3855,6 +3853,8 @@ public class ActivityChat extends ActivityEnhanced
         //empty
     }
 
+    private RealmRoomMessage voiceLastMessage = null;
+
     @Override
     public void onVoiceRecordDone(final String savedPath) {
         Realm realm = Realm.getDefaultInstance();
@@ -3867,7 +3867,6 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
-
                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
                 roomMessage.setMessage(getWrittenMessage());
                 roomMessage.setRoomId(mRoomId);
@@ -3875,6 +3874,7 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setAttachment(messageId, savedPath, 0, 0, 0, null, duration, LocalFileType.FILE);
                 roomMessage.setUserId(senderID);
                 roomMessage.setCreateTime(updateTime);
+                voiceLastMessage = roomMessage;
 
                 // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
                 // in response to a message as replay, so after server done creating replay and
@@ -3906,7 +3906,15 @@ public class ActivityChat extends ActivityEnhanced
         structChannelExtra.thumbsUp = "0";
         structChannelExtra.thumbsDown = "0";
         structChannelExtra.viewsLabel = "1";
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (voiceLastMessage != null) {
+                    realmRoom.setLastMessage(voiceLastMessage);
+                }
+            }
+        });
         if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
             structChannelExtra.signature = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName();
         } else {

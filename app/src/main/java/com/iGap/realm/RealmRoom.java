@@ -61,6 +61,7 @@ public class RealmRoom extends RealmObject {
     }
 
     public void setLastMessage(RealmRoomMessage lastMessage) {
+        setUpdatedTime(lastMessage.getUpdateOrCreateTime());
         this.lastMessage = lastMessage;
     }
 
