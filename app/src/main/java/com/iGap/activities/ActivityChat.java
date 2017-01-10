@@ -869,29 +869,8 @@ public class ActivityChat extends ActivityEnhanced
 
         if (
 
-                getIntent()
-
-                        != null &&
-
-                        getIntent()
-
-                                .
-
-                                        getExtras()
-
-                                != null &&
-
-                        getIntent()
-
-                                .
-
-                                        getExtras()
-
-                                .
-
-                                        getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE)
-
-                                != null)
+            getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().
+                getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null)
 
         {
             ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
@@ -1090,6 +1069,9 @@ public class ActivityChat extends ActivityEnhanced
                    /*if (messageInfo.channelExtra != null) {
                         forwardedMessage.setChannelExtra(RealmChannelExtra.convert(messageInfo.channelExtra));
                     }*/
+
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setLastMessage(forwardedMessage);
+
                 }
             }
         }, new Realm.Transaction.OnSuccess() {
