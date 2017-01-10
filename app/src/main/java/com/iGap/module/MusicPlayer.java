@@ -189,7 +189,7 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
 
             if (!isShowMediaPlayer) {
-
+                if (handler != null)
                 handler.post(new Runnable() {
                     @Override public void run() {
                         try {
@@ -224,7 +224,7 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             if (!isShowMediaPlayer) {
-
+                if (handler != null)
                 handler.post(new Runnable() {
                     @Override public void run() {
                         try {
@@ -264,7 +264,7 @@ public class MusicPlayer {
             musicProgress = 0;
 
             if (!isShowMediaPlayer) {
-
+                if (handler != null)
                 handler.post(new Runnable() {
                     @Override public void run() {
                         try {
@@ -347,6 +347,7 @@ public class MusicPlayer {
             mp = null;
         }
 
+        if (handler != null)
         handler.post(new Runnable() {
             @Override public void run() {
                 try {
@@ -387,7 +388,7 @@ public class MusicPlayer {
 
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 if (!isShowMediaPlayer) {
-
+                    if (handler != null)
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -429,7 +430,7 @@ public class MusicPlayer {
                 btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 if (!isShowMediaPlayer) {
-
+                    if (handler != null)
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -560,7 +561,7 @@ public class MusicPlayer {
                 .setContentIntent(pi)
                 .setAutoCancel(false)
                 .build();
-
+        if (handler != null)
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -694,50 +695,48 @@ public class MusicPlayer {
         musicInfo = "";
         musicInfoTitle = "";
 
-        MediaMetadataRetriever mediaMetadataRetriever =
-                (MediaMetadataRetriever) new MediaMetadataRetriever();
+        MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
         Uri uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
-        mediaMetadataRetriever.setDataSource(G.context, uri);
 
-        String title = (String) mediaMetadataRetriever.extractMetadata(
-                MediaMetadataRetriever.METADATA_KEY_TITLE);
+        if (uri != null) {
 
-        if (title != null) {
-            musicInfo += title + "       ";
-            musicInfoTitle = title;
-        }
-
-        String albumName =
-                mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-        if (albumName != null) {
-            musicInfo += albumName + "       ";
-            musicInfoTitle = albumName;
-        }
-
-        String artist =
-                mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-        if (artist != null) {
-            musicInfo += artist + "       ";
-            musicInfoTitle = artist;
-        }
-
-        if (musicInfoTitle.trim().length() == 0) {
-            musicInfoTitle = G.context.getString(R.string.unknown_artist);
-        }
-
-        try {
             mediaMetadataRetriever.setDataSource(G.context, uri);
-            byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
-            if (data != null) {
-                mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
-                int size = (int) G.context.getResources().getDimension(R.dimen.dp48);
-                remoteViews.setImageViewBitmap(R.id.mln_img_picture_music,
-                        Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
-            } else {
-                remoteViews.setImageViewResource(R.id.mln_img_picture_music,
-                        R.mipmap.music_icon_green);
+
+            String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+
+            if (title != null) {
+                musicInfo += title + "       ";
+                musicInfoTitle = title;
             }
-        } catch (Exception e) {
+
+            String albumName = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+            if (albumName != null) {
+                musicInfo += albumName + "       ";
+                musicInfoTitle = albumName;
+            }
+
+            String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            if (artist != null) {
+                musicInfo += artist + "       ";
+                musicInfoTitle = artist;
+            }
+
+            if (musicInfoTitle.trim().length() == 0) {
+                musicInfoTitle = G.context.getString(R.string.unknown_artist);
+            }
+
+            try {
+                mediaMetadataRetriever.setDataSource(G.context, uri);
+                byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
+                if (data != null) {
+                    mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    int size = (int) G.context.getResources().getDimension(R.dimen.dp48);
+                    remoteViews.setImageViewBitmap(R.id.mln_img_picture_music, Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
+                } else {
+                    remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
+                }
+            } catch (Exception e) {
+            }
         }
     }
 

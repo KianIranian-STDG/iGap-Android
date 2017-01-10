@@ -299,9 +299,18 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         });
 
-        RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
+        RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.asm_riple_delete_selected);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
+
+                final RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+                changesize = 0;
+                if (realmRoom != null) {
+                    ActivityChat.deleteSelectedMessages(roomId, adapter.SelectedList, realmRoom.getType());
+                }
+                adapter.resetSelected();
+
                 Log.e("ddd", "delete");
             }
         });
@@ -808,7 +817,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         protected ArrayList<StructShearedMedia> mList;
         protected Context context;
 
-        protected ArrayMap<Long, Boolean> SelectedList = new ArrayMap<>();
+        public ArrayList<Long> SelectedList = new ArrayList<>();
         protected ArrayMap<Long, Boolean> DownloadingList = new ArrayMap<>();
         protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
 
@@ -885,7 +894,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             // set blue back ground for selected file
             FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
-            if (SelectedList.containsKey(mList.get(position).item.getMessageId())) {
+            if (SelectedList.indexOf(mList.get(position).item.getMessageId()) >= 0) {
                 layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
             } else {
                 layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
@@ -908,15 +917,17 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             Long id = mList.get(position).item.getMessageId();
 
-            if (SelectedList.containsKey(id)) {
-                SelectedList.remove(id);
+            int index = SelectedList.indexOf(id);
+
+            if (index >= 0) {
+                SelectedList.remove(index);
                 numberOfSelected--;
 
                 if (numberOfSelected < 1) {
                     isSelectedMode = false;
                 }
             } else {
-                SelectedList.put(id, true);
+                SelectedList.add(id);
                 numberOfSelected++;
             }
             notifyItemChanged(position);

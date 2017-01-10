@@ -1361,6 +1361,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 @Override
                 public void run() {
                     mAdapter.updateChat(roomId, convertToChatItem(roomId));
+
+                    int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+                    if (firstVisibleItem < 3) {
+                        recyclerView.scrollToPosition(0);
+                    }
                 }
             });
         }
