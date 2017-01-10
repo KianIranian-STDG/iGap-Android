@@ -417,18 +417,6 @@ public class HelperUrl {
             return;
         }
 
-
-
-        if (realmRoom == null) {
-
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
-                    RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room);
-                    realmRoom1.setDeleted(true);
-                }
-            });
-        }
-
         realm.close();
 
         String title = G.context.getString(R.string.do_you_want_to_join_to_this);
@@ -464,20 +452,8 @@ public class HelperUrl {
                     })
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Realm realm = Realm.getDefaultInstance();
-                            final RealmRoom reamRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
 
-                            if (reamRoom != null) {
-                                if (reamRoom.isDeleted()) {
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
-                                            reamRoom.deleteFromRealm();
-                                        }
-                                    });
-                                }
-                            }
-
-                            realm.close();
+                            //do something here
                         }
                     })
                     .build();
@@ -515,18 +491,14 @@ public class HelperUrl {
                 dialogWaiting.dismiss();
 
                 Realm realm = Realm.getDefaultInstance();
-                final RealmRoom reamRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
-
-                if (reamRoom != null) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
-                            reamRoom.setDeleted(false);
-                            if (reamRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                reamRoom.setReadOnly(false);
-                            }
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        RealmRoom realmRoom = RealmRoom.putOrUpdate(room);
+                        if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                            realmRoom.setReadOnly(false);
                         }
-                    });
-                }
+                    }
+                });
 
                 realm.close();
 

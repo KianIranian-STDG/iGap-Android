@@ -153,6 +153,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     @Override public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+        final boolean[] updatePosition = { true };
 
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -172,25 +173,31 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                 @Override public void onCameraChange(CameraPosition cameraPosition) {
 
-                    Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
-                    Point size = new Point();
-                    display.getSize(size);
+                    if (updatePosition[0]) {
+                        Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
+                        Point size = new Point();
+                        display.getSize(size);
 
-                    LatLng mapCenter = mMap.getProjection().fromScreenLocation(new Point(size.x / 2, size.y / 2));
-                    latitude = mapCenter.latitude;
-                    longitude = mapCenter.longitude;
+                        LatLng mapCenter = mMap.getProjection().fromScreenLocation(new Point(size.x / 2, size.y / 2));
+                        latitude = mapCenter.latitude;
+                        longitude = mapCenter.longitude;
 
-                    if (marker != null) {
-                        marker.remove();
+                        if (marker != null) {
+                            marker.remove();
+                        }
+
+                        marker = mMap.addMarker(new MarkerOptions().position(mapCenter).title("position"));
+                    } else {
+                        updatePosition[0] = true;
                     }
 
-                    marker = mMap.addMarker(new MarkerOptions().position(mapCenter).title("position"));
                 }
             });
 
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override public void onMapClick(LatLng latLng) {
 
+                    updatePosition[0] = false;
                     latitude = latLng.latitude;
                     longitude = latLng.longitude;
 
@@ -198,6 +205,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                         marker.remove();
                     }
                     marker = mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                 }
             });
         }

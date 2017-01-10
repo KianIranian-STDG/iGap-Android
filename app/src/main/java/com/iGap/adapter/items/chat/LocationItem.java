@@ -3,7 +3,6 @@ package com.iGap.adapter.items.chat;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
@@ -56,8 +55,6 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
             if (item.getImagePath() != null) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(item.getImagePath()), holder.imgMapPosition);
-                //holder.imgMapPosition.setCornerRadius(HelperRadius.computeRadius(item.getImagePath()));
-                Log.e("ddddd", item.getImagePath());
 
             } else {
                 FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
@@ -65,8 +62,6 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                         holder.imgMapPosition.setImageBitmap(bitmap);
 
                         final String savedPath = FragmentMap.saveBitmapToFile(bitmap);
-
-                        Log.e("ddddd", savedPath + "             ddddddddddddddd");
 
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
@@ -92,10 +87,9 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
             }
 
             final RealmRoomMessageLocation finalItem = item;
-            final RealmRoomMessageLocation finalItem1 = item;
             holder.imgMapPosition.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem1.getLocationLong(), FragmentMap.Mode.seePosition);
+                    FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition);
                     //  if (G.currentActivity instanceof FragmentActivity) {
                     // ((AppCompatActivity) mContext).getSupportFragmentManager()
                     FragmentActivity activity = (FragmentActivity) G.currentActivity;

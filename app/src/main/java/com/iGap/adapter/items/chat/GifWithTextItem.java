@@ -3,8 +3,8 @@ package com.iGap.adapter.items.chat;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
@@ -13,12 +13,10 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
-import java.io.File;
-import java.util.List;
-
 import io.github.meness.emoji.EmojiTextView;
 import io.meness.github.messageprogress.MessageProgress;
+import java.io.File;
+import java.util.List;
 import pl.droidsonroids.gif.GifDrawable;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -129,32 +127,29 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             }
         });
 
-        holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                holder.itemView.performLongClick();
-                return false;
-            }
-        });
+        if (!mMessage.hasLinkInMessage) {
+            holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override public boolean onLongClick(View v) {
+                    holder.itemView.performLongClick();
+                    return false;
+                }
+            });
 
-        holder.messageText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isSelected()) {
-                    if (mMessage.status.equalsIgnoreCase(
-                            ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        return;
-                    }
-                    if (mMessage.status.equalsIgnoreCase(
-                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage,
-                                holder.getAdapterPosition());
-                    } else {
-                        messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+            holder.messageText.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (!isSelected()) {
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            return;
+                        }
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                        } else {
+                            messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -178,6 +173,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             image = (ReserveSpaceGifImageView) view.findViewById(R.id.thumbnail);
             messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
+            messageText.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 }

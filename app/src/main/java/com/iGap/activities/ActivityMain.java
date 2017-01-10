@@ -626,7 +626,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 // delete messages and rooms that was deleteed
                 RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll();
                 for (RealmRoom item : deletedRoomsList) {
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll();
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();//delete all message in deleted room
                     item.deleteFromRealm();
                 }
             }
@@ -794,6 +794,16 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
+
+                    // delete messages and rooms in the deleted room
+                    RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll();
+                    for (RealmRoom item : deletedRoomsList) {
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
+                        item.deleteFromRealm();
+                    }
+
+
+
                     for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
                         if (Room.getLastMessage() != null) {
                             if (Room.getLastMessage().getUpdateTime() > 0) {

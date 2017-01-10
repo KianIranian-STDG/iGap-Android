@@ -2989,6 +2989,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 roomMessage.setMessageType(finalMessageType);
                 roomMessage.setMessage(getWrittenMessage());
+                roomMessage.setHasMessageLink(HelperUrl.hasInMessageLink(getWrittenMessage()));
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.FILE);
@@ -3100,11 +3101,11 @@ public class ActivityChat extends ActivityEnhanced
             Realm realm = Realm.getDefaultInstance();
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
-                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom.getAttachment());
+                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
                 replayTo.setText(chatItem.forwardedFrom.getMessage());
             } else {
                 RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(chatItem.messageID)).findFirst();
-                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message.getAttachment());
+                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
                 replayTo.setText(chatItem.messageText);
             }
             if (chatType == CHANNEL) {
@@ -4036,7 +4037,7 @@ public class ActivityChat extends ActivityEnhanced
                 @Override
                 public void run() {
 
-                    if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
+                    if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
 
                     Realm realm = Realm.getDefaultInstance();
                     RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
