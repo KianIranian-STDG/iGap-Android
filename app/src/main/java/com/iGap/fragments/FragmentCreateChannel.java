@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityMain;
+import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnChannelCheckUsername;
 import com.iGap.interfaces.OnChannelUpdateUsername;
 import com.iGap.interfaces.OnClientGetRoomResponse;
@@ -275,8 +276,15 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                         Selection.setSelection(edtLink.getText(), edtLink.getText().length());
 
                     }
-                    String userName = edtLink.getText().toString().replace("iGap.net/", "");
-                    new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+                    if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
+                        String userName = edtLink.getText().toString().replace("iGap.net/", "");
+                        new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+                    } else {
+                        txtFinish.setEnabled(false);
+                        txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
+                        txtInputLayout.setErrorEnabled(true);
+                        txtInputLayout.setError("INVALID");
+                    }
 
                 }
             }

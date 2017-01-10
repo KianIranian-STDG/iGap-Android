@@ -6,8 +6,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
-                android:fitsSystemWindows="false"
                 android:elevation="999dp"
+                android:fitsSystemWindows="false"
                 tools:ignore="MissingPrefix">
 
     <ScrollView
@@ -17,7 +17,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <com.iGap.libs.rippleeffect.RippleView
                 android:id="@+id/ng_ripple_circle_image"
@@ -48,27 +48,28 @@
                 android:id="@+id/ng_root_newGroup"
                 android:layout_width="@dimen/dp240"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ng_ripple_circle_image"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                >
+                android:layout_below="@+id/ng_ripple_circle_image"
+                android:gravity="start">
+
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ng_txtInput_newGroup"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/dp240"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp20"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
-                    android:layout_marginStart="@dimen/dp20"
-                    >
+                    android:layout_marginStart="@dimen/dp20">
 
                     <EditText
                         android:id="@+id/ng_edt_newGroup"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@android:color/transparent"
                         android:paddingBottom="@dimen/dp4"
+                        android:layout_gravity="start"
                         android:paddingTop="@dimen/dp8"
                         android:singleLine="true"
                         android:textSize="@dimen/sp15"/>
@@ -77,8 +78,7 @@
                         android:id="@+id/ng_view_newGroup"
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:background="@color/line_edit_text"
-                        />
+                        android:background="@color/line_edit_text"/>
 
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
@@ -188,12 +188,12 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/ng_txt_back"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
                     android:text="@string/md_back_arrow"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:textColor="@color/whit_background"
                     />
             </com.iGap.libs.rippleeffect.RippleView>

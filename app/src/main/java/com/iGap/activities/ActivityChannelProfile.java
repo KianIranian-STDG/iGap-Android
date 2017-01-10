@@ -51,6 +51,7 @@ import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
@@ -2360,10 +2361,18 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 if (!editable.toString().contains("iGap.net/")) {
                     edtUserName.setText("iGap.net/");
                     Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
-
                 }
-                String userName = edtUserName.getText().toString().replace("iGap.net/", "");
-                new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+
+                if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
+                    String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+                    new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+
+
+                } else {
+                    positive.setEnabled(false);
+                    inputUserName.setErrorEnabled(true);
+                    inputUserName.setError("INVALID");
+                }
             }
         });
 

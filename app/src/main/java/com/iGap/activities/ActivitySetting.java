@@ -48,6 +48,7 @@ import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
@@ -843,7 +844,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     @Override
                     public void afterTextChanged(Editable editable) {
-                        new RequestUserProfileCheckUsername().userProfileCheckUsername(editable.toString());
+
+                        if (HelperString.regexCheckUsername(editable.toString())) {
+                            new RequestUserProfileCheckUsername().userProfileCheckUsername(editable.toString());
+                        } else {
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("INVALID");
+                            positive.setEnabled(false);
+                        }
                     }
                 });
                 G.onUserProfileCheckUsername = new OnUserProfileCheckUsername() {
