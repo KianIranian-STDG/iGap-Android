@@ -336,12 +336,16 @@ public final class AndroidUtils {
         if (width < maxWidth) {
             newWidth = width * density;
 
-            if (newWidth > maxWidth) {
+           /* if (newWidth > maxWidth) {
                 if (maxWidth < width) {
                     newWidth = maxWidth;
                 } else {
                     newWidth = width;
                 }
+            }*/
+
+            while (newWidth > maxWidth) {
+                newWidth = (newWidth * 90) / 100;
             }
         } else {
             newWidth = maxWidth;

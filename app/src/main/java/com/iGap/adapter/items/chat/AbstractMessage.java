@@ -829,7 +829,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             final String fileName = mMessage.forwardedFrom.getAttachment().getToken() + "_" + mMessage.forwardedFrom.getAttachment().getName();
             final long forwardMessageID = mMessage.forwardedFrom.getMessageId();
             final ProtoGlobal.RoomMessageType forwardMessageType = mMessage.forwardedFrom.getMessageType();
-            if (progress == 100) {
+            if (progress >= 100) {
                 final Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
@@ -861,7 +861,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         } else {
             final String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
-            if (progress == 100) {
+            if (progress >= 100) {
                 final Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {

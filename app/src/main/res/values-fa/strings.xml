@@ -707,7 +707,7 @@
     <string name="MEMBER_ADDED">"اضافه شدن"</string>
     <string name="MEMBER_KICKED">"بیرون انداختن"</string>
     <string name="MEMBER_LEFT">"ترک کردن"</string>
-    <string name="ROOM_CONVERTED_TO_PUBLIC">"تبدیل صفحه خصوصی به عموی"</string>
+    <string name="ROOM_CONVERTED_TO_PUBLIC">"تبدیل صفحه خصوصی به عمومی"</string>
     <string name="ROOM_CONVERTED_TO_PRIVATE">"تبدیل صفحه عمومی به خصوصی"</string>
     <string name="MEMBER_JOINED_BY_INVITE_LINK">"اضافه شدن کاربر با دعوت "</string>
     <string name="channel_link_revoke">ابطال</string>

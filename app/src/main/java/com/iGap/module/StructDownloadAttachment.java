@@ -2,17 +2,11 @@ package com.iGap.module;
 
 import com.iGap.G;
 import com.iGap.realm.RealmAttachment;
-
+import java.io.File;
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
-import java.io.File;
-
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/28/2016.
- */
-@Parcel
-public class StructDownloadAttachment {
+@Parcel public class StructDownloadAttachment {
     public String token;
     public int progress;
     public long offset;
@@ -32,7 +26,7 @@ public class StructDownloadAttachment {
             token = attachment.getToken();
             if (tempFile.exists()) {
                 offset = tempFile.length();
-                progress = (int) ((offset * 100) / attachment.getSize());
+                progress = (int) Math.ceil((offset * 100) / attachment.getSize());
             }
         }
     }
