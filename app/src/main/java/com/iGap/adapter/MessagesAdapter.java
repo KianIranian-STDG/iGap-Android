@@ -3,6 +3,7 @@ package com.iGap.adapter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import com.iGap.G;
@@ -403,6 +404,10 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
+            Log.i("EEE", "identity : " + identity);
+            Log.i("EEE", "messageInfo : " + messageInfo);
+            Log.i("EEE", "messageInfo.mMessage : " + messageInfo.mMessage);
+            Log.i("EEE", "messageInfo.mMessage.messageID : " + messageInfo.mMessage.messageID);
             if (messageInfo.mMessage.messageID.equals(identity)) {
                 int pos = items.indexOf(messageInfo);
                 messageInfo.mMessage.status = status.toString();
@@ -411,14 +416,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 break;
             }
         }
-    }
-
-    /**
-     * update
-     */
-
-    public void updateMessageWithUserId(long userId) {
-
     }
 
     @Override

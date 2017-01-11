@@ -141,6 +141,7 @@ import com.iGap.interfaces.UpdateListAfterKick;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ChatUpdateStatusUtil;
 import com.iGap.module.ClearMessagesUtil;
+import com.iGap.module.Connectivity;
 import com.iGap.module.Contacts;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
@@ -157,7 +158,6 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
-import com.neovisionaries.ws.client.WebSocket;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -178,6 +178,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.spec.SecretKeySpec;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
+import static com.iGap.WebSocketClient.allowForReconnecting;
+
 public class G extends MultiDexApplication {
 
     private Tracker mTracker;
@@ -190,8 +192,8 @@ public class G extends MultiDexApplication {
         return mTracker;
     }
 
-    public static final String FAQ = "http://www.digikala.com";
-    public static final String POLICY = "http://www.digikala.com";
+    public static final String FAQ = "";
+    public static final String POLICY = "";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";
     public static final String DIR_IMAGES = DIR_APP + "/iGap Images";
@@ -242,8 +244,6 @@ public class G extends MultiDexApplication {
     public static Typeface FONT_IGAP;
     public static Typeface HELETICBLK_TITR;
     public static List<String> downloadingTokens = new ArrayList<>();
-
-    public static int IMAGE_CORNER;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -376,7 +376,7 @@ public class G extends MultiDexApplication {
     public static File IMAGE_NEW_CHANEL;
     public static ConnectionMode connectionMode;
     public static boolean isNetworkRoaming;
-    public static boolean noNetwok;
+    public static boolean hasNetworkBefore;
 
     public static ConcurrentHashMap<Long, RequestWrapper> currentUploadFiles = new ConcurrentHashMap<>();
 
@@ -493,6 +493,8 @@ public class G extends MultiDexApplication {
         new RequestUserInfo().userInfo(userId);
     }
 
+    public static HelperCheckInternetConnection.ConnectivityType latestConnectivityType;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -517,28 +519,41 @@ public class G extends MultiDexApplication {
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        if (Connectivity.isConnectedMobile(context)) {
+            HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.MOBILE;
+        } else if (Connectivity.isConnectedWifi(context)) {
+            HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.WIFI;
+        }
+
         BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (HelperCheckInternetConnection.hasNetwork()) {
                     Log.e("DDD", "Has Network");
-                    /*if (noNetwok) {
-                        Log.e("DDD", "Has Network 1");
-                        noNetwok = true;
-                        WebSocketClient.getInstance().disconnect();
-                    } else {
-                        Log.e("DDD", "Has Network 2");
-                        WebSocketClient.allowForReconnecting = true;
-                        WebSocketClient.getInstance();
-                    }*/
 
-                    WebSocket webSocket = WebSocketClient.getInstance();
+                    if (!hasNetworkBefore) {
+                        Log.e("DDD", "before no network");
+                        latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
+                        hasNetworkBefore = true;
+                        allowForReconnecting = true;
+                        WebSocketClient.getInstance();
+                    } else {
+                        Log.e("DDD", "before has network");
+                        if (latestConnectivityType == null || latestConnectivityType != HelperCheckInternetConnection.currentConnectivityType) {
+                            Log.e("DDD", "change connectivity type");
+                            latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
+                            allowForReconnecting = true;
+                            WebSocketClient.getInstance().disconnect();
+                        }
+                    }
+
+                   /* WebSocket webSocket = WebSocketClient.getInstance();
                     if (webSocket != null) {
                         webSocket.disconnect();
-                    }
+                    }*/
                 } else {
-                    noNetwok = true;
+                    hasNetworkBefore = false;
                     Log.e("ddd", "No Network");
                     HelperConnectionState.connectionState(Config.ConnectionState.WAITING_FOR_NETWORK);
                     G.socketConnection = false;
@@ -728,6 +743,7 @@ public class G extends MultiDexApplication {
     public static void sendWaitingRequestWrappers() {
         for (RequestWrapper requestWrapper : RequestQueue.WAITING_REQUEST_WRAPPERS) {
             try {
+                Log.i("EEE!", "WAITING_REQUEST_WRAPPERS sendRequest");
                 RequestQueue.sendRequest(requestWrapper);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -747,7 +763,7 @@ public class G extends MultiDexApplication {
                         new RequestClientCondition().clientCondition();
                         getUserInfo();
                         importContact();
-                        sendWaitingRequestWrappers();
+                        //sendWaitingRequestWrappers();
 
                         new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
                     }

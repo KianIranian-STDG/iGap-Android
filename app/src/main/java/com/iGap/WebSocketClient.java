@@ -39,6 +39,7 @@ public class WebSocketClient {
                 @Override public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     Log.i("SOC_WebSocket", "onConnected");
                     if (G.isSecure) {
+                        allowForReconnecting = true;
                         webSocketClient.disconnect();
                     } else {
                         G.socketConnection = true;
@@ -118,7 +119,7 @@ public class WebSocketClient {
             Log.e("DDD", "getInstance 1");
             waitingForReconnecting = true;
             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-            checkGetInstanceSuccessfully();
+            checkSocketConnection();
             return webSocketClient = createSocketConnection();
         } else {
             Log.e("DDD", "getInstance 2");
@@ -127,32 +128,15 @@ public class WebSocketClient {
     }
 
     /**
-     * check current state of socket for insuring that
-     * connection established and if socket connection
-     * wasn't open or is null try for reconnecting
-     */
-
-    private static void checkGetInstanceSuccessfully() {
-
-        G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
-                if (webSocketClient == null || !webSocketClient.isOpen()) {
-                    reconnect();
-                }
-            }
-        }, Config.INSTANCE_SUCCESSFULLY_CHECKING);
-    }
-
-    /**
      * clear securing state and reconnect to server
      */
 
-    private static void reconnect() {
+    public static void reconnect() {
         HelperSetAction.clearAllActions();
-        HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
         Log.e("DDD", "reconnect 1");
         if (allowForReconnecting) {//&& (webSocketClient == null || !webSocketClient.isOpen())
             allowForReconnecting = false;
+            HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
             Log.e("DDD", "reconnect 2");
             if (G.allowForConnect) {
                 Log.e("DDD", "reconnect 3");

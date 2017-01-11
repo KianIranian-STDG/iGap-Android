@@ -10,6 +10,12 @@ import com.iGap.G;
  */
 public class HelperCheckInternetConnection {
 
+    public static ConnectivityType currentConnectivityType;
+
+    public enum ConnectivityType {
+        MOBILE, WIFI
+    }
+
     public static boolean hasNetwork() {
 
         try {
@@ -20,10 +26,12 @@ public class HelperCheckInternetConnection {
             }
             netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
             if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+                currentConnectivityType = ConnectivityType.MOBILE;
                 return true;
             } else {
                 netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
                 if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+                    currentConnectivityType = ConnectivityType.WIFI;
                     return true;
                 }
             }
