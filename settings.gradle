@@ -1,1 +1,2 @@
 include ':app', ':messageprogress', ':proto', ':emoji', ':audioplayerview', ':com.neovisionaries.ws.client', ':websocketqq', ':websocket'
+include ':lvl'
