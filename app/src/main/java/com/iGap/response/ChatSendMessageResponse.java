@@ -84,7 +84,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 } else {
                     // update last message sent/received in room table
                     if (room.getLastMessage() != null) {
-                        if (room.getLastMessage().getMessageId() < roomMessage.getMessageId()) {
+                        if (room.getLastMessage().getMessageId() <= roomMessage.getMessageId()) {
                             room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId()));
                             room.setUpdatedTime(roomMessage.getUpdateTime());
                         }
@@ -96,11 +96,9 @@ public class ChatSendMessageResponse extends MessageHandler {
             }
         });
 
-        if (chatSendMessageResponse.getResponse().getId().isEmpty()) {//TODO [Saeed Mozaffari] [2016-10-06 12:35 PM] - check this comment
-            // Alireza added and removed with saeed ==> //userId != roomMessage.getUserId() &&
+        if (chatSendMessageResponse.getResponse().getId().isEmpty()) {
             // invoke following callback when i'm not the sender, because I already done
             // everything after sending message
-            //TODO [Saeed Mozaffari] [2016-11-21 10:13 AM] - CHECK IT,
             if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
                 G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHAT);
             }

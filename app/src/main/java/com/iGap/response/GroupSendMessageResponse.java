@@ -91,7 +91,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                 } else {
                     // update last message sent/received in room table
                     if (room.getLastMessage() != null) {
-                        if (room.getLastMessage().getMessageId() < roomMessage.getMessageId()) {
+                        if (room.getLastMessage().getMessageId() <= roomMessage.getMessageId()) {
                             room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId()));
                             room.setUpdatedTime(roomMessage.getUpdateTime());
                         }

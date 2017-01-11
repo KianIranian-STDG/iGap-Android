@@ -1338,7 +1338,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         if (room != null) {
                             final int updatedUnreadCount = room.getUnreadCount() + 1;
                             room.setUnreadCount(updatedUnreadCount);
-                            room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, roomId));
                             realm.copyToRealmOrUpdate(room);
                         }
                     }
