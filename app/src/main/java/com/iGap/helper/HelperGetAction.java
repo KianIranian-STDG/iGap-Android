@@ -4,15 +4,13 @@ import com.iGap.Config;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import io.realm.Realm;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HelperGetAction {
 
-    private static ArrayList<HelperGetAction.StructAction> structActions = new ArrayList<>();
+    private static CopyOnWriteArrayList<StructAction> structActions = new CopyOnWriteArrayList<>();
 
     private static class StructAction {
         public long roomId;
