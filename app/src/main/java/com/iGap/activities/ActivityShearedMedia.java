@@ -102,9 +102,17 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     Handler handler;
     private int changesize = 0;
 
+    private static long countOFImage = 0;
+    private static long countOFVIDEO = 0;
+    private static long countOFAUDIO = 0;
+    private static long countOFVOICE = 0;
+    private static long countOFGIF = 0;
+    private static long countOFFILE = 0;
+    private static long countOFLink = 0;
+
+
     public static ArrayList<Long> downloadedList = new ArrayList<>();
 
-    public static String totalCountItem = "";
 
     private LinearLayout mediaLayout;
     private MusicPlayer musicPlayer;
@@ -334,6 +342,40 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 if (realmRoom != null) {
                     ActivityChat.deleteSelectedMessages(roomId, adapter.SelectedList, realmRoom.getType());
                 }
+
+                switch (mFilter) {
+                    case IMAGE:
+                        countOFImage -= adapter.SelectedList.size();
+                        break;
+                    case VIDEO:
+                        countOFVIDEO -= adapter.SelectedList.size();
+                        break;
+                    case AUDIO:
+                        countOFAUDIO -= adapter.SelectedList.size();
+                        break;
+                    case FILE:
+                        countOFFILE -= adapter.SelectedList.size();
+                        break;
+                    case GIF:
+                        countOFGIF -= adapter.SelectedList.size();
+                        break;
+                    case VOICE:
+                        countOFVOICE -= adapter.SelectedList.size();
+                        break;
+                    case URL:
+                        countOFLink -= adapter.SelectedList.size();
+                        break;
+                }
+
+                final RealmRoom room = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (room != null) {
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override public void execute(Realm realm) {
+                            room.setSharedMediaCount(getStringSharedMediaCount());
+                        }
+                    });
+                }
+
                 adapter.resetSelected();
 
             }
@@ -592,7 +634,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         offset = 0;
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+            @Override public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, String identity) {
                 isSendRequestForLoading = false;
 
                 //for (ProtoGlobal.RoomMessage message : resultList) {
@@ -620,10 +662,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 isSendRequestForLoading = false;
             }
 
-            @Override public void onTimeOut() {
-                isSendRequestForLoading = false;
-                Log.e("ddd", "timeOut  onClientSearchRoomHistory");
-            }
         };
 
         new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, filter);
@@ -723,87 +761,87 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
     }
 
-    static int counts = 0;
+    private static void updateCountOfSharedMedia(OnComplete complete, long roomid) {
 
-    public static void updateCountOfSharedMedia(OnComplete complete, long roomid) {
-
-        if (counts >= 7) {
-
-            totalCountItem = totalCountItem.trim();
-
-            if (totalCountItem.length() < 1) totalCountItem = context.getString(R.string.there_is_no_sheared_media);
+        String countStr = getStringSharedMediaCount();
 
             if (complete != null) {
-                complete.complete(true, totalCountItem, "");
+                complete.complete(true, countStr, "");
             }
 
             Realm realm = Realm.getDefaultInstance();
 
             final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
             if (room != null) {
+                final String finalCountStr = countStr;
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
-                        room.setSharedMediaCount(totalCountItem);
+                        room.setSharedMediaCount(finalCountStr);
                     }
                 });
             }
 
             realm.close();
-        }
+
+    }
+
+    private static String getStringSharedMediaCount() {
+
+        String result = "";
+
+        if (countOFImage > 0) result += "\n" + countOFImage + " " + context.getString(R.string.shared_image);
+        if (countOFVIDEO > 0) result += "\n" + countOFVIDEO + " " + context.getString(R.string.shared_video);
+        if (countOFAUDIO > 0) result += "\n" + countOFAUDIO + " " + context.getString(R.string.shared_audio);
+        if (countOFVOICE > 0) result += "\n" + countOFVOICE + " " + context.getString(R.string.shared_voice);
+        if (countOFGIF > 0) result += "\n" + countOFGIF + " " + context.getString(R.string.shared_gif);
+        if (countOFFILE > 0) result += "\n" + countOFFILE + " " + context.getString(R.string.shared_file);
+        if (countOFLink > 0) result += "\n" + countOFLink + " " + context.getString(R.string.shared_links);
+
+        result = result.trim();
+
+        if (result.length() < 1) result = context.getString(R.string.there_is_no_sheared_media);
+
+        return result;
     }
 
     public static void getCountOfSharedMedia(final long roomid, String text, final OnComplete complete) {
 
-        counts = 0;
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override public void onClientSearchRoomHistory(final int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList) {
+            @Override public void onClientSearchRoomHistory(final int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, String identyty) {
 
-                counts++;
                 if (notDeletedCount > 0) {
-                    ProtoGlobal.RoomMessageType type = resultList.get(0).getMessageType();
-
-                    switch (type) {
-                        case IMAGE:
-                        case IMAGE_TEXT:
-                            totalCountItem += "\n" + notDeletedCount + " " + context.getString(R.string.shared_image);
+                    switch (identyty) {
+                        case "IMAGE":
+                            countOFImage = notDeletedCount;
                             break;
-                        case VIDEO:
-                        case VIDEO_TEXT:
-                            totalCountItem += "\n" + notDeletedCount + " " + context.getString(R.string.shared_video);
+                        case "VIDEO":
+                            countOFVIDEO = notDeletedCount;
                             break;
-                        case AUDIO:
-                        case AUDIO_TEXT:
-                            totalCountItem += "\n" + notDeletedCount + " " + context.getString(R.string.shared_audio);
+                        case "AUDIO":
+                            countOFAUDIO = notDeletedCount;
                             break;
-                        case VOICE:
-                            totalCountItem += "\n" + notDeletedCount + " " + context.getString(R.string.shared_voice);
+                        case "VOICE":
+                            countOFVOICE = notDeletedCount;
                             break;
-                        case GIF:
-                        case GIF_TEXT:
-                            totalCountItem += "\n" + notDeletedCount + " " + context.getString(R.string.shared_gif);
+                        case "GIF":
+                            countOFGIF = notDeletedCount;
                             break;
-                        case FILE:
-                        case FILE_TEXT:
-                            totalCountItem += "\n" + notDeletedCount + " " + context.getString(R.string.shared_file);
+                        case "FILE":
+                            countOFFILE = notDeletedCount;
                             break;
-                        default:
-                            totalCountItem += "\n" + notDeletedCount + " " + context.getString(R.string.shared_links);
+                        case "URL":
+                            countOFLink = notDeletedCount;
+                            updateCountOfSharedMedia(complete, roomid);
                             break;
                     }
                 }
 
-                updateCountOfSharedMedia(complete, roomid);
+
             }
 
             @Override public void onError(int majorCode, int minorCode) {
-                counts++;
-                updateCountOfSharedMedia(complete, roomid);
-            }
 
-            @Override public void onTimeOut() {
-                counts++;
-                updateCountOfSharedMedia(complete, roomid);
             }
         };
 
@@ -817,17 +855,22 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         realm.close();
 
         if (text.length() == 0) {
-            totalCountItem = "";
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE);
-            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL);
+
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL);
+                }
+            }, 100);
+
         } else {
             if (complete != null) {
-                complete.complete(true, text, "");
+                complete.complete(true, getStringSharedMediaCount(), "");
             }
         }
     }

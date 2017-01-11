@@ -2795,6 +2795,12 @@ public class ActivityChat extends ActivityEnhanced
 
 
     private void sendMessage(int requestCode, String filePath) {
+
+        if (filePath == null) {
+            Log.e("dddd", "activity chat   send message  file path is null ");
+            return;
+        }
+
         Realm realm = Realm.getDefaultInstance();
         long messageId = SUID.id().get();
         final long updateTime = TimeUtils.currentLocalTime();
@@ -2808,6 +2814,7 @@ public class ActivityChat extends ActivityEnhanced
 
         switch (requestCode) {
             case IntentRequests.REQ_CROP:
+
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
                 imageDimens = AndroidUtils.getImageDimens(filePath);
@@ -3485,7 +3492,7 @@ public class ActivityChat extends ActivityEnhanced
         //long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
 
         long oldestMessageId = 0;
-        if (mAdapter.getAdapterItems().size() > 0) {
+        if (mAdapter.getAdapterItemCount() > 0) {
             if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) {
                 if (mAdapter.getAdapterItems().size() > 1) oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(1).mMessage.messageID);
             } else {
@@ -3499,16 +3506,15 @@ public class ActivityChat extends ActivityEnhanced
             latestMessageIdHistory = oldestMessageId;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
 
-            if (!(mAdapter.getAdapterItem(0) instanceof ProgressWaiting))
-
-            {
-                recyclerView.post(new Runnable() {
-                    @Override public void run() {
-                        mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
-                    }
-                });
+            if (mAdapter.getAdapterItemCount() > 0) {
+                if (!(mAdapter.getAdapterItem(0) instanceof ProgressWaiting)) {
+                    recyclerView.post(new Runnable() {
+                        @Override public void run() {
+                            mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                        }
+                    });
+                }
             }
-
 
         }
     }
@@ -4088,8 +4094,7 @@ public class ActivityChat extends ActivityEnhanced
     public void onGetRoomHistoryError(int majorCode, int minorCode) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
-
-                if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
+                if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
             }
         });
     }

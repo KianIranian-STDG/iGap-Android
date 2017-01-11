@@ -112,10 +112,14 @@ public class FragmentShowImage extends Fragment {
                 return false;
             }
 
-            for (int i = 0; i < mRealmList.size(); i++) {
-                if (selectedFileToken.equals(mRealmList.get(i).getAttachment().getToken())) {
-                    selectedFile = i;
-                    break;
+            if (selectedFileToken != null) {
+                for (int i = 0; i < mRealmList.size(); i++) {
+                    if (mRealmList.get(i).getAttachment() != null) {
+                        if (selectedFileToken.equals(mRealmList.get(i).getAttachment().getToken())) {
+                            selectedFile = i;
+                            break;
+                        }
+                    }
                 }
             }
 

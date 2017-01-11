@@ -25,16 +25,10 @@ public class ClientSearchRoomHistoryResponse extends MessageHandler {
 //        builder.getNotDeletedCount();
 //        builder.getResultList();
 
-        G.onClientSearchRoomHistory.onClientSearchRoomHistory(builder.getTotalCount(), builder.getNotDeletedCount(), builder.getResultList());
+        G.onClientSearchRoomHistory.onClientSearchRoomHistory(builder.getTotalCount(), builder.getNotDeletedCount(), builder.getResultList(), identity);
 
     }
 
-    @Override
-    public void timeOut() {
-        super.timeOut();
-
-        G.onClientSearchRoomHistory.onTimeOut();
-    }
 
     @Override
     public void error() {
