@@ -9,7 +9,7 @@ public class RequestUserSessionTerminate {
         ProtoUserSessionTerminate.UserSessionTerminate.Builder builder = ProtoUserSessionTerminate.UserSessionTerminate.newBuilder();
         builder.setSessionId(sessionId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(126, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(126, builder, sessionId + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

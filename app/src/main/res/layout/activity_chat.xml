@@ -109,7 +109,6 @@
                                 android:text="New Text"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/sp14"
-                                fontPath="fonts/IRANSansMobile_Medium.ttf"
                                 />
 
                             <com.iGap.module.MaterialDesignTextView

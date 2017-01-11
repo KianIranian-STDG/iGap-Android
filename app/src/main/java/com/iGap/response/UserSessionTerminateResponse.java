@@ -21,7 +21,7 @@ public class UserSessionTerminateResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserSessionTerminate.UserSessionTerminateResponse.Builder builder = (ProtoUserSessionTerminate.UserSessionTerminateResponse.Builder) message;
-        G.onUserSessionTerminate.onUserSessionTerminate();
+        G.onUserSessionTerminate.onUserSessionTerminate(Long.parseLong(identity));
     }
 
     @Override

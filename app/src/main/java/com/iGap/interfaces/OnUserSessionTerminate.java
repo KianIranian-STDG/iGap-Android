@@ -1,7 +1,7 @@
 package com.iGap.interfaces;
 
 public interface OnUserSessionTerminate {
-    void onUserSessionTerminate();
+    void onUserSessionTerminate(Long messageid);
 
     void onTimeOut();
 

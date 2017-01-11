@@ -51,7 +51,9 @@ public class FragmentActiveSessions extends Fragment {
     private List<IItem> items = new ArrayList<>();
     private ProgressBar prgWaiting;
     private FastItemAdapter fastItemAdapter;
-    private boolean isClearAdapter = false;
+    private boolean isClearAdapter = true;
+    private List<StructSessionsGetActiveList> list = new ArrayList<>();
+
 
     public FragmentActiveSessions() {
         // Required empty public constructor
@@ -96,7 +98,7 @@ public class FragmentActiveSessions extends Fragment {
         rcvContent.setItemAnimator(new DefaultItemAnimator());
         rcvContent.setAdapter(fastItemAdapter);
 
-        new RequestUserSessionGetActiveList().userSessionGetActiveList();
+
         G.onUserSessionGetActiveList = new OnUserSessionGetActiveList() {
             @Override
             public void onUserSessionGetActiveList(final List<ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Session> session) {
@@ -131,6 +133,8 @@ public class FragmentActiveSessions extends Fragment {
                                 structItems.add(item);
                             }
 
+                            list.add(item);
+
                         }
 
                         itemAdapter();
@@ -139,74 +143,81 @@ public class FragmentActiveSessions extends Fragment {
                 });
             }
         };
+        new RequestUserSessionGetActiveList().userSessionGetActiveList();
+
+        G.onUserSessionTerminate = new OnUserSessionTerminate() {
+
+            @Override
+            public void onUserSessionTerminate(final Long messageid) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        prgWaiting.setVisibility(View.GONE);
+
+                        for (int i = 0; i < list.size(); i++) {
+                            if (list.get(i).getSessionId() == messageid) {
+                                int j = fastItemAdapter.getPosition(list.get(i).getSessionId());
+                                if (j >= 0)
+                                    fastItemAdapter.remove(j);
+                            }
+
+
+                        }
+
+
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        prgWaiting.setVisibility(View.GONE);
+                        final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                R.string.error,
+                                Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        prgWaiting.setVisibility(View.GONE);
+                        final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                getString(R.string.error),
+                                Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+        };
 
         fastItemAdapter.withSelectable(true);
         fastItemAdapter.withOnClickListener(new FastAdapter.OnClickListener() {
             @Override
-            public boolean onClick(View v, IAdapter adapter, final IItem item, final int position) {
-
-                G.onUserSessionTerminate = new OnUserSessionTerminate() {
-                    @Override
-                    public void onUserSessionTerminate() {
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                prgWaiting.setVisibility(View.GONE);
-
-                                if (!isClearAdapter) {
-                                    fastItemAdapter.remove(position);
-                                    isClearAdapter = true;
-                                }
-                                fastItemAdapter.remove(position);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onTimeOut() {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                prgWaiting.setVisibility(View.GONE);
-                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        R.string.error,
-                                        Snackbar.LENGTH_LONG);
-                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError() {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                prgWaiting.setVisibility(View.GONE);
-                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        getString(R.string.error),
-                                        Snackbar.LENGTH_LONG);
-                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    }
-                };
+            public boolean onClick(final View v, IAdapter adapter, final IItem item, final int position) {
 
                 if (item instanceof AdapterActiveSessions) {
                     if (((AdapterActiveSessions) item).getItem().isCurrent()) {
@@ -279,7 +290,6 @@ public class FragmentActiveSessions extends Fragment {
                                                         snack.show();
                                                     }
                                                 });
-
                                             }
                                         };
 
@@ -295,85 +305,40 @@ public class FragmentActiveSessions extends Fragment {
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
                                         prgWaiting.setVisibility(View.VISIBLE);
                                         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
                                         new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessions) item).getItem().getSessionId());
                                     }
                                 }).show();
                     }
                 } else {
-                    v.setVisibility(View.GONE);
-                    if (((AdapterActiveSessionsHeader) item).getItem().size() > 0) {
-                        for (int i = 0; i < ((AdapterActiveSessionsHeader) item).getItem().size(); i++) {
-                            if (!((AdapterActiveSessionsHeader) item).getItem().get(i).isCurrent()) {
-                                new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessionsHeader) item).getItem().get(i).getSessionId());
-                            }
-                        }
-                    }
+
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.active_session_title)
+                            .content(R.string.active_session_content)
+                            .positiveText(R.string.B_ok)
+                            .negativeText(R.string.B_cancel)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                    v.setVisibility(View.GONE); // click on AdapterActiveSessionsHeader
+                                    int size = list.size();
+                                    if (size > 0) {
+                                        for (int i = 0; i < size; i++) {
+                                            if (!list.get(i).isCurrent()) {
+                                                new RequestUserSessionTerminate().userSessionTerminate(list.get(i).getSessionId());
+                                            }
+                                        }
+                                    }
+                                }
+                            }).show();
+
                 }
                 return false;
             }
         });
 
-        G.onUserSessionTerminate = new OnUserSessionTerminate() {
-            @Override
-            public void onUserSessionTerminate() {
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        prgWaiting.setVisibility(View.GONE);
-                        fastItemAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-
-            @Override
-            public void onTimeOut() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        prgWaiting.setVisibility(View.GONE);
-                        final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                R.string.error,
-                                Snackbar.LENGTH_LONG);
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            }
-
-            @Override
-            public void onError() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        prgWaiting.setVisibility(View.GONE);
-                        final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                getString(R.string.error),
-                                Snackbar.LENGTH_LONG);
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            }
-        };
 
     }
 
@@ -382,14 +347,15 @@ public class FragmentActiveSessions extends Fragment {
 
         for (StructSessionsGetActiveList s : structItems) {
 
+
             if (s.isCurrent()) {
-                fastItemAdapter.add(new AdapterActiveSessions(s).withIdentifier(SUID.id().get()));
-            } else if (!s.isCurrent() && !b) {
+                fastItemAdapter.add(new AdapterActiveSessions(s).withIdentifier(s.getSessionId()));
+            } else if (!b) {
                 fastItemAdapter.add(new AdapterActiveSessionsHeader(structItems).withIdentifier(SUID.id().get()));
-                fastItemAdapter.add(new AdapterActiveSessions(s).withIdentifier(SUID.id().get()));
+                fastItemAdapter.add(new AdapterActiveSessions(s).withIdentifier(s.getSessionId()));
                 b = true;
-            } else if (!s.isCurrent() && b) {
-                fastItemAdapter.add(new AdapterActiveSessions(s).withIdentifier(SUID.id().get()));
+            } else if (b) {
+                fastItemAdapter.add(new AdapterActiveSessions(s).withIdentifier(s.getSessionId()));
             }
         }
 
