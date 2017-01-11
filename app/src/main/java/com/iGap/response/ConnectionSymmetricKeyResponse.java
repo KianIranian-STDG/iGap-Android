@@ -55,14 +55,14 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
     @Override
     public void timeOut() {
         // disconnect socket for do securing action again
-        WebSocketClient.getInstance().disconnect();
+        //WebSocketClient.getInstance().disconnect();
         super.timeOut();
     }
 
     @Override
     public void error() {
         // disconnect socket for do securing action again
-        WebSocketClient.getInstance().disconnect();
+        //WebSocketClient.getInstance().disconnect();
         super.error();
     }
 }

@@ -29,7 +29,6 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -72,6 +71,7 @@ import com.iGap.adapter.items.chat.ImageItem;
 import com.iGap.adapter.items.chat.ImageWithTextItem;
 import com.iGap.adapter.items.chat.LocationItem;
 import com.iGap.adapter.items.chat.LogItem;
+import com.iGap.adapter.items.chat.ProgressWaiting;
 import com.iGap.adapter.items.chat.TextItem;
 import com.iGap.adapter.items.chat.TimeItem;
 import com.iGap.adapter.items.chat.VideoItem;
@@ -658,7 +658,11 @@ public class ActivityChat extends ActivityEnhanced
                                                 viewAttachFile.setVisibility(View.VISIBLE);
                                                 isChatReadOnly = false;
                                             }
-
+                                            if (realmRoom.getLastMessage() != null) {
+                                                realmRoom.setUpdatedTime(realmRoom.getLastMessage().getUpdateTime());
+                                            } else {
+                                                realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
+                                            }
                                         }
                                     }
                                 });
@@ -865,29 +869,8 @@ public class ActivityChat extends ActivityEnhanced
 
         if (
 
-                getIntent()
-
-                        != null &&
-
-                        getIntent()
-
-                                .
-
-                                        getExtras()
-
-                                != null &&
-
-                        getIntent()
-
-                                .
-
-                                        getExtras()
-
-                                .
-
-                                        getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE)
-
-                                != null)
+            getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().
+                getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null)
 
         {
             ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
@@ -938,7 +921,6 @@ public class ActivityChat extends ActivityEnhanced
                 messageLocation.setLocationLat(latitude);
                 messageLocation.setLocationLong(longitude);
                 messageLocation.setImagePath(imagePath);
-
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, id);
                 roomMessage.setLocation(messageLocation);
                 roomMessage.setCreateTime(TimeUtils.currentLocalTime());
@@ -1086,16 +1068,20 @@ public class ActivityChat extends ActivityEnhanced
                    /*if (messageInfo.channelExtra != null) {
                         forwardedMessage.setChannelExtra(RealmChannelExtra.convert(messageInfo.channelExtra));
                     }*/
+
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setLastMessage(forwardedMessage);
+
                 }
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
                 RealmRoomMessage forwardedMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
-                scrollToEnd();
-                chatSendMessageUtil.build(chatType, forwardedMessage.getRoomId(), forwardedMessage);
-
+                if (forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
+                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
+                    scrollToEnd();
+                    chatSendMessageUtil.build(chatType, forwardedMessage.getRoomId(), forwardedMessage);
+                }
                 realm.close();
             }
         });
@@ -1122,82 +1108,7 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                if (majorCode == 209 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_1), Snackbar.LENGTH_LONG);
 
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 209 && minorCode == 2) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_2), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 209 && minorCode == 3) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_209_3), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 210) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_210), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 211) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_211), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                }
             }
         };
 
@@ -1237,67 +1148,7 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                if (majorCode == 212 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
 
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 212 && minorCode == 2) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_212_1), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 213) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_213), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 214) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_214), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                }
             }
         };
     }
@@ -1959,6 +1810,7 @@ public class ActivityChat extends ActivityEnhanced
                     if (!message.isEmpty()) {
                         final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         final String identity = Long.toString(SUID.id().get());
+                        final long currentTime = TimeUtils.currentLocalTime();
 
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
@@ -1973,7 +1825,7 @@ public class ActivityChat extends ActivityEnhanced
                                 roomMessage.setShowMessage(true);
 
                                 roomMessage.setUserId(senderId);
-                                roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+                                roomMessage.setCreateTime(currentTime);
 
                                 // user wants to replay to a message
                                 if (mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo) {
@@ -1993,7 +1845,7 @@ public class ActivityChat extends ActivityEnhanced
                                 public void execute(Realm realm) {
                                     if (room != null) {
                                         room.setLastMessage(roomMessage);
-                                        room.setUpdatedTime(TimeUtils.currentLocalTime());
+                                        //room.setUpdatedTime(currentTime);
                                     }
                                 }
                             });
@@ -3118,6 +2970,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 roomMessage.setMessageType(finalMessageType);
                 roomMessage.setMessage(getWrittenMessage());
+                roomMessage.setHasMessageLink(HelperUrl.hasInMessageLink(getWrittenMessage()));
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.FILE);
@@ -3176,6 +3029,7 @@ public class ActivityChat extends ActivityEnhanced
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
                 if (realmRoom != null) {
                     realmRoom.setLastMessage(roomMessage);
+                    //realmRoom.setUpdatedTime(roomMessage.getUpdateOrCreateTime());
                 }
             }
         });
@@ -3228,11 +3082,11 @@ public class ActivityChat extends ActivityEnhanced
             Realm realm = Realm.getDefaultInstance();
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
-                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom.getAttachment());
+                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
                 replayTo.setText(chatItem.forwardedFrom.getMessage());
             } else {
                 RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(chatItem.messageID)).findFirst();
-                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message.getAttachment());
+                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
                 replayTo.setText(chatItem.messageText);
             }
             if (chatType == CHANNEL) {
@@ -3355,51 +3209,32 @@ public class ActivityChat extends ActivityEnhanced
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        // get offline delete list , add new deleted list and update in
-                        // client condition , then send request for delete message to server
-                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+
+                final ArrayList<Long> list = new ArrayList<Long>();
+
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
 
                         for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
-                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageID.mMessage.messageID)).findFirst();
-                            if (roomMessage != null) {
-                                // delete message from database
-                                roomMessage.deleteFromRealm();
-                            }
+                            Long messagid = parseLong(messageID.mMessage.messageID);
+                            list.add(messagid);
 
-                            RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
-                            realmOfflineDelete.setOfflineDelete(parseLong(messageID.mMessage.messageID));
+                            // remove deleted message from adapter
+                            mAdapter.removeMessage(messagid);
 
-                            realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // remove deleted message from adapter
-                                    mAdapter.removeMessage(parseLong(messageID.mMessage.messageID));
-
-                                    // remove tag from edtChat if the message has deleted
-                                    if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                        if (messageID.mMessage.messageID.equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                            edtChat.setTag(null);
-                                        }
-                                    }
+                            // remove tag from edtChat if the message has deleted
+                            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                if (messageID.mMessage.messageID.equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                    edtChat.setTag(null);
                                 }
-                            });
-                            if (chatType == GROUP) {
-                                new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
-                            } else if (chatType == CHAT) {
-                                new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
-                            } else if (chatType == CHANNEL) {
-                                new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(messageID.mMessage.messageID));
                             }
+
                         }
                     }
                 });
-                realm.close();
+
+                deleteSelectedMessages(mRoomId, list, chatType);
+
 
                 int size = mAdapter.getItemCount();
                 for (int i = 0; i < size; i++) {
@@ -3418,6 +3253,44 @@ public class ActivityChat extends ActivityEnhanced
         });
         txtNumberOfSelected = (TextView) findViewById(R.id.chl_txt_number_of_selected);
     }
+
+    public static void deleteSelectedMessages(final long RoomId, final ArrayList<Long> list, final ProtoGlobal.Room.Type chatType) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                // get offline delete list , add new deleted list and update in
+                // client condition , then send request for delete message to server
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, RoomId).findFirst();
+
+                for (final Long messageId : list) {
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                    if (roomMessage != null) {
+                        // delete message from database
+                        // roomMessage.deleteFromRealm();
+
+                        roomMessage.setDeleted(true);
+                    }
+
+                    RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
+                    realmOfflineDelete.setOfflineDelete(messageId);
+
+                    realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
+
+                    if (chatType == GROUP) {
+                        new RequestGroupDeleteMessage().groupDeleteMessage(RoomId, messageId);
+                    } else if (chatType == CHAT) {
+                        new RequestChatDeleteMessage().chatDeleteMessage(RoomId, messageId);
+                    } else if (chatType == CHANNEL) {
+                        new RequestChannelDeleteMessage().channelDeleteMessage(RoomId, messageId);
+                    }
+                }
+            }
+        });
+
+        realm.close();
+    }
+
 
     private ArrayList<Parcelable> getMessageStructFromSelectedItems() {
         ArrayList<Parcelable> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
@@ -3611,16 +3484,32 @@ public class ActivityChat extends ActivityEnhanced
     private void requestMessageHistory() {
         //long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
 
-        long oldestMessageId;
+        long oldestMessageId = 0;
         if (mAdapter.getAdapterItems().size() > 0) {
-            oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(0).mMessage.messageID);
+            if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) {
+                if (mAdapter.getAdapterItems().size() > 1) oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(1).mMessage.messageID);
+            } else {
+                oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(0).mMessage.messageID);
+            }
+
         } else {
             oldestMessageId = 0;
         }
         if (latestMessageIdHistory != oldestMessageId) {
             latestMessageIdHistory = oldestMessageId;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
-            prgWaiting.setVisibility(View.VISIBLE);
+
+            if (!(mAdapter.getAdapterItem(0) instanceof ProgressWaiting))
+
+            {
+                recyclerView.post(new Runnable() {
+                    @Override public void run() {
+                        mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                    }
+                });
+            }
+
+
         }
     }
 
@@ -3821,7 +3710,6 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
-        Log.i(ActivityChat.class.getSimpleName(), "onMessageReceive called for group");
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -3962,112 +3850,6 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onError(int majorCode, int minorCode) {
-        if (majorCode == 713 && minorCode == 1) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 2) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 3) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 4) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 5) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 714) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 715) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        }
     }
 
     @Override
@@ -4088,6 +3870,8 @@ public class ActivityChat extends ActivityEnhanced
         //empty
     }
 
+    private RealmRoomMessage voiceLastMessage = null;
+
     @Override
     public void onVoiceRecordDone(final String savedPath) {
         Realm realm = Realm.getDefaultInstance();
@@ -4100,7 +3884,6 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
-
                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
                 roomMessage.setMessage(getWrittenMessage());
                 roomMessage.setRoomId(mRoomId);
@@ -4108,6 +3891,7 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setAttachment(messageId, savedPath, 0, 0, 0, null, duration, LocalFileType.FILE);
                 roomMessage.setUserId(senderID);
                 roomMessage.setCreateTime(updateTime);
+                voiceLastMessage = roomMessage;
 
                 // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
                 // in response to a message as replay, so after server done creating replay and
@@ -4139,7 +3923,15 @@ public class ActivityChat extends ActivityEnhanced
         structChannelExtra.thumbsUp = "0";
         structChannelExtra.thumbsDown = "0";
         structChannelExtra.viewsLabel = "1";
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (voiceLastMessage != null) {
+                    realmRoom.setLastMessage(voiceLastMessage);
+                }
+            }
+        });
         if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
             structChannelExtra.signature = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName();
         } else {
@@ -4244,8 +4036,7 @@ public class ActivityChat extends ActivityEnhanced
                 @Override
                 public void run() {
 
-                    Log.e("ddd", "onGetRoomHistory                 aaaaaaaaaaaaa" + count + "  " + mAdapter.getAdapterItemCount());
-                    prgWaiting.setVisibility(View.GONE);
+                    if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
 
                     Realm realm = Realm.getDefaultInstance();
                     RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
@@ -4295,75 +4086,12 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onGetRoomHistoryError(int majorCode, int minorCode) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
 
-        ActivityChat.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                prgWaiting.setVisibility(View.GONE);
+                if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
             }
         });
-
-        if (majorCode == 615 && minorCode == 1) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_1), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 615 && minorCode == 2) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_615_2), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 616) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_616), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 617) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_617), Snackbar.LENGTH_LONG);
-
-                    snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    //                    snack.show();
-                }
-            });
-        }
     }
 
     @Override
@@ -4515,50 +4243,6 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void onChatDeleteError(int majorCode, int minorCode) {
-
-                if (majorCode == 218 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_218), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                } else if (majorCode == 219) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_219), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                } else if (majorCode == 220) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_220), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getResources().getString(R.string.B_cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                        }
-                    });
-                }
             }
         };
 

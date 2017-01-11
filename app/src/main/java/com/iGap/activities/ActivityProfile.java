@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -96,10 +97,10 @@ public class ActivityProfile extends ActivityEnhanced
         G.uploaderUtil.setActivityCallbacks(this);
         G.onUserAvatarResponse = this;
 
-        txtTitle = (TextView) findViewById(R.id.rg_txt_titleToolbar);
 
         txtTitle = (TextView) findViewById(R.id.pu_titleToolbar);
-        txtTitle.setTypeface(G.FONT_IGAP);
+        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        txtTitle.setTypeface(type);
 
         final View lineEditText = findViewById(R.id.pu_line_below_editText);
         btnSetImage = (com.iGap.module.CircleImageView) findViewById(R.id.pu_profile_circle_image);
@@ -205,31 +206,6 @@ public class ActivityProfile extends ActivityEnhanced
                         @Override
                         public void run() {
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        }
-                    });
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: 9/25/2016 Error 112 - USER_PROFILE_SET_NICKNAME_BAD_PAYLOAD
-                            //Invalid nickname
-                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                    getResources().getString(R.string.Toast_Invalid_nickname),
-                                    Snackbar.LENGTH_LONG);
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-
-                        }
-                    });
-                } else if (majorCode == 113) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: 9/25/2016 Error 113 - USER_PROFILE_SET_NICKNAME_INTERNAL_SERVER_ERROR
                         }
                     });
                 }

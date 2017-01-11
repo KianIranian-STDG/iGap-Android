@@ -1,9 +1,9 @@
 package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperRadius;
@@ -14,10 +14,8 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.util.List;
-
 import io.github.meness.emoji.EmojiTextView;
+import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
@@ -100,6 +98,7 @@ public class VideoWithTextItem
             messageText.setTextSize(G.userTextSize);
             image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
             duration = (TextView) view.findViewById(R.id.duration);
+            messageText.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 }

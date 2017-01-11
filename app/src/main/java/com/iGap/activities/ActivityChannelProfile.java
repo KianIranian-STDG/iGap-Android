@@ -23,7 +23,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
-import android.text.Spannable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -52,6 +52,7 @@ import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
@@ -69,6 +70,7 @@ import com.iGap.interfaces.OnChannelKickAdmin;
 import com.iGap.interfaces.OnChannelKickMember;
 import com.iGap.interfaces.OnChannelKickModerator;
 import com.iGap.interfaces.OnChannelLeft;
+import com.iGap.interfaces.OnChannelRemoveUsername;
 import com.iGap.interfaces.OnChannelRevokeLink;
 import com.iGap.interfaces.OnChannelUpdateSignature;
 import com.iGap.interfaces.OnChannelUpdateUsername;
@@ -111,6 +113,7 @@ import com.iGap.request.RequestChannelKickAdmin;
 import com.iGap.request.RequestChannelKickMember;
 import com.iGap.request.RequestChannelKickModerator;
 import com.iGap.request.RequestChannelLeft;
+import com.iGap.request.RequestChannelRemoveUsername;
 import com.iGap.request.RequestChannelRevokeLink;
 import com.iGap.request.RequestChannelUpdateSignature;
 import com.iGap.request.RequestChannelUpdateUsername;
@@ -141,13 +144,11 @@ import static com.iGap.realm.enums.RoomType.GROUP;
 public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
 
     private AppBarLayout appBarLayout;
-    private TextView txtNameChannel, txtDescription, txtChannelLink, txtNotifyAndSound, txtDeleteCache, txtLeaveChannel, txtReport, txtChannelNameInfo;
+    private TextView txtDescription, txtChannelLink, txtChannelNameInfo;
     private MaterialDesignTextView imgPupupMenul;
     private de.hdodenhof.circleimageview.CircleImageView imgCircleImageView;
     private FloatingActionButton fab;
     private PopupWindow popupWindow;
-    private Spannable wordToSpan;
-    private MaterialDesignTextView txtBack;
     private TextView titleToolbar;
     private TextView txtChannelName;
     TextView txtSharedMedia;
@@ -178,8 +179,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private long avatarId;
     private long roomId;
     private boolean isPrivate;
-    private String username;
+    private String linkUsername;
     private boolean isSignature;
+    private TextView txtLinkTitle;
+    private boolean isPopup = false;
 
     @Override
     protected void onResume() {
@@ -228,6 +231,17 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         //channel info
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+        if (realmRoom == null) {
+
+            Log.e("dddd", "activity channel profile   room is null  ");
+            finish();
+            return;
+        }
+
+
+
+
         RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
         title = realmRoom.getTitle();
         initials = realmRoom.getInitials();
@@ -235,11 +249,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         role = realmChannelRoom.getRole();
         inviteLink = realmChannelRoom.getInviteLink();
         isPrivate = realmChannelRoom.isPrivate();
-        username = realmChannelRoom.getUsername();
+        linkUsername = realmChannelRoom.getUsername();
         isSignature = realmChannelRoom.isSignature();
         fab = (FloatingActionButton) findViewById(R.id.pch_fab_addToChannel);
 
-        Log.i("CCCCCVV", "onCreate: " + isPrivate);
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -261,7 +274,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);
         txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
-        //memberNumber = (TextView) findViewById(R.id.txt_member_number);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting);
         LinearLayout lytSharedMedia = (LinearLayout) findViewById(R.id.lyt_shared_media);
         LinearLayout lytChannelName = (LinearLayout) findViewById(R.id.lyt_channel_name);
@@ -270,9 +282,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         lytListModerator = (LinearLayout) findViewById(R.id.lyt_list_moderator);
         lytDeleteChannel = (LinearLayout) findViewById(R.id.lyt_delete_channel);
         lytNotification = (LinearLayout) findViewById(R.id.lyt_notification);
-        final TextView txtLinkTitle = (TextView) findViewById(R.id.txt_channel_link_title);
+        txtLinkTitle = (TextView) findViewById(R.id.txt_channel_link_title);
         ViewGroup vgRootAddMember = (ViewGroup) findViewById(R.id.agp_root_layout_add_member);
         ViewGroup ltLink = (ViewGroup) findViewById(R.id.layout_channel_link);
+        imgPupupMenul = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
 
         if (role == ChannelChatRole.MEMBER) {
             vgRootAddMember.setVisibility(View.GONE);
@@ -285,12 +298,15 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         } else {
             lytChannelName.setEnabled(false);
             lytChannelDescription.setEnabled(false);
-//            ltLink.setEnabled(false);
         }
         if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
             fab.setVisibility(View.VISIBLE);
+            ltLink.setVisibility(View.VISIBLE);
+            imgPupupMenul.setVisibility(View.VISIBLE);
         } else {
             fab.setVisibility(View.GONE);
+            ltLink.setVisibility(View.GONE);
+            imgPupupMenul.setVisibility(View.GONE);
         }
 
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
@@ -321,7 +337,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         });
 
-        txtBack = (MaterialDesignTextView) findViewById(R.id.pch_txt_back);
         final RippleView rippleBack = (RippleView) findViewById(R.id.pch_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -353,7 +368,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         });
 
-        imgPupupMenul = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
+
         RippleView rippleMenu = (RippleView) findViewById(R.id.pch_ripple_menuPopup);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -363,7 +378,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         });
 
         //show option item just for owner
-        imgPupupMenul.setVisibility(View.GONE);
+
 //        rippleMenu.setVisibility(View.GONE);
         /*if (role != ChannelChatRole.OWNER) {
             imgPupupMenul.setVisibility(View.GONE);
@@ -544,25 +559,19 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         txtChannelNameInfo.setText(title);
 
 
-        if (isPrivate) {
-            txtChannelLink.setText(inviteLink);
-            txtLinkTitle.setText(getResources().getString(R.string.channel_link));
-
-        } else {
-            txtChannelLink.setText("iGap.net/" + username);
-            txtLinkTitle.setText(getResources().getString(R.string.st_username));
-        }
+        setTextChannelLik();
 
 
         ltLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                isPopup = false;
                 if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
                     if (isPrivate) {
                         dialogRevoke();
                     } else {
-                        editUsername();
+                        setUsername();
                     }
                 } else {
                     dialogCopyLink();
@@ -690,6 +699,18 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     }
 
+    private void setTextChannelLik() {
+
+        if (isPrivate) {
+            txtChannelLink.setText(inviteLink);
+            txtLinkTitle.setText(getResources().getString(R.string.channel_link));
+
+        } else {
+            txtChannelLink.setText("" + linkUsername);
+            txtLinkTitle.setText(getResources().getString(R.string.st_username));
+        }
+    }
+
     private void dialogRevoke() {
 
         String link = txtChannelLink.getText().toString();
@@ -723,7 +744,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         final MaterialDialog dialog =
                 new MaterialDialog.Builder(ActivityChannelProfile.this)
                         .title(getResources().getString(R.string.channel_link_title_revoke))
-                        .positiveText(getResources().getString(R.string.channel_link_revoke))
+                        .positiveText(getResources().getString(R.string.revoke))
                         .customView(layoutRevoke, true)
                         .widgetColor(getResources().getColor(R.color.toolbar_background))
                         .negativeText(getResources().getString(R.string.B_cancel))
@@ -760,7 +781,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
         final EditText edtUserName = new EditText(ActivityChannelProfile.this);
         edtUserName.setHint(getResources().getString(R.string.st_username));
-        edtUserName.setText(username);
+        edtUserName.setText(linkUsername);
         edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
         edtUserName.setPadding(0, 8, 0, 8);
@@ -1878,9 +1899,9 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     @Override
     public void onFileTimeOut(String identity) {
-        if (Long.parseLong(identity) == avatarId) {
-            hideProgressBar();
-        }
+        //if (Long.parseLong(identity) == avatarId) {
+        hideProgressBar();
+        //}
     }
 
     //***User Info
@@ -2141,7 +2162,14 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         TextView text3 = new TextView(ActivityChannelProfile.this);
         text3.setTextColor(getResources().getColor(android.R.color.black));
-        text3.setText(getResources().getString(R.string.clear_history));
+
+
+        if (isPrivate) {
+            text3.setText(getResources().getString(R.string.channel_title_convert_to_public));
+        } else {
+            text3.setText(getResources().getString(R.string.channel_title_convert_to_private));
+        }
+
 
         int dim20 = (int) getResources().getDimension(R.dimen.dp20);
         int dim12 = (int) getResources().getDimension(R.dimen.dp12);
@@ -2179,11 +2207,267 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public void onClick(View view) {
 
-                //TODO [Saeed Mozaffari] [2016-12-06 12:06 PM] - Clear History Channel
+                isPopup = true;
 
+                if (isPrivate) {
+                    convertToPublic();
+                } else {
+                    convertToPrivate();
+                }
                 popupWindow.dismiss();
             }
         });
+    }
+
+    private void convertToPrivate() {
+
+        G.onChannelRemoveUsername = new OnChannelRemoveUsername() {
+            @Override
+            public void onChannelRemoveUsername(final long roomId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        isPrivate = true;
+                        setTextChannelLik();
+                        Realm realm = Realm.getDefaultInstance();
+
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                                realmChannelRoom.setPrivate(true);
+                            }
+                        });
+                        realm.close();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+        };
+
+
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_private))
+                .content(getString(R.string.channel_text_convert_to_private))
+                .positiveText(R.string.B_ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        new RequestChannelRemoveUsername().channelRemoveUsername(roomId);
+
+                    }
+                })
+                .negativeText(R.string.B_cancel)
+                .show();
+    }
+
+    private void convertToPublic() {
+
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_public))
+                .content(getString(R.string.channel_text_convert_to_public))
+                .positiveText(R.string.B_ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        dialog.dismiss();
+                        setUsername();
+
+                    }
+                })
+                .negativeText(R.string.B_cancel)
+                .show();
+    }
+
+    private void setUsername() {
+        final LinearLayout layoutUserName = new LinearLayout(ActivityChannelProfile.this);
+        layoutUserName.setOrientation(LinearLayout.VERTICAL);
+
+        final View viewUserName = new View(ActivityChannelProfile.this);
+        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
+        final EditText edtUserName = new EditText(ActivityChannelProfile.this);
+        edtUserName.setHint(getResources().getString(R.string.channel_title_channel_set_username));
+
+        if (isPopup) {
+            edtUserName.setText("iGap.net/");
+        } else {
+            edtUserName.setText("" + linkUsername);
+        }
+
+        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
+        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtUserName.setPadding(0, 8, 0, 8);
+        edtUserName.setSingleLine(true);
+        inputUserName.addView(edtUserName);
+        inputUserName.addView(viewUserName, viewParams);
+
+        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
+        }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutUserName.addView(inputUserName, layoutParams);
+
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
+                        .customView(layoutUserName, true)
+                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
+                        .build();
+
+        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+        positive.setEnabled(false);
+
+        G.onChannelCheckUsername = new OnChannelCheckUsername() {
+            @Override
+            public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
+
+                            positive.setEnabled(true);
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("");
+                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.INVALID) {
+                            positive.setEnabled(false);
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("INVALID");
+
+                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
+                            positive.setEnabled(false);
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("TAKEN");
+                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.OCCUPYING_LIMIT_EXCEEDED) {
+                            positive.setEnabled(false);
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("OCCUPYING LIMIT EXCEEDED");
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+
+            @Override
+            public void onTimeOut() {
+
+            }
+        };
+
+        edtUserName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if (!editable.toString().contains("iGap.net/")) {
+                    edtUserName.setText("iGap.net/");
+                    Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
+                }
+
+                if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
+                    String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+                    new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+
+
+                } else {
+                    positive.setEnabled(false);
+                    inputUserName.setErrorEnabled(true);
+                    inputUserName.setError("INVALID");
+                }
+            }
+        });
+
+
+        G.onChannelUpdateUsername = new OnChannelUpdateUsername() {
+            @Override
+            public void onChannelUpdateUsername(final long roomId, final String username) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        isPrivate = false;
+                        dialog.dismiss();
+
+                        linkUsername = edtUserName.getText().toString();
+                        setTextChannelLik();
+
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                                realmChannelRoom.setUsername("iGap.net" + edtUserName.getText().toString());
+                                realmChannelRoom.setPrivate(false);
+                            }
+                        });
+                        realm.close();
+
+                    }
+                });
+
+
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+
+            @Override
+            public void onTimeOut() {
+
+            }
+        };
+
+        positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+                new RequestChannelUpdateUsername().channelUpdateUsername(roomId, userName);
+            }
+        });
+
+
+        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                } else {
+                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
+
+        // check each word with server
+
+        dialog.show();
     }
 
 

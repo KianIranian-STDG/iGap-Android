@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityMain;
+import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnChannelCheckUsername;
 import com.iGap.interfaces.OnChannelUpdateUsername;
 import com.iGap.interfaces.OnClientGetRoomResponse;
@@ -275,8 +276,15 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                         Selection.setSelection(edtLink.getText(), edtLink.getText().length());
 
                     }
-                    String userName = edtLink.getText().toString().replace("iGap.net/", "");
-                    new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+                    if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
+                        String userName = edtLink.getText().toString().replace("iGap.net/", "");
+                        new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
+                    } else {
+                        txtFinish.setEnabled(false);
+                        txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
+                        txtInputLayout.setErrorEnabled(true);
+                        txtInputLayout.setError("INVALID");
+                    }
 
                 }
             }
@@ -347,85 +355,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
             @Override
             public void onError(int majorCode, int minorCode) {
-
                 hideProgressBar();
-
-                if (majorCode == 610) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_610), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 611) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_611), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 612) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_612), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 613) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_613), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                } else if (majorCode == 614) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_614), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
-                }
             }
 
             @Override

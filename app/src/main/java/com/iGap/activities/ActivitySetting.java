@@ -16,7 +16,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -48,6 +48,7 @@ import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
@@ -89,13 +90,15 @@ import com.iGap.request.RequestUserProfileSetGender;
 import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -322,7 +325,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         realmUserInfo.setGender(gender);
                         userGender = gender;
-                        txtGander.setText(userGender == ProtoGlobal.Gender.MALE ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
+                        if (userGender == ProtoGlobal.Gender.MALE) {
+                            txtGander.setText(getResources().getString(R.string.Female));
+                        } else if (userGender == ProtoGlobal.Gender.FEMALE) {
+                            txtGander.setText(getResources().getString(R.string.Female));
+                        } else {
+                            txtGander.setText(getResources().getString(R.string.set_gender));
+                        }
+
+
                     }
                 });
                 realm.close();
@@ -345,7 +356,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                txtEmail.setText(email);
+                                if (!email.equals("")) {
+                                    txtEmail.setText(email);
+                                } else {
+                                    txtEmail.setText(getResources().getString(R.string.set_email));
+                                }
+
                             }
                         });
                     }
@@ -556,37 +572,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             @Override
                             public void onUserProfileNickNameError(int majorCode, int minorCode) {
 
-                                if (majorCode == 112) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_112), Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                } else if (majorCode == 113) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_113), Snackbar.LENGTH_LONG);
-
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
                             }
                         };
                         new RequestUserProfileSetNickname().userProfileNickName(fullName);
@@ -653,37 +638,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     @Override
                     public void Error(int majorCode, int minorCode) {
-                        if (majorCode == 116 && minorCode == 1) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_116), Snackbar.LENGTH_LONG);
 
-                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
-                                }
-                            });
-                        } else if (majorCode == 117) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.E_117), Snackbar.LENGTH_LONG);
-
-                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
-                                }
-                            });
-                        }
                     }
                 };
 
@@ -691,7 +646,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        if (userEmail == null) {
+        if (userEmail == null || userEmail.equals("")) {
             txtEmail.setText(getResources().getString(R.string.set_email));
         } else {
             txtEmail.setText(userEmail);
@@ -711,7 +666,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final EditText edtEmail = new EditText(ActivitySetting.this);
                 edtEmail.setHint(getResources().getString(R.string.set_email));
 
-                if (userEmail == null) {
+                if (txtEmail == null || txtEmail.getText().toString().equals(getResources().getString(R.string.set_email))) {
                     edtEmail.setText("");
                 } else {
                     edtEmail.setText(txtEmail.getText().toString());
@@ -889,7 +844,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     @Override
                     public void afterTextChanged(Editable editable) {
-                        new RequestUserProfileCheckUsername().userProfileCheckUsername(editable.toString());
+
+                        if (HelperString.regexCheckUsername(editable.toString())) {
+                            new RequestUserProfileCheckUsername().userProfileCheckUsername(editable.toString());
+                        } else {
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("INVALID");
+                            positive.setEnabled(false);
+                        }
                     }
                 });
                 G.onUserProfileCheckUsername = new OnUserProfileCheckUsername() {

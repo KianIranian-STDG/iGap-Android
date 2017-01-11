@@ -4,6 +4,7 @@ import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -61,6 +62,9 @@ public class RealmRoom extends RealmObject {
     }
 
     public void setLastMessage(RealmRoomMessage lastMessage) {
+        if (lastMessage != null) {
+            setUpdatedTime(lastMessage.getUpdateOrCreateTime());
+        }
         this.lastMessage = lastMessage;
     }
 
@@ -112,7 +116,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getChannelRoom().setInviteLink(room.getChannelRoomExtra().getPrivateExtra().getInviteLink());
                 realmRoom.getChannelRoom().setInvite_token(room.getChannelRoomExtra().getPrivateExtra().getInviteToken());
                 realmRoom.getChannelRoom().setUsername(room.getChannelRoomExtra().getPublicExtra().getUsername());
-
+                realmRoom.getChannelRoom().setPrivate(room.getChannelRoomExtra().hasPrivateExtra());
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
@@ -128,7 +132,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getGroupRoom().setInvite_token(room.getGroupRoomExtra().getPrivateExtra().getInviteToken());
                 realmRoom.getGroupRoom().setInvite_link(room.getGroupRoomExtra().getPrivateExtra().getInviteLink());
                 realmRoom.getGroupRoom().setUsername(room.getGroupRoomExtra().getPublicExtra().getUsername());
-
+                realmRoom.getGroupRoom().setPrivate(room.getGroupRoomExtra().hasPrivateExtra());
                 break;
         }
         //realmRoom.setLastMessage(RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId()));

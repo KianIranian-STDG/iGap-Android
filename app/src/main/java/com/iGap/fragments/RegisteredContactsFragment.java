@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -53,10 +53,12 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;
@@ -95,7 +97,6 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
 
         Contacts.getListOfContact(true);
 
-
     }
 
     @Override
@@ -109,7 +110,6 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                 HelperPermision.getContactPermision(getActivity(), new OnGetPermision() {
                     @Override
                     public void Allow() throws IOException {
-                        Log.i("CCCCCCC", "fragment Allow: " + isImportContactList);
                         importContactList();
                     }
                 });
@@ -239,6 +239,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         final List<IItem> items = new ArrayList<>();
         contacts = Contacts.retrieve(null);
 
+
         if (contacts.size() == 0) {
             /**
              * if contacts size is zero send request for get contacts list
@@ -247,32 +248,38 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             G.onUserContactGetList = new OnUserContactGetList() {
                 @Override
                 public void onContactGetList() {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (contacts != null && fastAdapter != null && itemAdapter != null) {
-                                for (StructContactInfo contact : contacts) {
-                                    items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
-                                }
-                                itemAdapter.add(items);
+                    if (contacts.size() == 0) {
 
-                                //so the headers are aware of changes
-                                stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                                    @Override
-                                    public void onChanged() {
-                                        decoration.invalidateHeaders();
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                contacts = Contacts.retrieve(null);
+
+                                if (contacts != null && fastAdapter != null && itemAdapter != null) {
+                                    for (StructContactInfo contact : contacts) {
+                                        items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
                                     }
-                                });
+                                    itemAdapter.add(items);
 
-                                //restore selections (this has to be done after the items were added
-                                fastAdapter.withSavedInstanceState(savedInstanceState);
+                                    //so the headers are aware of changes
+                                    stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                                        @Override
+                                        public void onChanged() {
+                                            decoration.invalidateHeaders();
+                                        }
+                                    });
+
+                                    //restore selections (this has to be done after the items were added
+                                    fastAdapter.withSavedInstanceState(savedInstanceState);
+                                    fastAdapter.notifyDataSetChanged();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             };
-
             new RequestUserContactsGetList().userContactGetList();
+
         } else {
             for (StructContactInfo contact : contacts) {
                 items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
@@ -350,60 +357,6 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                             prgWaiting.setVisibility(View.GONE);
                         }
                     });
-
-
-                    if (majorCode == 200) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_200), Snackbar.LENGTH_LONG);
-
-                                snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    }
-                    if (majorCode == 201) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-
-                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_201), Snackbar.LENGTH_LONG);
-
-                                snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    }
-                    if (majorCode == 202) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_202), Snackbar.LENGTH_LONG);
-
-                                snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
-                            }
-                        });
-                    }
                 }
 
             };
@@ -556,121 +509,6 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             }
         });
 
-        if (majorCode == 713 && minorCode == 1) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
-
-                    snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 2) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
-
-                    snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 3) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    /*getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    prgWaiting.setVisibility(View.GONE);
-
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
-
-                    snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();*/
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 4) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
-
-                    snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 713 && minorCode == 5) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
-
-                    snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 714) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
-
-                    snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        } else if (majorCode == 715) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
-
-                    snack.setAction("CANCEL", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
-            });
-        }
     }
 
     @Override

@@ -90,9 +90,7 @@ public class Contacts {
         assert cur != null;
         if (cur.getCount() > 0) {
             while (cur.moveToNext()) {
-                StructListOfContact itemContact = new StructListOfContact();
-                itemContact.setDisplayName(
-                        cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 if (Integer.parseInt(
                         cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)))
@@ -104,11 +102,13 @@ public class Contacts {
                     assert pCur != null;
                     while (pCur.moveToNext()) {
 
-
+                        StructListOfContact itemContact = new StructListOfContact();
+                        itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                         itemContact.setPhone(pCur.getString(pCur.getColumnIndex(
                                 ContactsContract.CommonDataKinds.Phone.NUMBER)));
-
-
+                        contactList.add(itemContact);
+//                        Log.i("BBBBB", "getListOfContact: " + pCur.getString(pCur.getColumnIndex(
+//                                ContactsContract.CommonDataKinds.Phone.NUMBER)));
                         /**
                          * this part filter phone contact
                          * and get just mobile number
@@ -123,7 +123,7 @@ public class Contacts {
                     }
                     pCur.close();
                 }
-                contactList.add(itemContact);
+
             }
         }
         cur.close();

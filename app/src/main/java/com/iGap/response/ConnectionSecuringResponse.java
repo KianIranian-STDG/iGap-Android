@@ -1,16 +1,13 @@
 package com.iGap.response;
 
 import android.util.Log;
-
 import com.google.protobuf.ByteString;
 import com.iGap.AESCrypt;
 import com.iGap.G;
-import com.iGap.WebSocketClient;
 import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoConnectionSecuring;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestWrapper;
-
 import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -71,14 +68,14 @@ public class ConnectionSecuringResponse extends MessageHandler {
     @Override
     public void timeOut() {
         // disconnect socket for do securing action again
-        WebSocketClient.getInstance().disconnect();
+        //WebSocketClient.getInstance().disconnect();
         super.timeOut();
     }
 
     @Override
     public void error() {
         // disconnect socket for do securing action again
-        WebSocketClient.getInstance().disconnect();
+        //WebSocketClient.getInstance().disconnect();
         super.error();
     }
 }

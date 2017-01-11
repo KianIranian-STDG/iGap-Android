@@ -3,7 +3,6 @@ package com.iGap.helper;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.request.RequestChannelGetMessagesStats;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class HelperGetMessageState {
     /**
      * check limit and timeout for sending getMessageState
      *
-     * @param roomId    currentRoomId
+     * @param roomId currentRoomId
      * @param messageId messageId that show in view
      */
 
@@ -58,8 +57,8 @@ public class HelperGetMessageState {
                 Map.Entry<Long, Long> entry = it.next();
                 if (roomId == entry.getValue()) {
                     messageIds.add(entry.getKey());
+                    getViewsMessage.remove(entry.getKey());
                 }
-                getViewsMessage.remove(entry.getKey());
             }
             if (messageIds.size() > 0) {
                 new RequestChannelGetMessagesStats().channelGetMessagesStats(roomId, messageIds);
@@ -80,7 +79,7 @@ public class HelperGetMessageState {
      * loop for check time out for sending request get message state
      */
     private static void checkLoop() {
-        if (getViewsMessage.size() > 0 && timeOut()) {
+        if (timeOut()) { // getViewsMessage.size() > 0 &&
             sendMessageStateRequest();
         } else {
             G.handler.postDelayed(new Runnable() {

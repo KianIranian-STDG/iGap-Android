@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     >
 
 
@@ -21,7 +22,7 @@
       android:textColor="@color/white"
       android:textSize="@dimen/sp18"
       android:background="@color/iGapColor"
-      android:text="send position"
+      android:text="@string/send_position"
       />
 
 

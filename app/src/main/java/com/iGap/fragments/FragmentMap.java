@@ -4,6 +4,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,13 +27,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
+import com.iGap.helper.HelperString;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Timestamp;
-import java.util.Calendar;
 
 import static com.iGap.R.id.mf_fragment_map_view;
 
@@ -111,20 +111,30 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             btnSendPosition.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
 
-                    mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                        @Override public void onSnapshotReady(Bitmap bitmap) {
+                    try {
+                        mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                            @Override public void onSnapshotReady(Bitmap bitmap) {
 
-                            String path = saveBitmapToFile(bitmap);
+                                String path = saveBitmapToFile(bitmap);
 
-                            close();
+                                close();
 
-                            if (path.length() > 0) {
+                                if (path.length() > 0) {
 
-                                ActivityChat activity = (ActivityChat) getActivity();
-                                activity.sendPosition(latitude, longitude, path);
+                                    ActivityChat activity = (ActivityChat) getActivity();
+                                    activity.sendPosition(latitude, longitude, path);
+                                }
                             }
-                        }
-                    });
+                        });
+                    } catch (Exception e) {
+                        Log.e("ddd", "fragment map   " + e.toString());
+                        close();
+                        ActivityChat activity = (ActivityChat) getActivity();
+                        activity.sendPosition(latitude, longitude, null);
+                    }
+
+
+
                 }
             });
         } else if (mode == Mode.seePosition) {
@@ -144,7 +154,9 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     @Override public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+        final boolean[] updatePosition = { true };
 
+        //if device has not gps permision in androi 6+ return form map
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -160,28 +172,55 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
 
         if (mode == Mode.sendPosition) {
 
-            mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                @Override public void onCameraChange(CameraPosition cameraPosition) {
+            mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+                @Override public void onMyLocationChange(Location location) {
 
-                    Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
-                    Point size = new Point();
-                    display.getSize(size);
-
-                    LatLng mapCenter = mMap.getProjection().fromScreenLocation(new Point(size.x / 2, size.y / 2));
-                    latitude = mapCenter.latitude;
-                    longitude = mapCenter.longitude;
+                    updatePosition[0] = false;
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
 
                     if (marker != null) {
                         marker.remove();
                     }
 
-                    marker = mMap.addMarker(new MarkerOptions().position(mapCenter).title("position"));
+                    LatLng la = new LatLng(latitude, longitude);
+
+                    marker = mMap.addMarker(new MarkerOptions().position(la).title("position"));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 16));
+
+                    mMap.setOnMyLocationChangeListener(null);
+                }
+            });
+
+
+            mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                @Override public void onCameraChange(CameraPosition cameraPosition) {
+
+                    if (updatePosition[0]) {
+                        Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
+                        Point size = new Point();
+                        display.getSize(size);
+
+                        LatLng mapCenter = mMap.getProjection().fromScreenLocation(new Point(size.x / 2, size.y / 2));
+                        latitude = mapCenter.latitude;
+                        longitude = mapCenter.longitude;
+
+                        if (marker != null) {
+                            marker.remove();
+                        }
+
+                        marker = mMap.addMarker(new MarkerOptions().position(mapCenter).title("position"));
+                    } else {
+                        updatePosition[0] = true;
+                    }
+
                 }
             });
 
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override public void onMapClick(LatLng latLng) {
 
+                    updatePosition[0] = false;
                     latitude = latLng.latitude;
                     longitude = latLng.longitude;
 
@@ -189,17 +228,34 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                         marker.remove();
                     }
                     marker = mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                 }
             });
         }
+
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override public boolean onMyLocationButtonClick() {
+
+                Location location = mMap.getMyLocation();
+
+                updatePosition[0] = false;
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+                if (marker != null) {
+                    marker.remove();
+                }
+
+                LatLng la = new LatLng(latitude, longitude);
+
+                marker = mMap.addMarker(new MarkerOptions().position(la).title("position"));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 16));
+
+                return false;
+            }
+        });
     }
 
-    private void setDefaultMapPosition(LatLng latLng) {
-
-        CameraPosition camPos = new CameraPosition.Builder().target(latLng).zoom(16).bearing(0).tilt(0).build();
-
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camPos));
-    }
 
     //****************************************************************************************************
 
@@ -215,15 +271,11 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         try {
             if (bitmap == null) return result;
 
-            Calendar calendar = Calendar.getInstance();
-            java.util.Date now = calendar.getTime();
-            Timestamp tsTemp = new Timestamp(now.getTime());
-            String ts = tsTemp.toString();
-
-            File file = new File(G.DIR_TEMP, ts + ".jpg");
+            String fileName = "location_" + HelperString.getRandomFileName(3) + ".png";
+            File file = new File(G.DIR_TEMP, fileName);
 
             OutputStream fOut = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
 
             result = file.getPath();
         } catch (FileNotFoundException e) {
@@ -236,7 +288,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     public static void loadImageFromPosition(double latiude, double longitude, OnGetPicture listener) {
 
         String urlstr = "https://maps.googleapis.com/maps/api/staticmap?center=" + latiude + "," + longitude + "&zoom=16&size=480x240" +
-            "&maptype=roadmap&key=" + G.context.getString(R.string.google_maps_key);
+            "&markers=color:red%7Clabel:S%7C" + latiude + "," + longitude + "&maptype=roadmap&key=" + G.context.getString(R.string.google_maps_key);
 
         new DownloadImageTask(listener).execute(urlstr);
     }

@@ -3,11 +3,10 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.iGap.R;
 import com.iGap.module.StructSessionsGetActiveList;
 import com.mikepenz.fastadapter.items.AbstractItem;
-
+import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
 
 
@@ -72,5 +71,27 @@ public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessi
 
             root = (ViewGroup) view.findViewById(R.id.adph_rootLayout);
         }
+    }
+
+    //the static ViewHolderFactory which will be used to generate the ViewHolder for this Item
+    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
+
+    /**
+     * our ItemFactory implementation which creates the ViewHolder for our adapter.
+     * It is highly recommended to implement a ViewHolderFactory as it is 0-1ms faster for ViewHolder creation,
+     * and it is also many many times more efficient if you define custom listeners on views within your item.
+     */
+    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
+        public ViewHolder create(View v) {
+            return new ViewHolder(v);
+        }
+    }
+
+    /**
+     * return our ViewHolderFactory implementation here
+     */
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
+        return FACTORY;
     }
 }

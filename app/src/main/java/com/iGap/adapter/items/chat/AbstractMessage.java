@@ -109,7 +109,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         /**
          * this use for select foreground in activity chat for search item and hash item
+         *
          */
+
+        if (holder instanceof ProgressWaiting.ViewHolder) return;
+
         mMessage.view = holder.itemView;
 
         /**
@@ -336,7 +340,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE
+            || messageType == ProtoGlobal.RoomMessageType.VIDEO
+            || messageType == ProtoGlobal.RoomMessageType.GIF
+            || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
             imgTick.setColorFilter(ContextCompat.getColor(context, R.color.white));
         } else {
@@ -379,7 +386,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO ||
+            messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
             imgTick.setColorFilter(ContextCompat.getColor(context, R.color.white));
         } else {
@@ -428,7 +436,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 try {
                     AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)),
                         mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(),
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getAttachment() : mMessage.replayTo.getForwardMessage().getAttachment());
+                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -821,7 +829,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             final String fileName = mMessage.forwardedFrom.getAttachment().getToken() + "_" + mMessage.forwardedFrom.getAttachment().getName();
             final long forwardMessageID = mMessage.forwardedFrom.getMessageId();
             final ProtoGlobal.RoomMessageType forwardMessageType = mMessage.forwardedFrom.getMessageType();
-            if (progress == 100) {
+            if (progress >= 100) {
                 final Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
@@ -853,7 +861,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         } else {
             final String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
-            if (progress == 100) {
+            if (progress >= 100) {
                 final Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {

@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.R;
 import com.iGap.adapter.items.RoomItem;
@@ -22,13 +21,11 @@ import com.iGap.realm.RealmRoomFields;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-
+import io.realm.Realm;
+import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySelectChat extends ActivityEnhanced {
@@ -107,7 +104,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
         mAdapter.clear();
         Realm realm = Realm.getDefaultInstance();
         List<RoomItem> roomItems = new ArrayList<>();
-        for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.ID, Sort.DESCENDING)) {
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
             roomItems.add(new RoomItem().setInfo(realmRoom).withIdentifier(SUID.id().get()));
         }
 

@@ -3,13 +3,14 @@ package com.iGap.adapter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.adapter.items.chat.TimeItem;
+import com.iGap.helper.HelperError;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
@@ -26,11 +27,9 @@ import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-
+import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
 
 public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
     // contain sender id
@@ -46,13 +45,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
 
             if (item instanceof TimeItem) {
-                if (item.isSelected())
-                    v.performLongClick();
+                if (item.isSelected()) v.performLongClick();
             } else {
                 if (iMessageItem != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
 
-                    if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || item.mMessage.status.equalsIgnoreCase(
-                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                    if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
 
                         if (item.isSelected()) v.performLongClick();
                         return true;
@@ -193,7 +190,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             if (attachment != null) {
                 ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
                 String identity = attachment.getToken() + '*' + selector.toString() + '*' + attachment.getSize() + '*' + attachment.getToken() + "_" + attachment.getName() + '*' + offset;
-                new RequestFileDownload().download(token, offset, (int) attachment.getSize(), selector, identity);
+                if (offset >= 0) {
+                    new RequestFileDownload().download(token, offset, (int) attachment.getSize(), selector, identity);
+                } else {
+                    HelperError.getErrorFromCode(99999, 0);
+                }
             }
 
             realm.close();
@@ -256,7 +257,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     /**
      * update message text
      *
-     * @param messageId   message id
+     * @param messageId message id
      * @param updatedText new message text
      */
     public void updateMessageText(long messageId, String updatedText) {
@@ -275,13 +276,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     /**
      * update message vote
      *
-     * @param roomId
-     * @param messageId
-     * @param vote
-     * @param reaction
      * @param mainMessageId when forward message from channel to another chats , make new messageId.
-     *                      mainMessageId is new messageId that created and messageId is for message
-     *                      that forwarded to another chats
+     * mainMessageId is new messageId that created and messageId is for message
+     * that forwarded to another chats
      */
     public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction, long mainMessageId) {
         List<Item> items = getAdapterItems();
@@ -313,11 +310,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     /**
      * update message state
-     *
-     * @param messageId
-     * @param voteUp
-     * @param voteDown
-     * @param viewsLabel
      */
     public void updateMessageState(long messageId, String voteUp, String voteDown, String viewsLabel) {
         List<Item> items = getAdapterItems();
@@ -388,11 +380,14 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      * update message status
      *
      * @param messageId message id
-     * @param status    ProtoGlobal.RoomMessageStatus
+     * @param status ProtoGlobal.RoomMessageStatus
      */
     public void updateMessageStatus(long messageId, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
+            Log.i("EEE", "updateMessageStatus messageInfo : " + messageInfo);
+            Log.i("EEE", "messageInfo.mMessage : " + messageInfo.mMessage);
+            Log.i("EEE", "messageInfo.mMessage.messageID : " + messageInfo.mMessage.messageID);
             if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
                 int pos = items.indexOf(messageInfo);
                 messageInfo.mMessage.status = status.toString();
@@ -406,12 +401,16 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      * update message id and status
      *
      * @param messageId new message id
-     * @param identity  old manually defined as identity id
-     * @param status    ProtoGlobal.RoomMessageStatus
+     * @param identity old manually defined as identity id
+     * @param status ProtoGlobal.RoomMessageStatus
      */
     public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
+            Log.i("EEE", "updateMessageIdAndStatus identity : " + identity);
+            Log.i("EEE", "messageInfo : " + messageInfo);
+            Log.i("EEE", "messageInfo.mMessage : " + messageInfo.mMessage);
+            Log.i("EEE", "messageInfo.mMessage.messageID : " + messageInfo.mMessage.messageID);
             if (messageInfo.mMessage.messageID.equals(identity)) {
                 int pos = items.indexOf(messageInfo);
                 messageInfo.mMessage.status = status.toString();
@@ -420,16 +419,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 break;
             }
         }
-    }
-
-    /**
-     * update
-     *
-     * @param userId
-     */
-
-    public void updateMessageWithUserId(long userId) {
-
     }
 
     @Override

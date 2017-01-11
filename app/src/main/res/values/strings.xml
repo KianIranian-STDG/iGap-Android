@@ -167,7 +167,7 @@
     <string name="st_send_by_enter">Send by pressing Enter Key</string>
     <string name="st_title_Media">Media</string>
     <string name="st_auto_download_data">auto download (cellular data)</string>
-    <string name="st_auto_download_wifi">auto download (wifi)</string>
+    <string name="st_auto_download_wifi">auto download (Wi-Fi)</string>
     <string name="st_auto_download_roaming">auto download (roaming)</string>
     <string name="st_auto_gif">Autoplay GIFs</string>
     <string name="st_save_to_gallery">Save to Gallery</string>
@@ -264,7 +264,7 @@
     <string name="array_Voice_Message">Voice_Message</string>
     <string name="array_Video">Video</string>
     <string name="array_File">File</string>
-    <string name="array_Music">Photo</string>
+    <string name="array_Music">Music</string>
     <string name="array_GIF">GIF</string>
     <string name="array_Add_to_Contact">Add to Contact</string>
     <string name="array_Call">Call</string>
@@ -413,6 +413,7 @@
     <string name="E_218">Bad payload: Invalid roomId</string>
     <string name="E_219">Internal Server Error</string>
     <string name="E_220">This operation is not permitted.</string>
+    <string name="E_300_1">Bad payload: Invalid description</string>
     <string name="E_300_2">Bad payload: Invalid description</string>
     <string name="E_301">Internal Server Error</string>
     <string name="E_610">Bad payload</string>
@@ -514,11 +515,11 @@
     <string name="text_kick_admin">Are you sure to kick this admin?</string>
     <string name="text_kick_moderator">Are you sure to kick this moderator?</string>
     <string name="dialog_readonly_chat">Sorry, you cannot send any messages to this chat.</string>
-    <string name="to_delete_contact">to delete a contact</string>
+    <string name="to_delete_contact">Delete Contact</string>
 
     <string name="capture_image">Capture Image</string>
     <string name="capture_video">Capture Video</string>
-    <string name="set_gender">Set Gender</string>
+    <string name="set_gender">Set Gander</string>
     <string name="set_email">Set Email</string>
     <string name="delete_contact">Delete Contact</string>
     <string name="error_email">Email is wrong</string>
@@ -710,9 +711,23 @@
     <string name="delete_account_text2">other</string>
     <string name="delete_account_text3">other</string>
     <string name="delete_account_text4">other</string>
-    <string name="channel_link_revoke">Revoke</string>
+    <string name="revoke">Revoke</string>
     <string name="channel_link_title_revoke">Invite Link</string>
     <string name="channel_link_hint_revoke">Channel Invite Link</string>
+    <string name="group_link_hint_revoke">Group Invite Link</string>
     <string name="self_destructs">Self Destructs</string>
+    <string name="channel_title_convert_to_private">Convert channel to private</string>
+    <string name="channel_text_convert_to_private">Do you want Convert channel to private?</string>
+    <string name="channel_title_convert_to_public">Convert channel to public</string>
+    <string name="channel_text_convert_to_public">Do you want Convert channel to public?</string>
+    <string name="channel_title_channel_set_username">Set Username</string>
+
+    <string name="group_title_convert_to_private">Convert group to private</string>
+    <string name="group_text_convert_to_private">Do you want Convert group to private?</string>
+    <string name="group_title_convert_to_public">Convert group to public</string>
+    <string name="group_text_convert_to_public">Do you want Convert group to public?</string>
+    <string name="group_title_set_username">Set Username</string>
+    <string name="send_position">send position</string>
+
 
 </resources>

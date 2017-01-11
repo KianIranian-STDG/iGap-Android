@@ -17,6 +17,7 @@ public class RealmGroupRoom extends RealmObject {
     private RealmList<RealmMember> members;
     private String invite_link;
     private String invite_token;
+    private boolean isPrivate;
     private String username;
 
 
@@ -118,5 +119,13 @@ public class RealmGroupRoom extends RealmObject {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
     }
 }
