@@ -3,7 +3,6 @@ package com.iGap.adapter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import com.iGap.G;
@@ -387,17 +386,18 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      */
     public void updateMessageStatus(long messageId, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
-        for (Item messageInfo : items) {
-            Log.i("EEE", "updateMessageStatus messageInfo : " + messageInfo);
-            Log.i("EEE", "messageInfo.mMessage : " + messageInfo.mMessage);
-            Log.i("EEE", "messageInfo.mMessage.messageID : " + messageInfo.mMessage.messageID);
-            if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
-                int pos = items.indexOf(messageInfo);
-                messageInfo.mMessage.status = status.toString();
-                set(pos, messageInfo);
-                break;
+
+        for (int i = items.size(); i > 0; i--) {
+            Item messageInfo = items.get(i - 1);
+            if (messageInfo.mMessage != null) {
+                if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
+                    messageInfo.mMessage.status = status.toString();
+                    set(i - 1, messageInfo);
+                    break;
+                }
             }
         }
+
     }
 
     /**
@@ -409,17 +409,15 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      */
     public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
-        for (Item messageInfo : items) {
-            Log.i("EEE", "updateMessageIdAndStatus identity : " + identity);
-            Log.i("EEE", "messageInfo : " + messageInfo);
-            Log.i("EEE", "messageInfo.mMessage : " + messageInfo.mMessage);
-            Log.i("EEE", "messageInfo.mMessage.messageID : " + messageInfo.mMessage.messageID);
-            if (messageInfo.mMessage.messageID.equals(identity)) {
-                int pos = items.indexOf(messageInfo);
-                messageInfo.mMessage.status = status.toString();
-                messageInfo.mMessage.messageID = Long.toString(messageId);
-                set(pos, messageInfo);
-                break;
+        for (int i = items.size(); i > 0; i--) {
+            Item messageInfo = items.get(i - 1);
+            if (messageInfo.mMessage != null) {
+                if (messageInfo.mMessage.messageID.equals(identity)) {
+                    messageInfo.mMessage.status = status.toString();
+                    messageInfo.mMessage.messageID = Long.toString(messageId);
+                    set(i - 1, messageInfo);
+                    break;
+                }
             }
         }
     }
