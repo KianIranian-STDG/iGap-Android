@@ -3710,7 +3710,6 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
-        Log.i(ActivityChat.class.getSimpleName(), "onMessageReceive called for group");
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {

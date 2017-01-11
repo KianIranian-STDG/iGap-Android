@@ -35,8 +35,7 @@ public class ChatSendMessageResponse extends MessageHandler {
     public void handler() {
         super.handler();
         Realm realm = Realm.getDefaultInstance();
-        final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse =
-                (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
+        final ProtoChatSendMessage.ChatSendMessageResponse.Builder chatSendMessageResponse = (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
 
         final ProtoGlobal.RoomMessage roomMessage = chatSendMessageResponse.getRoomMessage();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();

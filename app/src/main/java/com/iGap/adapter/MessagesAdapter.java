@@ -385,6 +385,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public void updateMessageStatus(long messageId, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
+            Log.i("EEE", "updateMessageStatus messageInfo : " + messageInfo);
+            Log.i("EEE", "messageInfo.mMessage : " + messageInfo.mMessage);
+            Log.i("EEE", "messageInfo.mMessage.messageID : " + messageInfo.mMessage.messageID);
             if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
                 int pos = items.indexOf(messageInfo);
                 messageInfo.mMessage.status = status.toString();
@@ -404,7 +407,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
-            Log.i("EEE", "identity : " + identity);
+            Log.i("EEE", "updateMessageIdAndStatus identity : " + identity);
             Log.i("EEE", "messageInfo : " + messageInfo);
             Log.i("EEE", "messageInfo.mMessage : " + messageInfo.mMessage);
             Log.i("EEE", "messageInfo.mMessage.messageID : " + messageInfo.mMessage.messageID);
