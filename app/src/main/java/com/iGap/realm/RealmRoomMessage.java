@@ -198,7 +198,11 @@ public class RealmRoomMessage extends RealmObject {
 
         }
         if (input.hasLocation()) {
-            message.setLocation(RealmRoomMessageLocation.build(input.getLocation(), message.getLocation().getImagePath()));
+
+            Long id = null;
+            if (message.getLocation() != null) id = message.getLocation().getId();
+
+            message.setLocation(RealmRoomMessageLocation.build(input.getLocation(), id));
         }
         if (input.hasLog()) {
             message.setLog(RealmRoomMessageLog.build(input.getLog()));

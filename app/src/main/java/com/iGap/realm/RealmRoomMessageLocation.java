@@ -18,12 +18,23 @@ public class RealmRoomMessageLocation extends RealmObject {
     @PrimaryKey
     private long id;
 
-    public static RealmRoomMessageLocation build(final ProtoGlobal.RoomMessageLocation input, String picPath) {
+    public static RealmRoomMessageLocation build(final ProtoGlobal.RoomMessageLocation input, Long id) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
+
+        RealmRoomMessageLocation messageLocation = null;
+
+        if (id != null) {
+            messageLocation = realm.where(RealmRoomMessageLocation.class).equalTo(RealmRoomMessageLocationFields.ID, id).findFirst();
+        }
+
+        if (messageLocation == null) {
+            messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
+        }
+
+
         messageLocation.setLocationLat(input.getLat());
         messageLocation.setLocationLong(input.getLon());
-        messageLocation.setImagePath(picPath);
+
         realm.close();
 
         return messageLocation;
