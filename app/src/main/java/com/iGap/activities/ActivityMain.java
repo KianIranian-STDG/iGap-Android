@@ -681,37 +681,38 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         @Override
                         public void execute(Realm realm) {
                             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
+                            if (realmRoom != null && realmRoom.isLoaded() && realmRoom.isValid()) {
 
-                            if (realmRoom.getLastMessage() != null) {
-                                element.setClearId(realmRoom.getLastMessage().getMessageId());
+                                if (realmRoom.getLastMessage() != null) {
+                                    element.setClearId(realmRoom.getLastMessage().getMessageId());
 
-                                G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
-                            }
-
-                            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
-                            for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-                                if (realmRoomMessage != null) {
-                                    // delete chat history message
-                                    realmRoomMessage.deleteFromRealm();
+                                    G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
                                 }
-                            }
 
-                            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
-                            if (room != null) {
-                                room.setUnreadCount(0);
-                                room.setLastMessage(null);
-                            }
-                            // finally delete whole chat history
-                            realmRoomMessages.deleteAllFromRealm();
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (mAdapter != null) {
-                                        mAdapter.updateChat(chatId, convertToChatItem(chatId));
+                                RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
+                                for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                                    if (realmRoomMessage != null) {
+                                        // delete chat history message
+                                        realmRoomMessage.deleteFromRealm();
                                     }
                                 }
-                            });
+
+                                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
+                                if (room != null) {
+                                    room.setUnreadCount(0);
+                                    room.setLastMessage(null);
+                                }
+                                // finally delete whole chat history
+                                realmRoomMessages.deleteAllFromRealm();
+
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        if (mAdapter != null) {
+                                            mAdapter.updateChat(chatId, convertToChatItem(chatId));
+                                        }
+                                    }
+                                });
+                            }
                         }
                     });
 
