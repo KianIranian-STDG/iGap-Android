@@ -12,6 +12,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -46,6 +47,7 @@ import com.iGap.module.AppUtils;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
+import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoClientSearchRoomHistory;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
@@ -72,6 +74,7 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import org.parceler.Parcels;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -126,13 +129,19 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
+
+        if (changeListener != null) mRealmList.addChangeListener(changeListener);
+
     }
 
     @Override protected void onStop() {
         super.onStop();
 
         if (mRealmList != null) mRealmList.removeChangeListeners();
+    }
 
+    @Override protected void onDestroy() {
+        super.onDestroy();
         if (mRealm != null) mRealm.close();
     }
 
@@ -295,7 +304,24 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                Log.e("ddd", "forward");
+                ArrayList<Parcelable> messageInfos = new ArrayList<>(adapter.SelectedList.size());
+                RealmRoomMessage rm;
+
+                for (Long Id : adapter.SelectedList) {
+
+                    rm = mRealmList.where().equalTo(RealmRoomMessageFields.MESSAGE_ID, Id).findFirst();
+                    if (rm != null) {
+                        messageInfos.add(Parcels.wrap(StructMessageInfo.convert(rm)));
+                    }
+                }
+
+                Intent intent = new Intent(ActivityShearedMedia.this, ActivitySelectChat.class);
+                intent.putParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE, messageInfos);
+
+                startActivity(intent);
+
+                adapter.resetSelected();
+
             }
         });
 
@@ -305,13 +331,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                 final RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                changesize = 0;
                 if (realmRoom != null) {
                     ActivityChat.deleteSelectedMessages(roomId, adapter.SelectedList, realmRoom.getType());
                 }
                 adapter.resetSelected();
 
-                Log.e("ddd", "delete");
             }
         });
 

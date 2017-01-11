@@ -22,7 +22,7 @@
       android:textColor="@color/white"
       android:textSize="@dimen/sp18"
       android:background="@color/iGapColor"
-      android:text="send position"
+      android:text="@string/send_position"
       />
 
 

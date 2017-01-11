@@ -714,4 +714,6 @@
     <string name="channel_link_title_revoke">Invite Link</string>
     <string name="channel_link_hint_revoke">Channel Invite Link</string>
     <string name="self_destructs">Self Destructs</string>
+
+    <string name="send_position">ارسال موقعیت</string>
 </resources>

@@ -4,6 +4,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -155,6 +156,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
         final boolean[] updatePosition = { true };
 
+        //if device has not gps permision in androi 6+ return form map
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -169,6 +171,27 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
 
         if (mode == Mode.sendPosition) {
+
+            mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+                @Override public void onMyLocationChange(Location location) {
+
+                    updatePosition[0] = false;
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+
+                    if (marker != null) {
+                        marker.remove();
+                    }
+
+                    LatLng la = new LatLng(latitude, longitude);
+
+                    marker = mMap.addMarker(new MarkerOptions().position(la).title("position"));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 16));
+
+                    mMap.setOnMyLocationChangeListener(null);
+                }
+            });
+
 
             mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                 @Override public void onCameraChange(CameraPosition cameraPosition) {
@@ -209,6 +232,28 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                 }
             });
         }
+
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override public boolean onMyLocationButtonClick() {
+
+                Location location = mMap.getMyLocation();
+
+                updatePosition[0] = false;
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+                if (marker != null) {
+                    marker.remove();
+                }
+
+                LatLng la = new LatLng(latitude, longitude);
+
+                marker = mMap.addMarker(new MarkerOptions().position(la).title("position"));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 16));
+
+                return false;
+            }
+        });
     }
 
 
