@@ -28,11 +28,13 @@
 -keep class * extends com.iGap.response.MessageHandler {
     *;
 }
+###
 
-#-keepclassmembers class * extends com.iGap.response.MessageHandler {
-#   public void *;
-#}
-##########
+###Crashlytics
+-keep class com.crashlytics.** { *; }
+-keepattributes SourceFile,LineNumberTable
+###
+
 
 -keepattributes Signature,InnerClasses
 -keepclasseswithmembers class io.netty.** {
@@ -86,6 +88,10 @@
 
 -keepclassmembers class * implements android.os.Parcelable {
  public <fields>;
+}
+
+-keepnames class * implements android.os.Parcelable {
+    public static final ** CREATOR;
 }
 
 #

@@ -5,6 +5,7 @@ import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.WebSocketClient;
+import com.neovisionaries.ws.client.WebSocket;
 
 
 public class HelperError {
@@ -16,7 +17,10 @@ public class HelperError {
             case 2:
                 if (minorCode == 1) {
                     error = "Login is required to perform this action. waiting for login";
-                    WebSocketClient.getInstance().disconnect();
+                    WebSocket webSocket = WebSocketClient.getInstance();
+                    if (webSocket != null) {
+                        webSocket.disconnect();
+                    }
                 }
                 break;
 

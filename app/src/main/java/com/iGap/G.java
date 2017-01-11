@@ -157,6 +157,7 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
+import com.neovisionaries.ws.client.WebSocket;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -516,7 +517,10 @@ public class G extends MultiDexApplication {
                             Log.e("DDD", "change connectivity type");
                             latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
                             allowForReconnecting = true;
-                            WebSocketClient.getInstance().disconnect();
+                            WebSocket webSocket = WebSocketClient.getInstance();
+                            if (webSocket != null) {
+                                webSocket.disconnect();
+                            }
                         }
                     }
 

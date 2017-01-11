@@ -31,7 +31,10 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
         if (statusNumber == Config.REJECT) {
 
             G.allowForConnect = false;
-            WebSocketClient.getInstance().disconnect();
+            WebSocket webSocket = WebSocketClient.getInstance();
+            if (webSocket != null) {
+                webSocket.disconnect();
+            }
             //TODO [Saeed Mozaffari] [2016-09-06 12:30 PM] - go to upgrade page
 
         } else if (statusNumber == Config.ACCEPT) {

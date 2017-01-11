@@ -36,12 +36,15 @@ public class WebSocketClient {
             websocketFactory = new WebSocketFactory().createSocket(Config.urlWebsocket);
             websocketFactory.addListener(new WebSocketAdapter() {
 
-                @Override public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                @Override
+                public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     Log.i("SOC_WebSocket", "onConnected");
                     waitingForReconnecting = false;
                     if (G.isSecure) {
                         allowForReconnecting = true;
-                        webSocketClient.disconnect();
+                        if (webSocketClient != null) {
+                            webSocketClient.disconnect();
+                        }
                     } else {
                         G.socketConnection = true;
                         HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
@@ -50,26 +53,30 @@ public class WebSocketClient {
                     super.onConnected(websocket, headers);
                 }
 
-                @Override public void onBinaryMessage(WebSocket websocket, final byte[] binary) throws Exception {
+                @Override
+                public void onBinaryMessage(WebSocket websocket, final byte[] binary) throws Exception {
                     Log.i("SOC_WebSocket", "WebSocketClient binary : " + binary);
                     new HandleResponse(binary).run();
                     super.onBinaryMessage(websocket, binary);
                 }
 
-                @Override public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
+                @Override
+                public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                     Log.i("SOC_WebSocket", "onError");
                     reconnect();
                     super.onError(websocket, cause);
                 }
 
-                @Override public void onDisconnected(WebSocket websocket, com.neovisionaries.ws.client.WebSocketFrame serverCloseFrame, com.neovisionaries.ws.client.WebSocketFrame clientCloseFrame,
-                    boolean closedByServer) throws Exception {
+                @Override
+                public void onDisconnected(WebSocket websocket, com.neovisionaries.ws.client.WebSocketFrame serverCloseFrame, com.neovisionaries.ws.client.WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                     Log.i("SOC_WebSocketD", "onDisconnected");
+                    allowForReconnecting = true;
                     reconnect();
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                 }
 
-                @Override public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
+                @Override
+                public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                     Log.i("SOC_WebSocket", "onConnectError");
                     reconnect();
                     super.onConnectError(websocket, exception);
@@ -80,7 +87,8 @@ public class WebSocketClient {
         }
         final WebSocket finalWs = websocketFactory;
         Thread thread = new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (G.allowForConnect) {
                     try {
                         if (finalWs != null) {
@@ -159,7 +167,8 @@ public class WebSocketClient {
 
         if (webSocketClient == null || !webSocketClient.isOpen()) {
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     if (timeDifference(latestConnectionTryTiming)) {
                         allowForReconnecting = true;
                         waitingForReconnecting = false;
@@ -251,7 +260,8 @@ public class WebSocketClient {
     private static void checkFirstResponse() {
 
         Thread thread = new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 while (G.symmetricKey == null && G.socketConnection) {
 
@@ -264,16 +274,23 @@ public class WebSocketClient {
                         }
 
                         G.handler.post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 if (G.symmetricKey == null && G.socketConnection) {
                                     Log.i("SOC", "I need 30001");
-                                    WebSocketClient.getInstance().sendText("i need 30001");
+                                    WebSocket webSocket = WebSocketClient.getInstance();
+                                    if (webSocket != null) {
+                                        webSocket.sendText("i need 30001");
+                                    }
                                 }
                             }
                         });
                     } else {
                         G.allowForConnect = false;
-                        WebSocketClient.getInstance().disconnect();
+                        WebSocket webSocket = WebSocketClient.getInstance();
+                        if (webSocket != null) {
+                            webSocket.disconnect();
+                        }
                         //TODO [Saeed Mozaffari] [2016-09-06 12:31 PM] - go to upgrade page
                     }
                 }

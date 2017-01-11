@@ -21,7 +21,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -46,13 +45,11 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -421,6 +418,9 @@ public class ActivityProfile extends ActivityEnhanced
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
                 Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
+                if (data.getData() == null) {
+                    return;
+                }
                 intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "profile");

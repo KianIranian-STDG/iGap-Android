@@ -87,16 +87,17 @@ public class RequestQueue {
                     if (webSocket != null) {
                         webSocket.sendBinary(message);
                     }
-                    Log.i("SOC_REQ", "RequestQueue ********** sendRequest Secure successful **********");
                     // remove from waiting request wrappers while user logged-in and send request
                     WAITING_REQUEST_WRAPPERS.remove(requestWrapper);
                 } else {
                     // add to waiting request wrappers while user not logged-in yet
                     WAITING_REQUEST_WRAPPERS.add(requestWrapper);
-                    Log.i("SOC_REQ", "RequestQueue ********** sendRequest Secure successful **********");
                 }
             } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
-                WebSocketClient.getInstance().sendBinary(message);
+                WebSocket webSocket = WebSocketClient.getInstance();
+                if (webSocket != null) {
+                    webSocket.sendBinary(message);
+                }
                 Log.i("SOC_REQ", "RequestQueue ********** sendRequest unSecure successful **********");
             }
             Log.i("WWW", "requestWrapper.actionId : " + requestWrapper.actionId);

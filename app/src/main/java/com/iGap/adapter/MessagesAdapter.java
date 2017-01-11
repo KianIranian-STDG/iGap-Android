@@ -118,6 +118,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     }
 
     public static boolean hasUploadRequested(long messageId) {
+        if (uploading == null) {
+            return false;
+        }
         return uploading.containsKey(messageId);
     }
 
