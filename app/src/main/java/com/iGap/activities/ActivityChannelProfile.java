@@ -38,6 +38,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -125,14 +126,16 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -179,6 +182,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private String linkUsername;
     private boolean isSignature;
     private TextView txtLinkTitle;
+    private boolean isPopup = false;
 
     @Override
     protected void onResume() {
@@ -562,11 +566,12 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public void onClick(View view) {
 
+                isPopup = false;
                 if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
                     if (isPrivate) {
                         dialogRevoke();
                     } else {
-                        editUsername();
+                        setUsername();
                     }
                 } else {
                     dialogCopyLink();
@@ -739,7 +744,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         final MaterialDialog dialog =
                 new MaterialDialog.Builder(ActivityChannelProfile.this)
                         .title(getResources().getString(R.string.channel_link_title_revoke))
-                        .positiveText(getResources().getString(R.string.channel_link_revoke))
+                        .positiveText(getResources().getString(R.string.revoke))
                         .customView(layoutRevoke, true)
                         .widgetColor(getResources().getColor(R.color.toolbar_background))
                         .negativeText(getResources().getString(R.string.B_cancel))
@@ -2158,6 +2163,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         TextView text3 = new TextView(ActivityChannelProfile.this);
         text3.setTextColor(getResources().getColor(android.R.color.black));
 
+
         if (isPrivate) {
             text3.setText(getResources().getString(R.string.channel_title_convert_to_public));
         } else {
@@ -2200,6 +2206,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         text3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                isPopup = true;
 
                 if (isPrivate) {
                     convertToPublic();
@@ -2287,7 +2295,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
         final EditText edtUserName = new EditText(ActivityChannelProfile.this);
         edtUserName.setHint(getResources().getString(R.string.channel_title_channel_set_username));
-        edtUserName.setText("iGap.net/");
+
+        if (isPopup) {
+            edtUserName.setText("iGap.net/");
+        } else {
+            edtUserName.setText("" + linkUsername);
+        }
+
         edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
         edtUserName.setPadding(0, 8, 0, 8);
@@ -2406,7 +2420,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                             public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                 RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                realmChannelRoom.setUsername(edtUserName.getText().toString());
+                                realmChannelRoom.setUsername("iGap.net" + edtUserName.getText().toString());
                                 realmChannelRoom.setPrivate(false);
                             }
                         });

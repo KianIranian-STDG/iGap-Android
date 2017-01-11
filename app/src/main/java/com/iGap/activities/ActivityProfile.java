@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -96,10 +97,10 @@ public class ActivityProfile extends ActivityEnhanced
         G.uploaderUtil.setActivityCallbacks(this);
         G.onUserAvatarResponse = this;
 
-        txtTitle = (TextView) findViewById(R.id.rg_txt_titleToolbar);
 
         txtTitle = (TextView) findViewById(R.id.pu_titleToolbar);
-        txtTitle.setTypeface(G.FONT_IGAP);
+        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        txtTitle.setTypeface(type);
 
         final View lineEditText = findViewById(R.id.pu_line_below_editText);
         btnSetImage = (com.iGap.module.CircleImageView) findViewById(R.id.pu_profile_circle_image);

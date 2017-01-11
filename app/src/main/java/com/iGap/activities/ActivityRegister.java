@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -65,11 +67,13 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-import io.realm.Realm;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
@@ -155,8 +159,6 @@ public class ActivityRegister extends ActivityEnhanced {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
 
@@ -194,14 +196,14 @@ public class ActivityRegister extends ActivityEnhanced {
                 }
             }
         }
-
         int getHeight = G.context.getResources().getDisplayMetrics().heightPixels;
 
         txtTitleRegister = (TextView) findViewById(R.id.rg_txt_title_register);
         txtDesc = (TextView) findViewById(R.id.rg_txt_text_descRegister);
 
         txtTitleToolbar = (TextView) findViewById(R.id.rg_txt_titleToolbar);
-        txtTitleToolbar.setTypeface(G.FONT_IGAP);
+        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        txtTitleToolbar.setTypeface(type);
 
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
@@ -212,7 +214,6 @@ public class ActivityRegister extends ActivityEnhanced {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equals("0")) {

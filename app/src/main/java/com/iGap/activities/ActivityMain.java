@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -101,15 +102,18 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.iGap.G.context;
 import static com.iGap.R.string.updating;
 
 public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar {
@@ -157,7 +161,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         mTracker.setScreenName("RoomList");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
-        G.saveLogcatToFile(G.context);
+        G.saveLogcatToFile(context);
 
         HelperGetDataFromOtherApp getShearedData = new HelperGetDataFromOtherApp(getIntent());
 
@@ -383,8 +387,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         });
 
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
+        final Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
 
-        txtIgap.setTypeface(null, Typeface.BOLD);
+        txtIgap.setTypeface(type, Typeface.BOLD);
         if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
             txtIgap.setText(R.string.waiting_for_network);
         } else if (G.connectionState == Config.ConnectionState.CONNECTING) {
@@ -410,6 +415,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             txtIgap.setText(updating);
                         } else {
                             txtIgap.setText(R.string.igap);
+                            txtIgap.setTypeface(type, Typeface.BOLD);
                         }
                     }
                 });

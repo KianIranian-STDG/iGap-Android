@@ -27,6 +27,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -54,6 +55,7 @@ import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
@@ -65,6 +67,7 @@ import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.interfaces.OnGroupAddModerator;
 import com.iGap.interfaces.OnGroupAvatarDelete;
 import com.iGap.interfaces.OnGroupAvatarResponse;
+import com.iGap.interfaces.OnGroupCheckUsername;
 import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupEdit;
 import com.iGap.interfaces.OnGroupGetMemberList;
@@ -72,7 +75,9 @@ import com.iGap.interfaces.OnGroupKickAdmin;
 import com.iGap.interfaces.OnGroupKickMember;
 import com.iGap.interfaces.OnGroupKickModerator;
 import com.iGap.interfaces.OnGroupLeft;
+import com.iGap.interfaces.OnGroupRemoveUsername;
 import com.iGap.interfaces.OnGroupRevokeLink;
+import com.iGap.interfaces.OnGroupUpdateUsername;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -88,6 +93,7 @@ import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoGroupCheckUsername;
 import com.iGap.proto.ProtoGroupGetMemberList;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
@@ -105,6 +111,7 @@ import com.iGap.request.RequestGroupAddAdmin;
 import com.iGap.request.RequestGroupAddMember;
 import com.iGap.request.RequestGroupAddModerator;
 import com.iGap.request.RequestGroupAvatarAdd;
+import com.iGap.request.RequestGroupCheckUsername;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupEdit;
 import com.iGap.request.RequestGroupGetMemberList;
@@ -112,7 +119,9 @@ import com.iGap.request.RequestGroupKickAdmin;
 import com.iGap.request.RequestGroupKickMember;
 import com.iGap.request.RequestGroupKickModerator;
 import com.iGap.request.RequestGroupLeft;
+import com.iGap.request.RequestGroupRemoveUsername;
 import com.iGap.request.RequestGroupRevokeLink;
+import com.iGap.request.RequestGroupUpdateUsername;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.AbstractAdapter;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -173,7 +182,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private String title;
     private String description;
     private String initials;
-    private String link;
+    private String inviteLink;
+    private String linkUsername;
     private String color;
     private GroupChatRole role;
     private long noLastMessage;
@@ -181,6 +191,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private RealmList<RealmMember> members;
     public static OnMenuClick onMenuClick;
     private Long userID = 0l;
+    private boolean isPrivate;
+    private TextView txtLinkTitle;
+    private TextView txtGroupLink;
+    private boolean isPopup = false;
 
     private long startMessageId = 0;
 
@@ -213,7 +227,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         initials = realmRoom.getInitials();
         color = realmRoom.getColor();
         role = realmGroupRoom.getRole();
-        link = realmGroupRoom.getInvite_link();
+        inviteLink = realmGroupRoom.getInvite_link();
+        linkUsername = realmGroupRoom.getUsername();
+        isPrivate = realmGroupRoom.isPrivate();
+
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -334,30 +351,40 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
                 //TextView text1 = new TextView(ActivityGroupProfile.this);
                 TextView text2 = new TextView(ActivityGroupProfile.this);
-//                TextView text3 = new TextView(ActivityGroupProfile.this);
+                TextView text3 = new TextView(ActivityGroupProfile.this);
 
                 //text1.setTextColor(getResources().getColor(android.R.color.black));
                 text2.setTextColor(getResources().getColor(android.R.color.black));
-//                text3.setTextColor(getResources().getColor(android.R.color.black));
+                text3.setTextColor(getResources().getColor(android.R.color.black));
 
                 //text1.setText(getResources().getString(R.string.Search));
                 text2.setText(getResources().getString(R.string.clear_history));
-//                text3.setText(getResources().getString(R.string.to_delete_chat));
+                if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+                    text3.setVisibility(View.VISIBLE);
+                    if (isPrivate) {
+                        text3.setText(getResources().getString(R.string.group_title_convert_to_public));
+                    } else {
+                        text3.setText(getResources().getString(R.string.group_title_convert_to_private));
+                    }
+                } else {
+                    text3.setVisibility(View.GONE);
+                }
+
 
                 int dim20 = (int) getResources().getDimension(R.dimen.dp20);
                 int dim12 = (int) getResources().getDimension(R.dimen.dp12);
 
                 //text1.setTextSize(16);
                 text2.setTextSize(16);
-//                text3.setTextSize(16);
+                text3.setTextSize(16);
 
                 //text1.setPadding(dim20, dim12, dim12, dim20);
                 text2.setPadding(dim20, dim12, dim12, dim12);
-//                text3.setPadding(dim20, 0, dim12, dim20);
+                text3.setPadding(dim20, 0, dim12, dim20);
 
                 //layoutDialog.addView(text1, params);
                 layoutDialog.addView(text2, params);
-//                layoutDialog.addView(text3, params);
+                layoutDialog.addView(text3, params);
 
                 popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 popupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -404,6 +431,21 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                 .negativeText(R.string.B_cancel)
                                 .show();
 
+                        popupWindow.dismiss();
+                    }
+                });
+
+                text3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        isPopup = true;
+
+                        if (isPrivate) {
+                            convertToPublic();
+                        } else {
+                            convertToPrivate();
+                        }
                         popupWindow.dismiss();
                     }
                 });
@@ -636,44 +678,59 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         txtMemberNumber.setText(participantsCountLabel);
 
-        final TextView txtLinkTitle = (TextView) findViewById(R.id.agp_txt_link_title);
-        final TextView txtGroupLink = (TextView) findViewById(R.id.agp_txt_link);
-        txtGroupLink.setText(link);
+        txtLinkTitle = (TextView) findViewById(R.id.agp_txt_link_title);
+        txtGroupLink = (TextView) findViewById(R.id.agp_txt_link);
+
+
+        setTextGroupLik();
 
         ViewGroup ltLink = (ViewGroup) findViewById(R.id.agp_ll_link);
         ltLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, txtLinkTitle);
-                //Inflating the Popup using xml file
-                popup.getMenuInflater()
-                        .inflate(R.menu.menu_item_group_link_profile, popup.getMenu());
+                isPopup = false;
 
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-
-                        switch (item.getItemId()) {
-                            case R.id.menu_group_link_copy:
-                                String copy;
-                                copy = txtGroupLink.getText().toString();
-                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                                clipboard.setPrimaryClip(clip);
-
-                                break;
-                            case R.id.menu_group_link_revoke:
-                                showProgressBar();
-                                new RequestGroupRevokeLink().groupRevokeLink(roomId);
-                                break;
-                        }
-
-                        return true;
+                if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+                    if (isPrivate) {
+                        dialogRevoke();
+                    } else {
+                        setUsername();
                     }
-                });
+                } else {
+                    dialogCopyLink();
+                }
 
-                popup.show(); //
+
+//                final PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, txtLinkTitle);
+//                //Inflating the Popup using xml file
+//                popup.getMenuInflater()
+//                        .inflate(R.menu.menu_item_group_link_profile, popup.getMenu());
+//
+//                //registering popup with OnMenuItemClickListener
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    public boolean onMenuItemClick(MenuItem item) {
+//
+//                        switch (item.getItemId()) {
+//                            case R.id.menu_group_link_copy:
+//                                String copy;
+//                                copy = txtGroupLink.getText().toString();
+//                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+//                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+//                                clipboard.setPrimaryClip(clip);
+//
+//                                break;
+//                            case R.id.menu_group_link_revoke:
+//                                showProgressBar();
+//                                new RequestGroupRevokeLink().groupRevokeLink(roomId);
+//                                break;
+//                        }
+//
+//                        return true;
+//                    }
+//                });
+//
+//                popup.show(); //
             }
         });
 
@@ -727,6 +784,542 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         onGroupAddModeratorCallback();
         onGroupKickModeratorCallback();
     }
+
+    private void dialogCopyLink() {
+
+        String link = txtGroupLink.getText().toString();
+
+        final LinearLayout layoutGroupLink = new LinearLayout(ActivityGroupProfile.this);
+        layoutGroupLink.setOrientation(LinearLayout.VERTICAL);
+
+        final View viewRevoke = new View(ActivityGroupProfile.this);
+        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        final TextInputLayout inputGroupLink = new TextInputLayout(ActivityGroupProfile.this);
+        EditText edtLink = new EditText(ActivityGroupProfile.this);
+        edtLink.setHint(getResources().getString(R.string.group_link_hint_revoke));
+        edtLink.setText(link);
+        edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
+        edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtLink.setPadding(0, 8, 0, 8);
+        edtLink.setEnabled(false);
+        edtLink.setSingleLine(true);
+        inputGroupLink.addView(edtLink);
+        inputGroupLink.addView(viewRevoke, viewParams);
+
+        viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            edtLink.setBackground(getResources().getDrawable(android.R.color.transparent));
+        }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutGroupLink.addView(inputGroupLink, layoutParams);
+
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(ActivityGroupProfile.this)
+                        .title(getResources().getString(R.string.group_link))
+                        .positiveText(getResources().getString(R.string.array_Copy))
+                        .customView(layoutGroupLink, true)
+                        .widgetColor(getResources().getColor(R.color.toolbar_background))
+                        .negativeText(getResources().getString(R.string.B_cancel))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                String copy;
+                                copy = txtGroupLink.getText().toString();
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                                clipboard.setPrimaryClip(clip);
+                            }
+                        })
+                        .build();
+
+        dialog.show();
+
+    }
+
+    /**
+     * is repeat
+     */
+
+//    private void editUsername() {
+//        final LinearLayout layoutUserName = new LinearLayout(ActivityGroupProfile.this);
+//        layoutUserName.setOrientation(LinearLayout.VERTICAL);
+//
+//        final View viewUserName = new View(ActivityGroupProfile.this);
+//        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+//
+//        final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
+//        final EditText edtUserName = new EditText(ActivityGroupProfile.this);
+//        edtUserName.setHint(getResources().getString(R.string.st_username));
+//        edtUserName.setText(linkUsername);
+//        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
+//        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+//        edtUserName.setPadding(0, 8, 0, 8);
+//        edtUserName.setSingleLine(true);
+//        inputUserName.addView(edtUserName);
+//        inputUserName.addView(viewUserName, viewParams);
+//
+//        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
+//        }
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//
+//        layoutUserName.addView(inputUserName, layoutParams);
+//
+//        final MaterialDialog dialog =
+//                new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
+//                        .customView(layoutUserName, true)
+//                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
+//                        .build();
+//
+//        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+//        positive.setEnabled(false);
+//
+//        final String finalUserName = inviteLink;
+//        edtUserName.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                if (!editable.toString().contains("iGap.net/")) {
+//                    edtUserName.setText("iGap.net/");
+//                    Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
+//                }
+//
+//                if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
+//                    String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+//                    new RequestGroupCheckUsername().GroupCheckUsername(roomId,userName);
+//
+//                } else {
+//                    positive.setEnabled(false);
+//                    inputUserName.setErrorEnabled(true);
+//                    inputUserName.setError("INVALID");
+//                }
+//
+//
+//            }
+//        });
+//
+//        G.onGroupCheckUsername = new OnGroupCheckUsername() {
+//            @Override
+//            public void onGroupCheckUsername(final ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status status) {
+//                G.handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.AVAILABLE) {
+//
+//                            if (!edtUserName.getText().toString().equals(finalUserName)) {
+//                                positive.setEnabled(true);
+//                            } else {
+//                                positive.setEnabled(false);
+//                            }
+//                            inputUserName.setErrorEnabled(true);
+//                            inputUserName.setError("");
+//
+//
+//                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.INVALID) {
+//                            positive.setEnabled(false);
+//                            inputUserName.setErrorEnabled(true);
+//                            inputUserName.setError("INVALID");
+//
+//                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.TAKEN) {
+//                            inputUserName.setErrorEnabled(true);
+//                            inputUserName.setError("TAKEN");
+//                            positive.setEnabled(false);
+//                        }
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onError(int majorCode, int minorCode) {
+//
+//            }
+//        };
+//
+//        G.onGroupUpdateUsername = new OnGroupUpdateUsername() {
+//            @Override
+//            public void onGroupUpdateUsername(final long roomId, final String username) {
+//                G.handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        txtGroupLink.setText("iGap.net/" + username);
+//
+//                        Realm realm = Realm.getDefaultInstance();
+//                        realm.executeTransaction(new Realm.Transaction() {
+//                            @Override
+//                            public void execute(Realm realm) {
+//                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+//                                realmRoom.getGroupRoom().setUsername(username);
+//                            }
+//                        });
+//
+//                        realm.close();
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onError(int majorCode, int minorCode) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+//
+//                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                snack.dismiss();
+//                            }
+//                        });
+//                        snack.show();
+//                    }
+//                });
+//            }
+//        };
+//
+//
+//        positive.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                new RequestGroupUpdateUsername().groupUpdateUsername(roomId, edtUserName.getText().toString());
+//                dialog.dismiss();
+//            }
+//        });
+//
+//
+//        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                if (b) {
+//                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+//                } else {
+//                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+//                }
+//            }
+//        });
+//
+//        // check each word with server
+//
+//        dialog.show();
+//    }
+    private void dialogRevoke() {
+
+        String link = txtGroupLink.getText().toString();
+
+        final LinearLayout layoutRevoke = new LinearLayout(ActivityGroupProfile.this);
+        layoutRevoke.setOrientation(LinearLayout.VERTICAL);
+
+        final View viewRevoke = new View(ActivityGroupProfile.this);
+        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        final TextInputLayout inputRevoke = new TextInputLayout(ActivityGroupProfile.this);
+        EditText edtRevoke = new EditText(ActivityGroupProfile.this);
+        edtRevoke.setHint(getResources().getString(R.string.group_link_hint_revoke));
+        edtRevoke.setText(link);
+        edtRevoke.setTextColor(getResources().getColor(R.color.text_edit_text));
+        edtRevoke.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtRevoke.setPadding(0, 8, 0, 8);
+        edtRevoke.setEnabled(false);
+        edtRevoke.setSingleLine(true);
+        inputRevoke.addView(edtRevoke);
+        inputRevoke.addView(viewRevoke, viewParams);
+
+        viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            edtRevoke.setBackground(getResources().getDrawable(android.R.color.transparent));
+        }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutRevoke.addView(inputRevoke, layoutParams);
+
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(ActivityGroupProfile.this)
+                        .title(getResources().getString(R.string.group_link_hint_revoke))
+                        .positiveText(getResources().getString(R.string.revoke))
+                        .customView(layoutRevoke, true)
+                        .widgetColor(getResources().getColor(R.color.toolbar_background))
+                        .negativeText(getResources().getString(R.string.B_cancel))
+                        .neutralText(R.string.array_Copy)
+                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                String copy;
+                                copy = txtGroupLink.getText().toString();
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                                clipboard.setPrimaryClip(clip);
+                            }
+                        })
+                        .build();
+
+        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+        positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new RequestGroupRevokeLink().groupRevokeLink(roomId);
+            }
+        });
+        dialog.show();
+    }
+
+    private void convertToPrivate() {
+
+        G.onGroupRemoveUsername = new OnGroupRemoveUsername() {
+            @Override
+            public void onGroupRemoveUsername(final long roomId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        isPrivate = true;
+                        setTextGroupLik();
+                        Realm realm = Realm.getDefaultInstance();
+
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                realmRoom.getGroupRoom().setPrivate(true);
+
+                            }
+                        });
+                        realm.close();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+        };
+
+
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_private))
+                .content(getString(R.string.group_text_convert_to_private))
+                .positiveText(R.string.B_ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        new RequestGroupRemoveUsername().groupRemoveUsername(roomId);
+
+                    }
+                })
+                .negativeText(R.string.B_cancel)
+                .show();
+    }
+
+    private void setTextGroupLik() {
+
+        if (isPrivate) {
+            txtGroupLink.setText("" + inviteLink);
+            txtLinkTitle.setText(getResources().getString(R.string.group_link));
+
+        } else {
+            txtGroupLink.setText("" + linkUsername);
+            txtLinkTitle.setText(getResources().getString(R.string.st_username));
+        }
+    }
+
+    private void convertToPublic() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_public))
+                .content(getString(R.string.group_text_convert_to_public))
+                .positiveText(R.string.B_ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        dialog.dismiss();
+                        setUsername();
+
+                    }
+                })
+                .negativeText(R.string.B_cancel)
+                .show();
+    }
+
+    private void setUsername() {
+        final LinearLayout layoutUserName = new LinearLayout(ActivityGroupProfile.this);
+        layoutUserName.setOrientation(LinearLayout.VERTICAL);
+
+        final View viewUserName = new View(ActivityGroupProfile.this);
+        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
+        final EditText edtUserName = new EditText(ActivityGroupProfile.this);
+        edtUserName.setHint(getResources().getString(R.string.group_title_set_username));
+
+        if (isPopup) {
+            edtUserName.setText("iGap.net/");
+        } else {
+            edtUserName.setText("" + linkUsername);
+        }
+
+        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
+        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtUserName.setPadding(0, 8, 0, 8);
+        edtUserName.setSingleLine(true);
+        inputUserName.addView(edtUserName);
+        inputUserName.addView(viewUserName, viewParams);
+
+        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
+        }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutUserName.addView(inputUserName, layoutParams);
+
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
+                        .customView(layoutUserName, true)
+                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
+                        .build();
+
+        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+        positive.setEnabled(false);
+
+        G.onGroupCheckUsername = new OnGroupCheckUsername() {
+            @Override
+            public void onGroupCheckUsername(final ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status status) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.AVAILABLE) {
+
+                            positive.setEnabled(true);
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("");
+                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.INVALID) {
+                            positive.setEnabled(false);
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("INVALID");
+
+                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.TAKEN) {
+                            positive.setEnabled(false);
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("TAKEN");
+                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.OCCUPYING_LIMIT_EXCEEDED) {
+                            positive.setEnabled(false);
+                            inputUserName.setErrorEnabled(true);
+                            inputUserName.setError("OCCUPYING LIMIT EXCEEDED");
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+        };
+
+        edtUserName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if (!editable.toString().contains("iGap.net/")) {
+                    edtUserName.setText("iGap.net/");
+                    Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
+                }
+
+                if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
+                    String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+                    new RequestGroupCheckUsername().GroupCheckUsername(roomId, userName);
+
+
+                } else {
+                    positive.setEnabled(false);
+                    inputUserName.setErrorEnabled(true);
+                    inputUserName.setError("INVALID");
+                }
+            }
+        });
+
+        G.onGroupUpdateUsername = new OnGroupUpdateUsername() {
+            @Override
+            public void onGroupUpdateUsername(final long roomId, String username) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        isPrivate = false;
+                        dialog.dismiss();
+
+                        linkUsername = edtUserName.getText().toString();
+                        setTextGroupLik();
+
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+                                realmRoom.getGroupRoom().setUsername("iGap.net" + edtUserName.getText().toString());
+                                realmRoom.getGroupRoom().setPrivate(false);
+
+                            }
+                        });
+                        realm.close();
+
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+        };
+
+
+        positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+                new RequestGroupUpdateUsername().groupUpdateUsername(roomId, userName);
+            }
+        });
+
+
+        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                } else {
+                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
+
+        // check each word with server
+
+        dialog.show();
+    }
+
 
     private void getMemberList() {
 
@@ -911,7 +1504,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             }
 
                             finish();
-                            if (ActivityChat.activityChat != null) ActivityChat.activityChat.finish();
+                            if (ActivityChat.activityChat != null)
+                                ActivityChat.activityChat.finish();
 
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -1044,6 +1638,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 s.color = realmRegisteredInfo.getColor();
                 s.lastSeen = realmRegisteredInfo.getLastSeen();
                 s.status = realmRegisteredInfo.getStatus();
+
+                Log.i("NNNNNN", "fillItem: " + s.status);
 
                 if (s.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                     contacts.add(0, s);
@@ -1591,137 +2187,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void ChangeGroupName() {
 
-//        MaterialDialog dialog =
-//                new MaterialDialog.Builder(ActivityGroupProfile.this)
-//                        .title(R.string.group_name)
-//                        .positiveText(R.string.save)
-//                        .alwaysCallInputCallback()
-//                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-//                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                            @Override
-//                            public void onClick(@NonNull MaterialDialog dialog,
-//                                                @NonNull DialogAction which) {
-//
-//                                G.onGroupEdit = new OnGroupEdit() {
-//                                    @Override
-//                                    public void onGroupEdit(final long roomId, final String name,
-//                                                            final String description) {
-//
-//                                        runOnUiThread(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//
-//                                                title = name;
-//                                                txtGroupNameTitle.setText(name);
-//                                                txtGroupName.setText(name);
-//                                            }
-//                                        });
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(int majorCode, int minorCode) {
-//
-//                                        if (majorCode == 330 && minorCode == 1) {
-//                                            runOnUiThread(new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//                                                    final Snackbar snack =
-//                                                            Snackbar.make(findViewById(android.R.id.content),
-//                                                                    getResources().getString(R.string.E_330_1),
-//                                                                    Snackbar.LENGTH_LONG);
-//
-//                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-//                                                        @Override
-//                                                        public void onClick(View view) {
-//                                                            snack.dismiss();
-//                                                        }
-//                                                    });
-//                                                    snack.show();
-//                                                }
-//                                            });
-//                                        } else if (majorCode == 330 && minorCode == 2) {
-//                                            runOnUiThread(new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//                                                    final Snackbar snack =
-//                                                            Snackbar.make(findViewById(android.R.id.content),
-//                                                                    getResources().getString(R.string.E_330_2),
-//                                                                    Snackbar.LENGTH_LONG);
-//
-//                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-//                                                        @Override
-//                                                        public void onClick(View view) {
-//                                                            snack.dismiss();
-//                                                        }
-//                                                    });
-//                                                    snack.show();
-//                                                }
-//                                            });
-//                                        } else if (majorCode == 330 && minorCode == 3) {
-//                                            runOnUiThread(new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//                                                    final Snackbar snack =
-//                                                            Snackbar.make(findViewById(android.R.id.content),
-//                                                                    getResources().getString(R.string.E_330_3),
-//                                                                    Snackbar.LENGTH_LONG);
-//
-//                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-//                                                        @Override
-//                                                        public void onClick(View view) {
-//                                                            snack.dismiss();
-//                                                        }
-//                                                    });
-//                                                    snack.show();
-//                                                }
-//                                            });
-//                                        } else if (majorCode == 331) {
-//                                            runOnUiThread(new Runnable() {
-//                                                @Override
-//                                                public void run() {
-//                                                    final Snackbar snack =
-//                                                            Snackbar.make(findViewById(android.R.id.content),
-//                                                                    getResources().getString(R.string.E_331),
-//                                                                    Snackbar.LENGTH_LONG);
-//
-//                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-//                                                        @Override
-//                                                        public void onClick(View view) {
-//                                                            snack.dismiss();
-//                                                        }
-//                                                    });
-//                                                    snack.show();
-//                                                }
-//                                            });
-//                                        }
-//                                    }
-//                                };
-//
-//                                new RequestGroupEdit().groupEdit(roomId, tmp,
-//                                        txtGroupDescription.getText().toString());
-//                            }
-//                        })
-//                        .negativeText(getString(R.string.cancel))
-//                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-//                        .input(getString(R.string.please_enter_group_name),
-//                                txtGroupName.getText().toString(), new MaterialDialog.InputCallback() {
-//                                    @Override
-//                                    public void onInput(MaterialDialog dialog, CharSequence input) {
-//                                        // Do something
-//
-//                                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
-//                                        tmp = input.toString();
-//                                        if (!input.toString().equals(txtGroupName.getText().toString())) {
-//
-//                                            positive.setClickable(true);
-//                                            positive.setAlpha(1.0f);
-//                                        } else {
-//                                            positive.setClickable(false);
-//                                            positive.setAlpha(0.5f);
-//                                        }
-//                                    }
-//                                })
-//                        .show();
 
         final LinearLayout layoutUserName = new LinearLayout(ActivityGroupProfile.this);
         layoutUserName.setOrientation(LinearLayout.VERTICAL);
@@ -1750,7 +2215,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         final MaterialDialog dialog =
                 new MaterialDialog.Builder(ActivityGroupProfile.this)
-                        .title(getResources().getString(R.string.channel_name))
+                        .title(getResources().getString(R.string.group_name))
                         .positiveText(getResources().getString(R.string.save))
                         .customView(layoutUserName, true)
                         .widgetColor(getResources().getColor(R.color.toolbar_background))
