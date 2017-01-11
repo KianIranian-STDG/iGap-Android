@@ -26,7 +26,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -102,15 +101,13 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -625,7 +622,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 }
 
                 for (ProtoGlobal.Room room : rooms) {
-                    Log.e("ddd", room.getTitle() + "   " + room.getLastMessage().getUpdateTime());
                     RealmRoom.putOrUpdate(room);
                 }
 
@@ -639,14 +635,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-
-
                 List<RoomItem> roomItems = new ArrayList<>();
-
                 for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
                     roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
                 }
-
                 mAdapter.add(roomItems);
             }
         });

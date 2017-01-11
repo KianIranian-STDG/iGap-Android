@@ -147,7 +147,6 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
 import com.iGap.module.enums.ConnectionMode;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
@@ -432,11 +431,6 @@ public class G extends MultiDexApplication {
     }
 
     public static void getUserInfo() {
-        //TODO [Saeed Mozaffari] [2016-10-15 1:51 PM] - nabayad har bar etella'ate khodam ro
-        // begiram. agar ham digar account taghiri dadae bashe response hamun zaman miayad va man
-        // ba accountam yeki misham
-        //TODO [Saeed Mozaffari] [2016-10-15 1:52 PM] - bayad zamani ke register kardam userInfo
-        // ro begiram , fekr nemikonam ke deige niaz be har bar gereftan bashe
         Realm realm = Realm.getDefaultInstance();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         realm.close();
@@ -450,29 +444,7 @@ public class G extends MultiDexApplication {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmAvatar avatar = RealmAvatar.put(user.getId(), user.getAvatar(), true);
-
                             RealmRegisteredInfo.putOrUpdate(user);
-
-                            /*if (G.onChangeUserPhotoListener != null) {
-                                G.onChangeUserPhotoListener.onChangeInitials(user.getInitials(), user.getColor());
-                            }
-*/
-                            /*if (avatar != null && avatar.isValid()) {
-                                if (!avatar.getFile().isFileExistsOnLocal() && !avatar.getFile().isThumbnailExistsOnLocal()) {
-                                    requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
-                                } else {
-                                    if (avatar.getFile().isFileExistsOnLocal()) {
-                                        if (G.onChangeUserPhotoListener != null) {
-                                            G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalFilePath());
-                                        }
-                                    } else if (avatar.getFile().isThumbnailExistsOnLocal()) {
-                                        if (G.onChangeUserPhotoListener != null) {
-                                            G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalThumbnailPath());
-                                        }
-                                    }
-                                }
-                            }*/
                         }
                     });
 

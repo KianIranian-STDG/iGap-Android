@@ -38,6 +38,7 @@ public class WebSocketClient {
 
                 @Override public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     Log.i("SOC_WebSocket", "onConnected");
+                    waitingForReconnecting = false;
                     if (G.isSecure) {
                         allowForReconnecting = true;
                         webSocketClient.disconnect();
