@@ -6,11 +6,9 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
 import com.iGap.request.RequestChatSetAction;
 import com.iGap.request.RequestGroupSetAction;
-
+import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-
-import io.realm.Realm;
 
 public class HelperSetAction {
 
@@ -57,6 +55,7 @@ public class HelperSetAction {
             for (int i = structActions.size() - 1; i >= 0; i--) {
                 StructAction action = structActions.get(i);
                 if (action.action == ProtoGlobal.ClientAction.TYPING) {
+                    removeStruct(action.randomKey);
                     if (action.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
                         new RequestGroupSetAction().groupSetAction(roomId, ProtoGlobal.ClientAction.CANCEL, action.randomKey);
                         break;
@@ -72,9 +71,9 @@ public class HelperSetAction {
     /**
      * set action for showing audience action
      *
-     * @param roomId    roomId that send action from that
+     * @param roomId roomId that send action from that
      * @param messageId unique number that we have in start upload and end of that
-     * @param action    action that doing
+     * @param action action that doing
      */
 
     public static void setActionFiles(long roomId, long messageId, ProtoGlobal.ClientAction action, ProtoGlobal.Room.Type chatType) {
@@ -150,7 +149,6 @@ public class HelperSetAction {
      * return true for send cancel request for that action
      *
      * @param startActionTime currentTimeMillis for start action or update action(when repeat it)
-     * @return
      */
 
     private static boolean autoCancel(long startActionTime) {
@@ -184,7 +182,6 @@ public class HelperSetAction {
      *
      * @param roomId roomId that send action from that
      * @param action action that send
-     * @return
      */
     private static boolean checkExistAction(long roomId, ProtoGlobal.ClientAction action) {
         for (StructAction struct : structActions) {
