@@ -376,7 +376,7 @@ public class ActivityChat extends ActivityEnhanced
         RealmRoomMessage.fetchMessages(mRoomId, new OnActivityChatStart() {
             @Override
             public void resendMessage(RealmRoomMessage message) {
-                G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
+                //G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
             }
 
             @Override
@@ -1065,6 +1065,7 @@ public class ActivityChat extends ActivityEnhanced
                     forwardedMessage.setRoomId(mRoomId);
                     forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                     forwardedMessage.setUserId(userId);
+                    forwardedMessage.setShowMessage(true);
                    /*if (messageInfo.channelExtra != null) {
                         forwardedMessage.setChannelExtra(RealmChannelExtra.convert(messageInfo.channelExtra));
                     }*/
