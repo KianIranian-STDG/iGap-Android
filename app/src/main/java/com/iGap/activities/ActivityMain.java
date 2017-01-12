@@ -26,7 +26,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -89,7 +88,6 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.request.RequestChannelDelete;
@@ -102,15 +100,13 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -1324,38 +1320,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
-        // I'm not in the room, so I have to add 1 to the unread messages count
-        Realm realm = Realm.getDefaultInstance();
-
-        if (roomMessage.getAuthor().getUser() != null) {
-
-            // check if another account send message don't update unread count
-
-            if (roomMessage.getAuthor().getUser().getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
-                //if another account not send this message , and really i'm recipient not sender
-                // update unread count
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        if (room != null) {
-                            final int updatedUnreadCount = room.getUnreadCount() + 1;
-                            room.setUnreadCount(updatedUnreadCount);
-                            realm.copyToRealmOrUpdate(room);
-                        }
-                    }
-                });
-            }
-        } else {
-
-            /*
-             * when i have roomMessage.getAuthor().getRoom(); how detect
-             * another account send message or not for updating unread count !
-             */
-
-        }
-
-        realm.close();
 
         if (mAdapter != null) {
             runOnUiThread(new Runnable() {

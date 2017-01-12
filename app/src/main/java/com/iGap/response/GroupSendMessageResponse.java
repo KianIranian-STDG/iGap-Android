@@ -99,6 +99,10 @@ public class GroupSendMessageResponse extends MessageHandler {
                         room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId()));
                         room.setUpdatedTime(roomMessage.getUpdateTime());
                     }
+
+                    if (roomMessage.getAuthor().getUser().getUserId() != G.userID) {
+                        room.setUnreadCount(room.getUnreadCount() + 1);
+                    }
                 }
             }
         });

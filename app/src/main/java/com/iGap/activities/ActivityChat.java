@@ -3721,7 +3721,7 @@ public class ActivityChat extends ActivityEnhanced
                         final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
                         if (roomMessage.getAuthor().getUser() != null) {
-                            if (roomMessage.getAuthor().getUser().getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                            if (roomMessage.getAuthor().getUser().getUserId() != G.userID) {
                                 // I'm in the room
                                 if (roomId == mRoomId) {
                                     // I'm in the room, so unread messages count is 0. it means, I read all messages
@@ -3731,7 +3731,6 @@ public class ActivityChat extends ActivityEnhanced
                                             RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                             if (room != null) {
                                                 room.setUnreadCount(0);
-                                                realm.copyToRealmOrUpdate(room);
                                             }
                                         }
                                     });
@@ -3777,17 +3776,6 @@ public class ActivityChat extends ActivityEnhanced
                                     } else if (roomType == GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
                                         G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
                                     }
-                                    // I'm not in the room, but I have to add 1 to unread messages count
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override
-                                        public void execute(Realm realm) {
-                                            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                                            if (room != null) {
-                                                room.setUnreadCount(room.getUnreadCount() + 1);
-                                                realm.copyToRealmOrUpdate(room);
-                                            }
-                                        }
-                                    });
                                 }
                             } else {
 

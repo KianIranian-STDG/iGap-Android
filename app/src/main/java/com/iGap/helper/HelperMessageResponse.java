@@ -86,6 +86,10 @@ public class HelperMessageResponse {
                         room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, roomId));
                         room.setUpdatedTime(roomMessage.getUpdateTime());
                     }
+
+                    if (roomMessage.getAuthor().getUser().getUserId() != G.userID) {
+                        room.setUnreadCount(room.getUnreadCount() + 1);
+                    }
                 }
             }
         });

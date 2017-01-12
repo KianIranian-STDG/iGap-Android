@@ -65,7 +65,10 @@ public class ChatSendMessageResponse extends MessageHandler {
                     // i'm the sender
                     // update message fields into database
                     RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findAll();
-                    for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                    for (int i = realmRoomMessages.size(); i > 0; i--) {
+
+                        RealmRoomMessage realmRoomMessage = realmRoomMessages.get(i - 1);
+
                         // find the message using identity and update it
                         if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
                             if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).count() == 0) {
@@ -92,6 +95,11 @@ public class ChatSendMessageResponse extends MessageHandler {
                         room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId()));
                         room.setUpdatedTime(roomMessage.getUpdateTime());
                     }
+
+                    if (roomMessage.getAuthor().getUser().getUserId() != G.userID) {
+                        room.setUnreadCount(room.getUnreadCount() + 1);
+                    }
+
                 }
             }
         });

@@ -245,6 +245,8 @@ public class G extends MultiDexApplication {
     public static Typeface HELETICBLK_TITR;
     public static List<String> downloadingTokens = new ArrayList<>();
 
+    public static long userID;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -762,6 +764,7 @@ public class G extends MultiDexApplication {
                 if (G.isSecure) {
                     Realm realm = Realm.getDefaultInstance();
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                    userID = userInfo.getUserId();
                     if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
                         new RequestUserLogin().userLogin(userInfo.getToken());
                     }
