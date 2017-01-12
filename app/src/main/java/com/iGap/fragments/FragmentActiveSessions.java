@@ -158,11 +158,11 @@ public class FragmentActiveSessions extends Fragment {
                         for (int i = 0; i < list.size(); i++) {
                             if (list.get(i).getSessionId() == messageid) {
                                 int j = fastItemAdapter.getPosition(list.get(i).getSessionId());
-                                if (j >= 0)
+                                if (j >= 0) {
                                     fastItemAdapter.remove(j);
+                                    list.remove(i);
+                                }
                             }
-
-
                         }
 
 
@@ -312,27 +312,28 @@ public class FragmentActiveSessions extends Fragment {
                                 }).show();
                     }
                 } else {
+                    final int size = list.size();
+                    if (size > 1) {
+                        new MaterialDialog.Builder(getActivity())
+                                .title(R.string.active_session_title)
+                                .content(R.string.active_session_content)
+                                .positiveText(R.string.B_ok)
+                                .negativeText(R.string.B_cancel)
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                    new MaterialDialog.Builder(getActivity())
-                            .title(R.string.active_session_title)
-                            .content(R.string.active_session_content)
-                            .positiveText(R.string.B_ok)
-                            .negativeText(R.string.B_cancel)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        v.setVisibility(View.GONE); // click on AdapterActiveSessionsHeader
 
-                                    v.setVisibility(View.GONE); // click on AdapterActiveSessionsHeader
-                                    int size = list.size();
-                                    if (size > 0) {
                                         for (int i = 0; i < size; i++) {
                                             if (!list.get(i).isCurrent()) {
                                                 new RequestUserSessionTerminate().userSessionTerminate(list.get(i).getSessionId());
                                             }
                                         }
+
                                     }
-                                }
-                            }).show();
+                                }).show();
+                    }
 
                 }
                 return false;

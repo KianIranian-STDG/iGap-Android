@@ -524,7 +524,9 @@
     <string name="delete_contact">Delete Contact</string>
     <string name="error_email">Email is wrong</string>
     <string name="active_session_title">Terminate Device</string>
+    <string name="active_session_all_title">Terminate All Device</string>
     <string name="active_session_content">Are you sure to terminate device?</string>
+    <string name="active_session_all_content">Are you sure to terminate all device?</string>
     <string name="USER_VERIFY_GIVEN_USERNAME">There is no registered user with given username.</string>
     <string name="USER_VERIFY_MANY_TRIES">Verification code is locked for a while due to too many tries.</string>
     <string name="USER_VERIFY_MANY_TRIES_SEND">Verification code has been forwarded exceedingly.</string>

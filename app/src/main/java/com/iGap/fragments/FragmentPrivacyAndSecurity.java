@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,32 +54,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        G.onUserProfileGetSelfRemove = new OnUserProfileGetSelfRemove() {
-            @Override
-            public void onUserSetSelfRemove(final int numberOfMonth) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
 
-                        Realm realm1 = Realm.getDefaultInstance();
-                        realm1.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                realm.where(RealmUserInfo.class).findFirst().setSelfRemove(numberOfMonth);
-                            }
-                        });
-
-                        realm1.close();
-
-                        setTextSelfDestructs();
-                    }
-                });
-
-
-            }
-        };
-
-        new RequestUserProfileGetSelfRemove().userProfileGetSelfRemove();
 
         Realm realm = Realm.getDefaultInstance();
         selfRemove = realm.where(RealmUserInfo.class).findFirst().getSelfRemove();
@@ -150,8 +124,35 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             }
         });
 
-        Log.i("JJJJJJJ", "FragmentPrivacyAndSecurity: ");
         realm.close();
+
+        G.onUserProfileGetSelfRemove = new OnUserProfileGetSelfRemove() {
+            @Override
+            public void onUserSetSelfRemove(final int numberOfMonth) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Realm realm1 = Realm.getDefaultInstance();
+                        realm1.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                realm.where(RealmUserInfo.class).findFirst().setSelfRemove(numberOfMonth);
+                            }
+                        });
+
+                        realm1.close();
+
+                        setTextSelfDestructs();
+                    }
+                });
+
+
+            }
+        };
+
+        new RequestUserProfileGetSelfRemove().userProfileGetSelfRemove();
+
     }
 
     private void selfDestructs() {

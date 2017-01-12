@@ -530,7 +530,9 @@
     <string name="error_email">نشانی ایمیل نامعتبر</string>
     <string name="do_you_want_delete_this">آیا از حذف آیتم انتخاب شده اطمینان دارید ؟</string>
     <string name="active_session_title">بستن جلسه</string>
+    <string name="active_session_all_title"> بستن تمام جلسه ها</string>
     <string name="active_session_content">آیا مطمئنید که می‌خواهید جلسه را ببندید؟</string>
+    <string name="active_session_all_content">آیا مطمئنید که می‌خواهید تمام جلسه ها را ببندید؟</string>
     <string name="USER_VERIFY_GIVEN_USERNAME">هیچ کاربری با نام کابری ارائه شده ثبت نام نکرده است.</string>
     <string name="USER_VERIFY_MANY_TRIES">کد تأییدیه به دلیل چندین مرتبه وارد کردن برای مدتی مسدود می‌باشد.</string>
     <string name="USER_VERIFY_MANY_TRIES_SEND">کد تأییدیه چندین مرتبه ارسال شده است.</string>

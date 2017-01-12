@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -63,6 +65,7 @@ import com.iGap.interfaces.OnUserProfileSetEmailResponse;
 import com.iGap.interfaces.OnUserProfileSetGenderResponse;
 import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import com.iGap.interfaces.OnUserProfileUpdateUsername;
+import com.iGap.interfaces.OnUserSessionLogout;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
@@ -88,14 +91,17 @@ import com.iGap.request.RequestUserProfileSetEmail;
 import com.iGap.request.RequestUserProfileSetGender;
 import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
+import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -323,7 +329,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         realmUserInfo.setGender(gender);
                         userGender = gender;
                         if (userGender == ProtoGlobal.Gender.MALE) {
-                            txtGander.setText(getResources().getString(R.string.Female));
+                            txtGander.setText(getResources().getString(R.string.Male));
                         } else if (userGender == ProtoGlobal.Gender.FEMALE) {
                             txtGander.setText(getResources().getString(R.string.Female));
                         } else {
@@ -1047,8 +1053,64 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                         popupWindow.dismiss();
                                         showProgressBar();
-                                        HelperLogout.logout();
-                                        hideProgressBar();
+
+                                        G.onUserSessionLogout = new OnUserSessionLogout() {
+                                            @Override
+                                            public void onUserSessionLogout() {
+
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        HelperLogout.logout();
+                                                        hideProgressBar();
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onError() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        hideProgressBar();
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                                                R.string.error,
+                                                                Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+
+
+                                            }
+
+                                            @Override
+                                            public void onTimeOut() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        hideProgressBar();
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
+                                                                R.string.error,
+                                                                Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
+                                        };
+
+                                        new RequestUserSessionLogout().userSessionLogout();
                                     }
                                 })
 
