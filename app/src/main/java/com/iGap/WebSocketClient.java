@@ -55,7 +55,6 @@ public class WebSocketClient {
 
                 @Override
                 public void onBinaryMessage(WebSocket websocket, final byte[] binary) throws Exception {
-                    Log.i("SOC_WebSocket", "WebSocketClient binary : " + binary);
                     new HandleResponse(binary).run();
                     super.onBinaryMessage(websocket, binary);
                 }
@@ -92,14 +91,11 @@ public class WebSocketClient {
                 if (G.allowForConnect) {
                     try {
                         if (finalWs != null) {
-                            Log.e("DDD", "createSocketConnection");
                             Log.i("SOC_WebSocket", "Connecting");
                             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                             finalWs.connect();
                         }
                     } catch (WebSocketException e) {
-                        //reconnect();
-                        Log.i("SOC_WebSocket", "WebSocketException : " + e);
                         e.printStackTrace();
                     }
                 }
@@ -161,7 +157,7 @@ public class WebSocketClient {
     public static void reconnect() {
         HelperSetAction.clearAllActions();
         Log.e("DDD", "reconnect 1");
-        if (allowForReconnecting) {//&& (webSocketClient == null || !webSocketClient.isOpen())
+        if (allowForReconnecting) {
             allowForReconnecting = false;
             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
             Log.e("DDD", "reconnect 2");
@@ -304,7 +300,7 @@ public class WebSocketClient {
                             }
                         });
                     } else {
-                        G.allowForConnect = false;
+                        //G.allowForConnect = false;
                         WebSocket webSocket = WebSocketClient.getInstance();
                         if (webSocket != null) {
                             webSocket.disconnect();
