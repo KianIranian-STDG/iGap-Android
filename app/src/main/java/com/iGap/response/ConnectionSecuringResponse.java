@@ -4,6 +4,7 @@ import android.util.Log;
 import com.google.protobuf.ByteString;
 import com.iGap.AESCrypt;
 import com.iGap.G;
+import com.iGap.helper.HelperNumerical;
 import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoConnectionSecuring;
 import com.iGap.request.RequestQueue;
@@ -33,7 +34,6 @@ public class ConnectionSecuringResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        Log.i("WWWWW", "ConnectionSecuringResponse");
         ProtoConnectionSecuring.ConnectionSecuringResponse.Builder builder = (ProtoConnectionSecuring.ConnectionSecuringResponse.Builder) message;
 
         String publicKey = builder.getPublicKey();
@@ -51,6 +51,7 @@ public class ConnectionSecuringResponse extends MessageHandler {
             RSAPublicKey rsaPublicKey = (RSAPublicKey) HelperString.getPublicKeyFromPemFormat(publicKey);
             PublicKey pubKey = KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(rsaPublicKey.getModulus(), rsaPublicKey.getPublicExponent()));
             encryption = AESCrypt.encryptSymmetricKey(pubKey, G.symmetricKey.getEncoded());
+            Log.i("UUU", "encryption bytesToHex symmetricKey : " + HelperNumerical.bytesToHex(G.symmetricKey.getEncoded()));
         } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }

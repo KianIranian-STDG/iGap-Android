@@ -128,12 +128,30 @@ public class WebSocketClient {
             Log.e("DDD", "getInstance 1");
             waitingForReconnecting = true;
             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-            checkSocketConnection();
+            checkGetInstanceSuccessfully();
             return webSocketClient = createSocketConnection();
         } else {
             Log.e("DDD", "getInstance 2");
             return webSocketClient;
         }
+    }
+
+    /**
+     * check current state of socket for insuring that
+     * connection established and if socket connection
+     * wasn't open or is null try for reconnecting
+     */
+
+    private static void checkGetInstanceSuccessfully() {
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (webSocketClient == null || !webSocketClient.isOpen()) {
+                    reconnect();
+                }
+            }
+        }, Config.INSTANCE_SUCCESSFULLY_CHECKING);
     }
 
     /**
