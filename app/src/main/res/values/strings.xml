@@ -730,6 +730,7 @@
     <string name="group_text_convert_to_public">Do you want Convert group to public?</string>
     <string name="group_title_set_username">Set Username</string>
     <string name="send_position">send position</string>
+    <string name="deleted_message">Deleted Message</string>
 
 
 </resources>

@@ -4592,7 +4592,8 @@ public class ActivityChat extends ActivityEnhanced
                                                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
                                                 if (roomMessage != null) {
                                                     // delete message from database
-                                                    roomMessage.deleteFromRealm();
+                                                    //roomMessage.deleteFromRealm();
+                                                    roomMessage.setDeleted(true);
                                                 }
 
                                                 RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class, SUID.id().get());

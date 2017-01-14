@@ -52,7 +52,6 @@ public final class AppUtils {
      * change enum to string for simple showing in toolbar when get status
      *
      * @param status UserUpdateStatus
-     * @return
      */
 
     public static String setStatsForUser(String status) {
@@ -166,7 +165,7 @@ public final class AppUtils {
             case SENT:
                 view.setImageResource(R.drawable.ic_check);
                 DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
-//                DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
+                //                DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
                 break;
         }
     }
@@ -237,7 +236,10 @@ public final class AppUtils {
         if (message == null) {
             return null;
         }
-        if (!TextUtils.isEmpty(message.getMessage())) {
+
+        if (message.isDeleted()) {
+            return resources.getString(R.string.deleted_message);
+        } else if (!TextUtils.isEmpty(message.getMessage())) {
             return message.getMessage();
         } else if (message.getForwardMessage() != null && !TextUtils.isEmpty(message.getForwardMessage().getMessage())) {
             return message.getForwardMessage().getMessage();
@@ -249,8 +251,7 @@ public final class AppUtils {
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat,
-                            attachment.getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case CONTACT:
                     messageText = "contact"; // need to fill messageText with a String because in return check null
@@ -259,26 +260,22 @@ public final class AppUtils {
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat,
-                            attachment.getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case GIF:
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat,
-                            attachment.getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case IMAGE:
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat,
-                            attachment.getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case LOCATION:
-                    messageText = resources.getString(R.string.last_msg_format_chat,
-                            resources.getString(R.string.location_message));
+                    messageText = resources.getString(R.string.last_msg_format_chat, resources.getString(R.string.location_message));
                     break;
                 case LOG:
                     messageText = resources.getString(R.string.last_msg_format_chat, message.getLogMessage());
@@ -288,15 +285,13 @@ public final class AppUtils {
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat,
-                            attachment.getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case VOICE:
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat,
-                            attachment.getName());
+                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 default:
                     messageText = null;
@@ -313,8 +308,7 @@ public final class AppUtils {
         items.add(context.getString(R.string.resend_chat_message));
         itemsId.add(0);
         if (failedMessagesCount > 1) {
-            items.add(String.format(context.getString(R.string.resend_all_messages),
-                    failedMessagesCount));
+            items.add(String.format(context.getString(R.string.resend_all_messages), failedMessagesCount));
             itemsId.add(1);
         }
         items.add(context.getString(R.string.delete_item_dialog));
@@ -325,25 +319,22 @@ public final class AppUtils {
             newIds[itemsId.indexOf(integer)] = integer;
         }
 
-        return new MaterialDialog.Builder(context).title("Resend Messages")
-                .negativeText(context.getString(R.string.cancel)).items(items).itemsIds(newIds)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int position,
-                                            CharSequence text) {
-                        switch (itemView.getId()) {
-                            case 0:
-                                listener.resendMessage();
-                                break;
-                            case 1:
-                                listener.resendAllMessages();
-                                break;
-                            case 2:
-                                listener.deleteMessage();
-                                break;
-                        }
-                    }
-                });
+        return new MaterialDialog.Builder(context).title("Resend Messages").negativeText(context.getString(R.string.cancel)).items(items).itemsIds(newIds).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                switch (itemView.getId()) {
+                    case 0:
+                        listener.resendMessage();
+                        break;
+                    case 1:
+                        listener.resendAllMessages();
+                        break;
+                    case 2:
+                        listener.deleteMessage();
+                        break;
+                }
+            }
+        });
     }
 
     public static String humanReadableDuration(double d) {
