@@ -43,6 +43,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -132,15 +133,17 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import io.realm.Sort;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.id.fragmentContainer_group_profile;
@@ -1324,7 +1327,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 if (identity != null && Long.parseLong(identity) == roomId) {
-
                     if (!userExistInList(user.getId())) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
                         runOnUiThread(new Runnable() {
                             @Override
@@ -1355,13 +1357,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                     struct.avatar = realmRegisteredInfo.getLastAvatar();
                                     struct.initials = realmRegisteredInfo.getInitials();
                                     struct.color = realmRegisteredInfo.getColor();
+                                    struct.lastSeen = realmRegisteredInfo.getLastSeen();
                                 }
 
 
                                 IItem item = new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get());
-
                                 if (struct.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                                     itemAdapter.add(0, item);
+
                                 } else {
                                     itemAdapter.add(item);
                                 }
@@ -1587,6 +1590,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         //txtMemberNumber.setText(listSize + "");
 
         for (int i = 0; i < listSize; i++) {
+            Log.i("CCCCC", "Activity contacts listSize: " + contacts.get(i).lastSeen);
             items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
         }
 
@@ -1636,7 +1640,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 s.lastSeen = realmRegisteredInfo.getLastSeen();
                 s.status = realmRegisteredInfo.getStatus();
 
-                Log.i("NNNNNN", "fillItem: " + s.status);
+                Log.i("CCCCC", "s.lastSeen: " + s.lastSeen);
 
                 if (s.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                     contacts.add(0, s);
@@ -2603,7 +2607,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             struct.status = realmRegistered.getStatus();
                             IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
                             itemAdapter.add(item);
-                            Log.i("TTT", "3  itemAdapter.add(item)");
+                            Log.i("CCCCC", "3  itemAdapter.add(item)" + struct.lastSeen);
                         } else {
 
                             if (roomIdUser == roomId) {

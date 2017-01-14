@@ -51,7 +51,6 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-
         if (mContact.isHeader) {
             holder.topLine.setVisibility(View.VISIBLE);
         } else {
@@ -91,13 +90,13 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
         } else {
             holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), mContact.initials, mContact.color));
         }*/
-
         if (mContact.status != null) {
             if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                 String timeUser = TimeUtils.toLocal(mContact.lastSeen * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
                 holder.subtitle.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
             } else {
                 holder.subtitle.setText(mContact.status);
+
             }
         }
 
