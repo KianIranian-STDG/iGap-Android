@@ -14,7 +14,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
@@ -252,7 +251,7 @@ public class MusicPlayer {
                 updateProgress();
             }
         } else {
-            startPlayer(musicPath, roomName, roomId, false, messageId);
+            startPlayer(musicPath, roomName, roomId, false, MusicPlayer.messageId);
         }
     }
 
@@ -298,45 +297,55 @@ public class MusicPlayer {
     }
 
     public static void nextMusic() {
+        String beforMessageID = MusicPlayer.messageId;
+
+        selectedMedia++;
+
         if (selectedMedia < mediaList.size()) {
             startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
-            selectedMedia++;
             if (onComplete != null) onComplete.complete(true, "update", "");
         } else {
-            startPlayer(mediaList.get(0).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(0).getMessageId() + "");
-            selectedMedia = 1;
+            selectedMedia = 0;
+            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+
             if (onComplete != null) onComplete.complete(true, "update", "");
         }
-        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, "", "");
+        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
     }
 
     private static void nextRandomMusic() {
+        String beforMessageID = MusicPlayer.messageId;
         Random r = new Random();
-        selectedMedia = r.nextInt(mediaList.size());
+        selectedMedia = r.nextInt(mediaList.size() - 1);
         startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
         if (onComplete != null) onComplete.complete(true, "update", "");
 
-        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, "", "");
+        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
     }
+
 
     public static void previousMusic() {
 
-        if (selectedMedia > 1) {
-            selectedMedia--;
-            startPlayer(mediaList.get(selectedMedia - 1).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia - 1).getMessageId() + "");
+        selectedMedia--;
+
+        String beforMessageID = MusicPlayer.messageId;
+
+        if (selectedMedia >= 0) {
+            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
             if (onComplete != null) onComplete.complete(true, "update", "");
         } else {
-            int item = mediaList.size();
-            if (item > 0) {
-                startPlayer(mediaList.get(item - 1).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(item - 1).getMessageId() + "");
-                selectedMedia = item;
+            int index = mediaList.size() - 1;
+            if (index >= 0) {
+                selectedMedia = index;
+                startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+
                 if (onComplete != null) onComplete.complete(true, "update", "");
             }
         }
 
-        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, "", "");
+        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
     }
 
     private static void closeLayoutMediaPlayer() {
@@ -361,15 +370,15 @@ public class MusicPlayer {
 
     }
 
-    public static void startPlayer(String musicPath, String roomName, long roomId, boolean updateList, String messageId) {
+    public static void startPlayer(String musicPath, String roomName, long roomId, boolean updateList, String messageID) {
 
+        MusicPlayer.messageId = messageID;
         MusicPlayer.musicPath = musicPath;
         MusicPlayer.roomName = roomName;
         mediaThumpnail = null;
         MusicPlayer.roomId = roomId;
-        MusicPlayer.messageId = messageId;
 
-        Log.e("ddd", "roomId   " + roomId);
+
 
         if (layoutTripMusic.getVisibility() == View.GONE) {
             layoutTripMusic.setVisibility(View.VISIBLE);
@@ -462,9 +471,6 @@ public class MusicPlayer {
                                 nextRandomMusic();
                             } else {
 
-                                if (selectedMedia >= mediaList.size()) {
-                                    selectedMedia = 0;
-                                }
                                 nextMusic();
                             }
                         } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
@@ -581,7 +587,8 @@ public class MusicPlayer {
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
+        RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+            equalTo(RealmRoomMessageFields.DELETED, false).findAll();
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage realmRoomMessage : roomMessages) {
@@ -591,14 +598,21 @@ public class MusicPlayer {
                         || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
 
                     mediaList.add(realmRoomMessage);
+                }
+            }
+        }
 
-                    if (realmRoomMessage.getAttachment() != null) {
-                        String tmpPath = realmRoomMessage.getAttachment().getLocalFilePath();
-                        if (tmpPath != null) {
-                            if (tmpPath.equals(musicPath)) selectedMedia = mediaList.size();
-                        }
+        for (int i = mediaList.size() - 1; i >= 0; i--) {
+
+            RealmRoomMessage rm = mediaList.get(i);
+
+            if (rm.getAttachment() != null) {
+                String tmpPath = rm.getAttachment().getLocalFilePath();
+                if (tmpPath != null) {
+                    if (tmpPath.equals(musicPath)) {
+                        selectedMedia = i;
+                        break;
                     }
-
                 }
             }
         }

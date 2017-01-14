@@ -764,7 +764,9 @@ public class G extends MultiDexApplication {
                 if (G.isSecure) {
                     Realm realm = Realm.getDefaultInstance();
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                    userID = userInfo.getUserId();
+
+                    if (userInfo != null) userID = userInfo.getUserId();
+
                     if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
                         new RequestUserLogin().userLogin(userInfo.getToken());
                     }

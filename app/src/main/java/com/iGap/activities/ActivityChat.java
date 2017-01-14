@@ -467,12 +467,27 @@ public class ActivityChat extends ActivityEnhanced
         mAdapter.notifyDataSetChanged();
 
         onMusicListener = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override public void complete(boolean result, String messageID, String beforMessageID) {
 
-                Log.e("ddd", "aaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                if (beforMessageID != null) {
+                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                        if (mAdapter.getItem(i).mMessage.messageID.equals(beforMessageID)) {
+                            mAdapter.notifyAdapterItemChanged(i);
+                            break;
+                        }
+                    }
+                }
 
-                mAdapter.notifyDataSetChanged();
+                if (messageID != null) {
+                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                        if (mAdapter.getItem(i).mMessage.messageID.equals(messageID)) {
+                            mAdapter.notifyAdapterItemChanged(i);
+                            break;
+                        }
+                    }
+                }
+
+
             }
         };
 

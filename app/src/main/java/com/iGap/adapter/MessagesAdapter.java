@@ -162,18 +162,18 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         if (item != null) {
             final int pos = getAdapterItems().indexOf(item);
 
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    item.updateProgress(new OnProgressUpdate() {
-                        @Override
-                        public void onProgressUpdate() {
-                            notifyAdapterItemChanged(pos);
-                            //set(pos, item);
-                        }
-                    });
-                }
-            }, 500);
+            if (pos >= 0) {
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+                        item.updateProgress(new OnProgressUpdate() {
+                            @Override public void onProgressUpdate() {
+                                notifyAdapterItemChanged(pos);
+                                //set(pos, item);
+                            }
+                        });
+                    }
+                }, 500);
+            }
 
         }
     }
@@ -349,7 +349,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      */
     public Item getItemByFileIdentity(long messageId) {
         for (Item item : getAdapterItems()) {
-            if (item != null && item.mMessage.messageID.equalsIgnoreCase(Long.toString(messageId))) {
+            if (item != null) if (item.mMessage != null) if (item.mMessage.messageID.equalsIgnoreCase(Long.toString(messageId))) {
                 return item;
             }
         }

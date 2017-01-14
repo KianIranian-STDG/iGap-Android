@@ -1,8 +1,6 @@
 package com.iGap.adapter.items.chat;
 
 import android.graphics.PorterDuff;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -25,7 +23,6 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.realm.Realm;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
@@ -168,18 +165,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         super.voteAction(holder);
     }
 
-    private MediaPlayer makeMediaPlayer(String filePath) {
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try {
-            mediaPlayer.setDataSource(filePath);
-            mediaPlayer.prepare(); // might take long! (for buffering, etc)
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        return mediaPlayer;
-    }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
         public ViewHolder create(View v) {
