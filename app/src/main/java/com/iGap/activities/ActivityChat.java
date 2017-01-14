@@ -858,54 +858,33 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         initComponent();
-
         initAppbarSelected();
 
-        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER)
-
-        {
+        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
             initLayotChannelFooter();
         }
 
-        if (
-
-            getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().
-                getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null)
-
-        {
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
             ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
-
             for (Parcelable messageInfo : messageInfos) {
                 sendForwardedMessage((StructMessageInfo) Parcels.unwrap(messageInfo));
             }
         }
 
         clearHistoryFromContactsProfileInterface();
-
         onDeleteChatFinishActivityInterface();
-
         getChatHistory();
-
         getDraft();
-
         getUserInfo();
-
         updateStatus();
-
         setUpEmojiPopup();
-
         checkAction();
-
-        G.onHelperSetAction = new
-
-                OnHelperSetAction() {
-                    @Override
-                    public void onAction(ProtoGlobal.ClientAction ClientAction) {
-                        HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
-                    }
-                }
-
-        ;
+        G.onHelperSetAction = new OnHelperSetAction() {
+            @Override
+            public void onAction(ProtoGlobal.ClientAction ClientAction) {
+                HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
+            }
+        };
     }
 
     public void sendPosition(final Double latitude, final Double longitude, final String imagePath) {
@@ -3214,7 +3193,8 @@ public class ActivityChat extends ActivityEnhanced
                 final ArrayList<Long> list = new ArrayList<Long>();
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
                             Long messagid = parseLong(messageID.mMessage.messageID);
@@ -3259,7 +3239,8 @@ public class ActivityChat extends ActivityEnhanced
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 // get offline delete list , add new deleted list and update in
                 // client condition , then send request for delete message to server
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, RoomId).findFirst();
@@ -3503,7 +3484,8 @@ public class ActivityChat extends ActivityEnhanced
             if (mAdapter.getAdapterItemCount() > 0) {
                 if (!(mAdapter.getAdapterItem(0) instanceof ProgressWaiting)) {
                     recyclerView.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
                         }
                     });
@@ -4076,7 +4058,8 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onGetRoomHistoryError(int majorCode, int minorCode) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
             }
         });
