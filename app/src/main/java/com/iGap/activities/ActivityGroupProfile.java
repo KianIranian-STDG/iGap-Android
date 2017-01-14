@@ -29,7 +29,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -1590,7 +1589,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         //txtMemberNumber.setText(listSize + "");
 
         for (int i = 0; i < listSize; i++) {
-            Log.i("CCCCC", "Activity contacts listSize: " + contacts.get(i).lastSeen);
+
             items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
         }
 
@@ -1639,8 +1638,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 s.color = realmRegisteredInfo.getColor();
                 s.lastSeen = realmRegisteredInfo.getLastSeen();
                 s.status = realmRegisteredInfo.getStatus();
-
-                Log.i("CCCCC", "s.lastSeen: " + s.lastSeen);
 
                 if (s.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                     contacts.add(0, s);
@@ -1880,7 +1877,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                 for (int i = 0; i < list.size(); i++) {
 
-                    Log.i("VVVVVVV", "getSelectedList: " + list.size());
                     new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, startMessageId);
                 }
 
@@ -2400,7 +2396,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                         if (ActivityChat.activityChat != null) {
                                             ActivityChat.activityChat.finish();
                                         }
-                                        Log.i("VVVFFFDD", "onGroupLeft: ");
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                         prgWait.setVisibility(View.GONE);
                                     }
@@ -2590,14 +2585,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                       }
                         );*/
 
-                Log.i("TTT", "1 roomIdUser : " + roomIdUser);
-                Log.i("TTT", "1 roomId : " + roomId);
+
                 runOnUiThread(new Runnable() { //TODO [Saeed Mozaffari] [2016-11-12 5:15 PM] - get member list from group and add new member . like get member list response
                     @Override
                     public void run() {
                         Realm realm = Realm.getDefaultInstance();
                         RealmRegisteredInfo realmRegistered = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, UserId).findFirst();
-                        Log.i("TTT", "2 realmRegistered : " + realmRegistered);
+
                         if (realmRegistered != null) {
                             StructContactInfo struct = new StructContactInfo(realmRegistered.getId(), realmRegistered.getDisplayName(), realmRegistered.getStatus(), false, false, realmRegistered.getPhoneNumber() + "");
                             struct.avatar = realmRegistered.getLastAvatar();
@@ -2607,7 +2601,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             struct.status = realmRegistered.getStatus();
                             IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
                             itemAdapter.add(item);
-                            Log.i("CCCCC", "3  itemAdapter.add(item)" + struct.lastSeen);
+
                         } else {
 
                             if (roomIdUser == roomId) {
@@ -3162,8 +3156,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     @Override
     public void onDeleteAvatarError(int majorCode, int minorCode) {
 
-        Log.i("EEEE", "onDeleteAvatarError  majorCode: " + majorCode);
-        Log.i("EEEE", "onDeleteAvatarError  minorCode: " + minorCode);
 
     }
     //***Show And Hide Progress

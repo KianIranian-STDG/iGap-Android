@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -40,6 +41,7 @@ import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalculateKeepMedia;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperPermision;
@@ -100,13 +102,15 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -128,6 +132,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     public static ArcMenu arcMenu;
     private MaterialDesignTextView btnSearchAll;
     private int clickPosition = 0;
+    private boolean keepMedia;
 
     private SharedPreferences sharedPreferences;
     private String cLanguage;
@@ -293,6 +298,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         initFloatingButtonCreateNew();
         initDrawerMenu();
         //onDraftMessage();
+
+        keepMedia = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
+
+        if (keepMedia) {// if Was selected keep media at 1week
+            new HelperCalculateKeepMedia().calculateTime();
+        }
     }
 
 

@@ -73,6 +73,9 @@ public class SHP_SETTING {
     public static final String KEY_STNS_SOUND_GROUP = "STNS_SOUND_GROUP";
     public static final String KEY_STNS_SOUND_GROUP_POSITION = "STNS_SOUND_GROUP_POSITION";
 
+    // keep media
+    public static final String KEY_KEEP_MEDIA = "KEY_KEEP_MEDIA";
+
     // ========================================================================================== chat background
 
     public static final String KEY_PATH_CHAT_BACKGROUND = "KEY_PATH_CHAT_BACKGROUND";

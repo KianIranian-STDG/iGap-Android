@@ -1547,12 +1547,20 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
+                                editor.apply();
                             }
                         })
                         .negativeText("1WEEk")
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
+                                editor.apply();
                             }
                         })
                         .show();
@@ -1592,7 +1600,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 editor.apply();
 
                                 for (Integer aWhich : which) {
-                                    Log.i("JJJJ", "WIFI: " + aWhich);
+
 
                                     if (aWhich == 0) {
                                         editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, aWhich);
