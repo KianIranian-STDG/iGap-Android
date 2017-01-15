@@ -134,15 +134,26 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     }
 
     public void downloadingAvatar(long peerId, int progress, long offset, StructMessageAttachment avatar) {
-        for (Item item : getAdapterItems()) {
-            if (item.mMessage.downloadAttachment != null && Long.parseLong(item.mMessage.senderID) == peerId) {
-                int pos = getAdapterItems().indexOf(item);
-                item.mMessage.senderAvatar = avatar;
-                item.mMessage.downloadAttachment.progress = progress;
-                item.mMessage.downloadAttachment.offset = offset;
-                notifyItemChanged(pos);
+
+        for (int i = getAdapterItemCount() - 1; i >= 0; i--) {
+            Item item = getAdapterItem(i);
+
+            if (item.mMessage != null) {
+                if (item.mMessage.downloadAttachment != null) {
+                    if (Long.parseLong(item.mMessage.senderID) == peerId) {
+
+                        item.mMessage.senderAvatar = avatar;
+                        item.mMessage.downloadAttachment.progress = progress;
+                        item.mMessage.downloadAttachment.offset = offset;
+
+                        notifyItemChanged(i);
+                        break;
+                    }
+                }
             }
+
         }
+
     }
 
     /**
@@ -206,43 +217,73 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public void updateDownloadFields(String token, int progress, long offset) {
         requestDownload(token, progress, offset);
 
-        for (Item item : getAdapterItems()) {
-            if (item.mMessage.attachment != null && item.mMessage.attachment.token != null && item.mMessage.attachment.token.equalsIgnoreCase(token)) {
-                final int pos = getAdapterItems().indexOf(item);
+        for (int i = getAdapterItemCount() - 1; i >= 0; i--) {
+            Item item = getAdapterItem(i);
 
-                item.onRequestDownloadFile(offset, progress, new OnFileDownload() {
-                    @Override
-                    public void onFileDownloaded() {
-                        notifyItemChanged(pos);
+            if (item.mMessage != null) {
+                if (item.mMessage.attachment != null) {
+                    if (item.mMessage.attachment.token != null) {
+                        if (item.mMessage.attachment.token.equalsIgnoreCase(token)) {
+
+                            final int finalI = i;
+                            item.onRequestDownloadFile(offset, progress, new OnFileDownload() {
+                                @Override public void onFileDownloaded() {
+                                    notifyItemChanged(finalI);
+                                }
+                            });
+
+                            break;
+                        }
                     }
-                });
+                }
             }
+
         }
     }
 
     public void makeNotDownloaded(String token) {
-        for (Item item : getAdapterItems()) {
-            if (item.mMessage.attachment != null && item.mMessage.attachment.token != null && item.mMessage.attachment.token.equalsIgnoreCase(token)) {
-                final int pos = getAdapterItems().indexOf(item);
-                item.mMessage.downloadAttachment = null;
-                set(pos, item);
+        for (int i = getAdapterItemCount() - 1; i >= 0; i--) {
+            Item item = getAdapterItem(i);
+
+            if (item.mMessage != null) {
+                if (item.mMessage.attachment != null) {
+                    if (item.mMessage.attachment.token != null) {
+                        if (item.mMessage.attachment.token.equalsIgnoreCase(token)) {
+
+                            item.mMessage.downloadAttachment = null;
+                            set(i, item);
+
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void updateThumbnail(String token) {
+        for (int i = getAdapterItemCount() - 1; i >= 0; i--) {
+            Item item = getAdapterItem(i);
+            if (item.mMessage != null) {
+                if (item.mMessage.attachment != null) {
+                    if (item.mMessage.attachment.token != null) {
+                        if (item.mMessage.attachment.token.equalsIgnoreCase(token)) {
+                            final int finalI = i;
+                            item.onRequestDownloadThumbnail(token, true, new OnFileDownload() {
+                                @Override public void onFileDownloaded() {
+                                    notifyItemChanged(finalI);
+                                }
+                            });
+
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
 
-    public void updateThumbnail(String token) {
-        for (Item item : getAdapterItems()) {
-            if (item.mMessage.attachment != null && item.mMessage.attachment.token != null && item.mMessage.attachment.token.equalsIgnoreCase(token)) {
-                final int pos = getAdapterItems().indexOf(item);
-                item.onRequestDownloadThumbnail(token, true, new OnFileDownload() {
-                    @Override
-                    public void onFileDownloaded() {
-                        notifyItemChanged(pos);
-                    }
-                });
-            }
-        }
-    }
 
     public void updateChatAvatar(long userId, RealmRegisteredInfo registeredInfo) {
         for (Item item : getAdapterItems()) {
@@ -263,14 +304,19 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      * @param updatedText new message text
      */
     public void updateMessageText(long messageId, String updatedText) {
-        List<Item> items = getAdapterItems();
-        for (Item messageInfo : items) {
-            if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
-                int pos = items.indexOf(messageInfo);
-                messageInfo.mMessage.messageText = updatedText;
-                messageInfo.mMessage.isEdited = true;
-                set(pos, messageInfo);
-                break;
+
+        for (int i = getAdapterItemCount() - 1; i >= 0; i--) {
+            Item item = getAdapterItem(i);
+
+            if (item.mMessage != null) {
+                if (item.mMessage.messageID != null) {
+                    if (item.mMessage.messageID.equals(Long.toString(messageId))) {
+                        item.mMessage.messageText = updatedText;
+                        item.mMessage.isEdited = true;
+                        set(i, item);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -357,15 +403,19 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     }
 
     public void removeMessage(long messageId) {
-        List<Item> items = getAdapterItems();
-        for (Item messageInfo : items) {
-            if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
-                int pos = items.indexOf(messageInfo);
-                if (onChatMessageRemove != null) {
-                    onChatMessageRemove.onPreChatMessageRemove(messageInfo.mMessage, pos);
+
+        for (int i = getAdapterItemCount() - 1; i >= 0; i--) {
+            Item item = getAdapterItem(i);
+            if (item.mMessage != null) {
+                if (item.mMessage.messageID != null) {
+                    if (item.mMessage.messageID.equals(Long.toString(messageId))) {
+                        if (onChatMessageRemove != null) {
+                            onChatMessageRemove.onPreChatMessageRemove(item.mMessage, i);
+                        }
+                        remove(i);
+                        break;
+                    }
                 }
-                remove(pos);
-                break;
             }
         }
     }
@@ -387,17 +437,14 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public void updateMessageStatus(long messageId, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
 
-        for (int i = items.size(); i > 0; i--) {
-            Item messageInfo = items.get(i - 1);
-            if (messageInfo.mMessage != null) {
-                if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
+        for (int i = items.size() - 1; i >= 0; i--) {
+            Item messageInfo = items.get(i);
+            if (messageInfo.mMessage != null) if (messageInfo.mMessage.messageID != null) if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
                     messageInfo.mMessage.status = status.toString();
-                    set(i - 1, messageInfo);
+                set(i, messageInfo);
                     break;
                 }
             }
-        }
-
     }
 
     /**
@@ -409,16 +456,14 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      */
     public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status) {
         List<Item> items = getAdapterItems();
-        for (int i = items.size(); i > 0; i--) {
-            Item messageInfo = items.get(i - 1);
-            if (messageInfo.mMessage != null) {
-                if (messageInfo.mMessage.messageID.equals(identity)) {
-                    messageInfo.mMessage.status = status.toString();
-                    messageInfo.mMessage.messageID = Long.toString(messageId);
-                    set(i - 1, messageInfo);
-                    break;
+        for (int i = items.size() - 1; i >= 0; i--) {
+            Item messageInfo = items.get(i);
+            if (messageInfo.mMessage != null) if (messageInfo.mMessage.messageID != null) if (messageInfo.mMessage.messageID.equals(identity)) {
+                messageInfo.mMessage.status = status.toString();
+                messageInfo.mMessage.messageID = Long.toString(messageId);
+                set(i, messageInfo);
+                break;
                 }
-            }
         }
     }
 

@@ -256,6 +256,7 @@ public class ActivityChat extends ActivityEnhanced
     BoomMenuButton boomMenuButton;
     LinearLayout mediaLayout;
     public static MusicPlayer musicPlayer;
+    private boolean isNeedAddTime = true;
     LinearLayout ll_Search;
     Button btnCloseLayoutSearch;
     EditText edtSearchMessage;
@@ -425,7 +426,6 @@ public class ActivityChat extends ActivityEnhanced
         chatTypeStatic = chatType;
         mRoomIdStatic = mRoomId;
         titleStatic = title;
-
 
         //call from ActivityGroupProfile for update group member number
         onComplete = new OnComplete() {
@@ -1644,8 +1644,23 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }, 1500);
         } else {
-            int position = recyclerView.getAdapter().getItemCount();
-            if (position > 0) recyclerView.scrollToPosition(position - 1);
+            //int position = recyclerView.getAdapter().getItemCount();
+            //if (position > 0) recyclerView.scrollToPosition(position - 1);
+
+            // scrool to unread position
+            int unreadPosition = mAdapter.getAdapterItemCount() - 1;
+            for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                try {
+                    if (mAdapter.getAdapterItem(i).mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                        unreadPosition = i;
+                        break;
+                    }
+                } catch (NullPointerException e) {
+                }
+            }
+            if (unreadPosition >= 0) recyclerView.scrollToPosition(unreadPosition);
+
+
         }
 
         imvBackButton.setOnClickListener(new View.OnClickListener() {
@@ -1723,6 +1738,12 @@ public class ActivityChat extends ActivityEnhanced
                 clearDraftRequest();
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
+
+                    // if need to add time befor insert new message
+                    if (isNeedAddTime) {
+                        addTimeToList(SUID.id().get());
+                    }
+
                     sendMessage(latestRequestCode, listPathString.get(0));
                     listPathString.clear();
                     ll_attach_text.setVisibility(View.GONE);
@@ -1798,6 +1819,12 @@ public class ActivityChat extends ActivityEnhanced
                         new RequestChatEditMessage().chatEditMessage(mRoomId, parseLong(messageInfo.messageID), message);
                     }
                 } else {
+
+                    // if need to add time befor insert new message
+                    if (isNeedAddTime) {
+                        addTimeToList(SUID.id().get());
+                    }
+
                     // new message has written
                     final String message = getWrittenMessage();
                     final Realm realm = Realm.getDefaultInstance();
@@ -2790,6 +2817,7 @@ public class ActivityChat extends ActivityEnhanced
 
 
     private void sendMessage(int requestCode, String filePath) {
+
         Realm realm = Realm.getDefaultInstance();
         long messageId = SUID.id().get();
         final long updateTime = TimeUtils.currentLocalTime();
@@ -3706,6 +3734,24 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
+    private void addTimeToList(Long messageid) {
+
+        isNeedAddTime = false;
+
+        String timeString = getTimeSettingMessage(TimeUtils.currentLocalTime());
+        if (!TextUtils.isEmpty(timeString)) {
+
+            RealmRoomMessage timeMessage = new RealmRoomMessage();
+            timeMessage.setMessageId(messageid);
+            // -1 means time message
+            timeMessage.setUserId(-1);
+            timeMessage.setMessage(timeString);
+            timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+
+            switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(timeMessage))), false);
+        }
+    }
+
     @Override
     public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
         G.handler.postDelayed(new Runnable() {
@@ -3763,6 +3809,11 @@ public class ActivityChat extends ActivityEnhanced
                                             }
                                         }
                                     });
+
+                                    // if need to add time befor insert new message
+                                    if (isNeedAddTime) {
+                                        addTimeToList(SUID.id().get());
+                                    }
 
                                     switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
                                     scrollToEnd();

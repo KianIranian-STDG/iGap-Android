@@ -35,11 +35,14 @@ import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
+
+import static com.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentShowImage extends Fragment {
 
@@ -221,9 +224,9 @@ public class FragmentShowImage extends Fragment {
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
             @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (which == 0) {
-                    saveToGalary();
-                } else if (which == 1) {
                     shareImage();
+                } else if (which == 1) {
+                    saveToGalary();
                 }
             }
         }).show();
@@ -297,13 +300,17 @@ public class FragmentShowImage extends Fragment {
                 String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
                 File file = new File(path);
                 if (file.exists()) {
-                    touchImageView.setImageURI(Uri.fromFile(file));
+                    //    touchImageView.setImageURI(Uri.fromFile(file));
+
+                    ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
+
                     progress.setVisibility(View.GONE);
                 } else {
                     path = getThumpnailPath(rm.getAttachment().getToken(), rm.getAttachment().getName());
                     file = new File(path);
                     if (file.exists()) {
-                        touchImageView.setImageURI(Uri.fromFile(file));
+                        //  touchImageView.setImageURI(Uri.fromFile(file));
+                        ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
                     }
                 }
             }
@@ -336,9 +343,9 @@ public class FragmentShowImage extends Fragment {
                                                     progress.setVisibility(View.GONE);
                                                     downloadingList.remove(rm.getMessageId());
                                                     String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
-                                                    File file = new File(path);
-                                                    touchImageView.setImageURI(Uri.fromFile(file));
-
+                                                    // File file = new File(path);
+                                                    //  touchImageView.setImageURI(Uri.fromFile(file));
+                                                    ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
                                                     ActivityShearedMedia.downloadedList.add(rm.getMessageId());
                                                 }
                                             }
