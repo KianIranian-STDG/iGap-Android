@@ -196,6 +196,11 @@ public class RealmRoomMessage extends RealmObject {
                 message.getAttachment().setSmallThumbnail(smallThumbnail);
             }
 
+            message.getAttachment().setDuration(input.getAttachment().getDuration());
+            message.getAttachment().setSize(input.getAttachment().getSize());
+
+            if (message.getAttachment().getName() == null) message.getAttachment().setName(input.getAttachment().getName());
+
         }
         if (input.hasLocation()) {
 

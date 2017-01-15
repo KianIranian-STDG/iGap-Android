@@ -719,4 +719,5 @@
 
     <string name="send_position">ارسال موقعیت</string>
     <string name="deleted_message">پیام حذف شده</string>
+    <string name="unread_message">پیام خوانده نشده</string>
 </resources>

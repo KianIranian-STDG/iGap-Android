@@ -74,6 +74,7 @@ import com.iGap.adapter.items.chat.LogItem;
 import com.iGap.adapter.items.chat.ProgressWaiting;
 import com.iGap.adapter.items.chat.TextItem;
 import com.iGap.adapter.items.chat.TimeItem;
+import com.iGap.adapter.items.chat.UnreadMessage;
 import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
@@ -1648,17 +1649,8 @@ public class ActivityChat extends ActivityEnhanced
             //if (position > 0) recyclerView.scrollToPosition(position - 1);
 
             // scrool to unread position
-            int unreadPosition = mAdapter.getAdapterItemCount() - 1;
-            for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                try {
-                    if (mAdapter.getAdapterItem(i).mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                        unreadPosition = i;
-                        break;
-                    }
-                } catch (NullPointerException e) {
-                }
-            }
-            if (unreadPosition >= 0) recyclerView.scrollToPosition(unreadPosition);
+
+            addLayotuUnreadMessage();
 
 
         }
@@ -2045,6 +2037,39 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
+    }
+
+    private void addLayotuUnreadMessage() {
+
+        int unreadPosition = mAdapter.getAdapterItemCount() - 1;
+
+        for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+            try {
+                if (mAdapter.getAdapterItem(i).mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) || mAdapter.getAdapterItem(i).mMessage.isSenderMe()) {
+                    unreadPosition = i;
+                    break;
+                }
+            } catch (NullPointerException e) {
+            }
+        }
+
+        int unreadMessageCount = mAdapter.getAdapterItemCount() - 1 - unreadPosition;
+
+        if (unreadMessageCount > 0) {
+            RealmRoomMessage unreadMessage = new RealmRoomMessage();
+            unreadMessage.setMessageId(TimeUtils.currentLocalTime());
+            // -1 means time message
+            unreadMessage.setUserId(-1);
+            unreadMessage.setMessage(unreadMessageCount + " " + getString(R.string.unread_message));
+            unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+
+            mAdapter.add(unreadPosition + 1, new UnreadMessage(this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
+
+            LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+            llm.scrollToPositionWithOffset(unreadPosition + 1, 0);
+        }
+
+
     }
 
     private void setUserStatus(String status, long time) {

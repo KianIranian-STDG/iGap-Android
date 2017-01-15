@@ -295,8 +295,30 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         });
 
-        fillListImage();
+        openLayout();
+
         initAppbarSelected();
+    }
+
+    private void openLayout() {
+
+        if (countOFImage > 0) {
+            fillListImage();
+        } else if (countOFVIDEO > 0) {
+            fillListVideo();
+        } else if (countOFAUDIO > 0) {
+            fillListAudio();
+        } else if (countOFVOICE > 0) {
+            fillListVoice();
+        } else if (countOFGIF > 0) {
+            fillListGif();
+        } else if (countOFFILE > 0) {
+            fillListFile();
+        } else if (countOFFILE > 0) {
+            fillListLink();
+        } else {
+            fillListImage();
+        }
     }
 
     private void initAppbarSelected() {
@@ -832,9 +854,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                             break;
                         case "URL":
                             countOFLink = notDeletedCount;
-                            updateCountOfSharedMedia(complete, roomid);
                             break;
                     }
+
+                    updateCountOfSharedMedia(complete, roomid);
                 }
 
 
@@ -845,14 +868,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         };
 
-        Realm realm = Realm.getDefaultInstance();
-        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
-        if (room != null) {
-            if (complete != null) {
-                complete.complete(true, room.getSharedMediaCount(), "");
-            }
+        if (complete != null) {
+            complete.complete(true, context.getString(R.string.there_is_no_sheared_media), "");
         }
-        realm.close();
 
         if (text.length() == 0) {
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE);
@@ -861,12 +879,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE);
-
-            G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
-                    new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL);
-                }
-            }, 100);
+            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL);
 
         } else {
             if (complete != null) {
