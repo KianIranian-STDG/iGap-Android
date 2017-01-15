@@ -1,10 +1,12 @@
 package com.iGap.helper;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.WebSocketClient;
+import com.iGap.activities.ActivityProfile;
 import com.neovisionaries.ws.client.WebSocket;
 
 
@@ -23,12 +25,18 @@ public class HelperError {
                     }
                 }
                 break;
-
-            case 110:
-
-                break;
             case 5:
                 //if (minorCode == 1) error = "time out  server not response";
+                break;
+            case 9:
+                if (G.currentActivity != null) {
+                    G.currentActivity.finish();
+                }
+                Intent intent = new Intent(G.context, ActivityProfile.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                G.context.startActivity(intent);
+                break;
+            case 110:
                 break;
             case 112:
                 error = G.context.getResources().getString(R.string.E_112);
