@@ -22,12 +22,9 @@ import org.parceler.Parcel;
 
 @Parcel(implementations = {RealmRoomMessageRealmProxy.class},
         value = Parcel.Serialization.BEAN,
-        analyze = {RealmRoomMessage.class})
-public class RealmRoomMessage extends RealmObject {
-    @PrimaryKey
-    private long messageId;
-    @Index
-    private long roomId;
+        analyze = {RealmRoomMessage.class}) public class RealmRoomMessage extends RealmObject {
+    @PrimaryKey private long messageId;
+    @Index private long roomId;
     private long messageVersion;
     private String status;
     private long statusVersion;
@@ -149,7 +146,7 @@ public class RealmRoomMessage extends RealmObject {
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
 
-        RealmRoomMessage message = putOrUpdate(input, roomId, true, realm);
+        RealmRoomMessage message = putOrUpdate(input, roomId, true, false, realm);
 
         message.setShowMessage(true);
 
@@ -158,7 +155,19 @@ public class RealmRoomMessage extends RealmObject {
         return message;
     }
 
-    public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId, boolean showMessage, Realm realm) {
+    public static RealmRoomMessage putOrUpdateForwardOrReply(ProtoGlobal.RoomMessage input, long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmRoomMessage message = putOrUpdate(input, roomId, true, true, realm);
+
+        message.setShowMessage(true);
+
+        realm.close();
+
+        return message;
+    }
+
+    public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId, boolean showMessage, boolean forwardOrReply, Realm realm) {
 
 
         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, input.getMessageId()).findFirst();
@@ -167,12 +176,11 @@ public class RealmRoomMessage extends RealmObject {
             message = realm.createObject(RealmRoomMessage.class, input.getMessageId());
             message.setRoomId(roomId);
 
-
             if (input.hasForwardFrom()) {
-                message.setForwardMessage(RealmRoomMessage.putOrUpdate(input.getForwardFrom(), roomId));
+                message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), roomId));
             }
             if (input.hasReplyTo()) {
-                message.setReplyTo(RealmRoomMessage.putOrUpdate(input.getReplyTo(), roomId));
+                message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), roomId));
             }
 
             message.setShowMessage(showMessage);
@@ -184,7 +192,9 @@ public class RealmRoomMessage extends RealmObject {
 
         message.setStatus(input.getStatus().toString());
         message.setUserId(input.getAuthor().getUser().getUserId());
-        message.setDeleted(input.getDeleted());
+        if (!forwardOrReply) {
+            message.setDeleted(input.getDeleted());
+        }
         message.setEdited(input.getEdited());
 
         if (input.hasAttachment()) {
@@ -493,8 +503,7 @@ public class RealmRoomMessage extends RealmObject {
         }
     }
 
-    public void setAttachment(final long messageId, final String path, int width, int height, long size, String name, double duration,
-                              LocalFileType type) {
+    public void setAttachment(final long messageId, final String path, int width, int height, long size, String name, double duration, LocalFileType type) {
         if (path == null) {
             return;
         }
