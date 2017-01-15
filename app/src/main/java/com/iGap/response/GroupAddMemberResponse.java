@@ -1,7 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
-
 import com.iGap.G;
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoError;
@@ -10,7 +8,6 @@ import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -39,7 +36,6 @@ public class GroupAddMemberResponse extends MessageHandler {
 
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        Log.i("TTT", "GroupAddMemberResponse 1 realmRoom : " + realmRoom);
         if (realmRoom != null) {
             RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
             if (realmGroupRoom != null) {
@@ -49,7 +45,6 @@ public class GroupAddMemberResponse extends MessageHandler {
                 realmMember.setId(SUID.id().get());
                 realmMember.setPeerId(userId);
                 realmMember.setRole(response.getRole().toString());
-                // realmMember = realm.copyToRealm(realmMember);
 
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
@@ -57,9 +52,7 @@ public class GroupAddMemberResponse extends MessageHandler {
                         members.add(realmMember);
                     }
                 });
-                Log.i("TTT", "onGroupAddMember 2 G.onGroupAddMember : " + G.onGroupAddMember);
                 if (G.onGroupAddMember != null) {
-                    Log.i("TTT", "onGroupAddMember 3");
                     G.onGroupAddMember.onGroupAddMember(roomId, userId);
                 }
             }
@@ -67,9 +60,6 @@ public class GroupAddMemberResponse extends MessageHandler {
 
 
         realm.close();
-
-
-        Log.i("XXX", "GroupAddMemberResponse handler : " + message);
     }
 
     @Override
@@ -78,20 +68,12 @@ public class GroupAddMemberResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        Log.i("XXX", "GroupAddMemberResponse majorCode : " + majorCode);
-        Log.i("XXX", "GroupAddMemberResponse minorCode : " + minorCode);
-
         G.onGroupAddMember.onError(majorCode, minorCode);
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-
-        Log.i("XXX", "GroupAddMemberResponse timeout : ");
-
-        G.onGroupAddMember.onError(0, 0); // for timeout
-
-
+        G.onGroupAddMember.onError(0, 0);
     }
 }

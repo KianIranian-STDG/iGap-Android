@@ -4,7 +4,6 @@ import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileGender;
 import com.iGap.realm.RealmUserInfo;
-
 import io.realm.Realm;
 
 public class UserProfileSetGenderResponse extends MessageHandler {

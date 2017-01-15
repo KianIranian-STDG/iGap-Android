@@ -9,7 +9,6 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import com.iGap.G;
 import com.iGap.R;
@@ -217,9 +216,7 @@ public final class AndroidUtils {
     public static byte[] getFileHash(FileUploadStructure uploadStructure) throws NoSuchAlgorithmException, IOException {
         try {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-            Log.i("TTT", "Before Time 1A : " + System.currentTimeMillis());
             byte[] fileBytes = fileToBytes(uploadStructure);
-            Log.i("TTT", "Before Time 2A : " + System.currentTimeMillis());
             return sha256.digest(fileBytes);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

@@ -3,7 +3,6 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoUserSessionGetActiveList;
 import com.iGap.realm.RealmSessionGetActiveList;
-
 import io.realm.Realm;
 
 public class UserSessionGetActiveListResponse extends MessageHandler {

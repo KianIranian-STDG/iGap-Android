@@ -27,21 +27,21 @@ public class UserAvatarGetListResponse extends MessageHandler {
         super.handler();
 
         Realm realm = Realm.getDefaultInstance();
-        final long uesrId = Long.parseLong(identity);
+        final long userId = Long.parseLong(identity);
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
-                // delete all avatar in roomid
-                realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, uesrId).findAll().deleteAllFromRealm();
+                // delete all avatar in roomId
+                realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll().deleteAllFromRealm();
 
                 ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder userAvatarGetListResponse = (ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder) message;
 
                 // add all list to realm avatar
                 for (ProtoGlobal.Avatar avatar : userAvatarGetListResponse.getAvatarList()) {
                     RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
-                    realmAvatar.setOwnerId(uesrId);
+                    realmAvatar.setOwnerId(userId);
                     realmAvatar.setUid(SUID.id().get());
                     realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
                 }

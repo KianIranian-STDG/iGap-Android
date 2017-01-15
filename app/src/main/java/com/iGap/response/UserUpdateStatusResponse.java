@@ -2,12 +2,10 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.module.AppUtils;
-import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmUserInfo;
-
 import io.realm.Realm;
 
 public class UserUpdateStatusResponse extends MessageHandler {
@@ -27,8 +25,6 @@ public class UserUpdateStatusResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder builder = (ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder) message;
-
-        ProtoResponse.Response response = builder.getResponse();
 
         Realm realm = Realm.getDefaultInstance();
         final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUserId()).findFirst();

@@ -19,8 +19,7 @@ public class UserUsernameToIdResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoUserUsernameToId.UserUsernameToIdResponse.Builder builder =
-                (ProtoUserUsernameToId.UserUsernameToIdResponse.Builder) message;
+        ProtoUserUsernameToId.UserUsernameToIdResponse.Builder builder = (ProtoUserUsernameToId.UserUsernameToIdResponse.Builder) message;
         builder.getUserId();
     }
 

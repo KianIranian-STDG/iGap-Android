@@ -19,18 +19,19 @@ public class UserProfileGetNicknameResponse extends MessageHandler {
 
     @Override
     public void handler() {
-
-        ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.Builder builder =
-                (ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.Builder) message;
+        super.handler();
+        ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.Builder builder = (ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.Builder) message;
         G.onUserProfileGetNickname.onUserProfileGetNickname(builder.getNickname());
     }
 
     @Override
     public void timeOut() {
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
     }
 }
 

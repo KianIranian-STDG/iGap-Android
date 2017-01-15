@@ -20,9 +20,7 @@ public class UserAvatarAddResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoUserAvatarAdd.UserAvatarAddResponse.Builder userAvatarAddResponse =
-                (ProtoUserAvatarAdd.UserAvatarAddResponse.Builder) message;
-
+        ProtoUserAvatarAdd.UserAvatarAddResponse.Builder userAvatarAddResponse = (ProtoUserAvatarAdd.UserAvatarAddResponse.Builder) message;
         if (G.onUserAvatarResponse != null) {
             G.onUserAvatarResponse.onAvatarAdd(userAvatarAddResponse.getAvatar());
         }

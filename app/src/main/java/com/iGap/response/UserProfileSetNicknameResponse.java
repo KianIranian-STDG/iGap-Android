@@ -22,11 +22,8 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder
-                userProfileNickNameResponse =
-                (ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder) message;
-        G.onUserProfileSetNickNameResponse.onUserProfileNickNameResponse(
-                userProfileNickNameResponse.getNickname(), userProfileNickNameResponse.getResponse());
+        ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder userProfileNickNameResponse = (ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder) message;
+        G.onUserProfileSetNickNameResponse.onUserProfileNickNameResponse(userProfileNickNameResponse.getNickname(), userProfileNickNameResponse.getResponse());
     }
 
     @Override

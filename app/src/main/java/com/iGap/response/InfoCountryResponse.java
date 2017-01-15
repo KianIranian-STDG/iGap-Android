@@ -19,6 +19,7 @@ public class InfoCountryResponse extends MessageHandler {
 
     @Override
     public void handler() {
+        super.handler();
 
         ProtoInfoCountry.InfoCountryResponse.Builder infoCountryResponse =
                 (ProtoInfoCountry.InfoCountryResponse.Builder) message;
@@ -30,10 +31,12 @@ public class InfoCountryResponse extends MessageHandler {
 
     @Override
     public void timeOut() {
+        super.timeOut();
     }
 
     @Override
     public void error() {
+        super.error();
     }
 }
 

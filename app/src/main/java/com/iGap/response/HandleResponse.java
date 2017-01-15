@@ -1,6 +1,5 @@
 package com.iGap.response;
 
-import android.util.Log;
 import com.iGap.AESCrypt;
 import com.iGap.G;
 import com.iGap.helper.HelperNumerical;
@@ -19,12 +18,6 @@ public class HandleResponse extends Thread {
     public void run() {
         super.run();
         if (G.isSecure) {
-            Log.i("TTT", "G.ivSize : " + G.ivSize);
-            Log.i("TTT", "G.symmetricMethod : " + G.symmetricMethod);
-            Log.i("TTT", "G.symmetricKey : " + G.symmetricKey);
-            Log.i("TTT", "G.symmetricKey.getAlgorithm() : " + G.symmetricKey.getAlgorithm());
-            Log.i("TTT", "G.symmetricKey.getFormat() : " + G.symmetricKey.getFormat());
-            Log.i("TTT", "G.symmetricKey.getEncoded() : " + G.symmetricKey.getEncoded().toString());
             byte[] iv = HelperNumerical.getIv(binary, G.ivSize);
             byte[] binaryDecode = HelperNumerical.getMessage(binary);
 

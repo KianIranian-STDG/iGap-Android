@@ -21,10 +21,8 @@ public class UserVerifyResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoUserVerify.UserVerifyResponse.Builder userVerifyResponse =
-                (ProtoUserVerify.UserVerifyResponse.Builder) message;
-        G.onUserVerification.onUserVerify(userVerifyResponse.getToken(),
-                userVerifyResponse.getNewUser());
+        ProtoUserVerify.UserVerifyResponse.Builder userVerifyResponse = (ProtoUserVerify.UserVerifyResponse.Builder) message;
+        G.onUserVerification.onUserVerify(userVerifyResponse.getToken(), userVerifyResponse.getNewUser());
     }
 
     @Override

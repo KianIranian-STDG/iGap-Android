@@ -3,7 +3,6 @@ package com.iGap.response;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import com.iGap.G;
 import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoGlobal;
@@ -31,7 +30,6 @@ public class UserContactsGetListResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        Log.i("QQQ", "2 contactsGetList");
         final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder = (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {

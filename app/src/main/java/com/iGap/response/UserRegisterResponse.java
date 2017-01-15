@@ -20,11 +20,8 @@ public class UserRegisterResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoUserRegister.UserRegisterResponse.Builder builder =
-                (ProtoUserRegister.UserRegisterResponse.Builder) message;
-        G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(),
-                builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(),
-                builder.getVerifyCodeDigitCount());
+        ProtoUserRegister.UserRegisterResponse.Builder builder = (ProtoUserRegister.UserRegisterResponse.Builder) message;
+        G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount());
     }
 
     @Override

@@ -20,8 +20,7 @@ public class UserProfileUpdateUsernameResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder builder =
-                (ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder) message;
+        ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder builder = (ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder) message;
 
         G.onUserProfileUpdateUsername.onUserProfileUpdateUsername(builder.getUsername());
     }
