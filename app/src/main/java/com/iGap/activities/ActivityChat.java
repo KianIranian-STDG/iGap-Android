@@ -468,7 +468,8 @@ public class ActivityChat extends ActivityEnhanced
         mAdapter.notifyDataSetChanged();
 
         onMusicListener = new OnComplete() {
-            @Override public void complete(boolean result, String messageID, String beforMessageID) {
+            @Override
+            public void complete(boolean result, String messageID, String beforMessageID) {
 
                 if (beforMessageID != null) {
                     for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
@@ -3732,7 +3733,10 @@ public class ActivityChat extends ActivityEnhanced
                     if (mAdapter.getAdapterItemCount() > 0) {
                         AbstractMessage lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
                         if (lastMessageBeforeDeleted != null) {
-                            realmRoom.setLastMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID)).findFirst());
+                            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID)).findFirst();
+                            if (realmRoomMessage != null) {
+                                realmRoom.setLastMessage(realmRoomMessage);
+                            }
                         }
                     }
                 }
