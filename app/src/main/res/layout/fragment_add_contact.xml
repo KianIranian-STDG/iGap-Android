@@ -104,6 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp16"
         android:layout_marginRight="@dimen/dp16"
+        app:hintTextAppearance="@style/Hint_appearance"
         >
 
         <EditText

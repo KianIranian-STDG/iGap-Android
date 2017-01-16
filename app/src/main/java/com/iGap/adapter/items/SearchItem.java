@@ -2,6 +2,7 @@ package com.iGap.adapter.items;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import io.github.meness.emoji.EmojiTextView;
 public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public SearchFragment.StructSearch item;
+    private Typeface typeFaceIcon;
 
     public SearchItem setContact(SearchFragment.StructSearch item) {
         this.item = item;
@@ -58,9 +60,13 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             //holder.txtIcon.setVisibility(View.VISIBLE);
             //holder.txtIcon.setText(G.context.getString(R.string.md_user_shape));
         } else if (item.roomType == ProtoGlobal.Room.Type.GROUP) {
+            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");
+            holder.txtIcon.setTypeface(typeFaceIcon);
             holder.txtIcon.setVisibility(View.VISIBLE);
             holder.txtIcon.setText(G.context.getString(R.string.md_users_social_symbol));
         } else if (item.roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
+            holder.txtIcon.setTypeface(typeFaceIcon);
             holder.txtIcon.setVisibility(View.VISIBLE);
             holder.txtIcon.setText(G.context.getString(R.string.md_channel_icon));
         }

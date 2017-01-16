@@ -20,6 +20,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -34,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -92,13 +94,15 @@ import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -978,8 +982,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 int dim20 = (int) getResources().getDimension(R.dimen.dp20);
                 int dim12 = (int) getResources().getDimension(R.dimen.dp12);
                 int dim16 = (int) getResources().getDimension(R.dimen.dp16);
-                txtLogOut.setTextSize(14);
-                txtDeleteAccount.setTextSize(14);
+                int sp14_Popup = 14;
+
+                /**
+                 * change dpi tp px
+                 */
+                DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+                int width = displayMetrics.widthPixels;
+                int widthDpi = Math.round(width / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+
+                if (widthDpi >= 720) {
+                    sp14_Popup = 30;
+                } else if (widthDpi >= 600) {
+                    sp14_Popup = 22;
+                } else {
+                    sp14_Popup = 15;
+                }
+                txtLogOut.setTextSize(sp14_Popup);
+                txtDeleteAccount.setTextSize(sp14_Popup);
 
                 txtLogOut.setPadding(dim20, dim12, dim12, dim20);
                 txtDeleteAccount.setPadding(dim20, 0, dim12, dim16);
@@ -2088,7 +2108,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
     }
 
-    private String getAppVersion() {
+    private int getAppVersion() {
 
         PackageManager manager = context.getPackageManager();
         PackageInfo info = null;
@@ -2097,7 +2117,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return info.versionName;
+        return info.versionCode;
     }
 
     @Override

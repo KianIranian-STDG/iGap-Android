@@ -23,6 +23,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -920,10 +921,26 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         int dim20 = (int) getResources().getDimension(R.dimen.dp20);
         int dim12 = (int) getResources().getDimension(R.dimen.dp12);
+        int sp14_Popup = 14;
 
-        text1.setTextSize(14);
-        text2.setTextSize(14);
-        text3.setTextSize(14);
+        /**
+         * change dpi tp px
+         */
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int width = displayMetrics.widthPixels;
+        int widthDpi = Math.round(width / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+
+        if (widthDpi >= 720) {
+            sp14_Popup = 30;
+        } else if (widthDpi >= 600) {
+            sp14_Popup = 22;
+        } else {
+            sp14_Popup = 15;
+        }
+
+        text1.setTextSize(sp14_Popup);
+        text2.setTextSize(sp14_Popup);
+        text3.setTextSize(sp14_Popup);
 
         text1.setPadding(dim20, dim12, dim12, 0);
         text2.setPadding(dim20, dim12, dim20, dim12);

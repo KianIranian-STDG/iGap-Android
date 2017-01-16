@@ -85,7 +85,7 @@ public class HelperNotificationAndBadge {
     private int inChat_Sound;
     private int countUnicChat = 0;
     private long idRoom;
-    private int delayAlarm = 1500;
+    private int delayAlarm = 5000;
     private long currentAlarm;
 
     public HelperNotificationAndBadge() {

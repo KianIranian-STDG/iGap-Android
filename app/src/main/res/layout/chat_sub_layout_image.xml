@@ -19,8 +19,8 @@
 
         <com.iGap.module.CircleImageView
             android:id="@+id/messageSenderAvatar"
-            android:layout_width="@dimen/dp52"
-            android:layout_height="@dimen/dp52"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
             android:layout_marginRight="@dimen/dp8"
             android:src="@mipmap/empty"/>
 
@@ -86,8 +86,8 @@
                             <TextView
                                 android:id="@+id/cslr_txt_time"
                                 android:layout_width="wrap_content"
-                                android:layout_height="16dp"
-                                android:layout_marginBottom="-1dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="0dp"
                                 android:gravity="center"
                                 android:text="10:21"
                                 android:textColor="@android:color/white"

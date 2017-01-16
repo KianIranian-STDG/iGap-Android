@@ -189,8 +189,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
 
 
-
-
         G.helperNotificationAndBadge.cancelNotification();
         G.onGroupAvatarResponse = this;
         G.onUpdateAvatar = this;
@@ -301,6 +299,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         keepMedia = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
 
+        Log.i("GGGGGGG", "onCreate: " + keepMedia);
         if (keepMedia) {// if Was selected keep media at 1week
             new HelperCalculateKeepMedia().calculateTime();
         }
@@ -398,10 +397,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         txtIgap.setTypeface(type, Typeface.BOLD);
         if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
             txtIgap.setText(R.string.waiting_for_network);
+            txtIgap.setTypeface(null, Typeface.BOLD);
         } else if (G.connectionState == Config.ConnectionState.CONNECTING) {
             txtIgap.setText(R.string.connecting);
+            txtIgap.setTypeface(null, Typeface.BOLD);
         } else if (G.connectionState == Config.ConnectionState.UPDATING) {
             txtIgap.setText(updating);
+            txtIgap.setTypeface(null, Typeface.BOLD);
         } else {
             txtIgap.setText(R.string.igap);
         }
@@ -735,7 +737,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     /**
      * on select room menu
      *
-     * @param message message text
+     * @param message  message text
      * @param position position dfdfdfdf
      */
     private void onSelectRoomMenu(String message, int position, RoomItem item) {
@@ -811,11 +813,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     }
 
 
-
                     for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
                         if (Room.getLastMessage() != null) {
                             if (Room.getLastMessage().getUpdateTime() > 0) {
-                                if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
+                                if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime())
+                                    Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
                             }
                         }
                     }

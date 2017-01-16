@@ -15,7 +15,7 @@
         android:id="@+id/txtEditedIndicator"
         style="@style/ChatMessages.Time"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp4"
         android:gravity="center"
         android:text="@string/edited"/>
@@ -24,7 +24,7 @@
         android:id="@+id/cslr_txt_time"
         style="@style/ChatMessages.Time"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="10:21"/>
 
@@ -32,7 +32,7 @@
         android:id="@+id/cslr_txt_tic"
         style="@style/ChatMessages.MaterialDesignTextView.Tick"
         android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp4"
         android:src="@drawable/ic_double_check"
         android:tint="@color/colorOldBlack"/>

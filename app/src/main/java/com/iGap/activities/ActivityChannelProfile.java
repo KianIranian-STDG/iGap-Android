@@ -25,6 +25,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -38,6 +39,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -125,14 +127,16 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -249,7 +253,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         linkUsername = realmChannelRoom.getUsername();
         isSignature = realmChannelRoom.isSignature();
         fab = (FloatingActionButton) findViewById(R.id.pch_fab_addToChannel);
-
+        Log.i("XXXXXX", "channel inviteLink: " + inviteLink);
+        Log.i("XXXXXX", "channel linkUsername: " + linkUsername);
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -295,13 +300,24 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             lytChannelName.setEnabled(false);
             lytChannelDescription.setEnabled(false);
         }
+
+        if (isPrivate && (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN)) {
+            ltLink.setVisibility(View.VISIBLE);
+        } else {
+            ltLink.setVisibility(View.GONE);
+        }
+
+        if (!isPrivate) {
+            ltLink.setVisibility(View.VISIBLE);
+        }
+
         if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
             fab.setVisibility(View.VISIBLE);
-            ltLink.setVisibility(View.VISIBLE);
+
             imgPupupMenul.setVisibility(View.VISIBLE);
         } else {
             fab.setVisibility(View.GONE);
-            ltLink.setVisibility(View.GONE);
+
             imgPupupMenul.setVisibility(View.GONE);
         }
 
@@ -2136,8 +2152,24 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         int dim20 = (int) getResources().getDimension(R.dimen.dp20);
         int dim12 = (int) getResources().getDimension(R.dimen.dp12);
+        int sp14_Popup = 14;
 
-        text3.setTextSize(14);
+        /**
+         * change dpi tp px
+         */
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int width = displayMetrics.widthPixels;
+        int widthDpi = Math.round(width / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+
+        if (widthDpi >= 720) {
+            sp14_Popup = 30;
+        } else if (widthDpi >= 600) {
+            sp14_Popup = 22;
+        } else {
+            sp14_Popup = 15;
+        }
+
+        text3.setTextSize(sp14_Popup);
         text3.setPadding(dim20, dim12, dim12, dim12);
         layoutDialog.addView(text3, params);
 
@@ -2360,7 +2392,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                         isPrivate = false;
                         dialog.dismiss();
 
-                        linkUsername = edtUserName.getText().toString();
+                        linkUsername = username;
                         setTextChannelLik();
 
                         Realm realm = Realm.getDefaultInstance();

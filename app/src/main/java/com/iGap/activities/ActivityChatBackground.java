@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -43,7 +43,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
     private RecyclerView rcvContent;
     private AdapterChatBackground adapterChatBackgroundSetting;
     private List<StructAdapterBackground> items = new ArrayList<>();
-
+    private int spanItemCount = 3;
     @Override
     protected void onResume() {
         super.onResume();
@@ -70,7 +70,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
             }
         });
 
-        int wdith = G.context.getResources().getDisplayMetrics().widthPixels;
+//        int wdith = G.context.getResources().getDisplayMetrics().widthPixels;
 
         try {
             copyFromAsset();
@@ -78,13 +78,15 @@ public class ActivityChatBackground extends ActivityEnhanced {
             e.printStackTrace();
         }
 
-        if (wdith <= 720) {
-            spanCount = 3;
-        } else if (wdith <= 1280) {
-            spanCount = 4;
-        } else {
-            spanCount = 4;
-        }
+//        if (wdith <= 600) {
+//            spanCount = 3;
+//        } else if (wdith <= 720) {
+//            spanCount = 4;
+//        } else if (wdith <= 720){
+//            spanCount = 4;
+//        }
+
+        final GridLayoutManager gLayoutManager = new GridLayoutManager(ActivityChatBackground.this, spanItemCount);
 
         rcvContent = (RecyclerView) findViewById(R.id.rcvContent);
         adapterChatBackgroundSetting = new AdapterChatBackground(items);
@@ -92,15 +94,26 @@ public class ActivityChatBackground extends ActivityEnhanced {
         rcvContent.setDrawingCacheEnabled(true);
         rcvContent.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         rcvContent.setItemViewCacheSize(100);
-        rcvContent.setLayoutManager(new GridLayoutManager(ActivityChatBackground.this, spanCount));
+        rcvContent.setLayoutManager(gLayoutManager);
         rcvContent.clearAnimation();
         setItem();
         adapterChatBackgroundSetting.notifyDataSetChanged();
-        for (int i = 0; i < items.size(); i++) {
 
-            Log.i("MMMMMMN", "getId: " + items.get(i).getId());
+        rcvContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                rcvContent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                int viewWidth = rcvContent.getMeasuredWidth();
+                float cardViewWidth = getResources().getDimension(R.dimen.dp120);
+                int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
 
-        }
+                if (newSpanCount < 3) newSpanCount = 3;
+
+                spanItemCount = newSpanCount;
+                gLayoutManager.setSpanCount(newSpanCount);
+                gLayoutManager.requestLayout();
+            }
+        });
     }
 
     public void setItem() {
@@ -176,7 +189,6 @@ public class ActivityChatBackground extends ActivityEnhanced {
         String[] files = null;
         files = getAssets().list("back");
 
-        Log.i("CCCCVVV", " G.chatBackground.list().length: " + chatBackground.length());
         if (chatBackground.length() == 0) {
             for (String file : files) {
 
@@ -195,21 +207,4 @@ public class ActivityChatBackground extends ActivityEnhanced {
             }
         }
     }
-
-    /*@Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            Log.i("CCCX", "onKeyDown 1: ");
-            FragmentFullChatBackground fm = (FragmentFullChatBackground) getSupportFragmentManager().findFragmentByTag("FRAGMENT_FULL");
-            if (fm !=null && fm.isVisible()){
-                Log.i("CCCX", "onKeyDown 2: ");
-                getSupportFragmentManager().beginTransaction().remove(fm).commit();
-            }
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }*/
 }

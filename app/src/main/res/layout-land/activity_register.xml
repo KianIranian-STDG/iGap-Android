@@ -135,6 +135,7 @@
                 android:layout_marginTop="@dimen/dp20"
                 android:background="@drawable/rg_background_button_start_register"
                 android:text="@string/rg_Start"
+                android:textSize="@dimen/sp14"
                 android:textColor="@color/rg_whit_background" />
 
             <LinearLayout

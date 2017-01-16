@@ -155,6 +155,7 @@
             android:paddingBottom="@dimen/dp4"
             android:paddingTop="@dimen/dp4"
             android:text="@string/rg_Start"
+            android:textSize="@dimen/sp14"
             android:textColor="@color/rg_whit_background"/>
 
     </RelativeLayout>

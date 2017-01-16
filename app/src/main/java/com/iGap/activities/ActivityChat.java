@@ -38,6 +38,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -54,6 +55,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -204,6 +206,20 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -215,17 +231,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -1426,12 +1431,31 @@ public class ActivityChat extends ActivityEnhanced
                 final int dim12 = (int) getResources().getDimension(R.dimen.dp12);
                 final int dim8 = (int) getResources().getDimension(R.dimen.dp8);
                 int sp16 = (int) getResources().getDimension(R.dimen.sp12);
+                int sp14_Popup = 14;
 
-                text1.setTextSize(14);
-                text2.setTextSize(14);
-                text3.setTextSize(14);
-                text4.setTextSize(14);
-                text5.setTextSize(14);
+                /**
+                 * change dpi tp px
+                 */
+                DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+                int width = displayMetrics.widthPixels;
+                int widthDpi = Math.round(width / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+
+                if (widthDpi >= 720) {
+                    sp14_Popup = 30;
+                } else if (widthDpi >= 600) {
+                    sp14_Popup = 22;
+                } else {
+                    sp14_Popup = 15;
+                }
+
+                Log.i("FFFFFF", "sp14_Popup: " + sp14_Popup);
+                Log.i("FFFFFF", "widthDpi: " + widthDpi);
+
+                text1.setTextSize(sp14_Popup);
+                text2.setTextSize(sp14_Popup);
+                text3.setTextSize(sp14_Popup);
+                text4.setTextSize(sp14_Popup);
+                text5.setTextSize(sp14_Popup);
 
                 text1.setPadding(dim20, dim12, dim12, dim20);
                 text2.setPadding(dim20, 0, dim12, dim20);

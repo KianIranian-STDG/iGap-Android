@@ -79,7 +79,10 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 if (selected_position == position) {
                     holder2.itemView.setBackgroundColor(
                             G.context.getResources().getColor(R.color.toolbar_background));
-                    holder2.itemView.setPadding(3, 3, 3, 3);
+                    holder2.itemView.setPadding((int) G.context.getResources().getDimension(R.dimen.dp4)
+                            , (int) G.context.getResources().getDimension(R.dimen.dp4),
+                            (int) G.context.getResources().getDimension(R.dimen.dp4),
+                            (int) G.context.getResources().getDimension(R.dimen.dp4));
                 } else {
                     holder2.itemView.setBackgroundColor(Color.TRANSPARENT);
                 }

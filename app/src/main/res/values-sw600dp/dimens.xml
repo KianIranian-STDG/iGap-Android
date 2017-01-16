@@ -1,7 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
 
+    <dimen name="messageContainerPadding">9dp</dimen>
+    <dimen name="messageContainerPaddingBottom">6dp</dimen>
+    <dimen name="messageContainerPaddingLeftRight">15dp</dimen>
+    <dimen name="chatBoxMaxWidth">405dp</dimen>
+    <dimen name="messageBox_cornerRadius">30dp</dimen>
+    <dimen name="messageBox_elevation">6dp</dimen>
+    <dimen name="messageBox_minusLeftRightMargin">-8dp</dimen>
 
+    <dimen name="sp14_Popup">10.5sp</dimen>
+    <dimen name="sp8">12sp</dimen>
+    <dimen name="sp9">13.5sp</dimen>
     <dimen name="sp10">15sp</dimen>
     <dimen name="sp12">18sp</dimen>
     <dimen name="sp13">19.5sp</dimen>

@@ -120,7 +120,7 @@
                     android:paddingLeft="@dimen/dp8"
                     android:paddingRight="@dimen/dp8"
                     android:text="@string/desc_public_channel"
-                    android:textSize="14sp"/>
+                    android:textSize="@dimen/sp14"/>
 
                 <RadioButton
                     android:id="@+id/fch_radioButton_private"
@@ -139,7 +139,7 @@
                     android:paddingLeft="@dimen/dp8"
                     android:paddingRight="@dimen/dp8"
                     android:text="@string/desc_private_channel"
-                    android:textSize="14sp"/>
+                    android:textSize="@dimen/sp14"/>
             </RadioGroup>
 
             <LinearLayout
@@ -171,6 +171,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/fch_txtInput_nikeName"
                         android:layout_width="match_parent"
+                        app:hintTextAppearance="@style/Hint_appearance"
+                        app:errorTextAppearance="@style/error_appearance"
                         android:layout_height="wrap_content">
 
                         <EditText

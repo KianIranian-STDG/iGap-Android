@@ -13,7 +13,7 @@
 
     <dimen name="messageBox_minusLeftRightMargin">-5dp</dimen>
 
-
+    <dimen name="sp14_Popup">14sp</dimen>
     <dimen name="sp10">10sp</dimen>
     <dimen name="sp12">12sp</dimen>
     <dimen name="sp13">13sp</dimen>

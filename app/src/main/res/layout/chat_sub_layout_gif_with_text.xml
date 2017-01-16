@@ -18,8 +18,8 @@
 
         <com.iGap.module.CircleImageView
             android:id="@+id/messageSenderAvatar"
-            android:layout_width="@dimen/dp52"
-            android:layout_height="@dimen/dp52"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
             android:layout_marginRight="@dimen/dp8"
             android:src="@mipmap/empty"/>
 
