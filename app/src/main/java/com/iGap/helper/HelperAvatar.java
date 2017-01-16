@@ -50,8 +50,10 @@ public class HelperAvatar {
             @Override
             public void execute(Realm realm) {
                 String avatarPath = copyAvatar(src, avatar);
-
-                RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
+                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatar.getId()).findFirst();
+                if (realmAvatar == null) {
+                    realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
+                }
                 realmAvatar.setUid(SUID.id().get());
                 realmAvatar.setOwnerId(ownerId);
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
@@ -296,21 +298,10 @@ public class HelperAvatar {
 
     private static class AvatarDownload implements OnFileDownloaded {
 
-        /*private static RealmAttachment realmAttachment;
-          private static ProtoFileDownload.FileDownload.Selector selector;
-        */
         private static OnDownload onDownload;
-        //private static String fileName = "";
-        //private static long fileSize = 0;
-
-
-        //public AvatarDownload(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector, OnDownload onDownload) {
 
         private void avatarDownload(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector, OnDownload onDownload) {
 
-           /* this.realmAttachment = realmAttachment;
-            this.selector = selector;
-            this.onDownload = onDownload;*/
             this.onDownload = onDownload;
             long fileSize = 0;
             String fileName = "";
@@ -331,18 +322,6 @@ public class HelperAvatar {
 
             new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector, identity);
 
-        }
-
-        private static int getFileSize(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector) {
-            long fileSize = 0;
-            if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-                fileSize = realmAttachment.getSize();
-            } else if (selector == ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL) {
-                fileSize = realmAttachment.getLargeThumbnail().getSize();
-            } else if (selector == ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL) {
-                fileSize = realmAttachment.getSmallThumbnail().getSize();
-            }
-            return (int) fileSize;
         }
 
         @Override
@@ -376,7 +355,7 @@ public class HelperAvatar {
     }
 
 
-    //======================
+    //======================do this for room list
 
     public static void getAvatar1(final long ownerId, AvatarType avatarType, final OnAvatarGet onAvatarGet) {
 
@@ -442,52 +421,6 @@ public class HelperAvatar {
             }
         }
     }
-
-   /* */
-
-    /**
-     * read from user and room db in local for find initials and color
-     *
-     * @param ownerId if is user set userId and if is room set roomId
-     * @return initials[0] , color[1]
-     *//*
-
-    public static String[] showInitials1(long ownerId, AvatarType avatarType) {
-        Realm realm = Realm.getDefaultInstance();
-        String initials = null;
-        String color = null;
-        if (avatarType == AvatarType.USER) {
-
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, ownerId).findFirst();
-            if (realmRegisteredInfo != null) {
-                initials = realmRegisteredInfo.getInitials();
-                color = realmRegisteredInfo.getColor();
-            } else {
-                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                    if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
-                        new UserInfo().getUserInfo(ownerId);
-                        initials = realmRoom.getInitials();
-                        color = realmRoom.getColor();
-                    }
-                }
-            }
-
-        } else if (avatarType == AvatarType.ROOM) {
-
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, ownerId).findFirst();
-            if (realmRoom != null) {
-                initials = realmRoom.getInitials();
-                color = realmRoom.getColor();
-            }
-        }
-        realm.close();
-
-        if (initials != null && color != null) {
-            return new String[]{initials, color};
-        }
-
-        return null;
-    }*/
 
     private static long getRoomId(long ownerId) {
         Realm realm = Realm.getDefaultInstance();

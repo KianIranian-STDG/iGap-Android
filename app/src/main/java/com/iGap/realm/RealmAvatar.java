@@ -3,7 +3,6 @@ package com.iGap.realm;
 import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -11,8 +10,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmAvatar extends RealmObject {
 
-    @PrimaryKey
-    private long id;
+    @PrimaryKey private long id;
     private long uid; // id for sorting avatars
     private long ownerId; // userId for users and roomId for rooms
     private RealmAttachment file;
@@ -23,6 +21,13 @@ public class RealmAvatar extends RealmObject {
     public RealmAvatar(long id) {
         this.id = id;
     }
+
+    /**
+     * if file is repetitious send it to bottom for detect it later
+     * for main avatar
+     *
+     * @param sendAvatarToBottom if need send avatar to bottom of avatars for that user
+     */
 
     public static RealmAvatar put(long ownerId, ProtoGlobal.Avatar input, boolean sendAvatarToBottom) {
         if (!input.hasFile()) {
@@ -69,8 +74,6 @@ public class RealmAvatar extends RealmObject {
      * update uid for avatar for send it to bottom
      * hint : i need do this action because client read avatars from RealmAvatar and sort descending
      * avatars for get latest avatar
-     *
-     * @param avatarId
      */
 
     private static void updateAvatarUid(final long avatarId) {

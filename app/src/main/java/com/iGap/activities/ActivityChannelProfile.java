@@ -38,7 +38,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -126,16 +125,14 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -266,8 +263,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         description = realmChannelRoom.getDescription();
 
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (userInfo != null)
-            userId = userInfo.getUserId();
+        if (userInfo != null) userId = userInfo.getUserId();
 
         //realm.close();
         //=========Put Extra End
@@ -379,7 +375,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         //show option item just for owner
 
-//        rippleMenu.setVisibility(View.GONE);
+        //        rippleMenu.setVisibility(View.GONE);
         /*if (role != ChannelChatRole.OWNER) {
             imgPupupMenul.setVisibility(View.GONE);
             rippleMenu.setVisibility(View.GONE);
@@ -404,11 +400,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     FragmentShowAvatars.appBarLayout = fab;
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
-                    ActivityChannelProfile.this.getSupportFragmentManager()
-                            .beginTransaction()
-                            .addToBackStack(null)
-                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
+                    ActivityChannelProfile.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
                 }
                 realm.close();
             }
@@ -595,7 +587,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
 
-//                showImage();
+                //                showImage();
                 long mAvatarId = 0;
                 if (messageOne != null && !messageOne.equals("")) {
                     mAvatarId = Long.parseLong(messageOne);
@@ -741,25 +733,23 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         layoutRevoke.addView(inputRevoke, layoutParams);
 
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityChannelProfile.this)
-                        .title(getResources().getString(R.string.channel_link_title_revoke))
-                        .positiveText(getResources().getString(R.string.revoke))
-                        .customView(layoutRevoke, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .neutralText(R.string.array_Copy)
-                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                String copy;
-                                copy = txtChannelLink.getText().toString();
-                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                                clipboard.setPrimaryClip(clip);
-                            }
-                        })
-                        .build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.channel_link_title_revoke))
+                .positiveText(getResources().getString(R.string.revoke))
+                .customView(layoutRevoke, true)
+                .widgetColor(getResources().getColor(R.color.toolbar_background))
+                .negativeText(getResources().getString(R.string.B_cancel))
+                .neutralText(R.string.array_Copy)
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = txtChannelLink.getText().toString();
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                })
+                .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setOnClickListener(new View.OnClickListener() {
@@ -797,11 +787,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
-                        .customView(layoutUserName, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
-                        .build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -985,40 +971,38 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         layoutChannelLink.addView(inputChannelLink, layoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityChannelProfile.this)
-                        .title(getResources().getString(R.string.channel_link))
-                        .positiveText(getResources().getString(R.string.array_Copy))
-                        .customView(layoutChannelLink, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                String copy;
-                                copy = txtChannelLink.getText().toString();
-                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                                clipboard.setPrimaryClip(clip);
-                            }
-                        })
-                        .build();
+                new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.channel_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutChannelLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = txtChannelLink.getText().toString();
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                }).build();
 
         dialog.show();
 
     }
 
     private void setAvatar() {
-        runOnUiThread(new Runnable() {
+        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
             @Override
-            public void run() {
-                HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+            public void onAvatarGet(final String avatarPath, long ownerId) {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onAvatarGet(String avatarPath, long ownerId) {
+                    public void run() {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgCircleImageView);
                     }
+                });
+            }
 
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onShowInitials(String initials, String color) {
+                    public void run() {
                         imgCircleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
@@ -1122,8 +1106,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                                 intent.putExtra("enterFrom", GROUP.toString());
                             }
 
-                            if (ActivityChat.activityChat != null)
-                                ActivityChat.activityChat.finish();
+                            if (ActivityChat.activityChat != null) ActivityChat.activityChat.finish();
 
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -1162,17 +1145,14 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     }
                 } else if (role == ChannelChatRole.ADMIN) {
 
-                    if (contactItemGroupProfile.mContact.role.equals(
-                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contactItemGroupProfile.mContact.peerId);
-                    } else if (contactItemGroupProfile.mContact.role.equals(
-                            ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    } else if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                         kickModerator(contacts.get(position).peerId);
                     }
                 } else if (role == ChannelChatRole.MODERATOR) {
 
-                    if (contactItemGroupProfile.mContact.role.equals(
-                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contactItemGroupProfile.mContact.peerId);
                     }
                 }
@@ -1187,8 +1167,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         recyclerView = (RecyclerView) findViewById(R.id.agp_recycler_view_group_member);
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityChannelProfile.this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(
-                stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
+        recyclerView.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
         recyclerView.setNestedScrollingEnabled(false);
 
@@ -1237,11 +1216,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             bundle.putString("TYPE", "ADMIN");
         }
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null)
-                .replace(R.id.fragmentContainer_channel_profile, fragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_channel_profile, fragment).commit();
     }
 
     private List<StructContactInfo> getCurrentUser(ProtoGlobal.ChannelRoom.Role role) {
@@ -1311,10 +1286,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         bundle.putBoolean("DIALOG_SHOWING", true);
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null)
-                .replace(R.id.coordinator, fragment).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.coordinator, fragment).commit();
     }
 
     //****** create popup
@@ -1584,72 +1556,65 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private String dialogName;
 
     private void ChangeGroupDescription() {
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_description)
-                .positiveText(getString(R.string.save))
-                .alwaysCallInputCallback()
-                .widgetColor(getResources().getColor(R.color.toolbar_background))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        editChannelRequest(txtChannelNameInfo.getText().toString(), dialogDesc);
-                        showProgressBar();
-                    }
-                })
-                .negativeText(getString(R.string.cancel))
-                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                .input(getString(R.string.please_enter_group_description), txtDescription.getText().toString(), new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        // Do something
-                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                        dialogDesc = input.toString();
-                        if (!input.toString().equals(txtDescription.getText().toString())) {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_description).positiveText(getString(R.string.save)).alwaysCallInputCallback().widgetColor(getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                editChannelRequest(txtChannelNameInfo.getText().toString(), dialogDesc);
+                showProgressBar();
+            }
+        }).negativeText(getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(getString(R.string.please_enter_group_description), txtDescription.getText().toString(), new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog dialog, CharSequence input) {
+                // Do something
+                View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                dialogDesc = input.toString();
+                if (!input.toString().equals(txtDescription.getText().toString())) {
 
-                            positive.setClickable(true);
-                            positive.setAlpha(1.0f);
-                        } else {
-                            positive.setClickable(false);
-                            positive.setAlpha(0.5f);
-                        }
-                    }
-                }).show();
+                    positive.setClickable(true);
+                    positive.setAlpha(1.0f);
+                } else {
+                    positive.setClickable(false);
+                    positive.setAlpha(0.5f);
+                }
+            }
+        }).show();
     }
 
     private void ChangeGroupName() {
-//        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_name)
-//                .positiveText(getString(R.string.save))
-//                .alwaysCallInputCallback()
-//                .widgetColor(getResources().getColor(R.color.toolbar_background))
-//                .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                    @Override
-//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//                        editChannelRequest(dialogName, txtDescription.getText().toString());
-//
-//                        prgWait.setVisibility(View.VISIBLE);
-//                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//                    }
-//                })
-//                .negativeText(getString(R.string.cancel))
-//                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-//                .alwaysCallInputCallback()
-//                .input(getString(R.string.please_enter_channel_name), txtChannelNameInfo.getText().toString(), new MaterialDialog.InputCallback() {
-//                    @Override
-//                    public void onInput(MaterialDialog dialog, CharSequence input) {
-//                        // Do something
-//                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
-//                        dialogName = input.toString();
-//                        Log.i("VVVV", "onInput: " + input.toString());
-//                        if (!input.toString().equals(txtChannelNameInfo.getText().toString())) {
-//                            positive.setClickable(true);
-//                            positive.setAlpha(1.0f);
-//                        } else {
-//                            positive.setClickable(false);
-//                            positive.setAlpha(0.5f);
-//                        }
-//
-//
-//                    }
-//                }).show();
+        //        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_name)
+        //                .positiveText(getString(R.string.save))
+        //                .alwaysCallInputCallback()
+        //                .widgetColor(getResources().getColor(R.color.toolbar_background))
+        //                .onPositive(new MaterialDialog.SingleButtonCallback() {
+        //                    @Override
+        //                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        //                        editChannelRequest(dialogName, txtDescription.getText().toString());
+        //
+        //                        prgWait.setVisibility(View.VISIBLE);
+        //                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        //                    }
+        //                })
+        //                .negativeText(getString(R.string.cancel))
+        //                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+        //                .alwaysCallInputCallback()
+        //                .input(getString(R.string.please_enter_channel_name), txtChannelNameInfo.getText().toString(), new MaterialDialog.InputCallback() {
+        //                    @Override
+        //                    public void onInput(MaterialDialog dialog, CharSequence input) {
+        //                        // Do something
+        //                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
+        //                        dialogName = input.toString();
+        //                        Log.i("VVVV", "onInput: " + input.toString());
+        //                        if (!input.toString().equals(txtChannelNameInfo.getText().toString())) {
+        //                            positive.setClickable(true);
+        //                            positive.setAlpha(1.0f);
+        //                        } else {
+        //                            positive.setClickable(false);
+        //                            positive.setAlpha(0.5f);
+        //                        }
+        //
+        //
+        //                    }
+        //                }).show();
 
         final LinearLayout layoutUserName = new LinearLayout(ActivityChannelProfile.this);
         layoutUserName.setOrientation(LinearLayout.VERTICAL);
@@ -1676,14 +1641,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityChannelProfile.this)
-                        .title(getResources().getString(R.string.channel_name))
-                        .positiveText(getResources().getString(R.string.save))
-                        .customView(layoutUserName, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.channel_name)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -1826,7 +1784,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     @Override
     public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
-        if (pathSaveImage != null) {
+        /**
+         * if another account do this action we haven't avatar source and have
+         * to download avatars . for do this action call HelperAvatar.getAvatar
+         */
+        if (pathSaveImage == null) {
+            setAvatar();
+        } else {
             HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
                 @Override
                 public void onAvatarAdd(final String avatarPath) {
@@ -1841,6 +1805,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
                 }
             });
+            pathSaveImage = null;
         }
     }
 
@@ -2119,10 +2084,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content),
-                                getResources().getString(R.string.normal_error),
-                                Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
@@ -2141,10 +2103,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content),
-                                getResources().getString(R.string.time_out),
-                                Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
@@ -2256,37 +2215,27 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         };
 
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_private))
-                .content(getString(R.string.channel_text_convert_to_private))
-                .positiveText(R.string.B_ok)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_private)).content(getString(R.string.channel_text_convert_to_private)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        new RequestChannelRemoveUsername().channelRemoveUsername(roomId);
+                new RequestChannelRemoveUsername().channelRemoveUsername(roomId);
 
-                    }
-                })
-                .negativeText(R.string.B_cancel)
-                .show();
+            }
+        }).negativeText(R.string.B_cancel).show();
     }
 
     private void convertToPublic() {
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_public))
-                .content(getString(R.string.channel_text_convert_to_public))
-                .positiveText(R.string.B_ok)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_public)).content(getString(R.string.channel_text_convert_to_public)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        dialog.dismiss();
-                        setUsername();
+                dialog.dismiss();
+                setUsername();
 
-                    }
-                })
-                .negativeText(R.string.B_cancel)
-                .show();
+            }
+        }).negativeText(R.string.B_cancel).show();
     }
 
     private void setUsername() {
@@ -2321,11 +2270,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
-                        .customView(layoutUserName, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
-                        .build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -2488,25 +2433,20 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             title = R.string.channel_left;
         }
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(title)
-                .content(deleteText)
-                .positiveText(R.string.B_ok)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(title).content(deleteText).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        if (role.equals(ChannelChatRole.OWNER)) {
-                            new RequestChannelDelete().channelDelete(roomId);
-                        } else {
-                            new RequestChannelLeft().channelLeft(roomId);
-                        }
+                if (role.equals(ChannelChatRole.OWNER)) {
+                    new RequestChannelDelete().channelDelete(roomId);
+                } else {
+                    new RequestChannelLeft().channelLeft(roomId);
+                }
 
-                        prgWait.setVisibility(View.VISIBLE);
-                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                })
-                .negativeText(R.string.B_cancel)
-                .show();
+                prgWait.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        }).negativeText(R.string.B_cancel).show();
     }
 
     //*** set avatar image
@@ -2531,11 +2471,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         bundle.putString("PAGE", "CHANNEL");
         bundle.putLong("ID", roomId);
         fragmentNotification.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null)
-                .replace(R.id.fragmentContainer_channel_profile, fragmentNotification)
-                .commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_channel_profile, fragmentNotification).commit();
     }
 
     //*** UploadTask

@@ -42,7 +42,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -132,17 +131,15 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.R.id.fragmentContainer_group_profile;
@@ -151,8 +148,7 @@ import static com.iGap.realm.enums.RoomType.GROUP;
 /**
  * Created by android3 on 9/18/2016.
  */
-public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAvatarResponse, OnFileUploadForActivities
-        , OnGroupAvatarDelete, OnGroupRevokeLink {
+public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAvatarResponse, OnFileUploadForActivities, OnGroupAvatarDelete, OnGroupRevokeLink {
 
     LinearLayout layoutSetting;
     LinearLayout layoutSetAdmin;
@@ -245,8 +241,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
 
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (userInfo != null)
-            userID = userInfo.getUserId();
+        if (userInfo != null) userID = userInfo.getUserId();
 
         realm.close();
         initComponent();
@@ -261,7 +256,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     @Override
     protected void onPause() {
-//        int me = setGroupParticipantLable();
+        //        int me = setGroupParticipantLable();
         if (ActivityChat.onComplete != null) {
 
             if (!txtMemberNumber.getText().toString().equals(participantsCountLabel)) {
@@ -417,18 +412,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     @Override
                     public void onClick(View view) {
 
-                        new MaterialDialog.Builder(ActivityGroupProfile.this).title(
-                                R.string.clear_history)
-                                .content(R.string.clear_history_content)
-                                .positiveText(R.string.B_ok)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new MaterialDialog.Builder(ActivityGroupProfile.this).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                    }
-                                })
-                                .negativeText(R.string.B_cancel)
-                                .show();
+                            }
+                        }).negativeText(R.string.B_cancel).show();
 
                         popupWindow.dismiss();
                     }
@@ -458,8 +447,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         layoutNotificatin = (LinearLayout) findViewById(R.id.agp_ll_notification);
         layoutDeleteAndLeftGroup = (LinearLayout) findViewById(R.id.agp_ll_delete_and_left_group);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting_addContact);
-        prgWait.getIndeterminateDrawable()
-                .setColorFilter(getResources().getColor(R.color.toolbar_background), PorterDuff.Mode.MULTIPLY);
+        prgWait.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), PorterDuff.Mode.MULTIPLY);
         imvGroupAvatar = (CircleImageView) findViewById(R.id.agp_imv_group_avatar);
 
         txtGroupNameTitle = (TextView) findViewById(R.id.agp_txt_group_name_title);
@@ -529,21 +517,21 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         });
 
-//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//
-//                TextView titleToolbar = (TextView) findViewById(R.id.agp_txt_titleToolbar);
-//                if (verticalOffset < -appBarLayout.getTotalScrollRange() / 4) {
-//
-//                    titleToolbar.animate().alpha(1).setDuration(300);
-//                    titleToolbar.setVisibility(View.VISIBLE);
-//                } else {
-//                    titleToolbar.animate().alpha(0).setDuration(500);
-//                    titleToolbar.setVisibility(View.GONE);
-//                }
-//            }
-//        });
+        //        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        //            @Override
+        //            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        //
+        //                TextView titleToolbar = (TextView) findViewById(R.id.agp_txt_titleToolbar);
+        //                if (verticalOffset < -appBarLayout.getTotalScrollRange() / 4) {
+        //
+        //                    titleToolbar.animate().alpha(1).setDuration(300);
+        //                    titleToolbar.setVisibility(View.VISIBLE);
+        //                } else {
+        //                    titleToolbar.animate().alpha(0).setDuration(500);
+        //                    titleToolbar.setVisibility(View.GONE);
+        //                }
+        //            }
+        //        });
 
 
         fab = (FloatingActionButton) findViewById(R.id.agp_fab_setPic);
@@ -607,8 +595,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         });
 
-        final ToggleButton toggleButton =
-                (ToggleButton) findViewById(R.id.agp_toggle_member_can_add_member);
+        final ToggleButton toggleButton = (ToggleButton) findViewById(R.id.agp_toggle_member_can_add_member);
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -629,12 +616,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 bundle.putString("PAGE", "GROUP");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                                R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(fragmentContainer_group_profile, fragmentNotification)
-                        .commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer_group_profile, fragmentNotification).commit();
             }
         });
 
@@ -664,11 +646,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     FragmentShowAvatars.appBarLayout = fab;
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.group);
-                    ActivityGroupProfile.this.getSupportFragmentManager()
-                            .beginTransaction()
-                            .addToBackStack(null)
-                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .replace(R.id.fragmentContainer_group_profile, fragment, null).commit();
+                    ActivityGroupProfile.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, null).commit();
                 }
                 realm.close();
 
@@ -701,35 +679,35 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 }
 
 
-//                final PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, txtLinkTitle);
-//                //Inflating the Popup using xml file
-//                popup.getMenuInflater()
-//                        .inflate(R.menu.menu_item_group_link_profile, popup.getMenu());
-//
-//                //registering popup with OnMenuItemClickListener
-//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    public boolean onMenuItemClick(MenuItem item) {
-//
-//                        switch (item.getItemId()) {
-//                            case R.id.menu_group_link_copy:
-//                                String copy;
-//                                copy = txtGroupLink.getText().toString();
-//                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-//                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-//                                clipboard.setPrimaryClip(clip);
-//
-//                                break;
-//                            case R.id.menu_group_link_revoke:
-//                                showProgressBar();
-//                                new RequestGroupRevokeLink().groupRevokeLink(roomId);
-//                                break;
-//                        }
-//
-//                        return true;
-//                    }
-//                });
-//
-//                popup.show(); //
+                //                final PopupMenu popup = new PopupMenu(ActivityGroupProfile.this, txtLinkTitle);
+                //                //Inflating the Popup using xml file
+                //                popup.getMenuInflater()
+                //                        .inflate(R.menu.menu_item_group_link_profile, popup.getMenu());
+                //
+                //                //registering popup with OnMenuItemClickListener
+                //                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                //                    public boolean onMenuItemClick(MenuItem item) {
+                //
+                //                        switch (item.getItemId()) {
+                //                            case R.id.menu_group_link_copy:
+                //                                String copy;
+                //                                copy = txtGroupLink.getText().toString();
+                //                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                //                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                //                                clipboard.setPrimaryClip(clip);
+                //
+                //                                break;
+                //                            case R.id.menu_group_link_revoke:
+                //                                showProgressBar();
+                //                                new RequestGroupRevokeLink().groupRevokeLink(roomId);
+                //                                break;
+                //                        }
+                //
+                //                        return true;
+                //                    }
+                //                });
+                //
+                //                popup.show(); //
             }
         });
 
@@ -738,7 +716,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
 
-//                showImage();
+                //                showImage();
                 long mAvatarId = 0;
                 if (messageOne != null && !messageOne.equals("")) {
                     mAvatarId = Long.parseLong(messageOne);
@@ -815,23 +793,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         layoutGroupLink.addView(inputGroupLink, layoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityGroupProfile.this)
-                        .title(getResources().getString(R.string.group_link))
-                        .positiveText(getResources().getString(R.string.array_Copy))
-                        .customView(layoutGroupLink, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                String copy;
-                                copy = txtGroupLink.getText().toString();
-                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                                clipboard.setPrimaryClip(clip);
-                            }
-                        })
-                        .build();
+                new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutGroupLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = txtGroupLink.getText().toString();
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                }).build();
 
         dialog.show();
 
@@ -841,177 +812,177 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
      * is repeat
      */
 
-//    private void editUsername() {
-//        final LinearLayout layoutUserName = new LinearLayout(ActivityGroupProfile.this);
-//        layoutUserName.setOrientation(LinearLayout.VERTICAL);
-//
-//        final View viewUserName = new View(ActivityGroupProfile.this);
-//        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-//
-//        final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
-//        final EditText edtUserName = new EditText(ActivityGroupProfile.this);
-//        edtUserName.setHint(getResources().getString(R.string.st_username));
-//        edtUserName.setText(linkUsername);
-//        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
-//        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
-//        edtUserName.setPadding(0, 8, 0, 8);
-//        edtUserName.setSingleLine(true);
-//        inputUserName.addView(edtUserName);
-//        inputUserName.addView(viewUserName, viewParams);
-//
-//        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
-//        }
-//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//
-//        layoutUserName.addView(inputUserName, layoutParams);
-//
-//        final MaterialDialog dialog =
-//                new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
-//                        .customView(layoutUserName, true)
-//                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
-//                        .build();
-//
-//        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-//        positive.setEnabled(false);
-//
-//        final String finalUserName = inviteLink;
-//        edtUserName.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                if (!editable.toString().contains("iGap.net/")) {
-//                    edtUserName.setText("iGap.net/");
-//                    Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
-//                }
-//
-//                if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
-//                    String userName = edtUserName.getText().toString().replace("iGap.net/", "");
-//                    new RequestGroupCheckUsername().GroupCheckUsername(roomId,userName);
-//
-//                } else {
-//                    positive.setEnabled(false);
-//                    inputUserName.setErrorEnabled(true);
-//                    inputUserName.setError("INVALID");
-//                }
-//
-//
-//            }
-//        });
-//
-//        G.onGroupCheckUsername = new OnGroupCheckUsername() {
-//            @Override
-//            public void onGroupCheckUsername(final ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status status) {
-//                G.handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.AVAILABLE) {
-//
-//                            if (!edtUserName.getText().toString().equals(finalUserName)) {
-//                                positive.setEnabled(true);
-//                            } else {
-//                                positive.setEnabled(false);
-//                            }
-//                            inputUserName.setErrorEnabled(true);
-//                            inputUserName.setError("");
-//
-//
-//                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.INVALID) {
-//                            positive.setEnabled(false);
-//                            inputUserName.setErrorEnabled(true);
-//                            inputUserName.setError("INVALID");
-//
-//                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.TAKEN) {
-//                            inputUserName.setErrorEnabled(true);
-//                            inputUserName.setError("TAKEN");
-//                            positive.setEnabled(false);
-//                        }
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onError(int majorCode, int minorCode) {
-//
-//            }
-//        };
-//
-//        G.onGroupUpdateUsername = new OnGroupUpdateUsername() {
-//            @Override
-//            public void onGroupUpdateUsername(final long roomId, final String username) {
-//                G.handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        txtGroupLink.setText("iGap.net/" + username);
-//
-//                        Realm realm = Realm.getDefaultInstance();
-//                        realm.executeTransaction(new Realm.Transaction() {
-//                            @Override
-//                            public void execute(Realm realm) {
-//                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-//                                realmRoom.getGroupRoom().setUsername(username);
-//                            }
-//                        });
-//
-//                        realm.close();
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onError(int majorCode, int minorCode) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
-//
-//                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                snack.dismiss();
-//                            }
-//                        });
-//                        snack.show();
-//                    }
-//                });
-//            }
-//        };
-//
-//
-//        positive.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                new RequestGroupUpdateUsername().groupUpdateUsername(roomId, edtUserName.getText().toString());
-//                dialog.dismiss();
-//            }
-//        });
-//
-//
-//        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View view, boolean b) {
-//                if (b) {
-//                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
-//                } else {
-//                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-//                }
-//            }
-//        });
-//
-//        // check each word with server
-//
-//        dialog.show();
-//    }
+    //    private void editUsername() {
+    //        final LinearLayout layoutUserName = new LinearLayout(ActivityGroupProfile.this);
+    //        layoutUserName.setOrientation(LinearLayout.VERTICAL);
+    //
+    //        final View viewUserName = new View(ActivityGroupProfile.this);
+    //        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+    //
+    //        final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
+    //        final EditText edtUserName = new EditText(ActivityGroupProfile.this);
+    //        edtUserName.setHint(getResources().getString(R.string.st_username));
+    //        edtUserName.setText(linkUsername);
+    //        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
+    //        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+    //        edtUserName.setPadding(0, 8, 0, 8);
+    //        edtUserName.setSingleLine(true);
+    //        inputUserName.addView(edtUserName);
+    //        inputUserName.addView(viewUserName, viewParams);
+    //
+    //        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+    //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+    //            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
+    //        }
+    //        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    //
+    //        layoutUserName.addView(inputUserName, layoutParams);
+    //
+    //        final MaterialDialog dialog =
+    //                new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
+    //                        .customView(layoutUserName, true)
+    //                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
+    //                        .build();
+    //
+    //        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+    //        positive.setEnabled(false);
+    //
+    //        final String finalUserName = inviteLink;
+    //        edtUserName.addTextChangedListener(new TextWatcher() {
+    //            @Override
+    //            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    //
+    //            }
+    //
+    //            @Override
+    //            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    //            }
+    //
+    //            @Override
+    //            public void afterTextChanged(Editable editable) {
+    //                if (!editable.toString().contains("iGap.net/")) {
+    //                    edtUserName.setText("iGap.net/");
+    //                    Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
+    //                }
+    //
+    //                if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
+    //                    String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+    //                    new RequestGroupCheckUsername().GroupCheckUsername(roomId,userName);
+    //
+    //                } else {
+    //                    positive.setEnabled(false);
+    //                    inputUserName.setErrorEnabled(true);
+    //                    inputUserName.setError("INVALID");
+    //                }
+    //
+    //
+    //            }
+    //        });
+    //
+    //        G.onGroupCheckUsername = new OnGroupCheckUsername() {
+    //            @Override
+    //            public void onGroupCheckUsername(final ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status status) {
+    //                G.handler.post(new Runnable() {
+    //                    @Override
+    //                    public void run() {
+    //                        if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.AVAILABLE) {
+    //
+    //                            if (!edtUserName.getText().toString().equals(finalUserName)) {
+    //                                positive.setEnabled(true);
+    //                            } else {
+    //                                positive.setEnabled(false);
+    //                            }
+    //                            inputUserName.setErrorEnabled(true);
+    //                            inputUserName.setError("");
+    //
+    //
+    //                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.INVALID) {
+    //                            positive.setEnabled(false);
+    //                            inputUserName.setErrorEnabled(true);
+    //                            inputUserName.setError("INVALID");
+    //
+    //                        } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.TAKEN) {
+    //                            inputUserName.setErrorEnabled(true);
+    //                            inputUserName.setError("TAKEN");
+    //                            positive.setEnabled(false);
+    //                        }
+    //                    }
+    //                });
+    //            }
+    //
+    //            @Override
+    //            public void onError(int majorCode, int minorCode) {
+    //
+    //            }
+    //        };
+    //
+    //        G.onGroupUpdateUsername = new OnGroupUpdateUsername() {
+    //            @Override
+    //            public void onGroupUpdateUsername(final long roomId, final String username) {
+    //                G.handler.post(new Runnable() {
+    //                    @Override
+    //                    public void run() {
+    //                        txtGroupLink.setText("iGap.net/" + username);
+    //
+    //                        Realm realm = Realm.getDefaultInstance();
+    //                        realm.executeTransaction(new Realm.Transaction() {
+    //                            @Override
+    //                            public void execute(Realm realm) {
+    //                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+    //                                realmRoom.getGroupRoom().setUsername(username);
+    //                            }
+    //                        });
+    //
+    //                        realm.close();
+    //                    }
+    //                });
+    //            }
+    //
+    //            @Override
+    //            public void onError(int majorCode, int minorCode) {
+    //                runOnUiThread(new Runnable() {
+    //                    @Override
+    //                    public void run() {
+    //                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+    //
+    //                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+    //                            @Override
+    //                            public void onClick(View view) {
+    //                                snack.dismiss();
+    //                            }
+    //                        });
+    //                        snack.show();
+    //                    }
+    //                });
+    //            }
+    //        };
+    //
+    //
+    //        positive.setOnClickListener(new View.OnClickListener() {
+    //            @Override
+    //            public void onClick(View view) {
+    //
+    //                new RequestGroupUpdateUsername().groupUpdateUsername(roomId, edtUserName.getText().toString());
+    //                dialog.dismiss();
+    //            }
+    //        });
+    //
+    //
+    //        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+    //            @Override
+    //            public void onFocusChange(View view, boolean b) {
+    //                if (b) {
+    //                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+    //                } else {
+    //                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+    //                }
+    //            }
+    //        });
+    //
+    //        // check each word with server
+    //
+    //        dialog.show();
+    //    }
     private void dialogRevoke() {
 
         String link = txtGroupLink.getText().toString();
@@ -1042,25 +1013,23 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         layoutRevoke.addView(inputRevoke, layoutParams);
 
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityGroupProfile.this)
-                        .title(getResources().getString(R.string.group_link_hint_revoke))
-                        .positiveText(getResources().getString(R.string.revoke))
-                        .customView(layoutRevoke, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .neutralText(R.string.array_Copy)
-                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                String copy;
-                                copy = txtGroupLink.getText().toString();
-                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                                clipboard.setPrimaryClip(clip);
-                            }
-                        })
-                        .build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link_hint_revoke))
+                .positiveText(getResources().getString(R.string.revoke))
+                .customView(layoutRevoke, true)
+                .widgetColor(getResources().getColor(R.color.toolbar_background))
+                .negativeText(getResources().getString(R.string.B_cancel))
+                .neutralText(R.string.array_Copy)
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = txtGroupLink.getText().toString();
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                })
+                .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setOnClickListener(new View.OnClickListener() {
@@ -1104,19 +1073,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         };
 
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_private))
-                .content(getString(R.string.group_text_convert_to_private))
-                .positiveText(R.string.B_ok)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_private)).content(getString(R.string.group_text_convert_to_private)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        new RequestGroupRemoveUsername().groupRemoveUsername(roomId);
+                new RequestGroupRemoveUsername().groupRemoveUsername(roomId);
 
-                    }
-                })
-                .negativeText(R.string.B_cancel)
-                .show();
+            }
+        }).negativeText(R.string.B_cancel).show();
     }
 
     private void setTextGroupLik() {
@@ -1132,20 +1096,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     private void convertToPublic() {
-        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_public))
-                .content(getString(R.string.group_text_convert_to_public))
-                .positiveText(R.string.B_ok)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_public)).content(getString(R.string.group_text_convert_to_public)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        dialog.dismiss();
-                        setUsername();
+                dialog.dismiss();
+                setUsername();
 
-                    }
-                })
-                .negativeText(R.string.B_cancel)
-                .show();
+            }
+        }).negativeText(R.string.B_cancel).show();
     }
 
     private void setUsername() {
@@ -1180,11 +1139,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
-                        .customView(layoutUserName, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
-                        .build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -1415,8 +1370,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         RealmResults<RealmAvatar> avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findAll();
 
         if (avatars.isEmpty()) {
-            imvGroupAvatar.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+            imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
             return;
         }
         RealmAvatar realmAvatar = null;
@@ -1429,8 +1383,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
 
         if (realmAvatar == null) {
-            imvGroupAvatar.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+            imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
             return;
         }
 
@@ -1439,8 +1392,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvGroupAvatar);
         } else {
-            imvGroupAvatar.setImageBitmap(
-                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+            imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
         }
 
         realm.close();
@@ -1468,8 +1420,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroupProfile>() {
             @Override
             public boolean filter(ContactItemGroupProfile item, CharSequence constraint) {
-                return !item.mContact.displayName.toLowerCase()
-                        .startsWith(String.valueOf(constraint).toLowerCase());
+                return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroupProfile>() {
@@ -1503,8 +1454,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             }
 
                             finish();
-                            if (ActivityChat.activityChat != null)
-                                ActivityChat.activityChat.finish();
+                            if (ActivityChat.activityChat != null) ActivityChat.activityChat.finish();
 
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -1542,17 +1492,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     }
                 } else if (role == GroupChatRole.ADMIN) {
 
-                    if (contactItemGroupProfile.mContact.role.equals(
-                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contactItemGroupProfile.mContact.peerId);
-                    } else if (contactItemGroupProfile.mContact.role.equals(
-                            ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    } else if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                         kickModerator(contacts.get(position).peerId);
                     }
                 } else if (role == GroupChatRole.MODERATOR) {
 
-                    if (contactItemGroupProfile.mContact.role.equals(
-                            ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contactItemGroupProfile.mContact.peerId);
                     }
                 }
@@ -1567,14 +1514,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         recyclerView = (RecyclerView) findViewById(R.id.agp_recycler_view_group_member);
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityGroupProfile.this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(
-                stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
+        recyclerView.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
         recyclerView.setNestedScrollingEnabled(false);
 
         //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration =
-                new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         recyclerView.addItemDecoration(decoration);
 
         items = new ArrayList<>();
@@ -1727,8 +1672,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     @Override
-    public void onFileUploading(FileUploadStructure uploadStructure, String identity,
-                                double progress) {
+    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
         // TODO: 10/20/2016 [Alireza] update view something like updating progress
     }
 
@@ -1750,51 +1694,47 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     //dialog for choose pic from gallery or camera
     private void startDialogSelectPicture(int r) {
 
-        new MaterialDialog.Builder(this).title(R.string.choose_picture)
-                .negativeText(R.string.cansel)
-                .items(r)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+        new MaterialDialog.Builder(this).title(R.string.choose_picture).negativeText(R.string.cansel).items(r).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        if (which == 0) {
-                            try {
-                                attachFile.requestOpenGalleryForImageSingleSelect();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else if (which == 1) {
-                            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) { // camera
+                if (which == 0) {
+                    try {
+                        attachFile.requestOpenGalleryForImageSingleSelect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else if (which == 1) {
+                    if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) { // camera
 
-                                try {
-                                    HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermision() {
+                        try {
+                            HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermision() {
+                                @Override
+                                public void Allow() throws IOException {
+                                    HelperPermision.getCamarePermision(ActivityGroupProfile.this, new OnGetPermision() {
                                         @Override
-                                        public void Allow() throws IOException {
-                                            HelperPermision.getCamarePermision(ActivityGroupProfile.this, new OnGetPermision() {
-                                                @Override
-                                                public void Allow() {
-                                                    dialog.dismiss();
-                                                    useCamera();
-                                                }
-                                            });
+                                        public void Allow() {
+                                            dialog.dismiss();
+                                            useCamera();
                                         }
                                     });
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                                 }
-                            } else {
-                                Toast.makeText(ActivityGroupProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
-                            }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-//                        else if (which == 2) {
-//                            showProgressBar();
-//                            Realm realm = Realm.getDefaultInstance();
-//                            new RequestGroupAvatarDelete().groupAvatarDelete(roomId, getLastAvatar().getId());
-//                            realm.close();
-//                        }
+                    } else {
+                        Toast.makeText(ActivityGroupProfile.this, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                     }
-                })
-                .show();
+                }
+                //                        else if (which == 2) {
+                //                            showProgressBar();
+                //                            Realm realm = Realm.getDefaultInstance();
+                //                            new RequestGroupAvatarDelete().groupAvatarDelete(roomId, getLastAvatar().getId());
+                //                            realm.close();
+                //                        }
+            }
+        }).show();
     }
 
     private void useCamera() {
@@ -1814,7 +1754,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     //=============get last avatar
-//TODO [Saeed Mozaffari] [2016-12-03 10:18 AM] - in do ta method ro az inja baradram va be surate global estefade konam
+    //TODO [Saeed Mozaffari] [2016-12-03 10:18 AM] - in do ta method ro az inja baradram va be surate global estefade konam
 
     public RealmList<RealmAvatar> getAvatars() {
         RealmList<RealmAvatar> avatars = new RealmList<>();
@@ -1888,10 +1828,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         bundle.putBoolean("DIALOG_SHOWING", true);
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null)
-                .replace(fragmentContainer_group_profile, fragment).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
     }
 
     @Override
@@ -1921,10 +1858,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content),
-                                getResources().getString(R.string.normal_error),
-                                Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
@@ -1944,10 +1878,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack =
-                        Snackbar.make(findViewById(android.R.id.content),
-                                getResources().getString(R.string.time_out),
-                                Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
@@ -2039,23 +1970,22 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         private void updateRole(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
             ContactItemGroupProfile.mainRole = role.toString();
             runOnUiThread(new Runnable() {
-                              @Override
-                              public void run() {
+                @Override
+                public void run() {
 
-                                  List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+                    List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
 
-                                  for (int i = 0; i < items.size(); i++) {
-                                      if (items.get(i).mContact.peerId == memberId) {
-                                          items.get(i).mContact.role = role.toString();
-                                          if (i < itemAdapter.getAdapterItemCount()) {
-                                              IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
-                                              itemAdapter.set(i, item);
-                                          }
-                                      }
-                                  }
-                              }
-                          }
-            );
+                    for (int i = 0; i < items.size(); i++) {
+                        if (items.get(i).mContact.peerId == memberId) {
+                            items.get(i).mContact.role = role.toString();
+                            if (i < itemAdapter.getAdapterItemCount()) {
+                                IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
+                                itemAdapter.set(i, item);
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         private void setToAdmin(Long peerId) {
@@ -2095,7 +2025,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 }
                 itemAdapter.clear();
                 itemAdapter.add(items);
-//                itemAdapter.add(new ContactItemGroupProfile().setContact(contacts.get(0)).withIdentifier(100 + contacts.indexOf(contacts.get(0))));
+                //                itemAdapter.add(new ContactItemGroupProfile().setContact(contacts.get(0)).withIdentifier(100 + contacts.indexOf(contacts.get(0))));
                 txtMore.setVisibility(View.GONE);
             }
         });
@@ -2111,16 +2041,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         if (messageCount == 0) {
             startMessageId = 0;
         } else {
-            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
-                    .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                    .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
             if (messageCount >= realmRoomMessages.size()) {
                 // if count is bigger than exist messages get first message id that exist
-                RealmResults<RealmRoomMessage> realmRoomMessageRealmResults =
-                        realm.where(RealmRoomMessage.class)
-                                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+                RealmResults<RealmRoomMessage> realmRoomMessageRealmResults = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
                 for (final RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
 
                     if (realmRoomMessage != null) {
@@ -2159,8 +2084,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     new RequestGroupAddMember().groupAddMember(roomId, peerId, startMessageId);
                 }
 
-                RealmRoom realmRoom =
-                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
 
                 for (int i = 0; i < members.size(); i++) {
@@ -2212,14 +2136,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityGroupProfile.this)
-                        .title(getResources().getString(R.string.group_name))
-                        .positiveText(getResources().getString(R.string.save))
-                        .customView(layoutUserName, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_name)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -2262,10 +2179,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final Snackbar snack =
-                                Snackbar.make(findViewById(android.R.id.content),
-                                        getResources().getString(R.string.time_out),
-                                        Snackbar.LENGTH_LONG);
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                             @Override
@@ -2303,68 +2217,54 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     private void ChangeGroupDescription() {
-        MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityGroupProfile.this).title(R.string.group_description)
-                        .positiveText(getString(R.string.save))
-                        .alwaysCallInputCallback()
-                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+        MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(R.string.group_description).positiveText(getString(R.string.save)).alwaysCallInputCallback().widgetColor(getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                G.onGroupEdit = new OnGroupEdit() {
+                    @Override
+                    public void onGroupEdit(final long roomId, final String name, final String descriptions) {
+
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void onClick(@NonNull MaterialDialog dialog,
-                                                @NonNull DialogAction which) {
+                            public void run() {
 
-                                G.onGroupEdit = new OnGroupEdit() {
-                                    @Override
-                                    public void onGroupEdit(final long roomId, final String name,
-                                                            final String descriptions) {
-
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-
-                                                description = descriptions;
-                                                txtGroupDescription.setText(descriptions);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onError(int majorCode, int minorCode) {
-
-                                    }
-
-                                    @Override
-                                    public void onTimeOut() {
-
-                                    }
-                                };
-
-                                new RequestGroupEdit().groupEdit(roomId, txtGroupName.getText().toString(),
-                                        tmp);
+                                description = descriptions;
+                                txtGroupDescription.setText(descriptions);
                             }
-                        })
-                        .negativeText(getString(R.string.cancel))
-                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-                        .input(getString(R.string.please_enter_group_description),
-                                txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
-                                    @Override
-                                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                                        // Do something
+                        });
+                    }
 
-                                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                                        tmp = input.toString();
-                                        if (!input.toString()
-                                                .equals(txtGroupDescription.getText().toString())) {
+                    @Override
+                    public void onError(int majorCode, int minorCode) {
 
-                                            positive.setClickable(true);
-                                            positive.setAlpha(1.0f);
-                                        } else {
-                                            positive.setClickable(false);
-                                            positive.setAlpha(0.5f);
-                                        }
-                                    }
-                                })
-                        .show();
+                    }
+
+                    @Override
+                    public void onTimeOut() {
+
+                    }
+                };
+
+                new RequestGroupEdit().groupEdit(roomId, txtGroupName.getText().toString(), tmp);
+            }
+        }).negativeText(getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(getString(R.string.please_enter_group_description), txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog dialog, CharSequence input) {
+                // Do something
+
+                View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                tmp = input.toString();
+                if (!input.toString().equals(txtGroupDescription.getText().toString())) {
+
+                    positive.setClickable(true);
+                    positive.setAlpha(1.0f);
+                } else {
+                    positive.setClickable(false);
+                    positive.setAlpha(0.5f);
+                }
+            }
+        }).show();
     }
 
     private void groupLeft() {
@@ -2376,143 +2276,137 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             text = getString(R.string.do_you_want_to_leave_this_group);
         }
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .content(text)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(text).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                G.onGroupLeft = new OnGroupLeft() {
                     @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    public void onGroupLeft(final long roomId, long memberId) {
 
-                        G.onGroupLeft = new OnGroupLeft() {
+
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void onGroupLeft(final long roomId, long memberId) {
-
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ActivityGroupProfile.this.finish();
-                                        if (ActivityChat.activityChat != null) {
-                                            ActivityChat.activityChat.finish();
-                                        }
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        prgWait.setVisibility(View.GONE);
-                                    }
-                                });
+                            public void run() {
+                                ActivityGroupProfile.this.finish();
+                                if (ActivityChat.activityChat != null) {
+                                    ActivityChat.activityChat.finish();
+                                }
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWait.setVisibility(View.GONE);
                             }
+                        });
+                    }
 
+                    @Override
+                    public void onError(int majorCode, int minorCode) {
+
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void onError(int majorCode, int minorCode) {
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        prgWait.setVisibility(View.GONE);
-                                    }
-                                });
+                            public void run() {
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWait.setVisibility(View.GONE);
                             }
+                        });
+                    }
 
+                    @Override
+                    public void onTimeOut() {
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void onTimeOut() {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        prgWait.setVisibility(View.GONE);
-                                    }
-                                });
+                            public void run() {
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWait.setVisibility(View.GONE);
                             }
-                        };
+                        });
+                    }
+                };
 
-                        G.onGroupDelete = new OnGroupDelete() {
+                G.onGroupDelete = new OnGroupDelete() {
+                    @Override
+                    public void onGroupDelete(final long roomId) {
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void onGroupDelete(final long roomId) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ActivityGroupProfile.this.finish();
-                                        if (ActivityChat.activityChat != null) {
-                                            ActivityChat.activityChat.finish();
-                                        }
+                            public void run() {
+                                ActivityGroupProfile.this.finish();
+                                if (ActivityChat.activityChat != null) {
+                                    ActivityChat.activityChat.finish();
+                                }
 
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        prgWait.setVisibility(View.GONE);
-                                    }
-                                });
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWait.setVisibility(View.GONE);
                             }
+                        });
+                    }
 
+                    @Override
+                    public void Error(int majorCode, int minorCode) {
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void Error(int majorCode, int minorCode) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        prgWait.setVisibility(View.GONE);
-                                    }
-                                });
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
-                                        snack.setAction("CANCEL", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                snack.dismiss();
-                                            }
-                                        });
-                                        snack.show();
-                                    }
-                                });
-
+                            public void run() {
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWait.setVisibility(View.GONE);
                             }
+                        });
 
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void onTimeOut() {
-                                runOnUiThread(new Runnable() {
+                            public void run() {
+                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                                snack.setAction("CANCEL", new View.OnClickListener() {
                                     @Override
-                                    public void run() {
-                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        prgWait.setVisibility(View.GONE);
+                                    public void onClick(View view) {
+                                        snack.dismiss();
                                     }
                                 });
+                                snack.show();
                             }
-                        };
-
-                        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
-                            new RequestGroupDelete().groupDelete(roomId);
-                        } else {
-                            new RequestGroupLeft().groupLeft(roomId);
-                        }
-                        prgWait.setVisibility(View.VISIBLE);
-                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        });
 
                     }
-                })
-                .show();
+
+                    @Override
+                    public void onTimeOut() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWait.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                };
+
+                if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+                    new RequestGroupDelete().groupDelete(roomId);
+                } else {
+                    new RequestGroupLeft().groupLeft(roomId);
+                }
+                prgWait.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+            }
+        }).show();
     }
 
     private void updateRole(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
         runOnUiThread(new Runnable() {
-                          @Override
-                          public void run() {
+            @Override
+            public void run() {
 
 
-                              List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                              for (int i = 0; i < items.size(); i++) {
-                                  if (items.get(i).mContact.peerId == memberId) {
-                                      items.get(i).mContact.role = role.toString();
-                                      if (i < itemAdapter.getAdapterItemCount()) {
-                                          IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
-                                          itemAdapter.set(i, item);
-                                      }
-                                  }
-                              }
-                          }
-                      }
-        );
+                List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+                for (int i = 0; i < items.size(); i++) {
+                    if (items.get(i).mContact.peerId == memberId) {
+                        items.get(i).mContact.role = role.toString();
+                        if (i < itemAdapter.getAdapterItemCount()) {
+                            IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
+                            itemAdapter.set(i, item);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -2520,18 +2414,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
      */
     private void kickAdmin(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(
-                R.string.do_you_want_to_set_admin_role_to_member)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        new RequestGroupKickAdmin().groupKickAdmin(roomId, memberID);
-                    }
-                })
-                .show();
+                new RequestGroupKickAdmin().groupKickAdmin(roomId, memberID);
+            }
+        }).show();
     }
 
     /**
@@ -2539,19 +2428,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
      */
     private void kickMember(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(
-                R.string.do_you_want_to_kick_this_member)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
 
-                        new RequestGroupKickMember().groupKickMember(roomId, memberID);
-                    }
-                })
-                .show();
+                new RequestGroupKickMember().groupKickMember(roomId, memberID);
+            }
+        }).show();
     }
 
     private void onGroupAddMemberCallback() {
@@ -2614,7 +2498,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 });
 
 
-//                        updateUi(list, UserId);
+                //                        updateUi(list, UserId);
             }
 
             @Override
@@ -2630,42 +2514,41 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             public void onGroupKickMember(final long roomId, final long memberId) {
 
                 runOnUiThread(new Runnable() {
-                                  @Override
-                                  public void run() {
+                    @Override
+                    public void run() {
 
-                                      final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                                      runOnUiThread(new Runnable() {
-                                          @Override
-                                          public void run() {
-                                              txtMemberNumber.setText((items.size() - 1) + "");
-                                          }
-                                      });
-                                      for (int i = 0; i < items.size(); i++) {
-                                          if (items.get(i).mContact.peerId == memberId) {
-                                              itemAdapter.remove(i);
-                                              Realm realm = Realm.getDefaultInstance();
-                                              realm.executeTransaction(new Realm.Transaction() {
-                                                  @Override
-                                                  public void execute(Realm realm) {
-                                                      RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                                      for (RealmMember realmMember : realmRoom.getGroupRoom().getMembers()) {
-                                                          if (realmMember.getPeerId() == memberId) {
-                                                              realmMember.deleteFromRealm();
-                                                              participantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
-                                                              participantsCountLabel = (Integer.parseInt(participantsCountLabel) - 1) + "";
-                                                              realmRoom.getGroupRoom().setParticipantsCountLabel(participantsCountLabel);
-                                                              break;
-                                                          }
-                                                      }
+                        final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                txtMemberNumber.setText((items.size() - 1) + "");
+                            }
+                        });
+                        for (int i = 0; i < items.size(); i++) {
+                            if (items.get(i).mContact.peerId == memberId) {
+                                itemAdapter.remove(i);
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                        for (RealmMember realmMember : realmRoom.getGroupRoom().getMembers()) {
+                                            if (realmMember.getPeerId() == memberId) {
+                                                realmMember.deleteFromRealm();
+                                                participantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
+                                                participantsCountLabel = (Integer.parseInt(participantsCountLabel) - 1) + "";
+                                                realmRoom.getGroupRoom().setParticipantsCountLabel(participantsCountLabel);
+                                                break;
+                                            }
+                                        }
 
-                                                  }
-                                              });
-                                              realm.close();
-                                          }
-                                      }
-                                  }
-                              }
-                );
+                                    }
+                                });
+                                realm.close();
+                            }
+                        }
+                    }
+                });
 
             }
 
@@ -2692,25 +2575,25 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
                 }
 
-//                                for (int i = 0; i < contacts.size(); i++) {
-//                                    if (contacts.get(i).peerId == memberId) {
-//                                        contacts.get(i).role =
-//                                                ProtoGlobal.GroupRoom.Role.MEMBER.toString();
-//                                        final int finalI = i;
-//                                        runOnUiThread(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                IItem item = (new ContactItemGroupProfile().setContact(
-//                                                        contacts.get(finalI))
-//                                                        .withIdentifier(
-//                                                                100 + contacts.indexOf(contacts.get(finalI))));
-//                                                itemAdapter.set(finalI, item);
-//                                            }
-//                                        });
-//
-//                                        break;
-//                                    }
-//                                }
+                //                                for (int i = 0; i < contacts.size(); i++) {
+                //                                    if (contacts.get(i).peerId == memberId) {
+                //                                        contacts.get(i).role =
+                //                                                ProtoGlobal.GroupRoom.Role.MEMBER.toString();
+                //                                        final int finalI = i;
+                //                                        runOnUiThread(new Runnable() {
+                //                                            @Override
+                //                                            public void run() {
+                //                                                IItem item = (new ContactItemGroupProfile().setContact(
+                //                                                        contacts.get(finalI))
+                //                                                        .withIdentifier(
+                //                                                                100 + contacts.indexOf(contacts.get(finalI))));
+                //                                                itemAdapter.set(finalI, item);
+                //                                            }
+                //                                        });
+                //
+                //                                        break;
+                //                                    }
+                //                                }
             }
 
             @Override
@@ -2731,23 +2614,23 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                 updateRole(memberId, ProtoGlobal.GroupRoom.Role.MODERATOR);
 
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            for (int i = 0; i < contacts.size(); i++) {
-//                                if (contacts.get(i).peerId == memberId) {
-//                                    contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
-//
-//                                    if (i < itemAdapter.getAdapterItemCount()) {
-//                                        IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier
-//                                                (100 + contacts.indexOf(contacts.get(i))));
-//                                        itemAdapter.set(i, item);
-//                                    }
-//                                    break;
-//                                }
-//                            }
-//                        }
-//                    });
+                //                    runOnUiThread(new Runnable() {
+                //                        @Override
+                //                        public void run() {
+                //                            for (int i = 0; i < contacts.size(); i++) {
+                //                                if (contacts.get(i).peerId == memberId) {
+                //                                    contacts.get(i).role = ProtoGlobal.GroupRoom.Role.MODERATOR.toString();
+                //
+                //                                    if (i < itemAdapter.getAdapterItemCount()) {
+                //                                        IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier
+                //                                                (100 + contacts.indexOf(contacts.get(i))));
+                //                                        itemAdapter.set(i, item);
+                //                                    }
+                //                                    break;
+                //                                }
+                //                            }
+                //                        }
+                //                    });
             }
 
             @Override
@@ -2809,17 +2692,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void kickModerator(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(
-                R.string.do_you_want_to_set_modereator_role_to_member)
-                .positiveText(R.string.ok)
-                .negativeText(R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new RequestGroupKickModerator().groupKickModerator(roomId, memberID);
-                    }
-                })
-                .show();
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new RequestGroupKickModerator().groupKickModerator(roomId, memberID);
+            }
+        }).show();
     }
 
     private void setMemberRoleToModerator() {
@@ -2830,11 +2708,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         bundle.putString("ROOM_TYPE", ProtoGlobal.Room.Type.GROUP.toString());
         bundle.putBoolean("DIALOG_SHOWING", false);
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null)
-                .replace(fragmentContainer_group_profile, fragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
     }
 
     private void setMemberRoleToAdmin() {
@@ -2845,11 +2719,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         bundle.putString("ROOM_TYPE", ProtoGlobal.Room.Type.GROUP.toString());
         bundle.putString("TYPE", "ADMIN");
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null)
-                .replace(fragmentContainer_group_profile, fragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
@@ -2913,8 +2783,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         @Override
         public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
             //we create the view for the header
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.contact_header_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
             return new RecyclerView.ViewHolder(view) {
             };
         }
@@ -2926,8 +2795,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             IItem item = getItem(position);
             if (((ContactItemGroupProfile) item).mContact != null) {
                 //based on the position we set the headers text
-                textView.setText(String.valueOf(
-                        ((ContactItemGroupProfile) item).mContact.displayName.toUpperCase().charAt(0)));
+                textView.setText(String.valueOf(((ContactItemGroupProfile) item).mContact.displayName.toUpperCase().charAt(0)));
             }
         }
 
@@ -3083,28 +2951,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
         hideProgressBar();
+        /**
+         * if another account do this action we haven't avatar source and have
+         *  to download avatars . for do this action call HelperAvatar.getAvatar
+         */
         if (filePathAvatar == null) {
-            HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(final String avatarPath, long ownerId) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
-                        }
-                    });
-                }
-
-                @Override
-                public void onShowInitials(final String initials, final String color) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    });
-                }
-            });
+            showAvatar();
         } else {
             HelperAvatar.avatarAdd(roomId, filePathAvatar, avatar, new OnAvatarAdd() {
                 @Override
@@ -3117,6 +2969,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     });
                 }
             });
+            filePathAvatar = null;
         }
     }
 

@@ -7,7 +7,6 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 
 import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.MEMBER_ADDED;
@@ -17,6 +16,7 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.MEMBER_LEFT;
 import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.ROOM_CONVERTED_TO_PRIVATE;
 import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.ROOM_CONVERTED_TO_PUBLIC;
 import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.ROOM_CREATED;
+import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.ROOM_DELETED;
 import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.USER_DELETED;
 import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.USER_JOINED;
 
@@ -107,6 +107,8 @@ public class HelperLogMessage {
             message = G.context.getResources().getString(R.string.ROOM_CONVERTED_TO_PRIVATE);
         } else if (type == MEMBER_JOINED_BY_INVITE_LINK) {
             message = G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK);
+        } else if (type == ROOM_DELETED) {
+            message = "Room Deleted";
         }
 
         return message;

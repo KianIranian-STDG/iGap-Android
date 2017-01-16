@@ -34,7 +34,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -93,15 +92,13 @@ import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -161,8 +158,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     public static long getFolderSize(File dir) throws RuntimeException {
         long size = 0;
-        if (dir == null)
-            return size;
+        if (dir == null) return size;
 
         if (dir.listFiles() != null) {
 
@@ -263,23 +259,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             return; // necessary
         }
 
-        ProtoFileDownload.FileDownload.Selector selector =
-                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        String identity =
-                token + '*' + selector.toString() + '*' + smallSize + '*' + fileName + '*' + 0;
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+        String identity = token + '*' + selector.toString() + '*' + smallSize + '*' + fileName + '*' + 0;
 
-        new RequestFileDownload().download(token, 0, smallSize,
-                selector, identity);
+        new RequestFileDownload().download(token, 0, smallSize, selector, identity);
     }
 
     private void showInitials() {
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        circleImageView.setImageBitmap(
-                HelperImageBackColor.drawAlphabetOnPicture(
-                        (int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100)
-                        , realmUserInfo.getUserInfo().getInitials()
-                        , realmUserInfo.getUserInfo().getColor()));
+        circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
         realm.close();
 
         if (G.onChangeUserPhotoListener != null) {
@@ -312,9 +301,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtGander = (TextView) findViewById(R.id.st_txt_gander);
         txtEmail = (TextView) findViewById(R.id.st_txt_email);
         prgWait = (ProgressBar) findViewById(R.id.st_prgWaiting_addContact);
-        prgWait.getIndeterminateDrawable()
-                .setColorFilter(getResources().getColor(R.color.toolbar_background),
-                        android.graphics.PorterDuff.Mode.MULTIPLY);
+        prgWait.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
 
         G.onUserProfileGetGender = new OnUserProfileGetGender() {
@@ -458,11 +445,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 layoutNickname.addView(inputFirstName, layoutParams);
                 layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
-                final MaterialDialog dialog =
-                        new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_nickname)).positiveText(getResources().getString(R.string.B_ok))
-                                .customView(layoutNickname, true)
-                                .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
-                                .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_nickname)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -609,29 +592,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     e.getStackTrace();
                 }
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Gander))
-                        .titleGravity(GravityEnum.START)
-                        .titleColor(getResources().getColor(android.R.color.black))
-                        .items(R.array.array_gander)
-                        .itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                if (text != null) txtGander.setText(text.toString());
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Gander)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.array_gander).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        if (text != null) txtGander.setText(text.toString());
 
-                                switch (which) {
-                                    case 0: {
-                                        new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
-                                        break;
-                                    }
-                                    case 1: {
-                                        new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
-                                        break;
-                                    }
-                                }
-                                return false;
+                        switch (which) {
+                            case 0: {
+                                new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
+                                break;
                             }
-                        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
-                        .show();
+                            case 1: {
+                                new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
+                                break;
+                            }
+                        }
+                        return false;
+                    }
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
 
                 G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
                     @Override
@@ -690,10 +668,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 layoutEmail.addView(inputEmail, layoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_email)).positiveText(getResources().getString(R.string.save))
-                        .customView(layoutEmail, true)
-                        .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
-                        .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_email)).positiveText(getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -825,11 +800,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 layoutUserName.addView(inputUserName, layoutParams);
 
-                final MaterialDialog dialog =
-                        new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save))
-                                .customView(layoutUserName, true)
-                                .widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel))
-                                .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -1041,8 +1012,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override
                     public void onClick(View view) {
 
-                        new MaterialDialog.Builder(ActivitySetting.this)
-                                .title(getResources().getString(R.string.log_out))
+                        new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.log_out))
                                 .content(R.string.content_log_out)
                                 .positiveText(getResources().getString(R.string.B_ok))
                                 .negativeText(getResources().getString(R.string.B_cancel))
@@ -1073,9 +1043,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                                     @Override
                                                     public void run() {
                                                         hideProgressBar();
-                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                                                R.string.error,
-                                                                Snackbar.LENGTH_LONG);
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
                                                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                             @Override
                                                             public void onClick(View view) {
@@ -1095,9 +1063,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                                     @Override
                                                     public void run() {
                                                         hideProgressBar();
-                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                                                R.string.error,
-                                                                Snackbar.LENGTH_LONG);
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
                                                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                             @Override
                                                             public void onClick(View view) {
@@ -1122,8 +1088,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override
                     public void onClick(View view) {
 
-                        new MaterialDialog.Builder(ActivitySetting.this)
-                                .title(getResources().getString(R.string.delete_account))
+                        new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.delete_account))
                                 .content(getResources().getString(R.string.delete_account_text))
                                 .positiveText(getResources().getString(R.string.B_ok))
                                 .iconRes(R.mipmap.round_delete_button)
@@ -1138,12 +1103,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         Bundle bundle = new Bundle();
                                         bundle.putString("PHONE", txtPhoneNumber.getText().toString());
                                         fragmentDeleteAccount.setArguments(bundle);
-                                        getSupportFragmentManager()
-                                                .beginTransaction()
-                                                .addToBackStack(null)
-                                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                                .replace(R.id.st_layoutParent, fragmentDeleteAccount, null)
-                                                .commit();
+                                        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentDeleteAccount, null).commit();
 
                                     }
                                 })
@@ -1169,7 +1129,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
 
-//                showImage();
+                //                showImage();
                 long mAvatarId = 0;
                 if (messageOne != null && !messageOne.equals("")) {
                     mAvatarId = Long.parseLong(messageOne);
@@ -1211,12 +1171,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
                     FragmentShowAvatars.appBarLayout = fab;
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
-                    ActivitySetting.this.getSupportFragmentManager()
-                            .beginTransaction()
-                            .addToBackStack(null)
-                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .replace(R.id.st_layoutParent, fragment, null)
-                            .commit();
+                    ActivitySetting.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragment, null).commit();
                 }
                 realm.close();
             }
@@ -1241,9 +1196,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Language))
-                        .titleGravity(GravityEnum.START)
-                        .titleColor(getResources().getColor(android.R.color.black)).items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Language)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -1277,8 +1230,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         return false;
                     }
-                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel))
-                        .show();
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
             }
         });
 
@@ -1301,10 +1253,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final long sizeFolderDocumentDialog = getFolderSize(new File(G.DIR_DOCUMENT));
 
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_Clear_Cache))
-                        .customView(R.layout.st_dialog_clear_cach, wrapInScrollView)
-                        .positiveText(getResources().getString(R.string.st_title_Clear_Cache))
-                        .show();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_Clear_Cache)).customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText(getResources().getString(R.string.st_title_Clear_Cache)).show();
 
                 View view = dialog.getCustomView();
 
@@ -1368,7 +1317,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtCrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                //                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (stsp_toggle_crop.isChecked()) {
@@ -1389,12 +1338,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onClick(View view) {
                 FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity = new FragmentPrivacyAndSecurity();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity, null)
-                        .commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity, null).commit();
             }
         });
 
@@ -1411,7 +1355,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtDataShams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                //                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (toggleEnableDataShams.isChecked()) {
@@ -1435,31 +1379,25 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize))
-                        .titleGravity(GravityEnum.START)
-                        .titleColor(getResources().getColor(android.R.color.black))
-                        .items(R.array.message_text_size)
-                        .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.message_text_size).itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                if (text != null) {
-                                    txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
-                                }
-                                poRbDialogTextSize = which;
-                                int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-                                editor.apply();
+                        if (text != null) {
+                            txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                        }
+                        poRbDialogTextSize = which;
+                        int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                        editor.apply();
 
-                                G.setUserTextSize();
+                        G.setUserTextSize();
 
-                                return false;
-                            }
-                        })
-                        .positiveText(getResources().getString(R.string.B_ok))
-                        .show();
+                        return false;
+                    }
+                }).positiveText(getResources().getString(R.string.B_ok)).show();
             }
         });
 
@@ -1541,29 +1479,23 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_keepMedia)
-                        .content(R.string.st_dialog_content_keepMedia)
-                        .positiveText("ForEver")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
-                                editor.apply();
-                            }
-                        })
-                        .negativeText("1WEEk")
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
-                                editor.apply();
-                            }
-                        })
-                        .show();
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_keepMedia).content(R.string.st_dialog_content_keepMedia).positiveText("ForEver").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
+                        editor.apply();
+                    }
+                }).negativeText("1WEEk").onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
+                        editor.apply();
+                    }
+                }).show();
             }
         });
 
@@ -1580,47 +1512,44 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_DATA_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
                 KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, -1);
 
-                new MaterialDialog.Builder(ActivitySetting.this)
-                        .title(R.string.st_auto_download_data)
-                        .items(R.array.auto_download_data)
-                        .itemsCallbackMultiChoice(new Integer[]{
-                                KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
-                        }, new MaterialDialog.ListCallbackMultiChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                        KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
+                }, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
-                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, -1);
-                                editor.apply();
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, -1);
+                        editor.apply();
 
-                                for (Integer aWhich : which) {
+                        for (Integer aWhich : which) {
 
 
-                                    if (aWhich == 0) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, aWhich);
-                                    } else if (aWhich == 1) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, aWhich);
-                                    } else if (aWhich == 2) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, aWhich);
-                                    } else if (aWhich == 3) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, aWhich);
-                                    } else if (aWhich == 4) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, aWhich);
-                                    } else if (aWhich == 5) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, aWhich);
-                                    }
-                                    editor.apply();
-                                }
-
-                                return true;
+                            if (aWhich == 0) {
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, aWhich);
+                            } else if (aWhich == 1) {
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, aWhich);
+                            } else if (aWhich == 2) {
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, aWhich);
+                            } else if (aWhich == 3) {
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, aWhich);
+                            } else if (aWhich == 4) {
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, aWhich);
+                            } else if (aWhich == 5) {
+                                editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, aWhich);
                             }
-                        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
+                            editor.apply();
+                        }
+
+                        return true;
+                    }
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
             }
         });
 
@@ -1637,49 +1566,47 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_WIFI_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
                 KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_wifi)
-                        .items(R.array.auto_download_data)
-                        .itemsCallbackMultiChoice(new Integer[]{
-                                KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
-                        }, new MaterialDialog.ListCallbackMultiChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                        KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
+                }, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
 
-                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
-                                editor.apply();
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
+                        editor.apply();
 
-                                for (Integer aWhich : which) {
-                                    Log.i("JJJJ", "WIFI: " + aWhich);
+                        for (Integer aWhich : which) {
+                            Log.i("JJJJ", "WIFI: " + aWhich);
 
-                                    if (aWhich == 0) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, aWhich);
-                                    } else if (aWhich == 1) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, aWhich);
-                                    } else if (aWhich == 2) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, aWhich);
-                                    } else if (aWhich == 3) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, aWhich);
-                                    } else if (aWhich == 4) {
+                            if (aWhich == 0) {
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, aWhich);
+                            } else if (aWhich == 1) {
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, aWhich);
+                            } else if (aWhich == 2) {
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, aWhich);
+                            } else if (aWhich == 3) {
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, aWhich);
+                            } else if (aWhich == 4) {
 
-                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, aWhich);
-                                    } else if (aWhich == 5) {
-                                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, aWhich);
-                                    }
-                                    editor.apply();
-                                }
-
-                                return true;
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, aWhich);
+                            } else if (aWhich == 5) {
+                                editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, aWhich);
                             }
-                        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.cancel)).show();
+                            editor.apply();
+                        }
+
+                        return true;
+                    }
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.cancel)).show();
             }
         });
 
@@ -1696,52 +1623,46 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_ROAMING_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
                 KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
 
-                new MaterialDialog.Builder(ActivitySetting.this)
-                        .title(R.string.st_auto_download_roaming)
-                        .items(R.array.auto_download_data)
-                        .itemsCallbackMultiChoice(new Integer[]{
-                                KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
-                        }, new MaterialDialog.ListCallbackMultiChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                        KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
+                }, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
-                                //
+                        //
 
-                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
-                                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
-                                editor.apply();
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
+                        editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
+                        editor.apply();
 
-                                for (Integer aWhich : which) {
-                                    if (aWhich > -1) {
-                                        if ((aWhich == 0)) {
-                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, aWhich);
-                                        } else if ((aWhich == 1)) {
-                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, aWhich);
-                                        } else if ((aWhich == 2)) {
-                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, aWhich);
-                                        } else if ((aWhich == 3)) {
-                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, aWhich);
-                                        } else if ((aWhich == 4)) {
-                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, aWhich);
-                                        } else if ((aWhich == 5)) {
-                                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, aWhich);
-                                        }
-                                        editor.apply();
-                                    }
+                        for (Integer aWhich : which) {
+                            if (aWhich > -1) {
+                                if ((aWhich == 0)) {
+                                    editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, aWhich);
+                                } else if ((aWhich == 1)) {
+                                    editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, aWhich);
+                                } else if ((aWhich == 2)) {
+                                    editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, aWhich);
+                                } else if ((aWhich == 3)) {
+                                    editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, aWhich);
+                                } else if ((aWhich == 4)) {
+                                    editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, aWhich);
+                                } else if ((aWhich == 5)) {
+                                    editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, aWhich);
                                 }
-                                return true;
-
+                                editor.apply();
                             }
-                        })
-                        .positiveText(getResources().getString(R.string.B_ok))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .show();
+                        }
+                        return true;
+
+                    }
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
             }
         });
 
@@ -1886,41 +1807,38 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     //dialog for choose pic from gallery or camera
     private void startDialog(int r) {
 
-        new MaterialDialog.Builder(this).title(getResources().getString(R.string.choose_picture))
-                .negativeText(getResources().getString(R.string.B_cancel))
-                .items(r)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) { // camera
+        new MaterialDialog.Builder(this).title(getResources().getString(R.string.choose_picture)).negativeText(getResources().getString(R.string.B_cancel)).items(r).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+                if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) { // camera
 
 
-                            try {
-                                HelperPermision.getStoragePermision(ActivitySetting.this, new OnGetPermision() {
+                    try {
+                        HelperPermision.getStoragePermision(ActivitySetting.this, new OnGetPermision() {
+                            @Override
+                            public void Allow() throws IOException {
+                                HelperPermision.getCamarePermision(ActivitySetting.this, new OnGetPermision() {
                                     @Override
-                                    public void Allow() throws IOException {
-                                        HelperPermision.getCamarePermision(ActivitySetting.this, new OnGetPermision() {
-                                            @Override
-                                            public void Allow() {
-                                                dialog.dismiss();
-                                                useCamera();
-                                            }
-                                        });
+                                    public void Allow() {
+                                        dialog.dismiss();
+                                        useCamera();
                                     }
                                 });
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
-                        } else {
-                            try {
-                                new AttachFile(ActivitySetting.this).requestOpenGalleryForImageSingleSelect();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            dialog.dismiss();
-                        }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }).show();
+                } else {
+                    try {
+                        new AttachFile(ActivitySetting.this).requestOpenGalleryForImageSingleSelect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.dismiss();
+                }
+            }
+        }).show();
     }
 
     private void useCamera() {
@@ -2013,63 +1931,73 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         finish();
     }
 
-//    private void getSms(String message) {
-//        String verificationCode = HelperString.regexExtractValue(message, regex);
-//
-//        if (verificationCode != null && !verificationCode.isEmpty()) {
-//
-//            G.onUserDelete = new OnUserDelete() {
-//                @Override
-//                public void onUserDeleteResponse() {
-//                    Log.i("UUU", "onUserDeleteResponse");
-//                    HelperLogout.logout();
-//                }
-//            };
-//
-//            Log.i("UUU", "RequestUserDelete verificationCode : " + verificationCode);
-//            new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
-//        }
-//    }
+    //    private void getSms(String message) {
+    //        String verificationCode = HelperString.regexExtractValue(message, regex);
+    //
+    //        if (verificationCode != null && !verificationCode.isEmpty()) {
+    //
+    //            G.onUserDelete = new OnUserDelete() {
+    //                @Override
+    //                public void onUserDeleteResponse() {
+    //                    Log.i("UUU", "onUserDeleteResponse");
+    //                    HelperLogout.logout();
+    //                }
+    //            };
+    //
+    //            Log.i("UUU", "RequestUserDelete verificationCode : " + verificationCode);
+    //            new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
+    //        }
+    //    }
 
     @Override
     protected void onResume() {
-//        final IntentFilter filter = new IntentFilter();
-//        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-//        smsReceiver = new IncomingSms(new OnSmsReceive() {
-//
-//            @Override
-//            public void onSmsReceive(String message) {
-//                try {
-//                    if (message != null && !message.isEmpty() && !message.equals("null") &&
-//                            !message.equals("")) {
-//                        getSms(message);
-//                    }
-//                } catch (Exception e1) {
-//                    e1.getStackTrace();
-//                }
-//            }
-//        });
-//
-//        registerReceiver(smsReceiver, filter);
+        //        final IntentFilter filter = new IntentFilter();
+        //        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+        //        smsReceiver = new IncomingSms(new OnSmsReceive() {
+        //
+        //            @Override
+        //            public void onSmsReceive(String message) {
+        //                try {
+        //                    if (message != null && !message.isEmpty() && !message.equals("null") &&
+        //                            !message.equals("")) {
+        //                        getSms(message);
+        //                    }
+        //                } catch (Exception e1) {
+        //                    e1.getStackTrace();
+        //                }
+        //            }
+        //        });
+        //
+        //        registerReceiver(smsReceiver, filter);
         super.onResume();
     }
 
     @Override
     public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
 
-        HelperAvatar.avatarAdd(userId, pathSaveImage, avatar, new OnAvatarAdd() {
-            @Override
-            public void onAvatarAdd(final String avatarPath) {
+        /**
+         * if another account do this action we haven't avatar source and have
+         *  to download avatars . for do this action call HelperAvatar.getAvatar
+         */
+        if (pathSaveImage == null) {
+            showImage();
+        } else {
+            HelperAvatar.avatarAdd(userId, pathSaveImage, avatar, new OnAvatarAdd() {
+                @Override
+                public void onAvatarAdd(final String avatarPath) {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                        setImage(avatarPath);
-                    }
-                });
-            }
-        });
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideProgressBar();
+                            setImage(avatarPath);
+                        }
+                    });
+                }
+            });
+            pathSaveImage = null;
+        }
+
     }
 
     @Override
