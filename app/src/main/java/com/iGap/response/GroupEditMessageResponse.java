@@ -2,16 +2,16 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.helper.HelperEditMessage;
-import com.iGap.proto.ProtoChatEditMessage;
 import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoGroupEditMessage;
 
-public class ChatEditMessageResponse extends MessageHandler {
+public class GroupEditMessageResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
     public String identity;
 
-    public ChatEditMessageResponse(int actionId, Object protoClass, String identity) {
+    public GroupEditMessageResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
         this.message = protoClass;
         this.identity = identity;
@@ -21,7 +21,8 @@ public class ChatEditMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoChatEditMessage.ChatEditMessageResponse.Builder builder = (ProtoChatEditMessage.ChatEditMessageResponse.Builder) message;
+
+        final ProtoGroupEditMessage.GroupEditMessageResponse.Builder builder = (ProtoGroupEditMessage.GroupEditMessageResponse.Builder) message;
         HelperEditMessage.editMessage(builder.getRoomId(), builder.getMessageId(), builder.getMessageVersion(), builder.getMessageType(), builder.getMessage(), builder.getResponse());
     }
 

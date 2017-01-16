@@ -180,6 +180,7 @@ import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChannelDeleteMessage;
+import com.iGap.request.RequestChannelEditMessage;
 import com.iGap.request.RequestChannelUpdateDraft;
 import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
@@ -190,6 +191,7 @@ import com.iGap.request.RequestClientJoinByUsername;
 import com.iGap.request.RequestClientSubscribeToRoom;
 import com.iGap.request.RequestClientUnsubscribeFromRoom;
 import com.iGap.request.RequestGroupDeleteMessage;
+import com.iGap.request.RequestGroupEditMessage;
 import com.iGap.request.RequestGroupUpdateDraft;
 import com.iGap.request.RequestUserContactsBlock;
 import com.iGap.request.RequestUserContactsUnblock;
@@ -1742,7 +1744,6 @@ public class ActivityChat extends ActivityEnhanced
                     ll_attach_text.setVisibility(View.GONE);
                     edtChat.setText("");
 
-                    Log.i("VVVVVVV", "onClick: " + userTriesReplay());
                     if (mReplayLayout != null && userTriesReplay()) {
                         mReplayLayout.setTag(null);
                         mReplayLayout.setVisibility(View.GONE);
@@ -1801,19 +1802,31 @@ public class ActivityChat extends ActivityEnhanced
                             }
                         });
 
-                        // should be null after requesting
+                        /**
+                         * should be null after requesting
+                         */
                         edtChat.setTag(null);
                         if (mReplayLayout != null) {
                             mReplayLayout.setTag(null);
                         }
                         edtChat.setText("");
 
-                        // send edit message request
-                        new RequestChatEditMessage().chatEditMessage(mRoomId, parseLong(messageInfo.messageID), message);
+                        /**
+                         * send edit message request
+                         */
+                        if (chatType == CHAT) {
+                            new RequestChatEditMessage().chatEditMessage(mRoomId, parseLong(messageInfo.messageID), message);
+                        } else if (chatType == GROUP) {
+                            new RequestGroupEditMessage().groupEditMessage(mRoomId, parseLong(messageInfo.messageID), message);
+                        } else if (chatType == CHANNEL) {
+                            new RequestChannelEditMessage().channelEditMessage(mRoomId, parseLong(messageInfo.messageID), message);
+                        }
                     }
                 } else {
 
-                    // if need to add time befor insert new message
+                    /**
+                     * if need to add time before insert new message
+                     */
                     if (isNeedAddTime) {
                         addTimeToList(SUID.id().get());
                     }
