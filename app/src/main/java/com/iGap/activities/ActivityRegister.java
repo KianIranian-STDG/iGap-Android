@@ -32,7 +32,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -67,13 +66,11 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-
+import io.realm.Realm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
@@ -103,6 +100,7 @@ public class ActivityRegister extends ActivityEnhanced {
     //Array List for Store List of StructCountry Object
     private String regex;
     private String userName;
+    private String authorHash;
     private String token;
     private String regexFetchCodeVerification;
     private long userId;
@@ -177,7 +175,6 @@ public class ActivityRegister extends ActivityEnhanced {
             btnChoseCountry.setText(savedInstanceState.getString(KEY_SAVE_NAMECOUNTRY));
             txtAgreement_register.setText(savedInstanceState.getString(KEY_SAVE_AGREEMENT));
             regex = (savedInstanceState.getString(KEY_SAVE_REGEX));
-            Log.i("TTTTT", "onSaveInstanceState22: ");
         } else {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
@@ -190,8 +187,7 @@ public class ActivityRegister extends ActivityEnhanced {
                 }
                 regex = extras.getString("REGEX");
                 String body = extras.getString("TERMS_BODY");
-                if (body != null & txtAgreement_register != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] -
-                    // txtAgreement_register !=null is wrong. change it
+                if (body != null & txtAgreement_register != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] - txtAgreement_register !=null is wrong. change it
                     txtAgreement_register.setText(Html.fromHtml(body));
                 }
             }
@@ -214,6 +210,7 @@ public class ActivityRegister extends ActivityEnhanced {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equals("0")) {
@@ -225,8 +222,9 @@ public class ActivityRegister extends ActivityEnhanced {
 
         layout_verify = (ViewGroup) findViewById(R.id.rg_layout_verify_and_agreement);
 
-        //==================================================================================================== read list of county from text file
-        //        list of country
+        /**
+         * list of country
+         */
 
         CountryReader countryReade = new CountryReader();
         StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", this);
@@ -379,17 +377,6 @@ public class ActivityRegister extends ActivityEnhanced {
                     }
                 });
 
-                //                TextView btnCancel = (TextView) dialogChooseCountry
-                // .findViewById(R.id.rg_txt_cancelDialog);
-                //                btnCancel.setOnClickListener(new View.OnClickListener() {
-                //                    @Override
-                //                    public void onClick(View view) {
-                //
-                //                        dialogChooseCountry.dismiss();
-                //
-                //                    }
-                //                });
-
                 btnOk = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_okDialog);
                 btnOk.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -447,65 +434,60 @@ public class ActivityRegister extends ActivityEnhanced {
 
                     phoneNumber = edtPhoneNumber.getText().toString();
 
-                    MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this)
-                            .customView(R.layout.rg_mdialog_text, true)
-                            .positiveText(getResources().getString(R.string.B_ok))
-                            .negativeText(getResources().getString(R.string.B_edit))
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this).customView(R.layout.rg_mdialog_text, true).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_edit)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                    int portaret_landscope = getResources().getConfiguration().orientation;
+                            int portaret_landscope = getResources().getConfiguration().orientation;
 
-                                    if (portaret_landscope == 1) {//portrait
-                                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                                        txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
-                                        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+                            if (portaret_landscope == 1) {//portrait
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                                txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
+                                txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
 
-                                        txtAgreement_register.setVisibility(View.GONE);
-                                        txtAgreement_register.startAnimation(trans_x_out);
-                                        G.handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
+                                txtAgreement_register.setVisibility(View.GONE);
+                                txtAgreement_register.startAnimation(trans_x_out);
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                                                btnStart.setBackgroundColor(getResources().getColor(R.color.rg_background_verify));
-                                                btnStart.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                                btnChoseCountry.setEnabled(false);
-                                                btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                                edtPhoneNumber.setEnabled(false);
-                                                edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
-
-                                                edtCodeNumber.setEnabled(false);
-                                                edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
-
-                                                layout_verify.setVisibility(View.VISIBLE);
-                                                layout_verify.startAnimation(trans_x_in);
-
-                                                checkVerify();
-                                            }
-                                        }, 600);
-                                    } else {
-
-                                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
-                                        dialogVerifyLandScape = new Dialog(ActivityRegister.this);
-
-                                        btnStart.setBackgroundColor(getResources().getColor(R.color.rg_border_editText));
-                                        btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                        btnStart.setBackgroundColor(getResources().getColor(R.color.rg_background_verify));
+                                        btnStart.setTextColor(getResources().getColor(R.color.rg_border_editText));
                                         btnChoseCountry.setEnabled(false);
-                                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                        btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
                                         edtPhoneNumber.setEnabled(false);
+                                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                        dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                        dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
-                                        dialogVerifyLandScape.setCanceledOnTouchOutside(false);
-                                        dialogVerifyLandScape.show();
+                                        edtCodeNumber.setEnabled(false);
+                                        edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+
+                                        layout_verify.setVisibility(View.VISIBLE);
+                                        layout_verify.startAnimation(trans_x_in);
 
                                         checkVerify();
                                     }
-                                }
-                            })
-                            .build();
+                                }, 600);
+                            } else {
+
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+                                dialogVerifyLandScape = new Dialog(ActivityRegister.this);
+
+                                btnStart.setBackgroundColor(getResources().getColor(R.color.rg_border_editText));
+                                btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                btnChoseCountry.setEnabled(false);
+                                edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                edtPhoneNumber.setEnabled(false);
+
+                                dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
+                                dialogVerifyLandScape.setCanceledOnTouchOutside(false);
+                                dialogVerifyLandScape.show();
+
+                                checkVerify();
+                            }
+                        }
+                    }).build();
 
                     View view = dialog.getCustomView();
                     assert view != null;
@@ -731,8 +713,7 @@ public class ActivityRegister extends ActivityEnhanced {
         G.onUserRegistration = new OnUserRegistration() {
 
             @Override
-            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex,
-                                   int verifyCodeDigitCount) {
+            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, final String authorHashR) {
                 digitCount = verifyCodeDigitCount;
                 countDownTimer.start();
                 regexFetchCodeVerification = regex;
@@ -742,16 +723,12 @@ public class ActivityRegister extends ActivityEnhanced {
                         txtTimer.setVisibility(View.VISIBLE);
                         userName = userNameR;
                         userId = userIdR;
+                        authorHash = authorHashR;
                         G.smsNumbers = smsNumbersR;
 
-                        if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS) {//verification with sms
-
-                        } else if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {//verification with socket
-
-                            errorVerifySms(Reason.SOCKET); // open rg_dialog for enter sms code
+                        if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
+                            errorVerifySms(Reason.SOCKET);
                             countDownTimer.cancel();
-                        } else if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET) {//verification with sms and socket
-
                         }
 
                         rg_prg_verify_connect.setVisibility(View.INVISIBLE);
@@ -761,7 +738,6 @@ public class ActivityRegister extends ActivityEnhanced {
 
                         rg_prg_verify_sms.setVisibility(View.VISIBLE);
                         rg_txt_verify_sms.setTextAppearance(G.context, R.style.RedHUGEText);
-                        //getVerificationSms();
                     }
                 });
             }
@@ -801,10 +777,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override
                         public void run() {
                             // TODO: 9/25/2016  Error 135 - USER_REGISTER_BLOCKED_USER
-                            new MaterialDialog.Builder(ActivityRegister.this)
-                                    .title(R.string.USER_VERIFY_BLOCKED_USER)
-                                    .content(R.string.Toast_Number_Block)
-                                    .positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 136) {
@@ -812,10 +785,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override
                         public void run() {
                             // TODO: 9/25/2016  Error 136 - USER_REGISTER_MAX_TRY_LOCK
-                            new MaterialDialog.Builder(ActivityRegister.this)
-                                    .title(R.string.USER_VERIFY_MANY_TRIES)
-                                    .content(R.string.Toast_Number_Block)
-                                    .positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_MANY_TRIES).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 137) {
@@ -823,10 +793,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override
                         public void run() {
                             // TODO: 9/25/2016  Error 137 - USER_REGISTER_MAX_SEND_LOCK
-                            new MaterialDialog.Builder(ActivityRegister.this)
-                                    .title(R.string.USER_VERIFY_MANY_TRIES_SEND)
-                                    .content(R.string.Toast_Number_Block)
-                                    .positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_MANY_TRIES_SEND).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
                         }
                     });
                 }
@@ -925,10 +892,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             // There is no registered user with given username
                             // TODO: 9/25/2016 Error 104 - USER_VERIFY_USER_NOT_FOUND
-                            new MaterialDialog.Builder(ActivityRegister.this)
-                                    .title(R.string.USER_VERIFY_GIVEN_USERNAME)
-                                    .content(R.string.Toast_Number_Block)
-                                    .positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_GIVEN_USERNAME).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
 
                         }
                     });
@@ -939,11 +903,7 @@ public class ActivityRegister extends ActivityEnhanced {
                             // User is blocked , You cannot verify the user
                             // TODO: 9/25/2016 Error 105 - USER_VERIFY_BLOCKED_USER
 
-                            new MaterialDialog.Builder(ActivityRegister.this)
-                                    .title(R.string.USER_VERIFY_BLOCKED_USER)
-                                    .content(R.string.Toast_Number_Block)
-                                    .positiveText(R.string.B_ok)
-                                    .show();
+                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 106) {
@@ -961,10 +921,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             // Verification code is expired
                             // TODO: 9/25/2016 Error 107 - USER_VERIFY_EXPIRED_CODE
-                            new MaterialDialog.Builder(ActivityRegister.this)
-                                    .title(R.string.USER_VERIFY_EXPIRED)
-                                    .content(R.string.Toast_Number_Block)
-                                    .positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_EXPIRED).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 108) {
@@ -973,10 +930,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             // Verification code is locked for a while due to too many tries
                             // TODO: 9/25/2016 Error 108 - USER_VERIFY_MAX_TRY_LOCK
-                            new MaterialDialog.Builder(ActivityRegister.this)
-                                    .title(R.string.USER_VERIFY_MANY_TRIES)
-                                    .content(R.string.Toast_Number_Block)
-                                    .positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_MANY_TRIES).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
 
                         }
                     });
@@ -1007,6 +961,7 @@ public class ActivityRegister extends ActivityEnhanced {
                                 userInfo.getUserInfo().setUsername(userName);
                                 userInfo.getUserInfo().setPhoneNumber(phoneNumber);
                                 userInfo.setToken(token);
+                                userInfo.setAuthorHash(authorHash);
                                 if (!newUser) {
                                     userInfo.setUserRegistrationState(true);
                                 }

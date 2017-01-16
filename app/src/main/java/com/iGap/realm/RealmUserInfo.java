@@ -1,7 +1,6 @@
 package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
-
 import io.realm.RealmObject;
 
 public class RealmUserInfo extends RealmObject {
@@ -12,6 +11,7 @@ public class RealmUserInfo extends RealmObject {
     private int gender;
     private int selfRemove;
     private String token;
+    private String authorHash;
 
     public RealmRegisteredInfo getUserInfo() {
         return userInfo;
@@ -63,5 +63,13 @@ public class RealmUserInfo extends RealmObject {
 
     public long getUserId() {
         return this.userInfo.getId();
+    }
+
+    public String getAuthorHash() {
+        return authorHash;
+    }
+
+    public void setAuthorHash(String authorHash) {
+        this.authorHash = authorHash;
     }
 }

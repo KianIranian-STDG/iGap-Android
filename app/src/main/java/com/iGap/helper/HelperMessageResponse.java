@@ -25,6 +25,12 @@ public class HelperMessageResponse {
             @Override
             public void execute(Realm realm) {
 
+                String authorHash = realm.where(RealmUserInfo.class).findFirst().getAuthorHash();
+                boolean isAuthorUser = false;
+                if (roomMessage.getAuthor().hasUser()) {
+                    isAuthorUser = true;
+                }
+
                 /**
                  * set info for clientCondition
                  */
@@ -37,14 +43,22 @@ public class HelperMessageResponse {
                  */
                 if (response.getId().isEmpty()) { // i'm recipient
 
-                    HelperUserInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                    if (isAuthorUser) {
+                        HelperUserInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                    }
                     RealmRoomMessage.putOrUpdate(roomMessage, roomId);
 
                     /**
                      * show notification if this message isn't for another account
                      */
-                    if (roomMessage.getAuthor().getUser().getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId() && !roomMessage.getLog().getType().toString().equals("ROOM_CREATED")) {
-                        G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHANNEL, roomId);
+                    if (isAuthorUser) {
+                        if (!roomMessage.getAuthor().getHash().equals(authorHash) && !roomMessage.getLog().getType().toString().equals("ROOM_CREATED")) {
+                            G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHANNEL, roomId);
+                        }
+                    } else {
+                        if (!roomMessage.getLog().getType().toString().equals("ROOM_CREATED")) {
+                            G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHANNEL, roomId);
+                        }
                     }
 
                 } else { // i'm the sender
