@@ -32,6 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -66,11 +67,13 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-import io.realm.Realm;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
@@ -135,11 +138,21 @@ public class ActivityRegister extends ActivityEnhanced {
         smsReceiver = new IncomingSms(new OnSmsReceive() {
 
             @Override
-            public void onSmsReceive(String message) {
+            public void onSmsReceive(final String phoneNumber, final String message) {
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
                         rg_txt_verify_sms.setText(message);
                         receiveVerifySms(message);
+                        Log.i("CCCCCCC", "ActivityRegister phoneNumber: " + phoneNumber);
+                        Log.i("CCCCCCC", "ActivityRegister message: " + message);
+
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                IncomingSms.markMessageRead(phoneNumber, message);
+                            }
+                        }, 2000);
+
                     }
                 } catch (Exception e1) {
                     e1.getStackTrace();

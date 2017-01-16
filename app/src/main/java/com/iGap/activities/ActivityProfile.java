@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -21,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -45,11 +47,13 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-import io.realm.Realm;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -595,5 +599,17 @@ public class ActivityProfile extends ActivityEnhanced
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            finishAffinity();
+        } else {
+            ActivityCompat.finishAffinity(this);
+        }
+
     }
 }

@@ -7,5 +7,5 @@ package com.iGap.interfaces;
 
 public interface OnSmsReceive {
 
-    void onSmsReceive(String message);
+    void onSmsReceive(String phoneNumber, String message);
 }

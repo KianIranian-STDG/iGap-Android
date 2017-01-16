@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
+
 import com.iGap.G;
 import com.iGap.interfaces.OnSmsReceive;
 
@@ -50,7 +51,7 @@ public class IncomingSms extends BroadcastReceiver {
                     String message = currentMessage.getDisplayMessageBody();
                     for (Long number : G.smsNumbers) {
                         if (phoneNumber.contains(number.toString())) {
-                            listener.onSmsReceive(message);
+                            listener.onSmsReceive("" + phoneNumber, message);
                             //markMessageRead(phoneNumber, message);
                             break;
                         }
@@ -62,7 +63,7 @@ public class IncomingSms extends BroadcastReceiver {
         }
     }
 
-    private void markMessageRead(String number, String body) {
+    public static void markMessageRead(String number, String body) {
 
         Uri uri = Uri.parse("content://sms/inbox");
         Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
@@ -73,7 +74,7 @@ public class IncomingSms extends BroadcastReceiver {
                     if (cursor.getString(cursor.getColumnIndex("body")).startsWith(body)) {
                         String SmsMessageId = cursor.getString(cursor.getColumnIndex("_id"));
                         ContentValues values = new ContentValues();
-                        values.put("read", true);
+                        values.put("read", 1);
                         context.getContentResolver().update(Uri.parse("content://sms/inbox"), values, "_id=" + SmsMessageId, null);
                         return;
                     }

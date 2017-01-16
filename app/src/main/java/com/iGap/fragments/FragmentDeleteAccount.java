@@ -65,7 +65,7 @@ public class FragmentDeleteAccount extends Fragment {
         smsReceiver = new IncomingSms(new OnSmsReceive() {
 
             @Override
-            public void onSmsReceive(final String message) {
+            public void onSmsReceive(final String phoneNumber, final String message) {
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
                         G.handler.postDelayed(new Runnable() {
@@ -74,6 +74,12 @@ public class FragmentDeleteAccount extends Fragment {
                                 getSms(message);
                             }
                         }, 500);
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                IncomingSms.markMessageRead(phoneNumber, message);
+                            }
+                        }, 2000);
 
                     }
                 } catch (Exception e1) {
