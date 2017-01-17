@@ -38,7 +38,7 @@ public class GroupUpdateUsernameResponse extends MessageHandler {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         if (G.onGroupUpdateUsername != null) {
-            G.onGroupUpdateUsername.onError(errorResponse.getMajorCode(), errorResponse.getMinorCode());
+            G.onGroupUpdateUsername.onError(errorResponse.getMajorCode(), errorResponse.getMinorCode(), errorResponse.getMajorCode());
         }
     }
 }

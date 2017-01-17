@@ -12,4 +12,6 @@ public interface OnUserProfileSetEmailResponse {
     void onUserProfileEmailResponse(String email, ProtoResponse.Response response);
 
     void Error(int majorCode, int minorCode);
+
+    void onTimeOut();
 }

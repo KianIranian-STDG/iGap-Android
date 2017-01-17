@@ -3,6 +3,7 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.helper.HelperLogout;
 import com.iGap.proto.ProtoError;
+
 import java.io.File;
 
 import static com.iGap.module.FileUtils.deleteRecursive;
@@ -43,7 +44,8 @@ public class UserDeleteResponse extends MessageHandler {
     public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        G.onUserDelete.Error(errorResponse.getMajorCode(), errorResponse.getMinorCode());
+        if (G.onUserDelete != null)
+            G.onUserDelete.Error(errorResponse.getMajorCode(), errorResponse.getMinorCode(), errorResponse.getWait());
     }
 
 }

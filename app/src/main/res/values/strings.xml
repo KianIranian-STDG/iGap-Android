@@ -606,7 +606,6 @@
     <string name="please_enter_code_for_verify">"Please enter code to verify."</string>
     <string name="server_do_not_response">Server don\'t response</string>
     <string name="share_image_from_igap">Share image from iGap</string>
-    <string name="you_need_to_allow">"You need to allow"</string>
     <string name="TERMINATE">"TERMINATE"</string>
     <string name="iGap_version">"iGap for Android"</string>
 
@@ -737,6 +736,17 @@
     <string name="send_position">send position</string>
     <string name="deleted_message">Deleted Message</string>
     <string name="unread_message">Unread Message</string>
+
+
+    <string name="you_need_to_allow">"You need to allow"</string>
+    <string name="permission_camera">for camera</string>
+    <string name="permission_storage">for storage</string>
+    <string name="permission_contact">for contact</string>
+    <string name="permission_calender">for calender</string>
+    <string name="permission_location">for location</string>
+    <string name="permission_record_audio">for record audio</string>
+    <string name="permission_phone">for phone</string>
+    <string name="permission_sms">for sms</string>
 
 
 </resources>

@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -36,6 +37,7 @@ import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.proto.ProtoGlobal;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -164,7 +166,7 @@ public class AttachFile {
         }
 
 
-        HelperPermision.getCamarePermision(context, new OnGetPermision() {
+        HelperPermision.getCameraPermission(context, new OnGetPermision() {
             @Override
             public void Allow() throws IOException {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -364,7 +366,7 @@ public class AttachFile {
             return;
         }
 
-        HelperPermision.getCamarePermision(context, new OnGetPermision() {
+        HelperPermision.getCameraPermission(context, new OnGetPermision() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);

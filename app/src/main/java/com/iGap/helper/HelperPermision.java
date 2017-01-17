@@ -44,7 +44,7 @@ public class HelperPermision {
     public static OnGetPermision onDenyStorage;
 
     //************************************************************************************************************
-    public static void getCamarePermision(Context context, OnGetPermision onGetPermision) throws IOException {
+    public static void getCameraPermission(Context context, OnGetPermision onGetPermision) throws IOException {
 
         if (checkApi()) {
             if (onGetPermision != null)
@@ -58,8 +58,8 @@ public class HelperPermision {
                 ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPremision(context, new String[]{Manifest.permission.CAMERA},
-                    MY_PERMISSIONS_CAMERA);
+            getPermission(context, new String[]{context.getResources().getString(R.string.permission_camera)},
+                    MY_PERMISSIONS_CAMERA, context.getResources().getString(R.string.permission_camera));
         } else {
             if (onGetPermision != null)
                 onGetPermision.Allow();
@@ -99,7 +99,7 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPremision(context, mStringArray, MY_PERMISSIONS_STORAGE);
+            getPermission(context, mStringArray, MY_PERMISSIONS_STORAGE, context.getResources().getString(R.string.permission_storage));
         } else {
             if (onGetPermision != null)
                 onGetPermision.Allow();
@@ -148,7 +148,8 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPremision(context, mStringArray, MY_PERMISSIONS_CONTACTS);
+            getPermission(context, new String[]{context.getResources().getString(R.string.permission_contact)},
+                    MY_PERMISSIONS_CONTACTS, context.getResources().getString(R.string.permission_sms));
         } else {
             if (onGetPermision != null)
                 onGetPermision.Allow();
@@ -188,7 +189,7 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPremision(context, mStringArray, MY_PERMISSIONS_CALENDAR);
+            getPermission(context, mStringArray, MY_PERMISSIONS_CALENDAR, context.getResources().getString(R.string.permission_calender));
         } else {
             if (onGetPermision != null)
                 onGetPermision.Allow();
@@ -228,7 +229,7 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPremision(context, mStringArray, MY_PERMISSIONS_LOCATION);
+            getPermission(context, mStringArray, MY_PERMISSIONS_LOCATION, context.getResources().getString(R.string.permission_location));
         } else {
             if (onGetPermision != null)
                 onGetPermision.Allow();
@@ -250,8 +251,8 @@ public class HelperPermision {
                 ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPremision(context, new String[]{Manifest.permission.RECORD_AUDIO},
-                    MY_PERMISSIONS_RECORD_AUDIO);
+            getPermission(context, new String[]{Manifest.permission.RECORD_AUDIO},
+                    MY_PERMISSIONS_RECORD_AUDIO, context.getResources().getString(R.string.permission_record_audio));
         } else {
             if (onGetPermision != null)
                 onGetPermision.Allow();
@@ -297,7 +298,7 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPremision(context, mStringArray, MY_PERMISSIONS_Phone);
+            getPermission(context, mStringArray, MY_PERMISSIONS_Phone, context.getResources().getString(R.string.permission_phone));
         } else {
             if (onGetPermision != null)
                 onGetPermision.Allow();
@@ -341,7 +342,7 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPremision(context, mStringArray, MY_PERMISSIONS_Sms);
+            getPermission(context, mStringArray, MY_PERMISSIONS_Sms, context.getResources().getString(R.string.permission_sms));
         } else {
             if (onGetPermision != null)
                 onGetPermision.Allow();
@@ -358,20 +359,20 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void getPremision(final Context context, final String[] needPermision,
-                                    final int requestCode) {
+    public static void getPermission(final Context context, final String[] needPermission,
+                                     final int requestCode, String Text) {
 
-        if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermision[0])) {
-            showMessageOKCancel(context, context.getString(R.string.you_need_to_allow) + needPermision[0], new DialogInterface.OnClickListener() {
+        if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermission[0])) {
+            showMessageOKCancel(context, context.getString(R.string.you_need_to_allow) + Text, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions((Activity) context, needPermision, requestCode);
+                            ActivityCompat.requestPermissions((Activity) context, needPermission, requestCode);
                         }
                     });
             return;
         }
 
-        ActivityCompat.requestPermissions((Activity) context, needPermision, requestCode);
+        ActivityCompat.requestPermissions((Activity) context, needPermission, requestCode);
     }
 
     private static void showMessageOKCancel(Context context, String message, DialogInterface.OnClickListener okListener) {

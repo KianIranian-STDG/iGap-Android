@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,16 +127,24 @@ public class FragmentDeleteAccount extends Fragment {
             }
 
             @Override
-            public void onUserGetDeleteError(int majorCode, int minorCode, int time) {
+            public void onUserGetDeleteError(final int majorCode, int minorCode, final int time) {
 
-                switch (majorCode) {
-                    case 152:
-                        dialogWaitTime(R.string.error, time, majorCode);
-                        break;
-                    case 153:
-                        dialogWaitTime(R.string.error, time, majorCode);
-                        break;
-                }
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (majorCode) {
+                            case 152:
+                                dialogWaitTime(R.string.error, time, majorCode);
+                                Log.i("HHHHH", " -1 run: ");
+                                break;
+                            case 153:
+                                dialogWaitTime(R.string.error, time, majorCode);
+                                Log.i("HHHHH", " -2 run: ");
+                                break;
+                        }
+                    }
+                });
+
 
             }
         };
@@ -183,7 +192,7 @@ public class FragmentDeleteAccount extends Fragment {
                             .negativeText(getResources().getString(R.string.B_cancel))
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
 
 //                                    String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
                                     String verificationCode = edtDeleteAccount.getText().toString();
@@ -196,12 +205,27 @@ public class FragmentDeleteAccount extends Fragment {
                                             }
 
                                             @Override
-                                            public void Error(int majorCode, final int minorCode) {
+                                            public void Error(final int majorCode, final int minorCode, final int time) {
+
+                                                G.handler.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        hideProgressBar();
+                                                        if (dialog.isShowing()) dialog.dismiss();
+                                                        switch (majorCode) {
+                                                            case 158:
+                                                                dialogWaitTime(R.string.error, time, majorCode);
+                                                                Log.i("HHHHH", " 0 run: ");
+                                                                break;
+                                                        }
+                                                    }
+                                                });
 
                                             }
 
                                             @Override
                                             public void TimeOut() {
+                                                hideProgressBar();
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -339,11 +363,19 @@ public class FragmentDeleteAccount extends Fragment {
                 .customView(R.layout.dialog_remind_time, wrapInScrollView)
                 .positiveText(R.string.B_ok)
                 .autoDismiss(false)
+                .negativeText(R.string.B_cancel)
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
+                    }
+                })
                 .canceledOnTouchOutside(false)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.dismiss();
+                        new RequestUserGetDeleteToken().userGetDeleteToken();
                     }
                 })
                 .show();

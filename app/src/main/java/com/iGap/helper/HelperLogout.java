@@ -1,5 +1,7 @@
 package com.iGap.helper;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 
 import com.iGap.G;
@@ -24,6 +26,13 @@ public final class HelperLogout {
                 if (G.currentActivity != null) {
                     G.currentActivity.finish();
                 }
+                try {
+                    NotificationManager nMgr = (NotificationManager) G.context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    nMgr.cancelAll();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+
             }
         });
     }

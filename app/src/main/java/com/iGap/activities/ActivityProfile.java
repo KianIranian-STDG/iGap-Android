@@ -355,7 +355,7 @@ public class ActivityProfile extends ActivityEnhanced
                                                        HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
                                                            @Override
                                                            public void Allow() throws IOException {
-                                                               HelperPermision.getCamarePermision(ActivityProfile.this, new OnGetPermision() {
+                                                               HelperPermision.getCameraPermission(ActivityProfile.this, new OnGetPermision() {
                                                                    @Override
                                                                    public void Allow() {
                                                                        // this dialog show 2 way for choose image : gallery and camera

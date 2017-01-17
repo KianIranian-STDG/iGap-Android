@@ -611,7 +611,6 @@
     <string name="please_enter_code_for_verify">لطفاْ به منظور تأیید کد را وارد کنید.</string>
     <string name="server_do_not_response">سرور پاسخ نمی‌دهد.</string>
     <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آی‌گپ</string>
-    <string name="you_need_to_allow">باید اجازه دهید</string>
     <string name="TERMINATE">پایان</string>
     <string name="iGap_version">آی‌گپ برای اندروید</string>
     <string name="do_you_want_left_this">آیااز ترک ایتم انتخاب شده اطمینان دارید؟</string>
@@ -724,4 +723,13 @@
     <string name="send_position">ارسال موقعیت</string>
     <string name="deleted_message">پیام حذف شده</string>
     <string name="unread_message">پیام خوانده نشده</string>
+
+    <string name="you_need_to_allow">باید اجازه استفاده از</string>
+    <string name="permission_camera">دوربین را بدهید</string>
+    <string name="permission_contact">لیست تماس ها را بدهید</string>
+    <string name="permission_calender">تقویم را بدهید</string>
+    <string name="permission_location">موقعیت یاب گوشی را بدهید</string>
+    <string name="permission_record_audio">ظبط صدا را بدهید</string>
+    <string name="permission_phone">گوشی را بدهید</string>
+    <string name="permission_sms">پیامک ها را بدهید</string>
 </resources>

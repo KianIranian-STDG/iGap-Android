@@ -8,9 +8,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.view.View;
@@ -20,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.vending.licensing.AESObfuscator;
 import com.google.android.vending.licensing.LicenseChecker;
 import com.google.android.vending.licensing.LicenseCheckerCallback;
@@ -38,8 +42,10 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
 import com.iGap.request.RequestInfoPage;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
-import io.realm.Realm;
+
 import java.io.IOException;
+
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityIntroduce extends ActivityEnhanced {
@@ -168,6 +174,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         layout_test = (ViewGroup) findViewById(R.id.int_layout_test);
 
+
         layout = new int[]{
                 R.layout.view_pager_introduce_1,
         };
@@ -182,8 +189,11 @@ public class ActivityIntroduce extends ActivityEnhanced {
         txtSkip = (TextView) findViewById(R.id.int_txt_skip);
 
         logoIgap = (ImageView) findViewById(R.id.int_img_logo_introduce);
-        txt_p1_l1 = (TextView) findViewById(R.id.int_txt_p1_l1);
+
         txt_i_p1_l1 = (TextView) findViewById(R.id.int_txt_i_p1_l1);
+        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        txt_i_p1_l1.setTypeface(type);
+
         txt_p1_l2 = (TextView) findViewById(R.id.int_txt_p1_l2);
         txt_p1_l3 = (TextView) findViewById(R.id.int_txt_p1_l3);
 
@@ -1026,5 +1036,16 @@ public class ActivityIntroduce extends ActivityEnhanced {
     protected void onDestroy() {
         super.onDestroy();
         mChecker.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            finishAffinity();
+        } else {
+            ActivityCompat.finishAffinity(this);
+        }
     }
 }

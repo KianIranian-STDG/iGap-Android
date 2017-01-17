@@ -149,7 +149,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
 import static com.iGap.R.id.fragmentContainer_group_profile;
-import static com.iGap.R.id.time;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
 /**
@@ -1073,14 +1072,19 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
 
             @Override
-            public void onError(int majorCode, int minorCode) {
+            public void onError(final int majorCode, int minorCode, final int time) {
 
-                if (dialog.isShowing()) {
-                    dialog.dismiss();
-                }
                 switch (majorCode) {
                     case 368:
-                        dialogWaitTime(R.string.error, time, majorCode);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (dialog.isShowing()) dialog.dismiss();
+                                dialogWaitTime(R.string.error, time, majorCode);
+                            }
+                        });
+
                         break;
                 }
             }
@@ -1152,6 +1156,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                     struct.initials = realmRegisteredInfo.getInitials();
                                     struct.color = realmRegisteredInfo.getColor();
                                     struct.lastSeen = realmRegisteredInfo.getLastSeen();
+                                    struct.status = realmRegisteredInfo.getStatus();
+                                    struct.role = role.toString();
                                 }
 
 
@@ -1551,7 +1557,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermision() {
                                 @Override
                                 public void Allow() throws IOException {
-                                    HelperPermision.getCamarePermision(ActivityGroupProfile.this, new OnGetPermision() {
+                                    HelperPermision.getCameraPermission(ActivityGroupProfile.this, new OnGetPermision() {
                                         @Override
                                         public void Allow() {
                                             dialog.dismiss();

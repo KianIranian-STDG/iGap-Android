@@ -176,7 +176,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                                         HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
                                             @Override
                                             public void Allow() throws IOException {
-                                                HelperPermision.getCamarePermision(getActivity(), new OnGetPermision() {
+                                                HelperPermision.getCameraPermission(getActivity(), new OnGetPermision() {
                                                     @Override
                                                     public void Allow() {
                                                         // this dialog show 2 way for choose image : gallery and camera

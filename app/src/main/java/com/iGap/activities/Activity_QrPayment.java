@@ -222,7 +222,7 @@ public class Activity_QrPayment extends ActivityEnhanced {
                 public void onClick(View view) {
 
                     try {
-                        HelperPermision.getCamarePermision(Activity_QrPayment.this, new OnGetPermision() {
+                        HelperPermision.getCameraPermission(Activity_QrPayment.this, new OnGetPermision() {
                             @Override
                             public void Allow() {
                                 deSelectOtherView();

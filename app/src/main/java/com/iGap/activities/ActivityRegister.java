@@ -710,9 +710,8 @@ public class ActivityRegister extends ActivityEnhanced {
         });
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        // Fatal Exception: android.view.WindowManager$BadTokenException
-        // a workaround is checking if the activity in finishing process
-        // if not, show dialog
+
+
         if (!isFinishing()) {
             dialog.show();
             if (dialog.isShowing()) {
@@ -829,8 +828,12 @@ public class ActivityRegister extends ActivityEnhanced {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        btnStart.setBackgroundColor(getResources().getColor(R.color.green));
+                        btnChoseCountry.setEnabled(true);
+                        edtPhoneNumber.setEnabled(true);
+                        txtAgreement_register.setVisibility(View.GONE);
                         dialog.dismiss();
-                        requestRegister();
                     }
                 })
                 .show();

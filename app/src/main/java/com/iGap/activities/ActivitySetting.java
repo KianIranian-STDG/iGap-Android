@@ -615,7 +615,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override
                     public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
 
-//                        hideProgressBar();
+                        hideProgressBar();
 
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
@@ -638,12 +638,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     @Override
                     public void Error(int majorCode, int minorCode) {
-//                        hideProgressBar();
+                        hideProgressBar();
                     }
 
                     @Override
                     public void onTimeOut() {
-//                        hideProgressBar();
+                        hideProgressBar();
                     }
                 };
 
@@ -654,8 +654,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         .itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-//                                showProgressBar();
 
                                 switch (which) {
                                     case 0: {
@@ -669,7 +667,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 }
                                 return false;
                             }
-                        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
+                        }).positiveText(getResources()
+                        .getString(R.string.B_ok))
+                        .negativeText(getResources().getString(R.string.B_cancel))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                showProgressBar();
+                            }
+                        })
+                        .show();
 
 
             }
@@ -749,7 +756,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        dialog.dismiss();
+                        showProgressBar();
                         new RequestUserProfileSetEmail().setUserProfileEmail(edtEmail.getText().toString());
                     }
                 });
@@ -769,7 +777,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override
                     public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
 
-
+                        hideProgressBar();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -781,7 +789,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                                         realm.where(RealmUserInfo.class).findFirst().setEmail(email);
                                         txtEmail.setText(email);
-                                        dialog.dismiss();
 
                                     }
                                 });
@@ -792,6 +799,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     @Override
                     public void Error(int majorCode, int minorCode) {
+                        hideProgressBar();
                         if (majorCode == 114 && minorCode == 1) {
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -811,6 +819,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 }
                             });
                         }
+                    }
+
+                    @Override
+                    public void onTimeOut() {
+                        hideProgressBar();
                     }
                 };
 
@@ -939,31 +952,40 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     }
 
                     @Override
-                    public void Error(int majorCode, int minorCode, int time) {
+                    public void Error(final int majorCode, int minorCode, final int time) {
 
                         switch (majorCode) {
                             case 175:
-                                dialogWaitTime(R.string.error, time, majorCode);
+                                if (dialog.isShowing()) dialog.dismiss();
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialogWaitTime(R.string.error, time, majorCode);
+                                    }
+                                });
+
                                 break;
                         }
-
-
                     }
                 };
 
-                edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onFocusChange(View view, boolean b) {
-                        if (b) {
-                            viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
-                        } else {
-                            viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-                        }
+                    public void run() {
+                        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                            @Override
+                            public void onFocusChange(View view, boolean b) {
+                                if (b) {
+                                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                                } else {
+                                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                                }
+                            }
+                        });
                     }
                 });
-
                 // check each word with server
-
                 dialog.show();
             }
         });
@@ -1888,7 +1910,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         HelperPermision.getStoragePermision(ActivitySetting.this, new OnGetPermision() {
                             @Override
                             public void Allow() throws IOException {
-                                HelperPermision.getCamarePermision(ActivitySetting.this, new OnGetPermision() {
+                                HelperPermision.getCameraPermission(ActivitySetting.this, new OnGetPermision() {
                                     @Override
                                     public void Allow() {
                                         dialog.dismiss();

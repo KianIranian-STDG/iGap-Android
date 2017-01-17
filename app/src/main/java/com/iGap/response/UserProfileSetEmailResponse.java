@@ -32,8 +32,17 @@ public class UserProfileSetEmailResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        G.onUserProfileSetEmailResponse.Error(majorCode, minorCode);
+        if (G.onUserProfileSetEmailResponse != null) {
+            G.onUserProfileSetEmailResponse.Error(majorCode, minorCode);
+        }
+    }
 
+    @Override
+    public void timeOut() {
+        super.timeOut();
+        if (G.onUserProfileSetEmailResponse != null) {
+            G.onUserProfileSetEmailResponse.onTimeOut();
+        }
     }
 }
 

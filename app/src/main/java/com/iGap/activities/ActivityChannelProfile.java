@@ -1423,7 +1423,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                             HelperPermision.getStoragePermision(ActivityChannelProfile.this, new OnGetPermision() {
                                 @Override
                                 public void Allow() throws IOException {
-                                    HelperPermision.getCamarePermision(ActivityChannelProfile.this, new OnGetPermision() {
+                                    HelperPermision.getCameraPermission(ActivityChannelProfile.this, new OnGetPermision() {
                                         @Override
                                         public void Allow() {
                                             // this dialog show 2 way for choose image : gallery and camera
@@ -2401,17 +2401,19 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
 
             @Override
-            public void onError(int majorCode, int minorCode, int time) {
+            public void onError(final int majorCode, int minorCode, final int time) {
 
                 switch (majorCode) {
                     case 457:
-                        if (dialog.isShowing()) dialog.dismiss();
-                        dialogWaitTime(R.string.error, time, majorCode);
-
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (dialog.isShowing()) dialog.dismiss();
+                                dialogWaitTime(R.string.error, time, majorCode);
+                            }
+                        });
                         break;
                 }
-
-
             }
 
             @Override
