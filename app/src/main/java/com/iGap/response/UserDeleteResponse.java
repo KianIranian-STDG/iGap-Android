@@ -1,7 +1,11 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.helper.HelperLogout;
 import com.iGap.proto.ProtoError;
+import java.io.File;
+
+import static com.iGap.module.FileUtils.deleteRecursive;
 
 public class UserDeleteResponse extends MessageHandler {
 
@@ -20,24 +24,26 @@ public class UserDeleteResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        G.onUserDelete.onUserDeleteResponse();
-
+        HelperLogout.logout();
+        deleteRecursive(new File(G.DIR_APP));
+        if (G.onUserDelete != null) {
+            G.onUserDelete.onUserDeleteResponse();
+        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        G.onUserDelete.TimeOut();
+        if (G.onUserDelete != null) {
+            G.onUserDelete.TimeOut();
+        }
     }
 
     @Override
     public void error() {
         super.error();
-
-        ProtoError.ErrorResponse.Builder errorReponse = (ProtoError.ErrorResponse.Builder) message;
-        errorReponse.getMajorCode();
-        errorReponse.getMinorCode();
-        G.onUserDelete.Error(errorReponse.getMajorCode(), errorReponse.getMinorCode());
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        G.onUserDelete.Error(errorResponse.getMajorCode(), errorResponse.getMinorCode());
     }
 
 }

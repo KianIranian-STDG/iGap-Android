@@ -16,12 +16,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnGetPermision;
@@ -34,8 +32,6 @@ import com.iGap.module.IncomingSms;
 import com.iGap.proto.ProtoUserDelete;
 import com.iGap.request.RequestUserDelete;
 import com.iGap.request.RequestUserGetDeleteToken;
-
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -181,8 +177,6 @@ public class FragmentDeleteAccount extends Fragment {
                                             @Override
                                             public void onUserDeleteResponse() {
                                                 hideProgressBar();
-                                                HelperLogout.logout();
-                                                deleteRecursive(new File(G.DIR_APP));
                                             }
 
                                             @Override
@@ -300,15 +294,6 @@ public class FragmentDeleteAccount extends Fragment {
             e.printStackTrace();
         }
         super.onPause();
-    }
-
-
-    void deleteRecursive(File fileOrDirectory) {
-        if (fileOrDirectory.isDirectory())
-            for (File child : fileOrDirectory.listFiles())
-                deleteRecursive(child);
-
-        fileOrDirectory.delete();
     }
 
     private void showProgressBar() {

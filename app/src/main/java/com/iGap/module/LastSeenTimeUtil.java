@@ -2,21 +2,18 @@ package com.iGap.module;
 
 import android.text.format.DateUtils;
 import android.util.Log;
-
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
-
+import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import io.realm.Realm;
 
 public class LastSeenTimeUtil {
     private LastSeenTimeUtil() throws InstantiationException {
@@ -28,10 +25,6 @@ public class LastSeenTimeUtil {
     /**
      * if last seen bigger than 10 minutes return local time otherwise
      * return minutes from latest user seen
-     *
-     * @param userId
-     * @param lastSeen
-     * @return
      */
     public static String computeTime(long userId, long lastSeen) {
         if (timeOut(lastSeen * DateUtils.SECOND_IN_MILLIS)) {
@@ -110,11 +103,8 @@ public class LastSeenTimeUtil {
                 } else {
                     showLastSeen = getMinute(value);
                 }
-//            if (realmRegisteredInfo != null && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
                 Log.i("TTT", "realmRegisteredInfo.getStatus() : " + realmRegisteredInfo.getStatus()); //
-                if (!realmRegisteredInfo.getStatus().equals("online")
-                        && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())
-                        && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
+                if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString()) && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
                     if (G.onLastSeenUpdateTiming != null) {
                         G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
                     }

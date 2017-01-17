@@ -31,7 +31,6 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -182,8 +181,7 @@ public class FileUtils {
                 String filepath = file.getAbsolutePath();
 
                 // Construct path without file name.
-                String pathwithoutname =
-                        filepath.substring(0, filepath.length() - filename.length());
+                String pathwithoutname = filepath.substring(0, filepath.length() - filename.length());
                 if (pathwithoutname.endsWith("/")) {
                     pathwithoutname = pathwithoutname.substring(0, pathwithoutname.length() - 1);
                 }
@@ -254,15 +252,14 @@ public class FileUtils {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
+     * @param context The context.
+     * @param uri The Uri to query.
+     * @param selection (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
      */
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
+    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";
@@ -271,8 +268,7 @@ public class FileUtils {
         };
 
         try {
-            cursor =
-                    context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
             if (cursor != null && cursor.moveToFirst()) {
                 if (DEBUG) DatabaseUtils.dumpCursor(cursor);
 
@@ -294,7 +290,7 @@ public class FileUtils {
      * represents a local file.
      *
      * @param context The context.
-     * @param uri     The Uri to query.
+     * @param uri The Uri to query.
      * @author paulburke
      * @see #isLocal(String)
      * @see #getFile(Context, Uri)
@@ -330,9 +326,7 @@ public class FileUtils {
             else if (isDownloadsDocument(uri)) {
 
                 final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri =
-                        ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
-                                Long.valueOf(id));
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
             }
@@ -467,11 +461,9 @@ public class FileUtils {
                     if (DEBUG) Log.d(TAG, "Got thumb ID: " + id);
 
                     if (mimeType.contains("video")) {
-                        bm = MediaStore.Video.Thumbnails.getThumbnail(resolver, id,
-                                MediaStore.Video.Thumbnails.MINI_KIND, null);
+                        bm = MediaStore.Video.Thumbnails.getThumbnail(resolver, id, MediaStore.Video.Thumbnails.MINI_KIND, null);
                     } else if (mimeType.contains(FileUtils.MIME_TYPE_IMAGE)) {
-                        bm = MediaStore.Images.Thumbnails.getThumbnail(resolver, id,
-                                MediaStore.Images.Thumbnails.MINI_KIND, null);
+                        bm = MediaStore.Images.Thumbnails.getThumbnail(resolver, id, MediaStore.Images.Thumbnails.MINI_KIND, null);
                     }
                 }
             } catch (Exception e) {
@@ -497,5 +489,19 @@ public class FileUtils {
         // Only return URIs that can be opened with ContentResolver
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         return intent;
+    }
+
+    /**
+     * delete all files that exist in iGap Folders
+     *
+     * @param fileOrDirectory main iGap directory
+     */
+    public static void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                deleteRecursive(child);
+            }
+        }
+        fileOrDirectory.delete();
     }
 }
