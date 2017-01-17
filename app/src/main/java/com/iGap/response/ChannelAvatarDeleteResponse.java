@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.helper.HelperAvatar;
 import com.iGap.proto.ProtoChannelAvatarDelete;
 
 public class ChannelAvatarDeleteResponse extends MessageHandler {
@@ -24,6 +25,8 @@ public class ChannelAvatarDeleteResponse extends MessageHandler {
         ProtoChannelAvatarDelete.ChannelAvatarDeleteResponse.Builder builder = (ProtoChannelAvatarDelete.ChannelAvatarDeleteResponse.Builder) message;
         if (G.onChannelAvatarDelete != null) {
             G.onChannelAvatarDelete.onChannelAvatarDelete(builder.getRoomId(), builder.getId());
+        } else {
+            HelperAvatar.avatarDelete(builder.getRoomId(), builder.getId(), HelperAvatar.AvatarType.ROOM, null);
         }
     }
 

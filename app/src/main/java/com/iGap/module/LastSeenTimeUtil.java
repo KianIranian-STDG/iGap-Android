@@ -50,31 +50,39 @@ public class LastSeenTimeUtil {
         long currentMillis = System.currentTimeMillis();
         int days = (int) ((currentMillis - (beforeMillis * DateUtils.SECOND_IN_MILLIS)) / DateUtils.DAY_IN_MILLIS);
 
-        switch (days) {
-            case 1:
-                time = G.context.getResources().getString(R.string.one_day) + exactlyTime;
-                break;
-            case 2:
-                time = G.context.getResources().getString(R.string.two_day) + exactlyTime;
-                break;
-            case 3:
-                time = G.context.getResources().getString(R.string.three_day) + exactlyTime;
-                break;
-            case 4:
-                time = G.context.getResources().getString(R.string.four_day) + exactlyTime;
-                break;
-            case 5:
-                time = G.context.getResources().getString(R.string.five_day) + exactlyTime;
-                break;
-            case 6:
-                time = G.context.getResources().getString(R.string.six_day) + exactlyTime;
-                break;
-            case 7:
-                time = G.context.getResources().getString(R.string.last_week);
-                break;
-            default:
-                time = TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
-                break;
+        if (days >= 7) {
+            switch (days) {
+                case 1:
+                    time = G.context.getResources().getString(R.string.last_seen) + " " +
+                            G.context.getResources().getString(R.string.yesterday) + " " +
+                            exactlyTime;
+                    break;
+                case 2:
+                    time = G.context.getResources().getString(R.string.two_day);//+ exactlyTime
+                    break;
+                case 3:
+                    time = G.context.getResources().getString(R.string.three_day);//+ exactlyTime
+                    break;
+                case 4:
+                    time = G.context.getResources().getString(R.string.four_day);// + exactlyTime
+                    break;
+                case 5:
+                    time = G.context.getResources().getString(R.string.five_day);// + exactlyTime
+                    break;
+                case 6:
+                    time = G.context.getResources().getString(R.string.six_day);// + exactlyTime
+                    break;
+                case 7:
+                    time = G.context.getResources().getString(R.string.last_week);
+                    break;
+                default:
+                    time = TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                    break;
+            }
+        } else {
+            time = G.context.getResources().getString(R.string.last_seen) + " " +
+                    TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, "yy-MM-dd") + " " +
+                    exactlyTime;
         }
 
         return time;

@@ -258,7 +258,7 @@
     <string name="select_room">Select Room</string>
     <string name="edited">Edited</string>
     <string name="today">Today</string>
-    <string name="yesterday">Yesterday</string>
+    <string name="yesterday">yesterday</string>
 
     <!-- array -->
     <string name="array_Photo">Photo</string>
@@ -595,7 +595,7 @@
     <string name="just_owner_can_delete">Just owner can delete</string>
 
     <string name="shate_audio_file">Share audio File</string>
-    <string name="last_seen">Last Seen</string>
+    <string name="last_seen">last seen</string>
     <string name="remove">Remove</string>
     <string name="please_check_your_connenction">Please check your connection</string>
     <string name="errore_verification_sms">Error verification SMS</string>

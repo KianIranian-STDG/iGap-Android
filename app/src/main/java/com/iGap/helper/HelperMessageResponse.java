@@ -101,7 +101,7 @@ public class HelperMessageResponse {
                         room.setUpdatedTime(roomMessage.getUpdateTime());
                     }
 
-                    if (roomMessage.getAuthor().getUser().getUserId() != G.userID) {
+                    if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
                         room.setUnreadCount(room.getUnreadCount() + 1);
                     }
                 }

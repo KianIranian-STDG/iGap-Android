@@ -974,7 +974,6 @@ public class ActivityChat extends ActivityEnhanced
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
-                        Log.i("BBBBBBB", "onCreate2222: " + groupParticipantsCountLabel);
                     }
                 }
             });
@@ -3830,7 +3829,7 @@ public class ActivityChat extends ActivityEnhanced
                         final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
                         if (roomMessage.getAuthor().getUser() != null) {
-                            if (roomMessage.getAuthor().getUser().getUserId() != G.userID) {
+                            if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
                                 // I'm in the room
                                 if (roomId == mRoomId) {
                                     // I'm in the room, so unread messages count is 0. it means, I read all messages
@@ -3941,9 +3940,7 @@ public class ActivityChat extends ActivityEnhanced
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
 
                 if (realmRegisteredInfo != null) {
-                    mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar())); //TODO [Saeed Mozaffari]
-                    // [2016-11-01 10:10 AM] -we have NullPointerException for
-                    // realmRegisteredInfo check this
+                    mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()));
                 }
 
                 realm.close();

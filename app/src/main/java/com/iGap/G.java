@@ -244,7 +244,7 @@ public class G extends MultiDexApplication {
     public static List<String> downloadingTokens = new ArrayList<>();
     public static long currentTime;
 
-    public static long userID;
+    public static long userId;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -762,7 +762,7 @@ public class G extends MultiDexApplication {
                     Realm realm = Realm.getDefaultInstance();
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
-                    if (userInfo != null) userID = userInfo.getUserId();
+                    if (userInfo != null) userId = userInfo.getUserId();
 
                     if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
                         new RequestUserLogin().userLogin(userInfo.getToken());
