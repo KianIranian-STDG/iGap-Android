@@ -9,24 +9,17 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.adapter.items.chat.TimeItem;
-import com.iGap.helper.HelperError;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
-import com.iGap.interfaces.OnFileDownload;
 import com.iGap.interfaces.OnProgressUpdate;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmAttachment;
-import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRegisteredInfo;
-import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +28,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public static List<String> avatarsRequested = new ArrayList<>();
     public static List<String> usersInfoRequested = new ArrayList<>();
     public static ArrayMap<Long, Integer> uploading = new ArrayMap<>();
-    public static ArrayMap<String, Integer> downloading = new ArrayMap<>();
+
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
@@ -112,10 +105,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         });
     }
 
-    public static boolean hasDownloadRequested(String token) {
-        return downloading.containsKey(token);
-    }
-
     public static boolean hasUploadRequested(long messageId) {
         if (uploading == null) {
             return false;
@@ -133,28 +122,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         return failedMessages;
     }
 
-    public void downloadingAvatar(long peerId, int progress, long offset, StructMessageAttachment avatar) {
 
-        for (int i = getAdapterItemCount() - 1; i >= 0; i--) {
-            Item item = getAdapterItem(i);
-
-            if (item.mMessage != null) {
-                if (item.mMessage.downloadAttachment != null) {
-                    if (Long.parseLong(item.mMessage.senderID) == peerId) {
-
-                        item.mMessage.senderAvatar = avatar;
-                        item.mMessage.downloadAttachment.progress = progress;
-                        item.mMessage.downloadAttachment.offset = offset;
-
-                        notifyItemChanged(i);
-                        break;
-                    }
-                }
-            }
-
-        }
-
-    }
 
     /**
      * update progress while file uploading
@@ -189,100 +157,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
-    public static void requestDownload(String token, int progress, long offset) {
-        if (!downloading.containsKey(token)) {
-            downloading.put(token, progress);
-        } else {
-            int pos2 = downloading.indexOfKey(token);
-            downloading.setValueAt(pos2, progress);
-        }
-
-        if (progress != 100) {
-            Realm realm = Realm.getDefaultInstance();
-            RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
-            if (attachment != null) {
-                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-                String identity = attachment.getToken() + '*' + selector.toString() + '*' + attachment.getSize() + '*' + attachment.getToken() + "_" + attachment.getName() + '*' + offset;
-                if (offset >= 0) {
-                    new RequestFileDownload().download(token, offset, (int) attachment.getSize(), selector, identity);
-                } else {
-                    HelperError.getErrorFromCode(99999, 0);
-                }
-            }
-
-            realm.close();
-        }
-    }
-
-    public void updateDownloadFields(String token, int progress, long offset) {
-        requestDownload(token, progress, offset);
-
-        for (int i = getAdapterItemCount() - 1; i >= 0; i--) {
-            Item item = getAdapterItem(i);
-
-            if (item.mMessage != null) {
-                if (item.mMessage.attachment != null) {
-                    if (item.mMessage.attachment.token != null) {
-                        if (item.mMessage.attachment.token.equalsIgnoreCase(token)) {
-
-                            final int finalI = i;
-                            item.onRequestDownloadFile(offset, progress, new OnFileDownload() {
-                                @Override public void onFileDownloaded() {
-                                    notifyItemChanged(finalI);
-                                }
-                            });
-
-                            break;
-                        }
-                    }
-                }
-            }
-
-        }
-    }
-
-    public void makeNotDownloaded(String token) {
-        for (int i = getAdapterItemCount() - 1; i >= 0; i--) {
-            Item item = getAdapterItem(i);
-
-            if (item.mMessage != null) {
-                if (item.mMessage.attachment != null) {
-                    if (item.mMessage.attachment.token != null) {
-                        if (item.mMessage.attachment.token.equalsIgnoreCase(token)) {
-
-                            item.mMessage.downloadAttachment = null;
-                            set(i, item);
-
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-    }
-
-    public void updateThumbnail(String token) {
-        for (int i = getAdapterItemCount() - 1; i >= 0; i--) {
-            Item item = getAdapterItem(i);
-            if (item.mMessage != null) {
-                if (item.mMessage.attachment != null) {
-                    if (item.mMessage.attachment.token != null) {
-                        if (item.mMessage.attachment.token.equalsIgnoreCase(token)) {
-                            final int finalI = i;
-                            item.onRequestDownloadThumbnail(token, true, new OnFileDownload() {
-                                @Override public void onFileDownloaded() {
-                                    notifyItemChanged(finalI);
-                                }
-                            });
-
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
 
 
     public void updateChatAvatar(long userId, RealmRegisteredInfo registeredInfo) {

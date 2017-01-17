@@ -16,17 +16,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperGetMessageState;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IChatItemAttachment;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnAvatarGet;
-import com.iGap.interfaces.OnFileDownload;
 import com.iGap.interfaces.OnProgressUpdate;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
@@ -34,7 +33,6 @@ import com.iGap.module.MyType;
 import com.iGap.module.ReserveSpaceGifImageView;
 import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.SHP_SETTING;
-import com.iGap.module.StructDownloadAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.enums.ConnectionMode;
@@ -42,7 +40,6 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
-import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmChannelExtraFields;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -52,17 +49,13 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestChannelAddMessageReaction;
-import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.IOException;
-import java.util.List;
-
 import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.meness.github.messageprogress.OnProgress;
 import io.realm.Realm;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;
@@ -72,6 +65,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
     public ProtoGlobal.Room.Type type;
+
+    enum DownLoadType {
+        thumpnail,
+        file;
+    }
+
+
 
     @Override public void onPlayPauseGIF(VH holder, String localPath) {
         // empty
@@ -668,7 +668,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                      */
                     onLoadThumbnailFromLocal(holder, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
-                    requestForThumbnail();
+                    downLoadThumpnail(holder);
                 }
             }
 
@@ -744,23 +744,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        /**
-         * create new download attachment once with attachment token
-         */
-        if (mMessage.downloadAttachment == null) {
-            mMessage.downloadAttachment = new StructDownloadAttachment(attachment);
-        }
-
-        /**
-         * make sure to not request multiple times by checking last offset with the new one
-         */
-        if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
-            onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress, null);
-            mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
-        }
-
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
-        messageClickListener.onDownloadStart(progress, mMessage, holder.getAdapterPosition());
+        downLoadFile(holder, progress);
+
     }
 
     private void forOnCLick(VH holder, RealmAttachment attachment) {
@@ -775,8 +761,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (MessagesAdapter.hasUploadRequested(Long.parseLong(mMessage.messageID))) {
             messageClickListener.onUploadCancel(progress, mMessage, holder.getAdapterPosition());
-        } else if (MessagesAdapter.hasDownloadRequested(attachment.getToken())) {
-            messageClickListener.onDownloadCancel(progress, mMessage, holder.getAdapterPosition());
+        } else if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
+            HelperDownloadFile.stopDownLoad(attachment.getToken());
+            progress.withProgress(0);
+            progress.withDrawable(R.drawable.ic_download, true);
         } else {
             if (thumbnail != null) {
                 thumbnail.setVisibility(View.VISIBLE);
@@ -797,25 +785,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
             } else {
-                progress.withDrawable(R.drawable.ic_cancel, false);
 
-                /**
-                 * create new download attachment once with attachment token
-                 */
-                if (mMessage.downloadAttachment == null) {
-                    mMessage.downloadAttachment = new StructDownloadAttachment(attachment);
-                    progress.withProgress(mMessage.downloadAttachment.progress);
-                }
-
-                /**
-                 * make sure to not request multiple times by checking last offset with the new one
-                 */
-                if (mMessage.downloadAttachment.lastOffset < mMessage.downloadAttachment.offset) {
-                    onRequestDownloadFile(mMessage.downloadAttachment.offset, mMessage.downloadAttachment.progress, null);
-                    mMessage.downloadAttachment.lastOffset = mMessage.downloadAttachment.offset;
-                }
-
-                messageClickListener.onDownloadStart(progress, mMessage, holder.getAdapterPosition());
+                downLoadFile(holder, progress);
             }
         }
     }
@@ -824,166 +795,77 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     }
 
-    @Override @CallSuper public void onRequestDownloadFile(long offset, int progress, final OnFileDownload onFileDownload) {
-        if (mMessage.forwardedFrom != null) {
-            final String fileName = mMessage.forwardedFrom.getAttachment().getToken() + "_" + mMessage.forwardedFrom.getAttachment().getName();
-            final long forwardMessageID = mMessage.forwardedFrom.getMessageId();
-            final ProtoGlobal.RoomMessageType forwardMessageType = mMessage.forwardedFrom.getMessageType();
-            if (progress >= 100) {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
-                        realm.where(RealmRoomMessage.class)
-                            .equalTo(RealmRoomMessageFields.MESSAGE_ID, forwardMessageID)
-                            .findFirst()
-                            .getAttachment()
-                            .setLocalFilePath(AndroidUtils.suitableAppFilePath(forwardMessageType) + "/" + fileName);
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
-                        try {
-                            AndroidUtils.cutFromTemp(mMessage.forwardedFrom.getMessageType(), fileName);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+    private void downLoadThumpnail(final VH holder) {
 
-                        onFileDownload.onFileDownloaded();
-                        realm.close();
-                    }
-                });
+        String token = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token;
+        String name = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getName() : mMessage.attachment.name;
+        Long size = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize() : mMessage.attachment.smallThumbnail.size;
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
-                return; // necessary
-            }
+        final String _path = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(name);
 
-            if (!MessagesAdapter.hasDownloadRequested(mMessage.forwardedFrom.getAttachment().getToken())) {
-                MessagesAdapter.requestDownload(mMessage.forwardedFrom.getAttachment().getToken(), progress, offset);
-                G.downloadingTokens.add(mMessage.forwardedFrom.getAttachment().getToken());
-            }
-        } else {
-            final String fileName = mMessage.attachment.token + "_" + mMessage.attachment.name;
-            if (progress >= 100) {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
-                        realm.where(RealmRoomMessage.class)
-                            .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID))
-                            .findFirst()
-                            .getAttachment()
-                            .setLocalFilePath(AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
-                        try {
-                            AndroidUtils.cutFromTemp(mMessage.messageType, fileName);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+        if (token != null && token.length() > 0 && size > 0) {
 
-                        if (onFileDownload != null) {
-                            onFileDownload.onFileDownloaded();
-                        }
+            HelperDownloadFile.startDoanload(token, name, size, selector, "", new HelperDownloadFile.UpdateListener() {
+                @Override public void OnProgress(String token, int progress) {
 
-                        realm.close();
-                    }
-                });
+                    if (progress == 100) onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
+                }
 
-                return; // necessary
-            }
-
-            if (!MessagesAdapter.hasDownloadRequested(mMessage.attachment.token)) {
-                MessagesAdapter.requestDownload(mMessage.attachment.token, progress, offset);
-                G.downloadingTokens.add(mMessage.attachment.token);
-            }
+                @Override public void OnError(String token) {
+                }
+            });
         }
 
-        if (onFileDownload != null) {
-            onFileDownload.onFileDownloaded();
-        }
     }
 
-    @Override public void onRequestDownloadThumbnail(final String token, boolean done, final OnFileDownload onFileDownload) {
-        if (mMessage.forwardedFrom != null && mMessage.forwardedFrom.getAttachment() != null && mMessage.forwardedFrom.getAttachment().getSmallThumbnail() != null) {
-            if (mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize() != 0) {
+    abstract void OnDownLoadFileFinish(VH holder, String filePath);
 
-                final String fileName = "thumb_" + token + "_" + AppUtils.suitableThumbFileName(mMessage.forwardedFrom.getAttachment().getName());
-                if (done) {
-                    final Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
-                            RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
-                            if (attachment != null) {
-                                attachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
+    private void downLoadFile(final VH holder, final MessageProgress progressBar) {
+
+        String token = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token;
+        String name = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getName() : mMessage.attachment.name;
+        Long size = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getSize() : mMessage.attachment.size;
+        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+
+        final String _path = AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + token + "_" + name;
+
+        if (token != null && token.length() > 0 && size > 0) {
+
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.withDrawable(R.drawable.ic_cancel, false);
+
+            HelperDownloadFile.startDoanload(token, name, size, selector, _path, new HelperDownloadFile.UpdateListener() {
+                @Override public void OnProgress(String token, final int progress) {
+
+                    progressBar.post(new Runnable() {
+                        @Override public void run() {
+
+                            if (progress == 100) {
+                                progressBar.setVisibility(View.GONE);
+                                OnDownLoadFileFinish(holder, _path);
+                            } else {
+                                progressBar.withProgress(progress);
                             }
-                        }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override public void onSuccess() {
-                            onFileDownload.onFileDownloaded();
-                            realm.close();
                         }
                     });
 
-                    return; // necessary
                 }
 
-                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-                String identity = mMessage.attachment.token + '*' + selector.toString() + '*' + mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize() + '*' + fileName + '*' + 0;
+                @Override public void OnError(String token) {
 
-                new RequestFileDownload().download(token, 0, (int) mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize(), selector, identity);
-            }
-        } else {
-            if (mMessage.attachment.smallThumbnail != null && mMessage.attachment.smallThumbnail.size != 0) {
-
-                final String fileName = "thumb_" + token + "_" + AppUtils.suitableThumbFileName(mMessage.attachment.name);
-                if (done) {
-                    final Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
-                            RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
-                            if (attachment != null) {
-                                attachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
-                            }
-                        }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override public void onSuccess() {
-                            mMessage.attachment.localThumbnailPath = G.DIR_TEMP + "/" + fileName;
-                            onFileDownload.onFileDownloaded();
-                            realm.close();
+                    progressBar.post(new Runnable() {
+                        @Override public void run() {
+                            progressBar.withProgress(0);
+                            progressBar.withDrawable(R.drawable.ic_download, true);
                         }
                     });
-
-                    return; // necessary
                 }
-
-                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-                String identity = mMessage.attachment.token + '*' + selector.toString() + '*' + mMessage.attachment.smallThumbnail.size + '*' + fileName + '*' + 0;
-
-                new RequestFileDownload().download(token, 0, (int) mMessage.attachment.smallThumbnail.size, selector, identity);
-            }
+            });
         }
+
     }
 
-    private void requestForThumbnail() {
-        if (mMessage.attachment == null) {
-            return;
-        }
-        /**
-         * create new download attachment once with attachment token
-         */
-        if (mMessage.downloadAttachment == null) {
-            mMessage.downloadAttachment = new StructDownloadAttachment(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token);
-        }
-
-        /**
-         * request thumbnail
-         */
-        if (!mMessage.downloadAttachment.thumbnailRequested) {
-            onRequestDownloadThumbnail(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token, false, null);
-            /**
-             * prevent from multiple requesting thumbnail
-             */
-            mMessage.downloadAttachment.thumbnailRequested = true;
-        }
-    }
 
     public void updateProgress(OnProgressUpdate onProgressUpdate) {
         onProgressUpdate.onProgressUpdate();
@@ -1031,17 +913,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void checkForDownloading(VH holder, RealmAttachment attachment) {
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
-        if (MessagesAdapter.downloading.containsKey(attachment.getToken())) {
+        if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
             hideThumbnailIf(holder);
 
-            progress.withDrawable(R.drawable.ic_cancel, false);
-            progress.setVisibility(View.VISIBLE);
-            progress.withProgress(MessagesAdapter.downloading.get(attachment.getToken()));
+            downLoadFile(holder, (MessageProgress) holder.itemView.findViewById(R.id.progress));
 
-            if (MessagesAdapter.downloading.get(attachment.getToken()) == 100) {
-                MessagesAdapter.downloading.remove(attachment.getToken());
-                progress.performProgress();
-            }
         } else {
             if (attachment.isFileExistsOnLocal()) {
                 progress.performProgress();

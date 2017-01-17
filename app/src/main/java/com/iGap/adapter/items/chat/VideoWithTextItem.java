@@ -70,6 +70,10 @@ public class VideoWithTextItem
         holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
     }
 
+    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
+
+    }
+
     @Override
     protected void voteAction(ViewHolder holder) {
         super.voteAction(holder);
