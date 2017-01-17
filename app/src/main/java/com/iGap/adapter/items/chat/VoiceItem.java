@@ -81,9 +81,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         realm.close();
 
-        int st = 1000;
-        if (mMessage.isSenderMe()) st = 1;
-        final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * st);
+        final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000);
 
         holder.txt_Timer.post(new Runnable() {
             @Override public void run() {

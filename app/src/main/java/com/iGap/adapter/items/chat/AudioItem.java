@@ -123,9 +123,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             audioBoxView.setBackgroundColor(Color.TRANSPARENT);
         }
 
-        int st = 1000;
-        if (mMessage.isSenderMe()) st = 1;
-        final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * st);
+        final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000);
 
         holder.txt_Timer.post(new Runnable() {
             @Override

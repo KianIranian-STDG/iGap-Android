@@ -3566,26 +3566,25 @@ public class ActivityChat extends ActivityEnhanced
         return messageInfos;
     }
 
-    private long latestMessageIdHistory;
+    private long latestMessageIdHistory = -1;
 
     private void requestMessageHistory() {
-        //long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
+        //  long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
 
         long oldestMessageId = 0;
-        if (mAdapter.getAdapterItems().size() > 0) {
-            if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) {
-                if (mAdapter.getAdapterItems().size() > 1) oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(1).mMessage.messageID);
-            } else {
-                oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(0).mMessage.messageID);
-            }
 
-        } else {
-            oldestMessageId = 0;
+        for (int i = 0; i < mAdapter.getAdapterItems().size(); i++) {
+            if (mAdapter.getAdapterItem(i) instanceof ProgressWaiting || mAdapter.getAdapterItem(i) instanceof TimeItem) {
+                continue;
+            } else {
+                oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(i).mMessage.messageID);
+                break;
+            }
         }
+
         if (latestMessageIdHistory != oldestMessageId) {
             latestMessageIdHistory = oldestMessageId;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
-
             if (mAdapter.getAdapterItemCount() > 0) {
                 if (!(mAdapter.getAdapterItem(0) instanceof ProgressWaiting)) {
                     recyclerView.post(new Runnable() {
@@ -3596,7 +3595,6 @@ public class ActivityChat extends ActivityEnhanced
                     });
                 }
             }
-
 
         }
     }
@@ -4137,6 +4135,9 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
 
                     if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
+
+                    if (count < 1) return;
+
 
                     Realm realm = Realm.getDefaultInstance();
                     RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.CREATE_TIME);

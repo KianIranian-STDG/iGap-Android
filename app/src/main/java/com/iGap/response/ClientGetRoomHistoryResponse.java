@@ -72,9 +72,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override public void onSuccess() {
 
-                        if (i[0] > 0) {
                             G.onClientGetRoomHistoryResponse.onGetRoomHistory(Long.parseLong(identity), builder.getMessageList(), i[0]);
-                        }
 
                         realm.close();
                     }
