@@ -1,5 +1,6 @@
 package com.iGap.helper;
 
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
@@ -101,7 +102,8 @@ public class HelperMessageResponse {
                         room.setUpdatedTime(roomMessage.getUpdateTime());
                     }
 
-                    if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
+                    if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
+                        Log.i("EEE", "Channel setUnreadCount");
                         room.setUnreadCount(room.getUnreadCount() + 1);
                     }
                 }

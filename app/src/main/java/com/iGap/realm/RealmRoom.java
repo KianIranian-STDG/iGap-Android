@@ -1,10 +1,10 @@
 package com.iGap.realm;
 
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -104,6 +104,7 @@ public class RealmRoom extends RealmObject {
         realmRoom.setInitials(room.getInitials());
         realmRoom.setTitle(room.getTitle());
         realmRoom.setType(RoomType.convert(room.getType()));
+        Log.i("EEE", "putOrUpdate setUnreadCount " + room.getUnreadCount());
         realmRoom.setUnreadCount(room.getUnreadCount());
         realmRoom.setReadOnly(room.getReadOnly());
         realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim

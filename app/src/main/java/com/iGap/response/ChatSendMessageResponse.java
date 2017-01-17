@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.helper.HelperUserInfo;
 import com.iGap.proto.ProtoChatSendMessage;
@@ -39,6 +40,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
         final ProtoGlobal.RoomMessage roomMessage = chatSendMessageResponse.getRoomMessage();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        final String authorHash = realm.where(RealmUserInfo.class).findFirst().getAuthorHash();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -96,7 +98,8 @@ public class ChatSendMessageResponse extends MessageHandler {
                         room.setUpdatedTime(roomMessage.getUpdateTime());
                     }
 
-                    if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
+                    if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
+                        Log.i("EEE", "Chat setUnreadCount");
                         room.setUnreadCount(room.getUnreadCount() + 1);
                     }
 

@@ -45,13 +45,15 @@ public class LastSeenTimeUtil {
 
     private static String computeDays(long beforeMillis) {
 
-        String time;
+        String time = "";
         String exactlyTime = " " + G.context.getResources().getString(R.string.at) + " " + TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
         long currentMillis = System.currentTimeMillis();
         int days = (int) ((currentMillis - (beforeMillis * DateUtils.SECOND_IN_MILLIS)) / DateUtils.DAY_IN_MILLIS);
-
-        if (days >= 7) {
+        if (days <= 7) {
             switch (days) {
+                case 0:
+                    time = TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                    break;
                 case 1:
                     time = G.context.getResources().getString(R.string.last_seen) + " " +
                             G.context.getResources().getString(R.string.yesterday) + " " +
@@ -74,9 +76,6 @@ public class LastSeenTimeUtil {
                     break;
                 case 7:
                     time = G.context.getResources().getString(R.string.last_week);
-                    break;
-                default:
-                    time = TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
                     break;
             }
         } else {

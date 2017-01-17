@@ -10,9 +10,12 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="@dimen/dp8"
+      android:paddingTop="@dimen/dp4"
+      android:paddingBottom="@dimen/dp4"
       android:layout_marginTop="@dimen/dp8"
       android:background="@color/white"
       android:gravity="center"
+      android:textStyle="bold"
       android:text="@string/unread_message"
       android:textColor="@color/green"
       />
