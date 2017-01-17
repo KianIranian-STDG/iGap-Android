@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -318,6 +319,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     public void execute(Realm realm) {
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         realmUserInfo.setGender(gender);
+                    }
+                });
+                realm.close();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         userGender = gender;
                         if (userGender == ProtoGlobal.Gender.MALE) {
                             txtGander.setText(getResources().getString(R.string.Male));
@@ -327,10 +335,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             txtGander.setText(getResources().getString(R.string.set_gender));
                         }
 
-
                     }
                 });
-                realm.close();
             }
         };
         new RequestUserProfileGetGender().userProfileGetGender();
@@ -361,6 +367,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     }
                 });
                 realm.close();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
             }
         };
 
@@ -585,49 +598,80 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void onClick(View view) {
                 int position = -1;
                 Realm realm1 = Realm.getDefaultInstance();
-
                 try {
                     if (realm1.where(RealmUserInfo.class).findFirst().getGender().getNumber() == 1) {
                         position = 0;
                     } else if (realm1.where(RealmUserInfo.class).findFirst().getGender().getNumber() == 2) {
                         position = 1;
+                    } else {
+                        position = -1;
                     }
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
-
-                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Gander)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.array_gander).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (text != null) txtGander.setText(text.toString());
-
-                        switch (which) {
-                            case 0: {
-                                new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
-                                break;
-                            }
-                            case 1: {
-                                new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
-                                break;
-                            }
-                        }
-                        return false;
-                    }
-                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
+                realm1.close();
 
                 G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
                     @Override
                     public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
-                        // empty
+
+//                        hideProgressBar();
+
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                                realmUserInfo.setGender(gender);
+                            }
+                        });
+                        realm.close();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                txtGander.setText(gender == ProtoGlobal.Gender.MALE ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
+                            }
+                        });
+
                     }
 
                     @Override
                     public void Error(int majorCode, int minorCode) {
+//                        hideProgressBar();
+                    }
 
+                    @Override
+                    public void onTimeOut() {
+//                        hideProgressBar();
                     }
                 };
 
-                realm1.close();
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources()
+                        .getString(R.string.st_Gander)).titleGravity(GravityEnum.START)
+                        .titleColor(getResources().getColor(android.R.color.black))
+                        .items(R.array.array_gander)
+                        .itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+//                                showProgressBar();
+
+                                switch (which) {
+                                    case 0: {
+                                        new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
+                                        break;
+                                    }
+                                    case 1: {
+                                        new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
+                                        break;
+                                    }
+                                }
+                                return false;
+                            }
+                        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
+
+
             }
         });
 
@@ -895,7 +939,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     }
 
                     @Override
-                    public void Error(int majorCode, int minorCode) {
+                    public void Error(int majorCode, int minorCode, int time) {
+
+                        switch (majorCode) {
+                            case 175:
+                                dialogWaitTime(R.string.error, time, majorCode);
+                                break;
+                        }
+
 
                     }
                 };
@@ -2156,5 +2207,42 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
+    }
+
+    private void dialogWaitTime(int title, long time, int majorCode) {
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
+                .title(title)
+                .customView(R.layout.dialog_remind_time, wrapInScrollView)
+                .positiveText(R.string.B_ok)
+                .autoDismiss(false)
+                .canceledOnTouchOutside(false)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+
+        View v = dialog.getCustomView();
+
+        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) ((millisUntilFinished) / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+//                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+            }
+
+            @Override
+            public void onFinish() {
+//                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+            }
+        };
+        countWaitTimer.start();
     }
 }

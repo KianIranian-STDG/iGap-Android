@@ -298,8 +298,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         //onDraftMessage();
 
         keepMedia = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
-
-        Log.i("GGGGGGG", "onCreate: " + keepMedia);
         if (keepMedia) {// if Was selected keep media at 1week
             new HelperCalculateKeepMedia().calculateTime();
         }

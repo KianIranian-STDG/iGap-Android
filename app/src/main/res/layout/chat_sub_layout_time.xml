@@ -17,7 +17,7 @@
         android:paddingRight="@dimen/dp24"
         android:paddingTop="@dimen/dp4"
         android:text="Today"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
         android:textColor="@color/colorOldBlack"
-        android:textSize="@dimen/sp16"/>
+        android:textSize="@dimen/sp12"/>
 </FrameLayout>

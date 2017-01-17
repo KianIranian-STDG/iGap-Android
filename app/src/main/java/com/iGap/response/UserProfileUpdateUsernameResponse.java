@@ -22,6 +22,7 @@ public class UserProfileUpdateUsernameResponse extends MessageHandler {
         super.handler();
         ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder builder = (ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder) message;
 
+        if (G.onUserProfileUpdateUsername != null)
         G.onUserProfileUpdateUsername.onUserProfileUpdateUsername(builder.getUsername());
     }
 
@@ -37,8 +38,10 @@ public class UserProfileUpdateUsernameResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+        int getWait = errorResponse.getWait();
 
-        G.onUserProfileUpdateUsername.Error(majorCode, minorCode);
+        if (G.onUserProfileUpdateUsername != null)
+            G.onUserProfileUpdateUsername.Error(majorCode, minorCode, getWait);
     }
 }
 

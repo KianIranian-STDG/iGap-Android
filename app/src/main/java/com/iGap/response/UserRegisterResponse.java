@@ -30,7 +30,8 @@ public class UserRegisterResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         final int majorCode = errorResponse.getMajorCode();
         final int minorCode = errorResponse.getMinorCode();
+        final int getWait = errorResponse.getWait();
 
-        G.onUserRegistration.onRegisterError(majorCode, minorCode);
+        G.onUserRegistration.onRegisterError(majorCode, minorCode, getWait);
     }
 }

@@ -156,7 +156,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                     }
 
                     @Override
-                    public void onError(int majorCode, int minorCode) {
+                    public void onError(int majorCode, int minorCode, int time) {
                         hideProgressBar();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override

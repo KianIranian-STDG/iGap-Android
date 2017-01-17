@@ -13,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -148,6 +149,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
 import static com.iGap.R.id.fragmentContainer_group_profile;
+import static com.iGap.R.id.time;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
 /**
@@ -1073,6 +1075,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onError(int majorCode, int minorCode) {
 
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+                switch (majorCode) {
+                    case 368:
+                        dialogWaitTime(R.string.error, time, majorCode);
+                        break;
+                }
             }
         };
 
@@ -2861,6 +2871,43 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
+    }
+
+    private void dialogWaitTime(int title, long time, int majorCode) {
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this)
+                .title(title)
+                .customView(R.layout.dialog_remind_time, wrapInScrollView)
+                .positiveText(R.string.B_ok)
+                .autoDismiss(false)
+                .canceledOnTouchOutside(false)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+
+        View v = dialog.getCustomView();
+
+        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) ((millisUntilFinished) / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+//                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+            }
+
+            @Override
+            public void onFinish() {
+//                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+            }
+        };
+        countWaitTimer.start();
     }
 
 }

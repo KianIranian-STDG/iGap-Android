@@ -59,6 +59,7 @@
     <string name="Toast_Enter_Phone_Number">Please enter your phone number without first zero</string>
     <string name="Toast_Enter_Code">Please enter the verification code</string>
     <string name="Toast_Number_Block">This number is blocked</string>
+    <string name="Toast_time_wait">please wait until:</string>
     <string name="Toast_Invalid_nickname">Invalid Nickname,Please change it.</string>
     <string name="Toast_Write_NickName">Please enter your nickname</string>
 

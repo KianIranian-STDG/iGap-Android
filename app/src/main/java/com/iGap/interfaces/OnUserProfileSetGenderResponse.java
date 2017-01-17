@@ -13,4 +13,6 @@ public interface OnUserProfileSetGenderResponse {
     void onUserProfileGenderResponse(ProtoGlobal.Gender gender, ProtoResponse.Response response);
 
     void Error(int majorCode, int minorCode);
+
+    void onTimeOut();
 }

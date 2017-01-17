@@ -4,6 +4,7 @@ import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileGender;
 import com.iGap.realm.RealmUserInfo;
+
 import io.realm.Realm;
 
 public class UserProfileSetGenderResponse extends MessageHandler {
@@ -38,6 +39,7 @@ public class UserProfileSetGenderResponse extends MessageHandler {
 
         realm.close();
 
+        if (G.onUserProfileSetGenderResponse != null)
         G.onUserProfileSetGenderResponse.onUserProfileGenderResponse(userProfileGenderResponse.getGender(), userProfileGenderResponse.getResponse());
     }
 
@@ -48,7 +50,17 @@ public class UserProfileSetGenderResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
+        if (G.onUserProfileSetGenderResponse != null)
         G.onUserProfileSetGenderResponse.Error(majorCode, minorCode);
+
+    }
+
+    @Override
+    public void timeOut() {
+        super.timeOut();
+
+        if (G.onUserProfileSetGenderResponse != null)
+            G.onUserProfileSetGenderResponse.onTimeOut();
 
     }
 }

@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -239,8 +240,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             finish();
             return;
         }
-
-
 
 
         RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
@@ -777,184 +776,171 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         dialog.show();
     }
 
-    private void editUsername() {
-        final LinearLayout layoutUserName = new LinearLayout(ActivityChannelProfile.this);
-        layoutUserName.setOrientation(LinearLayout.VERTICAL);
-
-        final View viewUserName = new View(ActivityChannelProfile.this);
-        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-
-        final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
-        final EditText edtUserName = new EditText(ActivityChannelProfile.this);
-        edtUserName.setHint(getResources().getString(R.string.st_username));
-        edtUserName.setText(linkUsername);
-        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
-        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
-        edtUserName.setPadding(0, 8, 0, 8);
-        edtUserName.setSingleLine(true);
-        inputUserName.addView(edtUserName);
-        inputUserName.addView(viewUserName, viewParams);
-
-        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
-        }
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        layoutUserName.addView(inputUserName, layoutParams);
-
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
-
-        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-        positive.setEnabled(false);
-
-        final String finalUserName = inviteLink;
-        edtUserName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                new RequestChannelCheckUsername().channelCheckUsername(roomId, editable.toString());
-            }
-        });
-
-
-        G.onChannelCheckUsername = new OnChannelCheckUsername() {
-            @Override
-            public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
-
-                            if (!edtUserName.getText().toString().equals(finalUserName)) {
-                                positive.setEnabled(true);
-                            } else {
-                                positive.setEnabled(false);
-                            }
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("");
-
-
-                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.INVALID) {
-                            positive.setEnabled(false);
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("INVALID");
-
-                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
-                            inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("TAKEN");
-                            positive.setEnabled(false);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-
-            @Override
-            public void onTimeOut() {
-
-            }
-        };
-
-
-        G.onChannelUpdateUsername = new OnChannelUpdateUsername() {
-            @Override
-            public void onChannelUpdateUsername(final long roomId, final String username) {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtChannelLink.setText("iGap.net/" + username);
-
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                realmRoom.getChannelRoom().setUsername(username);
-                            }
-                        });
-
-                        realm.close();
-                    }
-                });
-
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
-
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            }
-
-            @Override
-            public void onTimeOut() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
-
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
-                    }
-                });
-            }
-        };
-
-        positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                new RequestChannelUpdateUsername().channelUpdateUsername(roomId, edtUserName.getText().toString());
-                dialog.dismiss();
-            }
-        });
-
-
-        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
-                } else {
-                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
-
-        // check each word with server
-
-        dialog.show();
-    }
+//    private void editUsername() {
+//        final LinearLayout layoutUserName = new LinearLayout(ActivityChannelProfile.this);
+//        layoutUserName.setOrientation(LinearLayout.VERTICAL);
+//
+//        final View viewUserName = new View(ActivityChannelProfile.this);
+//        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+//
+//        final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
+//        final EditText edtUserName = new EditText(ActivityChannelProfile.this);
+//        edtUserName.setHint(getResources().getString(R.string.st_username));
+//        edtUserName.setText(linkUsername);
+//        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
+//        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+//        edtUserName.setPadding(0, 8, 0, 8);
+//        edtUserName.setSingleLine(true);
+//        inputUserName.addView(edtUserName);
+//        inputUserName.addView(viewUserName, viewParams);
+//
+//        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
+//        }
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//
+//        layoutUserName.addView(inputUserName, layoutParams);
+//
+//        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+//
+//        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+//        positive.setEnabled(false);
+//
+//        final String finalUserName = inviteLink;
+//        edtUserName.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                new RequestChannelCheckUsername().channelCheckUsername(roomId, editable.toString());
+//            }
+//        });
+//
+//
+//        G.onChannelCheckUsername = new OnChannelCheckUsername() {
+//            @Override
+//            public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
+//                G.handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
+//
+//                            if (!edtUserName.getText().toString().equals(finalUserName)) {
+//                                positive.setEnabled(true);
+//                            } else {
+//                                positive.setEnabled(false);
+//                            }
+//                            inputUserName.setErrorEnabled(true);
+//                            inputUserName.setError("");
+//
+//
+//                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.INVALID) {
+//                            positive.setEnabled(false);
+//                            inputUserName.setErrorEnabled(true);
+//                            inputUserName.setError("INVALID");
+//
+//                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
+//                            inputUserName.setErrorEnabled(true);
+//                            inputUserName.setError("TAKEN");
+//                            positive.setEnabled(false);
+//                        }
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onError(int majorCode, int minorCode) {
+//
+//            }
+//
+//            @Override
+//            public void onTimeOut() {
+//
+//            }
+//        };
+//
+//
+//        G.onChannelUpdateUsername = new OnChannelUpdateUsername() {
+//            @Override
+//            public void onChannelUpdateUsername(final long roomId, final String username) {
+//
+//                G.handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        txtChannelLink.setText("iGap.net/" + username);
+//
+//                        Realm realm = Realm.getDefaultInstance();
+//                        realm.executeTransaction(new Realm.Transaction() {
+//                            @Override
+//                            public void execute(Realm realm) {
+//                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+//                                realmRoom.getChannelRoom().setUsername(username);
+//                            }
+//                        });
+//
+//                        realm.close();
+//                    }
+//                });
+//
+//            }
+//
+//            @Override
+//            public void onError(int majorCode, int minorCode ,int time) {
+//
+//            }
+//
+//            @Override
+//            public void onTimeOut() {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+//
+//                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                snack.dismiss();
+//                            }
+//                        });
+//                        snack.show();
+//                    }
+//                });
+//            }
+//        };
+//
+//        positive.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                new RequestChannelUpdateUsername().channelUpdateUsername(roomId, edtUserName.getText().toString());
+//                dialog.dismiss();
+//            }
+//        });
+//
+//
+//        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                if (b) {
+//                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+//                } else {
+//                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+//                }
+//            }
+//        });
+//
+//        // check each word with server
+//
+//        dialog.show();
+//    }
 
     private void dialogCopyLink() {
 
@@ -1122,7 +1108,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                                 intent.putExtra("enterFrom", GROUP.toString());
                             }
 
-                            if (ActivityChat.activityChat != null) ActivityChat.activityChat.finish();
+                            if (ActivityChat.activityChat != null)
+                                ActivityChat.activityChat.finish();
 
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -2414,7 +2401,16 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
 
             @Override
-            public void onError(int majorCode, int minorCode) {
+            public void onError(int majorCode, int minorCode, int time) {
+
+                switch (majorCode) {
+                    case 457:
+                        if (dialog.isShowing()) dialog.dismiss();
+                        dialogWaitTime(R.string.error, time, majorCode);
+
+                        break;
+                }
+
 
             }
 
@@ -2608,6 +2604,43 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
+    }
+
+    private void dialogWaitTime(int title, long time, int majorCode) {
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this)
+                .title(title)
+                .customView(R.layout.dialog_remind_time, wrapInScrollView)
+                .positiveText(R.string.B_ok)
+                .autoDismiss(false)
+                .canceledOnTouchOutside(false)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+
+        View v = dialog.getCustomView();
+
+        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) ((millisUntilFinished) / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+//                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+            }
+
+            @Override
+            public void onFinish() {
+//                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+            }
+        };
+        countWaitTimer.start();
     }
 
 

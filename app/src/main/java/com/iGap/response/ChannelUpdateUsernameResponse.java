@@ -41,8 +41,12 @@ public class ChannelUpdateUsernameResponse extends MessageHandler {
     public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        int getWait = errorResponse.getWait();
+
         if (G.onChannelUpdateUsername != null) {
-            G.onChannelUpdateUsername.onError(errorResponse.getMajorCode(), errorResponse.getMinorCode());
+            G.onChannelUpdateUsername.onError(majorCode, minorCode, getWait);
         }
     }
 }

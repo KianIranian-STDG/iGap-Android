@@ -22,7 +22,9 @@ public class UserVerifyResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserVerify.UserVerifyResponse.Builder userVerifyResponse = (ProtoUserVerify.UserVerifyResponse.Builder) message;
-        G.onUserVerification.onUserVerify(userVerifyResponse.getToken(), userVerifyResponse.getNewUser());
+        if (G.onUserVerification != null) {
+            G.onUserVerification.onUserVerify(userVerifyResponse.getToken(), userVerifyResponse.getNewUser());
+        }
     }
 
     @Override
@@ -36,7 +38,10 @@ public class UserVerifyResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+        int getWait = errorResponse.getWait();
 
-        G.onUserVerification.onUserVerifyError(majorCode, minorCode);
+        if (G.onUserVerification != null) {
+            G.onUserVerification.onUserVerifyError(majorCode, minorCode, getWait);
+        }
     }
 }

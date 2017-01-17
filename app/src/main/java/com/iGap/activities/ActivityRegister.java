@@ -756,8 +756,8 @@ public class ActivityRegister extends ActivityEnhanced {
             }
 
             @Override
-            public void onRegisterError(int majorCode, int minorCode) {
-
+            public void onRegisterError(final int majorCode, int minorCode, int getWait) {
+                final long time = getWait;
                 if (majorCode == 100 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -797,16 +797,18 @@ public class ActivityRegister extends ActivityEnhanced {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // TODO: 9/25/2016  Error 136 - USER_REGISTER_MAX_TRY_LOCK
-                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_MANY_TRIES).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
+
+                            dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES, time, majorCode);
+
                         }
                     });
+
                 } else if (majorCode == 137) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // TODO: 9/25/2016  Error 137 - USER_REGISTER_MAX_SEND_LOCK
-                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_MANY_TRIES_SEND).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
+
+                            dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES_SEND, time, majorCode);
                         }
                     });
                 }
@@ -814,6 +816,44 @@ public class ActivityRegister extends ActivityEnhanced {
         };
 
         requestRegister();
+    }
+
+    private void dialogWaitTime(int title, long time, int majorCode) {
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this)
+                .title(title)
+                .customView(R.layout.dialog_remind_time, wrapInScrollView)
+                .positiveText(R.string.B_ok)
+                .autoDismiss(false)
+                .canceledOnTouchOutside(false)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                        requestRegister();
+                    }
+                })
+                .show();
+
+        View v = dialog.getCustomView();
+
+        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) ((millisUntilFinished) / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+            }
+
+            @Override
+            public void onFinish() {
+                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+            }
+        };
+        countWaitTimer.start();
     }
 
     private void requestRegister() {
@@ -875,7 +915,7 @@ public class ActivityRegister extends ActivityEnhanced {
             }
 
             @Override
-            public void onUserVerifyError(int majorCode, int minorCode) {
+            public void onUserVerifyError(final int majorCode, int minorCode, final int time) {
 
                 if (majorCode == 102 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
@@ -934,7 +974,16 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             // Verification code is expired
                             // TODO: 9/25/2016 Error 107 - USER_VERIFY_EXPIRED_CODE
-                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_EXPIRED).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityRegister.this)
+                                    .title(R.string.USER_VERIFY_EXPIRED)
+                                    .content(R.string.Toast_Number_Block)
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                        }
+                                    })
+                                    .positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 108) {
@@ -942,8 +991,9 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override
                         public void run() {
                             // Verification code is locked for a while due to too many tries
-                            // TODO: 9/25/2016 Error 108 - USER_VERIFY_MAX_TRY_LOCK
-                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_MANY_TRIES).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
+
+                            dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES, time, majorCode);
+
 
                         }
                     });

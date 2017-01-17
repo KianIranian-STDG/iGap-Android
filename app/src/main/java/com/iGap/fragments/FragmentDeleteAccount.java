@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -32,6 +33,7 @@ import com.iGap.module.IncomingSms;
 import com.iGap.proto.ProtoUserDelete;
 import com.iGap.request.RequestUserDelete;
 import com.iGap.request.RequestUserGetDeleteToken;
+
 import java.io.IOException;
 
 /**
@@ -121,6 +123,20 @@ public class FragmentDeleteAccount extends Fragment {
             @Override
             public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {
                 regex = tokenRegex;
+            }
+
+            @Override
+            public void onUserGetDeleteError(int majorCode, int minorCode, int time) {
+
+                switch (majorCode) {
+                    case 152:
+                        dialogWaitTime(R.string.error, time, majorCode);
+                        break;
+                    case 153:
+                        dialogWaitTime(R.string.error, time, majorCode);
+                        break;
+                }
+
             }
         };
 
@@ -314,6 +330,43 @@ public class FragmentDeleteAccount extends Fragment {
                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
+    }
+
+    private void dialogWaitTime(int title, long time, int majorCode) {
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                .title(title)
+                .customView(R.layout.dialog_remind_time, wrapInScrollView)
+                .positiveText(R.string.B_ok)
+                .autoDismiss(false)
+                .canceledOnTouchOutside(false)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+
+        View v = dialog.getCustomView();
+
+        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) ((millisUntilFinished) / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+            }
+
+            @Override
+            public void onFinish() {
+                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+            }
+        };
+        countWaitTimer.start();
     }
 
 }

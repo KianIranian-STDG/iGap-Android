@@ -8,5 +8,5 @@ package com.iGap.interfaces;
 public interface OnUserProfileUpdateUsername {
     void onUserProfileUpdateUsername(String username);
 
-    void Error(int majorCode, int minorCode);
+    void Error(int majorCode, int minorCode, int time);
 }
