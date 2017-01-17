@@ -371,6 +371,7 @@
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">"کاربر مسدود شده است و امکان تأیید وجود ندارد."</string>
     <string name="Enter_Code">"کد تخریب"</string>
+  <string name="E_2">نیاز به ورود به سیستم</string>
     <string name="E_335">"خطایی از کلاینت"</string>
     <string name="E_336">"خطای درونی سرور"</string>
     <string name="E_337">"این کار مجاز نیست."</string>
@@ -404,6 +405,9 @@
     <string name="E_330_2">"خطایی از سمت کلاینت: نام کاربری اشتباه است."</string>
     <string name="E_330_3">"خطایی از سمت کلاینت: توضیحات اشتباه است."</string>
     <string name="E_331">"خطای درونی سرور"</string>
+  <string name="E_109">شناسه نامعتبر است.</string>
+  <string name="E_110">"خطای درونی سرور"</string>
+  <string name="E_111">دسترسی شما مسدود شده است.</string>
     <string name="E_112">"خطایی از سمت کلاینت: نام مستعار اشتباه است."</string>
     <string name="E_113">"خطای درونی سرور"</string>
     <string name="E_200">"خطایی از سمت کلاینت: شناسهٔ عضو دیگر اشتباه است."</string>

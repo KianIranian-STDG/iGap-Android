@@ -365,6 +365,7 @@
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">User Verify Blocked User</string>
     <string name="Enter_Code">Waiting for Code</string>
+    <string name="E_2">Login is required</string>
     <string name="E_335">Bad payload</string>
     <string name="E_336">Internal Server Error</string>
     <string name="E_337">This operation is not permitted.</string>
@@ -398,6 +399,9 @@
     <string name="E_330_2">Bad payload: Invalid username</string>
     <string name="E_330_3">Bad payload: Invalid description</string>
     <string name="E_331">Internal Server Error</string>
+    <string name="E_109">Invalid Token</string>
+    <string name="E_110">Internal Server Error</string>
+    <string name="E_111">User is blocked</string>
     <string name="E_112">Bad payload: Invalid nickname</string>
     <string name="E_113">Internal Server Error</string>
     <string name="E_200">Bad payload: Invalid peerId</string>

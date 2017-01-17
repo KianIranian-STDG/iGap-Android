@@ -2,7 +2,6 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.WebSocketClient;
-import com.iGap.helper.HelperLogout;
 import com.iGap.proto.ProtoError;
 
 public class UserLoginResponse extends MessageHandler {
@@ -39,12 +38,6 @@ public class UserLoginResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        if (majorCode == 111 && minorCode != 4) {
-            HelperLogout.logout();
-            return;
-        }
-
         G.onUserLogin.onLoginError(majorCode, minorCode);
     }
 }
