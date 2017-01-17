@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
@@ -55,14 +54,12 @@ import com.iGap.request.RequestChannelAddMessageReaction;
 import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.IOException;
-import java.util.List;
-
 import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.meness.github.messageprogress.OnProgress;
 import io.realm.Realm;
+import java.io.IOException;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;
@@ -73,7 +70,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public boolean directionalBased = true;
     public ProtoGlobal.Room.Type type;
 
-    @Override public void onPlayPauseGIF(VH holder, String localPath) {
+    @Override
+    public void onPlayPauseGIF(VH holder, String localPath) {
         // empty
     }
 
@@ -103,11 +101,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return this;
     }
 
-    @Override public Item withIdentifier(long identifier) {
+    @Override
+    public Item withIdentifier(long identifier) {
         return super.withIdentifier(identifier);
     }
 
-    @Override @CallSuper public void bindView(final VH holder, List<Object> payloads) {
+    @Override
+    @CallSuper
+    public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
         /**
@@ -140,8 +141,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (!mMessage.isTimeOrLogMessage()) {
-            AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status),
-                mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
+            AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
         }
         /**
          * display 'edited' indicator beside message time if message was edited
@@ -161,25 +161,29 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
 
                 holder.itemView.findViewById(R.id.messageSenderAvatar).setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
                     }
                 });
 
                 HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
-                    @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+                    @Override
+                    public void onAvatarGet(final String avatarPath, long ownerId) {
                         G.handler.post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
                             }
                         });
                     }
 
-                    @Override public void onShowInitials(final String initials, final String color) {
+                    @Override
+                    public void onShowInitials(final String initials, final String color) {
                         G.handler.post(new Runnable() {
-                            @Override public void run() {
-                                ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
-                                    com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            @Override
+                            public void run() {
+                                ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                             }
                         });
                     }
@@ -204,15 +208,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
         if (roomMessage != null) {
-            prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment(),
-                mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
+            prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
         realm.close();
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         if (messageText != null) {
             if (messageText.getParent() instanceof LinearLayout) {
-                ((LinearLayout.LayoutParams) ((LinearLayout) messageText.getParent()).getLayoutParams()).gravity =
-                    AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
+                ((LinearLayout.LayoutParams) ((LinearLayout) messageText.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
             }
         }
 
@@ -259,7 +261,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    @CallSuper protected void voteAction(VH holder) {
+    @CallSuper
+    protected void voteAction(VH holder) {
 
         LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
         if (lytVote != null) {
@@ -290,13 +293,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             lytVoteUp.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_UP);
                 }
             });
 
             lytVoteDown.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_DOWN);
                 }
             });
@@ -311,13 +316,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private void voteSend(final ProtoGlobal.RoomMessageReaction reaction) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
                 if (realmRoomMessage != null) {
                     if (mMessage.forwardedFrom != null) {
-                        new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.forwardedFrom.getRoomId(), mMessage.forwardedFrom.getMessageId(), reaction,
-                            Long.parseLong(mMessage.messageID));
+                        new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.forwardedFrom.getRoomId(), mMessage.forwardedFrom.getMessageId(), reaction, Long.parseLong(mMessage.messageID));
                     } else {
                         new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction);
                     }
@@ -327,7 +332,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         realm.close();
     }
 
-    @CallSuper protected void updateLayoutForReceive(VH holder) {
+    @CallSuper
+    protected void updateLayoutForReceive(VH holder) {
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
 
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
@@ -343,10 +349,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        if (messageType == ProtoGlobal.RoomMessageType.IMAGE
-            || messageType == ProtoGlobal.RoomMessageType.VIDEO
-            || messageType == ProtoGlobal.RoomMessageType.GIF
-            || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
             imgTick.setColorFilter(ContextCompat.getColor(context, R.color.white));
         } else {
@@ -364,12 +367,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp8);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).rightMargin = 0;
-        ((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).leftMargin =
-            (int) holder.itemView.getResources().getDimension(R.dimen.messageBox_minusLeftRightMargin);
+        ((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).leftMargin = (int) holder.itemView.getResources().getDimension(R.dimen.messageBox_minusLeftRightMargin);
         ((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).rightMargin = 0;
     }
 
-    @CallSuper protected void updateLayoutForSend(VH holder) {
+    @CallSuper
+    protected void updateLayoutForSend(VH holder) {
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.END;
 
@@ -387,11 +390,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO ||
-            messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
+                messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
             imgTick.setColorFilter(ContextCompat.getColor(context, R.color.white));
         } else {
-            imgTick.setColorFilter(ContextCompat.getColor(context, R.color.colorOldBlack));
+            if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
+                imgTick.setColorFilter(ContextCompat.getColor(context, R.color.iGapColor));
+            } else {
+                imgTick.setColorFilter(ContextCompat.getColor(context, R.color.colorOldBlack));
+            }
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
 
@@ -403,8 +410,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp8);
 
-        ((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).rightMargin =
-            (int) holder.itemView.getResources().getDimension(R.dimen.messageBox_minusLeftRightMargin);
+        ((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).rightMargin = (int) holder.itemView.getResources().getDimension(R.dimen.messageBox_minusLeftRightMargin);
         ((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).leftMargin = 0;
     }
 
@@ -417,7 +423,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return TimeUtils.toLocal(mMessage.time, G.CHAT_MESSAGE_TIME);
     }
 
-    @CallSuper protected void replyMessageIfNeeded(VH holder) {
+    @CallSuper
+    protected void replyMessageIfNeeded(VH holder) {
         /**
          * set replay container visible if message was replayed, otherwise, gone it
          */
@@ -427,16 +434,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             TextView replayMessage = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message);
             if (mMessage.replayTo != null) {
                 replayContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         messageClickListener.onReplyClick(mMessage.replayTo);
                     }
                 });
                 holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
 
                 try {
-                    AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)),
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(),
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
+                    AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -454,8 +460,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
 
-                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(
-                    mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessage() : mMessage.replayTo.getForwardMessage().getMessage());
+                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessage() : mMessage.replayTo.getForwardMessage().getMessage());
 
                 replayContainer.setVisibility(View.VISIBLE);
                 realm.close();
@@ -477,7 +482,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    @CallSuper protected void forwardMessageIfNeeded(VH holder) {
+    @CallSuper
+    protected void forwardMessageIfNeeded(VH holder) {
         /**
          * set forward container visible if message was forwarded, otherwise, gone it
          */
@@ -532,7 +538,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             autoDownload(holder, attachment);
         } else {
             ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
-                @Override public void onMessageProgressClick(MessageProgress progress) {
+                @Override
+                public void onMessageProgressClick(MessageProgress progress) {
                     forOnCLick(holder, attachment);
                 }
             });
@@ -615,7 +622,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 break;
             default:
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
-                    @Override public void onMessageProgressClick(MessageProgress progress) {
+                    @Override
+                    public void onMessageProgressClick(MessageProgress progress) {
                         forOnCLick(holder, attachment);
                     }
                 });
@@ -628,10 +636,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * runs if message has attachment
          */
         if (attachment != null) {
-            if (messageType == ProtoGlobal.RoomMessageType.IMAGE
-                || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT
-                || messageType == ProtoGlobal.RoomMessageType.VIDEO
-                || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+            if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
                 if (imageViewReservedSpace != null) {
                     int[] dimens = imageViewReservedSpace.reserveSpace(attachment.getWidth(), attachment.getHeight());
@@ -674,7 +679,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if (hasProgress(holder.itemView)) {
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
-                    @Override public void onMessageProgressClick(MessageProgress progress) {
+                    @Override
+                    public void onMessageProgressClick(MessageProgress progress) {
                         forOnCLick(holder, attachment);
                     }
                 });
@@ -685,7 +691,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
-                    @Override public void onProgressFinished() {
+                    @Override
+                    public void onProgressFinished() {
                         holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(null);
                         ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(null, true);
 
@@ -704,7 +711,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             case FILE:
                             case FILE_TEXT:
                                 holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(new View.OnClickListener() {
-                                    @Override public void onClick(View v) {
+                                    @Override
+                                    public void onClick(View v) {
                                         forOnCLick(holder, attachment);
                                     }
                                 });
@@ -714,7 +722,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             case GIF:
                             case GIF_TEXT:
                                 holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(new View.OnClickListener() {
-                                    @Override public void onClick(View v) {
+                                    @Override
+                                    public void onClick(View v) {
                                         forOnCLick(holder, attachment);
                                     }
                                 });
@@ -820,11 +829,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    @Override @CallSuper public void onLoadThumbnailFromLocal(VH holder, String localPath, LocalFileType fileType) {
+    @Override
+    @CallSuper
+    public void onLoadThumbnailFromLocal(VH holder, String localPath, LocalFileType fileType) {
 
     }
 
-    @Override @CallSuper public void onRequestDownloadFile(long offset, int progress, final OnFileDownload onFileDownload) {
+    @Override
+    @CallSuper
+    public void onRequestDownloadFile(long offset, int progress, final OnFileDownload onFileDownload) {
         if (mMessage.forwardedFrom != null) {
             final String fileName = mMessage.forwardedFrom.getAttachment().getToken() + "_" + mMessage.forwardedFrom.getAttachment().getName();
             final long forwardMessageID = mMessage.forwardedFrom.getMessageId();
@@ -832,15 +845,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (progress >= 100) {
                 final Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
-                        realm.where(RealmRoomMessage.class)
-                            .equalTo(RealmRoomMessageFields.MESSAGE_ID, forwardMessageID)
-                            .findFirst()
-                            .getAttachment()
-                            .setLocalFilePath(AndroidUtils.suitableAppFilePath(forwardMessageType) + "/" + fileName);
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, forwardMessageID).findFirst().getAttachment().setLocalFilePath(AndroidUtils.suitableAppFilePath(forwardMessageType) + "/" + fileName);
                     }
                 }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
+                    @Override
+                    public void onSuccess() {
                         try {
                             AndroidUtils.cutFromTemp(mMessage.forwardedFrom.getMessageType(), fileName);
                         } catch (IOException e) {
@@ -864,15 +875,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (progress >= 100) {
                 final Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
-                        realm.where(RealmRoomMessage.class)
-                            .equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID))
-                            .findFirst()
-                            .getAttachment()
-                            .setLocalFilePath(AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst().getAttachment().setLocalFilePath(AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
                     }
                 }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
+                    @Override
+                    public void onSuccess() {
                         try {
                             AndroidUtils.cutFromTemp(mMessage.messageType, fileName);
                         } catch (IOException e) {
@@ -901,7 +910,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    @Override public void onRequestDownloadThumbnail(final String token, boolean done, final OnFileDownload onFileDownload) {
+    @Override
+    public void onRequestDownloadThumbnail(final String token, boolean done, final OnFileDownload onFileDownload) {
         if (mMessage.forwardedFrom != null && mMessage.forwardedFrom.getAttachment() != null && mMessage.forwardedFrom.getAttachment().getSmallThumbnail() != null) {
             if (mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize() != 0) {
 
@@ -909,14 +919,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (done) {
                     final Realm realm = Realm.getDefaultInstance();
                     realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
                             RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
                             if (attachment != null) {
                                 attachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
                             }
                         }
                     }, new Realm.Transaction.OnSuccess() {
-                        @Override public void onSuccess() {
+                        @Override
+                        public void onSuccess() {
                             onFileDownload.onFileDownloaded();
                             realm.close();
                         }
@@ -937,14 +949,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (done) {
                     final Realm realm = Realm.getDefaultInstance();
                     realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
                             RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
                             if (attachment != null) {
                                 attachment.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
                             }
                         }
                     }, new Realm.Transaction.OnSuccess() {
-                        @Override public void onSuccess() {
+                        @Override
+                        public void onSuccess() {
                             mMessage.attachment.localThumbnailPath = G.DIR_TEMP + "/" + fileName;
                             onFileDownload.onFileDownloaded();
                             realm.close();

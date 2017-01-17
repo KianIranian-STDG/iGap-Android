@@ -1,8 +1,10 @@
 package com.iGap.module;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
@@ -146,8 +148,9 @@ public final class AppUtils {
         }
         switch (status) {
             case DELIVERED:
-                view.setImageResource(R.drawable.ic_check);
-                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
+                view.setImageResource(R.drawable.ic_double_check);
+                //DrawableCompat.setTint(view.getDrawable(), Color.BLACK);
+                view.setColorFilter(Color.BLACK);
                 break;
             case FAILED:
                 view.setImageResource(R.drawable.ic_error);
@@ -155,17 +158,18 @@ public final class AppUtils {
                 break;
             case SEEN:
                 view.setImageResource(R.drawable.ic_double_check);
-                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
+                view.setColorFilter(view.getContext().getResources().getColor(R.color.iGapColor));
+                //final Drawable originalDrawable = view.getDrawable();
+                //final Drawable wrappedDrawable = DrawableCompat.wrap(originalDrawable);
+                //DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.iGapColor)));
                 break;
             case SENDING:
                 view.setImageResource(R.drawable.ic_clock);
                 DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
-                //DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
                 break;
             case SENT:
                 view.setImageResource(R.drawable.ic_check);
                 DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
-                //                DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
                 break;
         }
     }
@@ -187,8 +191,8 @@ public final class AppUtils {
         }
         switch (status) {
             case DELIVERED:
-                view.setImageResource(R.drawable.ic_check);
-                DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
+                view.setImageResource(R.drawable.ic_double_check);
+                //DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 break;
             case FAILED:
                 view.setImageResource(R.drawable.ic_error);
@@ -200,14 +204,16 @@ public final class AppUtils {
                 break;
             case SEEN:
                 view.setImageResource(R.drawable.ic_double_check);
-                DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
+                final Drawable originalDrawable = view.getDrawable();
+                final Drawable wrappedDrawable = DrawableCompat.wrap(originalDrawable);
+                DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.iGapColor)));
                 break;
             case SENDING:
                 view.setImageResource(R.drawable.ic_clock);
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
                     DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 } else {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
+                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 }
                 break;
             case SENT:
@@ -215,7 +221,7 @@ public final class AppUtils {
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
                     DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 } else {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), view.getContext().getResources().getColor(R.color.statusSendingColor));
+                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 }
                 break;
         }
