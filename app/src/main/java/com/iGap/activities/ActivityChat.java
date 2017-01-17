@@ -996,10 +996,12 @@ public class ActivityChat extends ActivityEnhanced
         G.onUpdateUserStatusInChangePage = new OnUpdateUserStatusInChangePage() {
             @Override
             public void updateStatus(long peerId, String status, long lastSeen) {
-                setUserStatus(status, lastSeen);
-
                 if (chatType == CHAT) {
-                    new RequestUserInfo().userInfo(peerId);
+                    setUserStatus(status, lastSeen);
+
+                    if (chatType == CHAT) {
+                        new RequestUserInfo().userInfo(peerId);
+                    }
                 }
             }
         };
