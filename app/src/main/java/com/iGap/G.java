@@ -233,6 +233,7 @@ public class G extends MultiDexApplication {
     public static boolean userLogin = false;
     public static boolean socketConnection = false;
     public static boolean canRunReceiver = false;
+    public static boolean mFirstRun = true;
     public static SecretKeySpec symmetricKey;
     public static String symmetricMethod;
     public static int ivSize;
@@ -240,7 +241,6 @@ public class G extends MultiDexApplication {
     public static Activity currentActivity;
     public static LayoutInflater inflater;
     public static Typeface FONT_IGAP;
-    public static Typeface HELETICBLK_TITR;
     public static List<String> downloadingTokens = new ArrayList<>();
     public static long currentTime;
 

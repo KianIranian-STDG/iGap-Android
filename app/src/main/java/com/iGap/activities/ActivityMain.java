@@ -26,7 +26,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -102,18 +101,17 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
+import static com.iGap.G.mFirstRun;
 import static com.iGap.R.string.updating;
 
 public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar {
@@ -856,8 +854,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
     }
 
-    private boolean mFirstRun = true;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -873,10 +869,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         G.onSetActionInRoom = this;
 
         getChatsList(mFirstRun);
+        mFirstRun = false;
 
         startService(new Intent(this, ServiceContact.class));
-
-        mFirstRun = false;
 
         G.onChannelDelete = new OnChannelDelete() {
             @Override

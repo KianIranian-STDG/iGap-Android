@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
@@ -56,7 +55,7 @@
             android:name=".activities.ActivityPopUpNotification"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:theme="@style/Theme.AppCompat.Translucent"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activities.ActivityExplorer"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"/>
@@ -171,7 +170,7 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppTheme22"/>
-        <activity android:name=".activities.ActivitySetting"></activity>
+        <activity android:name=".activities.ActivitySetting" />
         <activity android:name=".activities.ActivityContactsProfile"/>
         <activity
             android:name=".activities.ActivitySelectChat"
@@ -180,6 +179,13 @@
             android:theme="@style/AppThemeTranslucent"/>
 
         <receiver android:name=".module.IncomingSms"/>
+        <receiver
+            android:name=".module.ReceiverBootPhone"
+            android:label="ReceiverBootPhone">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".activities.ActivityChatBackground"/>
         <activity android:name=".activities.ActivityWebView"/>
@@ -191,8 +197,7 @@
         <service
             android:name=".helper.MyService"
             android:enabled="true"
-            android:exported="true"></service>
-
+            android:exported="true" />
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
