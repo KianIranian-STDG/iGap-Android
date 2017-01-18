@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/emoji_icon"
-    android:gravity="left|center"
     android:layout_width="32dp"
     android:layout_height="32dp"
     android:background="?attr/selectableItemBackground"

@@ -2077,10 +2077,16 @@ public class ActivityChat extends ActivityEnhanced
 
     private void addLayotuUnreadMessage() {
 
-        int unreadPosition = mAdapter.getAdapterItemCount() - 1;
+        int unreadPosition = 0;
+        int timelayoutCount = 0;
 
         for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
             try {
+                if ((mAdapter.getAdapterItem(i) instanceof TimeItem)) {
+                    if (i > 0) timelayoutCount++;
+                    continue;
+                }
+
                 if (mAdapter.getAdapterItem(i).mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) || mAdapter.getAdapterItem(i).mMessage.isSenderMe()) {
                     unreadPosition = i;
                     break;
@@ -2089,7 +2095,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         }
 
-        int unreadMessageCount = mAdapter.getAdapterItemCount() - 1 - unreadPosition;
+        int unreadMessageCount = mAdapter.getAdapterItemCount() - 1 - unreadPosition - timelayoutCount;
 
         if (unreadMessageCount > 0) {
             RealmRoomMessage unreadMessage = new RealmRoomMessage();
@@ -4128,6 +4134,10 @@ public class ActivityChat extends ActivityEnhanced
             //        realm.close();
             //    }
             //});
+
+            for (int i = 0; i < messages.size(); i++) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, messages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+            }
 
             runOnUiThread(new Runnable() {
                 @Override

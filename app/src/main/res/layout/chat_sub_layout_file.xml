@@ -119,7 +119,6 @@
 
                         <io.github.meness.emoji.EmojiTextView
                             android:id="@+id/messageText"
-                            android:gravity="left|center"
                             style="@style/ChatMessages.EmojiTextView"
                             android:text="SAMPLE TEXT"/>
 
