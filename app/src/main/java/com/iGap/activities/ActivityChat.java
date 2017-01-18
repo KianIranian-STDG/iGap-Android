@@ -1376,7 +1376,6 @@ public class ActivityChat extends ActivityEnhanced
         } else if (chatType == GROUP) {
 
             if (groupParticipantsCountLabel != null) {
-                Log.i("BBBBBBB", "onCreate333: " + groupParticipantsCountLabel);
                 txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member));
             }
         } else if (chatType == CHANNEL) {
@@ -4884,7 +4883,6 @@ public class ActivityChat extends ActivityEnhanced
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
-                        Log.i("BBBBBBB", "onCreate444444: " + groupParticipantsCountLabel);
                     }
                 }
             });
