@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+                                               xmlns:app="http://schemas.android.com/apk/res-auto"
+                                               xmlns:tools="http://schemas.android.com/tools"
+                                               tools:ignore="MissingPrefix"
+                                               android:layout_width="match_parent"
+                                               android:layout_height="match_parent"
+                                               android:orientation="vertical">
 
     <!--<TextView-->
     <!--android:id="@+id/int_txt_skip"-->
@@ -36,7 +38,7 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/city"
-            app:layout_heightPercent="85%" />
+            app:layout_heightPercent="85%"/>
 
         <ImageView
             android:id="@+id/int_background_two"
@@ -45,7 +47,7 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/city"
-            app:layout_heightPercent="85%" />
+            app:layout_heightPercent="85%"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -55,7 +57,7 @@
             android:adjustViewBounds="false"
             android:scaleType="fitCenter"
             android:src="@mipmap/sabz"
-            app:layout_heightPercent="85%" />
+            app:layout_heightPercent="85%"/>
         <!--page 1-->
         <ImageView
             android:id="@+id/int_img_logo_introduce"
@@ -68,7 +70,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:src="@mipmap/logo"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <!--page 1-->
         <!--page 2-->
@@ -82,7 +84,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:src="@mipmap/secure"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
         <!--page 2-->
 
         <!--page 3-->
@@ -96,7 +98,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:src="@mipmap/chat"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <!--page 4-->
         <ImageView
@@ -111,7 +113,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@mipmap/transfer"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <!--page 5-->
         <ImageView
@@ -123,7 +125,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:src="@mipmap/boy"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
     </android.support.percent.PercentRelativeLayout>
 
@@ -152,6 +154,7 @@
 
                 <TextView
                     android:id="@+id/int_txt_i_p1_l1"
+                    fontPath="fonts/neuropolitical.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -159,10 +162,11 @@
                     android:text="@string/text_i_introduce_page1"
                     android:textColor="@color/country"
                     android:textSize="@dimen/sp32"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/int_txt_p1_l1"
+                    fontPath="fonts/neuropolitical.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -170,7 +174,7 @@
                     android:text="@string/text_line_1_introduce_page1"
                     android:textColor="@color/text_line2_lc__dark"
                     android:textSize="@dimen/sp26"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
             </LinearLayout>
 
             <TextView
@@ -186,7 +190,7 @@
                 android:text="@string/text_line_2_introduce_page1"
                 android:textColor="@color/text_line2_lc__dark"
                 android:textSize="@dimen/sp14"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/int_txt_p1_l3"
@@ -201,7 +205,7 @@
                 android:text="@string/text_line_3_introduce_page1"
                 android:textColor="@color/text_line2_lc__dark"
                 android:textSize="@dimen/sp16"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </LinearLayout>
         <!--page 1-->
 
@@ -220,7 +224,7 @@
                 android:text="@string/text_line_1_introduce_page2"
                 android:textColor="@color/text_line1_igap_dark"
                 android:textSize="@dimen/sp16"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -236,7 +240,7 @@
                 android:text="@string/text_line_2_introduce_page2"
                 android:textColor="@color/text_line2_lc__dark"
                 android:textSize="@dimen/sp16"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
 
         </LinearLayout>
@@ -257,7 +261,7 @@
                 android:text="@string/text_line_1_introduce_page3"
                 android:textColor="@color/text_line1_igap_dark"
                 android:textSize="@dimen/sp16"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -273,7 +277,7 @@
                 android:text="@string/text_line_2_introduce_page3"
                 android:textColor="@color/text_line2_lc__dark"
                 android:textSize="@dimen/sp16"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
 
         </LinearLayout>
@@ -293,7 +297,7 @@
                 android:text="@string/text_line_1_introduce_page4"
                 android:textColor="@color/text_line1_igap_dark"
                 android:textSize="@dimen/sp16"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -309,7 +313,7 @@
                 android:text="@string/text_line_2_introduce_page4"
                 android:textColor="@color/text_line2_lc__dark"
                 android:textSize="@dimen/sp16"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </LinearLayout>
         <!--page 4-->
         <!--page 5-->
@@ -327,7 +331,7 @@
                 android:text="@string/text_line_1_introduce_page5"
                 android:textColor="@color/text_line1_igap_dark"
                 android:textSize="@dimen/sp16"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
                 android:id="@+id/int_txt_p5_l2"
@@ -341,7 +345,7 @@
                 android:text="@string/text_line_2_introduce_page5"
                 android:textColor="@color/text_line2_lc__dark"
                 android:textSize="@dimen/sp14"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
         </LinearLayout>
     </RelativeLayout>
@@ -358,13 +362,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/dp28" />
+            android:layout_marginLeft="@dimen/dp28"/>
     </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/int_viewPager_introduce"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
     <Button
         android:id="@+id/int_btnStart"
@@ -380,14 +384,14 @@
         android:textAllCaps="false"
         android:textColor="@color/txt_start_page5"
         android:textSize="@dimen/sp16"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/int_txt_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:layout_alignTop="@+id/int_layoutParentCircleImage"
         android:layout_marginTop="@dimen/dp4"
         android:background="@color/toolbar_background"

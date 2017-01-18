@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -191,8 +190,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
         logoIgap = (ImageView) findViewById(R.id.int_img_logo_introduce);
 
         txt_i_p1_l1 = (TextView) findViewById(R.id.int_txt_i_p1_l1);
-        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
-        txt_i_p1_l1.setTypeface(type);
+//        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+//        txt_i_p1_l1.setTypeface(type);
 
         txt_p1_l2 = (TextView) findViewById(R.id.int_txt_p1_l2);
         txt_p1_l3 = (TextView) findViewById(R.id.int_txt_p1_l3);

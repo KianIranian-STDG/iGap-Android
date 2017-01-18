@@ -172,12 +172,12 @@ public class ActivityRegister extends ActivityEnhanced {
         }
         edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
-
         edtPhoneNumber = (MaskedEditText) findViewById(R.id.rg_edt_PhoneNumber);
+        txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
 
         int portrait = getResources().getConfiguration().orientation;
         if (portrait == 1) {
-            txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
+
             txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
         }
         if (savedInstanceState != null) {

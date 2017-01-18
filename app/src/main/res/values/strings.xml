@@ -748,5 +748,13 @@
     <string name="permission_phone">for phone</string>
     <string name="permission_sms">for sms</string>
 
+    <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
+    <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
+    <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
+    <string name="USER_DELETE_MAX_TRY_LOCK">USER DELETE MAX TRY </string>
+    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">USER PROFILE UPDATE USERNAME UPDATE</string>
+    <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
+    <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
+
 
 </resources>

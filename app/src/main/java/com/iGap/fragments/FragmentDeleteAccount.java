@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,12 +133,10 @@ public class FragmentDeleteAccount extends Fragment {
                     public void run() {
                         switch (majorCode) {
                             case 152:
-                                dialogWaitTime(R.string.error, time, majorCode);
-                                Log.i("HHHHH", " -1 run: ");
+                                dialogWaitTime(R.string.USER_GET_DELETE_TOKEN_MAX_TRY_LOCK, time, majorCode);
                                 break;
                             case 153:
-                                dialogWaitTime(R.string.error, time, majorCode);
-                                Log.i("HHHHH", " -2 run: ");
+                                dialogWaitTime(R.string.USER_GET_DELETE_TOKEN_MAX_SEND, time, majorCode);
                                 break;
                         }
                     }
@@ -214,8 +211,7 @@ public class FragmentDeleteAccount extends Fragment {
                                                         if (dialog.isShowing()) dialog.dismiss();
                                                         switch (majorCode) {
                                                             case 158:
-                                                                dialogWaitTime(R.string.error, time, majorCode);
-                                                                Log.i("HHHHH", " 0 run: ");
+                                                                dialogWaitTime(R.string.USER_DELETE_MAX_TRY_LOCK, time, majorCode);
                                                                 break;
                                                         }
                                                     }

@@ -961,7 +961,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        dialogWaitTime(R.string.error, time, majorCode);
+                                        dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
                                     }
                                 });
 

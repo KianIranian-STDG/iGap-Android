@@ -1081,7 +1081,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             @Override
                             public void run() {
                                 if (dialog.isShowing()) dialog.dismiss();
-                                dialogWaitTime(R.string.error, time, majorCode);
+                                dialogWaitTime(R.string.GROUP_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
                             }
                         });
 

@@ -2409,7 +2409,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                             @Override
                             public void run() {
                                 if (dialog.isShowing()) dialog.dismiss();
-                                dialogWaitTime(R.string.error, time, majorCode);
+                                dialogWaitTime(R.string.CHANNEL_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
                             }
                         });
                         break;

@@ -149,7 +149,7 @@ public class HelperPermision {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
             getPermission(context, new String[]{context.getResources().getString(R.string.permission_contact)},
-                    MY_PERMISSIONS_CONTACTS, context.getResources().getString(R.string.permission_sms));
+                    MY_PERMISSIONS_CONTACTS, context.getResources().getString(R.string.permission_contact));
         } else {
             if (onGetPermision != null)
                 onGetPermision.Allow();
@@ -363,12 +363,12 @@ public class HelperPermision {
                                      final int requestCode, String Text) {
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermission[0])) {
-            showMessageOKCancel(context, context.getString(R.string.you_need_to_allow) + Text, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions((Activity) context, needPermission, requestCode);
-                        }
-                    });
+            showMessageOKCancel(context, context.getString(R.string.you_need_to_allow) + " " + Text, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ActivityCompat.requestPermissions((Activity) context, needPermission, requestCode);
+                }
+            });
             return;
         }
 
