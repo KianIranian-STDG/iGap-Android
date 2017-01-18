@@ -97,7 +97,7 @@ import org.parceler.Parcel;
         // when came back to the room with new messages, I make new update status request as SEEN to
         // the message sender
         final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSortedAsync(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSortedAsync(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         realmRoomMessages.addChangeListener(new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
             @Override
             public void onChange(final RealmResults<RealmRoomMessage> element) {
