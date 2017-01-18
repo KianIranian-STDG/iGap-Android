@@ -2,6 +2,7 @@ package com.iGap.helper;
 
 import android.content.ContentProviderOperation;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.iGap.G;
 
@@ -11,6 +12,9 @@ public class HelperAddContact {
 
     public static void addContact(String displayName, String phone) {
 
+        String saveNumber = "+98" + phone.replace("+98", "");
+        Log.i("GGGGGGG", "phone: " + phone);
+        Log.i("GGGGGGG", "saveNumber: " + saveNumber);
         ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
         ops.add(ContentProviderOperation.newInsert(
@@ -38,7 +42,7 @@ public class HelperAddContact {
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                     .withValue(ContactsContract.Data.MIMETYPE,
                             ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, saveNumber)
                     .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
                             ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                     .build());

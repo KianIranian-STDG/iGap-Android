@@ -1,13 +1,11 @@
 package com.iGap.activities;
 
-import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -19,7 +17,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -165,7 +162,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         super.onResume();
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
 
         if (rrg != null) {
@@ -201,7 +199,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             isBlockUser = rrg.isBlockUser();
 
             rrg.addChangeListener(new RealmChangeListener<RealmModel>() {
-                @Override public void onChange(RealmModel element) {
+                @Override
+                public void onChange(RealmModel element) {
 
                     isBlockUser = rrg.isBlockUser();
 
@@ -773,11 +772,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                         public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                             switch (which) {
                                 case 0:
-                                    long call = Long.parseLong(txtPhoneNumber.getText().toString());
+                                    String call = "+" + Long.parseLong(txtPhoneNumber.getText().toString());
                                     try {
-                                        Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-                                        phoneIntent.setData(Uri.parse("tel:" + call));
+//                                        Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+//                                        phoneIntent.setData(Uri.parse("tel:" + call));
                                         //startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
+                                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                        callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
+                                        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(callIntent);
 
                                     } catch (Exception ex) {
 
@@ -844,28 +847,17 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                     break;
                                 case 1:
 
-                                    long call = Long.parseLong(txtPhoneNumber.getText().toString());
+                                    String call = "+" + Long.parseLong(txtPhoneNumber.getText().toString());
                                     try {
-                                        Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-                                        phoneIntent.setData(Uri.parse("tel:" + call));
-                                        if (ActivityCompat.checkSelfPermission(ActivityContactsProfile.this, Manifest.permission.CALL_PHONE)
-                                                != PackageManager.PERMISSION_GRANTED) {
-                                            // TODO: Consider calling
-                                            //    ActivityCompat#requestPermissions
-                                            // here to request the missing permissions, and then overriding
-                                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                            //                                          int[] grantResults)
-                                            // to handle the case where the user grants the permission. See the documentation
-                                            // for ActivityCompat#requestPermissions for more details.
-                                            return;
-                                        }
-                                        startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
+                                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                        callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
+                                        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(callIntent);
+
                                     } catch (Exception ex) {
 
                                         ex.getStackTrace();
-
                                     }
-
                                     break;
                                 case 2:
 
@@ -974,7 +966,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         //                popupWindow.showAsDropDown(v);
 
         text1.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 blockOrUnblockUser();
                 popupWindow.dismiss();
             }
@@ -1031,7 +1024,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             new RequestUserContactsBlock().userContactsBlock(userId);
         }
     }
-
 
 
     private void showAlertDialog(String message, String positive, String negitive) { // alert dialog for block or clear user
@@ -1226,7 +1218,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         });
     }
-
     @Override
     public void onUserUpdateStatus(long userId, final long time, final String status) {
 

@@ -20,7 +20,7 @@ public class UserContactsImportResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        G.onContactImport.onContactImport();
+        if (G.onContactImport != null) G.onContactImport.onContactImport();
     }
 
     @Override

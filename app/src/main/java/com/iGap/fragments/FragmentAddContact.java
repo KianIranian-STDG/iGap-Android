@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -228,6 +229,17 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                         .show();
             }
         });
+
+//        G.onContactImport = new OnUserContactImport() {
+//            @Override
+//            public void onContactImport() {
+//
+//                if ( RegisteredContactsFragment.onImportComplete !=null) RegisteredContactsFragment.onImportComplete.complete(true,"","");
+//
+//                Log.i("GGGGGGG", "0000 onImportComplete.complete: ");
+//            }
+//        };
+
     }
 
     private void isEnableSetButton() {
@@ -256,11 +268,14 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
      */
     private void addContactToServer() {
 
+        String ph = "+98" + edtPhoneNumber.getText().toString().replace("+98", "");
         ArrayList<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
         contact.firstName = edtFirstName.getText().toString();
         contact.lastName = edtLastName.getText().toString();
-        contact.phone = edtPhoneNumber.getText().toString();
+        contact.phone = ph;
+
+        Log.i("XXXXXXX", "addContactToServer: " + ph);
 
         contacts.add(contact);
 

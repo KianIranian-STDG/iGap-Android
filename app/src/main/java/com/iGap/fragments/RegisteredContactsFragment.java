@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -52,10 +53,12 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;
@@ -70,6 +73,9 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     private SharedPreferences sharedPreferences;
     private boolean isImportContactList = false;
     private ProgressBar prgWaiting;
+    private ItemAdapter itemAdapter;
+    private List<IItem> items;
+//    public static OnComplete onImportComplete;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -140,7 +146,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         //create our adapters
         final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
         final HeaderAdapter headerAdapter = new HeaderAdapter();
-        final ItemAdapter itemAdapter = new ItemAdapter();
+        itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItem>() {
             @Override
             public boolean filter(ContactItem item, CharSequence constraint) {
@@ -233,50 +239,49 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
-        final List<IItem> items = new ArrayList<>();
+
+        items = new ArrayList<>();
         contacts = Contacts.retrieve(null);
+        G.onUserContactGetList = new OnUserContactGetList() {
+            @Override
+            public void onContactGetList() {
+                if (contacts.size() == 0) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            contacts = Contacts.retrieve(null);
 
+                            if (contacts != null && fastAdapter != null && itemAdapter != null) {
+                                for (StructContactInfo contact : contacts) {
+                                    items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+                                }
+                                itemAdapter.add(items);
 
+                                //so the headers are aware of changes
+                                stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                                    @Override
+                                    public void onChanged() {
+                                        decoration.invalidateHeaders();
+                                    }
+                                });
+
+                                //restore selections (this has to be done after the items were added
+                                fastAdapter.withSavedInstanceState(savedInstanceState);
+                                fastAdapter.notifyDataSetChanged();
+                            }
+
+                            Log.i("GGGGGGG", "o9999 nContactGetList: " + contacts.size());
+                        }
+                    });
+                }
+            }
+        };
         if (contacts.size() == 0) {
             /**
              * if contacts size is zero send request for get contacts list
              * for insuring that contacts not exist really or not
              */
-            G.onUserContactGetList = new OnUserContactGetList() {
-                @Override
-                public void onContactGetList() {
-                    if (contacts.size() == 0) {
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                contacts = Contacts.retrieve(null);
-
-                                if (contacts != null && fastAdapter != null && itemAdapter != null) {
-                                    for (StructContactInfo contact : contacts) {
-                                        items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
-                                    }
-                                    itemAdapter.add(items);
-
-                                    //so the headers are aware of changes
-                                    stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                                        @Override
-                                        public void onChanged() {
-                                            decoration.invalidateHeaders();
-                                        }
-                                    });
-
-                                    //restore selections (this has to be done after the items were added
-                                    fastAdapter.withSavedInstanceState(savedInstanceState);
-                                    fastAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        });
-                    }
-                }
-            };
             new RequestUserContactsGetList().userContactGetList();
-
         } else {
             for (StructContactInfo contact : contacts) {
                 items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
@@ -294,6 +299,16 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             //restore selections (this has to be done after the items were added
             fastAdapter.withSavedInstanceState(savedInstanceState);
         }
+
+//        onImportComplete = new OnComplete() {
+//            @Override
+//            public void complete(boolean result, String messageOne, String MessageTow) {
+////                Log.i("GGGGGGG", "complete RequestUserContactsGetList(): " + contacts.size());
+////                new RequestUserContactsGetList().userContactGetList();
+//            }
+//        };
+
+
     }
 
     private void chatGetRoom(final long peerId) {
