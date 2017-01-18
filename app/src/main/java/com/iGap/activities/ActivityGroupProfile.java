@@ -2911,6 +2911,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onFinish() {
 //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                remindTime.setText("00:00");
             }
         };
         countWaitTimer.start();

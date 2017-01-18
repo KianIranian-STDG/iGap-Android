@@ -363,6 +363,7 @@ public class FragmentDeleteAccount extends Fragment {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
                         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
                     }
                 })
@@ -392,6 +393,7 @@ public class FragmentDeleteAccount extends Fragment {
             @Override
             public void onFinish() {
                 dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                remindTime.setText("00:00");
             }
         };
         countWaitTimer.start();

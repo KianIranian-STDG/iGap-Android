@@ -565,7 +565,12 @@ public class HelperNotificationAndBadge {
 
                                 String text = "";
                                 try {
-                                    text = roomMessage.getMessage();
+                                    if (roomMessage.getLogMessage() != null) {
+                                        text = roomMessage.getLogMessage();
+                                    } else {
+                                        text = roomMessage.getMessage();
+                                    }
+
                                     if (text.length() < 1) if (roomMessage.getForwardMessage() != null) text = roomMessage.getForwardMessage().getMessage();
                                     if (text.length() < 1) if (roomMessage.getReplyTo() != null) text = roomMessage.getReplyTo().getMessage();
                                     if (text.length() < 1) text = ActivityPopUpNotification.getTextOfMessageType(roomMessage.getMessageType());

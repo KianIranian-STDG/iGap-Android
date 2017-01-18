@@ -327,9 +327,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override
                     public void run() {
                         userGender = gender;
-                        if (userGender == ProtoGlobal.Gender.MALE) {
+                        if (gender == ProtoGlobal.Gender.MALE) {
                             txtGander.setText(getResources().getString(R.string.Male));
-                        } else if (userGender == ProtoGlobal.Gender.FEMALE) {
+                        } else if (gender == ProtoGlobal.Gender.FEMALE) {
                             txtGander.setText(getResources().getString(R.string.Female));
                         } else {
                             txtGander.setText(getResources().getString(R.string.set_gender));
@@ -586,6 +586,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        Log.i("FFFFFFFF", "onCreate: " + userGender);
 
         if (userGender == null || userGender.getNumber() == -1 || userGender == ProtoGlobal.Gender.UNKNOWN) {
             txtGander.setText(getResources().getString(R.string.set_gender));
@@ -1400,7 +1401,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         final TextView txtCrop = (TextView) findViewById(R.id.stsp_txt_crop);
         final ToggleButton stsp_toggle_crop = (ToggleButton) findViewById(R.id.stsp_toggle_crop);
 
-        int checkedEnableCrop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 0);
+        int checkedEnableCrop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1);
         if (checkedEnableCrop == 1) {
             stsp_toggle_crop.setChecked(true);
         } else {

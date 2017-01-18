@@ -116,6 +116,7 @@ public class ActivityRegister extends ActivityEnhanced {
     private SearchView edtSearchView;
     private Dialog dialog;
     private int digitCount;
+    private MaterialDialog dialogWait;
 
     public enum Reason {
         SOCKET, TIME_OUT, INVALID_CODE
@@ -170,10 +171,13 @@ public class ActivityRegister extends ActivityEnhanced {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
         edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
         edtPhoneNumber = (MaskedEditText) findViewById(R.id.rg_edt_PhoneNumber);
         txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
+
 
         int portrait = getResources().getConfiguration().orientation;
         if (portrait == 1) {
@@ -455,7 +459,6 @@ public class ActivityRegister extends ActivityEnhanced {
 
                             if (portaret_landscope == 1) {//portrait
                                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                                txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
                                 txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
 
                                 txtAgreement_register.setVisibility(View.GONE);
@@ -819,7 +822,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this)
+        dialogWait = new MaterialDialog.Builder(ActivityRegister.this)
                 .title(title)
                 .customView(R.layout.dialog_remind_time, wrapInScrollView)
                 .positiveText(R.string.B_ok)
@@ -830,15 +833,21 @@ public class ActivityRegister extends ActivityEnhanced {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                         btnStart.setBackgroundColor(getResources().getColor(R.color.green));
+                        btnStart.setTextColor(getResources().getColor(R.color.white));
+                        btnStart.setEnabled(true);
                         btnChoseCountry.setEnabled(true);
+                        btnChoseCountry.setTextColor(getResources().getColor(R.color.black_register));
                         edtPhoneNumber.setEnabled(true);
-                        txtAgreement_register.setVisibility(View.GONE);
+                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.black_register));
+                        edtCodeNumber.setTextColor(getResources().getColor(R.color.black_register));
+                        txtAgreement_register.setVisibility(View.VISIBLE);
+                        layout_verify.setVisibility(View.GONE);
                         dialog.dismiss();
                     }
                 })
                 .show();
 
-        View v = dialog.getCustomView();
+        View v = dialogWait.getCustomView();
 
         final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
@@ -848,12 +857,13 @@ public class ActivityRegister extends ActivityEnhanced {
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
                 remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
             @Override
             public void onFinish() {
-                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                remindTime.setText("00:00");
             }
         };
         countWaitTimer.start();
@@ -1203,5 +1213,18 @@ public class ActivityRegister extends ActivityEnhanced {
         Log.i("TTTTT", "onSaveInstanceState: ");
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (dialogWait != null) {
+            if (dialogWait.isShowing()) {
+
+            }
+        } else {
+            super.onBackPressed();
+        }
+
     }
 }

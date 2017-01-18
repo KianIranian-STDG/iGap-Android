@@ -2640,6 +2640,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public void onFinish() {
 //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                remindTime.setText("00:00");
             }
         };
         countWaitTimer.start();
