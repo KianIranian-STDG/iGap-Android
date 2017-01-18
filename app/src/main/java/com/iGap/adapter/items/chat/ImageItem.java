@@ -49,10 +49,16 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
 
     }
 
-    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
+    @Override void OnDownLoadFileFinish(final ViewHolder holder, final String path) {
 
-        ImageLoader.getInstance().displayImage(suitablePath(path), holder.image);
-        holder.image.setCornerRadius(HelperRadius.computeRadius(path));
+        holder.image.post(new Runnable() {
+            @Override public void run() {
+                ImageLoader.getInstance().displayImage(suitablePath(path), holder.image);
+                holder.image.setCornerRadius(HelperRadius.computeRadius(path));
+            }
+        });
+
+
     }
 
     @Override
