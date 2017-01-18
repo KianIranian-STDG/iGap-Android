@@ -108,6 +108,7 @@ public class RealmRoom extends RealmObject {
         realmRoom.setUnreadCount(room.getUnreadCount());
         realmRoom.setReadOnly(room.getReadOnly());
         realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
+        realmRoom.setActionState(null);
         switch (room.getType()) {
             case CHANNEL:
                 realmRoom.setType(RoomType.CHANNEL);

@@ -153,7 +153,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
                                 RealmRoomMessage realmRoomMessage = results.first();
                                 if (realmRoomMessage != null) {
                                     RealmRegisteredInfo realmRegisteredInfo = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessage.getUserId()).findFirst();
-                                    if (realmRegisteredInfo != null) {
+                                    if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
                                         if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
                                             lastMessageSender = " : " + realmRegisteredInfo.getDisplayName();
                                         } else {

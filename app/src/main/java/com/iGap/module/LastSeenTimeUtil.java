@@ -103,18 +103,20 @@ public class LastSeenTimeUtil {
 
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
             if (realmRegisteredInfo != null) {
-                String showLastSeen;
-                if (timeOut(value * DateUtils.SECOND_IN_MILLIS)) {
-                    showLastSeen = computeDays(value);
-                    userIdList.add(userId);
-                } else {
-                    showLastSeen = getMinute(value);
-                }
-                Log.i("TTT", "realmRegisteredInfo.getStatus() : " + realmRegisteredInfo.getStatus()); //
+                Log.i("TTT", "realmRegisteredInfo.getStatus() : " + realmRegisteredInfo.getStatus());
                 if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString()) && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
+                    String showLastSeen;
+                    if (timeOut(value * DateUtils.SECOND_IN_MILLIS)) {
+                        showLastSeen = computeDays(realmRegisteredInfo.getLastSeen());
+                        userIdList.add(userId);
+                    } else {
+                        showLastSeen = getMinute(realmRegisteredInfo.getLastSeen());
+                    }
                     if (G.onLastSeenUpdateTiming != null) {
                         G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
                     }
+                } else {
+                    userIdList.add(userId);
                 }
             }
         }

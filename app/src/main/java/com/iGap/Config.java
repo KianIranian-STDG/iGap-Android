@@ -21,7 +21,7 @@ public class Config {
     public static final int GET_MESSAGE_STATE_TIME_OUT = 5000;
     public static final int GET_MESSAGE_STATE_TIME_OUT_CHECKING = 1000;
     public static final long LAST_SEEN_TIME_OUT = (60 * DateUtils.MINUTE_IN_MILLIS); // after this time show exactly time instead of minutes
-    public static final long LAST_SEEN_DELAY_CHECKING = (DateUtils.MINUTE_IN_MILLIS);
+    public static final long LAST_SEEN_DELAY_CHECKING = (int) (30 * DateUtils.SECOND_IN_MILLIS);
     public static final long GROUP_SHOW_ACTIONS_COUNT = 3;
     public static final long IMAGE_CORNER = 15;
     public static String urlWebsocket = "wss://secure.igap.net/hybrid/";

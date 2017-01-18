@@ -58,7 +58,7 @@ public final class AppUtils {
 
     public static String setStatsForUser(String status) {
 
-        String userStatus = "Online";
+        String userStatus = "";
         if (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString())) {
             userStatus = context.getResources().getString(R.string.last_seen_recently);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
