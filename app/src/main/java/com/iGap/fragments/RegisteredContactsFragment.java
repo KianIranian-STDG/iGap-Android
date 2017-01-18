@@ -9,7 +9,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -25,7 +23,6 @@ import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChatGetRoom;
-import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnGetPermision;
 import com.iGap.interfaces.OnUserContactGetList;
 import com.iGap.interfaces.OnUserContactImport;
@@ -35,14 +32,12 @@ import com.iGap.module.Contacts;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructContactInfo;
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChatGetRoom;
 import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
@@ -53,17 +48,15 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;
 
-public class RegisteredContactsFragment extends Fragment implements OnFileDownloadResponse {
+public class RegisteredContactsFragment extends Fragment {
     private FastAdapter fastAdapter;
     private SearchView searchView;
     private TextView menu_txt_titleToolbar;
@@ -128,8 +121,6 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         vgAddContact = (ViewGroup) view.findViewById(R.id.menu_layout_addContact);
         vgRoot = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
 
-
-        G.onFileDownloadResponse = this;
 
         Bundle bundle = this.getArguments();
         String title = null;
@@ -478,41 +469,6 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
-        // empty
-    }
 
-    @Override
-    public void onAvatarDownload(String token, long offset, final ProtoFileDownload.FileDownload.Selector selector, int progress, final long userId, RoomType roomType) {
-        G.currentActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // if thumbnail
-                if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
-                    //fastAdapter.downloadingAvatar(userId, StructMessageAttachment.convert(realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst().getLastAvatar()));
-                    Log.i("NNN", "set Avatar onAvatarDownload");
-                    updateChatAvatar(userId);
-                }
-            }
-        });
-    }
 
-    @Override
-    public void onError(int majorCode, int minorCode) {
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                prgWaiting.setVisibility(View.GONE);
-            }
-        });
-
-    }
-
-    @Override
-    public void onBadDownload(String token) {
-        // empty
-    }
 }

@@ -57,7 +57,6 @@ public class StructMessageInfo implements Parcelable {
     public byte[] fileHash;
     public int uploadProgress;
     public StructMessageAttachment attachment;
-    public StructDownloadAttachment downloadAttachment;
     public StructRegisteredInfo userInfo;
     public StructMessageAttachment senderAvatar;
     public long time;
@@ -213,7 +212,6 @@ public class StructMessageInfo implements Parcelable {
         this.fileHash = in.createByteArray();
         this.uploadProgress = in.readInt();
         this.attachment = in.readParcelable(StructMessageAttachment.class.getClassLoader());
-        this.downloadAttachment = Parcels.unwrap(in.readParcelable(StructDownloadAttachment.class.getClassLoader()));
         this.userInfo = in.readParcelable(StructRegisteredInfo.class.getClassLoader());
         this.senderAvatar = in.readParcelable(StructMessageAttachment.class.getClassLoader());
         this.time = in.readLong();
@@ -406,7 +404,6 @@ public class StructMessageInfo implements Parcelable {
         dest.writeByteArray(this.fileHash);
         dest.writeInt(this.uploadProgress);
         dest.writeParcelable(this.attachment, flags);
-        dest.writeParcelable(Parcels.wrap(this.downloadAttachment), flags);
         dest.writeParcelable(this.userInfo, flags);
         dest.writeParcelable(this.senderAvatar, flags);
         dest.writeLong(this.time);

@@ -1,11 +1,9 @@
 package com.iGap.helper;
 
 import android.support.annotation.CheckResult;
-
 import com.iGap.G;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.request.RequestWrapper;
-
 import java.util.Iterator;
 import java.util.Map;
 
@@ -22,9 +20,9 @@ public final class HelperCancelDownloadUpload {
      */
     @CheckResult
     public static boolean cancelDownload(String token) {
-        if (MessagesAdapter.hasDownloadRequested(token)) {
-            MessagesAdapter.downloading.remove(token);
-        }
+        //if (MessagesAdapter.hasDownloadRequested(token)) {
+        //    MessagesAdapter.downloading.remove(token);
+        //}
 
         for (String t : G.downloadingTokens) {
             if (t != null && token != null && t.equalsIgnoreCase(token)) {

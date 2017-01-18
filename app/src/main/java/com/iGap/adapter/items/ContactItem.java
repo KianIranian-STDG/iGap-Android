@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
@@ -20,10 +19,8 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.util.List;
-
 import io.realm.Realm;
+import java.util.List;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
@@ -107,60 +104,9 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
             }
         });
 
-       /* String avatarPath = null;
-        if (mContact.avatar != null && mContact.avatar.isValid() && mContact.avatar.getFile() != null && mContact.avatar.getFile().isValid()) {
-            avatarPath = mContact.avatar.getFile().getLocalThumbnailPath();
-        }
-
-        //Set Avatar For Chat,Group,Channel
-        if (avatarPath != null) {
-            File imgFile = new File(avatarPath);
-            if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                holder.image.setImageBitmap(myBitmap);
-            } else {
-                if (mContact.avatar != null && mContact.avatar.getFile() != null) {
-                    onRequestDownloadThumbnail(mContact.avatar.getFile().getToken(), false);
-                }
-                holder.image.setImageBitmap(
-                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                                (int) holder.image.getContext().getResources().getDimension(R.dimen.dp60),
-                                mContact.initials, mContact.color));
-            }
-        } else {
-            if (mContact.avatar != null && mContact.avatar.isValid() && mContact.avatar.getFile() != null && mContact.avatar.getFile().isValid()) {
-                onRequestDownloadThumbnail(mContact.avatar.getFile().getToken(), false);
-            }
-            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture(
-                    (int) holder.image.getContext().getResources().getDimension(R.dimen.dp60),
-                    mContact.initials, mContact.color));
-        }*/
     }
 
-  /*  public void onRequestDownloadThumbnail(String token, boolean done) {
-        final String fileName = "thumb_" + token + "_" + mContact.avatar.getFile().getName();
-        if (done) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, mContact.avatar.getFile().getId()).findFirst().setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
-                }
-            });
-            realm.close();
 
-            return; // necessary
-        }
-
-        ProtoFileDownload.FileDownload.Selector selector =
-                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        String identity =
-                mContact.avatar.getFile().getToken() + '*' + selector.toString() + '*' + mContact.avatar.getFile().getSmallThumbnail()
-                        .getSize() + '*' + fileName + '*' + 0;
-
-        new RequestFileDownload().download(token, 0, (int) mContact.avatar.getFile().getSmallThumbnail().getSize(),
-                selector, identity);
-    }*/
 
     @Override
     public ViewHolderFactory<? extends ViewHolder> getFactory() {

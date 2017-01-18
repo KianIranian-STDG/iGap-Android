@@ -80,6 +80,7 @@ import pl.droidsonroids.gif.GifImageView;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
+import static com.iGap.module.AndroidUtils.suitablePath;
 
 /**
  * Created by android3 on 9/4/2016.
@@ -109,10 +110,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private static long countOFGIF = 0;
     private static long countOFFILE = 0;
     private static long countOFLink = 0;
-
-
-    public static ArrayList<Long> downloadedList = new ArrayList<>();
-
 
     private LinearLayout mediaLayout;
     private MusicPlayer musicPlayer;
@@ -168,7 +165,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         mRealm = Realm.getDefaultInstance();
 
-        HelperDownloadFile helperDownloadFile = new HelperDownloadFile();
+
 
         mediaLayout = (LinearLayout) findViewById(R.id.asm_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
@@ -219,10 +216,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         if (myFragment != null && myFragment.isVisible()) {
             getFragmentManager().beginTransaction().remove(myFragment).commit();
 
-            int count = downloadedList.size();
+            int count = FragmentShowImage.downloadedList.size();
 
             for (int i = 0; i < count; i++) {
-                Long id = downloadedList.get(i);
+                Long id = FragmentShowImage.downloadedList.get(i);
                 for (int j = mNewList.size(); j > 0; j--) {
                     if (!mNewList.get(j - 1).isItemTime) {
                         if (mNewList.get(j - 1).item.getMessageId() == id) {
@@ -235,7 +232,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 adapter.needDownloadList.remove(id);
             }
 
-            downloadedList.clear();
+            FragmentShowImage.downloadedList.clear();
         } else if (!adapter.resetSelected()) {
             super.onBackPressed();
         }
@@ -924,7 +921,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         protected Context context;
 
         public ArrayList<Long> SelectedList = new ArrayList<>();
-        protected ArrayMap<Long, Boolean> DownloadingList = new ArrayMap<>();
         protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
 
         abstract void openSelectedItem(int position, RecyclerView.ViewHolder holder);
@@ -964,6 +960,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                 messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
                 messageProgress.withDrawable(R.drawable.ic_download, true);
+
+                if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getToken())) {
+                    startDownload(position, messageProgress);
+                }
 
                 messageProgress.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1053,13 +1053,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             final Long id = mList.get(position).item.getMessageId();
 
-            DownloadingList.put(id, true);
-
             messageProgress.withDrawable(R.drawable.ic_cancel, true);
 
             RealmAttachment at = mList.get(position).item.getAttachment();
-
-            HelperDownloadFile.startDoanload(at.getToken(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, mList.get(position).item.getMessageType(), new HelperDownloadFile.UpdateListener() {
+            String dirPath = AndroidUtils.suitableAppFilePath(mList.get(position).item.getMessageType()) + "/" + at.getToken() + "_" + at.getName();
+            HelperDownloadFile.startDoanload(at.getToken(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(String token, final int progress) {
 
@@ -1085,12 +1083,20 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 public void OnError(String token) {
 
                     Log.e("dddd", "OnError  token  = " + token + "   " + messageProgress);
-                    stopDownload(position, messageProgress);
+
+                    messageProgress.post(new Runnable() {
+                        @Override public void run() {
+                            messageProgress.withProgress(0);
+                            messageProgress.withDrawable(R.drawable.ic_download, true);
+                        }
+                    });
                 }
             });
         }
 
         private void stopDownload(int position, final MessageProgress messageProgress) {
+
+            HelperDownloadFile.stopDownLoad(mList.get(position).item.getAttachment().getToken());
 
             messageProgress.post(new Runnable() {
                 @Override
@@ -1099,14 +1105,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     messageProgress.withDrawable(R.drawable.ic_download, true);
                 }
             });
-
-            DownloadingList.remove(mList.get(position).item.getMessageId());
         }
 
         private void downloadFile(int position, MessageProgress messageProgress) {
 
-            if (DownloadingList.containsKey(mList.get(position).item.getMessageId())) {
-                HelperDownloadFile.stopDownLoad(mList.get(position).item.getAttachment().getToken());
+            if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getToken())) {
                 stopDownload(position, messageProgress);
             } else {
                 startDownload(position, messageProgress);
@@ -1245,21 +1248,23 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     messageProgress.setVisibility(View.VISIBLE);
                 }
 
+                // if thumpnail not exist download it
                 File filet = new File(tempFilePath);
                 if (filet.exists()) {
                     imvPicFile.setImageURI(Uri.fromFile(new File(tempFilePath)));
                 } else {
-
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
-                            HelperDownloadFile.startDoanload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, mList.get(position).item.getMessageType(), new HelperDownloadFile.UpdateListener() {
+
+                            HelperDownloadFile.startDoanload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "",
+                                new HelperDownloadFile.UpdateListener() {
                                 @Override
                                 public void OnProgress(String token, int progress) {
 
                                     imvPicFile.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            imvPicFile.setImageURI(Uri.fromFile(new File(tempFilePath)));
+                                            ImageLoader.getInstance().displayImage(suitablePath(tempFilePath), imvPicFile);
                                         }
                                     });
                                 }

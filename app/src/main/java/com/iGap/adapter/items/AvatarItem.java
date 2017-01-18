@@ -1,27 +1,21 @@
 package com.iGap.adapter.items;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AvatarsAdapter;
-import com.iGap.interfaces.IChatItemAvatar;
-import com.iGap.module.AndroidUtils;
+import com.iGap.fragments.FragmentShowAvatars;
+import com.iGap.helper.HelperDownloadFile;
 import com.iGap.module.TouchImageView;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAttachment;
-import com.iGap.request.RequestFileDownload;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.IOException;
-import java.util.List;
-
 import io.meness.github.messageprogress.MessageProgress;
-import io.meness.github.messageprogress.OnMessageProgressClick;
-import io.realm.Realm;
+import java.io.File;
+import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
@@ -29,8 +23,7 @@ import static com.iGap.module.AndroidUtils.suitablePath;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/26/2016.
  */
 
-public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
-        implements IChatItemAvatar {
+public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public RealmAttachment avatar;
     public long imageId;
@@ -51,148 +44,127 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder>
         return R.layout.show_image_sub_layout;
     }
 
-    /**
-     * request for avatar file
-     */
-    private void requestForAvatarFile(String token) {
-        if (!AvatarsAdapter.hasFileRequested(token)) {
-            AvatarsAdapter.requestsProgress.put(token, 0);
-            AvatarsAdapter.requestsOffset.put(token, 0L);
 
-            onRequestDownloadAvatar(0, 0);
-        }
-    }
-
-    /**
-     * request for avatar thumbnail
-     */
-    private void requestForAvatarThumbnail(String token) {
-        if (!AvatarsAdapter.hasThumbnailRequested(token)) {
-            AvatarsAdapter.thumbnailRequests.add(token);
-
-            onRequestDownloadThumbnail(token, false);
-        }
-    }
-
-    public void onRequestDownloadThumbnail(String token, boolean done) {
-        final String fileName = "thumb_" + token + "_" + avatar.getName();
-        if (done) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    avatar.setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
-                }
-            });
-            realm.close();
-
-            return; // necessary
-        }
-
-        ProtoFileDownload.FileDownload.Selector selector =
-                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        String identity =
-                avatar.getToken() + '*' + selector.toString() + '*' + avatar.getSmallThumbnail()
-                        .getSize() + '*' + fileName + '*' + 0;
-
-        new RequestFileDownload().download(token, 0, (int) avatar.getSmallThumbnail().getSize(),
-                selector, identity);
-    }
 
     public void onLoadFromLocal(ViewHolder holder, String localPath) {
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
     }
 
-    @Override
-    public void onRequestDownloadAvatar(long offset, int progress) {
-        ProtoFileDownload.FileDownload.Selector selector =
-                ProtoFileDownload.FileDownload.Selector.FILE;
-        final String fileName = avatar.getToken() + "_" + avatar.getName();
-
-        if (progress == 100) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    avatar.setLocalFilePath(G.DIR_IMAGE_USER + "/" + fileName);
-                }
-            });
-            realm.close();
-
-            try {
-                AndroidUtils.cutFromTemp(fileName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // remove from requests when downloading has finished
-            AvatarsAdapter.removeFileRequest(avatar.getToken());
-
-            return; // necessary
-        }
-
-        String identity = avatar.getToken()
-                + '*'
-                + selector.toString()
-                + '*'
-                + avatar.getSize()
-                + '*'
-                + fileName
-                + '*'
-                + offset;
-        new RequestFileDownload().download(avatar.getToken(), offset, (int) avatar.getSize(),
-                selector, identity);
-    }
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        if (FragmentShowAvatars.downloadingAvatarList.containsKey(imageId)) {
+            holder.progress.withDrawable(R.drawable.ic_cancel, true);
+        } else {
+            holder.progress.withDrawable(R.drawable.ic_download, true);
+        }
+
         // if file already exists, simply show the local one
         if (avatar.isFileExistsOnLocal()) {
             // load file from local
+            holder.progress.setVisibility(View.GONE);
             onLoadFromLocal(holder, avatar.getLocalFilePath());
         } else {
+
+            holder.progress.setVisibility(View.VISIBLE);
+            holder.progress.withDrawable(R.drawable.ic_download, true);
+
             // file doesn't exist on local, I check for a thumbnail
             // if thumbnail exists, I load it into the view
             if (avatar.isThumbnailExistsOnLocal()) {
                 // load thumbnail from local
                 onLoadFromLocal(holder, avatar.getLocalThumbnailPath());
-            } else {
-                requestForAvatarThumbnail(avatar.getToken());
+            } else if (avatar != null) {
+
+                // if thumpnail not exist download it
+                ProtoFileDownload.FileDownload.Selector selector = null;
+                long fileSize = 0;
+
+                if (avatar.getSmallThumbnail() != null) {
+                    selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+                    fileSize = avatar.getSmallThumbnail().getSize();
+                } else if (avatar.getLargeThumbnail() != null) {
+                    selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+                    fileSize = avatar.getLargeThumbnail().getSize();
+                }
+
+                final String filePathTumpnail = G.DIR_TEMP + "/" + "thumb_" + avatar.getToken() + "_" + avatar.getName();
+
+                if (selector != null && fileSize > 0) {
+                    HelperDownloadFile.startDoanload(avatar.getToken(), avatar.getName(), fileSize, selector, "", new HelperDownloadFile.UpdateListener() {
+                        @Override public void OnProgress(String token, int progress) {
+                            if (progress == 100) {
+
+                                holder.image.post(new Runnable() {
+                                    @Override public void run() {
+                                        holder.image.setImageURI(Uri.fromFile(new File(filePathTumpnail)));
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override public void OnError(String token) {
+
+                        }
+                    });
+                }
+
             }
 
-            holder.progress.withOnMessageProgress(new OnMessageProgressClick() {
-                @Override
-                public void onMessageProgressClick(MessageProgress progress) {
-                    holder.progress.withDrawable(R.drawable.ic_gray_cancel, false);
-                    holder.progress.withIndeterminate(true);
+            holder.progress.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
 
-                    // make sure to not request multiple times by checking last offset with the new one
-                    if (!AvatarsAdapter.hasFileRequested(avatar.getToken())) {
-                        requestForAvatarFile(avatar.getToken());
+                    if (FragmentShowAvatars.downloadingAvatarList.containsKey(imageId)) {
+                        HelperDownloadFile.stopDownLoad(avatar.getToken());
+                        holder.progress.withDrawable(R.drawable.ic_download, true);
+                        FragmentShowAvatars.downloadingAvatarList.remove(imageId);
+                    } else {
+                        holder.progress.withDrawable(R.drawable.ic_cancel, true);
+                        FragmentShowAvatars.downloadingAvatarList.put(imageId, true);
+
+                        final String path = G.DIR_IMAGE_USER + "/" + avatar.getToken() + "_" + avatar.getName();
+
+                        HelperDownloadFile.startDoanload(avatar.getToken(), avatar.getName(), avatar.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path,
+                            new HelperDownloadFile.UpdateListener() {
+                                @Override public void OnProgress(String token, final int progres) {
+
+                                    if (holder.progress != null) {
+
+                                        holder.progress.post(new Runnable() {
+                                            @Override public void run() {
+
+                                                if (progres < 100) {
+                                                    holder.progress.withProgress(progres);
+                                                } else {
+                                                    holder.progress.withProgress(0);
+                                                    holder.progress.setVisibility(View.GONE);
+                                                    FragmentShowAvatars.downloadingAvatarList.remove(imageId);
+
+                                                    ImageLoader.getInstance().displayImage(suitablePath(path), holder.image);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override public void OnError(String token) {
+                                    holder.progress.post(new Runnable() {
+                                        @Override public void run() {
+                                            holder.progress.withProgress(0);
+                                            holder.progress.withDrawable(R.drawable.ic_download, true);
+                                        }
+                                    });
+                                }
+                            });
                     }
                 }
             });
+
+
         }
 
-        prepareProgress(holder);
-    }
-
-    private void prepareProgress(ViewHolder holder) {
-        if (avatar.isFileExistsOnLocal()) {
-            holder.progress.setVisibility(View.INVISIBLE);
-        } else {
-            if (AvatarsAdapter.hasFileRequested(avatar.getToken())) {
-                holder.progress.setVisibility(View.VISIBLE);
-                holder.progress.withDrawable(R.drawable.ic_gray_cancel, false);
-                holder.progress.withProgress(
-                        AvatarsAdapter.requestsProgress.get(avatar.getToken()));
-            } else {
-                holder.progress.setVisibility(View.VISIBLE);
-                holder.progress.withDrawable(R.drawable.ic_download, true);
-            }
-        }
     }
 
     @Override
