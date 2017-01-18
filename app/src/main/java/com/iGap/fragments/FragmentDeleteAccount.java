@@ -16,14 +16,13 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnSmsReceive;
 import com.iGap.interfaces.OnUserDelete;
 import com.iGap.interfaces.OnUserGetDeleteToken;
@@ -33,7 +32,6 @@ import com.iGap.module.IncomingSms;
 import com.iGap.proto.ProtoUserDelete;
 import com.iGap.request.RequestUserDelete;
 import com.iGap.request.RequestUserGetDeleteToken;
-
 import java.io.IOException;
 
 /**
@@ -87,7 +85,7 @@ public class FragmentDeleteAccount extends Fragment {
         });
 
         try {
-            HelperPermision.getSmsPermision(getActivity(), new OnGetPermision() {
+            HelperPermision.getSmsPermision(getActivity(), new OnGetPermission() {
                 @Override
                 public void Allow() {
                     getActivity().registerReceiver(smsReceiver, filter);

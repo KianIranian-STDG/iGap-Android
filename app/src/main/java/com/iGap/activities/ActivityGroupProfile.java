@@ -44,7 +44,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -62,7 +61,7 @@ import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnFileUploadForActivities;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnGroupAddAdmin;
 import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.interfaces.OnGroupAddModerator;
@@ -134,17 +133,15 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -1274,7 +1271,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             public boolean onClick(View v, IAdapter adapter, final ContactItemGroupProfile item, final int position) {
 
                 try {
-                    HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermision() {
+                    HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermission() {
                         @Override
                         public void Allow() {
                             ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
@@ -1554,10 +1551,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) { // camera
 
                         try {
-                            HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermision() {
+                            HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermission() {
                                 @Override
                                 public void Allow() throws IOException {
-                                    HelperPermision.getCameraPermission(ActivityGroupProfile.this, new OnGetPermision() {
+                                    HelperPermision.getCameraPermission(ActivityGroupProfile.this, new OnGetPermission() {
                                         @Override
                                         public void Allow() {
                                             dialog.dismiss();

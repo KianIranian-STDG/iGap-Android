@@ -1968,7 +1968,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (ContextCompat.checkSelfPermission(ActivityChat.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     try {
-                        HelperPermision.getMicroPhonePermision(ActivityChat.this, null);
+                        HelperPermision.getMicroPhonePermission(ActivityChat.this, null);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityMain;
@@ -22,7 +21,7 @@ import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserInfoMyClient;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.AndroidUtils;
@@ -30,11 +29,9 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
-
-import io.realm.Realm;
 
 public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClient {
     public static TextView txtUserName;
@@ -104,7 +101,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
             @Override
             public void onClick(View view) {
                 try {
-                    HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                    HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
                         @Override
                         public void Allow() {
                             Intent intent = new Intent(G.context, ActivitySetting.class);
@@ -189,7 +186,7 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
             @Override
             public void onClick(View view) {
                 try {
-                    HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                    HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
                         @Override
                         public void Allow() {
                             Intent intent = new Intent(G.context, ActivitySetting.class);

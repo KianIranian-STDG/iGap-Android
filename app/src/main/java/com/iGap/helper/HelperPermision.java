@@ -10,10 +10,8 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
 import com.iGap.R;
-import com.iGap.interfaces.OnGetPermision;
-
+import com.iGap.interfaces.OnGetPermission;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -32,57 +30,50 @@ public class HelperPermision {
     private static final int MY_PERMISSIONS_Phone = 207;
     private static final int MY_PERMISSIONS_Sms = 208;
 
-    private static OnGetPermision ResultCamera;
-    private static OnGetPermision ResultStorage;
-    private static OnGetPermision ResultContact;
-    private static OnGetPermision ResultCalendar;
-    private static OnGetPermision ResultLocation;
-    private static OnGetPermision ResultRecordAudio;
-    private static OnGetPermision ResultPhone;
-    private static OnGetPermision ResultSms;
+    private static OnGetPermission ResultCamera;
+    private static OnGetPermission ResultStorage;
+    private static OnGetPermission ResultContact;
+    private static OnGetPermission ResultCalendar;
+    private static OnGetPermission ResultLocation;
+    private static OnGetPermission ResultRecordAudio;
+    private static OnGetPermission ResultPhone;
+    private static OnGetPermission ResultSms;
 
-    public static OnGetPermision onDenyStorage;
+    public static OnGetPermission onDenyStorage;
 
     //************************************************************************************************************
-    public static void getCameraPermission(Context context, OnGetPermision onGetPermision) throws IOException {
+    public static void getCameraPermission(Context context, OnGetPermission onGetPermission) throws IOException {
 
         if (checkApi()) {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
             return;
         }
 
-        ResultCamera = onGetPermision;
+        ResultCamera = onGetPermission;
 
-        int permissionCheck =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+        int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPermission(context, new String[]{context.getResources().getString(R.string.permission_camera)},
-                    MY_PERMISSIONS_CAMERA, context.getResources().getString(R.string.permission_camera));
+            getPermission(context, new String[]{context.getResources().getString(R.string.permission_camera)}, MY_PERMISSIONS_CAMERA, context.getResources().getString(R.string.permission_camera));
         } else {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
         }
     }
 
     //************************************************************************************************************
-    public static void getStoragePermision(Context context, OnGetPermision onGetPermision) throws IOException {
+    public static void getStoragePermision(Context context, OnGetPermission onGetPermission) throws IOException {
 
         if (checkApi()) {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
             return;
         }
 
-        ResultStorage = onGetPermision;
+        ResultStorage = onGetPermission;
 
         ArrayList<String> needPermosion = null;
 
-        int permissionReadStorage =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
-        int permissionWriteStorage =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionReadStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int permissionWriteStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permissionReadStorage != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -101,28 +92,24 @@ public class HelperPermision {
             mStringArray = needPermosion.toArray(mStringArray);
             getPermission(context, mStringArray, MY_PERMISSIONS_STORAGE, context.getResources().getString(R.string.permission_storage));
         } else {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
         }
     }
 
     //************************************************************************************************************
-    public static void getContactPermision(Context context, OnGetPermision onGetPermision) throws IOException {
+    public static void getContactPermision(Context context, OnGetPermission onGetPermission) throws IOException {
 
         if (checkApi()) {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
             return;
         }
 
-        ResultContact = onGetPermision;
+        ResultContact = onGetPermission;
 
         ArrayList<String> needPermosion = null;
 
-        int permissionReadContact =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
-        int permissionWriteContact =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+        int permissionReadContact = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
+        int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
         //  int permissionWritGetAccunt = ContextCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS);
 
         if (permissionReadContact != PackageManager.PERMISSION_GRANTED) {
@@ -148,31 +135,26 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPermission(context, new String[]{context.getResources().getString(R.string.permission_contact)},
-                    MY_PERMISSIONS_CONTACTS, context.getResources().getString(R.string.permission_contact));
+            getPermission(context, new String[]{context.getResources().getString(R.string.permission_contact)}, MY_PERMISSIONS_CONTACTS, context.getResources().getString(R.string.permission_contact));
         } else {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
         }
     }
 
     //************************************************************************************************************
-    public static void getCalendarPermision(Context context, OnGetPermision onGetPermision) throws IOException {
+    public static void getCalendarPermision(Context context, OnGetPermission onGetPermission) throws IOException {
 
         if (checkApi()) {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
             return;
         }
 
-        ResultCalendar = onGetPermision;
+        ResultCalendar = onGetPermission;
 
         ArrayList<String> needPermosion = null;
 
-        int permissionReadCalendar =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR);
-        int permissionWriteCaledar =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR);
+        int permissionReadCalendar = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR);
+        int permissionWriteCaledar = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR);
 
         if (permissionReadCalendar != PackageManager.PERMISSION_GRANTED) {
             needPermosion = new ArrayList<>();
@@ -191,161 +173,126 @@ public class HelperPermision {
             mStringArray = needPermosion.toArray(mStringArray);
             getPermission(context, mStringArray, MY_PERMISSIONS_CALENDAR, context.getResources().getString(R.string.permission_calender));
         } else {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
         }
     }
 
     //************************************************************************************************************
-    public static void getLocationPermision(Context context, OnGetPermision onGetPermision) throws IOException {
+    public static void getLocationPermission(Context context, OnGetPermission onGetPermission) throws IOException {
 
         if (checkApi()) {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
             return;
         }
 
-        ResultLocation = onGetPermision;
+        ResultLocation = onGetPermission;
 
-        ArrayList<String> needPermosion = null;
+        ArrayList<String> needPermission = null;
 
-        int permissionFineLocation =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
-        int permissionCoreseLocation =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int permissionFineLocation = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
+        int permissionCoreseLocation = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
 
         if (permissionFineLocation != PackageManager.PERMISSION_GRANTED) {
-            needPermosion = new ArrayList<>();
-            needPermosion.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            needPermission = new ArrayList<>();
+            needPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
         }
 
         if (permissionCoreseLocation != PackageManager.PERMISSION_GRANTED) {
-            if (needPermosion == null) {
-                needPermosion = new ArrayList<>();
+            if (needPermission == null) {
+                needPermission = new ArrayList<>();
             }
-            needPermosion.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+            needPermission.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
 
-        if (needPermosion != null) {
-            String[] mStringArray = new String[needPermosion.size()];
-            mStringArray = needPermosion.toArray(mStringArray);
+        if (needPermission != null) {
+            String[] mStringArray = new String[needPermission.size()];
+            mStringArray = needPermission.toArray(mStringArray);
             getPermission(context, mStringArray, MY_PERMISSIONS_LOCATION, context.getResources().getString(R.string.permission_location));
         } else {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
         }
     }
 
     //************************************************************************************************************
-    public static void getMicroPhonePermision(Context context, OnGetPermision onGetPermision) throws IOException {
+    public static void getMicroPhonePermission(Context context, OnGetPermission onGetPermission) throws IOException {
 
         if (checkApi()) {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
             return;
         }
 
-        ResultRecordAudio = onGetPermision;
+        ResultRecordAudio = onGetPermission;
 
-        int permissionCheck =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
+        int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPermission(context, new String[]{Manifest.permission.RECORD_AUDIO},
-                    MY_PERMISSIONS_RECORD_AUDIO, context.getResources().getString(R.string.permission_record_audio));
+            getPermission(context, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_RECORD_AUDIO, context.getResources().getString(R.string.permission_record_audio));
         } else {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
         }
     }
 
     //************************************************************************************************************
-    public static void getPhonePermision(Context context, OnGetPermision onGetPermision) throws IOException {
+    public static void getPhonePermision(Context context, OnGetPermission onGetPermission) throws IOException {
 
         if (checkApi()) {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
             return;
         }
 
-        ResultPhone = onGetPermision;
+        ResultPhone = onGetPermission;
 
-        ArrayList<String> needPermosion = null;
+        ArrayList<String> needPermission = null;
 
-        int permissionCallPhone =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
-        int permissionReadPhoneState =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
-
-        //        int permissionReadCallLog = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG);
-        //        int permissionWriteCallLog = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALL_LOG);
-        //        int permissionAddVoiceMaile = ContextCompat.checkSelfPermission(context, Manifest.permission.ADD_VOICEMAIL);
-        //        int permissionUseSip = ContextCompat.checkSelfPermission(context, Manifest.permission.USE_SIP);
-        //        int permissionProcessOutgoingCall = ContextCompat.checkSelfPermission(context, Manifest.permission.PROCESS_OUTGOING_CALLS);
+        int permissionCallPhone = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
+        int permissionReadPhoneState = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
 
         if (permissionCallPhone != PackageManager.PERMISSION_GRANTED) {
-            needPermosion = new ArrayList<>();
-            needPermosion.add(Manifest.permission.CALL_PHONE);
+            needPermission = new ArrayList<>();
+            needPermission.add(Manifest.permission.CALL_PHONE);
         }
 
         if (permissionReadPhoneState != PackageManager.PERMISSION_GRANTED) {
-            if (needPermosion == null) {
-                needPermosion = new ArrayList<>();
+            if (needPermission == null) {
+                needPermission = new ArrayList<>();
             }
-            needPermosion.add(Manifest.permission.READ_PHONE_STATE);
+            needPermission.add(Manifest.permission.READ_PHONE_STATE);
         }
 
-        if (needPermosion != null) {
-            String[] mStringArray = new String[needPermosion.size()];
-            mStringArray = needPermosion.toArray(mStringArray);
+        if (needPermission != null) {
+            String[] mStringArray = new String[needPermission.size()];
+            mStringArray = needPermission.toArray(mStringArray);
             getPermission(context, mStringArray, MY_PERMISSIONS_Phone, context.getResources().getString(R.string.permission_phone));
         } else {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
         }
     }
 
     //************************************************************************************************************
-    public static void getSmsPermision(Context context, OnGetPermision onGetPermision) throws IOException {
+    public static void getSmsPermision(Context context, OnGetPermission onGetPermission) throws IOException {
 
         if (checkApi()) {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
             return;
         }
 
-        ResultSms = onGetPermision;
+        ResultSms = onGetPermission;
 
-        ArrayList<String> needPermosion = null;
+        ArrayList<String> needPermission = null;
 
-        int permissionReciveSms =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
-        int permissionReadSms =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS);
+        int permissionReceiveSms = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
 
-        //        int permissionSendSms = ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS);
-        //        int permissionReciveWashBush = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_WAP_PUSH);
-        //        int permissionMms = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_MMS);
-
-        if (permissionReciveSms != PackageManager.PERMISSION_GRANTED) {
-            needPermosion = new ArrayList<>();
-            needPermosion.add(Manifest.permission.RECEIVE_SMS);
+        if (permissionReceiveSms != PackageManager.PERMISSION_GRANTED) {
+            needPermission = new ArrayList<>();
+            needPermission.add(Manifest.permission.RECEIVE_SMS);
         }
 
-        if (permissionReadSms != PackageManager.PERMISSION_GRANTED) {
-            if (needPermosion == null) {
-                needPermosion = new ArrayList<>();
-            }
-            needPermosion.add(Manifest.permission.READ_SMS);
-        }
-
-        if (needPermosion != null) {
-            String[] mStringArray = new String[needPermosion.size()];
-            mStringArray = needPermosion.toArray(mStringArray);
+        if (needPermission != null) {
+            String[] mStringArray = new String[needPermission.size()];
+            mStringArray = needPermission.toArray(mStringArray);
             getPermission(context, mStringArray, MY_PERMISSIONS_Sms, context.getResources().getString(R.string.permission_sms));
         } else {
-            if (onGetPermision != null)
-                onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
         }
     }
 
@@ -359,8 +306,7 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void getPermission(final Context context, final String[] needPermission,
-                                     final int requestCode, String Text) {
+    public static void getPermission(final Context context, final String[] needPermission, final int requestCode, String Text) {
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermission[0])) {
             showMessageOKCancel(context, context.getString(R.string.you_need_to_allow) + " " + Text, new DialogInterface.OnClickListener() {
@@ -376,11 +322,7 @@ public class HelperPermision {
     }
 
     private static void showMessageOKCancel(Context context, String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(context).setMessage(message)
-                .setPositiveButton(context.getString(R.string.ok), okListener)
-                .setNegativeButton(context.getString(R.string.cancel), null)
-                .create()
-                .show();
+        new AlertDialog.Builder(context).setMessage(message).setPositiveButton(context.getString(R.string.ok), okListener).setNegativeButton(context.getString(R.string.cancel), null).create().show();
     }
 
     //************************************************************************************************************
@@ -416,7 +358,7 @@ public class HelperPermision {
 
     //************************************************************************************************************
 
-    private static void actionResultBack(int[] grantResults, OnGetPermision onGetPermision) throws IOException {
+    private static void actionResultBack(int[] grantResults, OnGetPermission onGetPermission) throws IOException {
 
         boolean allOk = true;
         for (int i = 0; i < grantResults.length; i++) {
@@ -424,7 +366,7 @@ public class HelperPermision {
         }
 
         if (allOk) {
-            if (onGetPermision != null) onGetPermision.Allow();
+            if (onGetPermission != null) onGetPermission.Allow();
         } else if (onDenyStorage != null) {
             onDenyStorage.Allow();
         }

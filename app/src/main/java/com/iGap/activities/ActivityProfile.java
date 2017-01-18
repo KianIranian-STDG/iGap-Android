@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -31,7 +30,7 @@ import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnFileUploadForActivities;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
@@ -47,13 +46,11 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -315,7 +312,7 @@ public class ActivityProfile extends ActivityEnhanced
 //        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
 
         try {
-            HelperPermision.getStoragePermision(context, new OnGetPermision() {
+            HelperPermision.getStoragePermision(context, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     try {
@@ -352,10 +349,10 @@ public class ActivityProfile extends ActivityEnhanced
                                                if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                                                    try {
 
-                                                       HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermision() {
+                                                       HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermission() {
                                                            @Override
                                                            public void Allow() throws IOException {
-                                                               HelperPermision.getCameraPermission(ActivityProfile.this, new OnGetPermision() {
+                                                               HelperPermision.getCameraPermission(ActivityProfile.this, new OnGetPermission() {
                                                                    @Override
                                                                    public void Allow() {
                                                                        // this dialog show 2 way for choose image : gallery and camera

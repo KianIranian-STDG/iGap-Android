@@ -40,7 +40,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -77,7 +76,7 @@ import com.iGap.interfaces.OnChannelRevokeLink;
 import com.iGap.interfaces.OnChannelUpdateSignature;
 import com.iGap.interfaces.OnChannelUpdateUsername;
 import com.iGap.interfaces.OnFileUploadForActivities;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -128,16 +127,14 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -1093,7 +1090,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             public boolean onClick(View v, IAdapter adapter, final ContactItemGroupProfile item, final int position) {
 
                 try {
-                    HelperPermision.getStoragePermision(ActivityChannelProfile.this, new OnGetPermision() {
+                    HelperPermision.getStoragePermision(ActivityChannelProfile.this, new OnGetPermission() {
                         @Override
                         public void Allow() {
                             ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
@@ -1420,10 +1417,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
                         try {
 
-                            HelperPermision.getStoragePermision(ActivityChannelProfile.this, new OnGetPermision() {
+                            HelperPermision.getStoragePermision(ActivityChannelProfile.this, new OnGetPermission() {
                                 @Override
                                 public void Allow() throws IOException {
-                                    HelperPermision.getCameraPermission(ActivityChannelProfile.this, new OnGetPermision() {
+                                    HelperPermision.getCameraPermission(ActivityChannelProfile.this, new OnGetPermission() {
                                         @Override
                                         public void Allow() {
                                             // this dialog show 2 way for choose image : gallery and camera

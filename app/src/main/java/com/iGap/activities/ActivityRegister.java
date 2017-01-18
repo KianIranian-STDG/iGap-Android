@@ -32,7 +32,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -42,7 +41,7 @@ import com.iGap.adapter.AdapterDialog;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnInfoCountryResponse;
 import com.iGap.interfaces.OnSmsReceive;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -67,13 +66,11 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-
+import io.realm.Realm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
@@ -162,7 +159,7 @@ public class ActivityRegister extends ActivityEnhanced {
         });
 
         try {
-            HelperPermision.getSmsPermision(ActivityRegister.this, new OnGetPermision() {
+            HelperPermision.getSmsPermision(ActivityRegister.this, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     registerReceiver(smsReceiver, filter);

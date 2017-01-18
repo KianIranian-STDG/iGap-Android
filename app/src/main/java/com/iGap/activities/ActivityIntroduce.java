@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.vending.licensing.AESObfuscator;
 import com.google.android.vending.licensing.LicenseChecker;
 import com.google.android.vending.licensing.LicenseCheckerCallback;
@@ -33,7 +32,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
 import com.iGap.helper.HelperPermision;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnReceiveInfoLocation;
 import com.iGap.interfaces.OnReceivePageInfoTOS;
 import com.iGap.module.CustomCircleImage;
@@ -41,10 +40,8 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
 import com.iGap.request.RequestInfoPage;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
-
-import java.io.IOException;
-
 import io.realm.Realm;
+import java.io.IOException;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityIntroduce extends ActivityEnhanced {
@@ -89,7 +86,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         G.makeFolder();
 
-        HelperPermision.onDenyStorage = new OnGetPermision() {
+        HelperPermision.onDenyStorage = new OnGetPermission() {
             @Override
             public void Allow() throws RuntimeException {
 
@@ -97,7 +94,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermision() {
+                            HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermission() {
                                 @Override
                                 public void Allow() {
                                     G.makeFolder();
@@ -124,7 +121,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         };
 
         try {
-            HelperPermision.getStoragePermision(this, new OnGetPermision() {
+            HelperPermision.getStoragePermision(this, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     G.makeFolder();

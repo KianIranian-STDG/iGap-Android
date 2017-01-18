@@ -10,12 +10,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
-
 import com.iGap.R;
 import com.iGap.helper.HelperPermision;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.libs.rippleeffect.RippleView;
-
 import java.io.IOException;
 
 /**
@@ -222,7 +220,7 @@ public class Activity_QrPayment extends ActivityEnhanced {
                 public void onClick(View view) {
 
                     try {
-                        HelperPermision.getCameraPermission(Activity_QrPayment.this, new OnGetPermision() {
+                        HelperPermision.getCameraPermission(Activity_QrPayment.this, new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 deSelectOtherView();

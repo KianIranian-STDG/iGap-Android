@@ -57,7 +57,7 @@ import com.iGap.interfaces.OnClientGetRoomListResponse;
 import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnConnectionChangeState;
 import com.iGap.interfaces.OnDraftMessage;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupLeft;
@@ -172,7 +172,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
         if (!isGetContactList) {
             try {
-                HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermision() {
+                HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         importContactList();

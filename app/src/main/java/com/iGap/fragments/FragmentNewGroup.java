@@ -30,7 +30,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -47,7 +46,7 @@ import com.iGap.interfaces.OnChannelCreate;
 import com.iGap.interfaces.OnChatConvertToGroup;
 import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupCreate;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -71,14 +70,12 @@ import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestGroupAvatarAdd;
 import com.iGap.request.RequestGroupCreate;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import io.realm.Realm;
 
 import static com.iGap.G.context;
 import static com.iGap.R.id.fragmentContainer;
@@ -154,7 +151,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                             case 0: {
 
                                 try {
-                                    HelperPermision.getStoragePermision(context, new OnGetPermision() {
+                                    HelperPermision.getStoragePermision(context, new OnGetPermission() {
                                         @Override
                                         public void Allow() {
                                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -173,10 +170,10 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                                 if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                                     try {
 
-                                        HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                                        HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
                                             @Override
                                             public void Allow() throws IOException {
-                                                HelperPermision.getCameraPermission(getActivity(), new OnGetPermision() {
+                                                HelperPermision.getCameraPermission(getActivity(), new OnGetPermission() {
                                                     @Override
                                                     public void Allow() {
                                                         // this dialog show 2 way for choose image : gallery and camera
@@ -292,7 +289,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
             @Override
             public void onComplete(RippleView rippleView) throws IOException {
 
-                HelperPermision.getStoragePermision(getActivity(), new OnGetPermision() {
+                HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
                     @Override
                     public void Allow() {
                         showDialogSelectGallery();

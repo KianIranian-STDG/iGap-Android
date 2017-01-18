@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -26,7 +25,7 @@ import com.iGap.adapter.items.ContactItem;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnFileDownloadResponse;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserContactGetList;
 import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -53,12 +52,10 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;
@@ -107,7 +104,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         isImportContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, false);
         if (!isImportContactList) {
             try {
-                HelperPermision.getContactPermision(getActivity(), new OnGetPermision() {
+                HelperPermision.getContactPermision(getActivity(), new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         importContactList();

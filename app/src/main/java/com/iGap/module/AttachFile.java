@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -35,9 +34,8 @@ import com.iGap.activities.ActivityPaint;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.proto.ProtoGlobal;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -147,7 +145,7 @@ public class AttachFile {
 
     public void requestPaint() throws IOException {
 
-        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(context, ActivityPaint.class);
@@ -166,7 +164,7 @@ public class AttachFile {
         }
 
 
-        HelperPermision.getCameraPermission(context, new OnGetPermision() {
+        HelperPermision.getCameraPermission(context, new OnGetPermission() {
             @Override
             public void Allow() throws IOException {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -306,7 +304,7 @@ public class AttachFile {
         //((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
 
 
-        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent();
@@ -325,7 +323,7 @@ public class AttachFile {
     //*************************************************************************************************************
     public void requestOpenGalleryForVideoMultipleSelect() throws IOException {
 
-        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent();
@@ -344,7 +342,7 @@ public class AttachFile {
     //*************************************************************************************************************
     public void requestOpenGalleryForImageSingleSelect() throws IOException {
 
-        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -366,7 +364,7 @@ public class AttachFile {
             return;
         }
 
-        HelperPermision.getCameraPermission(context, new OnGetPermision() {
+        HelperPermision.getCameraPermission(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
@@ -427,7 +425,7 @@ public class AttachFile {
         //((Activity) context).startActivityForResult(intent, request_code_pic_audi);
 
 
-        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -442,7 +440,7 @@ public class AttachFile {
     }
 
     public void requestPickFile() throws IOException {
-        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(context, ActivityExplorer.class);
@@ -454,7 +452,7 @@ public class AttachFile {
 
     public void requestPickContact() throws IOException {
 
-        HelperPermision.getContactPermision(context, new OnGetPermision() {
+        HelperPermision.getContactPermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
@@ -472,7 +470,7 @@ public class AttachFile {
 
         this.complete = complete;
 
-        HelperPermision.getLocationPermision(context, new OnGetPermision() {
+        HelperPermision.getLocationPermission(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 getPosition();
@@ -532,7 +530,7 @@ public class AttachFile {
     public void requestOpenDocumentFolder() throws IOException {
 
 
-        HelperPermision.getStoragePermision(context, new OnGetPermision() {
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(context, ActivityExplorer.class);

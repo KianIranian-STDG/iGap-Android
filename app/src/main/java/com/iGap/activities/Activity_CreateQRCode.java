@@ -8,16 +8,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.iGap.R;
 import com.iGap.helper.HelperPermision;
-import com.iGap.interfaces.OnGetPermision;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.libs.rippleeffect.RippleView;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +73,7 @@ public class Activity_CreateQRCode extends ActivityEnhanced {
             public void onClick(View view) {
 
                 try {
-                    HelperPermision.getStoragePermision(Activity_CreateQRCode.this, new OnGetPermision() {
+                    HelperPermision.getStoragePermision(Activity_CreateQRCode.this, new OnGetPermission() {
                         @Override
                         public void Allow() {
                             CreateBarcode();
