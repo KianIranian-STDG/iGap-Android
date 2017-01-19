@@ -156,7 +156,7 @@ public class HelperDownloadFile {
         updateView(item);
 
         ProtoFileDownload.FileDownload.Selector selector = item.selector;
-        String identity = item.token + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset;
+        String identity = item.token + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset + '*' + true;
 
         new RequestFileDownload().download(item.token, item.offset, (int) item.size, selector, identity);
 

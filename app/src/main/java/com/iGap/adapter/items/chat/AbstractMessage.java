@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -64,6 +65,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
+    public ArrayMap<String, String> downloadedList = new ArrayMap<>();
     public ProtoGlobal.Room.Type type;
 
     enum DownLoadType {
@@ -239,6 +241,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
         Log.i("WWW", "12");
+
+        try {
+            if (downloadedList.containsKey(mMessage.messageID)) {
+                String _path = downloadedList.get(mMessage.messageID);
+                onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
+
+                if (holder.itemView != null) downloadedList.remove(mMessage.messageID);
+            }
+        } catch (Exception e) {
+
+        }
+
+
+
     }
 
     /**
@@ -817,12 +833,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         final String _path = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(name);
 
+        final String _messagID = mMessage.messageID;
+
         if (token != null && token.length() > 0 && size > 0) {
 
             HelperDownloadFile.startDoanload(token, name, size, selector, "", new HelperDownloadFile.UpdateListener() {
                 @Override public void OnProgress(String token, int progress) {
 
-                    if (progress == 100) onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
+                    if (progress == 100) {
+                        onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
+
+                        downloadedList.put(_messagID, _path);
+                    }
                 }
 
                 @Override public void OnError(String token) {

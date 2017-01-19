@@ -318,7 +318,7 @@ public class HelperAvatar {
                 fileSize = realmAttachment.getSmallThumbnail().getSize();
             }
 
-            String identity = realmAttachment.getToken() + '*' + selector.toString() + '*' + fileSize + '*' + fileName + '*' + 0;
+            String identity = realmAttachment.getToken() + '*' + selector.toString() + '*' + fileSize + '*' + fileName + '*' + 0 + '*' + false;
 
             new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector, identity);
 
@@ -338,7 +338,7 @@ public class HelperAvatar {
             } else {
                 // I don't use offset in getting thumbnail
                 try {
-                    String identity = token + '*' + selector.toString() + '*' + fileSize + '*' + fileName + '*' + offset;
+                    String identity = token + '*' + selector.toString() + '*' + fileSize + '*' + fileName + '*' + offset + '*' + false;
 
                     new RequestFileDownload().download(token, offset, (int) fileSize, selector, identity);
                 } catch (IllegalStateException e) {
