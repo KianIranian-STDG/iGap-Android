@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <string name="ga_trackingId">UA-69727923-3</string>
+  <string name="ga_trackingId">UA-89789834-5</string>
 
   <bool name="ga_autoActivityTracking">true</bool>
   <bool name="ga_reportUncaughtExceptions">true</bool>

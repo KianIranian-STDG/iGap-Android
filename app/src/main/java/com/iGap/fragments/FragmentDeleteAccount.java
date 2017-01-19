@@ -70,12 +70,13 @@ public class FragmentDeleteAccount extends Fragment {
                                 getSms(message);
                             }
                         }, 500);
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                IncomingSms.markMessageRead(phoneNumber, message);
-                            }
-                        }, 2000);
+
+                        //G.handler.postDelayed(new Runnable() {
+                        //    @Override
+                        //    public void run() {
+                        //        IncomingSms.markMessageRead(phoneNumber, message);
+                        //    }
+                        //}, 2000);
 
                     }
                 } catch (Exception e1) {

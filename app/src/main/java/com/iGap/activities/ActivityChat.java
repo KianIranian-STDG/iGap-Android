@@ -1675,7 +1675,7 @@ public class ActivityChat extends ActivityEnhanced
 
             // scrool to unread position
 
-            addLayotuUnreadMessage();
+            addLayoutUnreadMessage();
 
 
         }
@@ -2075,19 +2075,19 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    private void addLayotuUnreadMessage() {
+    private void addLayoutUnreadMessage() {
 
         int unreadPosition = 0;
-        int timelayoutCount = 0;
+        int timeLayoutCount = 0;
 
         for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
             try {
                 if ((mAdapter.getAdapterItem(i) instanceof TimeItem)) {
-                    if (i > 0) timelayoutCount++;
+                    if (i > 0) timeLayoutCount++;
                     continue;
                 }
 
-                if (mAdapter.getAdapterItem(i).mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) || mAdapter.getAdapterItem(i).mMessage.isSenderMe()) {
+                if (mAdapter.getAdapterItem(i).mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) || mAdapter.getAdapterItem(i).mMessage.isSenderMe() || mAdapter.getAdapterItem(i).mMessage.isAuthorMe()) {
                     unreadPosition = i;
                     break;
                 }
@@ -2095,7 +2095,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         }
 
-        int unreadMessageCount = mAdapter.getAdapterItemCount() - 1 - unreadPosition - timelayoutCount;
+        int unreadMessageCount = mAdapter.getAdapterItemCount() - 1 - unreadPosition - timeLayoutCount;
 
         if (unreadMessageCount > 0) {
             RealmRoomMessage unreadMessage = new RealmRoomMessage();

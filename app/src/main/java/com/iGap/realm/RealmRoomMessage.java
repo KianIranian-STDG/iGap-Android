@@ -44,6 +44,8 @@ import org.parceler.Parcel;
     private RealmRoomMessage forwardMessage;
     private RealmRoomMessage replyTo;
     private boolean showMessage = true;
+    private String authorHash;
+    //TODO [Saeed Mozaffari] [2017-01-19 9:28 AM] - use RealmAuthor instead of author hash
 
     // for channel
     /*private int voteUp;
@@ -191,7 +193,12 @@ import org.parceler.Parcel;
         message.setHasMessageLink(HelperUrl.hasInMessageLink(input.getMessage()));
 
         message.setStatus(input.getStatus().toString());
-        message.setUserId(input.getAuthor().getUser().getUserId());
+        if (input.getAuthor().hasUser()) {
+            message.setUserId(input.getAuthor().getUser().getUserId());
+        } else {
+            message.setUserId(0);
+        }
+        message.setAuthorHash(input.getAuthor().getHash());
         if (!forwardOrReply) {
             message.setDeleted(input.getDeleted());
         }
@@ -437,9 +444,28 @@ import org.parceler.Parcel;
         this.replyTo = replyTo;
     }
 
+    public String getAuthorHash() {
+        return authorHash;
+    }
+
+    public void setAuthorHash(String authorHash) {
+        this.authorHash = authorHash;
+    }
+
     public boolean isSenderMe() {
         Realm realm = Realm.getDefaultInstance();
         boolean output = getUserId() == realm.where(RealmUserInfo.class).findFirst().getUserId();
+        realm.close();
+        return output;
+    }
+
+    public boolean isAuthorMe() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        boolean output = false;
+        if (realmUserInfo != null && getAuthorHash() != null) {
+            output = getAuthorHash().equals(realmUserInfo.getAuthorHash());
+        }
         realm.close();
         return output;
     }

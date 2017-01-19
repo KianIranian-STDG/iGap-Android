@@ -20,18 +20,17 @@ import org.parceler.Parcels;
  * used for chat messages
  */
 public class StructMessageInfo implements Parcelable {
-    public static final Parcelable.Creator<StructMessageInfo> CREATOR =
-            new Parcelable.Creator<StructMessageInfo>() {
-                @Override
-                public StructMessageInfo createFromParcel(Parcel source) {
-                    return new StructMessageInfo(source);
-                }
+    public static final Parcelable.Creator<StructMessageInfo> CREATOR = new Parcelable.Creator<StructMessageInfo>() {
+        @Override
+        public StructMessageInfo createFromParcel(Parcel source) {
+            return new StructMessageInfo(source);
+        }
 
-                @Override
-                public StructMessageInfo[] newArray(int size) {
-                    return new StructMessageInfo[size];
-                }
-            };
+        @Override
+        public StructMessageInfo[] newArray(int size) {
+            return new StructMessageInfo[size];
+        }
+    };
     public View view = null;
     public long roomId;
     public String messageID = "1";
@@ -61,9 +60,7 @@ public class StructMessageInfo implements Parcelable {
     public StructRegisteredInfo userInfo;
     public StructMessageAttachment senderAvatar;
     public long time;
-    /*public int voteUp;
-    public int voteDown;
-    public int viewsLabel;*/
+    public String authorHash;
     public StructChannelExtra channelExtra;
 
     public StructMessageInfo() {
@@ -303,6 +300,7 @@ public class StructMessageInfo implements Parcelable {
         }
         messageInfo.messageText = roomMessage.getMessage();
         messageInfo.senderID = Long.toString(roomMessage.getUserId());
+        messageInfo.authorHash = roomMessage.getAuthorHash();
         if (roomMessage.getUserId() == userId) {
             messageInfo.sendType = MyType.SendType.send;
         } else if (roomMessage.getUserId() != userId) {
@@ -360,6 +358,17 @@ public class StructMessageInfo implements Parcelable {
         } finally {
             realm.close();
         }
+    }
+
+    public boolean isAuthorMe() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        boolean output = false;
+        if (realmUserInfo != null && authorHash != null) {
+            output = authorHash.equals(realmUserInfo.getAuthorHash());
+        }
+        realm.close();
+        return output;
     }
 
     public boolean isTimeOrLogMessage() {

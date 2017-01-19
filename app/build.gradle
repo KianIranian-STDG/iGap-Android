@@ -23,7 +23,7 @@ android {
     buildToolsVersion '25.0.1'
 
     defaultConfig {
-        applicationId "net.iGap"
+        applicationId "im.iGap"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1

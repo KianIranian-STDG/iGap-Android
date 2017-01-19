@@ -733,7 +733,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     /**
      * on select room menu
      *
-     * @param message  message text
+     * @param message message text
      * @param position position dfdfdfdf
      */
     private void onSelectRoomMenu(String message, int position, RoomItem item) {
@@ -812,8 +812,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
                         if (Room.getLastMessage() != null) {
                             if (Room.getLastMessage().getUpdateTime() > 0) {
-                                if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime())
-                                    Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
+                                if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
                             }
                         }
                     }
@@ -1466,7 +1465,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                                     List<RoomItem> items = mAdapter.getAdapterItems();
                                     type = null;
                                     for (int i = 0; i < items.size(); i++) {
-                                        if (items.get(i).getInfo().getId() == roomId) {
+                                        if (items.get(i).getInfo().isValid() && items.get(i).getInfo().getId() == roomId) {
                                             type = items.get(i).getInfo().getType();
                                         }
                                     }

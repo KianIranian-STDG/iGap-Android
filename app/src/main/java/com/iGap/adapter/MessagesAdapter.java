@@ -175,9 +175,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
             if (pos >= 0) {
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         item.updateProgress(new OnProgressUpdate() {
-                            @Override public void onProgressUpdate() {
+                            @Override
+                            public void onProgressUpdate() {
                                 notifyAdapterItemChanged(pos);
                                 //set(pos, item);
                             }
@@ -227,7 +229,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
                             final int finalI = i;
                             item.onRequestDownloadFile(offset, progress, new OnFileDownload() {
-                                @Override public void onFileDownloaded() {
+                                @Override
+                                public void onFileDownloaded() {
                                     notifyItemChanged(finalI);
                                 }
                             });
@@ -271,7 +274,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                         if (item.mMessage.attachment.token.equalsIgnoreCase(token)) {
                             final int finalI = i;
                             item.onRequestDownloadThumbnail(token, true, new OnFileDownload() {
-                                @Override public void onFileDownloaded() {
+                                @Override
+                                public void onFileDownloaded() {
                                     notifyItemChanged(finalI);
                                 }
                             });
@@ -287,7 +291,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public void updateChatAvatar(long userId, RealmRegisteredInfo registeredInfo) {
         for (Item item : getAdapterItems()) {
-            if (!item.mMessage.isSenderMe() && item.mMessage.senderID.equalsIgnoreCase(Long.toString(userId))) {
+            if (item.mMessage != null && !item.mMessage.isSenderMe() && item.mMessage.senderID.equalsIgnoreCase(Long.toString(userId))) {
                 int pos = getAdapterItems().indexOf(item);
                 item.mMessage.senderAvatar = StructMessageAttachment.convert(registeredInfo.getLastAvatar());
                 item.mMessage.initials = registeredInfo.getInitials();
@@ -331,26 +335,28 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction, long mainMessageId) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
-            /**
-             * if not forwarded message update structure otherwise just notify position
-             * mainMessageId == 0 means that this message not forwarded
-             */
-            if (mainMessageId == 0) {
-                if (Long.toString(messageInfo.mMessage.roomId).equals(Long.toString(roomId)) && messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
-                    int pos = items.indexOf(messageInfo);
-                    if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-                        messageInfo.mMessage.channelExtra.thumbsUp = vote;
-                    } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
-                        messageInfo.mMessage.channelExtra.thumbsDown = vote;
+            if (messageInfo.mMessage != null) {
+                /**
+                 * if not forwarded message update structure otherwise just notify position
+                 * mainMessageId == 0 means that this message not forwarded
+                 */
+                if (mainMessageId == 0) {
+                    if (Long.toString(messageInfo.mMessage.roomId).equals(Long.toString(roomId)) && messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
+                        int pos = items.indexOf(messageInfo);
+                        if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                            messageInfo.mMessage.channelExtra.thumbsUp = vote;
+                        } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
+                            messageInfo.mMessage.channelExtra.thumbsDown = vote;
+                        }
+                        set(pos, messageInfo);
+                        break;
                     }
-                    set(pos, messageInfo);
-                    break;
-                }
-            } else {
-                if (messageInfo.mMessage.messageID.equals(Long.toString(mainMessageId))) {
-                    int pos = items.indexOf(messageInfo);
-                    set(pos, messageInfo);
-                    break;
+                } else {
+                    if (messageInfo.mMessage.messageID.equals(Long.toString(mainMessageId))) {
+                        int pos = items.indexOf(messageInfo);
+                        set(pos, messageInfo);
+                        break;
+                    }
                 }
             }
         }
@@ -362,16 +368,18 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public void updateMessageState(long messageId, String voteUp, String voteDown, String viewsLabel) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
-            if (messageInfo.mMessage.forwardedFrom != null && messageInfo.mMessage.forwardedFrom.getMessageId() == messageId) {
-                int pos = items.indexOf(messageInfo);
-                set(pos, messageInfo);
-            } else if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
-                int pos = items.indexOf(messageInfo);
-                messageInfo.mMessage.channelExtra.thumbsUp = voteUp;
-                messageInfo.mMessage.channelExtra.thumbsDown = voteDown;
-                messageInfo.mMessage.channelExtra.viewsLabel = viewsLabel;
-                set(pos, messageInfo);
-                break;
+            if (messageInfo.mMessage != null) {
+                if (messageInfo.mMessage.forwardedFrom != null && messageInfo.mMessage.forwardedFrom.getMessageId() == messageId) {
+                    int pos = items.indexOf(messageInfo);
+                    set(pos, messageInfo);
+                } else if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
+                    int pos = items.indexOf(messageInfo);
+                    messageInfo.mMessage.channelExtra.thumbsUp = voteUp;
+                    messageInfo.mMessage.channelExtra.thumbsDown = voteDown;
+                    messageInfo.mMessage.channelExtra.viewsLabel = viewsLabel;
+                    set(pos, messageInfo);
+                    break;
+                }
             }
         }
     }
@@ -395,8 +403,12 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      */
     public Item getItemByFileIdentity(long messageId) {
         for (Item item : getAdapterItems()) {
-            if (item != null) if (item.mMessage != null) if (item.mMessage.messageID.equalsIgnoreCase(Long.toString(messageId))) {
-                return item;
+            if (item != null) {
+                if (item.mMessage != null) {
+                    if (item.mMessage.messageID.equalsIgnoreCase(Long.toString(messageId))) {
+                        return item;
+                    }
+                }
             }
         }
         return null;
@@ -439,12 +451,16 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
         for (int i = items.size() - 1; i >= 0; i--) {
             Item messageInfo = items.get(i);
-            if (messageInfo.mMessage != null) if (messageInfo.mMessage.messageID != null) if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
-                    messageInfo.mMessage.status = status.toString();
-                set(i, messageInfo);
-                    break;
+            if (messageInfo.mMessage != null) {
+                if (messageInfo.mMessage.messageID != null) {
+                    if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
+                        messageInfo.mMessage.status = status.toString();
+                        set(i, messageInfo);
+                        break;
+                    }
                 }
             }
+        }
     }
 
     /**
@@ -458,12 +474,16 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         List<Item> items = getAdapterItems();
         for (int i = items.size() - 1; i >= 0; i--) {
             Item messageInfo = items.get(i);
-            if (messageInfo.mMessage != null) if (messageInfo.mMessage.messageID != null) if (messageInfo.mMessage.messageID.equals(identity)) {
-                messageInfo.mMessage.status = status.toString();
-                messageInfo.mMessage.messageID = Long.toString(messageId);
-                set(i, messageInfo);
-                break;
+            if (messageInfo.mMessage != null) {
+                if (messageInfo.mMessage.messageID != null) {
+                    if (messageInfo.mMessage.messageID.equals(identity)) {
+                        messageInfo.mMessage.status = status.toString();
+                        messageInfo.mMessage.messageID = Long.toString(messageId);
+                        set(i, messageInfo);
+                        break;
+                    }
                 }
+            }
         }
     }
 

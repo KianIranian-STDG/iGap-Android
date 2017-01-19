@@ -135,7 +135,7 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPermission(context, new String[]{context.getResources().getString(R.string.permission_contact)}, MY_PERMISSIONS_CONTACTS, context.getResources().getString(R.string.permission_contact));
+            getPermission(context, mStringArray, MY_PERMISSIONS_CONTACTS, context.getResources().getString(R.string.permission_contact));
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }
