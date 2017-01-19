@@ -738,15 +738,15 @@
     <string name="unread_message">Unread Message</string>
 
 
-    <string name="you_need_to_allow">"You need to allow"</string>
-    <string name="permission_camera">for camera</string>
-    <string name="permission_storage">for storage</string>
-    <string name="permission_contact">for contact</string>
-    <string name="permission_calender">for calender</string>
-    <string name="permission_location">for location</string>
-    <string name="permission_record_audio">for record audio</string>
-    <string name="permission_phone">for phone</string>
-    <string name="permission_sms">for sms</string>
+    <string name="you_need_to_allow">"iGap need access to your"</string>
+    <string name="permission_camera">Camera</string>
+    <string name="permission_storage">Storage</string>
+    <string name="permission_contact">Contact</string>
+    <string name="permission_calender">Calender</string>
+    <string name="permission_location">Location</string>
+    <string name="permission_record_audio">Record Audio</string>
+    <string name="permission_phone">Call Phone</string>
+    <string name="permission_sms">Recive Sms</string>
 
     <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
