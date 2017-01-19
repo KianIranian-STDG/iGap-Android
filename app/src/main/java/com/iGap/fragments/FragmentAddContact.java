@@ -230,15 +230,13 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             }
         });
 
-//        G.onContactImport = new OnUserContactImport() {
-//            @Override
-//            public void onContactImport() {
-//
-//                if ( RegisteredContactsFragment.onImportComplete !=null) RegisteredContactsFragment.onImportComplete.complete(true,"","");
-//
-//                Log.i("GGGGGGG", "0000 onImportComplete.complete: ");
-//            }
-//        };
+        G.onContactImport = new OnUserContactImport() {
+            @Override
+            public void onContactImport() {
+                if (RegisteredContactsFragment.onImportComplete != null)
+                    RegisteredContactsFragment.onImportComplete.complete(true, "", "");
+            }
+        };
 
     }
 

@@ -33,6 +33,7 @@ import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoFileDownload;
@@ -75,7 +76,7 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
     private ProgressBar prgWaiting;
     private ItemAdapter itemAdapter;
     private List<IItem> items;
-//    public static OnComplete onImportComplete;
+    public static OnComplete onImportComplete;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -245,12 +246,15 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
         G.onUserContactGetList = new OnUserContactGetList() {
             @Override
             public void onContactGetList() {
-                if (contacts.size() == 0) {
+//                if (contacts.size() == 0) {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            contacts = Contacts.retrieve(null);
+                            contacts.clear();
+                            itemAdapter.clear();
+                            items.clear();
 
+                            contacts = Contacts.retrieve(null);
                             if (contacts != null && fastAdapter != null && itemAdapter != null) {
                                 for (StructContactInfo contact : contacts) {
                                     items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
@@ -264,17 +268,16 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
                                         decoration.invalidateHeaders();
                                     }
                                 });
-
                                 //restore selections (this has to be done after the items were added
                                 fastAdapter.withSavedInstanceState(savedInstanceState);
                                 fastAdapter.notifyDataSetChanged();
                             }
 
-                            Log.i("GGGGGGG", "o9999 nContactGetList: " + contacts.size());
+
                         }
                     });
                 }
-            }
+//            }
         };
         if (contacts.size() == 0) {
             /**
@@ -300,13 +303,12 @@ public class RegisteredContactsFragment extends Fragment implements OnFileDownlo
             fastAdapter.withSavedInstanceState(savedInstanceState);
         }
 
-//        onImportComplete = new OnComplete() {
-//            @Override
-//            public void complete(boolean result, String messageOne, String MessageTow) {
-////                Log.i("GGGGGGG", "complete RequestUserContactsGetList(): " + contacts.size());
-////                new RequestUserContactsGetList().userContactGetList();
-//            }
-//        };
+        onImportComplete = new OnComplete() {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
+                new RequestUserContactsGetList().userContactGetList();
+            }
+        };
 
 
     }
