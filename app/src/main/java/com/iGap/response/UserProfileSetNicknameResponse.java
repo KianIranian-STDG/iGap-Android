@@ -29,6 +29,10 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+
+        if (G.onUserProfileSetNickNameResponse != null) {
+            G.onUserProfileSetNickNameResponse.onUserProfileNickNameTimeOut();
+        }
     }
 
     @Override

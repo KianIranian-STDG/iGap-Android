@@ -12,4 +12,6 @@ public interface OnUserProfileSetNickNameResponse {
     void onUserProfileNickNameResponse(String nickName, ProtoResponse.Response response);
 
     void onUserProfileNickNameError(int majorCode, int minorCode);
+
+    void onUserProfileNickNameTimeOut();
 }

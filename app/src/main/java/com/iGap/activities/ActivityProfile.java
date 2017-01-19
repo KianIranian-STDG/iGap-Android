@@ -22,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -46,11 +47,13 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-import io.realm.Realm;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -151,6 +154,7 @@ public class ActivityProfile extends ActivityEnhanced
 
                         if (!nickName.equals("")) {
 
+                            showProgressBar();
                             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
@@ -190,23 +194,22 @@ public class ActivityProfile extends ActivityEnhanced
 
             @Override
             public void onUserProfileNickNameError(int majorCode, int minorCode) {
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        hideProgressBar();
                     }
                 });
+            }
 
-                if (majorCode == 112 && minorCode == 1) {
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        }
-                    });
-                }
+            @Override
+            public void onUserProfileNickNameTimeOut() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideProgressBar();
+                    }
+                });
             }
         };
 
@@ -238,6 +241,7 @@ public class ActivityProfile extends ActivityEnhanced
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        hideProgressBar();
                                         Intent intent = new Intent(context, ActivityMain.class);
                                         intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
                                         startActivity(intent);
@@ -258,7 +262,7 @@ public class ActivityProfile extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        hideProgressBar();
                     }
                 });
 
@@ -269,7 +273,7 @@ public class ActivityProfile extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        hideProgressBar();
                     }
                 });
             }
