@@ -41,7 +41,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
                     if (realmRegisteredInfo == null) {
                         realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
-                        realmRegisteredInfo.setShowSpamBar(true);
+                        realmRegisteredInfo.setDoNotshowSpamBar(false);
                     }
                     realmRegisteredInfo.fillRegisteredUserInfo(registerUser, realmRegisteredInfo);
 

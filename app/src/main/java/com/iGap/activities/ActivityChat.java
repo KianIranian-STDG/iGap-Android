@@ -510,7 +510,7 @@ public class ActivityChat extends ActivityEnhanced
 
         if (realmRegisteredInfo != null) {
 
-            if (realmRegisteredInfo.isShowSpamBar()) {
+            if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
                 if (realmRegisteredInfo.isBlockUser()) {
                     txtSpamUser.setText(getResources().getString(R.string.un_block_user));
                     vgSpamUser.setVisibility(View.VISIBLE);
@@ -783,7 +783,7 @@ public class ActivityChat extends ActivityEnhanced
                         mRealm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                realmRegisteredInfo.setShowSpamBar(false);
+                                realmRegisteredInfo.setDoNotshowSpamBar(true);
                             }
                         });
 
@@ -799,7 +799,7 @@ public class ActivityChat extends ActivityEnhanced
             realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
 
             if (realmRegisteredInfo != null) {
-                if (realmRegisteredInfo.isShowSpamBar()) {
+                if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
 
                     if (phoneNumber != null) {
                         if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {

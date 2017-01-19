@@ -54,7 +54,7 @@ public class HelperPermision {
         int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPermission(context, new String[]{context.getResources().getString(R.string.permission_camera)}, MY_PERMISSIONS_CAMERA, context.getResources().getString(R.string.permission_camera));
+            getPermission(context, new String[] { Manifest.permission.CAMERA }, MY_PERMISSIONS_CAMERA, context.getResources().getString(R.string.permission_camera));
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }

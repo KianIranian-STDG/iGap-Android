@@ -25,7 +25,7 @@ public class RealmRegisteredInfo extends RealmObject {
 
     private boolean mutual;
     private boolean blockUser = false;
-    private boolean showSpamBar = true;
+    private boolean DoNotshowSpamBar = false;
 
     public static RealmRegisteredInfo putOrUpdate(ProtoGlobal.RegisteredUser input) {
         Realm realm = Realm.getDefaultInstance();
@@ -33,7 +33,7 @@ public class RealmRegisteredInfo extends RealmObject {
         RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, input.getId()).findFirst();
         if (registeredInfo == null) {
             registeredInfo = realm.createObject(RealmRegisteredInfo.class, input.getId());
-            registeredInfo.setShowSpamBar(true);
+            registeredInfo.setDoNotshowSpamBar(false);
         }
 
         registeredInfo.setUsername(input.getUsername());
@@ -166,12 +166,12 @@ public class RealmRegisteredInfo extends RealmObject {
         this.blockUser = blockUser;
     }
 
-    public boolean isShowSpamBar() {
-        return showSpamBar;
+    public boolean getDoNotshowSpamBar() {
+        return DoNotshowSpamBar;
     }
 
-    public void setShowSpamBar(boolean showSpamBar) {
-        this.showSpamBar = showSpamBar;
+    public void setDoNotshowSpamBar(boolean doNotshowSpamBar) {
+        DoNotshowSpamBar = doNotshowSpamBar;
     }
 
     public RealmList<RealmAvatar> getAvatars() {
