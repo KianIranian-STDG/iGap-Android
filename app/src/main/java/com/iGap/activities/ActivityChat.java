@@ -4905,7 +4905,7 @@ public class ActivityChat extends ActivityEnhanced
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    setUserStatus(status, time);
+                    setUserStatus(AppUtils.getStatsForUser(status), time);
                 }
             });
         }

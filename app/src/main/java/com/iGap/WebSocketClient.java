@@ -33,7 +33,8 @@ public class WebSocketClient {
         Log.e("DDD", "createSocketConnection 1");
         WebSocket websocketFactory = null;
         try {
-            websocketFactory = new WebSocketFactory().createSocket(Config.urlWebsocket);
+            WebSocketFactory webSocketFactory = new WebSocketFactory();
+            websocketFactory = webSocketFactory.createSocket(Config.urlWebsocket);
             websocketFactory.addListener(new WebSocketAdapter() {
 
                 @Override
@@ -121,13 +122,13 @@ public class WebSocketClient {
         Log.e("DDD", "waitingForReconnecting : " + waitingForReconnecting);
 
         if (!waitingForReconnecting && (webSocketClient == null || !webSocketClient.isOpen())) {
-            Log.e("DDD", "getInstance 1");
+            Log.e("DDD", "getInstance create new");
             waitingForReconnecting = true;
             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
             checkGetInstanceSuccessfully();
             return webSocketClient = createSocketConnection();
         } else {
-            Log.e("DDD", "getInstance 2");
+            Log.e("DDD", "getInstance return old");
             return webSocketClient;
         }
     }
@@ -180,6 +181,7 @@ public class WebSocketClient {
     private static void checkSocketConnection() {
 
         if (webSocketClient == null || !webSocketClient.isOpen()) {
+            Log.i("SOC_WebSocket", "Need For reconnect");
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
