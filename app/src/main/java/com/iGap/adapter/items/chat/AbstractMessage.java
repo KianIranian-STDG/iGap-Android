@@ -883,7 +883,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst().getAttachment().setLocalFilePath(AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
+                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
+                        if (realmRoomMessage != null && realmRoomMessage.getAttachment() != null) {
+                            realmRoomMessage.getAttachment().setLocalFilePath(AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + fileName);
+                        }
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override

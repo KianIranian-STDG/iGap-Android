@@ -15,6 +15,7 @@ import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.BuildConfig;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -563,7 +565,13 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             userRegister();
                             btnStart.setEnabled(false);
-                            countDownTimer = new CountDownTimer(Config.COUNTER_TIMER, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
+                            long time = 0;
+                            if (BuildConfig.DEBUG) {
+                                time = 5 * DateUtils.SECOND_IN_MILLIS;
+                            } else {
+                                time = Config.COUNTER_TIMER;
+                            }
+                            countDownTimer = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
 
                                 TextView txtTimerLand;
 
@@ -819,30 +827,23 @@ public class ActivityRegister extends ActivityEnhanced {
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        dialogWait = new MaterialDialog.Builder(ActivityRegister.this)
-                .title(title)
-                .customView(R.layout.dialog_remind_time, wrapInScrollView)
-                .positiveText(R.string.B_ok)
-                .autoDismiss(false)
-                .canceledOnTouchOutside(false)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        dialogWait = new MaterialDialog.Builder(ActivityRegister.this).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        btnStart.setBackgroundColor(getResources().getColor(R.color.green));
-                        btnStart.setTextColor(getResources().getColor(R.color.white));
-                        btnStart.setEnabled(true);
-                        btnChoseCountry.setEnabled(true);
-                        btnChoseCountry.setTextColor(getResources().getColor(R.color.black_register));
-                        edtPhoneNumber.setEnabled(true);
-                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.black_register));
-                        edtCodeNumber.setTextColor(getResources().getColor(R.color.black_register));
-                        txtAgreement_register.setVisibility(View.VISIBLE);
-                        layout_verify.setVisibility(View.GONE);
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+                btnStart.setBackgroundColor(getResources().getColor(R.color.green));
+                btnStart.setTextColor(getResources().getColor(R.color.white));
+                btnStart.setEnabled(true);
+                btnChoseCountry.setEnabled(true);
+                btnChoseCountry.setTextColor(getResources().getColor(R.color.black_register));
+                edtPhoneNumber.setEnabled(true);
+                edtPhoneNumber.setTextColor(getResources().getColor(R.color.black_register));
+                edtCodeNumber.setTextColor(getResources().getColor(R.color.black_register));
+                txtAgreement_register.setVisibility(View.VISIBLE);
+                layout_verify.setVisibility(View.GONE);
+                dialog.dismiss();
+            }
+        }).show();
 
         View v = dialogWait.getCustomView();
 
@@ -984,16 +985,12 @@ public class ActivityRegister extends ActivityEnhanced {
                         public void run() {
                             // Verification code is expired
                             // TODO: 9/25/2016 Error 107 - USER_VERIFY_EXPIRED_CODE
-                            new MaterialDialog.Builder(ActivityRegister.this)
-                                    .title(R.string.USER_VERIFY_EXPIRED)
-                                    .content(R.string.Toast_Number_Block)
-                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                        @Override
-                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_EXPIRED).content(R.string.Toast_Number_Block).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                        }
-                                    })
-                                    .positiveText(R.string.B_ok).show();
+                                }
+                            }).positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 108) {

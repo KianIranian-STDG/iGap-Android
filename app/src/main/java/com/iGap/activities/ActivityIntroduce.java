@@ -141,7 +141,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         mLicenseCheckerCallback = new MyLicenseCheckerCallback();
         // Construct the LicenseChecker with a Policy.
         String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        mChecker = new LicenseChecker(this, new ServerManagedPolicy(this, new AESObfuscator(Config.SALT, "net.iGap", android_id)), Config.BASE64_PUBLIC_KEY);
+        mChecker = new LicenseChecker(this, new ServerManagedPolicy(this, new AESObfuscator(Config.SALT, "im.igap", android_id)), Config.BASE64_PUBLIC_KEY);
     }
 
     private void goToProgram(Bundle savedInstanceState) {
