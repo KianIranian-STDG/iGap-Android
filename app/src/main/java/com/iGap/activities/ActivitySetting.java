@@ -340,13 +340,40 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
 
             @Override
-            public void onUserProfileGetGenderError(ProtoGlobal.Gender gender) {
+            public void onUserProfileGetGenderError() {
 
+//               runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), ""+R.string.error, Snackbar.LENGTH_LONG);
+//
+//                        snack.setAction(R.string.cancel, new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                snack.dismiss();
+//                            }
+//                        });
+//                        snack.show();
+//                    }
+//                });
             }
 
             @Override
-            public void onUserProfileGetGenderTimeOut(ProtoGlobal.Gender gender) {
-
+            public void onUserProfileGetGenderTimeOut() {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), ""+R.string.time_out, Snackbar.LENGTH_LONG);
+//
+//                        snack.setAction(R.string.cancel, new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                snack.dismiss();
+//                            }
+//                        });
+//                        snack.show();
+//                    }
+//                });
             }
         };
         new RequestUserProfileGetGender().userProfileGetGender();

@@ -32,11 +32,19 @@ public class UserProfileGetGenderResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        if (G.onUserProfileGetGender != null) {
+            G.onUserProfileGetGender.onUserProfileGetGenderTimeOut();
+        }
+
     }
 
     @Override
     public void error() {
         super.error();
+        if (G.onUserProfileGetGender != null) {
+            G.onUserProfileGetGender.onUserProfileGetGenderError();
+        }
+
     }
 }
 

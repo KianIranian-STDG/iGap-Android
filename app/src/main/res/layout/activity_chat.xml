@@ -644,7 +644,7 @@
             layout="@layout/layout_attach_file"
             android:id="@+id/layout_attach_file"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/color_wheel_radius"
+            android:layout_height="@dimen/dp48"
             />
 
         <LinearLayout

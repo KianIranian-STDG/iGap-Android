@@ -11,7 +11,7 @@ public interface OnUserProfileGetGender {
 
     void onUserProfileGetGender(ProtoGlobal.Gender gender);
 
-    void onUserProfileGetGenderError(ProtoGlobal.Gender gender);
+    void onUserProfileGetGenderError();
 
-    void onUserProfileGetGenderTimeOut(ProtoGlobal.Gender gender);
+    void onUserProfileGetGenderTimeOut();
 }
