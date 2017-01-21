@@ -33,11 +33,17 @@ public class UserProfileGetEmailResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        if (G.onUserProfileGetEmail != null) {
+            G.onUserProfileGetEmail.onUserProfileGetEmailTimeOut();
+        }
     }
 
     @Override
     public void error() {
         super.error();
+        if (G.onUserProfileGetEmail != null) {
+            G.onUserProfileGetEmail.onUserProfileGetEmailError();
+        }
     }
 }
 

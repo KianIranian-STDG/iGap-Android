@@ -22,12 +22,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermission;
@@ -46,11 +48,13 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-import io.realm.Realm;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -290,13 +294,6 @@ public class ActivityProfile extends ActivityEnhanced
                 e.printStackTrace();
             }
         } else {
-//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//            pathImageUser = G.imageFile.toString() + "_" + 0 + ".jpg";
-//            pathImageFromCamera = new File(pathImageUser);
-//            uriIntent = Uri.fromFile(pathImageFromCamera);
-//            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-//            startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
-
             try {
                 new AttachFile(ActivityProfile.this).requestTakePicture();
             } catch (IOException e) {
@@ -402,6 +399,7 @@ public class ActivityProfile extends ActivityEnhanced
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
                 Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
+                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
                 intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "profile");
@@ -410,6 +408,7 @@ public class ActivityProfile extends ActivityEnhanced
 
             } else {
                 Intent intent = new Intent(ActivityProfile.this, ActivityCrop.class);
+                ImageHelper.correctRotateImage(AttachFile.imagePath, true);
                 intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "profile");

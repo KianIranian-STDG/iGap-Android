@@ -21,10 +21,10 @@ public class HelperCalculateKeepMedia {
             if (mRealmList.get(i).getAttachment() != null) {
                 long timeMedia = mRealmList.get(i).getUpdateTime() / 1000;
                 long currentTime = G.currentTime;
-                long oneWeeks = (7 * 24 * 60 * 60 * 1000);
+                long oneWeeks = (24L * 60L * 60L * 1000L);
                 long b = currentTime - timeMedia;
-                if ((b) >= oneWeeks) {
-
+                long last = b / oneWeeks;
+                if (last >= 7) {
                     String filePath = mRealmList.get(i).getAttachment().getLocalFilePath();
                     if (filePath != null) {
                         new File(filePath).delete();

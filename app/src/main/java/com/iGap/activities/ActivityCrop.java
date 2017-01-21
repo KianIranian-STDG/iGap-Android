@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperString;
@@ -25,11 +26,13 @@ import com.iGap.module.HelperCopyFile;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityCrop extends ActivityEnhanced {
@@ -134,9 +137,9 @@ public class ActivityCrop extends ActivityEnhanced {
                 if (type.equals("camera") || type.equals("crop_camera")) {
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        attachFile.dispatchTakePictureIntent();
+                        new AttachFile(ActivityCrop.this).dispatchTakePictureIntent();
                     } else {
-                        attachFile.requestTakePicture();
+                        new AttachFile(ActivityCrop.this).requestTakePicture();
                     }
 
                 } else if (type.equals("gallery")) {

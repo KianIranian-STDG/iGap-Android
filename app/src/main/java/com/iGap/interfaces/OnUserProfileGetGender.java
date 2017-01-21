@@ -10,4 +10,8 @@ import com.iGap.proto.ProtoGlobal;
 public interface OnUserProfileGetGender {
 
     void onUserProfileGetGender(ProtoGlobal.Gender gender);
+
+    void onUserProfileGetGenderError(ProtoGlobal.Gender gender);
+
+    void onUserProfileGetGenderTimeOut(ProtoGlobal.Gender gender);
 }

@@ -338,6 +338,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     }
                 });
             }
+
+            @Override
+            public void onUserProfileGetGenderError(ProtoGlobal.Gender gender) {
+
+            }
+
+            @Override
+            public void onUserProfileGetGenderTimeOut(ProtoGlobal.Gender gender) {
+
+            }
         };
         new RequestUserProfileGetGender().userProfileGetGender();
 
@@ -374,6 +384,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                     }
                 });
+            }
+
+            @Override
+            public void onUserProfileGetEmailError() {
+
+            }
+
+            @Override
+            public void onUserProfileGetEmailTimeOut() {
+
             }
         };
 

@@ -8,4 +8,8 @@ package com.iGap.interfaces;
 public interface OnUserProfileGetEmail {
 
     void onUserProfileGetEmail(String email);
+
+    void onUserProfileGetEmailError();
+
+    void onUserProfileGetEmailTimeOut();
 }
