@@ -60,6 +60,36 @@ public class VideoWithTextItem
 
             setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
+
+        if (!mMessage.hasLinkInMessage) {
+            holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override public boolean onLongClick(View v) {
+                    holder.itemView.performLongClick();
+                    return false;
+                }
+            });
+
+            holder.messageText.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (!isSelected()) {
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            return;
+                        }
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                        } else {
+                            messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+                        }
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
     }
 
     @Override

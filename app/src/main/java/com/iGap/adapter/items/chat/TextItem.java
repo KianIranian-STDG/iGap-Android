@@ -4,16 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
-import java.util.List;
-
 import io.github.meness.emoji.EmojiTextView;
+import java.util.List;
 
 public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
@@ -45,6 +42,34 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         setTextIfNeeded(holder.messageText, text);
         Log.i("QQQ", "Bind");
         //unbindView(holder);
+
+        if (!mMessage.hasLinkInMessage) {
+            holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override public boolean onLongClick(View v) {
+                    holder.itemView.performLongClick();
+                    return false;
+                }
+            });
+
+            holder.messageText.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (!isSelected()) {
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            return;
+                        }
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                        } else {
+                            messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
+                        }
+                    }
+                }
+            });
+        }
+
+
+
+
     }
 
 

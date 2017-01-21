@@ -406,6 +406,11 @@ public class ActivityChat extends ActivityEnhanced
                 G.helperNotificationAndBadge.checkAlert(false, CHANNEL, mRoomId);
             }
         }
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+
 
         final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
         updateUnreadCountRealm.executeTransactionAsync(new Realm.Transaction() {
@@ -423,11 +428,7 @@ public class ActivityChat extends ActivityEnhanced
                 updateUnreadCountRealm.close();
             }
         });
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         chatTypeStatic = chatType;
         mRoomIdStatic = mRoomId;

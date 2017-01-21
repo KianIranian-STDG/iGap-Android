@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -111,28 +112,43 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             btnSendPosition.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
 
-                    try {
-                        mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                            @Override public void onSnapshotReady(Bitmap bitmap) {
+                    if (latitude == null || longitude == null) {
 
-                                String path = saveBitmapToFile(bitmap);
+                        G.currentActivity.runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                final Snackbar snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), "Can not set position", Snackbar.LENGTH_LONG);
 
-                                close();
-
-                                if (path.length() > 0) {
-
-                                    ActivityChat activity = (ActivityChat) getActivity();
-                                    activity.sendPosition(latitude, longitude, path);
-                                }
+                                snack.setAction(R.string.cancel, new View.OnClickListener() {
+                                    @Override public void onClick(View view) {
+                                        snack.dismiss();
+                                    }
+                                });
+                                snack.show();
                             }
                         });
-                    } catch (Exception e) {
-                        Log.e("ddd", "fragment map   " + e.toString());
-                        close();
-                        ActivityChat activity = (ActivityChat) getActivity();
-                        activity.sendPosition(latitude, longitude, null);
-                    }
+                    } else {
 
+                        try {
+                            mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                                @Override public void onSnapshotReady(Bitmap bitmap) {
+
+                                    String path = saveBitmapToFile(bitmap);
+
+                                    close();
+
+                                    if (path.length() > 0) {
+                                        ActivityChat activity = (ActivityChat) getActivity();
+                                        activity.sendPosition(latitude, longitude, path);
+                                    }
+                                }
+                            });
+                        } catch (Exception e) {
+                            Log.e("ddd", "fragment map     mMap.snapshot     " + e.toString());
+                            close();
+                            ActivityChat activity = (ActivityChat) getActivity();
+                            activity.sendPosition(latitude, longitude, null);
+                        }
+                    }
 
 
                 }
@@ -231,29 +247,33 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                 }
             });
+
+            mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                @Override public boolean onMyLocationButtonClick() {
+
+                    Location location = mMap.getMyLocation();
+
+                    if (location == null) return false;
+
+                    updatePosition[0] = false;
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+
+                    if (marker != null) {
+                        marker.remove();
+                    }
+
+                    LatLng la = new LatLng(latitude, longitude);
+
+                    marker = mMap.addMarker(new MarkerOptions().position(la).title("position"));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 16));
+
+                    return false;
+                }
+            });
         }
 
-        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-            @Override public boolean onMyLocationButtonClick() {
 
-                Location location = mMap.getMyLocation();
-
-                updatePosition[0] = false;
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-
-                if (marker != null) {
-                    marker.remove();
-                }
-
-                LatLng la = new LatLng(latitude, longitude);
-
-                marker = mMap.addMarker(new MarkerOptions().position(la).title("position"));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 16));
-
-                return false;
-            }
-        });
     }
 
 

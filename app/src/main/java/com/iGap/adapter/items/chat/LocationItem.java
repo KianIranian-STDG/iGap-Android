@@ -7,7 +7,9 @@ import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.FragmentMap;
+import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.IMessageItem;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.proto.ProtoGlobal;
@@ -15,6 +17,7 @@ import com.iGap.realm.RealmRoomMessageLocation;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
+import java.io.IOException;
 import java.util.List;
 
 import static com.iGap.R.id.ac_ll_parent;
@@ -89,18 +92,27 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
             final RealmRoomMessageLocation finalItem = item;
             holder.imgMapPosition.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition);
-                    //  if (G.currentActivity instanceof FragmentActivity) {
-                    // ((AppCompatActivity) mContext).getSupportFragmentManager()
-                    FragmentActivity activity = (FragmentActivity) G.currentActivity;
-                    activity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
-                        .commit();
-                    //   }
 
+                    try {
+                        HelperPermision.getLocationPermission(G.currentActivity, new OnGetPermission() {
+                            @Override public void Allow() {
+
+                                FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition);
+                                //  if (G.currentActivity instanceof FragmentActivity) {
+                                // ((AppCompatActivity) mContext).getSupportFragmentManager()
+                                FragmentActivity activity = (FragmentActivity) G.currentActivity;
+                                activity.getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .addToBackStack(null)
+                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
+                                    .commit();
+                                //   }
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
