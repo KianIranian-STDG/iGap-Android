@@ -96,7 +96,8 @@ public class ActivityCrop extends ActivityEnhanced {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), imgPic);
             } else {
-                imgPic.setImageURI(uri);
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(uri.getPath()), imgPic);
+                Log.i("CCCCCCXX", "onCreate uri.getPath(): " + uri.getPath());
             }
             prgWaiting.setVisibility(View.GONE);
         }
