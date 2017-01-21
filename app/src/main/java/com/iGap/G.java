@@ -134,6 +134,7 @@ import com.iGap.interfaces.OnUserSessionGetActiveList;
 import com.iGap.interfaces.OnUserSessionLogout;
 import com.iGap.interfaces.OnUserSessionTerminate;
 import com.iGap.interfaces.OnUserUpdateStatus;
+import com.iGap.interfaces.OnUserUpdateStatusCheckLoop;
 import com.iGap.interfaces.OnUserUsernameToId;
 import com.iGap.interfaces.OnUserVerification;
 import com.iGap.interfaces.OpenFragment;
@@ -371,6 +372,7 @@ public class G extends MultiDexApplication {
     public static OnUpdateAvatar onUpdateAvatar;
     public static OnUserContactsBlock onUserContactsBlock;
     public static OnUserContactsUnBlock onUserContactsUnBlock;
+    public static OnUserUpdateStatusCheckLoop onUserUpdateStatusCheckLoop;
 
     public static File chatBackground;
     public static File IMAGE_NEW_GROUP;

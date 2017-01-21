@@ -4885,11 +4885,11 @@ public class ActivityChat extends ActivityEnhanced
                             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                                 txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime));
                             } else {
-                                txtLastSeen.setText(userStatus);
+                                txtLastSeen.setText(AppUtils.getStatsForUser(userStatus));
                             }
                         }
                         avi.setVisibility(View.GONE);
-                        txtLastSeen.setText(userStatus);
+                        //txtLastSeen.setText(userStatus);
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));

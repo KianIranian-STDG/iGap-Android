@@ -56,7 +56,7 @@ public final class AppUtils {
      * @param status UserUpdateStatus
      */
 
-    public static String setStatsForUser(String status) {
+    public static String getStatsForUser(String status) {
 
         String userStatus = "";
         if (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString())) {

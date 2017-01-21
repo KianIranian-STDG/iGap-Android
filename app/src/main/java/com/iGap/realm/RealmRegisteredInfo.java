@@ -9,8 +9,7 @@ import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 
 public class RealmRegisteredInfo extends RealmObject {
-    @PrimaryKey
-    private long id;
+    @PrimaryKey private long id;
     private String username;
     private String phoneNumber;
     private String firstName;
@@ -119,11 +118,11 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public String getStatus() {
-        return status;
+        return AppUtils.getStatsForUser(status);
     }
 
     public void setStatus(String status) {
-        this.status = AppUtils.setStatsForUser(status);
+        this.status = status;
     }
 
     public String getCacheId() {
@@ -203,7 +202,7 @@ public class RealmRegisteredInfo extends RealmObject {
      * fill object from proto to realm
      *
      * @param registeredUser proto that get from server
-     * @param info           object from RealmRegisteredInfo
+     * @param info object from RealmRegisteredInfo
      */
 
     public void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo info) {

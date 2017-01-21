@@ -5,7 +5,6 @@ import android.util.Log;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import io.realm.Realm;
@@ -100,11 +99,12 @@ public class LastSeenTimeUtil {
             Map.Entry<Long, Long> entry = it.next();
             long userId = entry.getKey();
             long value = entry.getValue();
-
+            Log.i("TTT", "TTTTT");
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
             if (realmRegisteredInfo != null) {
                 Log.i("TTT", "realmRegisteredInfo.getStatus() : " + realmRegisteredInfo.getStatus());
-                if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString()) && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
+                //if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString()) && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
+                if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
                     String showLastSeen;
                     if (timeOut(value * DateUtils.SECOND_IN_MILLIS)) {
                         showLastSeen = computeDays(realmRegisteredInfo.getLastSeen());

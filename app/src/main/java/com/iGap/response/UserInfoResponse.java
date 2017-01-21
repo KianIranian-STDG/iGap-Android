@@ -1,7 +1,6 @@
 package com.iGap.response;
 
 import com.iGap.G;
-import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserInfo;
 import com.iGap.realm.RealmAvatar;
@@ -69,7 +68,7 @@ public class UserInfoResponse extends MessageHandler {
                         }
 
                         if (G.onUserUpdateStatus != null) {
-                            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), AppUtils.setStatsForUser(builder.getUser().getStatus().toString()));
+                            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), builder.getUser().getStatus().toString());
                         }
 
                         if (G.onUserInfoResponse != null) {

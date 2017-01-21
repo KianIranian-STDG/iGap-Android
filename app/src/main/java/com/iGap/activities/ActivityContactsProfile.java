@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -48,6 +47,7 @@ import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserUpdateStatus;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
+import com.iGap.module.AppUtils;
 import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
@@ -79,16 +79,14 @@ import com.iGap.request.RequestUserContactsEdit;
 import com.iGap.request.RequestUserContactsUnblock;
 import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.File;
-import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
+import java.io.File;
+import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -116,8 +114,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     private AppBarLayout appBarLayout;
 
-    private TextView txtLastSeen, txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtPhoneNumber, txtNotifyAndSound,
-            txtNickname;
+    private TextView txtLastSeen, txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtPhoneNumber, txtNotifyAndSound, txtNickname;
     private ViewGroup vgPhoneNumber, vgSharedMedia, layoutNickname;
     private CircleImageView imgUser;
     private MaterialDesignTextView imgMenu, txtBack;
@@ -212,7 +209,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
-        if (realmRegisteredInfo != null)
+        if (realmRegisteredInfo != null) {
             if (realmRegisteredInfo.getLastAvatar() != null) {
 
                 String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
@@ -225,6 +222,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                 avatarList = realmRegisteredInfo.getAvatars();
             }
+        }
 
         RealmContacts realmUser = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
 
@@ -285,11 +283,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 Realm realm = Realm.getDefaultInstance();
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
                     FragmentShowAvatars.appBarLayout = fab;
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .addToBackStack(null)
-                            .replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat))
-                            .commit();
+                    getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat)).commit();
                 }
                 realm.close();
             }
@@ -402,8 +396,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                   final View viewFirstName = new View(ActivityContactsProfile.this);
                                                   viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
 
-                                                  LinearLayout.LayoutParams viewParams =
-                                                          new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+                LinearLayout.LayoutParams viewParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
 
                                                   TextInputLayout inputFirstName = new TextInputLayout(ActivityContactsProfile.this);
                                                   final EditText edtFirstName = new EditText(ActivityContactsProfile.this);
@@ -436,26 +429,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                   inputLastName.addView(edtLastName);
                                                   inputLastName.addView(viewLastName, viewParams);
 
-                                                  LinearLayout.LayoutParams layoutParams =
-                                                          new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                                                  ViewGroup.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                                   layoutParams.setMargins(0, 0, 0, 15);
-                                                  LinearLayout.LayoutParams lastNameLayoutParams =
-                                                          new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                                                  ViewGroup.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams lastNameLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                                   lastNameLayoutParams.setMargins(0, 15, 0, 10);
 
                                                   layoutNickname.addView(inputFirstName, layoutParams);
                                                   layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
-                                                  final MaterialDialog dialog =
-                                                          new MaterialDialog.Builder(ActivityContactsProfile.this)
-                                                                  .title(getResources().getString(R.string.pu_nikname_profileUser))
-                                                                  .positiveText(getResources().getString(R.string.B_ok))
-                                                                  .customView(layoutNickname, true)
-                                                                  .widgetColor(getResources().getColor(R.color.toolbar_background))
-                                                                  .negativeText(getResources().getString(R.string.B_cancel))
-                                                                  .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivityContactsProfile.this).title(getResources().getString(R.string.pu_nikname_profileUser)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                                                   final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                                                   positive.setEnabled(false);
@@ -534,8 +516,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                                                       long po = Long.parseLong(txtPhoneNumber.getText().toString());
                                                                                       String firstName = edtFirstName.getText().toString();
                                                                                       String lastName = edtLastName.getText().toString();
-                                                                                      new RequestUserContactsEdit().contactsEdit(po, firstName,
-                                                                                              lastName);
+                                                          new RequestUserContactsEdit().contactsEdit(po, firstName, lastName);
                                                                                       dialog.dismiss();
                                                                                   }
                                                                               }
@@ -547,8 +528,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                       @Override
                                                       public void onContactEdit(final String firstName, final String lastName) {
                                                           Realm realm1 = Realm.getDefaultInstance();
-                                                          final RealmContacts realmUser =
-                                                                  realm1.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+                                                          final RealmContacts realmUser = realm1.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
                                                           realm1.executeTransaction(new Realm.Transaction() {
                                                               @Override
                                                               public void execute(Realm realm) {
@@ -689,11 +669,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 bundle.putString("PAGE", "CONTACT");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.chi_layoutParent, fragmentNotification)
-                        .commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, fragmentNotification).commit();
             }
         });
 
@@ -765,114 +741,101 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         }
 
         if (isExist) {
-            new MaterialDialog.Builder(this).title(R.string.phone_number)
-                    .items(R.array.phone_number2)
-                    .itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override
-                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            switch (which) {
-                                case 0:
-                                    String call = "+" + Long.parseLong(txtPhoneNumber.getText().toString());
-                                    try {
-//                                        Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-//                                        phoneIntent.setData(Uri.parse("tel:" + call));
-                                        //startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
-                                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                        callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
-                                        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(callIntent);
+            new MaterialDialog.Builder(this).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback(new MaterialDialog.ListCallback() {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    switch (which) {
+                        case 0:
+                            String call = "+" + Long.parseLong(txtPhoneNumber.getText().toString());
+                            try {
+                                //                                        Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                                //                                        phoneIntent.setData(Uri.parse("tel:" + call));
+                                //startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
+                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
+                                callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(callIntent);
 
-                                    } catch (Exception ex) {
+                            } catch (Exception ex) {
 
-                                        ex.getStackTrace();
-                                    }
-                                    break;
-                                case 1:
-                                    String copy;
-                                    copy = txtPhoneNumber.getText().toString();
-                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
-                                    clipboard.setPrimaryClip(clip);
-                                    break;
+                                ex.getStackTrace();
                             }
-                        }
-                    })
-                    .show();
+                            break;
+                        case 1:
+                            String copy;
+                            copy = txtPhoneNumber.getText().toString();
+                            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
+                            clipboard.setPrimaryClip(clip);
+                            break;
+                    }
+                }
+            }).show();
         } else {
-            new MaterialDialog.Builder(this).title(R.string.phone_number)
-                    .items(R.array.phone_number)
-                    .itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override
-                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            switch (which) {
-                                case 0:
+            new MaterialDialog.Builder(this).title(R.string.phone_number).items(R.array.phone_number).itemsCallback(new MaterialDialog.ListCallback() {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    switch (which) {
+                        case 0:
 
-                                    String name = txtNickname.getText().toString();
-                                    String phone = "+" + txtPhoneNumber.getText().toString();
+                            String name = txtNickname.getText().toString();
+                            String phone = "+" + txtPhoneNumber.getText().toString();
 
-                                    ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+                            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
-                                    ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
-                                            .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-                                            .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
-                                            .build());
+                            ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI).withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null).withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null).build());
 
-                                    //------------------------------------------------------ Names
+                            //------------------------------------------------------ Names
 
-                                    ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                            .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                                            .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name)
-                                            .build());
+                            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI).withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0).withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE).withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name).build());
 
-                                    //------------------------------------------------------ Mobile Number
+                            //------------------------------------------------------ Mobile Number
 
-                                    ops.add(ContentProviderOperation.
-                                            newInsert(ContactsContract.Data.CONTENT_URI)
-                                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                            .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                                            .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
-                                            .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-                                            .build());
+                            ops.add(ContentProviderOperation.
+                                    newInsert(ContactsContract.Data.CONTENT_URI)
+                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                                    .build());
 
-                                    try {
-                                        G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-                                        addContactToServer();
-                                        Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        Toast.makeText(G.context, getString(R.string.exception) + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    break;
-                                case 1:
-
-                                    String call = "+" + Long.parseLong(txtPhoneNumber.getText().toString());
-                                    try {
-                                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                        callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
-                                        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(callIntent);
-
-                                    } catch (Exception ex) {
-
-                                        ex.getStackTrace();
-                                    }
-                                    break;
-                                case 2:
-
-                                    String copy;
-                                    copy = txtPhoneNumber.getText().toString();
-
-                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
-                                    clipboard.setPrimaryClip(clip);
-
-                                    break;
+                            try {
+                                G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                                addContactToServer();
+                                Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Toast.makeText(G.context, getString(R.string.exception) + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                        }
-                    })
-                    .show();
+
+                            break;
+                        case 1:
+
+                            String call = "+" + Long.parseLong(txtPhoneNumber.getText().toString());
+                            try {
+                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
+                                callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(callIntent);
+
+                            } catch (Exception ex) {
+
+                                ex.getStackTrace();
+                            }
+                            break;
+                        case 2:
+
+                            String copy;
+                            copy = txtPhoneNumber.getText().toString();
+
+                            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
+                            clipboard.setPrimaryClip(clip);
+
+                            break;
+                    }
+                }
+            }).show();
         }
     }
 
@@ -961,8 +924,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         });
 
         popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-        popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16),
-                (int) getResources().getDimension(R.dimen.dp32));
+        popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
         //                popupWindow.showAsDropDown(v);
 
         text1.setOnClickListener(new View.OnClickListener() {
@@ -976,17 +938,12 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.clear_history)
-                        .content(R.string.clear_history_content)
-                        .positiveText(R.string.B_ok)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            }
-                        })
-                        .negativeText(R.string.B_cancel)
-                        .show();
+                    }
+                }).negativeText(R.string.B_cancel).show();
 
                 popupWindow.dismiss();
             }
@@ -995,18 +952,13 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.to_delete_contact)
-                        .content(R.string.delete_text)
-                        .positiveText(R.string.B_ok)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                deleteContact();
-                            }
-                        })
-                        .negativeText(R.string.B_cancel)
-                        .show();
+                        deleteContact();
+                    }
+                }).negativeText(R.string.B_cancel).show();
 
                 popupWindow.dismiss();
             }
@@ -1085,8 +1037,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();
 
-        final RealmClientCondition realmClientCondition =
-                realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override
             public void onChange(final RealmClientCondition element) {
@@ -1101,8 +1052,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                             G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, realmRoom.getLastMessage().getMessageId());
                         }
 
-                        RealmResults<RealmRoomMessage> realmRoomMessages =
-                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
+                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
                         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                             if (realmRoomMessage != null) {
                                 // delete chat history message
@@ -1186,8 +1136,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         };
         final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition =
-                realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override
             public void onChange(final RealmClientCondition element) {
@@ -1218,6 +1167,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         });
     }
+
     @Override
     public void onUserUpdateStatus(long userId, final long time, final String status) {
 
@@ -1225,7 +1175,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    setUserStatus(status, time);
+                    setUserStatus(AppUtils.getStatsForUser(status), time);
                 }
             });
         }

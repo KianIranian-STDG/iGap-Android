@@ -2,7 +2,6 @@ package com.iGap.response;
 
 import android.text.format.DateUtils;
 import com.iGap.G;
-import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
@@ -47,7 +46,7 @@ public class UserUpdateStatusResponse extends MessageHandler {
                 }
             });
             if (G.onUserUpdateStatus != null) {
-                G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), (int) (System.currentTimeMillis() / DateUtils.SECOND_IN_MILLIS), AppUtils.setStatsForUser(builder.getStatus().toString()));
+                G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), builder.getResponse().getTimestamp(), builder.getStatus().toString());
             }
         }
         realm.close();
