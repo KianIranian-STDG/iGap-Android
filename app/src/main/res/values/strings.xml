@@ -703,9 +703,9 @@
     <string name="saturday">"Saturday"</string>
 
 
-    <string name="USER_JOINED">"User joined"</string>
-    <string name="USER_DELETED">"User deleted"</string>
-    <string name="ROOM_CREATED">"Room created"</string>
+    <string name="USER_JOINED">"Joined to iGap"</string>
+    <string name="USER_DELETED">"Lefted from iGap"</string>
+    <string name="ROOM_CREATED">"Room Created"</string>
     <string name="MEMBER_ADDED">"Added"</string>
     <string name="MEMBER_KICKED">"Kicked"</string>
     <string name="MEMBER_LEFT">"Left"</string>
