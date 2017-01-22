@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -40,6 +41,7 @@ import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperCalculateKeepMedia;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
@@ -101,13 +103,15 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -131,6 +135,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private MaterialDesignTextView btnSearchAll;
     private int clickPosition = 0;
     private boolean keepMedia;
+    private boolean isLanguageParsi;
+    private Typeface titleTypeface;
 
     private SharedPreferences sharedPreferences;
     private String cLanguage;
@@ -388,9 +394,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         });
 
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
-        final Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        if (!HelperCalander.isLanguagePersian) {
+            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        } else {
+            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+        }
 
-        txtIgap.setTypeface(type, Typeface.BOLD);
+
         if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
             txtIgap.setText(R.string.waiting_for_network);
             txtIgap.setTypeface(null, Typeface.BOLD);
@@ -402,6 +412,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             txtIgap.setTypeface(null, Typeface.BOLD);
         } else {
             txtIgap.setText(R.string.igap);
+            txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
         }
 
         G.onConnectionChangeState = new OnConnectionChangeState() {
@@ -419,7 +430,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             txtIgap.setText(updating);
                         } else {
                             txtIgap.setText(R.string.igap);
-                            txtIgap.setTypeface(type, Typeface.BOLD);
+                            txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
                         }
                     }
                 });
@@ -733,7 +744,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     /**
      * on select room menu
      *
-     * @param message message text
+     * @param message  message text
      * @param position position dfdfdfdf
      */
     private void onSelectRoomMenu(String message, int position, RoomItem item) {
