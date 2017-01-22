@@ -694,13 +694,13 @@
     <string name="st_signature">امضا</string>
     <string name="spam">Spam</string>
 
-    <string name="sunday">"یک شمبه"</string>
-    <string name="monday">دو شمبه</string>
-    <string name="tuesday">"سه شمبه"</string>
-    <string name="wednesday">"چهار شمبه"</string>
-    <string name="thursday">"پنج شمبه"</string>
+  <string name="sunday">"یک شنبه"</string>
+  <string name="monday">دو شنبه</string>
+  <string name="tuesday">"سه شنبه"</string>
+  <string name="wednesday">"چهار شنبه"</string>
+  <string name="thursday">"پنج شنبه"</string>
     <string name="friday">"جمعه"</string>
-    <string name="saturday">"شمبه"</string>
+  <string name="saturday">"شنبه"</string>
 
     <string name="block_user">مسدود کردن مخاطب </string>
     <string name="un_block_user">"رفع مسدودیت مخاطب"</string>

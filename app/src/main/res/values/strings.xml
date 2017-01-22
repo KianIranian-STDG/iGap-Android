@@ -25,7 +25,7 @@
 
     <!-- Fill Profile User -->
     <string name="pu_title_profileUser">Fill Profile</string>
-    <string name="pu_desc_profileUser">Enter your Nikename and choose Profile Avatar</string>
+    <string name="pu_desc_profileUser">Enter your Nickname and choose Profile Avatar</string>
     <string name="pu_addPhoto_profileUser">Profile Picture</string>
     <string name="pu_nikname_profileUser">Nickname</string>
     <string name="pu_Lets_Go">Continue</string>
