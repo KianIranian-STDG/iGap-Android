@@ -3781,6 +3781,7 @@ public class ActivityChat extends ActivityEnhanced
                             RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID)).findFirst();
                             if (realmRoomMessage != null) {
                                 realmRoom.setLastMessage(realmRoomMessage);
+                                realmRoom.setUpdatedTime(realmRoomMessage.getUpdateOrCreateTime() / 1000);
                             }
                         }
                     }
@@ -3808,7 +3809,7 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    private void addTimeToList(Long messageid) {
+    private void addTimeToList(Long messageId) {
 
         isNeedAddTime = false;
 
@@ -3816,7 +3817,7 @@ public class ActivityChat extends ActivityEnhanced
         if (!TextUtils.isEmpty(timeString)) {
 
             RealmRoomMessage timeMessage = new RealmRoomMessage();
-            timeMessage.setMessageId(messageid);
+            timeMessage.setMessageId(messageId);
             // -1 means time message
             timeMessage.setUserId(-1);
             timeMessage.setMessage(timeString);

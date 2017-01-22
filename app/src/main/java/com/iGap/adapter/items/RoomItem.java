@@ -5,11 +5,9 @@ import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
@@ -33,13 +31,11 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import java.util.List;
-
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.util.List;
 
 import static android.view.View.GONE;
 import static com.iGap.G.context;
@@ -171,7 +167,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
                         if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
                             holder.lastMessageSender.setText(lastMessageSender);
-                            Log.i("VVVVVVVV", "bindView: " + lastMessageSender);
                             holder.lastMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
                             holder.lastMessageSender.setVisibility(View.VISIBLE);
                         } else {
@@ -326,8 +321,8 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
             holder.name.setText(mInfo.getTitle());
 
-            if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateTime() != 0) {
-                holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateTime()));
+            if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
+                holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
 
                 holder.lastSeen.setVisibility(View.VISIBLE);
             } else {
