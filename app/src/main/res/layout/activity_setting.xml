@@ -1058,13 +1058,14 @@
                         android:layout_centerInParent="true">
 
                         <ToggleButton
-                        android:id="@+id/st_toggle_saveGallery"
-                        android:layout_width="@dimen/dp44"
-                        android:layout_height="@dimen/dp40"
-                        android:background="@drawable/st_switch_button"
-                        android:textOff=""
-                        android:textOn=""/>
+                            android:id="@+id/st_toggle_saveGallery"
+                            android:layout_width="@dimen/dp44"
+                            android:layout_height="@dimen/dp40"
+                            android:background="@drawable/st_switch_button"
+                            android:textOff=""
+                            android:textOn=""/>
                     </LinearLayout>
+
                     <TextView
                         android:id="@+id/st_txt_saveGallery"
                         fontPath="fonts/IRANSansMobile.ttf"
@@ -1125,8 +1126,9 @@
                     android:background="@color/background_editText"
                     android:visibility="gone"/>
 
+
                 <TextView
-                    android:id="@+id/st_txt_faq"
+                    android:id="@+id/st_txt_iGap_home"
                     fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
@@ -1134,7 +1136,7 @@
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:paddingTop="@dimen/dp4"
-                    android:text="@string/st_About_iGap"
+                    android:text="@string/st_privacy_iGap_home"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal"
@@ -1146,7 +1148,7 @@
                     android:background="@color/background_editText"/>
 
                 <TextView
-                    android:id="@+id/st_txt_privacy_policy"
+                    android:id="@+id/st_txt_privacy_blog"
                     fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
@@ -1154,16 +1156,39 @@
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:paddingTop="@dimen/dp4"
-                    android:text="@string/st_privacy_policy"
+                    android:text="@string/st_privacy_blog"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/sp15"
                     android:textStyle="normal"
                     />
 
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/background_editText"/>
+
+                <TextView
+                    android:id="@+id/st_txt_create_ticket"
+                    fontPath="fonts/IRANSansMobile.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:text="@string/st_privacy_create_ticket"
+                    android:textColor="@color/black_register"
+                    android:textSize="@dimen/sp15"
+                    android:textStyle="normal"
+                    />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/background_editText"/>
+
 
                 <TextView
                     android:id="@+id/st_txt_versionApp"

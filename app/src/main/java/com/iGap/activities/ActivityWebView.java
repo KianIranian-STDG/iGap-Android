@@ -48,8 +48,6 @@ public class ActivityWebView extends ActivityEnhanced {
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             key = bundle.getString("PATH");
-        } else {
-            key = G.FAQ;
         }
 
         allLayoutToolbar = (ViewGroup) findViewById(R.id.stfaq_allLayout_toolbar);

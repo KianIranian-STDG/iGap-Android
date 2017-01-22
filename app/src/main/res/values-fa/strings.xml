@@ -740,4 +740,9 @@
     <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">USER PROFILE UPDATE USERNAME UPDATE</string>
     <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
     <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
+
+    <string name="channel_public_hint_revoke">Channel Public Link</string>
+    <string name="st_privacy_blog">وبلاگ آی گپ</string>
+    <string name="st_privacy_create_ticket">درخواست پشتیبانی</string>
+    <string name="st_privacy_iGap_home">صفحه نخست آی گپ</string>
 </resources>

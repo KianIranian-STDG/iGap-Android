@@ -10,6 +10,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.R;
 import com.iGap.interfaces.IResendMessage;
@@ -19,11 +20,13 @@ import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.iGap.G.context;
 
@@ -137,6 +140,7 @@ public final class AppUtils {
      * @param view TextView message status
      */
     public static void rightMessageStatus(ImageView view, ProtoGlobal.RoomMessageStatus status, boolean isSenderMe) {
+
         if (view == null) {
             return;
         }
@@ -154,7 +158,8 @@ public final class AppUtils {
                 break;
             case FAILED:
                 view.setImageResource(R.drawable.ic_error);
-                DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
+//                DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
+                view.setColorFilter(view.getContext().getResources().getColor(R.color.red));
                 break;
             case SEEN:
                 view.setImageResource(R.drawable.ic_double_check);
@@ -165,11 +170,13 @@ public final class AppUtils {
                 break;
             case SENDING:
                 view.setImageResource(R.drawable.ic_clock);
-                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
+//                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
+                view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
                 break;
             case SENT:
                 view.setImageResource(R.drawable.ic_check);
-                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
+                view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
+//                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 break;
         }
     }

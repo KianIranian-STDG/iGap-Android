@@ -40,6 +40,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -127,14 +128,16 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -951,7 +954,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         final TextInputLayout inputChannelLink = new TextInputLayout(ActivityChannelProfile.this);
         EditText edtLink = new EditText(ActivityChannelProfile.this);
-        edtLink.setHint(getResources().getString(R.string.channel_link_hint_revoke));
+        edtLink.setHint(getResources().getString(R.string.channel_public_hint_revoke));
         edtLink.setText(link);
         edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -961,6 +964,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         inputChannelLink.addView(edtLink);
         inputChannelLink.addView(viewRevoke, viewParams);
 
+        TextView txtLink = new TextView(ActivityChannelProfile.this);
+        txtLink.setText("http://iGap.net/");
+        txtLink.setTextColor(getResources().getColor(R.color.gray_6c));
+
         viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             edtLink.setBackground(getResources().getDrawable(android.R.color.transparent));
@@ -968,6 +975,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         layoutChannelLink.addView(inputChannelLink, layoutParams);
+        layoutChannelLink.addView(txtLink, layoutParams);
 
         final MaterialDialog dialog =
                 new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.channel_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutChannelLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {

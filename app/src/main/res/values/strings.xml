@@ -756,5 +756,8 @@
     <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
     <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
 
-
+    <string name="channel_public_hint_revoke">Channel Public Link</string>
+    <string name="st_privacy_blog">iGap Blog</string>
+    <string name="st_privacy_create_ticket">Support Request</string>
+    <string name="st_privacy_iGap_home">iGap Home</string>
 </resources>

@@ -36,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -95,13 +96,15 @@ import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -136,7 +139,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private String textLanguage = "English";
     private int poRbDialogTextSize = -1;
     private ViewGroup ltMessageTextSize, ltLanguage;
-    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtFaq, txtPrivacyPolicy, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
+    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtWebViewBlog, txtWebViewHome, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
     private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
     private AppBarLayout appBarLayout;
     private Uri uriIntent;
@@ -340,7 +343,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             @Override
             public void onUserProfileGetGenderError() {
-
 //               runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -645,8 +647,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 dialog.show();
             }
         });
-
-        Log.i("FFFFFFFF", "onCreate: " + userGender);
 
         if (userGender == null || userGender.getNumber() == -1 || userGender == ProtoGlobal.Gender.UNKNOWN) {
             txtGander.setText(getResources().getString(R.string.set_gender));
@@ -1913,29 +1913,39 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        txtPrivacyPolicy = (TextView) findViewById(R.id.st_txt_privacy_policy);
-        txtPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
+        txtWebViewHome = (TextView) findViewById(R.id.st_txt_iGap_home);
+        txtWebViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-                intent.putExtra("PATH", "Policy");
+                intent.putExtra("PATH", "https://www.igap.net");
                 startActivity(intent);
             }
         });
 
-        txtFaq = (TextView) findViewById(R.id.st_txt_faq);
-        txtFaq.setOnClickListener(new View.OnClickListener() {
+        txtWebViewBlog = (TextView) findViewById(R.id.st_txt_privacy_blog);
+        txtWebViewBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-                intent.putExtra("PATH", "FAQ");
+                intent.putExtra("PATH", "https://blog.igap.net");
+                startActivity(intent);
+            }
+        });
+
+        TextView txtCreateTicket = (TextView) findViewById(R.id.st_txt_create_ticket);
+        txtCreateTicket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
+                intent.putExtra("PATH", "https://support.igap.net");
                 startActivity(intent);
             }
         });
 
 
         TextView txtVersionApp = (TextView) findViewById(R.id.st_txt_versionApp);
-        txtVersionApp.setText(getString(R.string.iGap_version) + " v" + getAppVersion());
+        txtVersionApp.setText(getString(R.string.iGap_version) + " v " + getAppVersion());
 
         realm.close();
 
@@ -2252,7 +2262,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
     }
 
-    private int getAppVersion() {
+    private String getAppVersion() {
 
         PackageManager manager = context.getPackageManager();
         PackageInfo info = null;
@@ -2261,7 +2271,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return info.versionCode;
+        return info.versionName;
     }
 
     @Override
