@@ -38,6 +38,7 @@ import com.iGap.R;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatGetRoom;
@@ -100,6 +101,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private String firstName;
     private String lastName;
     private long lastSeen;
+    private String mPhone = "";
     private String initials;
     private String color;
     private String enterFrom;
@@ -513,7 +515,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                       @Override
                                                       public void onClick(View view) {
 
-                                                                                      long po = Long.parseLong(txtPhoneNumber.getText().toString());
+                                                          long po = Long.parseLong(mPhone);
                                                                                       String firstName = edtFirstName.getText().toString();
                                                                                       String lastName = edtLastName.getText().toString();
                                                           new RequestUserContactsEdit().contactsEdit(po, firstName, lastName);
@@ -577,7 +579,16 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
 
         txtUserName.setText(username);
-        txtPhoneNumber.setText("" + phone);
+        mPhone = "" + phone;
+
+        txtPhoneNumber.setText(mPhone);
+
+        if (HelperCalander.isLanguagePersian) {
+            txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
+        }
+
+
+
 
         titleToolbar.setText(displayName);
 
@@ -623,8 +634,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             @Override
             public void onClick(View v) {
 
-                String phoneNumber = txtPhoneNumber.getText().toString();
-                showPopupPhoneNumber(vgPhoneNumber, phoneNumber);
+                showPopupPhoneNumber(vgPhoneNumber, mPhone);
                 //popUpMenu(R.menu.chi_popup_phone_number, v);
             }
         });
@@ -717,6 +727,10 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 titleLastSeen.setText(userStatus);
                 txtLastSeen.setText(userStatus);
             }
+
+            if (HelperCalander.isLanguagePersian) {
+                txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+            }
         }
     }
 
@@ -746,7 +760,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     switch (which) {
                         case 0:
-                            String call = "+" + Long.parseLong(txtPhoneNumber.getText().toString());
+                            String call = "+" + Long.parseLong(mPhone);
                             try {
                                 //                                        Intent phoneIntent = new Intent(Intent.ACTION_CALL);
                                 //                                        phoneIntent.setData(Uri.parse("tel:" + call));
@@ -763,7 +777,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                             break;
                         case 1:
                             String copy;
-                            copy = txtPhoneNumber.getText().toString();
+                            copy = mPhone;
                             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                             ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
                             clipboard.setPrimaryClip(clip);
@@ -779,7 +793,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                         case 0:
 
                             String name = txtNickname.getText().toString();
-                            String phone = "+" + txtPhoneNumber.getText().toString();
+                            String phone = "+" + mPhone;
 
                             ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
@@ -811,7 +825,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                             break;
                         case 1:
 
-                            String call = "+" + Long.parseLong(txtPhoneNumber.getText().toString());
+                            String call = "+" + Long.parseLong(mPhone);
                             try {
                                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                                 callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
@@ -825,11 +839,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                             break;
                         case 2:
 
-                            String copy;
-                            copy = txtPhoneNumber.getText().toString();
-
                             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
+                            ClipData clip = ClipData.newPlainText("PHONE_NUMBER", mPhone);
                             clipboard.setPrimaryClip(clip);
 
                             break;

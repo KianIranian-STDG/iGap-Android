@@ -2,15 +2,14 @@ package com.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.iGap.R;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
 import java.util.List;
 
 /**
@@ -53,6 +52,9 @@ public class ContactItemNotRegister
         holder.title.setText(mContact.displayName);
 
         holder.subtitle.setText(mContact.phone);
+        if (HelperCalander.isLanguagePersian) {
+            holder.subtitle.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.subtitle.getText().toString()));
+        }
 
         String name = HelperImageBackColor.getFirstAlphabetName(mContact.displayName);
         holder.image.setImageBitmap(

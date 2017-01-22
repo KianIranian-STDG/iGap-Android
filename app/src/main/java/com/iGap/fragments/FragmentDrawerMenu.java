@@ -17,6 +17,7 @@ import com.iGap.R;
 import com.iGap.activities.ActivityMain;
 import com.iGap.activities.ActivitySetting;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnAvatarGet;
@@ -90,6 +91,11 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
 
         txtUserName.setText(username);
         txtPhoneNumber.setText(phoneNumber);
+
+        if (HelperCalander.isLanguagePersian) {
+            txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
+            txtUserName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtUserName.getText().toString()));
+        }
 
         new RequestUserInfo().userInfo(realmUserInfo.getUserId());
 

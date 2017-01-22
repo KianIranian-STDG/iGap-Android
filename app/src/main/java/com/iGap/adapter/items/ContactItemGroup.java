@@ -3,11 +3,11 @@ package com.iGap.adapter.items;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.View;
-
 import com.hanks.library.AnimateCheckBox;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
@@ -18,7 +18,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.List;
 
 /**
@@ -70,6 +69,10 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
                 holder.subtitle.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
             } else {
                 holder.subtitle.setText(mContact.status);
+            }
+
+            if (HelperCalander.isLanguagePersian) {
+                holder.subtitle.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.subtitle.getText().toString()));
             }
         }
 

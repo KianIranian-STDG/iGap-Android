@@ -202,7 +202,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         } else {
             hrSize = dec.format(b).concat(" Bytes");
         }
-        return hrSize;
+
+        return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(hrSize) : hrSize;
     }
 
     /*private void setImage() {
@@ -441,6 +442,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (userName != null) txtUserName.setText(userName);
         if (phoneName != null) txtPhoneNumber.setText(phoneName);
 
+        if (HelperCalander.isLanguagePersian) {
+            txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
+        }
+
+
         ViewGroup layoutNickname = (ViewGroup) findViewById(R.id.st_layout_nickname);
         layoutNickname.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -608,6 +614,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                                 realm.where(RealmUserInfo.class).findFirst().getUserInfo().setDisplayName(nickName);
                                                 txtNickNameTitle.setText(nickName);
                                                 FragmentDrawerMenu.txtUserName.setText(nickName);
+
+                                                if (HelperCalander.isLanguagePersian) {
+                                                    FragmentDrawerMenu.txtUserName.setText(HelperCalander.convertToUnicodeFarsiNumber(nickName));
+                                                }
                                             }
                                         });
 
@@ -1245,7 +1255,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
 
                                         Bundle bundle = new Bundle();
-                                        bundle.putString("PHONE", txtPhoneNumber.getText().toString());
+                                        bundle.putString("PHONE", phoneName);
                                         fragmentDeleteAccount.setArguments(bundle);
                                         getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentDeleteAccount, null).commit();
 
@@ -1521,6 +1531,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtMessageTextSize = (TextView) findViewById(R.id.st_txt_messageTextSize_number);
         txtMessageTextSize.setText("" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
 
+        if (HelperCalander.isLanguagePersian) {
+            txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
+        }
+
         ltMessageTextSize = (ViewGroup) findViewById(R.id.st_layout_messageTextSize);
         ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1531,6 +1545,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         if (text != null) {
                             txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+
+                            if (HelperCalander.isLanguagePersian) {
+                                txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
+                            }
                         }
                         poRbDialogTextSize = which;
                         int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());

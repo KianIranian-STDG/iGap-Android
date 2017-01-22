@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnSelectedList;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -155,6 +156,9 @@ public class FragmentBlockedUser extends Fragment {
 
             viewHolder.title.setText(realmResults.get(i).getDisplayName());
             viewHolder.subtitle.setText(realmResults.get(i).getPhoneNumber());
+            if (HelperCalander.isLanguagePersian) {
+                viewHolder.subtitle.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.subtitle.getText().toString()));
+            }
 
             HelperAvatar.getAvatar(realmResults.get(i).getId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
                 @Override public void onAvatarGet(final String avatarPath, long ownerId) {

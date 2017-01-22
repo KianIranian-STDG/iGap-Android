@@ -4,10 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
@@ -20,10 +20,8 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.util.List;
-
 import io.realm.Realm;
+import java.util.List;
 
 /**
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
@@ -73,6 +71,10 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
                 } else {
                     holder.subtitle.setText(realmRegisteredInfo.getStatus());
                 }
+            }
+
+            if (HelperCalander.isLanguagePersian) {
+                holder.subtitle.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.subtitle.getText().toString()));
             }
 
 
