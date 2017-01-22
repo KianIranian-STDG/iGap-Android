@@ -326,7 +326,7 @@ public final class AndroidUtils {
     public static int[] scaleDimenWithSavedRatio(Context context, float width, float height) {
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         float density = display.density * 0.9f;
-        float maxWidth = context.getResources().getDimension(R.dimen.chatBoxMaxWidth);
+        float maxWidth = context.getResources().getDimension(R.dimen.dp220);
         float newWidth;
         float newHeight;
 
