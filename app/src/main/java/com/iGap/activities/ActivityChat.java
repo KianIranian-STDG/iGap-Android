@@ -257,30 +257,24 @@ public class ActivityChat extends ActivityEnhanced
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
-    AttachFile attachFile;
-    BoomMenuButton boomMenuButton;
-    LinearLayout mediaLayout;
+    private AttachFile attachFile;
+    private BoomMenuButton boomMenuButton;
+    private LinearLayout mediaLayout;
     public static MusicPlayer musicPlayer;
     private boolean isNeedAddTime = true;
-    LinearLayout ll_Search;
-    Button btnCloseLayoutSearch;
-    EditText edtSearchMessage;
-    long messageId;
-    int scroolPosition = 0;
-    private RelativeLayout parentLayout;
+    private LinearLayout ll_Search;
+    private EditText edtSearchMessage;
+    private long messageId;
+    private int scrollPosition = 0;
     private SharedPreferences sharedPreferences;
     private io.github.meness.emoji.EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private LinearLayout layoutAttachBottom;
     private MaterialDesignTextView imvMicButton;
-    private MaterialDesignTextView btnCloseAppBarSelected;
     private MaterialDesignTextView btnReplaySelected;
     private ArrayList<String> listPathString;
-    private MaterialDesignTextView btnCopySelected;
-    private MaterialDesignTextView btnForwardSelected;
-    private MaterialDesignTextView btnDeleteSelected;
-    private MaterialDesignTextView btnCancelSeningFile;
+    private MaterialDesignTextView btnCancelSendingFile;
     private TextView txtFileNameForSend;
     private LinearLayout ll_attach_text;
     private TextView txtNumberOfSelected;
@@ -409,7 +403,8 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
 
 
@@ -888,7 +883,7 @@ public class ActivityChat extends ActivityEnhanced
         initAppbarSelected();
 
         if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
-            initLayotChannelFooter();
+            initLayoutChannelFooter();
         }
 
         if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
@@ -1125,14 +1120,12 @@ public class ActivityChat extends ActivityEnhanced
         G.onChatDeleteMessageResponse = new OnChatDeleteMessageResponse() {
             @Override
             public void onChatDeleteMessage(long deleteVersion, final long messageId, long roomId, ProtoResponse.Response response) {
-                Log.i("CLI_DELETE", "response.getId() 4 : " + response.getId());
                 if (response.getId().isEmpty()) { // another account deleted this message
 
                     Realm realm = Realm.getDefaultInstance();
                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                     if (roomMessage != null) {
-                        // delete message from database
-                        roomMessage.deleteFromRealm();
+                        roomMessage.setDeleted(true);
                     }
                     realm.close();
 
@@ -1339,8 +1332,8 @@ public class ActivityChat extends ActivityEnhanced
 
         ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);
         txtFileNameForSend = (TextView) findViewById(R.id.ac_txt_file_neme_for_sending);
-        btnCancelSeningFile = (MaterialDesignTextView) findViewById(R.id.ac_btn_cancel_sending_file);
-        btnCancelSeningFile.setOnClickListener(new View.OnClickListener() {
+        btnCancelSendingFile = (MaterialDesignTextView) findViewById(R.id.ac_btn_cancel_sending_file);
+        btnCancelSendingFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ll_attach_text.setVisibility(View.GONE);
@@ -1669,17 +1662,17 @@ public class ActivityChat extends ActivityEnhanced
 
         if (messageId > 0) {
             // TODO: 10/15/2016  if list biger then 50 item list should load some data we need
-            scroolPosition = 0;
+            scrollPosition = 0;
             for (AbstractMessage chatItem : mAdapter.getAdapterItems()) {
                 if (chatItem.mMessage.messageID.equals(messageId + "")) {
                     break;
                 }
-                scroolPosition++;
+                scrollPosition++;
             }
             recyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    recyclerView.scrollToPosition(scroolPosition);
+                    recyclerView.scrollToPosition(scrollPosition);
                 }
             }, 1500);
         } else {
@@ -1769,7 +1762,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
 
-                    // if need to add time befor insert new message
+                    // if need to add time before insert new message
                     if (isNeedAddTime) {
                         addTimeToList(SUID.id().get());
                     }
@@ -1821,7 +1814,7 @@ public class ActivityChat extends ActivityEnhanced
                                 }
 
                                 RealmRoom rm = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                                if (rm != null) rm.setUpdatedTime(TimeUtils.currentLocalTime());
+                                if (rm != null) rm.setUpdatedTime(TimeUtils.currentLocalTime() / 1000);
                             }
                         });
 
@@ -3243,7 +3236,6 @@ public class ActivityChat extends ActivityEnhanced
 
         ll_AppBarSelected = (LinearLayout) findViewById(R.id.chl_ll_appbar_selelected);
 
-        btnCloseAppBarSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_close_layout);
         RippleView rippleCloseAppBarSelected = (RippleView) findViewById(R.id.chl_ripple_close_layout);
         rippleCloseAppBarSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -3276,7 +3268,6 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-        btnCopySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_copy_selected);
         RippleView rippleCopySelected = (RippleView) findViewById(R.id.chl_ripple_copy_selected);
         rippleCopySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -3299,7 +3290,6 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-        btnForwardSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_forward_selected);
         RippleView rippleForwardSelected = (RippleView) findViewById(R.id.chl_ripple_forward_selected);
         rippleForwardSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -3311,7 +3301,6 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-        btnDeleteSelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_delete_selected);
         RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.chl_ripple_delete_selected);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -3324,11 +3313,11 @@ public class ActivityChat extends ActivityEnhanced
                     public void run() {
 
                         for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
-                            Long messagid = parseLong(messageID.mMessage.messageID);
-                            list.add(messagid);
+                            Long messageId = parseLong(messageID.mMessage.messageID);
+                            list.add(messageId);
 
                             // remove deleted message from adapter
-                            mAdapter.removeMessage(messagid);
+                            mAdapter.removeMessage(messageId);
 
                             // remove tag from edtChat if the message has deleted
                             if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
@@ -3375,9 +3364,6 @@ public class ActivityChat extends ActivityEnhanced
                 for (final Long messageId : list) {
                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                     if (roomMessage != null) {
-                        // delete message from database
-                        // roomMessage.deleteFromRealm();
-
                         roomMessage.setDeleted(true);
                     }
 
@@ -3409,7 +3395,7 @@ public class ActivityChat extends ActivityEnhanced
         return messageInfos;
     }
 
-    private void initLayotChannelFooter() {
+    private void initLayoutChannelFooter() {
 
         LinearLayout layoutAttach = (LinearLayout) findViewById(R.id.chl_ll_attach);
         RelativeLayout layoutChannelFooter = (RelativeLayout) findViewById(R.id.chl_ll_channel_footer);

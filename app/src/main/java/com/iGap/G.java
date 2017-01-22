@@ -517,7 +517,7 @@ public class G extends MultiDexApplication {
                         latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
                         hasNetworkBefore = true;
                         allowForReconnecting = true;
-                        WebSocketClient.reconnect();
+                        WebSocketClient.reconnect(true);
                     } else {
                         Log.e("DDD", "before has network");
                         if (latestConnectivityType == null || latestConnectivityType != HelperCheckInternetConnection.currentConnectivityType) {
@@ -528,6 +528,8 @@ public class G extends MultiDexApplication {
                             if (webSocket != null) {
                                 webSocket.disconnect();
                             }
+                        } else {
+                            Log.e("DDD", "not change connectivity type");
                         }
                     }
 
