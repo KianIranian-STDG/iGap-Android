@@ -46,12 +46,6 @@ import org.parceler.Parcel;
     private boolean showMessage = true;
     private String authorHash;
     //TODO [Saeed Mozaffari] [2017-01-19 9:28 AM] - use RealmAuthor instead of author hash
-
-    // for channel
-    /*private int voteUp;
-    private int voteDown;
-    private int seenCount;*/
-
     // for channel message should be exist in other rooms (forwarded message)
     private RealmChannelExtra channelExtra;
 

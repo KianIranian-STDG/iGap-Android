@@ -63,7 +63,7 @@ public class WebSocketClient {
                 @Override
                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                     Log.i("SOC_WebSocket", "onError");
-                    reconnect();
+                    reconnect(true);
                     super.onError(websocket, cause);
                 }
 
@@ -71,14 +71,14 @@ public class WebSocketClient {
                 public void onDisconnected(WebSocket websocket, com.neovisionaries.ws.client.WebSocketFrame serverCloseFrame, com.neovisionaries.ws.client.WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                     Log.i("SOC_WebSocketD", "onDisconnected");
                     allowForReconnecting = true;
-                    reconnect();
+                    reconnect(true);
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                 }
 
                 @Override
                 public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                     Log.i("SOC_WebSocket", "onConnectError");
-                    reconnect();
+                    reconnect(true);
                     super.onConnectError(websocket, exception);
                 }
             });
@@ -145,7 +145,7 @@ public class WebSocketClient {
             @Override
             public void run() {
                 if (webSocketClient == null || !webSocketClient.isOpen()) {
-                    reconnect();
+                    reconnect(false);
                 }
             }
         }, Config.INSTANCE_SUCCESSFULLY_CHECKING);
@@ -153,23 +153,44 @@ public class WebSocketClient {
 
     /**
      * clear securing state and reconnect to server
+     *
+     * @param force if set force true try for reconnect even socket is open.
+     * client do this action because maybe connection lost but client not
+     * detected this actions(android 7.*).
      */
 
-    public static void reconnect() {
-        HelperSetAction.clearAllActions();
-        Log.e("DDD", "reconnect 1");
-        if (allowForReconnecting) {
-            allowForReconnecting = false;
-            HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-            Log.e("DDD", "reconnect 2");
-            if (G.allowForConnect) {
-                Log.e("DDD", "reconnect 3");
-                latestConnectionTryTiming = System.currentTimeMillis();
-                waitingForReconnecting = false;
-                resetWebsocketInfo();
-                WebSocketClient.getInstance();
-                checkSocketConnection();
-            }
+    public static void reconnect(boolean force) {
+
+        if (force || (webSocketClient == null || !webSocketClient.isOpen())) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (timeDifference(latestConnectionTryTiming)) {
+                        HelperSetAction.clearAllActions();
+                        Log.e("DDD", "reconnect 1");
+                        if (allowForReconnecting) {
+                            allowForReconnecting = false;
+                            HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
+                            Log.e("DDD", "reconnect 2");
+                            if (G.allowForConnect) {
+                                Log.e("DDD", "reconnect 3");
+                                latestConnectionTryTiming = System.currentTimeMillis();
+                                waitingForReconnecting = false;
+                                resetWebsocketInfo();
+                                WebSocketClient.getInstance();
+                                //checkSocketConnection();
+                            }
+                        }
+                    } else {
+                        Log.e("DDD", "try for connect");
+                        allowForReconnecting = true;
+                        waitingForReconnecting = false;
+                        reconnect(false);
+                    }
+                }
+            }, Config.REPEAT_CONNECTION_CHECKING);
+        } else {
+            Log.i("SOC_WebSocket", "don't need Reconnect");
         }
     }
 
@@ -188,7 +209,7 @@ public class WebSocketClient {
                     if (timeDifference(latestConnectionTryTiming)) {
                         allowForReconnecting = true;
                         waitingForReconnecting = false;
-                        reconnect();
+                        reconnect(false);
                     } else {
                         checkSocketConnection();
                     }
@@ -248,7 +269,7 @@ public class WebSocketClient {
          */
         waitingForReconnecting = false;
         allowForReconnecting = true;
-        reconnect();
+        reconnect(false);
         return false;
     }
 

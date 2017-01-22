@@ -810,9 +810,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
 
                     for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
+                        Log.i("YYY", "name : " + Room.getTitle() + " || update time : " + Room.getUpdatedTime());
                         if (Room.getLastMessage() != null) {
                             if (Room.getLastMessage().getUpdateTime() > 0) {
-                                if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
+                                if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) {
+                                    Log.i("YYY", "UPDATE");
+                                    Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
+                                }
                             }
                         }
                     }
