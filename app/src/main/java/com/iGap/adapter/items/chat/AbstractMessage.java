@@ -20,6 +20,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperGetMessageState;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IChatItemAttachment;
@@ -82,13 +83,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     protected void setTextIfNeeded(TextView view, String msg) {
+
+        msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
+
         if (!TextUtils.isEmpty(msg)) {
             if (mMessage.hasLinkInMessage) {
                 view.setText(HelperUrl.setUrlLink(msg, true, true, mMessage.messageID, true));
             } else {
                 view.setText(msg);
             }
-
 
             view.setVisibility(View.VISIBLE);
         } else {
@@ -427,7 +430,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * @return String
      */
     protected String formatTime() {
-        return TimeUtils.toLocal(mMessage.time, G.CHAT_MESSAGE_TIME);
+
+        String _time = TimeUtils.toLocal(mMessage.time, G.CHAT_MESSAGE_TIME);
+
+        return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(_time) : _time;
     }
 
     @CallSuper

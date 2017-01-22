@@ -82,6 +82,7 @@ import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentMap;
 import com.iGap.fragments.FragmentShowImageMessages;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperCancelDownloadUpload;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
@@ -439,6 +440,9 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
                 txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member));
+
+                // change english number to persian number
+                if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
             }
         };
@@ -976,6 +980,8 @@ public class ActivityChat extends ActivityEnhanced
                         avi.setVisibility(View.GONE);
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
                     }
+                    // change english number to persian number
+                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
         }
@@ -1369,6 +1375,9 @@ public class ActivityChat extends ActivityEnhanced
         txtName = (TextView) findViewById(R.id.chl_txt_name);
         if (title != null) txtName.setText(title);
 
+        // change english number to persian number
+        if (HelperCalander.isLanguagePersian) txtName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtName.getText().toString()));
+
         txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
 
         if (chatType == CHAT) {
@@ -1385,6 +1394,9 @@ public class ActivityChat extends ActivityEnhanced
                 txtLastSeen.setText(channelParticipantsCountLabel + " " + getResources().getString(R.string.member));
             }
         }
+
+        // change english number to persian number
+        if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
         txt_mute = (TextView) findViewById(R.id.chl_txt_mute);
 
@@ -2124,6 +2136,10 @@ public class ActivityChat extends ActivityEnhanced
             } else {
                 txtLastSeen.setText(status);
             }
+
+            // change english number to persian number
+            if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+
             checkAction();
         }
     }
@@ -4895,6 +4911,9 @@ public class ActivityChat extends ActivityEnhanced
                         avi.setVisibility(View.GONE);
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
                     }
+
+                    // change english number to persian number
+                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
         }
@@ -4919,6 +4938,8 @@ public class ActivityChat extends ActivityEnhanced
             public void run() {
                 if (chatType == CHAT && userId == chatPeerId) {
                     txtLastSeen.setText(time);
+                    // change english number to persian number
+                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             }
         });

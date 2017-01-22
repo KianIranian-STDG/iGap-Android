@@ -36,7 +36,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -48,6 +47,7 @@ import com.iGap.fragments.FragmentDrawerMenu;
 import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
@@ -95,15 +95,13 @@ import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -1357,20 +1355,22 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             case 0:
                                 setLocale("en");
                                 G.onRefreshActivity.refresh("en");
+                                HelperCalander.isLanguagePersian = false;
                                 break;
                             case 1:
                                 setLocale("fa");
                                 G.onRefreshActivity.refresh("fa");
-
+                                HelperCalander.isLanguagePersian = true;
                                 break;
                             case 2:
                                 setLocale("ar");
                                 G.onRefreshActivity.refresh("ar");
-
+                                HelperCalander.isLanguagePersian = false;
                                 break;
                             case 3:
                                 setLocale("nl");
                                 G.onRefreshActivity.refresh("nl");
+                                HelperCalander.isLanguagePersian = false;
                                 break;
                         }
 

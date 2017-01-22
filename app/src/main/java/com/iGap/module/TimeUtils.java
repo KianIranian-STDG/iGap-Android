@@ -76,9 +76,8 @@ public final class TimeUtils {
 
                 CalendarTools convertTime = new CalendarTools();
                 convertTime.GregorianToPersian(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-
                 output = convertTime.getYear() + " " + HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getDay();
-                output = HelperCalander.convertToUnicodeFarsiNumber(output);
+
             } else {
                 output = TimeUtils.toLocal(date.getTimeInMillis(), "dd MMM yyyy");
             }
@@ -94,6 +93,7 @@ public final class TimeUtils {
         //        output = String.format("%1$s %2$s", new SimpleDateFormat("MMMM", Locale.getDefault()).format(date.getTimeInMillis()), date.get(Calendar.DAY_OF_MONTH));
         //    }
 
-        return output;
+        return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(output) : output;
+
     }
 }

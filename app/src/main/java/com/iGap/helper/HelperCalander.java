@@ -16,14 +16,16 @@ import java.util.Date;
 
 public class HelperCalander {
 
+    public static boolean isLanguagePersian = false;
+
     public static String getPersianCalander(int year, int mounth, int day) {
 
         CalendarTools convertTime = new CalendarTools();
         convertTime.GregorianToPersian(year, mounth, day);
 
-        String t = convertTime.getYear() + "/" + (Integer.parseInt(convertTime.getMonth()) + 1) + "/" + convertTime.getDay();
+        String time = convertTime.getYear() + "/" + (Integer.parseInt(convertTime.getMonth()) + 1) + "/" + convertTime.getDay();
 
-        return convertToUnicodeFarsiNumber(t);
+        return isLanguagePersian ? convertToUnicodeFarsiNumber(time) : time;
     }
 
     public static String getPersianCalander(long time) {
@@ -112,6 +114,8 @@ public class HelperCalander {
 
         String[] persianNumbers = new String[] { "۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹" };
 
+        if (text == null) return "";
+
         if (text.length() == 0) {
             return "";
         }
@@ -158,15 +162,15 @@ public class HelperCalander {
 
                 CalendarTools convertTime = new CalendarTools();
                 convertTime.GregorianToPersian(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-
                 output = HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getDay();
-                output = HelperCalander.convertToUnicodeFarsiNumber(output);
+
             } else {
                 output = TimeUtils.toLocal(date.getTimeInMillis(), "MMM dd");
             }
         }
 
-        return output;
+        return isLanguagePersian ? convertToUnicodeFarsiNumber(output) : output;
+
     }
 
     private static String getPersianStringDay(int dayOfWeek) {
@@ -200,5 +204,4 @@ public class HelperCalander {
 
         return result;
     }
-
 }

@@ -348,6 +348,15 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
                 holder.mute.setVisibility(GONE);
             }
         }
+
+        // for change english number to persian number
+        if (HelperCalander.isLanguagePersian) {
+            holder.lastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.lastMessage.getText().toString()));
+            holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
+            holder.unreadMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.unreadMessage.getText().toString()));
+        }
+
+
     }
 
     @Override
