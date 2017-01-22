@@ -694,24 +694,24 @@
     <string name="un_block_user">"UnBlock User"</string>
     <string name="spam">Spam</string>
 
-    <string name="sunday">"sunday"</string>
-    <string name="monday">monday</string>
-    <string name="tuesday">"tuesday"</string>
-    <string name="wednesday">"wednesday"</string>
-    <string name="thursday">"thursday"</string>
-    <string name="friday">"friday"</string>
-    <string name="saturday">"saturday"</string>
+    <string name="sunday">"Sunday"</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">"Tuesday"</string>
+    <string name="wednesday">"Wednesday"</string>
+    <string name="thursday">"Thursday"</string>
+    <string name="friday">"Friday"</string>
+    <string name="saturday">"Saturday"</string>
 
 
-    <string name="USER_JOINED">"user joined"</string>
-    <string name="USER_DELETED">"user deleted"</string>
-    <string name="ROOM_CREATED">"room created"</string>
-    <string name="MEMBER_ADDED">"added"</string>
-    <string name="MEMBER_KICKED">"kicked"</string>
-    <string name="MEMBER_LEFT">"left"</string>
-    <string name="ROOM_CONVERTED_TO_PUBLIC">"room converted to public"</string>
-    <string name="ROOM_CONVERTED_TO_PRIVATE">"room converted to private"</string>
-    <string name="MEMBER_JOINED_BY_INVITE_LINK">"member join by invite link"</string>
+    <string name="USER_JOINED">"User joined"</string>
+    <string name="USER_DELETED">"User deleted"</string>
+    <string name="ROOM_CREATED">"Room created"</string>
+    <string name="MEMBER_ADDED">"Added"</string>
+    <string name="MEMBER_KICKED">"Kicked"</string>
+    <string name="MEMBER_LEFT">"Left"</string>
+    <string name="ROOM_CONVERTED_TO_PUBLIC">"Converted to Public"</string>
+    <string name="ROOM_CONVERTED_TO_PRIVATE">"Converted to Private"</string>
+    <string name="MEMBER_JOINED_BY_INVITE_LINK">"Member join by invite link"</string>
 
     <string name="delete_account_text1">other</string>
     <string name="delete_account_text2">other</string>
