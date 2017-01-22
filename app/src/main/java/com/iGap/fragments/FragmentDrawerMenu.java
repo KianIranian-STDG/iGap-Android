@@ -3,7 +3,9 @@ package com.iGap.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityMain;
@@ -19,20 +24,25 @@ import com.iGap.activities.ActivitySetting;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperImageBackColor;
+import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserInfoMyClient;
+import com.iGap.interfaces.OnUserSessionLogout;
 import com.iGap.libs.flowingdrawer.MenuFragment;
 import com.iGap.module.AndroidUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserInfo;
+import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import io.realm.Realm;
+
 import java.io.File;
 import java.io.IOException;
+
+import io.realm.Realm;
 
 public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClient {
     public static TextView txtUserName;
@@ -211,7 +221,75 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
         layoutiGapFAQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //empty
+
+                new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.log_out))
+                        .content(R.string.content_log_out)
+                        .positiveText(getResources().getString(R.string.B_ok))
+                        .negativeText(getResources().getString(R.string.B_cancel))
+                        .iconRes(R.mipmap.exit_to_app_button)
+                        .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                                showProgressBar();
+                                G.onUserSessionLogout = new OnUserSessionLogout() {
+                                    @Override
+                                    public void onUserSessionLogout() {
+
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                HelperLogout.logout();
+//                                                hideProgressBar();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+//                                                hideProgressBar();
+                                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+
+
+                                    }
+
+                                    @Override
+                                    public void onTimeOut() {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+//                                                hideProgressBar();
+                                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
+                                };
+
+                                new RequestUserSessionLogout().userSessionLogout();
+                            }
+                        })
+
+                        .show();
+
             }
         });
     }

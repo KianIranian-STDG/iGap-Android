@@ -323,7 +323,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
-                        android:text="@string/md_help_round_button"
+                        android:text="@string/md_exit_app"
                         android:textAppearance="@style/TextIconAppearance.menu"
                         android:textSize="@dimen/sp22"/>
 
@@ -336,7 +336,7 @@
                         android:paddingRight="@dimen/dp8"
                         android:paddingTop="@dimen/dp12"
                         android:paddingBottom="@dimen/dp8"
-                        android:text="@string/iGap_FAQ"
+                        android:text="@string/log_out"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"
                         android:id="@+id/textView3"/>
