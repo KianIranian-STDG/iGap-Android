@@ -655,30 +655,27 @@ public class HelperNotificationAndBadge {
                 sound = R.raw.doodoo;
                 break;
             case 6:
-                sound = R.raw.igap;
-                break;
-            case 7:
                 sound = R.raw.jing;
                 break;
-            case 8:
+            case 7:
                 sound = R.raw.lili;
                 break;
-            case 9:
+            case 8:
                 sound = R.raw.msg;
                 break;
-            case 10:
+            case 9:
                 sound = R.raw.newa;
                 break;
-            case 11:
+            case 10:
                 sound = R.raw.none;
                 break;
-            case 12:
+            case 11:
                 sound = R.raw.onelime;
                 break;
-            case 13:
+            case 12:
                 sound = R.raw.tone;
                 break;
-            case 14:
+            case 13:
                 sound = R.raw.woow;
                 break;
         }

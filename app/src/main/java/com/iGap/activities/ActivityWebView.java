@@ -105,8 +105,8 @@ public class ActivityWebView extends ActivityEnhanced {
 
         webView = (WebView) findViewById(R.id.stfaq_webView);
         webView.loadUrl(key);
-
-
+//        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebChromeClient(new WebChromeClient());
         webView.getSettings().getJavaScriptEnabled();
         webView.getSettings().getBuiltInZoomControls();
 

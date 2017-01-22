@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -29,6 +30,7 @@ import com.iGap.module.SHP_SETTING;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySettingNotification extends AppCompatActivity {
@@ -346,7 +348,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
 
-        poRbDialogSoundMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 1);
+        poRbDialogSoundMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
         txtSoundMessage = (TextView) findViewById(R.id.stns_txt_sound_text);
         String soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, getResources().getString(R.string.array_Default_Notification_tone));
         txtSoundMessage.setText(soundMessage);
@@ -392,39 +394,36 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.doodoo).start();
                                                 break;
+
                                             case 6:
-                                                MediaPlayer.create(ActivitySettingNotification.this,
-                                                        R.raw.igap).start();
-                                                break;
-                                            case 7:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.jing).start();
                                                 break;
-                                            case 8:
+                                            case 7:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.lili).start();
                                                 break;
-                                            case 9:
+                                            case 8:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.msg).start();
                                                 break;
-                                            case 10:
+                                            case 9:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.newa).start();
                                                 break;
-                                            case 11:
+                                            case 10:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.none).start();
                                                 break;
-                                            case 12:
+                                            case 11:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.onelime).start();
                                                 break;
-                                            case 13:
+                                            case 12:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.tone).start();
                                                 break;
-                                            case 14:
+                                            case 13:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.woow).start();
                                                 break;
@@ -711,7 +710,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         poRbDialogSoundGroup =
-                sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
+                sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
         txtSoundGroup = (TextView) findViewById(R.id.stns_txt_sound_group_text);
         String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, getResources().getString(R.string.arrow));
         txtSoundGroup.setText(soundGroup);
@@ -755,43 +754,41 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.doodoo).start();
                                                 break;
+
                                             case 6:
-                                                MediaPlayer.create(ActivitySettingNotification.this,
-                                                        R.raw.igap).start();
-                                                break;
-                                            case 7:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.jing).start();
                                                 break;
-                                            case 8:
+                                            case 7:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.lili).start();
                                                 break;
-                                            case 9:
+                                            case 8:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.msg).start();
                                                 break;
-                                            case 10:
+                                            case 9:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.newa).start();
                                                 break;
-                                            case 11:
+                                            case 10:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.none).start();
                                                 break;
-                                            case 12:
+                                            case 11:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.onelime).start();
                                                 break;
-                                            case 13:
+                                            case 12:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.tone).start();
                                                 break;
-                                            case 14:
+                                            case 13:
                                                 MediaPlayer.create(ActivitySettingNotification.this,
                                                         R.raw.woow).start();
                                                 break;
                                         }
+
                                         txtSoundGroup.setText(text.toString());
                                         poRbDialogSoundGroup = which;
                                         sharedPreferences =

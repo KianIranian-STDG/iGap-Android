@@ -342,49 +342,61 @@ public class FragmentNotification extends Fragment {
 
                                         switch (which) {
                                             case 0:
-                                                MediaPlayer.create(getActivity(), R.raw.igap).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.igap).start();
                                                 break;
                                             case 1:
-                                                MediaPlayer.create(getActivity(), R.raw.aooow).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.aooow).start();
                                                 break;
                                             case 2:
-                                                MediaPlayer.create(getActivity(), R.raw.bbalert).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.bbalert).start();
                                                 break;
                                             case 3:
-                                                MediaPlayer.create(getActivity(), R.raw.boom).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.boom).start();
                                                 break;
                                             case 4:
-                                                MediaPlayer.create(getActivity(), R.raw.bounce).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.bounce).start();
                                                 break;
                                             case 5:
-                                                MediaPlayer.create(getActivity(), R.raw.doodoo).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.doodoo).start();
                                                 break;
+
                                             case 6:
-                                                MediaPlayer.create(getActivity(), R.raw.igap).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.jing).start();
                                                 break;
                                             case 7:
-                                                MediaPlayer.create(getActivity(), R.raw.jing).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.lili).start();
                                                 break;
                                             case 8:
-                                                MediaPlayer.create(getActivity(), R.raw.lili).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.msg).start();
                                                 break;
                                             case 9:
-                                                MediaPlayer.create(getActivity(), R.raw.msg).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.newa).start();
                                                 break;
                                             case 10:
-                                                MediaPlayer.create(getActivity(), R.raw.newa).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.none).start();
                                                 break;
                                             case 11:
-                                                MediaPlayer.create(getActivity(), R.raw.none).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.onelime).start();
                                                 break;
                                             case 12:
-                                                MediaPlayer.create(getActivity(), R.raw.onelime).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.tone).start();
                                                 break;
                                             case 13:
-                                                MediaPlayer.create(getActivity(), R.raw.tone).start();
-                                                break;
-                                            case 14:
-                                                MediaPlayer.create(getActivity(), R.raw.woow).start();
+                                                MediaPlayer.create(getActivity(),
+                                                        R.raw.woow).start();
                                                 break;
                                         }
 
