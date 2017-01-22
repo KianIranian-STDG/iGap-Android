@@ -152,7 +152,12 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 txtCountOfShearedMedia.post(new Runnable() {
                     @Override
                     public void run() {
-                        txtCountOfShearedMedia.setText(messageOne);
+
+                        if (HelperCalander.isLanguagePersian) {
+                            txtCountOfShearedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(messageOne));
+                        } else {
+                            txtCountOfShearedMedia.setText(messageOne);
+                        }
                     }
                 });
             }

@@ -510,19 +510,45 @@ public class ActivityChat extends ActivityEnhanced
 
         initLayoutHashNavigation();
 
+        realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+        RealmContacts realmContacts = mRealm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+
+        if (phoneNumber == null) {
+            if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
+                vgSpamUser.setVisibility(View.VISIBLE);
+            }
+        }
 
         if (realmRegisteredInfo != null) {
-
             if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
+
                 if (realmRegisteredInfo.isBlockUser()) {
+                    blockUser = true;
                     txtSpamUser.setText(getResources().getString(R.string.un_block_user));
                     vgSpamUser.setVisibility(View.VISIBLE);
-                } else {
-                    txtSpamUser.setText(getResources().getString(R.string.block_user));
-                    if (!showSpamfromContact) vgSpamUser.setVisibility(View.GONE);
                 }
             }
         }
+
+        if (realmContacts != null) {
+            if (realmContacts.isBlockUser()) {
+
+                if (realmRegisteredInfo != null) {
+                    if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
+
+                        blockUser = true;
+                        txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                        vgSpamUser.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    blockUser = true;
+                    txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                    vgSpamUser.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
+
 
 
     }
@@ -794,49 +820,6 @@ public class ActivityChat extends ActivityEnhanced
 
                 }
             });
-
-
-
-            RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-
-            realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-
-            if (realmRegisteredInfo != null) {
-                if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
-
-                    if (phoneNumber != null) {
-                        if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
-                            vgSpamUser.setVisibility(View.VISIBLE);
-                            showSpamfromContact = true;
-                        }
-                    }
-
-                    if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
-                        final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-                        if (realmRegisteredInfo != null) {
-
-                            if (realmRegisteredInfo.isBlockUser()) {
-                                blockUser = true;
-                                txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-                            } else {
-                                txtSpamUser.setText(getResources().getString(R.string.block_user));
-                            }
-                        } else {
-                            final RealmContacts realmContact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-                            if (realmContact != null) {
-                                if (realmContact.isBlockUser()) {
-                                    blockUser = true;
-                                    txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-                                } else {
-                                    txtSpamUser.setText(getResources().getString(R.string.block_user));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-
 
 
             txtSpamUser.setOnClickListener(new View.OnClickListener() {

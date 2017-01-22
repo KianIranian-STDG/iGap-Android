@@ -76,7 +76,12 @@ public final class TimeUtils {
 
                 CalendarTools convertTime = new CalendarTools();
                 convertTime.GregorianToPersian(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-                output = convertTime.getDay() + " " + HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getYear();
+
+                if (HelperCalander.isLanguagePersian) {
+                    output = convertTime.getDay() + " " + HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getYear();
+                } else {
+                    output = convertTime.getYear() + " " + HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getDay();
+                }
 
             } else {
                 output = TimeUtils.toLocal(date.getTimeInMillis(), "dd MMM yyyy");

@@ -301,6 +301,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 txtSignature.setText(mMessage.channelExtra.signature);
             }
 
+            if (HelperCalander.isLanguagePersian) {
+                txtViewsLabel.setText(HelperCalander.convertToUnicodeFarsiNumber(txtViewsLabel.getText().toString()));
+                txtVoteDown.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVoteDown.getText().toString()));
+                txtVoteUp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVoteUp.getText().toString()));
+            }
+
+
+
+
             lytVoteUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
