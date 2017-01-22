@@ -4892,7 +4892,7 @@ public class ActivityChat extends ActivityEnhanced
                             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                                 txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime));
                             } else {
-                                txtLastSeen.setText(AppUtils.getStatsForUser(userStatus));
+                                txtLastSeen.setText(userStatus);
                             }
                         }
                         avi.setVisibility(View.GONE);
@@ -4915,19 +4915,20 @@ public class ActivityChat extends ActivityEnhanced
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    setUserStatus(AppUtils.getStatsForUser(status), time);
+                    userStatus = AppUtils.getStatsForUser(status);
+                    setUserStatus(userStatus, time);
                 }
             });
         }
     }
 
     @Override
-    public void onLastSeenUpdate(final long userId, final String time) {
+    public void onLastSeenUpdate(final long userId, final String showLastSeen) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (chatType == CHAT && userId == chatPeerId) {
-                    txtLastSeen.setText(time);
+                    txtLastSeen.setText(showLastSeen);
                     // change english number to persian number
                     if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }

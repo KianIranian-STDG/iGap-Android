@@ -197,7 +197,7 @@
     <string name="st_in_app_preview">"پیش نمایش درون برنامه‌ای"</string>
     <string name="st_in_chat_sound">"صداهای درون گفتگو"</string>
     <string name="st_title_Events">"رویدادها"</string>
-    <string name="st_Contact_joined_igap">"مخاطبی اخیراْ عضو آی‌‌گپ شده است."</string>
+  <string name="st_Contact_joined_igap">"مخاطبی اخیراً عضو آی‌‌گپ شده است."</string>
     <string name="st_pinned_message">"پیام‌های چسبان"</string>
     <string name="st_title_other">"سایر"</string>
     <string name="st_text_keep_alive_service">"اگر اپلیکیشن توسط کاربر یا سیستم  از حالت اجرا خارج شده‌ بود، باید دوباره اجرا شود. این کار اطمینان می‌دهد که شما تمام اعلانات را خواهید دید."</string>
@@ -504,7 +504,7 @@
     <string name="last_week">هفتهٔ گذشته</string>
     <string name="online">آنلاین</string>
     <string name="exactly">دقیقاْ</string>
-    <string name="recently">اخیراْ</string>
+  <string name="recently">اخیراً</string>
     <string name="support">پشتیبانی</string>
     <string name="service_notification">اعلان خدمات</string>
     <string name="B_edit">ویرایش</string>

@@ -103,10 +103,9 @@ public class LastSeenTimeUtil {
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
             if (realmRegisteredInfo != null) {
                 Log.i("TTT", "realmRegisteredInfo.getStatus() : " + realmRegisteredInfo.getStatus());
-                //if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString()) && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
                 if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
                     String showLastSeen;
-                    if (timeOut(value * DateUtils.SECOND_IN_MILLIS)) {
+                    if (timeOut(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS)) {
                         showLastSeen = computeDays(realmRegisteredInfo.getLastSeen());
                         userIdList.add(userId);
                     } else {
