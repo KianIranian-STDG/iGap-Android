@@ -233,6 +233,7 @@ import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
 import static com.iGap.R.id.ac_ll_parent;
 import static com.iGap.R.id.replyFrom;
+import static com.iGap.R.string.member;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
@@ -430,11 +431,13 @@ public class ActivityChat extends ActivityEnhanced
         mRoomIdStatic = mRoomId;
         titleStatic = title;
 
-        //call from ActivityGroupProfile for update group member number
+        /**
+         * call from ActivityGroupProfile for update group member number
+         */
         onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
-                txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member));
+                txtLastSeen.setText(messageOne + " " + getResources().getString(member));
 
                 // change english number to persian number
                 if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
@@ -973,7 +976,7 @@ public class ActivityChat extends ActivityEnhanced
                         }
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
-                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
+                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(member));
                     }
                     // change english number to persian number
                     if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
@@ -1379,12 +1382,12 @@ public class ActivityChat extends ActivityEnhanced
         } else if (chatType == GROUP) {
 
             if (groupParticipantsCountLabel != null) {
-                txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member));
+                txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(member));
             }
         } else if (chatType == CHANNEL) {
 
             if (channelParticipantsCountLabel != null) {
-                txtLastSeen.setText(channelParticipantsCountLabel + " " + getResources().getString(R.string.member));
+                txtLastSeen.setText(channelParticipantsCountLabel + " " + getResources().getString(member));
             }
         }
 
@@ -4895,7 +4898,7 @@ public class ActivityChat extends ActivityEnhanced
                         //txtLastSeen.setText(userStatus);
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
-                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member));
+                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(member));
                     }
 
                     // change english number to persian number
