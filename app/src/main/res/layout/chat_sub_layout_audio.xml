@@ -7,12 +7,12 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:layoutDirection="ltr"
-             android:layout_marginBottom="@dimen/dp4"
-             android:maxWidth="@dimen/chatBoxMaxWidth">
+    android:layout_marginBottom="@dimen/dp4"
+    >
 
     <RelativeLayout
         android:id="@+id/mainContainer"
-        android:layout_width="@dimen/dp220"
+        android:layout_width="@dimen/dp260"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         tools:ignore="UselessParent"
