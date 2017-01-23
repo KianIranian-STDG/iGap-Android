@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
@@ -60,7 +59,7 @@ public class FragmentShowImage extends Fragment {
     private Long mRoomid;
     private String selectedFileToken = "";
     private Realm mRealm;
-    private ArrayMap<Long, Boolean> downloadingList = new ArrayMap<>();
+
     public static ArrayList<Long> downloadedList = new ArrayList<>();
 
     public static View appBarLayout;
@@ -291,8 +290,9 @@ public class FragmentShowImage extends Fragment {
             final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
             final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
 
-            if (downloadingList.containsKey(mRealmList.get(position).getMessageId())) {
+            if (HelperDownloadFile.isDownLoading(mRealmList.get(position).getAttachment().getToken())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
+                startDownload(position, progress, touchImageView);
             } else {
                 progress.withDrawable(R.drawable.ic_download, true);
             }
@@ -303,19 +303,14 @@ public class FragmentShowImage extends Fragment {
                 String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
                 File file = new File(path);
                 if (file.exists()) {
-                    //    touchImageView.setImageURI(Uri.fromFile(file));
-
                     ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
-
                     progress.setVisibility(View.GONE);
                 } else {
                     path = getThumpnailPath(rm.getAttachment().getToken(), rm.getAttachment().getName());
                     file = new File(path);
                     if (file.exists()) {
-                        //  touchImageView.setImageURI(Uri.fromFile(file));
                         ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
                     } else if (rm.getAttachment() != null) {
-
                         // if thumpnail not exist download it
                         ProtoFileDownload.FileDownload.Selector selector = null;
                         long fileSize = 0;
@@ -356,55 +351,13 @@ public class FragmentShowImage extends Fragment {
             progress.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
 
-                    if (downloadingList.containsKey(mRealmList.get(position).getMessageId())) {
+                    if (HelperDownloadFile.isDownLoading(mRealmList.get(position).getAttachment().getToken())) {
                         HelperDownloadFile.stopDownLoad(mRealmList.get(position).getAttachment().getToken());
                         progress.withDrawable(R.drawable.ic_download, true);
-                        downloadingList.remove(mRealmList.get(position).getMessageId());
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
-                        downloadingList.put(mRealmList.get(position).getMessageId(), true);
 
-                        String dirPath =
-                            AndroidUtils.suitableAppFilePath(mRealmList.get(position).getMessageType()) + "/" + mRealmList.get(position).getAttachment().getToken() + "_" + mRealmList.get(position)
-                                .getAttachment()
-                                .getName();
-
-                        HelperDownloadFile.startDoanload(mRealmList.get(position).getAttachment().getToken(), mRealmList.get(position).getAttachment().getName(),
-                            mRealmList.get(position).getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath,
-                            new HelperDownloadFile.UpdateListener() {
-                                @Override public void OnProgress(String token, final int progres) {
-
-                                    if (progress != null) {
-
-                                        progress.post(new Runnable() {
-                                            @Override public void run() {
-
-                                                if (progres < 100) {
-                                                    progress.withProgress(progres);
-                                                } else {
-                                                    progress.withProgress(0);
-                                                    progress.setVisibility(View.GONE);
-                                                    downloadingList.remove(rm.getMessageId());
-                                                    String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
-                                                    // File file = new File(path);
-                                                    //  touchImageView.setImageURI(Uri.fromFile(file));
-                                                    ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
-                                                    downloadedList.add(rm.getMessageId());
-                                                }
-                                            }
-                                        });
-                                    }
-                                }
-
-                                @Override public void OnError(String token) {
-                                    progress.post(new Runnable() {
-                                        @Override public void run() {
-                                            progress.withProgress(0);
-                                            progress.withDrawable(R.drawable.ic_download, true);
-                                        }
-                                    });
-                                }
-                            });
+                        startDownload(position, progress, touchImageView);
                     }
                 }
             });
@@ -429,6 +382,50 @@ public class FragmentShowImage extends Fragment {
 
             ((ViewGroup) container).addView(layout);
             return layout;
+        }
+
+        private void startDownload(int position, final MessageProgress progress, final TouchImageView touchImageView) {
+
+            String dirPath = AndroidUtils.suitableAppFilePath(mRealmList.get(position).getMessageType()) + "/" +
+                mRealmList.get(position).getAttachment().getToken() + "_" + mRealmList.get(position).getAttachment().getName();
+
+            final RealmRoomMessage rm = mRealmList.get(position);
+
+            HelperDownloadFile.startDoanload(mRealmList.get(position).getAttachment().getToken(), mRealmList.get(position).getAttachment().getName(),
+                mRealmList.get(position).getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, new HelperDownloadFile.UpdateListener() {
+                    @Override public void OnProgress(String token, final int progres) {
+
+                        if (progress != null) {
+
+                            progress.post(new Runnable() {
+                                @Override public void run() {
+
+                                    if (progres < 100) {
+                                        progress.withProgress(progres);
+                                    } else {
+                                        progress.withProgress(0);
+                                        progress.setVisibility(View.GONE);
+
+                                        String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
+                                        // File file = new File(path);
+                                        //  touchImageView.setImageURI(Uri.fromFile(file));
+                                        ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
+                                        downloadedList.add(rm.getMessageId());
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    @Override public void OnError(String token) {
+                        progress.post(new Runnable() {
+                            @Override public void run() {
+                                progress.withProgress(0);
+                                progress.withDrawable(R.drawable.ic_download, true);
+                            }
+                        });
+                    }
+                });
         }
 
         @Override public void destroyItem(ViewGroup container, int position, Object object) {
