@@ -36,7 +36,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -96,15 +95,13 @@ import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -1541,8 +1538,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void onClick(View view) {
                 new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize))
                     .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.message_text_size)
+                    .titleColor(getResources().getColor(android.R.color.black)).items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
                     .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -1950,6 +1946,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         TextView txtVersionApp = (TextView) findViewById(R.id.st_txt_versionApp);
         txtVersionApp.setText(getString(R.string.iGap_version) + " v " + getAppVersion());
+
+        if (HelperCalander.isLanguagePersian) {
+            txtVersionApp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVersionApp.getText().toString()));
+        }
 
         realm.close();
 

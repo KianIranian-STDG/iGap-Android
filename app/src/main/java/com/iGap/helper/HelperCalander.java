@@ -53,7 +53,17 @@ public class HelperCalander {
         if (isTimeHijri()) {
             result = getPersianCalander(time * DateUtils.SECOND_IN_MILLIS);
         } else {
-            result = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, "dd MMM yyyy");
+
+            if (HelperCalander.isLanguagePersian) {
+                result = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, "dd MM yyyy");
+                String[] _date = result.split(" ");
+                if (_date.length > 2) {
+                    result = _date[2] + " " + convertEnglishMonthNameToPersian(Integer.parseInt(_date[1])) + " " + _date[0];
+                }
+            } else {
+                result = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, "dd MMM yyyy");
+            }
+
         }
 
         return result;
@@ -61,6 +71,51 @@ public class HelperCalander {
 
     public static String milladyDate(long time) {
         return TimeUtils.toLocal(time, "dd_MM_yyyy");
+    }
+
+    public static String convertEnglishMonthNameToPersian(int month) {
+        String result = "";
+
+        switch (month) {
+            case 1:
+                result = "ژانویه";
+                break;
+            case 2:
+                result = "فوریه";
+                break;
+            case 3:
+                result = "مارس";
+                break;
+            case 4:
+                result = "آوریل";
+                break;
+            case 5:
+                result = "مه";
+                break;
+            case 6:
+                result = "ژوئن";
+                break;
+            case 7:
+                result = "ژوئیه";
+                break;
+            case 8:
+                result = "اوت";
+                break;
+            case 9:
+                result = "سپتامبر";
+                break;
+            case 10:
+                result = "اکتبر";
+                break;
+            case 11:
+                result = "نوامبر";
+                break;
+            case 12:
+                result = "دسامبر";
+                break;
+        }
+
+        return result;
     }
 
     public static String getPersianMonthName(int month) {
@@ -165,7 +220,21 @@ public class HelperCalander {
                 output = HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getDay();
 
             } else {
-                output = TimeUtils.toLocal(date.getTimeInMillis(), "MMM dd");
+
+                if (HelperCalander.isLanguagePersian) {
+                    output = TimeUtils.toLocal(date.getTimeInMillis(), "MM dd");
+                    String[] _date = output.split(" ");
+                    if (_date.length > 1) {
+                        output = _date[1] + " " + convertEnglishMonthNameToPersian(Integer.parseInt(_date[0]));
+                    }
+                } else {
+                    output = TimeUtils.toLocal(date.getTimeInMillis(), "MMM dd");
+                }
+
+
+
+
+
             }
         }
 

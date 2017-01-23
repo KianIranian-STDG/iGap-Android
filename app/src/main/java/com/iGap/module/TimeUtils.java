@@ -84,7 +84,17 @@ public final class TimeUtils {
                 }
 
             } else {
-                output = TimeUtils.toLocal(date.getTimeInMillis(), "dd MMM yyyy");
+
+                if (HelperCalander.isLanguagePersian) {
+                    output = TimeUtils.toLocal(date.getTimeInMillis(), "dd MM yyyy");
+                    String[] _date = output.split(" ");
+                    if (_date.length > 2) {
+                        output = _date[2] + " " + HelperCalander.convertEnglishMonthNameToPersian(Integer.parseInt(_date[1])) + " " + _date[0];
+                    }
+                } else {
+                    output = TimeUtils.toLocal(date.getTimeInMillis(), "dd MMM yyyy");
+                }
+
             }
         }
 

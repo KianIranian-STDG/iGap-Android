@@ -33,6 +33,31 @@
         <item><font size="30"> 30(Hello)</font></item>
     </string-array>
 
+
+    <string-array name="message_text_size_persian">
+        <item><font size="11"> ۱۱(Hello)</font></item>
+        <item><font size="12"> ۱۲(Hello)</font></item>
+        <item><font size="13"> ۱۳(Hello)</font></item>
+        <item><font size="14"> ۱۴(Hello)</font></item>
+        <item><font size="15"> ۱۵(Hello)</font></item>
+        <item><font size="16"> ۱۶Hello)</font></item>
+        <item><font size="17"> ۱۷(Hello)</font></item>
+        <item><font size="18"> ۱۸(Hello)</font></item>
+        <item><font size="19"> ۱۹(Hello)</font></item>
+        <item><font size="20"> ۲۰(Hello)</font></item>
+        <item><font size="21"> ۲۱(Hello)</font></item>
+        <item><font size="22"> ۲۲(Hello)</font></item>
+        <item><font size="23"> ۲۳(Hello)</font></item>
+        <item><font size="24"> ۲۴(Hello)</font></item>
+        <item><font size="25"> ۲۵(Hello)</font></item>
+        <item><font size="26"> ۲۶(Hello)</font></item>
+        <item><font size="27"> ۲۷(Hello)</font></item>
+        <item><font size="28"> ۲۸(Hello)</font></item>
+        <item><font size="29"> ۲۹(Hello)</font></item>
+        <item><font size="30"> ۳۰(Hello)</font></item>
+    </string-array>
+
+
     <string-array name="auto_download_data">
         <item>@string/array_Photo</item>
         <item>@string/array_Voice_Message</item>
