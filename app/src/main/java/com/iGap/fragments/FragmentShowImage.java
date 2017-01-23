@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activities.ActivityShearedMedia;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -41,6 +40,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
+import java.util.ArrayList;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
@@ -61,6 +61,7 @@ public class FragmentShowImage extends Fragment {
     private String selectedFileToken = "";
     private Realm mRealm;
     private ArrayMap<Long, Boolean> downloadingList = new ArrayMap<>();
+    public static ArrayList<Long> downloadedList = new ArrayList<>();
 
     public static View appBarLayout;
 
@@ -134,6 +135,8 @@ public class FragmentShowImage extends Fragment {
     }
 
     private void initComponent(View view) {
+
+        downloadedList.clear();
 
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
@@ -311,6 +314,41 @@ public class FragmentShowImage extends Fragment {
                     if (file.exists()) {
                         //  touchImageView.setImageURI(Uri.fromFile(file));
                         ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
+                    } else if (rm.getAttachment() != null) {
+
+                        // if thumpnail not exist download it
+                        ProtoFileDownload.FileDownload.Selector selector = null;
+                        long fileSize = 0;
+
+                        if (rm.getAttachment().getSmallThumbnail() != null) {
+                            selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+                            fileSize = rm.getAttachment().getSmallThumbnail().getSize();
+                        } else if (rm.getAttachment().getLargeThumbnail() != null) {
+                            selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+                            fileSize = rm.getAttachment().getLargeThumbnail().getSize();
+                        }
+
+                        final String filePathTumpnail = G.DIR_TEMP + "/" + "thumb_" + rm.getAttachment().getToken() + "_" + rm.getAttachment().getName();
+
+                        if (selector != null && fileSize > 0) {
+                            HelperDownloadFile.startDoanload(rm.getAttachment().getToken(), rm.getAttachment().getName(), fileSize, selector, "", new HelperDownloadFile.UpdateListener() {
+                                @Override public void OnProgress(String token, int progress) {
+                                    if (progress == 100) {
+
+                                        touchImageView.post(new Runnable() {
+                                            @Override public void run() {
+                                                ImageLoader.getInstance().displayImage(suitablePath(filePathTumpnail), touchImageView);
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override public void OnError(String token) {
+
+                                }
+                            });
+                        }
+
                     }
                 }
             }
@@ -326,8 +364,13 @@ public class FragmentShowImage extends Fragment {
                         progress.withDrawable(R.drawable.ic_cancel, true);
                         downloadingList.put(mRealmList.get(position).getMessageId(), true);
 
+                        String dirPath =
+                            AndroidUtils.suitableAppFilePath(mRealmList.get(position).getMessageType()) + "/" + mRealmList.get(position).getAttachment().getToken() + "_" + mRealmList.get(position)
+                                .getAttachment()
+                                .getName();
+
                         HelperDownloadFile.startDoanload(mRealmList.get(position).getAttachment().getToken(), mRealmList.get(position).getAttachment().getName(),
-                            mRealmList.get(position).getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, mRealmList.get(position).getMessageType(),
+                            mRealmList.get(position).getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath,
                             new HelperDownloadFile.UpdateListener() {
                                 @Override public void OnProgress(String token, final int progres) {
 
@@ -346,7 +389,7 @@ public class FragmentShowImage extends Fragment {
                                                     // File file = new File(path);
                                                     //  touchImageView.setImageURI(Uri.fromFile(file));
                                                     ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
-                                                    ActivityShearedMedia.downloadedList.add(rm.getMessageId());
+                                                    downloadedList.add(rm.getMessageId());
                                                 }
                                             }
                                         });

@@ -32,6 +32,10 @@ public class ProgressWaiting extends AbstractMessage<com.iGap.adapter.items.chat
         super.voteAction(holder);
     }
 
+    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
+
+    }
+
     @Override public ViewHolderFactory<? extends com.iGap.adapter.items.chat.ProgressWaiting.ViewHolder> getFactory() {
         return FACTORY;
     }

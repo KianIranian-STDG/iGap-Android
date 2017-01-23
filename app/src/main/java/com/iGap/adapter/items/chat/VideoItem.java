@@ -3,7 +3,6 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
 import com.iGap.R;
 import com.iGap.helper.HelperRadius;
 import com.iGap.interfaces.IMessageItem;
@@ -13,7 +12,6 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
@@ -46,6 +44,10 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
         ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
 
         holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+    }
+
+    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
+
     }
 
     @Override

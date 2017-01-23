@@ -29,7 +29,6 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -80,7 +79,7 @@ import com.iGap.adapter.items.chat.VideoItem;
 import com.iGap.adapter.items.chat.VideoWithTextItem;
 import com.iGap.adapter.items.chat.VoiceItem;
 import com.iGap.fragments.FragmentMap;
-import com.iGap.fragments.FragmentShowImageMessages;
+import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperCancelDownloadUpload;
@@ -111,7 +110,6 @@ import com.iGap.interfaces.OnClearChatHistory;
 import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnClientJoinByUsername;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
-import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnHelperSetAction;
@@ -150,7 +148,6 @@ import com.iGap.module.TimeUtils;
 import com.iGap.module.VoiceRecord;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoChannelGetMessagesStats;
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAttachment;
@@ -180,7 +177,6 @@ import com.iGap.realm.RealmRoomMessageLocation;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChannelDeleteMessage;
 import com.iGap.request.RequestChannelEditMessage;
 import com.iGap.request.RequestChannelUpdateDraft;
@@ -253,7 +249,8 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
 public class ActivityChat extends ActivityEnhanced
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnFileDownloadResponse, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse,
+    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
+    OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse,
         OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 
     public static ActivityChat activityChat;
@@ -316,7 +313,7 @@ public class ActivityChat extends ActivityEnhanced
     private TextView btnDown;
     private TextView txtChannelMute;
     //popular (chat , group , channel)
-    private ArrayList<Integer> updateFiled = new ArrayList<>();
+
     public String title;
     public String phoneNumber;
     public static String titleStatic;
@@ -449,7 +446,7 @@ public class ActivityChat extends ActivityEnhanced
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.uploaderUtil.setActivityCallbacks(this);
-        G.onFileDownloadResponse = this;
+
         G.onUserInfoResponse = this;
         G.onClientGetRoomHistoryResponse = this;
         G.onChannelAddMessageReaction = this;
@@ -2444,18 +2441,31 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onBackPressed() {
 
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag("ShowImageMessage");
+        android.app.Fragment fragment = getFragmentManager().findFragmentByTag("ShowImageMessage");
 
         if (fragment != null) {
 
-            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            getFragmentManager().beginTransaction().remove(fragment).commit();
 
-            for (int i = 0; i < updateFiled.size(); i++) {
-                mAdapter.notifyItemChanged(updateFiled.get(i));
+            // for update view that image download in fragment show image
+            int count = FragmentShowImage.downloadedList.size();
+
+            for (int i = 0; i < count; i++) {
+                String id = FragmentShowImage.downloadedList.get(i) + "";
+
+                for (int j = mAdapter.getAdapterItemCount() - 1; j >= 0; j--) {
+                    try {
+                        if (mAdapter.getItem(j).mMessage.messageID.equals(id)) {
+                            mAdapter.notifyItemChanged(j);
+                            break;
+                        }
+                    } catch (NullPointerException e) {
+                    }
+                }
             }
-            updateFiled.clear();
+            FragmentShowImage.downloadedList.clear();
 
-            G.onFileDownloadResponse = this;
+
 
         } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
@@ -3621,34 +3631,19 @@ public class ActivityChat extends ActivityEnhanced
     private void showImage(final StructMessageInfo messageInfo) {
 
         // for gone appbare
-        FragmentShowImageMessages.appBarLayout = appBarLayout;
+        FragmentShowImage.appBarLayout = appBarLayout;
 
-        // when image download in fragment show imaga after finish update ui in chat layout
-        FragmentShowImageMessages.onDownloadComplet = new OnComplete() {
-            @Override
-            public void complete(boolean result, String token, String MessageTow) {
+        String selectedFileToken = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getToken() : messageInfo.attachment.token;
 
-                for (int i = mAdapter.getAdapterItemCount(); i > 0; i--) {
+        android.app.Fragment fragment = FragmentShowImage.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putLong("RoomId", mRoomId);
+        bundle.putString("SelectedImage", selectedFileToken);
+        fragment.setArguments(bundle);
 
-                    try {
+        getFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, fragment, "ShowImageMessage").commit();
 
-                        String _token = "";
-                        StructMessageInfo _smi = mAdapter.getAdapterItem(i - 1).mMessage;
-                        _token = _smi.forwardedFrom != null ? _smi.forwardedFrom.getAttachment().getToken() : _smi.attachment.token;
 
-                        if (_token.equals(token)) {
-                            updateFiled.add(i - 1);
-                            break;
-                        }
-                    } catch (NullPointerException e) {
-                        Log.e("dddd", " activity chat   FragmentShowImageMessages.onDownloadComplet   " + e);
-                    }
-                }
-            }
-        };
-
-        FragmentShowImageMessages fragment = FragmentShowImageMessages.newInstance(mRoomId, messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getToken() : messageInfo.attachment.token);
-        getSupportFragmentManager().beginTransaction().replace(ac_ll_parent, fragment, "ShowImageMessage").commit();
     }
 
     @Override
@@ -3907,56 +3902,6 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override
-    public void onFileDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // if thumbnail
-                if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
-                    mAdapter.updateThumbnail(token);
-                } else {
-                    // else file
-                    mAdapter.updateDownloadFields(token, progress, offset);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onAvatarDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Realm realm = Realm.getDefaultInstance();
-
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
-
-                if (realmRegisteredInfo != null) {
-                    mAdapter.downloadingAvatar(userId, progress, offset, StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()));
-                }
-
-                realm.close();
-            }
-        });
-    }
-
-    @Override
-    public void onError(int majorCode, int minorCode) {
-    }
-
-    @Override
-    public void onBadDownload(final String token) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // make item not downloaded
-                if (mAdapter != null) {
-                    mAdapter.makeNotDownloaded(token);
-                }
-            }
-        });
-    }
 
     @Override
     public void onFileTimeOut(String identity) {
@@ -4245,6 +4190,10 @@ public class ActivityChat extends ActivityEnhanced
             }
         }
         realm.close();
+    }
+
+    @Override public void onBadDownload(String token) {
+
     }
 
     private void onSelectRoomMenu(String message, int item) {
@@ -4803,24 +4752,6 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onDownloadCancel(View view, final StructMessageInfo message, final int pos) {
-        if (HelperCancelDownloadUpload.cancelDownload(message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token)) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    // make item not downloaded
-                    mAdapter.makeNotDownloaded(message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onDownloadStart(View view, StructMessageInfo message, int pos) {
-        // empty
-    }
-
-    @Override
     public void onFailedMessageClick(View view, final StructMessageInfo message, final int pos) {
         final List<StructMessageInfo> failedMessages = mAdapter.getFailedMessages();
         new ResendMessage(this, new IResendMessage() {
@@ -5123,6 +5054,10 @@ public class ActivityChat extends ActivityEnhanced
                 mAdapter.updateVote(roomId, messageId, reactionCounterLabel, reaction, forwardedMessageId);
             }
         });
+    }
+
+    @Override public void onError(int majorCode, int minorCode) {
+
     }
 
     @Override

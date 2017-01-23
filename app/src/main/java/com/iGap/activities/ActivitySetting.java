@@ -56,7 +56,6 @@ import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
 import com.iGap.interfaces.OnAvatarGet;
-import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserAvatarResponse;
@@ -76,15 +75,12 @@ import com.iGap.module.IncomingSms;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.realm.enums.RoomType;
-import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserProfileCheckUsername;
 import com.iGap.request.RequestUserProfileGetEmail;
@@ -107,7 +103,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.iGap.G.context;
 import static com.iGap.R.string.log_out;
 
-public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities, OnFileDownloadResponse {
+public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
 
     public static String pathSaveImage;
     public static int KEY_AD_DATA_PHOTO = -1;
@@ -240,34 +236,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
     }
 
-    private void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
-        final String fileName = "thumb_" + token + "_" + name;
-        if (done) {
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
-                }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    String filePath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().getLocalThumbnailPath();
-                    if (G.onChangeUserPhotoListener != null) {
-                        G.onChangeUserPhotoListener.onChangePhoto(filePath);
-                    }
-                    realm.close();
-                }
-            });
-
-            return; // necessary
-        }
-
-        ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        String identity = token + '*' + selector.toString() + '*' + smallSize + '*' + fileName + '*' + 0;
-
-        new RequestFileDownload().download(token, 0, smallSize, selector, identity);
-    }
 
     private void showInitials() {
         Realm realm = Realm.getDefaultInstance();
@@ -294,7 +262,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         G.uploaderUtil.setActivityCallbacks(this);
         G.onUserAvatarResponse = this;
-        G.onFileDownloadResponse = this;
+
 
         final Realm realm = Realm.getDefaultInstance();
         final TextView txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
@@ -2189,34 +2157,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     @Override
-    public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
-        Realm realm = Realm.getDefaultInstance();
-        if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
-            // requested thumbnail
-            RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst();
-            if (avatar != null) {
-                requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
-            }
-        } else {
-            // TODO: 11/22/2016 [Alireza] implement
-        }
-        realm.close();
-    }
-
-    @Override
-    public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
-        // empty
-    }
-
-    @Override
     public void onAvatarError() {
 
     }
 
-    @Override
-    public void onError(int majorCode, int minorCode) {
 
-    }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
 

@@ -50,6 +50,10 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         //holder.thumbnail.setImageResource(R.drawable.file_icon);
     }
 
+    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
+
+    }
+
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
@@ -57,16 +61,14 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
                 holder.cslf_txt_file_name.setText(mMessage.forwardedFrom.getAttachment().getName());
-                holder.cslf_txt_file_size.setText(
-                        AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
+                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
             }
 
             setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
         } else {
             if (mMessage.attachment != null) {
                 holder.cslf_txt_file_name.setText(mMessage.attachment.name);
-                holder.cslf_txt_file_size.setText(
-                        AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
             }
 
             setTextIfNeeded(holder.messageText, mMessage.messageText);
@@ -121,6 +123,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         holder.cslf_txt_file_size.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
     }
 
+
     @Override
     protected void voteAction(ViewHolder holder) {
         super.voteAction(holder);
@@ -129,7 +132,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
         public ViewHolder create(View v) {
             return new ViewHolder(v);
-        }
+    }
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
@@ -146,6 +149,6 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
             cslf_txt_file_size = (TextView) view.findViewById(R.id.fileSize);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-        }
+    }
     }
 }

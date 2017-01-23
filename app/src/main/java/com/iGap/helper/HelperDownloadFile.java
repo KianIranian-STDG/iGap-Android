@@ -12,7 +12,6 @@ import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoFileDownload;
-import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.enums.RoomType;
@@ -28,14 +27,13 @@ import java.io.IOException;
 public class HelperDownloadFile {
 
     private static ArrayMap<String, StructDownLoad> list = new ArrayMap<>();
-    private static OnFileDownloadResponse onFileDownloadResponse;
+    private OnFileDownloadResponse onFileDownloadResponse;
 
     public HelperDownloadFile() {
 
         onFileDownloadResponse = new OnFileDownloadResponse() {
             @Override public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
 
-                if (progress < 100) {
                     if (list.containsKey(token)) {
                         StructDownLoad item = list.get(token);
                         item.offset = offset;
@@ -43,51 +41,30 @@ public class HelperDownloadFile {
 
                         requestDownloadFile(item);
                     }
-                } else {
-
-                    if (list.containsKey(token)) {
-                        StructDownLoad item = list.get(token);
-                        item.offset = offset;
-                        item.progress = progress;
-
-                        updateView(item);
-
-                        moveTmpFileToOrginFolder(token);
-
-                        list.remove(token);
-                    }
-                }
             }
 
             @Override public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
 
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode, String token) {
+
+                Log.e("ddddd", "helper download file    major  =" + majorCode + "   " + minorCode);
+
+                if (list.containsKey(token)) {
+                    StructDownLoad item = list.get(token);
+                    item.attampOnError--;
+                    if (item.attampOnError >= 0) {
+                        requestDownloadFile(item);
+                    } else {
+                        if (item.update != null) {
+                            item.update.OnError(item.token);
+                        }
+                        list.remove(token);
+                    }
+                }
 
             }
-
-            @Override public void onBadDownload(String token) {
-
-            }
-
-            //@Override
-            //public void onError(int majorCode, int minorCode, String token) {
-            //
-            //    if (list.containsKey(token)) {
-            //        StructDownLoad item = list.get(token);
-            //        item.attampOnError--;
-            //        if (item.attampOnError >= 0) {
-            //            requestDownloadFile(item);
-            //        } else {
-            //            if (item.update != null) {
-            //                item.update.OnError(item.token);
-            //            }
-            //            list.remove(token);
-            //        }
-            //    }
-            //
-            //}
         };
 
         G.onFileDownloadResponse = onFileDownloadResponse;
@@ -99,7 +76,7 @@ public class HelperDownloadFile {
         public long offset = 0;
         public String name = "";
         public String token = "";
-        public ProtoGlobal.RoomMessageType fileType;
+        public String moveToDirectoryPAth = "";
         public long size = 0;
         public int attampOnError = 2;
         public ProtoFileDownload.FileDownload.Selector selector;
@@ -112,7 +89,7 @@ public class HelperDownloadFile {
         void OnError(String token);
     }
 
-    public static void startDoanload(String token, String name, long size, ProtoFileDownload.FileDownload.Selector selector, ProtoGlobal.RoomMessageType fileType, UpdateListener update) {
+    public static void startDoanload(String token, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, UpdateListener update) {
 
         StructDownLoad item;
 
@@ -121,7 +98,7 @@ public class HelperDownloadFile {
             item = new StructDownLoad();
             item.update = update;
             item.name = name;
-            item.fileType = fileType;
+            item.moveToDirectoryPAth = moveToDirectoryPAth;
             item.token = token;
             item.size = size;
 
@@ -129,6 +106,7 @@ public class HelperDownloadFile {
         } else {
             item = list.get(token);
             item.update = update;
+            updateView(item);
 
             return;
         }
@@ -140,6 +118,7 @@ public class HelperDownloadFile {
                 item.path = token + "_" + item.name;
                 break;
             case SMALL_THUMBNAIL:
+            case LARGE_THUMBNAIL:
                 item.path = "thumb_" + item.token + "_" + AppUtils.suitableThumbFileName(item.name);
                 break;
         }
@@ -167,21 +146,19 @@ public class HelperDownloadFile {
 
     private static void requestDownloadFile(StructDownLoad item) {
 
-        updateView(item);
-
         if (item.progress == 100) {
-
             moveTmpFileToOrginFolder(item.token);
+            updateView(item);
             list.remove(item.token);
             return;
         }
 
+        updateView(item);
+
         ProtoFileDownload.FileDownload.Selector selector = item.selector;
-
         String identity = item.token + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset;
+
         new RequestFileDownload().download(item.token, item.offset, (int) item.size, selector, identity);
-
-
 
     }
 
@@ -189,29 +166,67 @@ public class HelperDownloadFile {
 
         StructDownLoad item = list.get(token);
 
+        if (item.moveToDirectoryPAth.length() > 0) {
+            String dirTmp = G.DIR_TEMP + "/" + item.path;
+            try {
+                AndroidUtils.cutFromTemp(dirTmp, item.moveToDirectoryPAth);
+            } catch (IOException e) {
+            }
+        }
+
+
         switch (item.selector) {
             case FILE:
-                String dirPath = AndroidUtils.suitableAppFilePath(item.fileType) + "/" + item.path;
-                String dirTmp = G.DIR_TEMP + "/" + item.path;
-                try {
-                    AndroidUtils.cutFromTemp(dirTmp, dirPath);
-
-                    setToDataBaseAttachment(token, dirPath);
-
-                } catch (IOException e) {
-                }
+                setFilePAthToDataBaseAttachment(token, item.moveToDirectoryPAth);
                 break;
+
+            case SMALL_THUMBNAIL:
+            case LARGE_THUMBNAIL:
+                String dirPathThumpnail = G.DIR_TEMP + "/" + item.path;
+                ;
+                setThumpnailPathDataBaseAttachment(token, dirPathThumpnail);
+                break;
+
         }
     }
 
-    private static void setToDataBaseAttachment(final String token, final String name) {
+    private static void setThumpnailPathDataBaseAttachment(final String token, final String name) {
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
                 RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
                 if (attachment != null) {
-                    Log.e("ddd", "bbbbbbbbbbbbb      " + name);
+                    attachment.setLocalThumbnailPath(name);
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static boolean isDownLoading(String token) {
+
+        if (list.containsKey(token)) if (list.get(token).selector == ProtoFileDownload.FileDownload.Selector.FILE) return true;
+
+        return false;
+    }
+
+    public static int getProgress(String token) {
+
+        if (list.containsKey(token)) {
+            return list.get(token).progress;
+        } else {
+            return 0;
+        }
+    }
+
+    private static void setFilePAthToDataBaseAttachment(final String token, final String name) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
+                if (attachment != null) {
                     attachment.setLocalFilePath(name);
                 }
             }
@@ -222,8 +237,12 @@ public class HelperDownloadFile {
 
     private static void updateView(StructDownLoad item) {
 
+        Log.e("ddddd", item.offset + "   " + item.progress + "    " + item.size + "   " + item.selector);
+
         if (item.update != null) {
             item.update.OnProgress(item.token, item.progress);
+        } else {
+            Log.e("ddddd", "helper download file   listener is null");
         }
     }
 

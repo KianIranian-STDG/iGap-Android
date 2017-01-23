@@ -109,6 +109,11 @@ public class ImageWithTextItem
         holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
     }
 
+    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
+        ImageLoader.getInstance().displayImage(suitablePath(path), holder.image);
+        holder.image.setCornerRadius(HelperRadius.computeRadius(path));
+    }
+
     @Override
     protected void voteAction(ViewHolder holder) {
         super.voteAction(holder);

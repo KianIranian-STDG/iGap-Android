@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.ReserveSpaceGifImageView;
@@ -12,11 +11,9 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
+import io.meness.github.messageprogress.MessageProgress;
 import java.io.File;
 import java.util.List;
-
-import io.meness.github.messageprogress.MessageProgress;
 import pl.droidsonroids.gif.GifDrawable;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -79,6 +76,10 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
                 }
             }
         }
+    }
+
+    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
+
     }
 
     @Override

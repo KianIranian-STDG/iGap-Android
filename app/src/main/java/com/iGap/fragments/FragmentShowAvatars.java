@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
@@ -17,20 +18,16 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.AvatarsAdapter;
 import com.iGap.adapter.items.AvatarItem;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.interfaces.OnChannelAvatarDelete;
-import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnGroupAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.OnComplete;
-import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -39,20 +36,18 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChannelAvatarDelete;
 import com.iGap.request.RequestChannelAvatarGetList;
 import com.iGap.request.RequestGroupAvatarDelete;
 import com.iGap.request.RequestGroupAvatarGetList;
 import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserAvatarGetList;
-
-import java.io.File;
-
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
 
 import static com.iGap.R.id.count;
 
@@ -60,7 +55,7 @@ import static com.iGap.R.id.count;
  * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/26/2016.
  */
 
-public class FragmentShowAvatars extends Fragment implements OnFileDownloadResponse {
+public class FragmentShowAvatars extends Fragment {
     private static final String ARG_PEER_ID = "arg_peer_id";
     private static final String ARG_Type = "arg_type";
 
@@ -70,7 +65,10 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     private LinearLayout mToolbar;
     private TextView mCount;
     private RecyclerView mRecyclerView;
-    private AvatarsAdapter<AvatarItem> mAdapter;
+    public static ArrayMap<Long, Boolean> downloadingAvatarList = new ArrayMap<>();
+
+    FastItemAdapter<AvatarItem> mAdapter;
+
     private int avatarListSize = 0;
 
     public static OnComplete onComplete;
@@ -160,9 +158,6 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         if (result != null)
             from = result;
 
-
-        // init callbacks
-        G.onFileDownloadResponse = this;
     }
 
     @Nullable
@@ -177,11 +172,13 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
 
         mRealm = Realm.getDefaultInstance();
 
+
         // init fields
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mCount = (TextView) view.findViewById(count);
         mToolbar = (LinearLayout) view.findViewById(R.id.toolbar);
-        mAdapter = new AvatarsAdapter<>();
+
+        mAdapter = new FastItemAdapter<>();
 
         // ripple back
         ((RippleView) view.findViewById(R.id.back)).setOnRippleCompleteListener(
@@ -322,6 +319,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     private void fillAdapterChat(RealmResults<RealmAvatar> avatarList) {
 
         avatarListSize = avatarList.size();
+
         for (int i = 0; i < avatarListSize; i++) {
             RealmAvatar avatar = avatarList.get((i));
             mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(100 + i));
@@ -476,7 +474,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             }
         };
 
-        new RequestChannelAvatarDelete().channelAvatarDelete(mPeerId, mAdapter.getAdapterItems().get(curerntItemPosition).imageId);
+        new RequestChannelAvatarDelete().channelAvatarDelete(mPeerId, ((AvatarItem) mAdapter.getItem(curerntItemPosition)).imageId);
 
 
     }
@@ -523,8 +521,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
             }
         };
 
-
-        new RequestGroupAvatarDelete().groupAvatarDelete(mPeerId, mAdapter.getAdapterItems().get(curerntItemPosition).imageId);
+        new RequestGroupAvatarDelete().groupAvatarDelete(mPeerId, ((AvatarItem) mAdapter.getItem(curerntItemPosition)).imageId);
     }
 
     private void deletePhotoSetting() {
@@ -566,7 +563,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
         };
 //        RealmAvatar realmAvatar = HelperAvatar.getLastAvatar(userId);
 
-        new RequestUserAvatarDelete().userAvatarDelete(mAdapter.getAdapterItems().get(curerntItemPosition).imageId);
+        new RequestUserAvatarDelete().userAvatarDelete(((AvatarItem) mAdapter.getItem(curerntItemPosition)).imageId);
 
     }
 
@@ -577,7 +574,7 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
     private void saveToGallery() {
 
         if (mAdapter.getItem(curerntItemPosition) != null) {
-            String media = mAdapter.getItem(curerntItemPosition).avatar.getLocalFilePath();
+            String media = ((AvatarItem) mAdapter.getItem(curerntItemPosition)).avatar.getLocalFilePath();
             if (media != null) {
                 File file = new File(media);
                 if (file.exists()) {
@@ -585,39 +582,5 @@ public class FragmentShowAvatars extends Fragment implements OnFileDownloadRespo
                 }
             }
         }
-    }
-
-    @Override
-    public void onFileDownload(final String token, final long offset,
-                               final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
-                    // requested thumbnail
-                    mAdapter.downloadingAvatarThumbnail(token);
-                } else {
-                    // requested file
-                    mAdapter.downloadingAvatarFile(token, progress, offset);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onAvatarDownload(String token, long offset,
-                                 ProtoFileDownload.FileDownload.Selector selector, int progress, long userId,
-                                 RoomType roomType) {
-        // empty
-    }
-
-    @Override
-    public void onError(int majorCode, int minorCode) {
-
-    }
-
-    @Override
-    public void onBadDownload(String token) {
-        // empty
     }
 }

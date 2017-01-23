@@ -137,6 +137,10 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
     }
 
+    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
+
+    }
+
     @Override
     protected void voteAction(ViewHolder holder) {
         super.voteAction(holder);

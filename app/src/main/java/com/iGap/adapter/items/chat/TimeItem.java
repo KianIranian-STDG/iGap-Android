@@ -3,12 +3,10 @@ package com.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
 import java.util.List;
 
 public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
@@ -38,6 +36,10 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
     @Override
     protected void voteAction(ViewHolder holder) {
         super.voteAction(holder);
+    }
+
+    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
+
     }
 
     @Override

@@ -27,6 +27,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperCheckInternetConnection;
 import com.iGap.helper.HelperConnectionState;
+import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.MyService;
@@ -590,6 +591,8 @@ public class G extends MultiDexApplication {
         //G.onFileDownloadResponse = this;
 
         saveLogcatToFile(context);
+
+        HelperDownloadFile helperDownloadFile = new HelperDownloadFile();
     }
 
     public static void makeFolder() {
