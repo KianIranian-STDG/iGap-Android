@@ -156,7 +156,7 @@ public class HelperString {
 
     public static boolean regexCheckUsername(String text) {
 
-        String regex = "^[a-zA-Z].{5,}$";
+        String regex = "^[a-zA-Z].{4,}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher m = pattern.matcher(text);
         return m.matches();
