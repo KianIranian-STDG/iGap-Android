@@ -43,8 +43,6 @@ public class GroupSendMessageResponse extends MessageHandler {
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         final String authorHash = realm.where(RealmUserInfo.class).findFirst().getAuthorHash();
 
-        Log.e("ddddddddd", builder + "");
-
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

@@ -1146,8 +1146,6 @@ public class ActivityChat extends ActivityEnhanced
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
 
-            Log.e("ddddd", messageInfo.messageID + "");
-
             if (!messageInfo.isTimeOrLogMessage()) {
                 switch (messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType) {
                     case TEXT:
@@ -4228,8 +4226,9 @@ public class ActivityChat extends ActivityEnhanced
     }
     //    delete & clear History & mutNotification
 
-    private void clearHistory(int item) {
+    public static void clearHistory(long item) {
         final long chatId = item;
+
 
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();
@@ -4266,19 +4265,13 @@ public class ActivityChat extends ActivityEnhanced
                         }
                         // finally delete whole chat history
                         realmRoomMessages.deleteAllFromRealm();
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mAdapter != null) {
-                                    mAdapter.clear();
-                                }
-                            }
-                        });
                     }
                 });
 
                 element.removeChangeListeners();
+
+                G.onClearChatHistory.onClearChatHistory();
+
                 realm.close();
             }
         });
