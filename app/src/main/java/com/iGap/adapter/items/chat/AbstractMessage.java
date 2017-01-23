@@ -21,8 +21,8 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperAvatar;
-import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperCalander;
+import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperGetMessageState;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IChatItemAttachment;
@@ -58,7 +58,6 @@ import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.meness.github.messageprogress.OnProgress;
 import io.realm.Realm;
 import java.util.List;
-import java.io.IOException;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;

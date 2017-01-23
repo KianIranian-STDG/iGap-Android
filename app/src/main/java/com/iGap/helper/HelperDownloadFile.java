@@ -17,8 +17,10 @@ import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
 import io.realm.Realm;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Maryam on 12/9/2016.
@@ -34,12 +36,20 @@ public class HelperDownloadFile {
         onFileDownloadResponse = new OnFileDownloadResponse() {
             @Override public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
 
-                    if (list.containsKey(token)) {
-                        StructDownLoad item = list.get(token);
+                String PrimaryKey = token + selector;
+
+                if (list.containsKey(PrimaryKey)) {
+
+                    StructDownLoad item = list.get(PrimaryKey);
+
+                    if (item.isCanseling) {
+                        list.remove(PrimaryKey);
+                    } else {
                         item.offset = offset;
                         item.progress = progress;
-
                         requestDownloadFile(item);
+                    }
+
                     }
             }
 
@@ -47,20 +57,31 @@ public class HelperDownloadFile {
 
             }
 
-            @Override public void onError(int majorCode, int minorCode, String token) {
+            @Override public void onError(int majorCode, int minorCode, String token, String selector) {
 
                 Log.e("ddddd", "helper download file    major  =" + majorCode + "   " + minorCode);
 
-                if (list.containsKey(token)) {
-                    StructDownLoad item = list.get(token);
-                    item.attampOnError--;
-                    if (item.attampOnError >= 0) {
-                        requestDownloadFile(item);
+                String primaryKey = token + selector;
+
+                if (list.containsKey(primaryKey)) {
+                    StructDownLoad item = list.get(primaryKey);
+
+                    if (item.isCanseling) {
+                        list.remove(primaryKey);
                     } else {
-                        if (item.update != null) {
-                            item.update.OnError(item.token);
+                        item.attampOnError--;
+                        if (item.attampOnError >= 0) {
+                            requestDownloadFile(item);
+                        } else {
+
+                            for (UpdateListener listener : item.listeners) {
+                                if (listener != null) {
+                                    listener.OnError(item.Token);
+                                }
+                            }
+
+                            list.remove(primaryKey);
                         }
-                        list.remove(token);
                     }
                 }
 
@@ -71,16 +92,17 @@ public class HelperDownloadFile {
     }
 
     private static class StructDownLoad {
-        public UpdateListener update = null;
+        public String Token = "";
+        public ArrayList<UpdateListener> listeners = new ArrayList<>();
         public int progress = 0;
         public long offset = 0;
         public String name = "";
-        public String token = "";
         public String moveToDirectoryPAth = "";
         public long size = 0;
         public int attampOnError = 2;
         public ProtoFileDownload.FileDownload.Selector selector;
         public String path = "";
+        public boolean isCanseling = false;
     }
 
     public interface UpdateListener {
@@ -93,19 +115,22 @@ public class HelperDownloadFile {
 
         StructDownLoad item;
 
-        if (!list.containsKey(token)) {
+        String primaryKey = token + selector;
+
+        if (!list.containsKey(primaryKey)) {
 
             item = new StructDownLoad();
-            item.update = update;
+            item.Token = token;
+            item.listeners.add(update);
             item.name = name;
             item.moveToDirectoryPAth = moveToDirectoryPAth;
-            item.token = token;
             item.size = size;
 
-            list.put(token, item);
+            list.put(primaryKey, item);
         } else {
-            item = list.get(token);
-            item.update = update;
+            item = list.get(primaryKey);
+            item.listeners.add(update);
+            item.isCanseling = false;
             updateView(item);
 
             return;
@@ -119,7 +144,7 @@ public class HelperDownloadFile {
                 break;
             case SMALL_THUMBNAIL:
             case LARGE_THUMBNAIL:
-                item.path = "thumb_" + item.token + "_" + AppUtils.suitableThumbFileName(item.name);
+                item.path = "thumb_" + item.Token + "_" + AppUtils.suitableThumbFileName(item.name);
                 break;
         }
 
@@ -139,32 +164,36 @@ public class HelperDownloadFile {
 
     public static void stopDownLoad(String token) {
 
-        if (list.containsKey(token)) {
-            list.remove(token);
+        String primaryKey = token + ProtoFileDownload.FileDownload.Selector.FILE;
+
+        if (list.containsKey(primaryKey)) {
+            StructDownLoad item = list.get(primaryKey);
+            item.isCanseling = true;
+            item.listeners.clear();
         }
     }
 
     private static void requestDownloadFile(StructDownLoad item) {
 
         if (item.progress == 100) {
-            moveTmpFileToOrginFolder(item.token);
+            moveTmpFileToOrginFolder(item.Token, item.selector);
             updateView(item);
-            list.remove(item.token);
+            list.remove(item.Token + item.selector);
             return;
         }
 
         updateView(item);
 
         ProtoFileDownload.FileDownload.Selector selector = item.selector;
-        String identity = item.token + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset + '*' + true;
+        String identity = item.Token + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset + '*' + true;
 
-        new RequestFileDownload().download(item.token, item.offset, (int) item.size, selector, identity);
+        new RequestFileDownload().download(item.Token, item.offset, (int) item.size, selector, identity);
 
     }
 
-    private static void moveTmpFileToOrginFolder(String token) {
+    private static void moveTmpFileToOrginFolder(String token, ProtoFileDownload.FileDownload.Selector selector) {
 
-        StructDownLoad item = list.get(token);
+        StructDownLoad item = list.get(token + selector);
 
         if (item.moveToDirectoryPAth.length() > 0) {
             String dirTmp = G.DIR_TEMP + "/" + item.path;
@@ -183,7 +212,6 @@ public class HelperDownloadFile {
             case SMALL_THUMBNAIL:
             case LARGE_THUMBNAIL:
                 String dirPathThumpnail = G.DIR_TEMP + "/" + item.path;
-                ;
                 setThumpnailPathDataBaseAttachment(token, dirPathThumpnail);
                 break;
 
@@ -195,8 +223,9 @@ public class HelperDownloadFile {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
-                RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
-                if (attachment != null) {
+                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findAll();
+
+                for (RealmAttachment attachment : attachments) {
                     attachment.setLocalThumbnailPath(name);
                 }
             }
@@ -206,15 +235,19 @@ public class HelperDownloadFile {
 
     public static boolean isDownLoading(String token) {
 
-        if (list.containsKey(token)) if (list.get(token).selector == ProtoFileDownload.FileDownload.Selector.FILE) return true;
+        String primarykey = token + ProtoFileDownload.FileDownload.Selector.FILE;
+
+        if (list.containsKey(primarykey)) return true;
 
         return false;
     }
 
     public static int getProgress(String token) {
 
-        if (list.containsKey(token)) {
-            return list.get(token).progress;
+        String primarykey = token + ProtoFileDownload.FileDownload.Selector.FILE;
+
+        if (list.containsKey(primarykey)) {
+            return list.get(primarykey).progress;
         } else {
             return 0;
         }
@@ -225,8 +258,9 @@ public class HelperDownloadFile {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
-                RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
-                if (attachment != null) {
+                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findAll();
+
+                for (RealmAttachment attachment : attachments) {
                     attachment.setLocalFilePath(name);
                 }
             }
@@ -239,10 +273,10 @@ public class HelperDownloadFile {
 
         Log.e("ddddd", item.offset + "   " + item.progress + "    " + item.size + "   " + item.selector);
 
-        if (item.update != null) {
-            item.update.OnProgress(item.token, item.progress);
-        } else {
-            Log.e("ddddd", "helper download file   listener is null");
+        for (UpdateListener listener : item.listeners) {
+            if (listener != null) {
+                listener.OnProgress(item.Token, item.progress);
+            }
         }
     }
 

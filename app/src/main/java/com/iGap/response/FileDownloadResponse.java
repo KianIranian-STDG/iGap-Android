@@ -20,8 +20,7 @@ public class FileDownloadResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override
-    public void handler() {
+    @Override public void handler() {
         super.handler();
         ProtoFileDownload.FileDownloadResponse.Builder builder = (ProtoFileDownload.FileDownloadResponse.Builder) message;
         String[] identityParams = identity.split("\\*");
@@ -43,10 +42,8 @@ public class FileDownloadResponse extends MessageHandler {
         //    roomType = RoomType.GROUP;
         //}
 
-
         long nextOffset = previousOffset + builder.getBytes().size();
         long progress = (nextOffset * 100) / fileSize;
-
 
         AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
 
@@ -61,20 +58,18 @@ public class FileDownloadResponse extends MessageHandler {
             if (G.onFileDownloaded != null) {
                 G.onFileDownloaded.onFileDownload(filename, token, fileSize, nextOffset, selector, (int) progress);
             }
-            }
+        }
 
         //} else {
         //    G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, (int) progress, userId, roomType);
         //}
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         super.timeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         super.error();
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
@@ -85,7 +80,8 @@ public class FileDownloadResponse extends MessageHandler {
             if (G.onFileDownloadResponse != null) {
                 String[] identityParams = identity.split("\\*");
                 String token = identityParams[0];
-                G.onFileDownloadResponse.onError(majorCode, minorCode, token);
+                String selector = identityParams[1];
+                G.onFileDownloadResponse.onError(majorCode, minorCode, token, selector);
             }
         } else {
             if (G.onFileDownloaded != null) {
