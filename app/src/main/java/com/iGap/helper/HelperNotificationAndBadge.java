@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.RemoteViews;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -37,13 +36,11 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.iGap.G.context;
 
@@ -447,7 +444,7 @@ public class HelperNotificationAndBadge {
 
                     sound = realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
-                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 3);
+                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
                 }
                 messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
 
@@ -482,7 +479,7 @@ public class HelperNotificationAndBadge {
 
                     sound = realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
-                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
+                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
                 }
 
                 messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
@@ -519,7 +516,7 @@ public class HelperNotificationAndBadge {
 
                     sound = realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound();
                 } else {
-                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 3);
+                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
                 }
 
                 messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
