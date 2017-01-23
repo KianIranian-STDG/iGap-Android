@@ -430,9 +430,8 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                         }
 
                                         txtSoundMessage.setText(text.toString());
-
-                                        sharedPreferences =
-                                                getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                        poRbDialogSoundMessage = which;
+                                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
                                         editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE,
                                                 text.toString());
@@ -709,10 +708,9 @@ public class ActivitySettingNotification extends AppCompatActivity {
             }
         });
 
-        poRbDialogSoundGroup =
-                sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
+        poRbDialogSoundGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
         txtSoundGroup = (TextView) findViewById(R.id.stns_txt_sound_group_text);
-        String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, getResources().getString(R.string.arrow));
+        String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, getResources().getString(R.string.array_Default_Notification_tone));
         txtSoundGroup.setText(soundGroup);
         ltSoundGroup = (ViewGroup) findViewById(R.id.stns_layout_sound_group);
         ltSoundGroup.setOnClickListener(new View.OnClickListener() {
@@ -791,8 +789,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
 
                                         txtSoundGroup.setText(text.toString());
                                         poRbDialogSoundGroup = which;
-                                        sharedPreferences =
-                                                getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
                                         editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, text.toString());
                                         editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, which);

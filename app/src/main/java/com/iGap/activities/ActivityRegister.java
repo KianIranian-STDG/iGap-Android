@@ -33,6 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.BuildConfig;
@@ -68,11 +69,13 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-import io.realm.Realm;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
@@ -567,7 +570,7 @@ public class ActivityRegister extends ActivityEnhanced {
                             btnStart.setEnabled(false);
                             long time = 0;
                             if (BuildConfig.DEBUG) {
-                                time = 5 * DateUtils.SECOND_IN_MILLIS;
+                                time = 60 * DateUtils.SECOND_IN_MILLIS;
                             } else {
                                 time = Config.COUNTER_TIMER;
                             }
@@ -753,6 +756,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
                         rg_prg_verify_connect.setVisibility(View.INVISIBLE);
                         rg_img_verify_connect.setVisibility(View.VISIBLE);
+                        if (rg_img_verify_sms != null) rg_img_verify_sms.setVisibility(View.GONE);
                         rg_txt_verify_connect.setTextAppearance(G.context, R.style.RedHUGEText);
                         rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_text_verify));
 

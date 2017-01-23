@@ -471,6 +471,7 @@ public class G extends MultiDexApplication {
     }
 
     public static HelperCheckInternetConnection.ConnectivityType latestConnectivityType;
+    public static boolean latestMobileDataState;
 
     @Override
     public void onCreate() {
@@ -499,10 +500,12 @@ public class G extends MultiDexApplication {
         if (Connectivity.isConnectedMobile(context)) {
             HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.MOBILE;
             latestConnectivityType = HelperCheckInternetConnection.ConnectivityType.MOBILE;
+            latestMobileDataState = true;
             hasNetworkBefore = true;
         } else if (Connectivity.isConnectedWifi(context)) {
             HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.WIFI;
             latestConnectivityType = HelperCheckInternetConnection.ConnectivityType.WIFI;
+            latestMobileDataState = false;
             hasNetworkBefore = true;
         }
 
@@ -510,8 +513,22 @@ public class G extends MultiDexApplication {
 
             @Override
             public void onReceive(Context context, Intent intent) {
+                //Log.e("DDDD", "Mobile data : " + Connectivity.haveMobileData(context));
+
+                if (Connectivity.isConnectedMobile(context)) {
+                    HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.MOBILE;
+                    Log.e("DDDD", "isConnectedMobile*");
+                } else if (Connectivity.isConnectedWifi(context)) {
+                    HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.WIFI;
+                    Log.e("DDDD", "isConnectedWifi*");
+                } else {
+                    Log.e("DDDD", "no connection");
+                }
+
                 if (HelperCheckInternetConnection.hasNetwork()) {
-                    Log.e("DDD", "Has Network");
+                    Log.e("DDDD", "Has Network ");
+                    // Log.e("DDDD", "Current : " + HelperCheckInternetConnection.currentConnectivityType);
+                    // Log.e("DDDD", "latestConnectivityType : " + latestConnectivityType);
 
                     if (!hasNetworkBefore) {
                         Log.e("DDD", "before no network");
@@ -521,6 +538,7 @@ public class G extends MultiDexApplication {
                         WebSocketClient.reconnect(true);
                     } else {
                         Log.e("DDD", "before has network");
+                        //if (latestConnectivityType == null || latestConnectivityType != HelperCheckInternetConnection.currentConnectivityType) {
                         if (latestConnectivityType == null || latestConnectivityType != HelperCheckInternetConnection.currentConnectivityType) {
                             Log.e("DDD", "change connectivity type");
                             latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;

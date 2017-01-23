@@ -26,12 +26,12 @@ public class HelperCheckInternetConnection {
             }
             netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
             if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-                currentConnectivityType = ConnectivityType.MOBILE;
+                //currentConnectivityType = ConnectivityType.MOBILE;
                 return true;
             } else {
                 netInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
                 if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-                    currentConnectivityType = ConnectivityType.WIFI;
+                    //currentConnectivityType = ConnectivityType.WIFI;
                     return true;
                 }
             }

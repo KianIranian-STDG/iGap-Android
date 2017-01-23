@@ -1,5 +1,6 @@
 package com.iGap;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 import com.iGap.helper.HelperConnectionState;
 import com.iGap.helper.HelperSetAction;
@@ -8,6 +9,8 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
+import com.neovisionaries.ws.client.WebSocketFrame;
+import com.neovisionaries.ws.client.WebSocketState;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,7 @@ public class WebSocketClient {
     private static WebSocket webSocketClient;
     private static int count = 0;
     private static long latestConnectionTryTiming;
+    private static WebSocketState connectionState;
 
     /**
      * add webSocketConnection listeners and try for connect
@@ -34,6 +38,7 @@ public class WebSocketClient {
         WebSocket websocketFactory = null;
         try {
             WebSocketFactory webSocketFactory = new WebSocketFactory();
+            webSocketFactory.setConnectionTimeout((int) (10 * DateUtils.SECOND_IN_MILLIS));
             websocketFactory = webSocketFactory.createSocket(Config.urlWebsocket);
             websocketFactory.addListener(new WebSocketAdapter() {
 
@@ -68,8 +73,41 @@ public class WebSocketClient {
                 }
 
                 @Override
+                public void onUnexpectedError(WebSocket websocket, WebSocketException cause) throws Exception {
+                    super.onUnexpectedError(websocket, cause);
+                    Log.i("SOC_WebSocket", "onUnexpectedError");
+                }
+
+                @Override
+                public void onPingFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
+                    super.onPingFrame(websocket, frame);
+                    Log.i("SOC_WebSocket", "onPingFrame");
+                }
+
+                @Override
+                public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
+                    super.onPongFrame(websocket, frame);
+                    Log.i("SOC_WebSocket", "onPongFrame");
+                }
+
+                @Override
+                public void onFrameError(WebSocket websocket, WebSocketException cause, WebSocketFrame frame) throws Exception {
+                    super.onFrameError(websocket, cause, frame);
+                    Log.i("SOC_WebSocket", "onFrameError");
+                }
+
+                @Override
+                public void onStateChanged(WebSocket websocket, WebSocketState newState) throws Exception {
+                    super.onStateChanged(websocket, newState);
+                    connectionState = newState;
+                    Log.i("SOC_WebSocket_X", "onStateChanged");
+                    Log.i("SOC_WebSocket_X", "newState : " + newState);
+                }
+
+                @Override
                 public void onDisconnected(WebSocket websocket, com.neovisionaries.ws.client.WebSocketFrame serverCloseFrame, com.neovisionaries.ws.client.WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                    Log.i("SOC_WebSocketD", "onDisconnected");
+                    Log.i("SOC_WebSocket", "onDisconnected");
+                    Log.i("SOC_WebSocket", "closedByServer : " + closedByServer);
                     allowForReconnecting = true;
                     reconnect(true);
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
@@ -77,7 +115,7 @@ public class WebSocketClient {
 
                 @Override
                 public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
-                    Log.i("SOC_WebSocket", "onConnectError");
+                    Log.i("SOC_WebSocket_XXX", "onConnectError");
                     reconnect(true);
                     super.onConnectError(websocket, exception);
                 }
@@ -165,7 +203,7 @@ public class WebSocketClient {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (timeDifference(latestConnectionTryTiming)) {
+                    if (timeDifference(latestConnectionTryTiming) && connectionState != WebSocketState.CONNECTING) {
                         HelperSetAction.clearAllActions();
                         Log.e("DDD", "reconnect 1");
                         if (allowForReconnecting) {

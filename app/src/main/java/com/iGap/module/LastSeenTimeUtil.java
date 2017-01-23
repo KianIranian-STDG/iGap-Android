@@ -82,7 +82,7 @@ public class LastSeenTimeUtil {
                     TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, "yy-MM-dd") + " " +
                     exactlyTime;
         }
-
+        Log.i("TTT", "computeDays time : " + time);
         return time;
     }
 
@@ -99,19 +99,22 @@ public class LastSeenTimeUtil {
             Map.Entry<Long, Long> entry = it.next();
             long userId = entry.getKey();
             long value = entry.getValue();
-            Log.i("TTT", "TTTTT");
+            Log.i("TTT", "updateLastSeenTime 1");
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
             if (realmRegisteredInfo != null) {
                 Log.i("TTT", "realmRegisteredInfo.getStatus() : " + realmRegisteredInfo.getStatus());
                 if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
                     String showLastSeen;
                     if (timeOut(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS)) {
+                        Log.i("TTT", "updateLastSeenTime timeout 2");
                         showLastSeen = computeDays(realmRegisteredInfo.getLastSeen());
                         userIdList.add(userId);
                     } else {
+                        Log.i("TTT", "updateLastSeenTime getMinute 3");
                         showLastSeen = getMinute(realmRegisteredInfo.getLastSeen());
                     }
                     if (G.onLastSeenUpdateTiming != null) {
+                        Log.i("TTT", "showLastSeen : " + showLastSeen);
                         G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
                     }
                 } else {
@@ -154,10 +157,18 @@ public class LastSeenTimeUtil {
 
         long currentTime = System.currentTimeMillis();
         long difference = (currentTime - (time * DateUtils.SECOND_IN_MILLIS));
-
+        Log.i("TTT", "time : " + time);
+        Log.i("TTT", "time * DateUtils.SECOND_IN_MILLIS) : " + time * DateUtils.SECOND_IN_MILLIS);
+        Log.i("TTT", "currentTime : " + currentTime);
+        Log.i("TTT", "getMinute TimeUnit.MILLISECONDS.toMinutes(difference) : " + TimeUnit.MILLISECONDS.toMinutes(difference));
+        //difference = -(70 * DateUtils.MINUTE_IN_MILLIS);
         if (TimeUnit.MILLISECONDS.toMinutes(difference) <= 0) {
             return G.context.getResources().getString(R.string.last_seen_recently);
         }
+
+        /*else if (TimeUnit.MILLISECONDS.toMinutes(difference) >= 61) {
+            return "*"+G.context.getResources().getString(R.string.last_seen_recently);
+        }*/
 
         return TimeUnit.MILLISECONDS.toMinutes(difference) + " " + G.context.getResources().getString(R.string.minute_ago);
     }

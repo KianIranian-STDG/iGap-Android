@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
+import java.lang.reflect.Method;
 
 /**
  * Check device's network connectivity and speed
@@ -28,11 +29,26 @@ public class Connectivity {
         return (info != null && info.isConnected());
     }
 
+    public static boolean haveMobileData(Context context) {
+        boolean mobileDataEnabled = false; // Assume disabled
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            Class cmClass = Class.forName(cm.getClass().getName());
+            Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
+            method.setAccessible(true); // Make the method callable
+            // get the setting for "mobile data"
+            return mobileDataEnabled = (Boolean) method.invoke(cm);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * Check if there is any connectivity to a Wifi network
      */
     public static boolean isConnectedWifi(Context context) {
         NetworkInfo info = Connectivity.getNetworkInfo(context);
+
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_WIFI);
     }
 

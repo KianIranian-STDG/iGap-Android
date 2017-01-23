@@ -469,12 +469,17 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void onClick(View view) {
 
-                Fragment fragment = RegisteredContactsFragment.newInstance();
+                final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
 
+                try {
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
                 arcMenu.toggleMenu();
 
                 //                isMenuButtonAddShown = true;

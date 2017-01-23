@@ -1,6 +1,5 @@
 package com.iGap.response;
 
-import android.text.format.DateUtils;
 import com.iGap.G;
 import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -34,7 +33,7 @@ public class UserUpdateStatusResponse extends MessageHandler {
                 public void execute(Realm realm) {
 
                     realmRegisteredInfo.setStatus(builder.getStatus().toString());
-                    realmRegisteredInfo.setLastSeen((int) (System.currentTimeMillis() / DateUtils.SECOND_IN_MILLIS));
+                    realmRegisteredInfo.setLastSeen(builder.getResponse().getTimestamp());
 
                     if (builder.getUserId() == realm.where(RealmUserInfo.class).findFirst().getUserId()) {
                         if (builder.getStatus() == ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE) {

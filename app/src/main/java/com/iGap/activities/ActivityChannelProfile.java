@@ -40,6 +40,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -128,14 +129,16 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -289,7 +292,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         ViewGroup vgRootAddMember = (ViewGroup) findViewById(R.id.agp_root_layout_add_member);
         ViewGroup ltLink = (ViewGroup) findViewById(R.id.layout_channel_link);
         imgPupupMenul = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
-
+        txtDescription = (TextView) findViewById(R.id.txt_description);
         if (role == ChannelChatRole.MEMBER) {
             vgRootAddMember.setVisibility(View.GONE);
         }
@@ -314,13 +317,22 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         }
 
         if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
+
             fab.setVisibility(View.VISIBLE);
 
             imgPupupMenul.setVisibility(View.VISIBLE);
         } else {
             fab.setVisibility(View.GONE);
-
             imgPupupMenul.setVisibility(View.GONE);
+        }
+
+        Log.i("VVVVVVVV", "4 onCreate: " + description);
+        if (role != ChannelChatRole.OWNER) {
+            Log.i("VVVVVVVV", "0 onCreate: " + description);
+            if (description.equals("")) {
+                Log.i("VVVVVVVV", "1 onCreate: " + description);
+                lytChannelDescription.setVisibility(View.GONE);
+            }
         }
 
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
@@ -425,7 +437,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         });
 
 
-        txtDescription = (TextView) findViewById(R.id.txt_description);
+
        /* txtDescription.setMovementMethod(LinkMovementMethod.getInstance());
 
         String a[] = txtDescription.getText().toString().split(" ");
@@ -968,7 +980,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         inputChannelLink.addView(viewRevoke, viewParams);
 
         TextView txtLink = new TextView(ActivityChannelProfile.this);
-        txtLink.setText("http://iGap.net/");
+        txtLink.setText("iGap.net/" + link);
         txtLink.setTextColor(getResources().getColor(R.color.gray_6c));
 
         viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
