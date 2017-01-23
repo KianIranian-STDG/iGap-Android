@@ -129,43 +129,35 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private int offset;
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
 
         if (changeListener != null) mRealmList.addChangeListener(changeListener);
-
     }
 
-    @Override
-    protected void onStop() {
+    @Override protected void onStop() {
         super.onStop();
 
         if (mRealmList != null) mRealmList.removeChangeListeners();
     }
 
-    @Override
-    protected void onDestroy() {
+    @Override protected void onDestroy() {
         super.onDestroy();
         if (mRealm != null) mRealm.close();
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sheared_media);
 
         mRealm = Realm.getDefaultInstance();
-
-
 
         mediaLayout = (LinearLayout) findViewById(R.id.asm_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
@@ -177,8 +169,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         handler = new Handler();
 
         changeListener = new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
-            @Override
-            public void onChange(RealmResults<RealmRoomMessage> element) {
+            @Override public void onChange(RealmResults<RealmRoomMessage> element) {
 
                 if (changesize - mRealmList.size() != 0) {
 
@@ -209,8 +200,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         };
     }
 
-    @Override
-    public void onBackPressed() {
+    @Override public void onBackPressed() {
         FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag("Show_Image_fragment_shared_media");
 
         if (myFragment != null && myFragment.isVisible()) {
@@ -247,8 +237,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.asm_btn_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.asm_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -256,8 +245,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.asm_btn_menu);
         RippleView rippleMenu = (RippleView) findViewById(R.id.asm_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 popUpMenuSharedMedai();
             }
         });
@@ -265,8 +253,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         txtSharedMedia = (TextView) findViewById(R.id.asm_txt_sheared_media);
 
         complete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override public void complete(boolean result, String messageOne, String MessageTow) {
 
                 int whatAction = 0;
                 String number = "0";
@@ -283,10 +270,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         recyclerView = (RecyclerView) findViewById(R.id.asm_recycler_view_sheared_media);
 
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (isThereAnyMoreItemToLoad) {
@@ -333,16 +318,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         RippleView rippleCloseAppBarSelected = (RippleView) findViewById(R.id.asm_ripple_close_layout);
         rippleCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 adapter.resetSelected();
             }
         });
 
         MaterialDesignTextView btnForwardSelected = (MaterialDesignTextView) findViewById(R.id.asm_btn_forward_selected);
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 ArrayList<Parcelable> messageInfos = new ArrayList<>(adapter.SelectedList.size());
                 RealmRoomMessage rm;
@@ -361,14 +344,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 startActivity(intent);
 
                 adapter.resetSelected();
-
             }
         });
 
         RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.asm_riple_delete_selected);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
                 final RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
@@ -403,15 +384,13 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 final RealmRoom room = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (room != null) {
                     mRealm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
+                        @Override public void execute(Realm realm) {
                             room.setSharedMediaCount(getStringSharedMediaCount());
                         }
                     });
                 }
 
                 adapter.resetSelected();
-
             }
         });
 
@@ -440,8 +419,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     public void popUpMenuSharedMedai() {
 
         MaterialDialog dialog = new MaterialDialog.Builder(this).items(R.array.pop_up_shared_media).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                 switch (which) {
                     case 0:
@@ -484,8 +462,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         final GridLayoutManager gLayoutManager = new GridLayoutManager(ActivityShearedMedia.this, spanItemCount);
 
         gLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
+            @Override public int getSpanSize(int position) {
                 if (mNewList.get(position).isItemTime) {
                     return spanItemCount;
                 } else {
@@ -500,8 +477,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         recyclerView.setAdapter(adapter);
 
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
+            @Override public void onGlobalLayout() {
                 recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 int viewWidth = recyclerView.getMeasuredWidth();
                 float cardViewWidth = getResources().getDimension(R.dimen.dp120);
@@ -591,9 +567,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL;
 
         mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                equalTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.TEXT.toString()).
-                equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
-                findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+            equalTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.TEXT.toString()).
+            equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
+            findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         changesize = mRealmList.size();
 
@@ -614,7 +590,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private ArrayList<StructShearedMedia> loadLoackData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter, String type) {
 
         mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                contains(RealmRoomMessageFields.MESSAGE_TYPE, type).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+            contains(RealmRoomMessageFields.MESSAGE_TYPE, type).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         changesize = mRealmList.size();
 
@@ -671,8 +647,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         offset = 0;
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override
-            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, String identity) {
+            @Override public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, String identity) {
                 isSendRequestForLoading = false;
 
                 //for (ProtoGlobal.RoomMessage message : resultList) {
@@ -696,11 +671,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 Log.e("dddd", "isThereAnyMoreItemToLoad   " + isThereAnyMoreItemToLoad + "    " + offset);
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
                 isSendRequestForLoading = false;
             }
-
         };
 
         new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, filter);
@@ -710,16 +683,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
 
         handler.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 mRealmList.removeChangeListeners();
 
                 Realm realm = Realm.getDefaultInstance();
 
                 for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
                     realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
+                        @Override public void execute(Realm realm) {
                             RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, false, realm);
                         }
                     });
@@ -797,8 +768,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
          * @param obj - object to be cloned
          * @return a clone of obj
          */
-        @SuppressWarnings("unchecked")
-        public static <T> T cloneObject(T obj) {
+        @SuppressWarnings("unchecked") public static <T> T cloneObject(T obj) {
             return (T) deserialize(serialize(obj));
         }
     }
@@ -817,15 +787,13 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         if (room != null) {
             final String finalCountStr = countStr;
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+                @Override public void execute(Realm realm) {
                     room.setSharedMediaCount(finalCountStr);
                 }
             });
         }
 
         realm.close();
-
     }
 
     private static String getStringSharedMediaCount() {
@@ -849,10 +817,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     public static void getCountOfSharedMedia(final long roomid, String text, final OnComplete complete) {
 
-
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override
-            public void onClientSearchRoomHistory(final int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, String identyty) {
+            @Override public void onClientSearchRoomHistory(final int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, String identyty) {
 
                 if (notDeletedCount > 0) {
                     switch (identyty) {
@@ -881,12 +847,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     updateCountOfSharedMedia(complete, roomid);
                 }
-
-
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
 
             }
         };
@@ -903,7 +866,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL);
-
         } else {
             if (complete != null) {
                 complete.complete(true, getStringSharedMediaCount(), "");
@@ -938,8 +900,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 super(view);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    @Override public void onClick(View view) {
                         if (isSelectedMode) {
                             setSelectedItem(getPosition());
                         } else {
@@ -950,8 +911,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 });
 
                 itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
+                    @Override public boolean onLongClick(View view) {
                         isSelectedMode = true;
                         setSelectedItem(getPosition());
                         return true;
@@ -966,8 +926,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 }
 
                 messageProgress.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    @Override public void onClick(View view) {
 
                         downloadFile(getPosition(), messageProgress);
                     }
@@ -975,18 +934,15 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         }
 
-        @Override
-        public int getItemViewType(int position) {
+        @Override public int getItemViewType(int position) {
             return position;
         }
 
-        @Override
-        public int getItemCount() {
+        @Override public int getItemCount() {
             return mList.size();
         }
 
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
             if (!mList.get(position).isItemTime) {
                 setBackgroundColor(holder, position);
@@ -1058,14 +1014,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             RealmAttachment at = mList.get(position).item.getAttachment();
             String dirPath = AndroidUtils.suitableAppFilePath(mList.get(position).item.getMessageType()) + "/" + at.getToken() + "_" + at.getName();
             HelperDownloadFile.startDoanload(at.getToken(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(String token, final int progress) {
+                @Override public void OnProgress(String token, final int progress) {
 
                     if (messageProgress != null) {
 
                         messageProgress.post(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
 
                                 if (progress < 100) {
                                     messageProgress.withProgress(progress);
@@ -1079,8 +1033,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     }
                 }
 
-                @Override
-                public void OnError(String token) {
+                @Override public void OnError(String token) {
 
                     Log.e("dddd", "OnError  token  = " + token + "   " + messageProgress);
 
@@ -1099,8 +1052,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             HelperDownloadFile.stopDownLoad(mList.get(position).item.getAttachment().getToken());
 
             messageProgress.post(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     messageProgress.withProgress(0);
                     messageProgress.withDrawable(R.drawable.ic_download, true);
                 }
@@ -1143,7 +1095,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             if (at != null) {
                 if (at.getLocalThumbnailPath() != null) result = at.getLocalThumbnailPath();
             }
-
 
             String name = at.getName();
             if (name == null) if (at.getLocalFilePath() != null) name = at.getLocalFilePath().substring(at.getLocalFilePath().lastIndexOf("/"), at.getLocalFilePath().length());
@@ -1188,8 +1139,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             super(context, list);
         }
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+        @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
             RecyclerView.ViewHolder viewHolder = null;
 
             if (mList.get(position).isItemTime) {
@@ -1203,22 +1153,40 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             return viewHolder;
         }
 
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
 
             if (!mList.get(position).isItemTime) {
 
-                //  final MyHoldersImage mi = (MyHoldersImage) holder;
+                final ImageAdapter.ViewHolder vh = (ImageAdapter.ViewHolder) holder;
 
-                //  File file = new File(mi.filePath);
-                //   if (file.exists()) {
-                //      ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mi.filePath), mi.imvPicFile);
-                //  } else {
-                //File file = new File(mi.tempFilePath);
-                //if (file.exists()) {
-                //    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mi.tempFilePath), mi.imvPicFile);
-                //}
+                // if thumpnail not exist download it
+                File filet = new File(vh.tempFilePath);
+                if (filet.exists()) {
+                    vh.imvPicFile.setImageURI(Uri.fromFile(new File(vh.tempFilePath)));
+                } else {
+
+                    RealmAttachment at = mList.get(position).item.getAttachment();
+                    if (at.getSmallThumbnail() != null) {
+                        if (at.getSmallThumbnail().getSize() > 0) {
+                            HelperDownloadFile.startDoanload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "",
+                                new HelperDownloadFile.UpdateListener() {
+                                    @Override public void OnProgress(String token, int progress) {
+                                        vh.imvPicFile.post(new Runnable() {
+                                            @Override public void run() {
+                                                ImageLoader.getInstance().displayImage(suitablePath(vh.tempFilePath), vh.imvPicFile);
+                                            }
+                                        });
+                                    }
+
+                                    @Override public void OnError(String token) {
+
+                                    }
+                                });
+                        }
+                    }
+                }
+
             }
         }
 
@@ -1230,8 +1198,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             public ViewHolder(View view, int position) {
                 super(view, position);
-
-                RealmAttachment at = mList.get(position).item.getAttachment();
 
                 tempFilePath = getThumpnailPath(position);
                 filePath = getFilePath(position);
@@ -1247,41 +1213,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     messageProgress.setVisibility(View.VISIBLE);
                 }
-
-                // if thumpnail not exist download it
-                File filet = new File(tempFilePath);
-                if (filet.exists()) {
-                    imvPicFile.setImageURI(Uri.fromFile(new File(tempFilePath)));
-                } else {
-                    if (at.getSmallThumbnail() != null) {
-                        if (at.getSmallThumbnail().getSize() > 0) {
-
-                            HelperDownloadFile.startDoanload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "",
-                                new HelperDownloadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(String token, int progress) {
-
-                                    imvPicFile.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ImageLoader.getInstance().displayImage(suitablePath(tempFilePath), imvPicFile);
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void OnError(String token) {
-
-                                }
-                            });
-                        }
-                    }
-                }
             }
         }
 
-        @Override
-        void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
+        @Override void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
             showImage(position, holder);
         }
 
@@ -1307,8 +1242,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             super(context, list);
         }
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+        @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
             RecyclerView.ViewHolder viewHolder = null;
 
             if (mList.get(position).isItemTime) {
@@ -1322,8 +1256,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             return viewHolder;
         }
 
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
 
             if (!mList.get(position).isItemTime) {
@@ -1373,8 +1306,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         }
 
-        @Override
-        void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
+        @Override void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
             playVideo(position, holder);
         }
 
@@ -1395,8 +1327,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             super(context, list);
         }
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+        @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
             RecyclerView.ViewHolder viewHolder = null;
 
             if (mList.get(position).isItemTime) {
@@ -1412,8 +1343,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             return viewHolder;
         }
 
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
         }
 
@@ -1478,8 +1408,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         }
 
-        @Override
-        void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
+        @Override void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
             playAudio(position, holder);
         }
 
@@ -1499,8 +1428,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             super(context, list);
         }
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+        @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
             RecyclerView.ViewHolder viewHolder = null;
 
             if (mList.get(position).isItemTime) {
@@ -1514,8 +1442,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             return viewHolder;
         }
 
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
         }
 
@@ -1543,8 +1470,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     messageProgress.withDrawable(R.drawable.ic_play, true);
                     messageProgress.setVisibility(View.GONE);
                     messageProgress.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                        @Override public void onClick(View view) {
                             if (gifDrawable != null) {
                                 gifDrawable.start();
                                 messageProgress.setVisibility(View.GONE);
@@ -1561,8 +1487,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         }
 
-        @Override
-        void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
+        @Override void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
             playAndPusGif(position, holder);
         }
 
@@ -1591,8 +1516,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             super(context, list);
         }
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+        @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
             RecyclerView.ViewHolder viewHolder = null;
 
             if (mList.get(position).isItemTime) {
@@ -1608,8 +1532,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             return viewHolder;
         }
 
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
 
             if (!mList.get(position).isItemTime) {
@@ -1657,8 +1580,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         }
 
-        @Override
-        void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
+        @Override void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
             openFile(position, holder);
         }
 
@@ -1679,8 +1601,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             super(context, list);
         }
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+        @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
             RecyclerView.ViewHolder viewHolder = null;
 
             if (mList.get(position).isItemTime) {
@@ -1694,8 +1615,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             return viewHolder;
         }
 
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
         }
 
@@ -1714,8 +1634,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         }
 
-        @Override
-        void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
+        @Override void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
 
         }
     }

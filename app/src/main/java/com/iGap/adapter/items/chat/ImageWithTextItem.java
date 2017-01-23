@@ -101,17 +101,30 @@ public class ImageWithTextItem
 
     }
 
-    @Override
-    public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
+    @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
-        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
 
-        holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+        if (holder.image.getDrawable() == null) {
+
+            holder.image.post(new Runnable() {
+                @Override public void run() {
+                    ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
+                    holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+                }
+            });
+        }
+
     }
 
-    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
-        ImageLoader.getInstance().displayImage(suitablePath(path), holder.image);
-        holder.image.setCornerRadius(HelperRadius.computeRadius(path));
+    @Override void OnDownLoadFileFinish(final ViewHolder holder, final String path) {
+
+        holder.image.post(new Runnable() {
+            @Override public void run() {
+                ImageLoader.getInstance().displayImage(suitablePath(path), holder.image);
+                holder.image.setCornerRadius(HelperRadius.computeRadius(path));
+            }
+        });
+
     }
 
     @Override

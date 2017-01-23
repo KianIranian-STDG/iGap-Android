@@ -66,6 +66,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         return -1;
     }
 
+
     public MessagesAdapter(OnChatMessageSelectionChanged<Item> OnChatMessageSelectionChangedListener, final IMessageItem iMessageItemListener, final OnChatMessageRemove chatMessageRemoveListener) {
         onChatMessageSelectionChanged = OnChatMessageSelectionChangedListener;
         iMessageItem = iMessageItemListener;
