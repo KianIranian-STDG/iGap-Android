@@ -96,7 +96,6 @@ public class FragmentNotification extends Fragment {
                 if (realmRoom.getGroupRoom() != null) {
 
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-
                     if (realmGroupRoom.getRealmNotificationSetting() == null) {
                         setRealm(realm, realmGroupRoom, null, null);
                     } else {
@@ -113,11 +112,10 @@ public class FragmentNotification extends Fragment {
             case "CHANNEL": {
                 Realm realm = Realm.getDefaultInstance();
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+
 
                 if (realmRoom.getChannelRoom() != null) {
-
-
+                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                     if (realmChannelRoom.getRealmNotificationSetting() == null) {
                         setRealm(realm, null, realmChannelRoom, null);
                     } else {
@@ -133,9 +131,10 @@ public class FragmentNotification extends Fragment {
 
                 Realm realm = Realm.getDefaultInstance();
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+
 
                 if (realmRoom.getChatRoom() != null) {
+                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
                     if (realmChatRoom.getRealmNotificationSetting() == null) {
                         setRealm(realm, null, null, realmChatRoom);
                     } else {
@@ -328,7 +327,7 @@ public class FragmentNotification extends Fragment {
         ltSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Log.i("CCCCCCCC", "onClick: " + realmIdSound);
                 new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.Ringtone))
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black))
@@ -401,7 +400,7 @@ public class FragmentNotification extends Fragment {
                                         }
 
                                         txtSound.setText(text.toString());
-
+                                        realmIdSound = which;
                                         Realm realm = Realm.getDefaultInstance();
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
