@@ -25,9 +25,6 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         holder.image.setImageResource(R.drawable.black_contact);
     }
 
-    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
-
-    }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {

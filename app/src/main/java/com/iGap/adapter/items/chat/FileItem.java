@@ -50,9 +50,6 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         //holder.thumbnail.setImageResource(R.drawable.file_icon);
     }
 
-    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
-
-    }
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {

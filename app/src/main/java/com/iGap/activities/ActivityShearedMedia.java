@@ -1011,8 +1011,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             messageProgress.withDrawable(R.drawable.ic_cancel, true);
 
-            RealmAttachment at = mList.get(position).item.getAttachment();
-            String dirPath = AndroidUtils.suitableAppFilePath(mList.get(position).item.getMessageType()) + "/" + at.getToken() + "_" + at.getName();
+            RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
+            ProtoGlobal.RoomMessageType messageType =
+                mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getMessageType() : mList.get(position).item.getMessageType();
+
+            String dirPath = AndroidUtils.suitableAppFilePath(messageType) + "/" + at.getToken() + "_" + at.getName();
             HelperDownloadFile.startDoanload(at.getToken(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, new HelperDownloadFile.UpdateListener() {
                 @Override public void OnProgress(String token, final int progress) {
 
@@ -1166,7 +1169,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     vh.imvPicFile.setImageURI(Uri.fromFile(new File(vh.tempFilePath)));
                 } else {
 
-                    RealmAttachment at = mList.get(position).item.getAttachment();
+                    RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
+
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
                             HelperDownloadFile.startDoanload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "",

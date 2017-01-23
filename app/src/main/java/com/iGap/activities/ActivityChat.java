@@ -2457,13 +2457,13 @@ public class ActivityChat extends ActivityEnhanced
                     try {
                         if (mAdapter.getItem(j).mMessage.messageID.equals(id)) {
                             mAdapter.notifyItemChanged(j);
-
                             break;
                         }
                     } catch (NullPointerException e) {
                     }
                 }
             }
+
             FragmentShowImage.downloadedList.clear();
 
 

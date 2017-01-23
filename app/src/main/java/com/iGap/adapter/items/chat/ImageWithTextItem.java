@@ -116,17 +116,6 @@ public class ImageWithTextItem
 
     }
 
-    @Override void OnDownLoadFileFinish(final ViewHolder holder, final String path) {
-
-        holder.image.post(new Runnable() {
-            @Override public void run() {
-                ImageLoader.getInstance().displayImage(suitablePath(path), holder.image);
-                holder.image.setCornerRadius(HelperRadius.computeRadius(path));
-            }
-        });
-
-    }
-
     @Override
     protected void voteAction(ViewHolder holder) {
         super.voteAction(holder);

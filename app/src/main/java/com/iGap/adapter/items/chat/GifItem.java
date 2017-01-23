@@ -78,9 +78,6 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         }
     }
 
-    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
-
-    }
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {

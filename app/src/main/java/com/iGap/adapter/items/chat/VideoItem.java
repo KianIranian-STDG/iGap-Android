@@ -46,10 +46,6 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
         holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
     }
 
-    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
-
-    }
-
     @Override
     protected void voteAction(ViewHolder holder) {
         super.voteAction(holder);

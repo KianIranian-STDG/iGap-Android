@@ -34,10 +34,6 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
         super.voteAction(holder);
     }
 
-    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
-
-    }
-
     @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }

@@ -297,7 +297,7 @@ public class FragmentShowImage extends Fragment {
                 progress.withDrawable(R.drawable.ic_download, true);
             }
 
-            final RealmRoomMessage rm = mRealmList.get(position);
+            final RealmRoomMessage rm = mRealmList.get(position).getForwardMessage() != null ? mRealmList.get(position).getForwardMessage() : mRealmList.get(position);
 
             if (rm != null) {
                 String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
@@ -389,10 +389,10 @@ public class FragmentShowImage extends Fragment {
             String dirPath = AndroidUtils.suitableAppFilePath(mRealmList.get(position).getMessageType()) + "/" +
                 mRealmList.get(position).getAttachment().getToken() + "_" + mRealmList.get(position).getAttachment().getName();
 
-            final RealmRoomMessage rm = mRealmList.get(position);
+            final RealmRoomMessage rm = mRealmList.get(position).getForwardMessage() != null ? mRealmList.get(position).getForwardMessage() : mRealmList.get(position);
 
-            HelperDownloadFile.startDoanload(mRealmList.get(position).getAttachment().getToken(), mRealmList.get(position).getAttachment().getName(),
-                mRealmList.get(position).getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDoanload(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath,
+                new HelperDownloadFile.UpdateListener() {
                     @Override public void OnProgress(String token, final int progres) {
 
                         if (progress != null) {

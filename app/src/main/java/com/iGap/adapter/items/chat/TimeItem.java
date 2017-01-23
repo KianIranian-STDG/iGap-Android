@@ -38,10 +38,6 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
         super.voteAction(holder);
     }
 
-    @Override void OnDownLoadFileFinish(ViewHolder holder, String path) {
-
-    }
-
     @Override
     public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;

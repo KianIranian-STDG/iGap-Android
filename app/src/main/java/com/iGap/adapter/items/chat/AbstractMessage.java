@@ -680,8 +680,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
                 if (imageViewReservedSpace != null) {
 
-                    int _with = attachment.getWidth() != 0 ? attachment.getWidth() : (int) G.context.getResources().getDimension(R.dimen.dp120);
-                    int _hight = attachment.getHeight() != 0 ? attachment.getHeight() : (int) G.context.getResources().getDimension(R.dimen.dp120);
+                    int _with = attachment.getWidth() != 0 ? attachment.getWidth() : attachment.getSmallThumbnail().getWidth();
+                    int _hight = attachment.getHeight() != 0 ? attachment.getHeight() : attachment.getSmallThumbnail().getHeight();
+
+                    if (_with == 0) _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
+                    if (_hight == 0) _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
+
+
                     int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight);
                     if (dimens[0] != 0 && dimens[1] != 0) {
                         ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
@@ -881,7 +886,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     }
 
-    abstract void OnDownLoadFileFinish(VH holder, String filePath);
 
     private void downLoadFile(final VH holder, final MessageProgress progressBar) {
 
@@ -890,7 +894,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Long size = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getSize() : mMessage.attachment.size;
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-        final String _path = AndroidUtils.suitableAppFilePath(mMessage.messageType) + "/" + token + "_" + name;
+        ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
+
+        final String _path = AndroidUtils.suitableAppFilePath(messageType) + "/" + token + "_" + name;
 
         if (token != null && token.length() > 0 && size > 0) {
 
@@ -905,7 +911,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                             if (progress == 100) {
                                 progressBar.setVisibility(View.GONE);
-                                OnDownLoadFileFinish(holder, _path);
+                                onLoadThumbnailFromLocal(holder, _path, LocalFileType.FILE);
                             } else {
                                 progressBar.withProgress(progress);
                             }
