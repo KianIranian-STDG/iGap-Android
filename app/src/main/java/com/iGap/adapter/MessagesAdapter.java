@@ -66,7 +66,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     public int findPositionByMessageId(long messageId) {
         for (Item item : getAdapterItems()) {
-            if (Long.parseLong(item.mMessage.messageID) == messageId) {
+            if (item.mMessage != null && Long.parseLong(item.mMessage.messageID) == messageId) {
                 return getAdapterPosition(item);
             }
         }
@@ -126,7 +126,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public List<StructMessageInfo> getFailedMessages() {
         List<StructMessageInfo> failedMessages = new ArrayList<>();
         for (Item item : getAdapterItems()) {
-            if (!item.mMessage.senderID.equalsIgnoreCase("-1") && item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+            if (item.mMessage != null && !item.mMessage.senderID.equalsIgnoreCase("-1") && item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                 failedMessages.add(item.mMessage);
             }
         }
