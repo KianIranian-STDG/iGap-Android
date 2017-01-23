@@ -167,9 +167,10 @@ public class HelperDownloadFile {
         String primaryKey = token + ProtoFileDownload.FileDownload.Selector.FILE;
 
         if (list.containsKey(primaryKey)) {
-            StructDownLoad item = list.get(primaryKey);
-            item.isCanseling = true;
-            item.listeners.clear();
+            //StructDownLoad item = list.get(primaryKey);
+            //item.isCanseling = true;
+            //item.listeners.clear();
+            list.remove(primaryKey);
         }
     }
 

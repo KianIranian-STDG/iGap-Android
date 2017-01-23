@@ -193,9 +193,13 @@ import org.parceler.Parcel;
             message.setUserId(0);
         }
         message.setAuthorHash(input.getAuthor().getHash());
-        if (!forwardOrReply) {
+
+        if (forwardOrReply) {
+            message.setDeleted(true);
+        } else {
             message.setDeleted(input.getDeleted());
         }
+
         message.setEdited(input.getEdited());
 
         if (input.hasAttachment()) {

@@ -1145,6 +1145,9 @@ public class ActivityChat extends ActivityEnhanced
 
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
+
+            Log.e("ddddd", messageInfo.messageID + "");
+
             if (!messageInfo.isTimeOrLogMessage()) {
                 switch (messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType) {
                     case TEXT:

@@ -21,6 +21,7 @@ public class FileDownloadResponse extends MessageHandler {
     }
 
     @Override public void handler() {
+
         super.handler();
         ProtoFileDownload.FileDownloadResponse.Builder builder = (ProtoFileDownload.FileDownloadResponse.Builder) message;
         String[] identityParams = identity.split("\\*");
