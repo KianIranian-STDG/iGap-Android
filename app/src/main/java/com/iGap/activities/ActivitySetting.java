@@ -1,6 +1,7 @@
 package com.iGap.activities;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -93,6 +95,8 @@ import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.chromium.customtabsclient.CustomTabsActivityHelper;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -101,6 +105,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -157,6 +162,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private TextView txtGander;
     private TextView txtEmail;
     private AttachFile attachFile;
+    private CustomTabsHelperFragment mCustomTabsHelperFragment;
 
     public static long getFolderSize(File dir) throws RuntimeException {
         long size = 0;
@@ -1889,13 +1895,50 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+
+        mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo(this);
         txtWebViewHome = (TextView) findViewById(R.id.st_txt_iGap_home);
         txtWebViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-                intent.putExtra("PATH", "https://www.igap.net/en/");
-                startActivity(intent);
+//                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
+//                intent.putExtra("PATH", "https://www.igap.net/en/");
+//                startActivity(intent);
+
+//                Uri uri =  Uri.parse( "https://www.igap.net/en/" );
+//                mCustomTabsHelperFragment.mayLaunchUrl(uri, null, null);
+                int mColorPrimary = 0;
+                final Uri PROJECT_URI = Uri.parse(
+                        "https://www.igap.net/en/");
+
+                CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder()
+                        .enableUrlBarHiding()
+                        .setToolbarColor(mColorPrimary)
+                        .setShowTitle(true)
+                        .build();
+
+                mCustomTabsHelperFragment.setConnectionCallback(
+                        new CustomTabsActivityHelper.ConnectionCallback() {
+                            @Override
+                            public void onCustomTabsConnected() {
+                                mCustomTabsHelperFragment.mayLaunchUrl(PROJECT_URI, null, null);
+                            }
+
+                            @Override
+                            public void onCustomTabsDisconnected() {
+                            }
+                        });
+
+                CustomTabsHelperFragment.open(ActivitySetting.this, mCustomTabsIntent, PROJECT_URI,
+                        mCustomTabsFallback);
+//                mCustomTabsHelperFragment.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        CustomTabsHelperFragment.open(MainActivity.this, mCustomTabsIntent, PROJECT_URI,
+//                                mCustomTabsFallback);
+//                    }
+//                });
+
 
             }
         });
@@ -2311,4 +2354,21 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         };
         countWaitTimer.start();
     }
+
+    private final CustomTabsActivityHelper.CustomTabsFallback mCustomTabsFallback =
+            new CustomTabsActivityHelper.CustomTabsFallback() {
+                @Override
+                public void openUri(Activity activity, Uri uri) {
+//                    Toast.makeText(activity, R.string.custom_tabs_failed, Toast.LENGTH_SHORT)
+//                            .show();
+                    try {
+                        activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                    } catch (ActivityNotFoundException e) {
+                        e.printStackTrace();
+//                        Toast.makeText(activity, R.string.activity_not_found, Toast.LENGTH_SHORT)
+//                                .show();
+                    }
+                }
+            };
+
 }

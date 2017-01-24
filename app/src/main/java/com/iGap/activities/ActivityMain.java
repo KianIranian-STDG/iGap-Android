@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baoyz.widget.PullRefreshLayout;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -138,8 +138,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private boolean keepMedia;
     private boolean isLanguageParsi;
     private Typeface titleTypeface;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
-    private PullRefreshLayout swipeLayout;
+//    private PullRefreshLayout swipeLayout;
 
     private SharedPreferences sharedPreferences;
     private String cLanguage;
@@ -163,8 +164,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        swipeLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swipeLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+//        swipeLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+//        swipeLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
         G application = (G) getApplication();
         Tracker mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RoomList");
@@ -236,8 +238,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         contentLoading.hide();
                         mAdapter.clear();
                         putChatToDatabase(roomList);
-                        recyclerView.setNestedScrollingEnabled(true);
-                        swipeLayout.setRefreshing(false);// swipe refresh is complete and gone
+//                        recyclerView.setNestedScrollingEnabled(true);
+//                        swipeLayout.setRefreshing(false);// swipe refresh is complete and gone
+                        swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
 
                     }
                 });
@@ -249,12 +252,21 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     @Override
                     public void run() {
                         getChatsList(false);
+                        swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                     }
                 });
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
+                    }
+                });
+
                 if (majorCode == 9) {
                     if (G.currentActivity != null) {
                         G.currentActivity.finish();
@@ -588,7 +600,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
         recyclerView.setLayoutManager(mLayoutManager);
         // set behavior to RecyclerView
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) swipeLayout.getLayoutParams();
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
         params.setBehavior(new ShouldScrolledBehavior(mLayoutManager, mAdapter));
         recyclerView.setLayoutParams(params);
         recyclerView.setAdapter(mAdapter);
@@ -610,17 +622,26 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 }
             }
         });
-        swipeLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // start refresh
-
-//                scrollToTop();
-                appBarLayout.setExpanded(true);
-                recyclerView.setNestedScrollingEnabled(false);
                 new RequestClientGetRoomList().clientGetRoomList();
             }
         });
+        swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
+        ;
+//        swipeLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                // start refresh
+//
+////                scrollToTop();
+//                appBarLayout.setExpanded(true);
+//                recyclerView.setNestedScrollingEnabled(false);
+//                new RequestClientGetRoomList().clientGetRoomList();
+//            }
+//        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
