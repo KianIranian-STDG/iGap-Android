@@ -246,7 +246,14 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
             @Override
             public void onError(int majorCode, int minorCode) {
-
+                if (majorCode == 9) {
+                    if (G.currentActivity != null) {
+                        G.currentActivity.finish();
+                    }
+                    Intent intent = new Intent(G.context, ActivityProfile.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    G.context.startActivity(intent);
+                }
             }
         };
 

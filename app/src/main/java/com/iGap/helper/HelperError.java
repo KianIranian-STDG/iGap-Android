@@ -14,6 +14,7 @@ public class HelperError {
         switch (majorCode) {
             case 2:
                 if (minorCode == 1) {
+                    G.userLogin = false;
                     error = G.context.getResources().getString(R.string.E_2);
                     G.login();
                 }
@@ -22,12 +23,12 @@ public class HelperError {
                 //if (minorCode == 1) error = "time out  server not response";
                 break;
             case 9:
-                //                if (G.currentActivity != null) {
-                //                    G.currentActivity.finish();
-                //                }
-                //                Intent intent = new Intent(G.context, ActivityProfile.class);
-                //                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                //                G.context.startActivity(intent);
+                /*if (G.currentActivity != null) {
+                    G.currentActivity.finish();
+                }
+                Intent intent = new Intent(G.context, ActivityProfile.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                G.context.startActivity(intent);*/
                 break;
             case 109:
                 error = G.context.getResources().getString(R.string.E_109);

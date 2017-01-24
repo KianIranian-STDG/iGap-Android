@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -48,20 +47,17 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
 import static com.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
-public class ActivityProfile extends ActivityEnhanced
-        implements OnUserAvatarResponse, OnFileUploadForActivities {
+public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
 
     public final static String ARG_USER_ID = "arg_user_id";
     public static boolean IsDeleteFile;
@@ -116,8 +112,7 @@ public class ActivityProfile extends ActivityEnhanced
             }
         });
 
-        final TextInputLayout txtInputNickName =
-                (TextInputLayout) findViewById(R.id.pu_txtInput_nikeName);
+        final TextInputLayout txtInputNickName = (TextInputLayout) findViewById(R.id.pu_txtInput_nikeName);
         //        txtInputNickName.setHint("Nickname");
 
         edtNikName = (EditTextAdjustPan) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName
@@ -145,51 +140,47 @@ public class ActivityProfile extends ActivityEnhanced
 
             }
         });
-        btnLetsGo.setOnClickListener(
-                new View.OnClickListener() { // button for save data and go to next page
-                    @Override
-                    public void onClick(View view) {
+        btnLetsGo.setOnClickListener(new View.OnClickListener() { // button for save data and go to next page
+            @Override
+            public void onClick(View view) {
 
-                        Realm realm = Realm.getDefaultInstance();
-                        final String nickName = edtNikName.getText().toString();
+                Realm realm = Realm.getDefaultInstance();
+                final String nickName = edtNikName.getText().toString();
 
-                        if (!nickName.equals("")) {
+                if (!nickName.equals("")) {
 
-                            showProgressBar();
-                            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    setNickName();
-                                }
-                            });
-                            realm.close();
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                                @Override
-                                public void run() {
-
-                                    txtInputNickName.setErrorEnabled(true);
-                                    txtInputNickName.setError(
-                                            getResources().getString(R.string.Toast_Write_NickName));
-                                    txtInputNickName.setHintTextAppearance(R.style.error_appearance);
-                                    edtNikName.setTextColor(getResources().getColor(R.color.red));
-                                    lineEditText.setBackgroundColor(
-                                            getResources().getColor(R.color.red));
-                                }
-                            });
+                    showProgressBar();
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            setNickName();
                         }
-                    }
-                });
+                    });
+                    realm.close();
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                        @Override
+                        public void run() {
+
+                            txtInputNickName.setErrorEnabled(true);
+                            txtInputNickName.setError(getResources().getString(R.string.Toast_Write_NickName));
+                            txtInputNickName.setHintTextAppearance(R.style.error_appearance);
+                            edtNikName.setTextColor(getResources().getColor(R.color.red));
+                            lineEditText.setBackgroundColor(getResources().getColor(R.color.red));
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void setNickName() {
 
         G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
             @Override
-            public void onUserProfileNickNameResponse(final String nickName,
-                                                      ProtoResponse.Response response) {
+            public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
                 getUserInfo();
             }
 
@@ -235,7 +226,6 @@ public class ActivityProfile extends ActivityEnhanced
                                 realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
                                 realmUserInfo.getUserInfo().setInitials(user.getInitials());
                                 realmUserInfo.getUserInfo().setColor(user.getColor());
-                                realmUserInfo.setUserRegistrationState(true);
 
                                 final long userId = realmUserInfo.getUserId();
 
@@ -306,8 +296,8 @@ public class ActivityProfile extends ActivityEnhanced
     //======================================================================================================dialog for choose image
 
     public void useGallery() {
-//        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
+        //        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        //        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
 
         try {
             HelperPermision.getStoragePermision(context, new OnGetPermission() {
@@ -327,65 +317,57 @@ public class ActivityProfile extends ActivityEnhanced
 
     private void startDialog() {
 
-        new MaterialDialog.Builder(this)
-                .title(getResources().getString(R.string.choose_picture))
-                .negativeText(getResources().getString(R.string.B_cancel))
-                .items(R.array.profile)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                                   @Override
-                                   public void onSelection(final MaterialDialog dialog, View view, int which,
-                                                           CharSequence text) {
+        new MaterialDialog.Builder(this).title(getResources().getString(R.string.choose_picture)).negativeText(getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+                                                                                                                                                                                                     @Override
+                                                                                                                                                                                                     public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                       switch (which) {
-                                           case 0: {
-                                               useGallery();
-                                               dialog.dismiss();
-                                               break;
+                                                                                                                                                                                                         switch (which) {
+                                                                                                                                                                                                             case 0: {
+                                                                                                                                                                                                                 useGallery();
+                                                                                                                                                                                                                 dialog.dismiss();
+                                                                                                                                                                                                                 break;
 
-                                           }
-                                           case 1: {
-                                               if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                                   try {
+                                                                                                                                                                                                             }
+                                                                                                                                                                                                             case 1: {
+                                                                                                                                                                                                                 if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                                                                                                                                                                                                     try {
 
-                                                       HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermission() {
-                                                           @Override
-                                                           public void Allow() throws IOException {
-                                                               HelperPermision.getCameraPermission(ActivityProfile.this, new OnGetPermission() {
-                                                                   @Override
-                                                                   public void Allow() {
-                                                                       // this dialog show 2 way for choose image : gallery and camera
-                                                                       dialog.dismiss();
-                                                                       useCamera();
-                                                                   }
-                                                               });
-                                                           }
-                                                       });
-                                                   } catch (IOException e) {
-                                                       e.printStackTrace();
-                                                   }
-                                               } else {
-                                                   final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-                                                           getResources().getString(R.string.please_check_your_camera),
-                                                           Snackbar.LENGTH_LONG);
+                                                                                                                                                                                                                         HelperPermision.getStoragePermision(ActivityProfile.this, new OnGetPermission() {
+                                                                                                                                                                                                                             @Override
+                                                                                                                                                                                                                             public void Allow() throws IOException {
+                                                                                                                                                                                                                                 HelperPermision.getCameraPermission(ActivityProfile.this, new OnGetPermission() {
+                                                                                                                                                                                                                                     @Override
+                                                                                                                                                                                                                                     public void Allow() {
+                                                                                                                                                                                                                                         // this dialog show 2 way for choose image : gallery and camera
+                                                                                                                                                                                                                                         dialog.dismiss();
+                                                                                                                                                                                                                                         useCamera();
+                                                                                                                                                                                                                                     }
+                                                                                                                                                                                                                                 });
+                                                                                                                                                                                                                             }
+                                                                                                                                                                                                                         });
+                                                                                                                                                                                                                     } catch (IOException e) {
+                                                                                                                                                                                                                         e.printStackTrace();
+                                                                                                                                                                                                                     }
+                                                                                                                                                                                                                 } else {
+                                                                                                                                                                                                                     final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.please_check_your_camera), Snackbar.LENGTH_LONG);
 
-                                                   snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                       @Override
-                                                       public void onClick(View view) {
-                                                           snack.dismiss();
-                                                       }
-                                                   });
-                                                   snack.show();
-                                               }
-                                               break;
-                                           }
-                                       }
-                                   }
-                               }
+                                                                                                                                                                                                                     snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                                                                                                                                                                                         @Override
+                                                                                                                                                                                                                         public void onClick(View view) {
+                                                                                                                                                                                                                             snack.dismiss();
+                                                                                                                                                                                                                         }
+                                                                                                                                                                                                                     });
+                                                                                                                                                                                                                     snack.show();
+                                                                                                                                                                                                                 }
+                                                                                                                                                                                                                 break;
+                                                                                                                                                                                                             }
+                                                                                                                                                                                                         }
+                                                                                                                                                                                                     }
+                                                                                                                                                                                                 }
 
-                )
-                .
+        ).
 
-                        show();
+                show();
     }
 
     //======================================================================================================result from camera , gallery and crop
@@ -393,8 +375,7 @@ public class ActivityProfile extends ActivityEnhanced
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == AttachFile.request_code_TAKE_PICTURE
-                && resultCode == RESULT_OK) {// result for camera
+        if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
@@ -462,8 +443,7 @@ public class ActivityProfile extends ActivityEnhanced
     private void delete() {
         Realm realm = Realm.getDefaultInstance();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        final RealmResults<RealmAvatar> realmAvatars =
-                realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll();
+        final RealmResults<RealmAvatar> realmAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll();
         if (!realmAvatars.isEmpty()) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -502,8 +482,7 @@ public class ActivityProfile extends ActivityEnhanced
         hideProgressBar();
     }
 
-    private static class UploadTask
-            extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
+    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
         @Override
         protected FileUploadStructure doInBackground(Object... params) {
             try {
@@ -512,8 +491,7 @@ public class ActivityProfile extends ActivityEnhanced
                 File file = new File(filePath);
                 String fileName = file.getName();
                 long fileSize = file.length();
-                FileUploadStructure fileUploadStructure =
-                        new FileUploadStructure(fileName, fileSize, filePath, avatarId);
+                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
                 fileUploadStructure.openFile(filePath);
 
                 byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);

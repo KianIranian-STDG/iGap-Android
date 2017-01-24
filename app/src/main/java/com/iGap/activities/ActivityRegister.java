@@ -567,7 +567,7 @@ public class ActivityRegister extends ActivityEnhanced {
                             btnStart.setEnabled(false);
                             long time = 0;
                             if (BuildConfig.DEBUG) {
-                                time = 60 * DateUtils.SECOND_IN_MILLIS;
+                                time = 10 * DateUtils.SECOND_IN_MILLIS;
                             } else {
                                 time = Config.COUNTER_TIMER;
                             }
@@ -1033,11 +1033,8 @@ public class ActivityRegister extends ActivityEnhanced {
                                 userInfo.getUserInfo().setPhoneNumber(phoneNumber);
                                 userInfo.setToken(token);
                                 userInfo.setAuthorHash(authorHash);
-                                if (!newUser) {
-                                    userInfo.setUserRegistrationState(true);
-                                }
-                                G.importContact();
-                                G.getUserInfo();
+                                userInfo.setUserRegistrationState(true);
+
                             }
                         });
 
@@ -1053,6 +1050,8 @@ public class ActivityRegister extends ActivityEnhanced {
                         } else {
                             // get user info for set nick name and after from that go to
                             // ActivityMain
+                            G.importContact();
+                            //G.getUserInfo();
                             getUserInfo();
                         }
                         realm.close();
