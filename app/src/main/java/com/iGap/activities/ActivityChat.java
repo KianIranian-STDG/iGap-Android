@@ -3587,16 +3587,11 @@ public class ActivityChat extends ActivityEnhanced
     private void requestMessageHistory() {
         //  long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
 
-        long oldestMessageId = 0;
 
-        for (int i = 0; i < mAdapter.getAdapterItems().size(); i++) {
-            if (mAdapter.getAdapterItem(i) instanceof ProgressWaiting || mAdapter.getAdapterItem(i) instanceof TimeItem) {
-                continue;
-            } else {
-                oldestMessageId = Long.parseLong(mAdapter.getAdapterItem(i).mMessage.messageID);
-                break;
-            }
-        }
+        long oldestMessageId = 0;
+        RealmRoomMessage messagefirst = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().last();
+        oldestMessageId = messagefirst.getMessageId();
+
 
         if (latestMessageIdHistory != oldestMessageId) {
             latestMessageIdHistory = oldestMessageId;
