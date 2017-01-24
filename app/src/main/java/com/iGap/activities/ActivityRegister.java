@@ -33,7 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.BuildConfig;
@@ -69,13 +68,11 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-
+import io.realm.Realm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
@@ -1065,7 +1062,15 @@ public class ActivityRegister extends ActivityEnhanced {
 
             @Override
             public void onLoginError(int majorCode, int minorCode) {
-                if (majorCode == 109 && minorCode == 1) {
+                if (majorCode == 9) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            // TODO: 9/25/2016 Error 109 - USER_LOGIN_BAD_PAYLOAD
+                        }
+                    });
+                } else if (majorCode == 109 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

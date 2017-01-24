@@ -2,7 +2,6 @@ package com.iGap.response;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import com.iGap.G;
 import com.iGap.helper.HelperUserInfo;
 import com.iGap.proto.ProtoGlobal;
@@ -91,6 +90,9 @@ public class GroupSendMessageResponse extends MessageHandler {
                     // make get room request
                     new RequestClientGetRoom().clientGetRoom(builder.getRoomId());
                 } else {
+                    if (!roomMessage.getAuthor().getHash().equals(authorHash) && room.getLastMessage().getMessageId() < roomMessage.getMessageId()) {
+                        room.setUnreadCount(room.getUnreadCount() + 1);
+                    }
                     // update last message sent/received in room table
                     if (room.getLastMessage() != null) {
                         if (room.getLastMessage().getMessageId() <= roomMessage.getMessageId()) {
@@ -100,11 +102,6 @@ public class GroupSendMessageResponse extends MessageHandler {
                     } else {
                         room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId()));
                         room.setUpdatedTime(roomMessage.getUpdateTime());
-                    }
-
-                    if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
-                        Log.i("EEE", "Group setUnreadCount");
-                        room.setUnreadCount(room.getUnreadCount() + 1);
                     }
                 }
             }

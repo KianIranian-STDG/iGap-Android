@@ -26,7 +26,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -103,15 +102,13 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -648,7 +645,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     RealmRoom.putOrUpdate(room);
                 }
 
-                // delete messages and rooms that was deleteed
+                // delete messages and rooms that was deleted
                 RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll();
                 for (RealmRoom item : deletedRoomsList) {
                     realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();//delete all message in deleted room
@@ -660,6 +657,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             public void onSuccess() {
                 List<RoomItem> roomItems = new ArrayList<>();
                 for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
+                    Log.i("YYYY", "item : " + item.getTitle());
+                    Log.i("YYYY", "item : " + item.getUpdatedTime());
                     roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
                 }
                 mAdapter.add(roomItems);
@@ -749,7 +748,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     /**
      * on select room menu
      *
-     * @param message  message text
+     * @param message message text
      * @param position position dfdfdfdf
      */
     private void onSelectRoomMenu(String message, int position, RoomItem item) {

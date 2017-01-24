@@ -207,6 +207,7 @@ public class G extends MultiDexApplication {
     public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
     public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
     public static final String DIR_IMAGE_USER = DIR_APP + "/.image_user";
+    public static final String DIR_NOMEDIA = DIR_APP + "/.nomedia";
 
     public static final String CHAT_MESSAGE_TIME = "H:mm";
     public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";
@@ -624,6 +625,13 @@ public class G extends MultiDexApplication {
         new File(DIR_NEW_CHANEL).mkdirs();
         new File(DIR_IMAGE_USER).mkdirs();
         new File(DIR_TEMP).mkdirs();
+
+        String file = ".nomedia";
+        new File(DIR_APP + "/" + file);
+        new File(DIR_IMAGES + "/" + file);
+        new File(DIR_VIDEOS + "/" + file);
+        new File(DIR_AUDIOS + "/" + file);
+        new File(DIR_DOCUMENT + "/" + file);
     }
 
     public static void saveLogcatToFile(Context context) {

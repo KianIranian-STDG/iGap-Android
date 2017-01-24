@@ -39,6 +39,7 @@ public class RealmRoom extends RealmObject {
     public long getUpdatedTime() {
         if (getLastMessage() != null && getLastMessage().isValid()) {
             if (getLastMessage().getUpdateOrCreateTime() > updatedTime) {
+                Log.i("YYYY", "getUpdateOrCreateTime : " + getLastMessage().getUpdateOrCreateTime());
                 return getLastMessage().getUpdateOrCreateTime();
             }
         }
@@ -104,7 +105,6 @@ public class RealmRoom extends RealmObject {
         realmRoom.setInitials(room.getInitials());
         realmRoom.setTitle(room.getTitle());
         realmRoom.setType(RoomType.convert(room.getType()));
-        Log.i("EEE", "putOrUpdate setUnreadCount " + room.getUnreadCount());
         realmRoom.setUnreadCount(room.getUnreadCount());
         realmRoom.setReadOnly(room.getReadOnly());
         realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
@@ -137,9 +137,12 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getGroupRoom().setPrivate(room.getGroupRoomExtra().hasPrivateExtra());
                 break;
         }
-        //realmRoom.setLastMessage(RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId()));
         realmRoom.setLastMessage(RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId()));
-        realmRoom.setUpdatedTime(room.getLastMessage().getUpdateTime());
+        if (room.getLastMessage().getUpdateTime() == 0) {
+            realmRoom.setUpdatedTime(room.getLastMessage().getCreateTime());
+        } else {
+            realmRoom.setUpdatedTime(room.getLastMessage().getUpdateTime());
+        }
 
         RealmRoomDraft realmRoomDraft = realmRoom.getDraft();
         if (realmRoomDraft == null) {

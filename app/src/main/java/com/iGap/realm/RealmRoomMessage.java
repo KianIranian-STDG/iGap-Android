@@ -234,7 +234,11 @@ import org.parceler.Parcel;
         message.setMessageType(input.getMessageType());
         message.setMessageVersion(input.getMessageVersion());
         message.setStatusVersion(input.getStatusVersion());
-        message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+        if (input.getUpdateTime() == 0) {
+            message.setUpdateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
+        } else {
+            message.setUpdateTime(input.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+        }
         message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
 
         if (input.hasChannelExtra()) {
