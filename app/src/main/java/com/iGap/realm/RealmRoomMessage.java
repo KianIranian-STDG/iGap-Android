@@ -154,9 +154,9 @@ import org.parceler.Parcel;
     public static RealmRoomMessage putOrUpdateForwardOrReply(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
 
-        RealmRoomMessage message = putOrUpdate(input, roomId, true, true, realm);
+        RealmRoomMessage message = putOrUpdate(input, roomId, false, true, realm);
 
-        message.setShowMessage(true);
+
 
         realm.close();
 
@@ -173,10 +173,10 @@ import org.parceler.Parcel;
             message.setRoomId(roomId);
 
             if (input.hasForwardFrom()) {
-                message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), -1));
+                message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), roomId));
             }
             if (input.hasReplyTo()) {
-                message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), -1));
+                message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), roomId));
             }
 
             message.setShowMessage(showMessage);

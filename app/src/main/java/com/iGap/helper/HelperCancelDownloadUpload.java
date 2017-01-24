@@ -60,7 +60,7 @@ public final class HelperCancelDownloadUpload {
         return false;
     }
 
-    private static boolean removeRequestQueue(String identity) {
+    public static boolean removeRequestQueue(String identity) {
         for (Iterator<Map.Entry<String, RequestWrapper>> it = G.requestQueueMap.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<String, RequestWrapper> entry = it.next();
 
