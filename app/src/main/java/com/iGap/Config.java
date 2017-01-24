@@ -25,7 +25,7 @@ public class Config {
     public static final long GROUP_SHOW_ACTIONS_COUNT = 3;
     public static final long IMAGE_CORNER = 15;
     public static final long CONNECTION_TIME_OUT = (DateUtils.SECOND_IN_MILLIS);
-    public static String urlWebsocket = "ws://10.10.10.102:6708";
+    public static String urlWebsocket = "wss://secure.igap.net/hybrid/";
 
     // Generate 20 random bytes, and put them here.
     public static final byte[] SALT = new byte[]{

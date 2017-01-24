@@ -221,7 +221,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
         if (roomMessage != null) {
-            prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
+            prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment(),
+                mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
         realm.close();
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
@@ -723,7 +724,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                      */
                     onLoadThumbnailFromLocal(holder, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
-                    downLoadThumpnail(holder);
+                    downLoadThumpnail(holder, attachment);
                 }
             }
 
@@ -804,7 +805,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
-        downLoadFile(holder, progress);
+        downLoadFile(holder, progress, attachment);
 
     }
 
@@ -845,7 +846,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             } else {
 
-                downLoadFile(holder, progress);
+                downLoadFile(holder, progress, attachment);
             }
         }
     }
@@ -856,11 +857,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     }
 
-    private void downLoadThumpnail(final VH holder) {
+    private void downLoadThumpnail(final VH holder, RealmAttachment attachment) {
 
-        String token = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token;
-        String name = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getName() : mMessage.attachment.name;
-        Long size = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getSmallThumbnail().getSize() : mMessage.attachment.smallThumbnail.size;
+        if (attachment == null) return;
+
+        String token = attachment.getToken();
+        String name = attachment.getName();
+        Long size = attachment.getSmallThumbnail().getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
         final String _path = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(name);
@@ -886,12 +889,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     }
 
+    private void downLoadFile(final VH holder, final MessageProgress progressBar, RealmAttachment attachment) {
 
-    private void downLoadFile(final VH holder, final MessageProgress progressBar) {
+        if (attachment == null) return;
 
-        String token = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getToken() : mMessage.attachment.token;
-        String name = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getName() : mMessage.attachment.name;
-        Long size = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getSize() : mMessage.attachment.size;
+        String token = attachment.getToken();
+        String name = attachment.getName();
+        Long size = attachment.getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
@@ -984,7 +988,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
             hideThumbnailIf(holder);
 
-            downLoadFile(holder, (MessageProgress) holder.itemView.findViewById(R.id.progress));
+            downLoadFile(holder, (MessageProgress) holder.itemView.findViewById(R.id.progress), attachment);
 
         } else {
             if (attachment.isFileExistsOnLocal()) {
