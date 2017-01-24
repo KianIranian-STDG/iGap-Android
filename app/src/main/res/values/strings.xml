@@ -258,7 +258,7 @@
     <string name="select_room">Select Room</string>
     <string name="edited">Edited</string>
     <string name="today">Today</string>
-    <string name="yesterday">yesterday</string>
+    <string name="yesterday">Yesterday</string>
 
     <!-- array -->
     <string name="array_Photo">Photo</string>
