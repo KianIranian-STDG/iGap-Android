@@ -1618,9 +1618,9 @@ public class ActivityChat extends ActivityEnhanced
         // remove blinking for updates on items
         recyclerView.setItemAnimator(null);
         // following lines make scrolling smoother
-        //recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(1000);
-        //recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheEnabled(true);
 
         mAdapter = new MessagesAdapter<>(this, this, this);
 

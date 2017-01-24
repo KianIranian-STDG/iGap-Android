@@ -334,7 +334,6 @@
     <string name="updating">"در حال به‌روزرسانی"</string>
     <string name="last_seen_recently">"اخیراً"</string>
     <string name="member">"اعضا"</string>
-    <string name="save_ok"></string>
     <string name="exception">"خطا:"</string>
     <string name="please_enter_phone_number">"لطفاً شماره تماس را وارد کنید."</string>
     <string name="please_enter_firstname_or_lastname">"لطفاً نام یا نام خانوادگی را وارد کنید."</string>
@@ -716,9 +715,7 @@
     <string name="ROOM_CONVERTED_TO_PRIVATE">"تبدیل صفحه عمومی به خصوصی"</string>
     <string name="MEMBER_JOINED_BY_INVITE_LINK">"اضافه شدن کاربر با دعوت "</string>
     <string name="revoke">ابطال</string>
-    <string name="channel_link_title_revoke">Invite Link</string>
-    <string name="channel_link_hint_revoke">Channel Invite Link</string>
-    <string name="self_destructs">Self Destructs</string>
+
 
     <string name="send_position">ارسال موقعیت</string>
     <string name="deleted_message">پیام حذف شده</string>
@@ -732,17 +729,37 @@
     <string name="permission_record_audio">ظبط صدا را بدهید</string>
     <string name="permission_phone">گوشی را بدهید</string>
     <string name="permission_sms">پیامک ها را بدهید</string>
-
-    <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
-    <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
-    <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
-    <string name="USER_DELETE_MAX_TRY_LOCK">USER DELETE MAX TRY </string>
-    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">USER PROFILE UPDATE USERNAME UPDATE</string>
-    <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
-    <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
-
-    <string name="channel_public_hint_revoke">Channel Public Link</string>
     <string name="st_privacy_blog">وبلاگ آی گپ</string>
     <string name="st_privacy_create_ticket">درخواست پشتیبانی</string>
     <string name="st_privacy_iGap_home">صفحه نخست آی گپ</string>
+
+  <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
+  <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
+  <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
+  <string name="USER_DELETE_MAX_TRY_LOCK">USER DELETE MAX TRY </string>
+  <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">USER PROFILE UPDATE USERNAME UPDATE</string>
+  <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
+  <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
+  <string name="channel_public_hint_revoke">Channel Public Link</string>
+  <string name="channel_link_title_revoke">Invite Link</string>
+  <string name="channel_link_hint_revoke">Channel Invite Link</string>
+  <string name="self_destructs">Self Destructs</string>
+  <string name="save_ok">Save OK:</string>
+
+  <string name="Toast_time_wait">please wait until:</string>
+  <string name="array_delete_photo_group">Delete Photo</string>
+  <string name="group_link_hint_revoke">Group Invite Link</string>
+  <string name="channel_title_convert_to_private">Convert channel to private</string>
+  <string name="channel_text_convert_to_private">Do you want Convert channel to private?</string>
+  <string name="channel_title_convert_to_public">Convert channel to public</string>
+  <string name="channel_text_convert_to_public">Do you want Convert channel to public?</string>
+  <string name="channel_title_channel_set_username">Set Username</string>
+  <string name="group_title_convert_to_private">Convert group to private</string>
+  <string name="group_text_convert_to_private">Do you want Convert group to private?</string>
+  <string name="group_title_convert_to_public">Convert group to public</string>
+  <string name="group_text_convert_to_public">Do you want Convert group to public?</string>
+  <string name="group_title_set_username">Set Username</string>
+  <string name="permission_storage">Storage</string>
+
+
 </resources>
