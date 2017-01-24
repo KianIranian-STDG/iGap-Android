@@ -746,19 +746,19 @@
   <string name="self_destructs">Self Destructs</string>
   <string name="save_ok">Save OK:</string>
 
-  <string name="Toast_time_wait">please wait until:</string>
-  <string name="array_delete_photo_group">Delete Photo</string>
+  <string name="Toast_time_wait">لطفا منتظر بمانید تا :</string>
+  <string name="array_delete_photo_group">حذف عکس</string>
   <string name="group_link_hint_revoke">Group Invite Link</string>
   <string name="channel_title_convert_to_private">Convert channel to private</string>
   <string name="channel_text_convert_to_private">Do you want Convert channel to private?</string>
   <string name="channel_title_convert_to_public">Convert channel to public</string>
   <string name="channel_text_convert_to_public">Do you want Convert channel to public?</string>
-  <string name="channel_title_channel_set_username">Set Username</string>
+  <string name="channel_title_channel_set_username">تخصیص لینک عمومی کانال</string>
   <string name="group_title_convert_to_private">Convert group to private</string>
   <string name="group_text_convert_to_private">Do you want Convert group to private?</string>
-  <string name="group_title_convert_to_public">Convert group to public</string>
+  <string name="group_title_convert_to_public">تبدیل به گروه عمومی</string>
   <string name="group_text_convert_to_public">Do you want Convert group to public?</string>
-  <string name="group_title_set_username">Set Username</string>
+  <string name="group_title_set_username">تخصیص نام کاربری</string>
   <string name="permission_storage">Storage</string>
 
 
