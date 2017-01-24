@@ -113,14 +113,21 @@
 
   </com.iGap.module.MyAppBarLayout>
 
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/cl_recycler_view_contact"
+  <com.baoyz.widget.PullRefreshLayout
+      android:id="@+id/swipeRefreshLayout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:overScrollMode="never"
+      app:refreshType="material"
       >
 
-  </android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cl_recycler_view_contact"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        />
+
+  </com.baoyz.widget.PullRefreshLayout>
 
   <com.iGap.libs.floatingAddButton.ArcMenu
       android:id="@+id/ac_arc_button_add"

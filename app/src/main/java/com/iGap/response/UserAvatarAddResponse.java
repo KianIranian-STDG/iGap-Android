@@ -4,6 +4,7 @@ import com.iGap.G;
 import com.iGap.proto.ProtoUserAvatarAdd;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmUserInfo;
+
 import io.realm.Realm;
 
 public class UserAvatarAddResponse extends MessageHandler {
@@ -54,6 +55,9 @@ public class UserAvatarAddResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        if (G.onUserAvatarResponse != null) {
+            G.onUserAvatarResponse.onAvatarAddTimeOut();
+        }
     }
 
     @Override

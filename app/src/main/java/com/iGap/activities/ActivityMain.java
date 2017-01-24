@@ -26,6 +26,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.baoyz.widget.PullRefreshLayout;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -102,13 +104,15 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -135,6 +139,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private boolean isLanguageParsi;
     private Typeface titleTypeface;
 
+    private PullRefreshLayout swipeLayout;
+
     private SharedPreferences sharedPreferences;
     private String cLanguage;
     private boolean isGetContactList = false;
@@ -157,7 +163,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        swipeLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
         G application = (G) getApplication();
         Tracker mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RoomList");
@@ -228,8 +235,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     public void run() {
                         contentLoading.hide();
                         mAdapter.clear();
-
                         putChatToDatabase(roomList);
+                        recyclerView.setNestedScrollingEnabled(true);
+                        swipeLayout.setRefreshing(false);// swipe refresh is complete and gone
+
                     }
                 });
             }
@@ -579,7 +588,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
         recyclerView.setLayoutManager(mLayoutManager);
         // set behavior to RecyclerView
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) swipeLayout.getLayoutParams();
         params.setBehavior(new ShouldScrolledBehavior(mLayoutManager, mAdapter));
         recyclerView.setLayoutParams(params);
         recyclerView.setAdapter(mAdapter);
@@ -599,6 +608,17 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         toolbar.animate().setDuration(150).alpha(1F).start();
                     }
                 }
+            }
+        });
+        swipeLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // start refresh
+
+//                scrollToTop();
+                appBarLayout.setExpanded(true);
+                recyclerView.setNestedScrollingEnabled(false);
+                new RequestClientGetRoomList().clientGetRoomList();
             }
         });
 

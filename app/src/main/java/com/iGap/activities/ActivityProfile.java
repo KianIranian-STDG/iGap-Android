@@ -22,11 +22,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
@@ -47,11 +49,13 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-import io.realm.Realm;
-import io.realm.RealmResults;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -74,6 +78,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
     private ProgressBar prgWait;
     private String pathSaveImage;
     private boolean existAvatar = false;
+    private Typeface titleTypeface;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -97,8 +102,13 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
 
         txtTitle = (TextView) findViewById(R.id.pu_titleToolbar);
-        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
-        txtTitle.setTypeface(type);
+
+        if (!HelperCalander.isLanguagePersian) {
+            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        } else {
+            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+        }
+        txtTitle.setTypeface(titleTypeface);
 
         final View lineEditText = findViewById(R.id.pu_line_below_editText);
         btnSetImage = (com.iGap.module.CircleImageView) findViewById(R.id.pu_profile_circle_image);
@@ -475,6 +485,11 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
             }
         });
+    }
+
+    @Override
+    public void onAvatarAddTimeOut() {
+        hideProgressBar();
     }
 
     @Override

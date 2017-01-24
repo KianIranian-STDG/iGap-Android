@@ -326,11 +326,9 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             imgPupupMenul.setVisibility(View.GONE);
         }
 
-        Log.i("VVVVVVVV", "4 onCreate: " + description);
+
         if (role != ChannelChatRole.OWNER) {
-            Log.i("VVVVVVVV", "0 onCreate: " + description);
             if (description.equals("")) {
-                Log.i("VVVVVVVV", "1 onCreate: " + description);
                 lytChannelDescription.setVisibility(View.GONE);
             }
         }

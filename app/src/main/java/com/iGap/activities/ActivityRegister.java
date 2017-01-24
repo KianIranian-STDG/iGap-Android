@@ -33,6 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.BuildConfig;
@@ -40,6 +41,7 @@ import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterDialog;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
@@ -68,11 +70,13 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-import io.realm.Realm;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
@@ -116,6 +120,7 @@ public class ActivityRegister extends ActivityEnhanced {
     private Dialog dialog;
     private int digitCount;
     private MaterialDialog dialogWait;
+    private Typeface titleTypeface;
 
     public enum Reason {
         SOCKET, TIME_OUT, INVALID_CODE
@@ -214,8 +219,14 @@ public class ActivityRegister extends ActivityEnhanced {
         txtDesc = (TextView) findViewById(R.id.rg_txt_text_descRegister);
 
         txtTitleToolbar = (TextView) findViewById(R.id.rg_txt_titleToolbar);
-        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
-        txtTitleToolbar.setTypeface(type);
+
+        if (!HelperCalander.isLanguagePersian) {
+            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        } else {
+            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+        }
+
+        txtTitleToolbar.setTypeface(titleTypeface);
 
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override

@@ -1,6 +1,5 @@
 package com.iGap.activities;
 
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +28,9 @@ import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 
+import static android.view.View.VISIBLE;
+import static com.iGap.G.context;
+
 public class ActivityWebView extends ActivityEnhanced {
 
     private WebView webView;
@@ -44,7 +46,7 @@ public class ActivityWebView extends ActivityEnhanced {
     //    protected void attachBaseContext(Context newBase) {
     //        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     //    }
-    @SuppressLint({"SetJavaScriptEnabled"})
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,8 +93,10 @@ public class ActivityWebView extends ActivityEnhanced {
         webView.loadUrl(key);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
         webView.setWebViewClient(new WebViewClient());
-        webView.setWebChromeClient(new WebChromeClient());
+//        webView.setWebChromeClient(new WebChromeClient());
         webView.getSettings().setBuiltInZoomControls(true);
         if (Build.VERSION.SDK_INT >= 21) {
             webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
@@ -101,7 +105,25 @@ public class ActivityWebView extends ActivityEnhanced {
 
         }
 
+        if (Build.VERSION.SDK_INT >= 17) {
+            webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+        }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        }
+
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onLoadResource(WebView view, String url) {
+                super.onLoadResource(view, url);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+        });
         progressBar = (ProgressBar) findViewById(R.id.stfaq_progressBar);
         int color = getResources().getColor(R.color.gray);
         //        progressBar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
@@ -113,7 +135,7 @@ public class ActivityWebView extends ActivityEnhanced {
                 if (progress == 100) {
                     progressBar.setVisibility(View.GONE);
                 } else {
-                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(VISIBLE);
                 }
             }
         });
@@ -213,7 +235,7 @@ public class ActivityWebView extends ActivityEnhanced {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.setPackage("com.android.chrome");
                         try {
-                            G.context.startActivity(intent);
+                            context.startActivity(intent);
                         } catch (ActivityNotFoundException ex) {
                             // Chrome browser presumably not installed so allow user to choose instead
                             intent.setPackage(null);

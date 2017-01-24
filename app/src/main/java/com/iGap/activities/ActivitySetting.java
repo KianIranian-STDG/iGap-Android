@@ -36,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -91,13 +92,15 @@ import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -1401,16 +1404,21 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     public void onClick(View view) {
 
                         if (checkBoxPhoto.isChecked()) {
-                            for (File file : filePhoto.listFiles())
-                                if (!file.isDirectory()) file.delete();
+                            for (File file : filePhoto.listFiles()) {
+                                if (!file.isDirectory())
+                                    file.delete();
+                            }
                         }
                         if (checkBoxVideo.isChecked()) {
-                            for (File file : fileVideo.listFiles())
+                            for (File file : fileVideo.listFiles()) {
                                 if (!file.isDirectory()) file.delete();
+                            }
+
                         }
                         if (checkBoxDocument.isChecked()) {
-                            for (File file : fileDocument.listFiles())
+                            for (File file : fileDocument.listFiles()) {
                                 if (!file.isDirectory()) file.delete();
+                            }
                         }
                         long afterClearSizeFolderPhoto = getFolderSize(new File(G.DIR_IMAGES));
                         long afterClearSizeFolderVideo = getFolderSize(new File(G.DIR_VIDEOS));
@@ -1505,31 +1513,31 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize))
-                    .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black)).items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
-                    .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        .titleGravity(GravityEnum.START)
+                        .titleColor(getResources().getColor(android.R.color.black)).items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
+                        .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        if (text != null) {
-                            txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                                if (text != null) {
+                                    txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
 
-                            if (HelperCalander.isLanguagePersian) {
-                                txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
+                                    if (HelperCalander.isLanguagePersian) {
+                                        txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
+                                    }
+                                }
+                                poRbDialogTextSize = which;
+                                int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                                editor.apply();
+
+                                G.setUserTextSize();
+
+                                return false;
                             }
-                        }
-                        poRbDialogTextSize = which;
-                        int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-                        editor.apply();
-
-                        G.setUserTextSize();
-
-                        return false;
-                    }
-                }).positiveText(getResources().getString(R.string.B_ok)).show();
+                        }).positiveText(getResources().getString(R.string.B_ok)).show();
             }
         });
 
@@ -1888,6 +1896,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
                 intent.putExtra("PATH", "https://www.igap.net/en/");
                 startActivity(intent);
+
             }
         });
 
@@ -2147,6 +2156,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     @Override
+    public void onAvatarAddTimeOut() {
+        hideProgressBar();
+    }
+
+    @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
         new RequestUserAvatarAdd().userAddAvatar(uploadStructure.token);
     }
@@ -2158,7 +2172,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     @Override
     public void onAvatarError() {
-
+        hideProgressBar();
     }
 
 
