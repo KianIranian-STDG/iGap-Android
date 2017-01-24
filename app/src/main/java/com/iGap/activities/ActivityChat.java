@@ -3552,12 +3552,20 @@ public class ActivityChat extends ActivityEnhanced
         EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(lastResultMessages, mAdapter) {
             @Override
             public void onLoadMore(EndlessRecyclerOnScrollListener listener, int page) {
+
+
+                Parcelable recyclerViewState;
+                recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+
                 List<RealmRoomMessage> roomMessages = listener.loadMore(page);
                 ArrayList<StructMessageInfo> convertedMessages = new ArrayList<>();
+
                 for (RealmRoomMessage roomMessage : roomMessages) {
                     convertedMessages.add(StructMessageInfo.convert(roomMessage));
                 }
+
                 switchAddItem(convertedMessages, true);
+                recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
             }
 
             @Override
