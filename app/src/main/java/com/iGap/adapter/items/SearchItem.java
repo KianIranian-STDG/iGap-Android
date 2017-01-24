@@ -6,10 +6,10 @@ import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.fragments.SearchFragment;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
@@ -17,11 +17,9 @@ import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-
+import io.github.meness.emoji.EmojiTextView;
 import java.io.File;
 import java.util.List;
-
-import io.github.meness.emoji.EmojiTextView;
 
 public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
@@ -53,6 +51,12 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         holder.lastSeen.setText(item.comment);
 
         holder.txtTime.setText(TimeUtils.toLocal(item.time, G.CHAT_MESSAGE_TIME));
+
+        if (HelperCalander.isLanguagePersian) {
+            holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
+            holder.lastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.lastSeen.getText().toString()));
+            holder.txtTime.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtTime.getText().toString()));
+        }
 
         holder.txtIcon.setVisibility(View.GONE);
 

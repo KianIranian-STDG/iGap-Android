@@ -206,7 +206,7 @@ public class HelperCalander {
             output = TimeUtils.toLocal(time, G.ROOM_LAST_MESSAGE_TIME);
         } else if (current.get(Calendar.DAY_OF_YEAR) < (date.get(Calendar.DAY_OF_YEAR) + 7)) {
 
-            if (HelperCalander.isTimeHijri()) {
+            if (HelperCalander.isLanguagePersian) {
                 output = getPersianStringDay(date.get(Calendar.DAY_OF_WEEK));
             } else {
                 output = TimeUtils.toLocal(date.getTimeInMillis(), "EEE");

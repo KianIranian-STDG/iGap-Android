@@ -74,6 +74,8 @@ public class ChatSendMessageResponse extends MessageHandler {
                         if (realmRoomMessage != null && realmRoomMessage.getMessageId() == Long.parseLong(identity)) {
                             if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).count() == 0) {
                                 RealmRoomMessage.updateId(Long.parseLong(identity), roomMessage.getMessageId());
+
+                                if (realmRoomMessage.getForwardMessage() != null) realmRoomMessage.getForwardMessage().setMessageId(roomMessage.getForwardFrom().getMessageId());
                             }
                             RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId());
                             break;

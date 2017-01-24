@@ -173,10 +173,10 @@ import org.parceler.Parcel;
             message.setRoomId(roomId);
 
             if (input.hasForwardFrom()) {
-                message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), roomId));
+                message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), -1));
             }
             if (input.hasReplyTo()) {
-                message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), roomId));
+                message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), -1));
             }
 
             message.setShowMessage(showMessage);
@@ -194,9 +194,7 @@ import org.parceler.Parcel;
         }
         message.setAuthorHash(input.getAuthor().getHash());
 
-        if (forwardOrReply) {
-            message.setDeleted(true);
-        } else {
+        if (!forwardOrReply) {
             message.setDeleted(input.getDeleted());
         }
 
