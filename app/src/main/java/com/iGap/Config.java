@@ -24,7 +24,7 @@ public class Config {
     public static final long LAST_SEEN_DELAY_CHECKING = (int) (5 * DateUtils.SECOND_IN_MILLIS);
     public static final long GROUP_SHOW_ACTIONS_COUNT = 3;
     public static final long IMAGE_CORNER = 15;
-    public static final long HEART_BEAT_CHECKING_TIME_OUT = (int) (3 * DateUtils.MINUTE_IN_MILLIS);
+    public static final long HEART_BEAT_CHECKING_TIME_OUT = (int) (65 * DateUtils.SECOND_IN_MILLIS);
     public static final long CONNECTION_TIME_OUT = (DateUtils.SECOND_IN_MILLIS);
     public static String urlWebsocket = "wss://secure.igap.net/hybrid/";
 

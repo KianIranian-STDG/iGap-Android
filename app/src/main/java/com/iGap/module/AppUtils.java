@@ -10,7 +10,6 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.R;
 import com.iGap.interfaces.IResendMessage;
@@ -20,13 +19,11 @@ import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.iGap.G.context;
 
@@ -158,7 +155,7 @@ public final class AppUtils {
                 break;
             case FAILED:
                 view.setImageResource(R.drawable.ic_error);
-//                DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
+                //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.red));
                 break;
             case SEEN:
@@ -170,13 +167,13 @@ public final class AppUtils {
                 break;
             case SENDING:
                 view.setImageResource(R.drawable.ic_clock);
-//                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
+                //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
                 break;
             case SENT:
                 view.setImageResource(R.drawable.ic_check);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
-//                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
+                //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 break;
         }
     }
@@ -244,14 +241,14 @@ public final class AppUtils {
         return 0;
     }
 
-    public static String rightLastMessage(Resources resources, ProtoGlobal.Room.Type roomType, RealmRoomMessage message, RealmAttachment attachment) {
+    public static String rightLastMessage(long roomId, Resources resources, ProtoGlobal.Room.Type roomType, RealmRoomMessage message, RealmAttachment attachment) {
         String messageText;
         if (message == null) {
             return null;
         }
 
         if (message.isDeleted()) {
-            return resources.getString(R.string.deleted_message);
+            return computeLastMessage(roomId, resources, roomType, attachment);
         } else if (!TextUtils.isEmpty(message.getMessage())) {
             return message.getMessage();
         } else if (message.getForwardMessage() != null && !TextUtils.isEmpty(message.getForwardMessage().getMessage())) {
@@ -313,6 +310,34 @@ public final class AppUtils {
         }
 
         return messageText;
+    }
+
+    private static String computeLastMessage(final long roomId, Resources resources, ProtoGlobal.Room.Type roomType, RealmAttachment attachment) {
+        Realm realm = Realm.getDefaultInstance();
+        String lastMessage = "";
+        RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        for (RealmRoomMessage realmRoomMessage : realmList) {
+            if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
+                lastMessage = AppUtils.rightLastMessage(roomId, resources, roomType, realmRoomMessage, attachment);
+                break;
+            }
+        }
+        realm.close();
+        return lastMessage;
+    }
+
+    public static long computeLastMessageTime(final long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        long lastMessageTime = 0;
+        RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        for (RealmRoomMessage realmRoomMessage : realmList) {
+            if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
+                lastMessageTime = realmRoomMessage.getUpdateOrCreateTime();
+                break;
+            }
+        }
+        realm.close();
+        return lastMessageTime;
     }
 
     public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount, final IResendMessage listener) {

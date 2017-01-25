@@ -118,7 +118,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             } else {
                 holder.avi.setVisibility(View.GONE);
                 if (mInfo.getLastMessage() != null) {
-                    String lastMessage = AppUtils.rightLastMessage(holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                    String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
                     if (lastMessage == null) {
                         lastMessage = mInfo.getLastMessage().getMessage();
                     }
@@ -321,12 +321,23 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
             holder.name.setText(mInfo.getTitle());
 
-            if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
-                holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
+            if (mInfo.isDeleted()) {
+                long lastMessageTime = AppUtils.computeLastMessageTime(mInfo.getId());
+                if (lastMessageTime != 0) {
+                    holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(lastMessageTime));
 
-                holder.lastSeen.setVisibility(View.VISIBLE);
+                    holder.lastSeen.setVisibility(View.VISIBLE);
+                } else {
+                    holder.lastSeen.setVisibility(GONE);
+                }
             } else {
-                holder.lastSeen.setVisibility(GONE);
+                if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
+                    holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
+
+                    holder.lastSeen.setVisibility(View.VISIBLE);
+                } else {
+                    holder.lastSeen.setVisibility(GONE);
+                }
             }
 
             if (mInfo.getUnreadCount() < 1) {
