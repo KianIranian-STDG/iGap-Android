@@ -73,8 +73,8 @@
                             <include
                                 android:id="@+id/progress"
                                 layout="@layout/msg_progress_item"
-                                android:layout_width="38dp"
-                                android:layout_height="38dp"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
                                 android:layout_gravity="center"/>
                         </FrameLayout>
 

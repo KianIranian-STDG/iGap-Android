@@ -4,27 +4,33 @@
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
-    <FrameLayout
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
+      >
+
+    <com.iGap.module.TouchImageView
+        android:id="@+id/sisl_touch_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center">
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/difaultimage"
+        />
 
-        <com.iGap.module.TouchImageView
-            android:id="@+id/sisl_touch_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/difaultimage" />
+    <include
+        layout="@layout/msg_progress_item"
+        android:id="@+id/progress"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        />
 
-        <include
-            android:id="@+id/progress"
-            layout="@layout/msg_progress_item"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center" />
-    </FrameLayout>
+
+  </FrameLayout>
 
 </LinearLayout>

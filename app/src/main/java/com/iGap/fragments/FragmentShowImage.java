@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -290,11 +291,15 @@ public class FragmentShowImage extends Fragment {
             final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
             final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
 
+            final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) layout.findViewById(R.id.ch_progress_loadingContent);
+            contentLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+
             if (HelperDownloadFile.isDownLoading(mRealmList.get(position).getAttachment().getToken())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
-                startDownload(position, progress, touchImageView);
+                startDownload(position, progress, touchImageView, contentLoading);
             } else {
                 progress.withDrawable(R.drawable.ic_download, true);
+                contentLoading.setVisibility(View.GONE);
             }
 
             final RealmRoomMessage rm = mRealmList.get(position).getForwardMessage() != null ? mRealmList.get(position).getForwardMessage() : mRealmList.get(position);
@@ -354,10 +359,10 @@ public class FragmentShowImage extends Fragment {
                     if (HelperDownloadFile.isDownLoading(mRealmList.get(position).getAttachment().getToken())) {
                         HelperDownloadFile.stopDownLoad(mRealmList.get(position).getAttachment().getToken());
                         progress.withDrawable(R.drawable.ic_download, true);
+                        contentLoading.setVisibility(View.GONE);
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
-
-                        startDownload(position, progress, touchImageView);
+                        startDownload(position, progress, touchImageView, contentLoading);
                     }
                 }
             });
@@ -384,7 +389,9 @@ public class FragmentShowImage extends Fragment {
             return layout;
         }
 
-        private void startDownload(int position, final MessageProgress progress, final TouchImageView touchImageView) {
+        private void startDownload(int position, final MessageProgress progress, final TouchImageView touchImageView, final ContentLoadingProgressBar contentLoading) {
+
+            contentLoading.setVisibility(View.VISIBLE);
 
             String dirPath = AndroidUtils.suitableAppFilePath(mRealmList.get(position).getMessageType()) + "/" +
                 mRealmList.get(position).getAttachment().getToken() + "_" + mRealmList.get(position).getAttachment().getName();
@@ -405,10 +412,9 @@ public class FragmentShowImage extends Fragment {
                                     } else {
                                         progress.withProgress(0);
                                         progress.setVisibility(View.GONE);
+                                        contentLoading.setVisibility(View.GONE);
 
                                         String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
-                                        // File file = new File(path);
-                                        //  touchImageView.setImageURI(Uri.fromFile(file));
                                         ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
                                         downloadedList.add(rm.getMessageId());
                                     }
@@ -422,6 +428,7 @@ public class FragmentShowImage extends Fragment {
                             @Override public void run() {
                                 progress.withProgress(0);
                                 progress.withDrawable(R.drawable.ic_download, true);
+                                contentLoading.setVisibility(View.GONE);
                             }
                         });
                     }

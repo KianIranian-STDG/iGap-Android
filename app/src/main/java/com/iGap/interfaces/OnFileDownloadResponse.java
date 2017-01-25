@@ -11,6 +11,6 @@ public interface OnFileDownloadResponse {
 
     void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType);
 
-    void onError(int majorCode, int minorCode, String token, String selector);
+    void onError(int majorCode, int minorCode, String token, ProtoFileDownload.FileDownload.Selector selector);
 
 }

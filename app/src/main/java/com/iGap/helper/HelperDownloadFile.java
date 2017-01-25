@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
@@ -21,6 +20,8 @@ import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by Maryam on 12/9/2016.
@@ -31,6 +32,10 @@ public class HelperDownloadFile {
     private static ArrayMap<String, StructDownLoad> list = new ArrayMap<>();
     private OnFileDownloadResponse onFileDownloadResponse;
 
+    private static int maxDownloadSize = 10;
+    private static Queue<String> queue = new LinkedList<String>();
+
+
     public HelperDownloadFile() {
 
         onFileDownloadResponse = new OnFileDownloadResponse() {
@@ -39,52 +44,40 @@ public class HelperDownloadFile {
                 String PrimaryKey = token + selector;
 
                 if (list.containsKey(PrimaryKey)) {
-
                     StructDownLoad item = list.get(PrimaryKey);
-
-                    if (item.isCanseling) {
-                        list.remove(PrimaryKey);
-                    } else {
-                        item.offset = offset;
-                        item.progress = progress;
-                        requestDownloadFile(item);
-                    }
-
-                    }
+                    item.offset = offset;
+                    item.progress = progress;
+                    requestDownloadFile(item);
+                }
             }
 
             @Override public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
 
             }
 
-            @Override public void onError(int majorCode, int minorCode, String token, String selector) {
-
-                Log.e("ddddd", "helper download file    major  =" + majorCode + "   " + minorCode);
+            @Override public void onError(int majorCode, int minorCode, String token, ProtoFileDownload.FileDownload.Selector selector) {
 
                 String primaryKey = token + selector;
 
                 if (list.containsKey(primaryKey)) {
                     StructDownLoad item = list.get(primaryKey);
 
-                    if (item.isCanseling) {
-                        list.remove(primaryKey);
+                    item.attampOnError--;
+                    if (item.attampOnError >= 0) {
+                        requestDownloadFile(item);
                     } else {
-                        item.attampOnError--;
-                        if (item.attampOnError >= 0) {
-                            requestDownloadFile(item);
-                        } else {
 
-                            for (UpdateListener listener : item.listeners) {
-                                if (listener != null) {
-                                    listener.OnError(item.Token);
-                                }
+                        for (UpdateListener listener : item.listeners) {
+                            if (listener != null) {
+                                listener.OnError(item.Token);
                             }
-
-                            list.remove(primaryKey);
                         }
+
+                        list.remove(primaryKey);
+
+                        if (selector == ProtoFileDownload.FileDownload.Selector.FILE) addDownloadFromQueue();
                     }
                 }
-
             }
         };
 
@@ -99,16 +92,33 @@ public class HelperDownloadFile {
         public String name = "";
         public String moveToDirectoryPAth = "";
         public long size = 0;
+        public String identity = "";
         public int attampOnError = 2;
         public ProtoFileDownload.FileDownload.Selector selector;
         public String path = "";
-        public boolean isCanseling = false;
     }
 
     public interface UpdateListener {
         void OnProgress(String token, int progress);
 
         void OnError(String token);
+    }
+
+    private static boolean isNeedItemGoToQueue() {
+
+        if (queue.size() > 0) return true;
+
+        int count = 0;
+
+        for (int i = 0; i < list.size(); i++) {
+
+            StructDownLoad _sd = list.valueAt(i);
+            if (_sd.selector == ProtoFileDownload.FileDownload.Selector.FILE) count++;
+        }
+
+        if ((count) > maxDownloadSize) return true;
+
+        return false;
     }
 
     public static void startDoanload(String token, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, UpdateListener update) {
@@ -127,10 +137,10 @@ public class HelperDownloadFile {
             item.size = size;
 
             list.put(primaryKey, item);
+
         } else {
             item = list.get(primaryKey);
             item.listeners.add(update);
-            item.isCanseling = false;
             updateView(item);
 
             return;
@@ -159,6 +169,11 @@ public class HelperDownloadFile {
             }
         }
 
+        if (isNeedItemGoToQueue()) {
+            queue.add(primaryKey);
+            return;
+        }
+
         requestDownloadFile(item);
     }
 
@@ -167,8 +182,25 @@ public class HelperDownloadFile {
         String primaryKey = token + ProtoFileDownload.FileDownload.Selector.FILE;
 
         if (list.containsKey(primaryKey)) {
-            //   HelperCancelDownloadUpload.removeRequestQueue("");
+            HelperCancelDownloadUpload.removeRequestQueue(list.get(primaryKey).identity);
             list.remove(primaryKey);
+
+            addDownloadFromQueue();
+        }
+    }
+
+    private static void addDownloadFromQueue() {
+
+        // if any file exist in download queue add one to start download
+
+        for (int i = 0; i < queue.size(); i++) {
+
+            String _primaryKey = queue.poll();
+
+            if (list.containsKey(_primaryKey)) {
+                requestDownloadFile(list.get(_primaryKey));
+                break;
+            }
         }
     }
 
@@ -178,16 +210,17 @@ public class HelperDownloadFile {
             moveTmpFileToOrginFolder(item.Token, item.selector);
             updateView(item);
             list.remove(item.Token + item.selector);
+
+            if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) addDownloadFromQueue();
+
             return;
         }
 
         updateView(item);
 
         ProtoFileDownload.FileDownload.Selector selector = item.selector;
-        String identity = item.Token + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset + '*' + true;
-
-        new RequestFileDownload().download(item.Token, item.offset, (int) item.size, selector, identity);
-
+        item.identity = item.Token + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset + '*' + true;
+        new RequestFileDownload().download(item.Token, item.offset, (int) item.size, selector, item.identity);
     }
 
     private static void moveTmpFileToOrginFolder(String token, ProtoFileDownload.FileDownload.Selector selector) {
@@ -202,7 +235,6 @@ public class HelperDownloadFile {
             }
         }
 
-
         switch (item.selector) {
             case FILE:
                 setFilePAthToDataBaseAttachment(token, item.moveToDirectoryPAth);
@@ -213,7 +245,6 @@ public class HelperDownloadFile {
                 String dirPathThumpnail = G.DIR_TEMP + "/" + item.path;
                 setThumpnailPathDataBaseAttachment(token, dirPathThumpnail);
                 break;
-
         }
     }
 
@@ -267,10 +298,7 @@ public class HelperDownloadFile {
         realm.close();
     }
 
-
     private static void updateView(StructDownLoad item) {
-
-        Log.e("ddddd", item.offset + "   " + item.progress + "    " + item.size + "   " + item.selector);
 
         for (UpdateListener listener : item.listeners) {
             if (listener != null) {

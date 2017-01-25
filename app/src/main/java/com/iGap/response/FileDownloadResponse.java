@@ -81,7 +81,9 @@ public class FileDownloadResponse extends MessageHandler {
             if (G.onFileDownloadResponse != null) {
                 String[] identityParams = identity.split("\\*");
                 String token = identityParams[0];
-                String selector = identityParams[1];
+
+                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
+
                 G.onFileDownloadResponse.onError(majorCode, minorCode, token, selector);
             }
         } else {

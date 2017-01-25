@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -896,6 +897,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             public MessageProgress messageProgress;
 
+            public ContentLoadingProgressBar contentLoading;
+
             public mHolder(View view, int position) {
                 super(view);
 
@@ -921,14 +924,18 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
                 messageProgress.withDrawable(R.drawable.ic_download, true);
 
+                contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);
+                contentLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+
                 if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getToken())) {
-                    startDownload(position, messageProgress);
+                    startDownload(position, messageProgress, contentLoading);
                 }
 
                 messageProgress.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
 
-                        downloadFile(getPosition(), messageProgress);
+                        downloadFile(getPosition(), messageProgress, contentLoading);
                     }
                 });
             }
@@ -1005,8 +1012,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         }
 
-        private void startDownload(final int position, final MessageProgress messageProgress) {
+        private void startDownload(final int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
 
+            contentLoading.setVisibility(View.VISIBLE);
             final Long id = mList.get(position).item.getMessageId();
 
             messageProgress.withDrawable(R.drawable.ic_cancel, true);
@@ -1029,6 +1037,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                                 } else {
                                     messageProgress.withProgress(0);
                                     messageProgress.setVisibility(View.GONE);
+                                    contentLoading.setVisibility(View.GONE);
                                     needDownloadList.remove(id);
                                 }
                             }
@@ -1044,13 +1053,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         @Override public void run() {
                             messageProgress.withProgress(0);
                             messageProgress.withDrawable(R.drawable.ic_download, true);
+                            contentLoading.setVisibility(View.GONE);
                         }
                     });
                 }
             });
         }
 
-        private void stopDownload(int position, final MessageProgress messageProgress) {
+        private void stopDownload(int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
 
             HelperDownloadFile.stopDownLoad(mList.get(position).item.getAttachment().getToken());
 
@@ -1058,16 +1068,17 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 @Override public void run() {
                     messageProgress.withProgress(0);
                     messageProgress.withDrawable(R.drawable.ic_download, true);
+                    contentLoading.setVisibility(View.GONE);
                 }
             });
         }
 
-        private void downloadFile(int position, MessageProgress messageProgress) {
+        private void downloadFile(int position, MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
 
             if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getToken())) {
-                stopDownload(position, messageProgress);
+                stopDownload(position, messageProgress, contentLoading);
             } else {
-                startDownload(position, messageProgress);
+                startDownload(position, messageProgress, contentLoading);
             }
         }
 
