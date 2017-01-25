@@ -1,5 +1,7 @@
 package com.iGap.response;
 
+import com.iGap.G;
+
 public class ClientConditionResponse extends MessageHandler {
 
     public int actionId;
@@ -17,16 +19,25 @@ public class ClientConditionResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+        if (G.onClientCondition != null) {
+            G.onClientCondition.onClientCondition();
+        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        /**
+         * timeOut call error also
+         */
     }
 
     @Override
     public void error() {
         super.error();
+        if (G.onClientCondition != null) {
+            G.onClientCondition.onClientConditionError();
+        }
     }
 }
 

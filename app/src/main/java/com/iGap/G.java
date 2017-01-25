@@ -26,6 +26,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperCheckInternetConnection;
+import com.iGap.helper.HelperClientCondition;
 import com.iGap.helper.HelperConnectionState;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperFillLookUpClass;
@@ -59,6 +60,7 @@ import com.iGap.interfaces.OnChatEditMessageResponse;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnClearChatHistory;
 import com.iGap.interfaces.OnClientCheckInviteLink;
+import com.iGap.interfaces.OnClientCondition;
 import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnClientGetRoomListResponse;
 import com.iGap.interfaces.OnClientGetRoomMessage;
@@ -148,11 +150,11 @@ import com.iGap.module.Contacts;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.UploaderUtil;
 import com.iGap.module.enums.ConnectionMode;
+import com.iGap.proto.ProtoClientCondition;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserContactsGetBlockedList;
 import com.iGap.request.RequestUserContactsGetList;
@@ -374,6 +376,7 @@ public class G extends MultiDexApplication {
     public static OnUpdateAvatar onUpdateAvatar;
     public static OnUserContactsBlock onUserContactsBlock;
     public static OnUserContactsUnBlock onUserContactsUnBlock;
+    public static OnClientCondition onClientCondition;
 
 
     public static File chatBackground;
@@ -384,6 +387,7 @@ public class G extends MultiDexApplication {
     public static boolean hasNetworkBefore;
 
     public static ConcurrentHashMap<Long, RequestWrapper> currentUploadFiles = new ConcurrentHashMap<>();
+    public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
 
     public static void setUserTextSize() {
 
@@ -763,8 +767,7 @@ public class G extends MultiDexApplication {
         }
     }
 
-    public static void login() { //TODO [Saeed Mozaffari] [2016-09-07 10:24 AM] - mitonim karhaie ke
-        // hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
+    public static void login() { //TODO [Saeed Mozaffari] [2016-09-07 10:24 AM] - mitonim karhaie ke hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
 
         G.onUserLogin = new OnUserLogin() {
             @Override
@@ -772,7 +775,7 @@ public class G extends MultiDexApplication {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        new RequestClientCondition().clientCondition();
+                        clientConditionGlobal = HelperClientCondition.computeClientCondition();
                         getUserInfo();
                         importContact();
                         //sendWaitingRequestWrappers();

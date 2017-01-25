@@ -27,7 +27,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -44,6 +43,7 @@ import com.iGap.fragments.SearchFragment;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperCalculateKeepMedia;
+import com.iGap.helper.HelperClientCondition;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperPermision;
@@ -56,6 +56,7 @@ import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.interfaces.OnChatUpdateStatusResponse;
+import com.iGap.interfaces.OnClientCondition;
 import com.iGap.interfaces.OnClientGetRoomListResponse;
 import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnConnectionChangeState;
@@ -76,7 +77,6 @@ import com.iGap.libs.flowingdrawer.FlowingView;
 import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
-import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.OnComplete;
@@ -97,6 +97,7 @@ import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.request.RequestChannelDelete;
 import com.iGap.request.RequestChannelLeft;
 import com.iGap.request.RequestChatDelete;
+import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupLeft;
@@ -104,22 +105,21 @@ import com.iGap.request.RequestUserContactsGetList;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.iGap.G.clientConditionGlobal;
 import static com.iGap.G.context;
 import static com.iGap.G.mFirstRun;
 import static com.iGap.R.string.updating;
 
-public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar {
+public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition {
 
     public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
@@ -133,17 +133,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private RecyclerView recyclerView;
     private RoomsAdapter<RoomItem> mAdapter;
     public static ArcMenu arcMenu;
-    private MaterialDesignTextView btnSearchAll;
     private int clickPosition = 0;
     private boolean keepMedia;
-    private boolean isLanguageParsi;
     private Typeface titleTypeface;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-//    private PullRefreshLayout swipeLayout;
-
+    private static boolean firstTimeEnterToApp = true;
     private SharedPreferences sharedPreferences;
-    private String cLanguage;
     private boolean isGetContactList = false;
 
     private void scrollToTop() {
@@ -165,8 +160,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
-//        swipeLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-//        swipeLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
         G application = (G) getApplication();
         Tracker mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RoomList");
@@ -174,7 +167,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
         G.saveLogcatToFile(context);
 
-        HelperGetDataFromOtherApp getShearedData = new HelperGetDataFromOtherApp(getIntent());
+        new HelperGetDataFromOtherApp(getIntent());
 
         mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
@@ -235,13 +228,19 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        contentLoading.hide();
+                        /**
+                         * to first enter to app , client first compute clientCondition then
+                         * getRoomList and finally send condition that before get clientCondition;
+                         * in else state compute new client condition with latest messaging state
+                         */
+                        if (firstTimeEnterToApp) {
+                            sendClientCondition();
+                        } else {
+                            new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+                        }
                         mAdapter.clear();
                         putChatToDatabase(roomList);
-//                        recyclerView.setNestedScrollingEnabled(true);
-//                        swipeLayout.setRefreshing(false);// swipe refresh is complete and gone
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
-
                     }
                 });
             }
@@ -332,6 +331,22 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
     }
 
+    /**
+     * send client condition
+     */
+    private void sendClientCondition() {
+        if (clientConditionGlobal != null) {
+            new RequestClientCondition().clientCondition(clientConditionGlobal);
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    sendClientCondition();
+                }
+            }, 1000);
+        }
+    }
+
 
     /**
      * import contact phone for first one
@@ -402,13 +417,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         contentLoading = (ContentLoadingProgressBar) findViewById(R.id.loadingContent);
         contentLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.fragmentContainer);
-
-        final MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.cl_btn_menu);
         RippleView rippleMenu = (RippleView) findViewById(R.id.cl_ripple_menu);
-
-        btnSearchAll = (MaterialDesignTextView) findViewById(R.id.amr_btn_search);
-
         RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
         rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -424,7 +433,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         } else {
             titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
         }
-
 
         if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
             txtIgap.setText(R.string.waiting_for_network);
@@ -466,7 +474,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
             @Override
             public void onComplete(RippleView rippleView) {
-
                 mLeftDrawerLayout.toggle();
             }
         });
@@ -484,7 +491,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
             @Override
             public void onMenuClosed() {
-
                 isMenuButtonAddShown = false;
             }
         });
@@ -626,22 +632,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new RequestClientGetRoomList().clientGetRoomList();
+                new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
-        ;
-//        swipeLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                // start refresh
-//
-////                scrollToTop();
-//                appBarLayout.setExpanded(true);
-//                recyclerView.setNestedScrollingEnabled(false);
-//                new RequestClientGetRoomList().clientGetRoomList();
-//            }
-//        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -832,14 +826,12 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
     }
 
-    // FIXME: 9/6/2016 [Alireza Eskandarpour Shoferi] not to be on handler, but for fixing
-    // securing for testing purposes
-    // TODO ghable pak kardan, request ro bear jaye jaee ke invoke kardi
     private void testIsSecure() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (G.isSecure && G.userLogin) {
+                    swipeRefreshLayout.setRefreshing(true);
                     new RequestClientGetRoomList().clientGetRoomList();
                 } else {
                     testIsSecure();
@@ -852,10 +844,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     private void getChatsList(boolean fromServer) {
         if (fromServer && G.socketConnection) {
-            contentLoading.show();
             testIsSecure();
         } else {
-            contentLoading.hide();
+            //contentLoading.hide();
             mAdapter.clear();
             Realm realm = Realm.getDefaultInstance();
             List<RoomItem> roomItems = new ArrayList<>();
@@ -870,6 +861,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
                         item.deleteFromRealm();
                     }
+
 
 
                     for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
@@ -932,6 +924,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+        G.onClientCondition = this;
         G.onSetActionInRoom = this;
 
         getChatsList(mFirstRun);
@@ -1592,6 +1585,26 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             public void run() {
                 Log.i("XXX", "roomId : " + roomId);
                 mAdapter.notifyWithRoomId(roomId);
+            }
+        });
+    }
+
+    @Override
+    public void onClientCondition() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    @Override
+    public void onClientConditionError() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
