@@ -22,10 +22,12 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -36,6 +38,7 @@ import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.proto.ProtoGlobal;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -172,7 +175,7 @@ public class AttachFile {
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     dispatchTakePictureIntent();
                 } else {
-                    Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                    Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 0);
 
                     if (outPath != null) {
                         imagePath = outPath.getPath();
@@ -186,8 +189,8 @@ public class AttachFile {
         });
     }
 
-    private Uri getOutputMediaFileUri(int type) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    private Uri getOutputMediaFileUri(int type, int camera) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && camera == 0) {
             return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", getOutputMediaFile(type));
         } else {
             return Uri.fromFile(getOutputMediaFile(type));
@@ -600,7 +603,7 @@ public class AttachFile {
     }
 
     public String saveGalleryPicToLocal(String galleryPath) {
-
+        Log.i("CCCCCCD", "0 getPath: " + galleryPath);
             String result = "";
             if (galleryPath == null) return "";
 
@@ -610,6 +613,10 @@ public class AttachFile {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 result = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file).getPath();
+//                result = Uri.fromFile(file).getPath();
+                Log.i("CCCCCCD", "getPath: " + file.getPath());
+                Log.i("CCCCCCD", "toString: " + file.toString());
+                Log.i("CCCCCCD", "getAbsolutePath: " + file.getAbsolutePath());
             } else {
                 result = Uri.fromFile(file).getPath();
             }
@@ -621,7 +628,9 @@ public class AttachFile {
             Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
 
             if (bitmap != null) {
-                result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE).getPath();
+                Log.i("CCCCCCD", "0 result: " + result);
+                result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 1).getPath();
+                Log.i("CCCCCCD", "1 result: " + result);
                 ImageHelper.SaveBitmapToFile(result, bitmap);
             }
 

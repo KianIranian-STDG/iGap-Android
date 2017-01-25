@@ -164,7 +164,7 @@
     <string name="st_chatBackground">Chat Background</string>
     <string name="st_Enable_Animation">Enable Animations</string>
     <string name="st_inApp_Browser">In-App browser</string>
-    <string name="st_crop">Crop</string>
+    <string name="st_crop">Crop and Resize</string>
     <string name="st_send_by_enter">Send by pressing Enter Key</string>
     <string name="st_title_Media">Media</string>
     <string name="st_auto_download_data">auto download (cellular data)</string>

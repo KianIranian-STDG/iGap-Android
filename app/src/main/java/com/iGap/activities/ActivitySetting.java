@@ -1907,38 +1907,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
 //                Uri uri =  Uri.parse( "https://www.igap.net/en/" );
 //                mCustomTabsHelperFragment.mayLaunchUrl(uri, null, null);
-                int mColorPrimary = 0;
-                final Uri PROJECT_URI = Uri.parse(
-                        "https://www.igap.net/en/");
 
-                CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder()
-                        .enableUrlBarHiding()
-                        .setToolbarColor(mColorPrimary)
-                        .setShowTitle(true)
-                        .build();
-
-                mCustomTabsHelperFragment.setConnectionCallback(
-                        new CustomTabsActivityHelper.ConnectionCallback() {
-                            @Override
-                            public void onCustomTabsConnected() {
-                                mCustomTabsHelperFragment.mayLaunchUrl(PROJECT_URI, null, null);
-                            }
-
-                            @Override
-                            public void onCustomTabsDisconnected() {
-                            }
-                        });
-
-                CustomTabsHelperFragment.open(ActivitySetting.this, mCustomTabsIntent, PROJECT_URI,
-                        mCustomTabsFallback);
-//                mCustomTabsHelperFragment.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        CustomTabsHelperFragment.open(MainActivity.this, mCustomTabsIntent, PROJECT_URI,
-//                                mCustomTabsFallback);
-//                    }
-//                });
-
+                openBrowser("https://www.igap.net/en/");
 
             }
         });
@@ -1947,9 +1917,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtWebViewBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-                intent.putExtra("PATH", "https://blog.igap.net");
-                startActivity(intent);
+//                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
+//                intent.putExtra("PATH", "https://blog.igap.net");
+//                startActivity(intent);
+                openBrowser("https://blog.igap.net");
             }
         });
 
@@ -1957,9 +1928,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtCreateTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-                intent.putExtra("PATH", "https://support.igap.net");
-                startActivity(intent);
+//                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
+//                intent.putExtra("PATH", "https://support.igap.net");
+//                startActivity(intent);
+
+                openBrowser("https://support.igap.net");
             }
         });
 
@@ -1974,6 +1947,35 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         realm.close();
 
         showImage();
+    }
+
+    private void openBrowser(String s) {
+
+        int mColorPrimary = getResources().getColor(R.color.green);
+        final Uri PROJECT_URI = Uri.parse(s);
+
+        CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder()
+                .enableUrlBarHiding()
+                .setToolbarColor(mColorPrimary)
+                .setShowTitle(true)
+                .build();
+
+        mCustomTabsHelperFragment.setConnectionCallback(
+                new CustomTabsActivityHelper.ConnectionCallback() {
+                    @Override
+                    public void onCustomTabsConnected() {
+                        mCustomTabsHelperFragment.mayLaunchUrl(PROJECT_URI, null, null);
+                    }
+
+                    @Override
+                    public void onCustomTabsDisconnected() {
+                    }
+                });
+
+        CustomTabsHelperFragment.open(ActivitySetting.this, mCustomTabsIntent, PROJECT_URI,
+                mCustomTabsFallback);
+
+
     }
 
 
