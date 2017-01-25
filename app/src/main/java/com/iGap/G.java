@@ -248,8 +248,8 @@ public class G extends MultiDexApplication {
     public static Typeface FONT_IGAP;
     public static List<String> downloadingTokens = new ArrayList<>();
     public static long currentTime;
-
     public static long userId;
+    public static long latestHearBeatTime = 0;
 
     @Override
     protected void attachBaseContext(Context base) {

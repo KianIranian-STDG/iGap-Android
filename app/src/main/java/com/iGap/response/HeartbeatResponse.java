@@ -2,6 +2,8 @@ package com.iGap.response;
 
 import com.iGap.request.RequestHeartbeat;
 
+import static com.iGap.G.latestHearBeatTime;
+
 public class HeartbeatResponse extends MessageHandler {
 
     public int actionId;
@@ -18,6 +20,7 @@ public class HeartbeatResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+        latestHearBeatTime = System.currentTimeMillis();
         new RequestHeartbeat().heartBeat();
     }
 
