@@ -109,6 +109,10 @@ public class RegisteredContactsFragment extends Fragment {
                     public void Allow() throws IOException {
                         importContactList();
                     }
+
+                    @Override public void deney() {
+
+                    }
                 });
             } catch (IOException e) {
                 e.printStackTrace();

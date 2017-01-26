@@ -9,4 +9,6 @@ import java.io.IOException;
 public interface OnGetPermission {
 
     void Allow() throws IOException;
+
+    void deney();
 }

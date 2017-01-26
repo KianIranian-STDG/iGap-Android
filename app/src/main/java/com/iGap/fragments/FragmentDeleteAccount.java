@@ -91,6 +91,10 @@ public class FragmentDeleteAccount extends Fragment {
                 public void Allow() {
                     getActivity().registerReceiver(smsReceiver, filter);
                 }
+
+                @Override public void deney() {
+
+                }
             });
         } catch (IOException e) {
             e.printStackTrace();

@@ -1321,6 +1321,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             startActivity(intent);
 
                         }
+
+                        @Override public void deney() {
+
+                        }
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -1578,7 +1582,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                             dialog.dismiss();
                                             useCamera();
                                         }
+
+                                        @Override public void deney() {
+
+                                        }
                                     });
+                                }
+
+                                @Override public void deney() {
+
                                 }
                             });
                         } catch (IOException e) {

@@ -182,6 +182,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     public void Allow() throws IOException {
                         importContactList();
                     }
+
+                    @Override public void deney() {
+
+                    }
                 });
             } catch (IOException e) {
                 e.printStackTrace();

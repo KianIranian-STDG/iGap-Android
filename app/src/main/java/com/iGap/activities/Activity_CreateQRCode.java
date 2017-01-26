@@ -78,6 +78,10 @@ public class Activity_CreateQRCode extends ActivityEnhanced {
                         public void Allow() {
                             CreateBarcode();
                         }
+
+                        @Override public void deney() {
+
+                        }
                     });
                 } catch (IOException e) {
                     e.printStackTrace();

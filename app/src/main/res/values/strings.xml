@@ -760,4 +760,5 @@
     <string name="st_privacy_blog">iGap Blog</string>
     <string name="st_privacy_create_ticket">Support Request</string>
     <string name="st_privacy_iGap_home">iGap Home</string>
+    <string name="you_have_to_get_storage_permision_for_continue">you have to get storage permision for continue</string>
 </resources>

@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -38,7 +37,6 @@ import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.proto.ProtoGlobal;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -155,6 +153,10 @@ public class AttachFile {
                 ((Activity) context).startActivityForResult(intent, request_code_paint);
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.PAINTING);
             }
+
+            @Override public void deney() {
+
+            }
         });
     }
 
@@ -185,6 +187,10 @@ public class AttachFile {
                         isInAttach = true;
                     }
                 }
+            }
+
+            @Override public void deney() {
+
             }
         });
     }
@@ -320,6 +326,10 @@ public class AttachFile {
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
                 isInAttach = true;
             }
+
+            @Override public void deney() {
+
+            }
         });
     }
 
@@ -337,6 +347,10 @@ public class AttachFile {
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_VIDEO);
                 isInAttach = true;
             }
+
+            @Override public void deney() {
+
+            }
         });
 
 
@@ -352,6 +366,10 @@ public class AttachFile {
                 intent.setType("image/*");
                 ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
                 isInAttach = true;
+            }
+
+            @Override public void deney() {
+
             }
         });
     }
@@ -373,6 +391,10 @@ public class AttachFile {
                 Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                 ((Activity) context).startActivityForResult(intent, request_code_VIDEO_CAPTURED);
                 isInAttach = true;
+            }
+
+            @Override public void deney() {
+
             }
         });
 
@@ -439,6 +461,10 @@ public class AttachFile {
 
                 isInAttach = true;
             }
+
+            @Override public void deney() {
+
+            }
         });
     }
 
@@ -449,6 +475,10 @@ public class AttachFile {
                 Intent intent = new Intent(context, ActivityExplorer.class);
                 ((Activity) context).startActivityForResult(intent, request_code_pic_file);
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
+            }
+
+            @Override public void deney() {
+
             }
         });
     }
@@ -465,6 +495,10 @@ public class AttachFile {
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.CHOOSING_CONTACT);
                 isInAttach = true;
             }
+
+            @Override public void deney() {
+
+            }
         });
 
     }
@@ -477,6 +511,10 @@ public class AttachFile {
             @Override
             public void Allow() {
                 getPosition();
+
+            }
+
+            @Override public void deney() {
 
             }
         });
@@ -540,6 +578,10 @@ public class AttachFile {
                 intent.putExtra("Mode", "documnet");
                 ((Activity) context).startActivityForResult(intent, request_code_open_document);
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
+            }
+
+            @Override public void deney() {
+
             }
         });
 

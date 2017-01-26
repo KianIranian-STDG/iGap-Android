@@ -33,7 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.BuildConfig;
@@ -70,13 +69,11 @@ import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-
+import io.realm.Realm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import io.realm.Realm;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
@@ -170,6 +167,10 @@ public class ActivityRegister extends ActivityEnhanced {
                 @Override
                 public void Allow() {
                     registerReceiver(smsReceiver, filter);
+                }
+
+                @Override public void deney() {
+
                 }
             });
         } catch (IOException e) {

@@ -40,7 +40,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -129,16 +128,14 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -1134,6 +1131,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
                             finish();
                         }
+
+                        @Override public void deney() {
+
+                        }
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -1448,7 +1449,15 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                                             dialog.dismiss();
                                             useCamera();
                                         }
+
+                                        @Override public void deney() {
+
+                                        }
                                     });
+                                }
+
+                                @Override public void deney() {
+
                                 }
                             });
                         } catch (IOException e) {

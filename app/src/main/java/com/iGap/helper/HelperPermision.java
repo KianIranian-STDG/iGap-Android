@@ -39,7 +39,6 @@ public class HelperPermision {
     private static OnGetPermission ResultPhone;
     private static OnGetPermission ResultSms;
 
-    public static OnGetPermission onDenyStorage;
 
     //************************************************************************************************************
     public static void getCameraPermission(Context context, OnGetPermission onGetPermission) throws IOException {
@@ -54,7 +53,7 @@ public class HelperPermision {
         int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPermission(context, new String[] { Manifest.permission.CAMERA }, MY_PERMISSIONS_CAMERA, context.getResources().getString(R.string.permission_camera));
+            getPermission(context, new String[] { Manifest.permission.CAMERA }, MY_PERMISSIONS_CAMERA, context.getResources().getString(R.string.permission_camera), ResultCamera);
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }
@@ -90,7 +89,7 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPermission(context, mStringArray, MY_PERMISSIONS_STORAGE, context.getResources().getString(R.string.permission_storage));
+            getPermission(context, mStringArray, MY_PERMISSIONS_STORAGE, context.getResources().getString(R.string.permission_storage), ResultStorage);
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }
@@ -135,7 +134,7 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPermission(context, mStringArray, MY_PERMISSIONS_CONTACTS, context.getResources().getString(R.string.permission_contact));
+            getPermission(context, mStringArray, MY_PERMISSIONS_CONTACTS, context.getResources().getString(R.string.permission_contact), ResultContact);
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }
@@ -171,7 +170,7 @@ public class HelperPermision {
         if (needPermosion != null) {
             String[] mStringArray = new String[needPermosion.size()];
             mStringArray = needPermosion.toArray(mStringArray);
-            getPermission(context, mStringArray, MY_PERMISSIONS_CALENDAR, context.getResources().getString(R.string.permission_calender));
+            getPermission(context, mStringArray, MY_PERMISSIONS_CALENDAR, context.getResources().getString(R.string.permission_calender), ResultCalendar);
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }
@@ -207,7 +206,7 @@ public class HelperPermision {
         if (needPermission != null) {
             String[] mStringArray = new String[needPermission.size()];
             mStringArray = needPermission.toArray(mStringArray);
-            getPermission(context, mStringArray, MY_PERMISSIONS_LOCATION, context.getResources().getString(R.string.permission_location));
+            getPermission(context, mStringArray, MY_PERMISSIONS_LOCATION, context.getResources().getString(R.string.permission_location), ResultLocation);
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }
@@ -226,7 +225,8 @@ public class HelperPermision {
         int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            getPermission(context, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_RECORD_AUDIO, context.getResources().getString(R.string.permission_record_audio));
+            getPermission(context, new String[] { Manifest.permission.RECORD_AUDIO }, MY_PERMISSIONS_RECORD_AUDIO, context.getResources().getString(R.string.permission_record_audio),
+                ResultRecordAudio);
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }
@@ -262,7 +262,7 @@ public class HelperPermision {
         if (needPermission != null) {
             String[] mStringArray = new String[needPermission.size()];
             mStringArray = needPermission.toArray(mStringArray);
-            getPermission(context, mStringArray, MY_PERMISSIONS_Phone, context.getResources().getString(R.string.permission_phone));
+            getPermission(context, mStringArray, MY_PERMISSIONS_Phone, context.getResources().getString(R.string.permission_phone), ResultPhone);
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }
@@ -290,7 +290,7 @@ public class HelperPermision {
         if (needPermission != null) {
             String[] mStringArray = new String[needPermission.size()];
             mStringArray = needPermission.toArray(mStringArray);
-            getPermission(context, mStringArray, MY_PERMISSIONS_Sms, context.getResources().getString(R.string.permission_sms));
+            getPermission(context, mStringArray, MY_PERMISSIONS_Sms, context.getResources().getString(R.string.permission_sms), ResultSms);
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }
@@ -306,24 +306,39 @@ public class HelperPermision {
     }
 
     //************************************************************************************************************
-    public static void getPermission(final Context context, final String[] needPermission, final int requestCode, String Text) {
+    public static void getPermission(final Context context, final String[] needPermission, final int requestCode, String Text, final OnGetPermission onGetPermission) {
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermission[0])) {
-            showMessageOKCancel(context, context.getString(R.string.you_need_to_allow) + " " + Text, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+
+            String message = context.getString(R.string.you_need_to_allow) + " " + Text;
+
+            DialogInterface.OnClickListener okListener = new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+
                     ActivityCompat.requestPermissions((Activity) context, needPermission, requestCode);
                 }
-            });
+            };
+
+            DialogInterface.OnClickListener onCancel = new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+
+                    if (onGetPermission != null) onGetPermission.deney();
+                }
+            };
+
+            new AlertDialog.Builder(context).setMessage(message)
+                .setPositiveButton(context.getString(R.string.ok), okListener)
+                .setNegativeButton(context.getString(R.string.cancel), onCancel)
+                .create()
+                .show();
+
             return;
         }
 
         ActivityCompat.requestPermissions((Activity) context, needPermission, requestCode);
     }
 
-    private static void showMessageOKCancel(Context context, String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(context).setMessage(message).setPositiveButton(context.getString(R.string.ok), okListener).setNegativeButton(context.getString(R.string.cancel), null).create().show();
-    }
+
 
     //************************************************************************************************************
     public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) throws IOException {
@@ -360,15 +375,17 @@ public class HelperPermision {
 
     private static void actionResultBack(int[] grantResults, OnGetPermission onGetPermission) throws IOException {
 
+        if (onGetPermission == null) return;
+
         boolean allOk = true;
         for (int i = 0; i < grantResults.length; i++) {
             if (grantResults[i] != PackageManager.PERMISSION_GRANTED) allOk = false;
         }
 
         if (allOk) {
-            if (onGetPermission != null) onGetPermission.Allow();
-        } else if (onDenyStorage != null) {
-            onDenyStorage.Allow();
+            onGetPermission.Allow();
+        } else {
+            onGetPermission.deney();
         }
     }
 

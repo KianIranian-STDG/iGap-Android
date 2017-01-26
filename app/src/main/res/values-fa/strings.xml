@@ -760,6 +760,7 @@
   <string name="group_text_convert_to_public">Do you want Convert group to public?</string>
   <string name="group_title_set_username">تخصیص نام کاربری</string>
   <string name="permission_storage">Storage</string>
+  <string name="you_have_to_get_storage_permision_for_continue">you have to get storage permision for continue</string>
 
 
 </resources>

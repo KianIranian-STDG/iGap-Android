@@ -229,6 +229,10 @@ public class Activity_QrPayment extends ActivityEnhanced {
 
                                 startActivity(new Intent(Activity_QrPayment.this, Activity_payViaQRCode.class));
                             }
+
+                            @Override public void deney() {
+
+                            }
                         });
                     } catch (IOException e) {
                         e.printStackTrace();

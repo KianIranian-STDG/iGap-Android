@@ -38,7 +38,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -94,18 +93,15 @@ import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.chromium.customtabsclient.CustomTabsActivityHelper;
-
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.realm.Realm;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
+import org.chromium.customtabsclient.CustomTabsActivityHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -2023,7 +2019,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         dialog.dismiss();
                                         useCamera();
                                     }
+
+                                    @Override public void deney() {
+
+                                    }
                                 });
+                            }
+
+                            @Override public void deney() {
+
                             }
                         });
                     } catch (IOException e) {

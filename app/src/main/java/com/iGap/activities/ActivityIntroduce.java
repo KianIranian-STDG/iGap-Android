@@ -86,47 +86,55 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         G.makeFolder();
 
-        HelperPermision.onDenyStorage = new OnGetPermission() {
-            @Override
-            public void Allow() throws RuntimeException {
-
-                DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermission() {
-                                @Override
-                                public void Allow() {
-                                    G.makeFolder();
-                                    HelperPermision.onDenyStorage = null;
-                                    goToProgram(savedInstanceState);
-                                }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-
-                DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        HelperPermision.onDenyStorage = null;
-                        finish();
-                    }
-                };
-
-                new AlertDialog.Builder(ActivityIntroduce.this).setMessage("you have to get storage permision for continue").setCancelable(false).setPositiveButton(ActivityIntroduce.this.getString(R.string.ok), onOkListener).setNegativeButton(ActivityIntroduce.this.getString(R.string.cancel), onCancelListener).create().show();
-            }
-        };
 
         try {
             HelperPermision.getStoragePermision(this, new OnGetPermission() {
                 @Override
                 public void Allow() {
+
                     G.makeFolder();
-                    HelperPermision.onDenyStorage = null;
                     goToProgram(savedInstanceState);
+                }
+
+                @Override public void deney() {
+
+                    DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
+                        @Override public void onClick(DialogInterface dialog, int which) {
+
+                            try {
+                                HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermission() {
+                                    @Override public void Allow() {
+
+                                        G.makeFolder();
+                                        goToProgram(savedInstanceState);
+                                    }
+
+                                    @Override public void deney() {
+                                        finish();
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+
+                    DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
+                        @Override public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    };
+
+                    new AlertDialog.Builder(ActivityIntroduce.this).setMessage(R.string.you_have_to_get_storage_permision_for_continue)
+                        .setCancelable(false)
+                        .
+                            setPositiveButton(ActivityIntroduce.this.getString(R.string.ok), onOkListener)
+                        .setNegativeButton(ActivityIntroduce.this.getString(R.string.cancel), onCancelListener)
+                        .create()
+                        .show();
+
+
+
                 }
             });
         } catch (IOException e) {

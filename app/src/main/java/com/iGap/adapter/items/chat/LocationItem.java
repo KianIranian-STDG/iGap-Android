@@ -109,6 +109,10 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                                     .commit();
                                 //   }
                             }
+
+                            @Override public void deney() {
+
+                            }
                         });
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -159,6 +159,10 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                                             startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
                                             isInAttach = true;
                                         }
+
+                                        @Override public void deney() {
+
+                                        }
                                     });
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -180,7 +184,15 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                                                         dialog.dismiss();
                                                         useCamera();
                                                     }
+
+                                                    @Override public void deney() {
+
+                                                    }
                                                 });
+                                            }
+
+                                            @Override public void deney() {
+
                                             }
                                         });
                                     } catch (IOException e) {
@@ -293,6 +305,10 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                     @Override
                     public void Allow() {
                         showDialogSelectGallery();
+                    }
+
+                    @Override public void deney() {
+
                     }
                 });
 

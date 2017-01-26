@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -38,11 +37,9 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserSessionLogout;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
-
-import io.realm.Realm;
 
 public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClient {
     public static TextView txtUserName;
@@ -124,6 +121,10 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             G.context.startActivity(intent);
                             ActivityMain.mLeftDrawerLayout.closeDrawer();
+                        }
+
+                        @Override public void deney() {
+
                         }
                     });
                 } catch (IOException e) {
@@ -209,6 +210,10 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             ActivityMain.mLeftDrawerLayout.closeDrawer();
+                        }
+
+                        @Override public void deney() {
+
                         }
                     });
                 } catch (IOException e) {
