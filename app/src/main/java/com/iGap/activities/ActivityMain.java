@@ -241,7 +241,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         if (firstTimeEnterToApp) {
                             sendClientCondition();
                         } else {
-                            new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+                            //new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
                         }
                         mAdapter.clear();
                         putChatToDatabase(roomList);
@@ -638,7 +638,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
@@ -847,6 +849,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private ContentLoadingProgressBar contentLoading;
 
     private void getChatsList(boolean fromServer) {
+        swipeRefreshLayout.setRefreshing(true);
         if (fromServer && G.socketConnection) {
             testIsSecure();
         } else {
@@ -879,6 +882,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                             }
                         }
                     }
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             });
 
@@ -1397,13 +1401,19 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 @Override
                 public void run() {
                     Log.i("CCC", "updateChat 3");
-                    mAdapter.updateChat(roomId, convertToChatItem(roomId));
 
-                    int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                    RoomItem rm = convertToChatItem(roomId);
 
-                    if (firstVisibleItem < 3) {
-                        recyclerView.scrollToPosition(0);
+                    if (roomMessage.getMessageId() > rm.getInfo().getLastMessage().getMessageId()) {
+                        mAdapter.updateChat(roomId, convertToChatItem(roomId));
+
+                        int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                        if (firstVisibleItem < 3) {
+                            recyclerView.scrollToPosition(0);
+                        }
                     }
+
+
                 }
             });
         }
