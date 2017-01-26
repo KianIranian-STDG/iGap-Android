@@ -57,6 +57,7 @@ public class HelperNotificationAndBadge {
     private int unreadMessageCount = 0;
     private String messageOne = "";
     private boolean isFromOnRoom = true;
+    int countChannelMessage = 0;
     private long roomId = 0;
     private long senderId = 0;
     private ArrayList<Item> list = new ArrayList<>();
@@ -117,7 +118,7 @@ public class HelperNotificationAndBadge {
                 s = " " + context.getString(R.string.chats);
             }
 
-            String str = String.format(" %d " + context.getString(R.string.new_messages_from) + " %d " + s, unreadMessageCount, countUnicChat);
+            String str = String.format(" %d " + context.getString(R.string.new_messages_from) + " %d " + s, unreadMessageCount + countChannelMessage, countUnicChat);
 
             remoteViews.setTextViewText(R.id.ln_txt_message_notification, str);
         }
@@ -277,16 +278,16 @@ public class HelperNotificationAndBadge {
         }
 
         String newmess = "";
-        if (unreadMessageCount == 1) {
+        if (unreadMessageCount + countChannelMessage == 1) {
             newmess = context.getString(R.string.new_message);
             chatCount = "";
         } else {
             newmess = context.getString(R.string.new_messages);
         }
 
-        remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + " " + newmess + " " + chatCount);
+        remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + countChannelMessage + " " + newmess + " " + chatCount);
 
-        if (unreadMessageCount == 1) {
+        if (unreadMessageCount + countChannelMessage == 1) {
             remoteViewsLarge.setViewVisibility(R.id.mln_btn_replay, View.VISIBLE);
             remoteViewsLarge.setViewVisibility(R.id.ln_txt_replay, View.VISIBLE);
         } else {
@@ -578,17 +579,17 @@ public class HelperNotificationAndBadge {
                 }
             }
 
-            int countMessage = 0;
+            countChannelMessage = 0;
             int countChat = 0;
             RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
             for (RealmRoom realmRoom1 : realmRooms) {
                 if (realmRoom1.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom1.getUnreadCount() > 0) {
-                    countMessage += realmRoom1.getUnreadCount();
+                    countChannelMessage += realmRoom1.getUnreadCount();
                     countChat++;
                 }
             }
             countUnicChat += countChat;
-            unreadMessageCount += countMessage;
+
 
 
             countUnicChat += senderList.size();
@@ -596,7 +597,7 @@ public class HelperNotificationAndBadge {
 
         realm.close();
 
-        if (unreadMessageCount == 0) {
+        if (unreadMessageCount + countChannelMessage == 0) {
             if (updateNotification) {
                 //  notificationManager.cancel(notificationId);
             }
