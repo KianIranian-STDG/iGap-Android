@@ -641,7 +641,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
-        ;
+
         //        swipeLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
         //            @Override
         //            public void onRefresh() {
