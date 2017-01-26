@@ -642,18 +642,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
 
-        //        swipeLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-        //            @Override
-        //            public void onRefresh() {
-        //                // start refresh
-        //
-        ////                scrollToTop();
-        //                appBarLayout.setExpanded(true);
-        //                recyclerView.setNestedScrollingEnabled(false);
-        //                new RequestClientGetRoomList().clientGetRoomList();
-        //            }
-        //        });
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
