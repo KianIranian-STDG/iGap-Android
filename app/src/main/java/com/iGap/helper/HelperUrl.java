@@ -1,5 +1,6 @@
 package com.iGap.helper;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.app.FragmentActivity;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -20,7 +23,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
-import com.iGap.activities.ActivityWebView;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnClientCheckInviteLink;
@@ -44,6 +46,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
+import org.chromium.customtabsclient.CustomTabsActivityHelper;
 
 import static com.iGap.G.context;
 
@@ -76,7 +80,7 @@ public class HelperUrl {
     ////**********************************************************************************************************
 
     public static int LinkColor = Color.GRAY;
-    public static String igapSite1 = "igap.im/";
+    //  public static String igapSite1 = "igap.im/";
     public static String igapSite2 = "igap.net/";
     public static MaterialDialog dialogWaiting;
 
@@ -100,7 +104,8 @@ public class HelperUrl {
             int matchStart = matcher.start(1);
             int matchEnd = matcher.end();
 
-            if (strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite1) || strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite2)) {
+            // strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite1) ||
+            if (strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite2)) {
                 //  insertIgapLink(strBuilder, matchStart, matchEnd);
             } else {
                 insertLinkSpan(strBuilder, matchStart, matchEnd, withClickable);
@@ -115,7 +120,7 @@ public class HelperUrl {
 
             String str = list[i];
 
-            if (str.contains(igapSite1) || str.contains(igapSite2)) {
+            if (str.contains(igapSite2)) {
                 insertIgapLink(strBuilder, count, count + str.length());
             }
             count += str.length() + 1;
@@ -150,28 +155,34 @@ public class HelperUrl {
                         url = "http://" + url;
                     }
 
-                    if (openLocalWebPage) {
+                    openBrowser(url);
 
-                        Intent intent = new Intent(G.context, ActivityWebView.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("PATH", url);
-                        G.context.startActivity(intent);
-                        try {
-                            G.context.startActivity(intent);
-                        } catch (ActivityNotFoundException e) {
-                            Log.e("ddd", "can not open url");
-                        }
-                    } else {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.setData(Uri.parse(url));
+                    //if (openLocalWebPage) {
+                    //
+                    //
+                    //
+                    //    Intent intent = new Intent(G.context, ActivityWebView.class);
+                    //    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //    intent.putExtra("PATH", url);
+                    //    G.context.startActivity(intent);
+                    //    try {
+                    //        G.context.startActivity(intent);
+                    //    } catch (ActivityNotFoundException e) {
+                    //        Log.e("ddd", "can not open url");
+                    //    }
+                    //} else {
+                    //    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    //    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //    intent.setData(Uri.parse(url));
+                    //
+                    //    try {
+                    //        G.context.startActivity(intent);
+                    //    } catch (ActivityNotFoundException e) {
+                    //        Log.e("ddd", "can not open url");
+                    //    }
+                    //}
 
-                        try {
-                            G.context.startActivity(intent);
-                        } catch (ActivityNotFoundException e) {
-                            Log.e("ddd", "can not open url");
-                        }
-                    }
+
                 }
             }
 
@@ -183,6 +194,36 @@ public class HelperUrl {
 
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
+
+    private static void openBrowser(String s) {
+
+        final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo((FragmentActivity) G.currentActivity);
+
+        int mColorPrimary = G.context.getResources().getColor(R.color.green);
+        final Uri PROJECT_URI = Uri.parse(s);
+
+        CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();
+
+        mCustomTabsHelperFragment.setConnectionCallback(new CustomTabsActivityHelper.ConnectionCallback() {
+            @Override public void onCustomTabsConnected() {
+                mCustomTabsHelperFragment.mayLaunchUrl(PROJECT_URI, null, null);
+            }
+
+            @Override public void onCustomTabsDisconnected() {
+            }
+        });
+
+        CustomTabsHelperFragment.open(G.currentActivity, mCustomTabsIntent, PROJECT_URI, new CustomTabsActivityHelper.CustomTabsFallback() {
+            @Override public void openUri(Activity activity, Uri uri) {
+                try {
+                    activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 
     private static void insertIgapLink(final SpannableStringBuilder strBuilder, final int start, final int end) {
 
@@ -360,7 +401,7 @@ public class HelperUrl {
 
         if (message.contains("#") || message.contains("@")) return true;
 
-        if (message.contains(igapSite1) || message.contains(igapSite2)) return true;
+        if (message.contains(igapSite2)) return true;
 
         Pattern urlPattern = Pattern.compile("(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*" + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
             Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);

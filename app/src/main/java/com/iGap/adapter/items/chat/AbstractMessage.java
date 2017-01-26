@@ -685,8 +685,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     int _with = attachment.getWidth() != 0 ? attachment.getWidth() : attachment.getSmallThumbnail().getWidth();
                     int _hight = attachment.getHeight() != 0 ? attachment.getHeight() : attachment.getSmallThumbnail().getHeight();
 
-                    if (_with == 0) _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
-                    if (_hight == 0) _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
+                    if (_with == 0) _with = (int) G.context.getResources().getDimension(R.dimen.dp40);
+                    if (_hight == 0) _hight = (int) G.context.getResources().getDimension(R.dimen.dp40);
 
 
                     int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight);
@@ -694,7 +694,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
                     }
 
-                    imageViewReservedSpace.setImageResource(R.mipmap.difaultimage);
+                    imageViewReservedSpace.setImageResource(R.mipmap.j_pic);
                 }
             } else if (messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                 ReserveSpaceGifImageView imageViewReservedSpace = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
