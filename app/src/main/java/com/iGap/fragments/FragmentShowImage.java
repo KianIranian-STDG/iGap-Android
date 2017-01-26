@@ -292,7 +292,7 @@ public class FragmentShowImage extends Fragment {
             final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
 
             final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) layout.findViewById(R.id.ch_progress_loadingContent);
-            contentLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
 
             if (HelperDownloadFile.isDownLoading(mRealmList.get(position).getAttachment().getToken())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);

@@ -925,7 +925,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 messageProgress.withDrawable(R.drawable.ic_download, true);
 
                 contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);
-                contentLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+                contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
 
 
                 if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getToken())) {

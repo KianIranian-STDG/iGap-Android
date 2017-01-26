@@ -807,7 +807,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-        contentLoading.getIndeterminateDrawable().setColorFilter(G.context.getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
         downLoadFile(holder, progress, attachment, contentLoading);
 
     }
@@ -817,7 +817,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         View thumbnail = holder.itemView.findViewById(R.id.thumbnail);
 
         ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-        contentLoading.getIndeterminateDrawable().setColorFilter(G.context.getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
 
         if (mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
             if (thumbnail != null) {
@@ -870,7 +870,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         String token = attachment.getToken();
         String name = attachment.getName();
-        Long size = attachment.getSmallThumbnail().getSize();
+        long size = 0;
+
+        if (attachment.getSmallThumbnail() != null) size = attachment.getSmallThumbnail().getSize();
+
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
         final String _path = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(name);
@@ -1000,7 +1003,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             hideThumbnailIf(holder);
 
             ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-            contentLoading.getIndeterminateDrawable().setColorFilter(G.context.getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
 
             downLoadFile(holder, (MessageProgress) holder.itemView.findViewById(R.id.progress), attachment, contentLoading);
 
