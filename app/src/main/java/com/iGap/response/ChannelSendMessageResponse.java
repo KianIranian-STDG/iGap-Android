@@ -2,14 +2,13 @@ package com.iGap.response;
 
 import android.os.Handler;
 import android.os.Looper;
-
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.helper.HelperMessageResponse;
 import com.iGap.proto.ProtoChannelSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-
 import io.realm.Realm;
 
 public class ChannelSendMessageResponse extends MessageHandler {
@@ -29,7 +28,7 @@ public class ChannelSendMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-
+        Log.i("CLI", "message : " + message);
         final ProtoChannelSendMessage.ChannelSendMessageResponse.Builder channelSendMessageResponse = (ProtoChannelSendMessage.ChannelSendMessageResponse.Builder) message;
         HelperMessageResponse.handleMessage(channelSendMessageResponse.getRoomId(), channelSendMessageResponse.getRoomMessage(), channelSendMessageResponse.getResponse(), this.identity);
 

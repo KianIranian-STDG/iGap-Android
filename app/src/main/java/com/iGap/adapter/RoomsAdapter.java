@@ -1,5 +1,6 @@
 package com.iGap.adapter;
 
+import android.util.Log;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
@@ -30,6 +31,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public void updateChat(long chatId, Item item) {
         List<Item> items = getAdapterItems();
         for (Item chat : items) {
+            Log.i("CCC", "updateChat chat : " + chat.mInfo.getTitle());
             if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == chatId) {
                 int pos = items.indexOf(chat);
                 remove(pos);
@@ -67,6 +69,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
                 break;
             }
         }
+        Log.i("CCC", "updateChat 4 : " + chatId);
         updateChat(chatId, item);
     }
 
@@ -117,7 +120,6 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
      * check realm for detect that item is exist or changed
      * info with another thread
      *
-     * @param realmRoom
      * @return true if is valid and is exist otherwise return false
      */
     public boolean checkValidationForRealm(RoomItem roomItem, RealmRoom realmRoom) {

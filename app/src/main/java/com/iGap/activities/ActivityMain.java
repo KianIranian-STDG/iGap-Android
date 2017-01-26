@@ -244,6 +244,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         }
                         mAdapter.clear();
                         putChatToDatabase(roomList);
+
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                     }
                 });
@@ -703,8 +704,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             public void onSuccess() {
                 List<RoomItem> roomItems = new ArrayList<>();
                 for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
-                    Log.i("YYYY", "item : " + item.getTitle());
-                    Log.i("YYYY", "item : " + item.getUpdatedTime());
                     roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
                 }
                 mAdapter.add(roomItems);
@@ -776,6 +775,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                                 runOnUiThread(new Runnable() {
                                     public void run() {
                                         if (mAdapter != null) {
+                                            Log.i("CCC", "updateChat 1");
                                             mAdapter.updateChat(chatId, convertToChatItem(chatId));
                                         }
                                     }
@@ -835,7 +835,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void run() {
                 if (G.isSecure && G.userLogin) {
-                    swipeRefreshLayout.setRefreshing(true);
                     new RequestClientGetRoomList().clientGetRoomList();
                 } else {
                     testIsSecure();
@@ -889,6 +888,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
             mAdapter.add(roomItems);
             //realm.close(); //TODO [Saeed Mozaffari] [2016-11-27 1:43 PM] - Check Close Realm
+
         }
     }
 
@@ -1371,6 +1371,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     @Override
                     public void run() {
                         if (mAdapter != null) {
+                            Log.i("CCC", "updateChat 2");
                             mAdapter.updateChat(roomId, convertToChatItem(roomId));
                         }
 
@@ -1394,6 +1395,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.i("CCC", "updateChat 3");
                     mAdapter.updateChat(roomId, convertToChatItem(roomId));
 
                     int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();

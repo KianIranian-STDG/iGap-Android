@@ -106,7 +106,9 @@ public class HelperNotificationAndBadge {
         } else {
 
             remoteViews.setTextViewText(R.id.ln_txt_header, context.getString(R.string.igap));
-            remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
+            if ((list.size() - 1) > 0) {
+                remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
+            }
 
             String s = "";
             if (countUnicChat == 1) {
@@ -511,63 +513,85 @@ public class HelperNotificationAndBadge {
         if (!realmRoomMessages.isEmpty()) {
             for (RealmRoomMessage roomMessage : realmRoomMessages) {
                 if (roomMessage != null) {
+                    Log.i("CCC", "1 roomMessage : " + roomMessage.getMessage());
                     if (roomMessage.getUserId() != userId) {
                         if (!roomMessage.getAuthorHash().equals(authorHash)) {// for channel message
-                            if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
-                                unreadMessageCount++;
-                                messageOne = roomMessage.getMessage();
-                                senderId = roomMessage.getUserId();
+                            Log.i("CCC", "2 getMessage : " + roomMessage.getMessage());
+                            Log.i("CCC", "3 getStatus : " + roomMessage.getStatus());
+                            RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                            if (realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
+                                if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
+                                    Log.i("CCC", "compute*********");
+                                    unreadMessageCount++;
+                                    messageOne = roomMessage.getMessage();
+                                    senderId = roomMessage.getUserId();
 
-                                if (unreadMessageCount == 1 || unreadMessageCount == 2 || unreadMessageCount == 3) {
-                                    Item item = new Item();
-                                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-                                    if (room != null) {
-                                        item.name = room.getTitle() + " : ";
-                                        item.roomId = room.getId();
-                                    }
-
-                                    String text = "";
-                                    try {
-                                        if (roomMessage.getLogMessage() != null) {
-                                            text = roomMessage.getLogMessage();
-                                        } else {
-                                            text = roomMessage.getMessage();
+                                    if (unreadMessageCount == 1 || unreadMessageCount == 2 || unreadMessageCount == 3) {
+                                        Item item = new Item();
+                                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                                        if (room != null) {
+                                            item.name = room.getTitle() + " : ";
+                                            item.roomId = room.getId();
                                         }
 
-                                        if (text.length() < 1) if (roomMessage.getForwardMessage() != null) text = roomMessage.getForwardMessage().getMessage();
-                                        if (text.length() < 1) if (roomMessage.getReplyTo() != null) text = roomMessage.getReplyTo().getMessage();
-                                        if (text.length() < 1) text = ActivityPopUpNotification.getTextOfMessageType(roomMessage.getMessageType());
-                                    } catch (NullPointerException e) {
+                                        String text = "";
+                                        try {
+                                            if (roomMessage.getLogMessage() != null) {
+                                                text = roomMessage.getLogMessage();
+                                            } else {
+                                                text = roomMessage.getMessage();
+                                            }
 
+                                            if (text.length() < 1) if (roomMessage.getForwardMessage() != null) text = roomMessage.getForwardMessage().getMessage();
+                                            if (text.length() < 1) if (roomMessage.getReplyTo() != null) text = roomMessage.getReplyTo().getMessage();
+                                            if (text.length() < 1) text = ActivityPopUpNotification.getTextOfMessageType(roomMessage.getMessageType());
+                                        } catch (NullPointerException e) {
+
+                                        }
+
+                                        item.message = text;
+                                        item.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
+                                        list.add(item);
                                     }
 
-                                    item.message = text;
-                                    item.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
-                                    list.add(item);
-                                }
+                                    if (unreadMessageCount == 1) roomId = roomMessage.getRoomId();
 
-                                if (unreadMessageCount == 1) roomId = roomMessage.getRoomId();
-
-                                if (roomId != roomMessage.getRoomId()) {
-                                    isFromOnRoom = false;
-                                }
-
-                                boolean isAdd = true;
-                                for (int k = 0; k < senderList.size(); k++) {
-                                    if (senderList.get(k) == roomMessage.getRoomId()) {
-                                        isAdd = false;
-                                        break;
+                                    if (roomId != roomMessage.getRoomId()) {
+                                        isFromOnRoom = false;
                                     }
-                                }
 
-                                if (isAdd) senderList.add(roomMessage.getRoomId());
+                                    boolean isAdd = true;
+                                    for (int k = 0; k < senderList.size(); k++) {
+                                        if (senderList.get(k) == roomMessage.getRoomId()) {
+                                            isAdd = false;
+                                            break;
+                                        }
+                                    }
+
+                                    if (isAdd) senderList.add(roomMessage.getRoomId());
+                                }
+                            } else {
+                                Log.i("CCCC", "IS CHANNEL");
                             }
                         }
                     }
                 }
             }
 
-            countUnicChat = senderList.size();
+            int countMessage = 0;
+            int countChat = 0;
+            RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+            for (RealmRoom realmRoom1 : realmRooms) {
+                if (realmRoom1.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom1.getUnreadCount() > 0) {
+                    countMessage += realmRoom1.getUnreadCount();
+                    countChat++;
+                }
+            }
+            countUnicChat += countChat;
+            unreadMessageCount += countMessage;
+
+
+            countUnicChat += senderList.size();
         }
 
         realm.close();

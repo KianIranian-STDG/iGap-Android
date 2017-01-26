@@ -1,5 +1,6 @@
 package com.iGap.helper;
 
+import android.util.Log;
 import com.iGap.proto.ProtoClientCondition;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmClientCondition;
@@ -72,7 +73,7 @@ public class HelperClientCondition {
             }
 
             clientCondition.addRooms(room);
-
+            Log.i("CLI", "Condition : " + realmClientCondition);
             clearOffline(realmClientCondition, realm);
         }
         realm.close();
@@ -83,6 +84,8 @@ public class HelperClientCondition {
     public static void setMessageAndStatusVersion(Realm realm, long roomId, ProtoGlobal.RoomMessage roomMessage) {
         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
         if (realmClientCondition != null) {
+            Log.i("CLI", "getMessageVersion() : " + roomMessage.getMessageVersion());
+            Log.i("CLI", "getStatusVersion() : " + roomMessage.getStatusVersion());
             realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
             realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
         }

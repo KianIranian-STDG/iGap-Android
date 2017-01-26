@@ -54,7 +54,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
@@ -203,20 +202,6 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -228,6 +213,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
 import static com.iGap.G.context;
@@ -253,9 +249,8 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
 public class ActivityChat extends ActivityEnhanced
-    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
-    OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse,
-        OnChannelAddMessageReaction, OnChannelGetMessagesStats {
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction,
+        OnChannelGetMessagesStats {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -710,6 +705,7 @@ public class ActivityChat extends ActivityEnhanced
                                                 viewAttachFile.setVisibility(View.VISIBLE);
                                                 isChatReadOnly = false;
                                             }
+
                                             if (realmRoom.getLastMessage() != null) {
                                                 realmRoom.setUpdatedTime(realmRoom.getLastMessage().getUpdateTime());
                                             } else {
@@ -1673,14 +1669,12 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }, 1500);
         } else {
-            //int position = recyclerView.getAdapter().getItemCount();
-            //if (position > 0) recyclerView.scrollToPosition(position - 1);
-
-            // scrool to unread position
-
-            addLayoutUnreadMessage();
-
-
+            /**
+             * show unread message
+             */
+            if (chatType != CHANNEL) {
+                addLayoutUnreadMessage();
+            }
         }
 
         imvBackButton.setOnClickListener(new View.OnClickListener() {
@@ -4213,7 +4207,8 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
     }
 
-    @Override public void onBadDownload(String token) {
+    @Override
+    public void onBadDownload(String token) {
 
     }
 
@@ -5072,7 +5067,8 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    @Override public void onError(int majorCode, int minorCode) {
+    @Override
+    public void onError(int majorCode, int minorCode) {
 
     }
 
