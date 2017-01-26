@@ -183,7 +183,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         importContactList();
                     }
 
-                    @Override public void deney() {
+                    @Override
+                    public void deney() {
 
                     }
                 });
@@ -637,10 +638,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                scrollToTop();
-                appBarLayout.setExpanded(true);
-                recyclerView.setNestedScrollingEnabled(false);
-                new RequestClientGetRoomList().clientGetRoomList();
+                new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
