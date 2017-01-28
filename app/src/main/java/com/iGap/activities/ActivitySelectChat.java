@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -34,6 +35,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private RecyclerView mRecyclerView;
     private FastItemAdapter<RoomItem> mAdapter;
     private ArrayList<Parcelable> mForwardMessages;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -46,7 +48,9 @@ public class ActivitySelectChat extends ActivityEnhanced {
         setContentView(R.layout.activity_main);
 
         mForwardMessages = getIntent().getExtras().getParcelableArrayList(ARG_FORWARD_MESSAGE);
-
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setEnabled(false);
         findViewById(R.id.loadingContent).setVisibility(View.GONE);
 
         initRecycleView();
@@ -92,7 +96,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(null);
         // set behavior to RecyclerView
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mRecyclerView.getLayoutParams();
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
         params.setBehavior(new ShouldScrolledBehavior(mLayoutManager, mAdapter));
         mRecyclerView.setLayoutParams(params);
         mRecyclerView.setAdapter(mAdapter);
