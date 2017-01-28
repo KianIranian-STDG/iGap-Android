@@ -2,19 +2,17 @@ package com.iGap.helper;
 
 import android.content.ContentProviderOperation;
 import android.provider.ContactsContract;
-import android.util.Log;
-
 import com.iGap.G;
-
 import java.util.ArrayList;
 
 public class HelperAddContact {
 
     public static void addContact(String displayName, String phone) {
 
+        if (phone.startsWith("0")) phone = phone.substring(1, phone.length());
+
         String saveNumber = "+98" + phone.replace("+98", "");
-        Log.i("GGGGGGG", "phone: " + phone);
-        Log.i("GGGGGGG", "saveNumber: " + saveNumber);
+
         ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
         ops.add(ContentProviderOperation.newInsert(

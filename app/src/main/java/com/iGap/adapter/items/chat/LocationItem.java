@@ -17,6 +17,7 @@ import com.iGap.realm.RealmRoomMessageLocation;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
         if (item != null) {
 
-            if (item.getImagePath() != null) {
+            if (item.getImagePath() != null && new File(item.getImagePath()).exists()) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(item.getImagePath()), holder.imgMapPosition);
 
             } else {

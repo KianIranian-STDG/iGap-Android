@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -30,7 +28,6 @@ import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructListOfContact;
 import com.iGap.request.RequestUserContactImport;
 import com.iGap.request.RequestUserContactsGetList;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -266,14 +263,17 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
      */
     private void addContactToServer() {
 
-        String ph = "+98" + edtPhoneNumber.getText().toString().replace("+98", "");
+        String _phone = edtPhoneNumber.getText().toString();
+        if (_phone.startsWith("0")) _phone = _phone.substring(1, _phone.length());
+
+        String ph = "+98" + _phone.replace("+98", "");
+
         ArrayList<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
         contact.firstName = edtFirstName.getText().toString();
         contact.lastName = edtLastName.getText().toString();
         contact.phone = ph;
 
-        Log.i("XXXXXXX", "addContactToServer: " + ph);
 
         contacts.add(contact);
 
