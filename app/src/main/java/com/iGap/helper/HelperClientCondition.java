@@ -83,11 +83,22 @@ public class HelperClientCondition {
 
     public static void setMessageAndStatusVersion(Realm realm, long roomId, ProtoGlobal.RoomMessage roomMessage) {
         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+
+        RealmRoomMessage realmRoomMessages1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).last();
+        long latestMessageId = 0;
+        if (realmRoomMessages1 != null) {
+            latestMessageId = realmRoomMessages1.getMessageId();
+        }
+        /**
+         * if received new message set info to RealmClientCondition
+         */
         if (realmClientCondition != null) {
-            Log.i("CLI", "getMessageVersion() : " + roomMessage.getMessageVersion());
-            Log.i("CLI", "getStatusVersion() : " + roomMessage.getStatusVersion());
-            realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
-            realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
+            if (roomMessage.getMessageId() > latestMessageId) {
+                Log.i("CLI", "getMessageVersion() : " + roomMessage.getMessageVersion());
+                Log.i("CLI", "getStatusVersion() : " + roomMessage.getStatusVersion());
+                realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
+                realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
+            }
         }
     }
 

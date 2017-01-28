@@ -11,6 +11,7 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * helper message response for get message and detect message is for
@@ -21,6 +22,12 @@ public class HelperMessageResponse {
     public static void handleMessage(final long roomId, final ProtoGlobal.RoomMessage roomMessage, final ProtoResponse.Response response, final String identity) {
 
         Realm realm = Realm.getDefaultInstance();
+        long latestMessageId = 0;
+
+        RealmRoomMessage realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).last();
+        if (realmRoomMessages != null) {
+            latestMessageId = realmRoomMessages.getMessageId();
+        }
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -109,19 +116,21 @@ public class HelperMessageResponse {
             }
         });
 
-        if (response.getId().isEmpty()) {
-            /**
-             * invoke following callback when i'm not the sender, because
-             * I already done everything after sending message
-             */
-            if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst() != null) {
-                G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHANNEL);
+        if (roomMessage.getMessageId() > latestMessageId) {
+            if (response.getId().isEmpty()) {
+                /**
+                 * invoke following callback when i'm not the sender, because
+                 * I already done everything after sending message
+                 */
+                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst() != null) {
+                    G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHANNEL);
+                }
+            } else {
+                /**
+                 * invoke following callback when I'm the sender and the message has updated
+                 */
+                G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
             }
-        } else {
-            /**
-             * invoke following callback when I'm the sender and the message has updated
-             */
-            G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
         }
 
     }
