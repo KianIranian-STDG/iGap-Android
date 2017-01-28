@@ -975,6 +975,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (mMessage.sendType == MyType.SendType.send) {
             ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel, false);
+
+            ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
+            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+            contentLoading.setVisibility(View.GONE);
+
             /**
              * update progress when user trying to upload or download
              */
@@ -982,9 +987,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 hideThumbnailIf(holder);
 
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                contentLoading.setVisibility(View.VISIBLE);
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)));
                 if (MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)) == 100) {
                     ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+                    contentLoading.setVisibility(View.GONE);
                 }
             } else {
                 checkForDownloading(holder, attachment);
