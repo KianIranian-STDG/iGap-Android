@@ -328,7 +328,7 @@ public class HelperPermision {
 
             new AlertDialog.Builder(context).setMessage(message)
                 .setPositiveButton(context.getString(R.string.ok), okListener)
-                .setNegativeButton(context.getString(R.string.cancel), onCancel)
+                .setNegativeButton(context.getString(R.string.cancel), onCancel).setCancelable(false)
                 .create()
                 .show();
 
