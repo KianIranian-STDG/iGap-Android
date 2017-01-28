@@ -3,7 +3,6 @@ package com.iGap.module;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import com.iGap.realm.RealmRoomMessage;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -45,7 +44,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         mTotalItemCount = mLayoutManager.getItemCount();
         mFirstVisibleItem = findFirstVisibleItemPosition(recyclerView);
 
-        Log.e("ddddd", "total " + mTotalItemCount + "    first" + mFirstVisibleItem + "   tresh  " + mVisibleThreshold + "    mloading " + mLoading);
 
         mTotalItemCount = mAdapter.getItemCount();
 
@@ -58,16 +56,14 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
         if (!mLoading && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {
             mCurrentPage++;
-
             onLoadMore(this, mCurrentPage);
 
             mLoading = true;
-        } else {
-            //if (mAdapter.getAdapterItemCount() == mMessagesList.size() && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {// && !mAlreadyCalledOnNoMore
-            if (mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {// && !mAlreadyCalledOnNoMore
-                onNoMore(this);
-                //mAlreadyCalledOnNoMore = true;
-            }
+        }
+
+        if (mLayoutManager.findFirstVisibleItemPosition() <= 10) {// && !mAlreadyCalledOnNoMore
+            onNoMore(this);
+            //mAlreadyCalledOnNoMore = true;
         }
     }
 
