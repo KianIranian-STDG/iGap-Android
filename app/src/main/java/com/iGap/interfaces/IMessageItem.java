@@ -20,5 +20,7 @@ public interface IMessageItem {
 
     void onReplyClick(RealmRoomMessage replyMessage);
 
+    void onDownloadAllEqualCashId(String token);
+
     //void onVoteClick(StructMessageInfo message, String vote, ProtoGlobal.RoomMessageReaction reaction);
 }

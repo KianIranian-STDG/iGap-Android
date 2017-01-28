@@ -358,8 +358,6 @@ public class FragmentShowImage extends Fragment {
 
                     if (HelperDownloadFile.isDownLoading(mRealmList.get(position).getAttachment().getToken())) {
                         HelperDownloadFile.stopDownLoad(mRealmList.get(position).getAttachment().getToken());
-                        progress.withDrawable(R.drawable.ic_download, true);
-                        contentLoading.setVisibility(View.GONE);
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
                         startDownload(position, progress, touchImageView, contentLoading);

@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
@@ -65,7 +64,7 @@ public class FragmentShowAvatars extends Fragment {
     private LinearLayout mToolbar;
     private TextView mCount;
     private RecyclerView mRecyclerView;
-    public static ArrayMap<Long, Boolean> downloadingAvatarList = new ArrayMap<>();
+
 
     FastItemAdapter<AvatarItem> mAdapter;
 
@@ -322,7 +321,7 @@ public class FragmentShowAvatars extends Fragment {
 
         for (int i = 0; i < avatarListSize; i++) {
             RealmAvatar avatar = avatarList.get((i));
-            mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(100 + i));
+            mAdapter.add(new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(100 + i));
         }
     }
 
@@ -474,7 +473,7 @@ public class FragmentShowAvatars extends Fragment {
             }
         };
 
-        new RequestChannelAvatarDelete().channelAvatarDelete(mPeerId, ((AvatarItem) mAdapter.getItem(curerntItemPosition)).imageId);
+        new RequestChannelAvatarDelete().channelAvatarDelete(mPeerId, avatarList.get(curerntItemPosition).getId());
 
 
     }
@@ -521,7 +520,7 @@ public class FragmentShowAvatars extends Fragment {
             }
         };
 
-        new RequestGroupAvatarDelete().groupAvatarDelete(mPeerId, ((AvatarItem) mAdapter.getItem(curerntItemPosition)).imageId);
+        new RequestGroupAvatarDelete().groupAvatarDelete(mPeerId, avatarList.get(curerntItemPosition).getId());
     }
 
     private void deletePhotoSetting() {
@@ -563,7 +562,7 @@ public class FragmentShowAvatars extends Fragment {
         };
 //        RealmAvatar realmAvatar = HelperAvatar.getLastAvatar(userId);
 
-        new RequestUserAvatarDelete().userAvatarDelete(((AvatarItem) mAdapter.getItem(curerntItemPosition)).imageId);
+        new RequestUserAvatarDelete().userAvatarDelete(avatarList.get(curerntItemPosition).getId());
 
     }
 

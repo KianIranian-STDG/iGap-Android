@@ -1,11 +1,12 @@
 package com.iGap.adapter.items;
 
+import android.graphics.Color;
 import android.net.Uri;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.module.TouchImageView;
 import com.iGap.proto.ProtoFileDownload;
@@ -26,11 +27,9 @@ import static com.iGap.module.AndroidUtils.suitablePath;
 public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public RealmAttachment avatar;
-    public long imageId;
 
-    public AvatarItem setAvatar(RealmAttachment avatar, long id) {
+    public AvatarItem setAvatar(RealmAttachment avatar) {
         this.avatar = avatar;
-        this.imageId = id;
         return this;
     }
 
@@ -55,10 +54,12 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (FragmentShowAvatars.downloadingAvatarList.containsKey(imageId)) {
+        if (HelperDownloadFile.isDownLoading(avatar.getToken())) {
             holder.progress.withDrawable(R.drawable.ic_cancel, true);
+            holder.contentLoading.setVisibility(View.VISIBLE);
         } else {
             holder.progress.withDrawable(R.drawable.ic_download, true);
+            holder.contentLoading.setVisibility(View.GONE);
         }
 
         // if file already exists, simply show the local one
@@ -116,13 +117,12 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
             holder.progress.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
 
-                    if (FragmentShowAvatars.downloadingAvatarList.containsKey(imageId)) {
+                    if (HelperDownloadFile.isDownLoading(avatar.getToken())) {
                         HelperDownloadFile.stopDownLoad(avatar.getToken());
-                        holder.progress.withDrawable(R.drawable.ic_download, true);
-                        FragmentShowAvatars.downloadingAvatarList.remove(imageId);
+
                     } else {
                         holder.progress.withDrawable(R.drawable.ic_cancel, true);
-                        FragmentShowAvatars.downloadingAvatarList.put(imageId, true);
+                        holder.contentLoading.setVisibility(View.VISIBLE);
 
                         final String path = G.DIR_IMAGE_USER + "/" + avatar.getToken() + "_" + avatar.getName();
 
@@ -140,7 +140,6 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
                                                 } else {
                                                     holder.progress.withProgress(0);
                                                     holder.progress.setVisibility(View.GONE);
-                                                    FragmentShowAvatars.downloadingAvatarList.remove(imageId);
 
                                                     ImageLoader.getInstance().displayImage(suitablePath(path), holder.image);
                                                 }
@@ -154,6 +153,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
                                         @Override public void run() {
                                             holder.progress.withProgress(0);
                                             holder.progress.withDrawable(R.drawable.ic_download, true);
+                                            holder.contentLoading.setVisibility(View.GONE);
                                         }
                                     });
                                 }
@@ -182,11 +182,17 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
         protected TouchImageView image;
         protected MessageProgress progress;
 
+        protected ContentLoadingProgressBar contentLoading;
+
         public ViewHolder(View view) {
             super(view);
 
             image = (TouchImageView) view.findViewById(R.id.sisl_touch_image_view);
             progress = (MessageProgress) view.findViewById(R.id.progress);
+
+            contentLoading = (ContentLoadingProgressBar) view.findViewById(R.id.ch_progress_loadingContent);
+            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+
         }
     }
 }

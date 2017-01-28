@@ -589,6 +589,7 @@ public class HelperNotificationAndBadge {
                 }
             }
             countUnicChat += countChat;
+
             countUnicChat += senderList.size();
         }
 

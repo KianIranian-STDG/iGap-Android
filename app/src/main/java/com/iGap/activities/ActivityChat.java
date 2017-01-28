@@ -4593,6 +4593,21 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
     }
 
+    @Override public void onDownloadAllEqualCashId(String token) {
+
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+
+            try {
+                AbstractMessage item = mAdapter.getAdapterItem(i);
+                String mToken = item.mMessage.forwardedFrom != null ? item.mMessage.forwardedFrom.getAttachment().getToken() : item.mMessage.getAttachment().token;
+
+                if (mToken.equals(token)) mAdapter.notifyItemChanged(i);
+            } catch (Exception e) {
+                Log.e("dddddd", "activity chat    onDownloadAllEqualCashid  " + e);
+            }
+        }
+    }
+
     @Override
     public void onContainerClick(View view, final StructMessageInfo message, int pos) {
         @ArrayRes int itemsRes = 0;

@@ -104,16 +104,12 @@ public class ImageWithTextItem
     @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
-        if (holder.image.getDrawable() == null) {
-
-            holder.image.post(new Runnable() {
-                @Override public void run() {
-                    ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
-                    holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
-                }
-            });
-        }
-
+        holder.image.post(new Runnable() {
+            @Override public void run() {
+                ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
+                holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+            }
+        });
     }
 
     @Override

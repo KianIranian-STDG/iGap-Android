@@ -685,8 +685,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     int _with = attachment.getWidth() != 0 ? attachment.getWidth() : attachment.getSmallThumbnail().getWidth();
                     int _hight = attachment.getHeight() != 0 ? attachment.getHeight() : attachment.getSmallThumbnail().getHeight();
 
-                    if (_with == 0) _with = (int) G.context.getResources().getDimension(R.dimen.dp40);
-                    if (_hight == 0) _hight = (int) G.context.getResources().getDimension(R.dimen.dp40);
+                    //  if (_with == 0) _with = (int) G.context.getResources().getDimension(R.dimen.dp40);
+                    //  if (_hight == 0) _hight = (int) G.context.getResources().getDimension(R.dimen.dp40);
 
 
                     int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight);
@@ -694,7 +694,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
                     }
 
-                    imageViewReservedSpace.setImageResource(R.mipmap.j_pic);
+                    // imageViewReservedSpace.setImageResource(R.mipmap.j_pic);
                 }
             } else if (messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                 ReserveSpaceGifImageView imageViewReservedSpace = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
@@ -805,10 +805,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
-        ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-        contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-        downLoadFile(holder, progress, attachment, contentLoading);
+        downLoadFile(holder, attachment);
 
     }
 
@@ -816,8 +813,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         View thumbnail = holder.itemView.findViewById(R.id.thumbnail);
 
-        ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-        contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
 
         if (mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
             if (thumbnail != null) {
@@ -829,15 +824,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             messageClickListener.onUploadCancel(progress, mMessage, holder.getAdapterPosition());
         } else if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
             HelperDownloadFile.stopDownLoad(attachment.getToken());
-            progress.withProgress(0);
-            progress.withDrawable(R.drawable.ic_download, true);
-            contentLoading.setVisibility(View.GONE);
         } else {
             if (thumbnail != null) {
                 thumbnail.setVisibility(View.VISIBLE);
             }
 
             if (attachment.isFileExistsOnLocal()) {
+
+                if (progress.getVisibility() == View.VISIBLE) {
+                    progress.setVisibility(View.GONE);
+                    onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
+                }
+
                 if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                     return;
                 }
@@ -853,7 +851,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             } else {
 
-                downLoadFile(holder, progress, attachment, contentLoading);
+                downLoadFile(holder, attachment);
             }
         }
     }
@@ -899,16 +897,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     }
 
-    private void downLoadFile(final VH holder, final MessageProgress progressBar, RealmAttachment attachment, final ContentLoadingProgressBar contentLoading) {
+    private void downLoadFile(final VH holder, RealmAttachment attachment) {
 
         if (attachment == null) return;
 
+        final MessageProgress progressBar = (MessageProgress) holder.itemView.findViewById(R.id.progress);
+
+        final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
+        contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+
         contentLoading.setVisibility(View.VISIBLE);
 
-        String token = attachment.getToken();
+        final String token = attachment.getToken();
         String name = attachment.getName();
         Long size = attachment.getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+
+        messageClickListener.onDownloadAllEqualCashId(token);
 
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
 
@@ -920,7 +925,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
             HelperDownloadFile.startDoanload(token, name, size, selector, _path, new HelperDownloadFile.UpdateListener() {
-                @Override public void OnProgress(String token, final int progress) {
+                @Override public void OnProgress(final String token, final int progress) {
 
                     progressBar.post(new Runnable() {
                         @Override public void run() {
@@ -929,6 +934,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 progressBar.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
                                 onLoadThumbnailFromLocal(holder, _path, LocalFileType.FILE);
+
                             } else {
                                 progressBar.withProgress(progress);
                             }
@@ -1002,10 +1008,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
             hideThumbnailIf(holder);
 
-            ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-
-            downLoadFile(holder, (MessageProgress) holder.itemView.findViewById(R.id.progress), attachment, contentLoading);
+            downLoadFile(holder, attachment);
 
         } else {
             if (attachment.isFileExistsOnLocal()) {

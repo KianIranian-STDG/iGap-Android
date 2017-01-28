@@ -182,7 +182,17 @@ public class HelperDownloadFile {
         String primaryKey = token + ProtoFileDownload.FileDownload.Selector.FILE;
 
         if (list.containsKey(primaryKey)) {
+
             HelperCancelDownloadUpload.removeRequestQueue(list.get(primaryKey).identity);
+
+            StructDownLoad item = list.get(primaryKey);
+
+            for (UpdateListener listener : item.listeners) {
+                if (listener != null) {
+                    listener.OnError(item.Token);
+                }
+            }
+
             list.remove(primaryKey);
 
             addDownloadFromQueue();
