@@ -241,9 +241,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         if (firstTimeEnterToApp) {
                             sendClientCondition();
                         } else {
-                            //new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+                            new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
                         }
-                        mAdapter.clear();
+
                         putChatToDatabase(roomList);
 
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
@@ -640,7 +640,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             public void onRefresh() {
 
                 new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
-
+                new RequestClientGetRoomList().clientGetRoomList();
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
@@ -707,8 +707,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             public void onSuccess() {
                 List<RoomItem> roomItems = new ArrayList<>();
                 for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
+                    Log.i("YYY", "name : " + item.getTitle() + " || last message" + item.getLastMessage().getMessage() + "  ||  update time : " + item.getUpdatedTime());
                     roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
                 }
+                mAdapter.clear();
                 mAdapter.add(roomItems);
             }
         });
@@ -1394,26 +1396,22 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     }
 
     @Override
-    public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+    public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
 
         if (mAdapter != null) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("CCC", "updateChat 3");
+                    Log.i("CCC", "updateChat 3 : " + message + "  ||  messageId : " + roomMessage.getMessageId());
 
                     RoomItem rm = convertToChatItem(roomId);
 
-                    if (roomMessage.getMessageId() > rm.getInfo().getLastMessage().getMessageId()) {
-                        mAdapter.updateChat(roomId, convertToChatItem(roomId));
+                    mAdapter.updateChat(roomId, convertToChatItem(roomId));
 
-                        int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        if (firstVisibleItem < 3) {
-                            recyclerView.scrollToPosition(0);
-                        }
+                    int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                    if (firstVisibleItem < 3) {
+                        recyclerView.scrollToPosition(0);
                     }
-
-
                 }
             });
         }

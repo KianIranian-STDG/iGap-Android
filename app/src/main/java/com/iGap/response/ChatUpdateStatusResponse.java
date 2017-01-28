@@ -9,7 +9,6 @@ import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineSeen;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-
 import io.realm.Realm;
 
 public class ChatUpdateStatusResponse extends MessageHandler {
@@ -28,47 +27,30 @@ public class ChatUpdateStatusResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder chatUpdateStatus =
-                (ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder) message;
+        final ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder chatUpdateStatus = (ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder) message;
 
-        final ProtoResponse.Response.Builder response =
-                ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
+        final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 if (!response.getId().isEmpty()) { // I'm sender
-                    RealmClientCondition realmClientCondition =
-                            realm.where(RealmClientCondition.class)
-                                    .equalTo(RealmClientConditionFields.ROOM_ID,
-                                            chatUpdateStatus.getRoomId())
-                                    .findFirst();
-                    // RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatUpdateStatus.getRoomId()).findFirst();
                     for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) {
                         if (realmOfflineSeen.getOfflineSeen() == chatUpdateStatus.getMessageId()) {
                             realmOfflineSeen.deleteFromRealm();
                             break;
                         }
                     }
-                    //                    for (int i = offlineSeen.size() - 1; i >= 0; i--) {
-                    //                        RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
-                    //                        Log.i("SOC_CONDITION", "realmOfflineSeen 1 : " + realmOfflineSeen);
-                    //                        realmOfflineSeen.deleteFromRealm();
-                    //                    }
                 } else { // I'm recipient
-
                     // find message from database and update its status
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class)
-                            .equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId())
-                            .findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId()).findFirst();
                     if (roomMessage != null) {
                         roomMessage.setStatus(chatUpdateStatus.getStatus().toString());
                         realm.copyToRealmOrUpdate(roomMessage);
 
-                        G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(),
-                                chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(),
-                                chatUpdateStatus.getStatusVersion());
+                        G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
                     }
                 }
             }

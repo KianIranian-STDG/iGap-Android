@@ -321,7 +321,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
             holder.name.setText(mInfo.getTitle());
 
-            if (mInfo.isDeleted()) {
+           /* if (mInfo.isDeleted()) {
                 long lastMessageTime = AppUtils.computeLastMessageTime(mInfo.getId());
                 if (lastMessageTime != 0) {
                     holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(lastMessageTime));
@@ -338,6 +338,14 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
                 } else {
                     holder.lastSeen.setVisibility(GONE);
                 }
+            }*/
+
+            if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
+                holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
+
+                holder.lastSeen.setVisibility(View.VISIBLE);
+            } else {
+                holder.lastSeen.setVisibility(GONE);
             }
 
             if (mInfo.getUnreadCount() < 1) {

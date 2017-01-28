@@ -248,7 +248,8 @@ public final class AppUtils {
         }
 
         if (message.isDeleted()) {
-            return computeLastMessage(roomId, resources, roomType, attachment);
+            return resources.getString(R.string.deleted_message);
+            //return computeLastMessage(roomId, resources, roomType, attachment);
         } else if (!TextUtils.isEmpty(message.getMessage())) {
             return message.getMessage();
         } else if (message.getForwardMessage() != null && !TextUtils.isEmpty(message.getForwardMessage().getMessage())) {

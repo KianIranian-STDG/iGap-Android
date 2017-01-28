@@ -520,7 +520,7 @@ public class HelperNotificationAndBadge {
                             Log.i("CCC", "2 getMessage : " + roomMessage.getMessage());
                             Log.i("CCC", "3 getStatus : " + roomMessage.getStatus());
                             RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-                            if (realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
+                            if (realmRoom1 != null && realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
                                 if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
                                     Log.i("CCC", "compute*********");
                                     unreadMessageCount++;
@@ -589,9 +589,6 @@ public class HelperNotificationAndBadge {
                 }
             }
             countUnicChat += countChat;
-
-
-
             countUnicChat += senderList.size();
         }
 

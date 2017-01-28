@@ -31,8 +31,9 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public void updateChat(long chatId, Item item) {
         List<Item> items = getAdapterItems();
         for (Item chat : items) {
-            Log.i("CCC", "updateChat chat : " + chat.mInfo.getTitle());
+            Log.i("CCC", "updateChat chat 1 : " + chat.mInfo.getTitle());
             if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == chatId) {
+                Log.i("CCC", "updateChat chat 2 : " + chat.mInfo.getTitle());
                 int pos = items.indexOf(chat);
                 remove(pos);
                 add(0, item);

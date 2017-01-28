@@ -22,7 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityMain;
@@ -38,7 +37,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.request.RequestChannelCheckUsername;
 import com.iGap.request.RequestChannelUpdateUsername;
 import com.iGap.request.RequestClientGetRoom;
-
 import io.realm.Realm;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -64,15 +62,13 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
     private String pathSaveImage;
 
 
-    public FragmentCreateChannel(
-    ) {
+    public FragmentCreateChannel() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_channel, container, false);
 
@@ -107,10 +103,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .remove(FragmentCreateChannel.this)
-                        .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
             }
         });
 
@@ -118,10 +111,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .remove(FragmentCreateChannel.this)
-                        .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
             }
         });
 
@@ -227,8 +217,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                 if (raPrivate.isChecked()) {
                     final PopupMenu popup = new PopupMenu(getActivity(), view);
                     //Inflating the Popup using xml file
-                    popup.getMenuInflater()
-                            .inflate(R.menu.menu_item_copy, popup.getMenu());
+                    popup.getMenuInflater().inflate(R.menu.menu_item_copy, popup.getMenu());
 
                     //registering popup with OnMenuItemClickListener
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -337,12 +326,9 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                                 bundle.putString("TYPE", type.toString());
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);
-                                getActivity().getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
 
-                                        .replace(fragmentContainer, fragment, "contactGroup_fragment")
-                                        .commitAllowingStateLoss();
+                                        .replace(fragmentContainer, fragment, "contactGroup_fragment").commitAllowingStateLoss();
                                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
                                 ActivityMain.mLeftDrawerLayout.closeDrawer();
                             }
@@ -466,7 +452,9 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
             public void run() {
 
                 prgWaiting.setVisibility(View.VISIBLE);
-                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (getActivity() != null) {
+                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
             }
         });
     }
@@ -477,7 +465,9 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
             public void run() {
 
                 prgWaiting.setVisibility(View.GONE);
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (getActivity() != null) {
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
             }
         });
     }

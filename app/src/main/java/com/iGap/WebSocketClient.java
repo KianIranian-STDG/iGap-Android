@@ -68,6 +68,7 @@ public class WebSocketClient {
                 @Override
                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                     Log.i("SOC_WebSocket", "onError");
+                    Log.i("reconnect", "1");
                     reconnect(true);
                     super.onError(websocket, cause);
                 }
@@ -109,6 +110,7 @@ public class WebSocketClient {
                     Log.i("SOC_WebSocket", "onDisconnected");
                     Log.i("SOC_WebSocket", "closedByServer : " + closedByServer);
                     allowForReconnecting = true;
+                    Log.i("reconnect", "2");
                     reconnect(true);
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                 }
@@ -116,6 +118,7 @@ public class WebSocketClient {
                 @Override
                 public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                     Log.i("SOC_WebSocket_XXX", "onConnectError");
+                    Log.i("reconnect", "3");
                     reconnect(true);
                     super.onConnectError(websocket, exception);
                 }
@@ -183,6 +186,7 @@ public class WebSocketClient {
             @Override
             public void run() {
                 if (webSocketClient == null || !webSocketClient.isOpen()) {
+                    Log.i("reconnect", "4");
                     reconnect(false);
                 }
             }
@@ -223,6 +227,7 @@ public class WebSocketClient {
                         Log.e("DDD", "try for connect");
                         allowForReconnecting = true;
                         waitingForReconnecting = false;
+                        Log.i("reconnect", "5");
                         reconnect(false);
                     }
                 }
@@ -247,6 +252,7 @@ public class WebSocketClient {
                     if (timeDifference(latestConnectionTryTiming)) {
                         allowForReconnecting = true;
                         waitingForReconnecting = false;
+                        Log.i("reconnect", "6");
                         reconnect(false);
                     } else {
                         checkSocketConnection();
@@ -307,6 +313,7 @@ public class WebSocketClient {
          */
         waitingForReconnecting = false;
         allowForReconnecting = true;
+        Log.i("reconnect", "7");
         reconnect(false);
         return false;
     }
