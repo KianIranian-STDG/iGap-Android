@@ -44,7 +44,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         mTotalItemCount = mLayoutManager.getItemCount();
         mFirstVisibleItem = findFirstVisibleItemPosition(recyclerView);
 
-
         mTotalItemCount = mAdapter.getItemCount();
 
         if (mLoading) {
@@ -56,14 +55,16 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
         if (!mLoading && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {
             mCurrentPage++;
+
             onLoadMore(this, mCurrentPage);
 
             mLoading = true;
-        }
-
-        if (mLayoutManager.findFirstVisibleItemPosition() <= 10) {// && !mAlreadyCalledOnNoMore
-            onNoMore(this);
-            //mAlreadyCalledOnNoMore = true;
+        } else {
+            //if (mAdapter.getAdapterItemCount() == mMessagesList.size() && mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {// && !mAlreadyCalledOnNoMore
+            if (mLayoutManager.findFirstVisibleItemPosition() - mVisibleThreshold <= 0) {// && !mAlreadyCalledOnNoMore
+                onNoMore(this);
+                //mAlreadyCalledOnNoMore = true;
+            }
         }
     }
 

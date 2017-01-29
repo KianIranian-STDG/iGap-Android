@@ -4094,6 +4094,7 @@ public class ActivityChat extends ActivityEnhanced
                     RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
                     if (results.size() > 0) lastMessageId = results.get(0).getMessageId();
+                    lastDateCalendar.clear();
 
                     List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
 
@@ -4114,20 +4115,27 @@ public class ActivityChat extends ActivityEnhanced
 
                     Collections.sort(lastResultMessages, SortMessages.DESC);
 
-                    ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
+                    if (mAdapter.getItemCount() > 0 && mAdapter.getAdapterItem(0).mMessage.isTimeOrLogMessage()) mAdapter.remove(0);
+
+                    String topID = "";
+                    if (mAdapter.getItemCount() > 0) topID = mAdapter.getItem(0).mMessage.messageID;
+
+
+
                     for (RealmRoomMessage realmRoomMessage : lastResultMessages) {
-                        messageInfos.add(StructMessageInfo.convert(realmRoomMessage));
+
+                        if (topID.compareTo(realmRoomMessage.getMessageId() + "") <= 0 && topID.length() > 0) continue;
+
+                        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), true);
+                    }
+
+                    if (mAdapter.getItemCount() >= count + 1) {
+                        recyclerView.scrollToPosition(count + 1);
+                    } else {
+                        recyclerView.scrollToPosition(count);
                     }
 
                     realm.close();
-
-
-
-                    mAdapter.clear();
-
-                    switchAddItem(messageInfos, true);
-
-                    if (count > 0) recyclerView.scrollToPosition(count - 1);
 
 
 
