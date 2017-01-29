@@ -77,7 +77,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
 
-    @Override public void onPlayPauseGIF(VH holder, String localPath) {
+    @Override
+    public void onPlayPauseGIF(VH holder, String localPath) {
         // empty
     }
 
@@ -222,8 +223,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
         if (roomMessage != null) {
-            prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment(),
-                mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
+            prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
         realm.close();
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
@@ -725,7 +725,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                      */
                     onLoadThumbnailFromLocal(holder, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
-                    downLoadThumpnail(holder, attachment);
+                    if (messageType != ProtoGlobal.RoomMessageType.CONTACT) {
+                        downLoadThumpnail(holder, attachment);
+                    }
                 }
             }
 
@@ -881,7 +883,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (token != null && token.length() > 0 && size > 0) {
 
             HelperDownloadFile.startDoanload(token, name, size, selector, "", new HelperDownloadFile.UpdateListener() {
-                @Override public void OnProgress(String token, int progress) {
+                @Override
+                public void OnProgress(String token, int progress) {
 
                     if (progress == 100) {
                         onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
@@ -890,7 +893,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
 
-                @Override public void OnError(String token) {
+                @Override
+                public void OnError(String token) {
                 }
             });
         }
@@ -925,10 +929,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
             HelperDownloadFile.startDoanload(token, name, size, selector, _path, new HelperDownloadFile.UpdateListener() {
-                @Override public void OnProgress(final String token, final int progress) {
+                @Override
+                public void OnProgress(final String token, final int progress) {
 
                     progressBar.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             if (progress == 100) {
                                 progressBar.setVisibility(View.GONE);
@@ -943,10 +949,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 }
 
-                @Override public void OnError(String token) {
+                @Override
+                public void OnError(String token) {
 
                     progressBar.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             progressBar.withProgress(0);
                             progressBar.withDrawable(R.drawable.ic_download, true);
                             contentLoading.setVisibility(View.GONE);
