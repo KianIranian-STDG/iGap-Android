@@ -89,8 +89,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         List<RealmRoomMessage> messages = new ArrayList<>();
 
         // +timeMessagesAddedCount because of not counting time messages
-        for (int i = startFrom, timeMessagesAddedCount = 0;
-             i < (startFrom) + mTotalItemsInPages + timeMessagesAddedCount; i++) {
+        for (int i = startFrom, timeMessagesAddedCount = 0; i < (startFrom) + mTotalItemsInPages + timeMessagesAddedCount; i++) {
             if (i < mMessagesList.size()) {
                 // Object is no longer valid to operate on. Was it deleted by another thread?
                 // I check validity of the model
