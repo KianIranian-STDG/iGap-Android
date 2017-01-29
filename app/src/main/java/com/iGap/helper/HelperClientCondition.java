@@ -15,6 +15,8 @@ import io.realm.RealmList;
 import io.realm.Sort;
 import java.util.List;
 
+import static com.iGap.helper.HelperMessageResponse.computeLastMessageId;
+
 /**
  * helper client condition for set info to RealmClientCondition
  */
@@ -84,11 +86,7 @@ public class HelperClientCondition {
     public static void setMessageAndStatusVersion(Realm realm, long roomId, ProtoGlobal.RoomMessage roomMessage) {
         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
-        RealmRoomMessage realmRoomMessages1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).last();
-        long latestMessageId = 0;
-        if (realmRoomMessages1 != null) {
-            latestMessageId = realmRoomMessages1.getMessageId();
-        }
+        long latestMessageId = computeLastMessageId(realm, roomId);
         /**
          * if received new message set info to RealmClientCondition
          */

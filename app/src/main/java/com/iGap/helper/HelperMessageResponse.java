@@ -22,12 +22,7 @@ public class HelperMessageResponse {
     public static void handleMessage(final long roomId, final ProtoGlobal.RoomMessage roomMessage, final ProtoResponse.Response response, final String identity) {
 
         Realm realm = Realm.getDefaultInstance();
-        long latestMessageId = 0;
-
-        RealmRoomMessage realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).last();
-        if (realmRoomMessages != null) {
-            latestMessageId = realmRoomMessages.getMessageId();
-        }
+        long latestMessageId = computeLastMessageId(realm, roomId);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -132,6 +127,19 @@ public class HelperMessageResponse {
                 G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
             }
         }
-
     }
+
+    public static long computeLastMessageId(Realm realm, long roomId) {
+        RealmRoomMessage realmRoomMessage = null;
+        long latestMessageId = 0;
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        if (realmRoomMessages.size() > 0) {
+            realmRoomMessage = realmRoomMessages.last();
+        }
+        if (realmRoomMessage != null) {
+            latestMessageId = realmRoomMessage.getMessageId();
+        }
+        return latestMessageId;
+    }
+
 }

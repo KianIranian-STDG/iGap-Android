@@ -375,7 +375,7 @@ public class ActivityChat extends ActivityEnhanced
             public void resendMessage(RealmRoomMessage message) {
                 // in khat ba'es mishod ke vaghti forward mikardim dobar ferestade beshe , chon vaghti miferestadim inja
                 // payam ro vaz'eatesh sending bud va inja ejra mishod.
-                //G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
+                G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
             }
 
             @Override
@@ -1045,9 +1045,17 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (roomMessage != null) {
 
+                    /*RealmRoomMessage _mes = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage() : roomMessage;
+                    RealmRoomMessage messageforwrad = realm.copyFromRealm(_mes);
+                    messageforwrad.setMessageId(messageId + 1);
+                    messageforwrad.setRoomId(mRoomId);
+                    messageforwrad.setShowMessage(false);
+                    messageforwrad = realm.copyToRealmOrUpdate(messageforwrad);*/
+
+
                     long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
-                    forwardedMessage.setForwardMessage(roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage() : roomMessage);
+                    forwardedMessage.setForwardMessage(roomMessage);
                     forwardedMessage.setCreateTime(TimeUtils.currentLocalTime());
                     forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                     forwardedMessage.setRoomId(mRoomId);
@@ -3589,9 +3597,15 @@ public class ActivityChat extends ActivityEnhanced
 
 
         long oldestMessageId = 0;
-        RealmRoomMessage messagefirst = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().last();
-        oldestMessageId = messagefirst.getMessageId();
+        RealmRoomMessage messageFirst = null;
+        RealmResults<RealmRoomMessage> realmRoomMessages = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll();
+        if (realmRoomMessages.size() > 0) {
+            messageFirst = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().last();
+        }
 
+        if (messageFirst != null) {
+            oldestMessageId = messageFirst.getMessageId();
+        }
 
         if (latestMessageIdHistory != oldestMessageId) {
             latestMessageIdHistory = oldestMessageId;
@@ -4593,7 +4607,8 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
     }
 
-    @Override public void onDownloadAllEqualCashId(String token) {
+    @Override
+    public void onDownloadAllEqualCashId(String token) {
 
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
 

@@ -16,7 +16,8 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoom;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import io.realm.Sort;
+
+import static com.iGap.helper.HelperMessageResponse.computeLastMessageId;
 
 public class ChatSendMessageResponse extends MessageHandler {
 
@@ -41,12 +42,7 @@ public class ChatSendMessageResponse extends MessageHandler {
         final ProtoGlobal.RoomMessage roomMessage = chatSendMessageResponse.getRoomMessage();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         final String authorHash = realm.where(RealmUserInfo.class).findFirst().getAuthorHash();
-        long latestMessageId = 0;
-
-        RealmRoomMessage realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).last();
-        if (realmRoomMessages != null) {
-            latestMessageId = realmRoomMessages.getMessageId();
-        }
+        long latestMessageId = computeLastMessageId(realm, chatSendMessageResponse.getRoomId());
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -54,11 +50,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 // set info for clientCondition
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findFirst();
 
-                RealmRoomMessage realmRoomMessages1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).last();
-                long latestMessageId = 0;
-                if (realmRoomMessages1 != null) {
-                    latestMessageId = realmRoomMessages1.getMessageId();
-                }
+                long latestMessageId = computeLastMessageId(realm, chatSendMessageResponse.getRoomId());
                 /**
                  * if received new message set info to RealmClientCondition
                  */

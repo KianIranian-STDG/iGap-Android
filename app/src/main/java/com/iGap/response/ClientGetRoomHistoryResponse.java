@@ -111,7 +111,9 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        G.onClientGetRoomHistoryResponse.onGetRoomHistoryError(majorCode, minorCode);
+        if (G.onClientGetRoomHistoryResponse != null) {
+            G.onClientGetRoomHistoryResponse.onGetRoomHistoryError(majorCode, minorCode);
+        }
     }
 }
 

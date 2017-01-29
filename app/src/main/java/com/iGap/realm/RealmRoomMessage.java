@@ -1,6 +1,7 @@
 package com.iGap.realm;
 
 import android.text.format.DateUtils;
+import com.iGap.Config;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperLogMessage;
 import com.iGap.helper.HelperUrl;
@@ -108,13 +109,19 @@ import org.parceler.Parcel;
                                 if (roomMessage != null) {
                                     if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId() && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                         if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) != ProtoGlobal.RoomMessageStatus.SEEN) {
-                                            roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                                            /**
+                                             * check timeout, because when forward message to room ,message state is sending
+                                             * and add forward message to Realm from here and finally client have duplicated message
+                                             */
+                                            if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
+                                                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
-                                            RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
-                                            realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
+                                                RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
+                                                realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
 
-                                            realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                            callback.sendSeenStatus(roomMessage);
+                                                realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                                callback.sendSeenStatus(roomMessage);
+                                            }
                                         }
                                     } else {
                                         if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
