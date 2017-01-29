@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import com.iGap.Config;
 import com.iGap.G;
-import com.iGap.WebSocketClient;
 import com.iGap.helper.HelperPermision;
 import com.iGap.module.AttachFile;
 import com.iGap.proto.ProtoUserUpdateStatus;
@@ -73,7 +72,7 @@ public class ActivityEnhanced extends AppCompatActivity {
     protected void onStart() {
 
         if (heartBeatTimeOut()) {
-            WebSocketClient.checkConnection();
+            //WebSocketClient.checkConnection();
         }
 
         if (!G.isAppInFg) {

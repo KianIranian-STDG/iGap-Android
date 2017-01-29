@@ -56,10 +56,10 @@ public class GroupSendMessageResponse extends MessageHandler {
                  * if received new message set info to RealmClientCondition
                  */
                 if (realmClientCondition != null) {
-                    if (builder.getRoomMessage().getMessageId() > latestMessageId) {
+                    //if (builder.getRoomMessage().getMessageId() > latestMessageId) {
                         realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
                         realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
-                    }
+                    //}
                 }
 
                 // because user may have more than one device, his another device should not be recipient

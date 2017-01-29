@@ -30,11 +30,24 @@ public class HelperClientCondition {
         for (RealmClientCondition realmClientCondition : realm.where(RealmClientCondition.class).findAll()) {
             ProtoClientCondition.ClientCondition.Room.Builder room = ProtoClientCondition.ClientCondition.Room.newBuilder();
             room.setRoomId(realmClientCondition.getRoomId());
-            room.setMessageVersion(realmClientCondition.getMessageVersion());//Done
-            room.setStatusVersion(realmClientCondition.getStatusVersion());//Done
-            room.setDeleteVersion(realmClientCondition.getDeleteVersion());//DONE
 
-            for (RealmOfflineDelete offlineDeleted : realmClientCondition.getOfflineDeleted()) { //DONE
+            long messageVersion = 0;
+            long statusVersion = 0;
+            for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class).findAll()) {
+                if (roomMessage.getMessageVersion() > messageVersion) {
+                    messageVersion = roomMessage.getMessageVersion();
+                }
+
+                if (roomMessage.getStatusVersion() > statusVersion) {
+                    statusVersion = roomMessage.getStatusVersion();
+                }
+            }
+            room.setMessageVersion(messageVersion);
+            room.setStatusVersion(statusVersion);
+
+            room.setDeleteVersion(realmClientCondition.getDeleteVersion());
+
+            for (RealmOfflineDelete offlineDeleted : realmClientCondition.getOfflineDeleted()) {
                 room.addOfflineDeleted(offlineDeleted.getOfflineDelete());
             }
 
@@ -51,7 +64,7 @@ public class HelperClientCondition {
 
             room.setClearId(realmClientCondition.getClearId()); //DONE
 
-            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findFirst();
+            /*RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findFirst();
             if (realmRoomMessage != null) {
                 room.setCacheStartId(realmRoomMessage.getMessageId());//Done
                 List<RealmRoomMessage> allItems = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
@@ -61,6 +74,22 @@ public class HelperClientCondition {
                         room.setCacheEndId(item.getMessageId());//Done
                         break;
                     }
+                }
+            }*/
+
+            List<RealmRoomMessage> allItemsAscending = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+            for (RealmRoomMessage item : allItemsAscending) {
+                if (item != null) {
+                    room.setCacheStartId(item.getMessageId());
+                    break;
+                }
+            }
+
+            List<RealmRoomMessage> allItems = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            for (RealmRoomMessage item : allItems) {
+                if (item != null) {
+                    room.setCacheEndId(item.getMessageId());//Done
+                    break;
                 }
             }
 
@@ -91,12 +120,12 @@ public class HelperClientCondition {
          * if received new message set info to RealmClientCondition
          */
         if (realmClientCondition != null) {
-            if (roomMessage.getMessageId() > latestMessageId) {
-                Log.i("CLI", "getMessageVersion() : " + roomMessage.getMessageVersion());
-                Log.i("CLI", "getStatusVersion() : " + roomMessage.getStatusVersion());
-                realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
-                realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
-            }
+            //if (roomMessage.getMessageId() > latestMessageId) {
+            Log.i("CLI", "getMessageVersion() : " + roomMessage.getMessageVersion());
+            Log.i("CLI", "getStatusVersion() : " + roomMessage.getStatusVersion());
+            realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
+            realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
+            //}
         }
     }
 
@@ -109,6 +138,29 @@ public class HelperClientCondition {
                 realmClientCondition.setOfflineSeen(new RealmList<RealmOfflineSeen>());
             }
         });
+    }
+
+    private static void computeMessageVersion(long roomId, Realm realm) {
+        long messageVersion = 0;
+        long statusVersion = 0;
+
+        for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class).findAll()) {
+            if (roomMessage.getMessageVersion() > messageVersion) {
+                messageVersion = roomMessage.getMessageVersion();
+            }
+
+            if (roomMessage.getStatusVersion() > statusVersion) {
+                messageVersion = roomMessage.getStatusVersion();
+            }
+        }
+    }
+
+    private static void computeStatusVersion() {
+
+    }
+
+    private static void computeDeleteVersion() {
+
     }
 
 }

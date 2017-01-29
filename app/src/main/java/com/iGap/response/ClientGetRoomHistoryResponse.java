@@ -6,6 +6,8 @@ import com.iGap.helper.HelperUserInfo;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmClientCondition;
+import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
@@ -52,20 +54,18 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                             }
 
                             // set info for clientCondition
-                            /*RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, Long.parseLong(identity)).findFirst();
+                            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, Long.parseLong(identity)).findFirst();
 
-                            long latestMessageId = 0;
+                           /* long latestMessageId = 0;
                             RealmRoomMessage realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, Long.parseLong(identity)).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).last();
                             if (realmRoomMessages != null) {
                                 latestMessageId = realmRoomMessages.getMessageId();
-                            }
+                            }*/
 
                             if (realmClientCondition != null) {
-                                if (roomMessage.getMessageId() > latestMessageId) {
-                                    realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
-                                    realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
-                                }
-                            }*/
+                                realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
+                                realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
+                            }
 
                             RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
                             if (rm == null) {

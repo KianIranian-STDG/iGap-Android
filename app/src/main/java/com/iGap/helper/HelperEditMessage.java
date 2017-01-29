@@ -1,5 +1,6 @@
 package com.iGap.helper;
 
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
@@ -23,6 +24,7 @@ public class HelperEditMessage {
 
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
                 if (realmClientCondition != null) {
+                    Log.i("EEE", "editMessage");
                     realmClientCondition.setMessageVersion(messageVersion);
                 }
 

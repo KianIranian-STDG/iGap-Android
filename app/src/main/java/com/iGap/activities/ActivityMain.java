@@ -639,7 +639,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void onRefresh() {
 
-                new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+                //new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
                 new RequestClientGetRoomList().clientGetRoomList();
             }
         });

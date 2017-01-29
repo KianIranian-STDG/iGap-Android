@@ -37,7 +37,7 @@ public final class AppUtils {
     public static String suitableThumbFileName(String name) {
         boolean isImage = false;
         for (String ext : exts) {
-            if (name.endsWith(ext)) {
+            if (name != null && name.endsWith(ext)) {
                 isImage = true;
                 break;
             }

@@ -50,15 +50,12 @@ public class ChatSendMessageResponse extends MessageHandler {
                 // set info for clientCondition
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatSendMessageResponse.getRoomId()).findFirst();
 
-                long latestMessageId = computeLastMessageId(realm, chatSendMessageResponse.getRoomId());
                 /**
                  * if received new message set info to RealmClientCondition
                  */
                 if (realmClientCondition != null) {
-                    if (chatSendMessageResponse.getRoomMessage().getMessageId() > latestMessageId) {
-                        realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
-                        realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
-                    }
+                    realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
+                    realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
                 }
 
                 // because user may have more than one device, his another device should not be recipient

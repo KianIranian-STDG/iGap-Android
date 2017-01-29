@@ -26,8 +26,7 @@ public class GroupClearMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoGroupClearMessage.GroupClearMessageResponse.Builder builder =
-                (ProtoGroupClearMessage.GroupClearMessageResponse.Builder) message;
+        final ProtoGroupClearMessage.GroupClearMessageResponse.Builder builder = (ProtoGroupClearMessage.GroupClearMessageResponse.Builder) message;
         builder.getRoomId();
         builder.getClearId();
 
@@ -36,22 +35,22 @@ public class GroupClearMessageResponse extends MessageHandler {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    final RealmClientCondition realmClientCondition =
-                            realm.where(RealmClientCondition.class)
-                                    .equalTo(RealmClientConditionFields.ROOM_ID,
-                                            builder.getRoomId())
-                                    .findFirst();
+                    final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
                     realmClientCondition.setClearId(builder.getClearId());
                 }
             });
-            G.clearMessagesUtil.onChatClearMessage(builder.getRoomId(),
-                    builder.getClearId(), builder.getResponse());
+            G.clearMessagesUtil.onChatClearMessage(builder.getRoomId(), builder.getClearId(), builder.getResponse());
         }
 
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-        if (realmRoom != null) {
-            realmRoom.setUpdatedTime(builder.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
-        }
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+                if (realmRoom != null) {
+                    realmRoom.setUpdatedTime(builder.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
+                }
+            }
+        });
 
         realm.close();
     }
