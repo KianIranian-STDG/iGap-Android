@@ -333,9 +333,10 @@ public class FragmentShowImage extends Fragment {
                         if (selector != null && fileSize > 0) {
                             HelperDownloadFile.startDoanload(rm.getAttachment().getToken(), rm.getAttachment().getName(), fileSize, selector, "", new HelperDownloadFile.UpdateListener() {
                                 @Override public void OnProgress(String token, int progress) {
+
                                     if (progress == 100) {
 
-                                        touchImageView.post(new Runnable() {
+                                        G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override public void run() {
                                                 ImageLoader.getInstance().displayImage(suitablePath(filePathTumpnail), touchImageView);
                                             }
@@ -402,9 +403,8 @@ public class FragmentShowImage extends Fragment {
 
                         if (progress != null) {
 
-                            progress.post(new Runnable() {
+                            G.currentActivity.runOnUiThread(new Runnable() {
                                 @Override public void run() {
-
                                     if (progres < 100) {
                                         progress.withProgress(progres);
                                     } else {
@@ -422,7 +422,8 @@ public class FragmentShowImage extends Fragment {
                     }
 
                     @Override public void OnError(String token) {
-                        progress.post(new Runnable() {
+
+                        G.currentActivity.runOnUiThread(new Runnable() {
                             @Override public void run() {
                                 progress.withProgress(0);
                                 progress.withDrawable(R.drawable.ic_download, true);

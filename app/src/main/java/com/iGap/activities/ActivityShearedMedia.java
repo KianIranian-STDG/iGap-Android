@@ -1029,9 +1029,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     if (messageProgress != null) {
 
-                        messageProgress.post(new Runnable() {
+                        G.currentActivity.runOnUiThread(new Runnable() {
                             @Override public void run() {
-
                                 if (progress < 100) {
                                     messageProgress.withProgress(progress);
                                 } else {
@@ -1042,14 +1041,13 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                                 }
                             }
                         });
+
                     }
                 }
 
                 @Override public void OnError(String token) {
 
-                    Log.e("dddd", "OnError  token  = " + token + "   " + messageProgress);
-
-                    messageProgress.post(new Runnable() {
+                    G.currentActivity.runOnUiThread(new Runnable() {
                         @Override public void run() {
                             messageProgress.withProgress(0);
                             messageProgress.withDrawable(R.drawable.ic_download, true);
@@ -1064,13 +1062,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             HelperDownloadFile.stopDownLoad(mList.get(position).item.getAttachment().getToken());
 
-            messageProgress.post(new Runnable() {
-                @Override public void run() {
-                    messageProgress.withProgress(0);
-                    messageProgress.withDrawable(R.drawable.ic_download, true);
-                    contentLoading.setVisibility(View.GONE);
-                }
-            });
         }
 
         private void downloadFile(int position, MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
@@ -1184,10 +1175,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
+
                             HelperDownloadFile.startDoanload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "",
                                 new HelperDownloadFile.UpdateListener() {
                                     @Override public void OnProgress(String token, int progress) {
-                                        vh.imvPicFile.post(new Runnable() {
+
+                                        G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override public void run() {
                                                 ImageLoader.getInstance().displayImage(suitablePath(vh.tempFilePath), vh.imvPicFile);
                                             }

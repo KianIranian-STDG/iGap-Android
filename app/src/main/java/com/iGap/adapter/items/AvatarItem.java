@@ -96,9 +96,9 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
                 if (selector != null && fileSize > 0) {
                     HelperDownloadFile.startDoanload(avatar.getToken(), avatar.getName(), fileSize, selector, "", new HelperDownloadFile.UpdateListener() {
                         @Override public void OnProgress(String token, int progress) {
-                            if (progress == 100) {
 
-                                holder.image.post(new Runnable() {
+                            if (progress == 100) {
+                                G.currentActivity.runOnUiThread(new Runnable() {
                                     @Override public void run() {
                                         holder.image.setImageURI(Uri.fromFile(new File(filePathTumpnail)));
                                     }
@@ -132,24 +132,24 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
 
                                     if (holder.progress != null) {
 
-                                        holder.progress.post(new Runnable() {
+                                        G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override public void run() {
-
                                                 if (progres < 100) {
                                                     holder.progress.withProgress(progres);
                                                 } else {
                                                     holder.progress.withProgress(0);
                                                     holder.progress.setVisibility(View.GONE);
-
                                                     ImageLoader.getInstance().displayImage(suitablePath(path), holder.image);
                                                 }
                                             }
                                         });
+
                                     }
                                 }
 
                                 @Override public void OnError(String token) {
-                                    holder.progress.post(new Runnable() {
+
+                                    G.currentActivity.runOnUiThread(new Runnable() {
                                         @Override public void run() {
                                             holder.progress.withProgress(0);
                                             holder.progress.withDrawable(R.drawable.ic_download, true);

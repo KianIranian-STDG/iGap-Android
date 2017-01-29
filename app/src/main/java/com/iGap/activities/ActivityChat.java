@@ -3005,7 +3005,7 @@ public class ActivityChat extends ActivityEnhanced
             case AttachFile.request_code_pic_audi:
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
-                duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath);
+                duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath) / 1000;
                 if (isMessageWrote()) {
                     messageType = ProtoGlobal.RoomMessageType.AUDIO_TEXT;
                 } else {

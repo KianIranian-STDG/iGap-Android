@@ -887,9 +887,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void OnProgress(String token, int progress) {
 
                     if (progress == 100) {
-                        onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
+                        G.currentActivity.runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
 
-                        downloadedList.put(_messagID, _path);
+                                downloadedList.put(_messagID, _path);
+                            }
+                        });
                     }
                 }
 
@@ -932,10 +936,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void OnProgress(final String token, final int progress) {
 
-                    progressBar.post(new Runnable() {
-                        @Override
-                        public void run() {
-
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override public void run() {
                             if (progress == 100) {
                                 progressBar.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
@@ -951,6 +953,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 @Override
                 public void OnError(String token) {
+
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override public void run() {
+
+                        }
+                    });
 
                     progressBar.post(new Runnable() {
                         @Override
