@@ -101,7 +101,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                     // make get room request
                     new RequestClientGetRoom().clientGetRoom(builder.getRoomId());
                 } else {
-                    if (!roomMessage.getAuthor().getHash().equals(authorHash) && room.getLastMessage().getMessageId() < roomMessage.getMessageId()) {
+                    if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
                         room.setUnreadCount(room.getUnreadCount() + 1);
                     }
                     // update last message sent/received in room table

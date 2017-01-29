@@ -239,6 +239,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                          * in else state compute new client condition with latest messaging state
                          */
                         if (firstTimeEnterToApp) {
+                            firstTimeEnterToApp = false;
                             sendClientCondition();
                         } else {
                             new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());

@@ -2712,10 +2712,6 @@ public class ActivityChat extends ActivityEnhanced
                         sendMessage(requestCode, path);
                     }
                 }
-                //                if (mReplayLayout != null && userTriesReplay()) {
-                //                    mReplayLayout.setTag(null);
-                //                    mReplayLayout.setVisibility(View.GONE);
-                //                }
             }
 
             if (listPathString.size() == 1) {

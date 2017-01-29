@@ -1,26 +1,19 @@
 package com.iGap.realm;
 
 import android.support.annotation.Nullable;
-
 import com.iGap.G;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoGlobal;
-
-import org.parceler.Parcel;
-
-import java.io.File;
-
 import io.realm.Realm;
 import io.realm.RealmAttachmentRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import java.io.File;
+import org.parceler.Parcel;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/26/2016.
- */
 @Parcel(implementations = {RealmAttachmentRealmProxy.class},
         value = Parcel.Serialization.BEAN,
         analyze = {RealmAttachment.class})

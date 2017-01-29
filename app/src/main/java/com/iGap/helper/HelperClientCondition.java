@@ -15,8 +15,6 @@ import io.realm.RealmList;
 import io.realm.Sort;
 import java.util.List;
 
-import static com.iGap.helper.HelperMessageResponse.computeLastMessageId;
-
 /**
  * helper client condition for set info to RealmClientCondition
  */
@@ -33,13 +31,18 @@ public class HelperClientCondition {
 
             long messageVersion = 0;
             long statusVersion = 0;
-            for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class).findAll()) {
-                if (roomMessage.getMessageVersion() > messageVersion) {
-                    messageVersion = roomMessage.getMessageVersion();
+            List<RealmRoomMessage> allItemsMessageVersion = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.MESSAGE_VERSION, Sort.DESCENDING);
+            for (RealmRoomMessage item : allItemsMessageVersion) {
+                if (item != null) {
+                    messageVersion = item.getMessageVersion();
+                    break;
                 }
-
-                if (roomMessage.getStatusVersion() > statusVersion) {
-                    statusVersion = roomMessage.getStatusVersion();
+            }
+            List<RealmRoomMessage> allItemsStatusVersion = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.STATUS_VERSION, Sort.DESCENDING);
+            for (RealmRoomMessage item : allItemsStatusVersion) {
+                if (item != null) {
+                    statusVersion = item.getMessageVersion();
+                    break;
                 }
             }
             room.setMessageVersion(messageVersion);
@@ -63,19 +66,6 @@ public class HelperClientCondition {
             }
 
             room.setClearId(realmClientCondition.getClearId()); //DONE
-
-            /*RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findFirst();
-            if (realmRoomMessage != null) {
-                room.setCacheStartId(realmRoomMessage.getMessageId());//Done
-                List<RealmRoomMessage> allItems = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-
-                for (RealmRoomMessage item : allItems) {
-                    if (item != null) {
-                        room.setCacheEndId(item.getMessageId());//Done
-                        break;
-                    }
-                }
-            }*/
 
             List<RealmRoomMessage> allItemsAscending = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
             for (RealmRoomMessage item : allItemsAscending) {
@@ -115,17 +105,12 @@ public class HelperClientCondition {
     public static void setMessageAndStatusVersion(Realm realm, long roomId, ProtoGlobal.RoomMessage roomMessage) {
         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
-        long latestMessageId = computeLastMessageId(realm, roomId);
         /**
          * if received new message set info to RealmClientCondition
          */
         if (realmClientCondition != null) {
-            //if (roomMessage.getMessageId() > latestMessageId) {
-            Log.i("CLI", "getMessageVersion() : " + roomMessage.getMessageVersion());
-            Log.i("CLI", "getStatusVersion() : " + roomMessage.getStatusVersion());
             realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
             realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
-            //}
         }
     }
 

@@ -91,7 +91,7 @@ public class HelperMessageResponse {
                     new RequestClientGetRoom().clientGetRoom(roomId);
                 } else {
 
-                    if (!roomMessage.getAuthor().getHash().equals(authorHash) && room.getLastMessage().getMessageId() < roomMessage.getMessageId()) {
+                    if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
                         room.setUnreadCount(room.getUnreadCount() + 1);
                     }
 
