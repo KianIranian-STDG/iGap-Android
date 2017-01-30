@@ -379,7 +379,7 @@ public class ActivityChat extends ActivityEnhanced
             public void resendMessage(RealmRoomMessage message) {
                 // in khat ba'es mishod ke vaghti forward mikardim dobar ferestade beshe , chon vaghti miferestadim inja
                 // payam ro vaz'eatesh sending bud va inja ejra mishod.
-                //G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
+                G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
             }
 
             @Override

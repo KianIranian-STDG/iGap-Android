@@ -41,7 +41,7 @@ public class HelperClientCondition {
             List<RealmRoomMessage> allItemsStatusVersion = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.STATUS_VERSION, Sort.DESCENDING);
             for (RealmRoomMessage item : allItemsStatusVersion) {
                 if (item != null) {
-                    statusVersion = item.getMessageVersion();
+                    statusVersion = item.getStatusVersion();
                     break;
                 }
             }

@@ -16,6 +16,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -83,6 +84,12 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        G.onUserAvatarResponse = this;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
@@ -95,8 +102,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
         prgWait = (ProgressBar) findViewById(R.id.prg);
 
         G.uploaderUtil.setActivityCallbacks(this);
-        G.onUserAvatarResponse = this;
-
 
         txtTitle = (TextView) findViewById(R.id.pu_titleToolbar);
 
@@ -317,7 +322,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                     }
                 }
 
-                @Override public void deney() {
+                @Override
+                public void deney() {
 
                 }
             });
@@ -481,6 +487,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        Log.i("RRR", "onAvatarAdd 3");
         HelperAvatar.avatarAdd(userId, pathSaveImage, avatar, new OnAvatarAdd() {
             @Override
             public void onAvatarAdd(final String avatarPath) {
@@ -488,6 +495,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.i("RRR", "onAvatarAdd 4");
                         existAvatar = true;
                         hideProgressBar();
                         setImage(avatarPath);

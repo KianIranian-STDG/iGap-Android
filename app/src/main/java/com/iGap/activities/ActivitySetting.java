@@ -266,8 +266,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         G.uploaderUtil.setActivityCallbacks(this);
-        G.onUserAvatarResponse = this;
-
 
         final Realm realm = Realm.getDefaultInstance();
         final TextView txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
@@ -2135,45 +2133,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         finish();
     }
 
-    //    private void getSms(String message) {
-    //        String verificationCode = HelperString.regexExtractValue(message, regex);
-    //
-    //        if (verificationCode != null && !verificationCode.isEmpty()) {
-    //
-    //            G.onUserDelete = new OnUserDelete() {
-    //                @Override
-    //                public void onUserDeleteResponse() {
-    //                    Log.i("UUU", "onUserDeleteResponse");
-    //                    HelperLogout.logout();
-    //                }
-    //            };
-    //
-    //            Log.i("UUU", "RequestUserDelete verificationCode : " + verificationCode);
-    //            new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
-    //        }
-    //    }
 
     @Override
     protected void onResume() {
-        //        final IntentFilter filter = new IntentFilter();
-        //        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-        //        smsReceiver = new IncomingSms(new OnSmsReceive() {
-        //
-        //            @Override
-        //            public void onSmsReceive(String message) {
-        //                try {
-        //                    if (message != null && !message.isEmpty() && !message.equals("null") &&
-        //                            !message.equals("")) {
-        //                        getSms(message);
-        //                    }
-        //                } catch (Exception e1) {
-        //                    e1.getStackTrace();
-        //                }
-        //            }
-        //        });
-        //
-        //        registerReceiver(smsReceiver, filter);
         super.onResume();
+        G.onUserAvatarResponse = this;
     }
 
     @Override
