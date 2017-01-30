@@ -3981,7 +3981,7 @@ public class ActivityChat extends ActivityEnhanced
         final long messageId = SUID.id().get();
         final long updateTime = TimeUtils.currentLocalTime();
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath);
+        final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath) / 1000;
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -4193,11 +4193,8 @@ public class ActivityChat extends ActivityEnhanced
                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), true);
                     }
 
-                    if (mAdapter.getItemCount() >= count + 1) {
-                        recyclerView.scrollToPosition(count + 1);
-                    } else {
-                        recyclerView.scrollToPosition(count);
-                    }
+                    recyclerView.scrollToPosition(count);
+
 
                     realm.close();
 
@@ -4658,8 +4655,7 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
     }
 
-    @Override
-    public void onDownloadAllEqualCashId(String token) {
+    @Override public void onDownloadAllEqualCashId(String token, String messageID) {
 
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
 
@@ -4667,7 +4663,7 @@ public class ActivityChat extends ActivityEnhanced
                 AbstractMessage item = mAdapter.getAdapterItem(i);
                 String mToken = item.mMessage.forwardedFrom != null ? item.mMessage.forwardedFrom.getAttachment().getToken() : item.mMessage.getAttachment().token;
 
-                if (mToken.equals(token)) mAdapter.notifyItemChanged(i);
+                if (mToken.equals(token) && (!item.mMessage.messageID.equals(messageID))) mAdapter.notifyItemChanged(i);
             } catch (Exception e) {
                 Log.e("dddddd", "activity chat    onDownloadAllEqualCashid  " + e);
             }

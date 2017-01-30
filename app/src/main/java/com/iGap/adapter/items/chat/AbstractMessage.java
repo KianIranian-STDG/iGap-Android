@@ -682,8 +682,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
                 if (imageViewReservedSpace != null) {
 
-                    int _with = attachment.getWidth() != 0 ? attachment.getWidth() : attachment.getSmallThumbnail().getWidth();
-                    int _hight = attachment.getHeight() != 0 ? attachment.getHeight() : attachment.getSmallThumbnail().getHeight();
+                    int _with = attachment.getWidth();
+                    int _hight = attachment.getHeight();
+
+                    if (_with == 0) {
+                        if (attachment.getSmallThumbnail() != null) {
+                            _with = attachment.getSmallThumbnail().getWidth();
+                            _hight = attachment.getSmallThumbnail().getHeight();
+                        }
+                    }
 
                     //  if (_with == 0) _with = (int) G.context.getResources().getDimension(R.dimen.dp40);
                     //  if (_hight == 0) _hight = (int) G.context.getResources().getDimension(R.dimen.dp40);
@@ -921,7 +928,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Long size = attachment.getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-        messageClickListener.onDownloadAllEqualCashId(token);
+        messageClickListener.onDownloadAllEqualCashId(token, mMessage.messageID);
 
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
 

@@ -9,7 +9,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
 
@@ -67,10 +66,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                                 realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
                             }
 
-                            RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-                            if (rm == null) {
-                                i[0]++;
-                            }
+                            i[0]++;
 
                             RealmRoomMessage.putOrUpdate(roomMessage, Long.parseLong(identity));
 

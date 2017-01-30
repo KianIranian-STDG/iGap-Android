@@ -38,7 +38,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import io.realm.Sort;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -57,6 +56,9 @@ public class FragmentShowImage extends Fragment {
     private int selectedFile = 0;
     private AdapterViewPager mAdapter;
     private RealmResults<RealmRoomMessage> mRealmList;
+
+    private ArrayList<RealmRoomMessage> mFList = new ArrayList<>();
+
     private Long mRoomid;
     private String selectedFileToken = "";
     private Realm mRealm;
@@ -106,20 +108,40 @@ public class FragmentShowImage extends Fragment {
 
             mRealm = Realm.getDefaultInstance();
 
-            mRealmList = mRealm.where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomid)
-                .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.IMAGE.toString())
-                .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomid).findAll();
+
 
             if (mRealmList.size() < 1) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 return false;
             }
 
+            for (RealmRoomMessage item : mRealmList) {
+
+                boolean isImage = false;
+
+                if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+                    isImage = true;
+                } else if (item.getForwardMessage() != null) {
+                    if (item.getForwardMessage().getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+                        isImage = true;
+                    }
+                }
+
+                if (isImage) mFList.add(item);
+            }
+
+
+
+
+
             if (selectedFileToken != null) {
-                for (int i = 0; i < mRealmList.size(); i++) {
-                    if (mRealmList.get(i).getAttachment() != null) {
-                        if (selectedFileToken.equals(mRealmList.get(i).getAttachment().getToken())) {
+                for (int i = 0; i < mFList.size(); i++) {
+
+                    RealmAttachment attachment = mFList.get(i).getForwardMessage() != null ? mFList.get(i).getForwardMessage().getAttachment() : mFList.get(i).getAttachment();
+
+                    if (attachment != null) {
+                        if (selectedFileToken.equals(attachment.getToken())) {
                             selectedFile = i;
                             break;
                         }
@@ -175,12 +197,12 @@ public class FragmentShowImage extends Fragment {
 
         viewPager.setCurrentItem(selectedFile);
 
-        txtImageNumber.setText(selectedFile + 1 + " " + getString(R.string.of) + " " + mRealmList.size());
-        if (mRealmList.get(selectedFile).getAttachment() != null) {
-            txtImageName.setText(mRealmList.get(selectedFile).getAttachment().getName());
+        txtImageNumber.setText(selectedFile + 1 + " " + getString(R.string.of) + " " + mFList.size());
+        if (mFList.get(selectedFile).getAttachment() != null) {
+            txtImageName.setText(mFList.get(selectedFile).getAttachment().getName());
         }
-        if (mRealmList.get(selectedFile).getUpdateTime() != 0) {
-            txtImageDate.setText(TimeUtils.toLocal(mRealmList.get(selectedFile).getUpdateTime(), G.CHAT_MESSAGE_TIME));
+        if (mFList.get(selectedFile).getUpdateTime() != 0) {
+            txtImageDate.setText(TimeUtils.toLocal(mFList.get(selectedFile).getUpdateTime(), G.CHAT_MESSAGE_TIME));
         }
 
         viewPager.setOnClickListener(new View.OnClickListener() {
@@ -196,14 +218,14 @@ public class FragmentShowImage extends Fragment {
 
             @Override public void onPageSelected(int position) {
 
-                txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + mRealmList.size());
+                txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + mFList.size());
 
-                if (mRealmList.get(position).getAttachment() != null) {
-                    txtImageName.setText(mRealmList.get(position).getAttachment().getName());
+                if (mFList.get(position).getAttachment() != null) {
+                    txtImageName.setText(mFList.get(position).getAttachment().getName());
                 }
 
-                if (mRealmList.get(position).getUpdateTime() != 0) {
-                    txtImageDate.setText(TimeUtils.toLocal(mRealmList.get(position).getUpdateTime(), G.CHAT_MESSAGE_TIME));
+                if (mFList.get(position).getUpdateTime() != 0) {
+                    txtImageDate.setText(TimeUtils.toLocal(mFList.get(position).getUpdateTime(), G.CHAT_MESSAGE_TIME));
                 }
             }
 
@@ -243,9 +265,13 @@ public class FragmentShowImage extends Fragment {
 
     private void shareImage() {
 
-        RealmRoomMessage rm = mRealmList.get(viewPager.getCurrentItem());
+        RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
 
         if (rm != null) {
+
+            if (rm.getForwardMessage() != null) rm = rm.getForwardMessage();
+
+
             String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
             File file = new File(path);
             if (file.exists()) {
@@ -263,8 +289,11 @@ public class FragmentShowImage extends Fragment {
 
     private void saveToGalary() {
 
-        RealmRoomMessage rm = mRealmList.get(viewPager.getCurrentItem());
+        RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
         if (rm != null) {
+
+            if (rm.getForwardMessage() != null) rm = rm.getForwardMessage();
+
             String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
             File file = new File(path);
             if (file.exists()) {
@@ -276,7 +305,7 @@ public class FragmentShowImage extends Fragment {
     private class AdapterViewPager extends PagerAdapter {
 
         @Override public int getCount() {
-            return mRealmList.size();
+            return mFList.size();
         }
 
         @Override public boolean isViewFromObject(View view, Object object) {
@@ -294,7 +323,9 @@ public class FragmentShowImage extends Fragment {
             final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) layout.findViewById(R.id.ch_progress_loadingContent);
             contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
 
-            if (HelperDownloadFile.isDownLoading(mRealmList.get(position).getAttachment().getToken())) {
+            final RealmRoomMessage rm = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage() : mFList.get(position);
+
+            if (HelperDownloadFile.isDownLoading(rm.getAttachment().getToken())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
                 startDownload(position, progress, touchImageView, contentLoading);
             } else {
@@ -302,7 +333,6 @@ public class FragmentShowImage extends Fragment {
                 contentLoading.setVisibility(View.GONE);
             }
 
-            final RealmRoomMessage rm = mRealmList.get(position).getForwardMessage() != null ? mRealmList.get(position).getForwardMessage() : mRealmList.get(position);
 
             if (rm != null) {
                 String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
@@ -357,8 +387,11 @@ public class FragmentShowImage extends Fragment {
             progress.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
 
-                    if (HelperDownloadFile.isDownLoading(mRealmList.get(position).getAttachment().getToken())) {
-                        HelperDownloadFile.stopDownLoad(mRealmList.get(position).getAttachment().getToken());
+                    String _tpken =
+                        mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getAttachment().getToken() : mFList.get(position).getAttachment().getToken();
+
+                    if (HelperDownloadFile.isDownLoading(_tpken)) {
+                        HelperDownloadFile.stopDownLoad(_tpken);
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
                         startDownload(position, progress, touchImageView, contentLoading);
@@ -392,10 +425,12 @@ public class FragmentShowImage extends Fragment {
 
             contentLoading.setVisibility(View.VISIBLE);
 
-            String dirPath = AndroidUtils.suitableAppFilePath(mRealmList.get(position).getMessageType()) + "/" +
-                mRealmList.get(position).getAttachment().getToken() + "_" + mRealmList.get(position).getAttachment().getName();
+            final RealmRoomMessage rm = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage() : mFList.get(position);
 
-            final RealmRoomMessage rm = mRealmList.get(position).getForwardMessage() != null ? mRealmList.get(position).getForwardMessage() : mRealmList.get(position);
+            String dirPath = AndroidUtils.suitableAppFilePath(rm.getMessageType()) + "/" +
+                rm.getAttachment().getToken() + "_" + rm.getAttachment().getName();
+
+
 
             HelperDownloadFile.startDoanload(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath,
                 new HelperDownloadFile.UpdateListener() {
