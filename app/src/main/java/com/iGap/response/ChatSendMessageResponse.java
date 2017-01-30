@@ -99,8 +99,6 @@ public class ChatSendMessageResponse extends MessageHandler {
                         room.setUnreadCount(room.getUnreadCount() + 1);
                     }
 
-                    room.setLastMessage(realm.where(RealmRoomMessage.class).findAllSorted(RealmRoomMessageFields.UPDATE_TIME).first());
-
                     // update last message sent/received in room table
                     if (room.getLastMessage() != null) {
                         if (room.getLastMessage().getMessageId() <= roomMessage.getMessageId()) {

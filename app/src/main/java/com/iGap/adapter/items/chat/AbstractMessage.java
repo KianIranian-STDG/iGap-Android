@@ -502,7 +502,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
 
-                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessage() : mMessage.replayTo.getForwardMessage().getMessage());
+                String forwardMessage;
+                ProtoGlobal.RoomMessageType forwardType = mMessage.replayTo.getForwardMessage() != null ? mMessage.replayTo.getForwardMessage().getMessageType() : mMessage.replayTo.getMessageType();
+
+                if (forwardType == ProtoGlobal.RoomMessageType.CONTACT) {
+                    forwardMessage =
+                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getRoomMessageContact().getLastPhoneNumber()
+                            : mMessage.replayTo.getForwardMessage().getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getForwardMessage().getRoomMessageContact().getLastPhoneNumber();
+                } else {
+                    forwardMessage = mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessage() : mMessage.replayTo.getForwardMessage().getMessage();
+                }
+
+                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
 
                 replayContainer.setVisibility(View.VISIBLE);
                 realm.close();
@@ -677,6 +688,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * runs if message has attachment
          */
+
         if (attachment != null) {
             if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
@@ -692,8 +704,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     }
 
-                    //  if (_with == 0) _with = (int) G.context.getResources().getDimension(R.dimen.dp40);
-                    //  if (_hight == 0) _hight = (int) G.context.getResources().getDimension(R.dimen.dp40);
+                    if (attachment.getLocalFilePath() == null && attachment.getLocalThumbnailPath() == null) {
+                        _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
+                        _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
+                    }
+
 
 
                     int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight);
@@ -701,7 +716,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
                     }
 
-                    // imageViewReservedSpace.setImageResource(R.mipmap.j_pic);
+                    if (attachment.getLocalFilePath() == null && attachment.getLocalThumbnailPath() == null) {
+                        imageViewReservedSpace.setImageResource(R.mipmap.difaultimage);
+                    }
+
+
                 }
             } else if (messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                 ReserveSpaceGifImageView imageViewReservedSpace = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
