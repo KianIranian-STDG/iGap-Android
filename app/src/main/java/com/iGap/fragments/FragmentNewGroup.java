@@ -678,61 +678,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                                     getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                                     ActivityMain.mLeftDrawerLayout.closeDrawer();
                                 }
-                                /*if (typeCreate.toString().equals(ProtoGlobal.Room.Type.CHANNEL.toString())) {
-
-                                    prgWaiting.setVisibility(View.GONE);
-                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                                    Fragment fragment = ContactGroupFragment.newInstance();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putLong("RoomId", roomId);
-
-                                    if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                        bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
-                                    }
-
-                                    if (existAvatar) {
-                                        new RequestChannelAvatarAdd().channelAvatarAdd(roomId, token);
-                                    } else {
-                                        bundle.putString("TYPE", typeCreate.toString());
-                                        bundle.putBoolean("NewRoom", true);
-                                        fragment.setArguments(bundle);
-                                        getActivity().getSupportFragmentManager()
-                                                .beginTransaction()
-                                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                                .addToBackStack(null)
-                                                .replace(fragmentContainer, fragment)
-                                                .commitAllowingStateLoss();
-                                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                                        ActivityMain.mLeftDrawerLayout.closeDrawer();
-                                    }
-
-
-                                } else {
-                                    prgWaiting.setVisibility(View.GONE);
-                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                                    Fragment fragment = ContactGroupFragment.newInstance();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putLong("RoomId", roomId);
-
-                                    if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                        bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
-                                    }
-
-                                    bundle.putString("TYPE", typeCreate.toString());
-                                    bundle.putBoolean("NewRoom", true);
-                                    fragment.setArguments(bundle);
-                                    getActivity().getSupportFragmentManager()
-                                            .beginTransaction()
-                                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                            .addToBackStack(null)
-                                            .replace(fragmentContainer, fragment)
-                                            .commitAllowingStateLoss();
-                                    getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                                    ActivityMain.mLeftDrawerLayout.closeDrawer();
-                                }*/
-
                             }
                         });
                     }
@@ -744,6 +689,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
             @Override
             public void onError(int majorCode, int minorCode) {
 
+                //TODO [Saeed Mozaffari] [2017-01-30 1:12 PM] - check get activity null state in app, hint: use handler instead of activity.
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

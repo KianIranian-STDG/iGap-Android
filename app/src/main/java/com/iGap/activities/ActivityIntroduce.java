@@ -44,6 +44,8 @@ import io.realm.Realm;
 import java.io.IOException;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.iGap.G.mFirstRun;
+
 public class ActivityIntroduce extends ActivityEnhanced {
 
     static final String KEY_SAVE = "SAVE";
@@ -81,7 +83,10 @@ public class ActivityIntroduce extends ActivityEnhanced {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        /**
+         * set true mFirstRun for get room history after logout and login again
+         */
+        mFirstRun = true;
         licenceChecker();
 
         G.makeFolder();
@@ -96,20 +101,24 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     goToProgram(savedInstanceState);
                 }
 
-                @Override public void deney() {
+                @Override
+                public void deney() {
 
                     DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
-                        @Override public void onClick(DialogInterface dialog, int which) {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
                             try {
                                 HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermission() {
-                                    @Override public void Allow() {
+                                    @Override
+                                    public void Allow() {
 
                                         G.makeFolder();
                                         goToProgram(savedInstanceState);
                                     }
 
-                                    @Override public void deney() {
+                                    @Override
+                                    public void deney() {
                                         finish();
                                     }
                                 });
@@ -120,18 +129,14 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     };
 
                     DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
-                        @Override public void onClick(DialogInterface dialog, int which) {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
                             finish();
                         }
                     };
 
-                    new AlertDialog.Builder(ActivityIntroduce.this).setMessage(R.string.you_have_to_get_storage_permision_for_continue)
-                        .setCancelable(false)
-                        .
-                            setPositiveButton(ActivityIntroduce.this.getString(R.string.ok), onOkListener)
-                        .setNegativeButton(ActivityIntroduce.this.getString(R.string.cancel), onCancelListener)
-                        .create()
-                        .show();
+                    new AlertDialog.Builder(ActivityIntroduce.this).setMessage(R.string.you_have_to_get_storage_permision_for_continue).setCancelable(false).
+                            setPositiveButton(ActivityIntroduce.this.getString(R.string.ok), onOkListener).setNegativeButton(ActivityIntroduce.this.getString(R.string.cancel), onCancelListener).create().show();
 
 
 
