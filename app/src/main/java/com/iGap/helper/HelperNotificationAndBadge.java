@@ -514,15 +514,11 @@ public class HelperNotificationAndBadge {
         if (!realmRoomMessages.isEmpty()) {
             for (RealmRoomMessage roomMessage : realmRoomMessages) {
                 if (roomMessage != null) {
-                    Log.i("CCC", "1 roomMessage : " + roomMessage.getMessage());
                     if (roomMessage.getUserId() != userId) {
                         if (!roomMessage.getAuthorHash().equals(authorHash)) {// for channel message
-                            Log.i("CCC", "2 getMessage : " + roomMessage.getMessage());
-                            Log.i("CCC", "3 getStatus : " + roomMessage.getStatus());
                             RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
                             if (realmRoom1 != null && realmRoom1.getType() != null && realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
                                 if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
-                                    Log.i("CCC", "compute*********");
                                     unreadMessageCount++;
                                     messageOne = roomMessage.getMessage();
                                     senderId = roomMessage.getUserId();

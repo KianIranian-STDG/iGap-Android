@@ -377,8 +377,6 @@ public class ActivityChat extends ActivityEnhanced
         RealmRoomMessage.fetchMessages(mRoomId, new OnActivityChatStart() {
             @Override
             public void resendMessage(RealmRoomMessage message) {
-                // in khat ba'es mishod ke vaghti forward mikardim dobar ferestade beshe , chon vaghti miferestadim inja
-                // payam ro vaz'eatesh sending bud va inja ejra mishod.
                 G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
             }
 
@@ -389,6 +387,7 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void sendSeenStatus(RealmRoomMessage message) {
+                Log.i("QQQ", "sendSeenStatus ");
                 G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
             }
         });
@@ -438,6 +437,7 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
                 txtLastSeen.setText(messageOne + " " + getResources().getString(member));
+                avi.setVisibility(View.GONE);
 
                 // change english number to persian number
                 if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
@@ -951,13 +951,13 @@ public class ActivityChat extends ActivityEnhanced
                         txtLastSeen.setText(realmRoom.getActionState());
                         avi.setVisibility(View.VISIBLE);
                     } else if (chatType == CHAT) {
-                        avi.setVisibility(View.GONE);
                         if (userStatus != null) {
                             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                                 txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime));
                             } else {
                                 txtLastSeen.setText(userStatus);
                             }
+                            avi.setVisibility(View.GONE);
                         }
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
@@ -1378,11 +1378,13 @@ public class ActivityChat extends ActivityEnhanced
 
             if (groupParticipantsCountLabel != null) {
                 txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(member));
+                avi.setVisibility(View.GONE);
             }
         } else if (chatType == CHANNEL) {
 
             if (channelParticipantsCountLabel != null) {
                 txtLastSeen.setText(channelParticipantsCountLabel + " " + getResources().getString(member));
+                avi.setVisibility(View.GONE);
             }
         }
 
@@ -2125,7 +2127,7 @@ public class ActivityChat extends ActivityEnhanced
             } else {
                 txtLastSeen.setText(status);
             }
-
+            avi.setVisibility(View.GONE);
             // change english number to persian number
             if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
@@ -3544,7 +3546,8 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
-            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 if (isThereAnyMoreItemToLoadFromLocal || isThereAnyMoreItemToLoadFromserver) {
@@ -3635,7 +3638,7 @@ public class ActivityChat extends ActivityEnhanced
 
         RealmRoomMessage messageFirst = null;
         RealmResults<RealmRoomMessage> realmRoomMessages = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).
-            equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
+                equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
         if (realmRoomMessages.size() > 0) {
             messageFirst = realmRoomMessages.first();
@@ -4932,6 +4935,7 @@ public class ActivityChat extends ActivityEnhanced
             public void run() {
                 if (chatType == CHAT && userId == chatPeerId) {
                     txtLastSeen.setText(showLastSeen);
+                    avi.setVisibility(View.GONE);
                     // change english number to persian number
                     if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
@@ -4951,17 +4955,12 @@ public class ActivityChat extends ActivityEnhanced
                 File file = new File(filePath);
                 String fileName = file.getName();
                 long fileSize = file.length();
+                Log.i("TTT", "fileSize test : " + fileSize);
                 FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, roomId);
                 fileUploadStructure.openFile(filePath);
                 fileUploadStructure.text = messageText;
 
-                long time1 = System.currentTimeMillis();
-                Log.i("TTT", "Before Time 1 : " + time1);
                 byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
-                long time2 = System.currentTimeMillis();
-                Log.i("TTT", "Before Time 2 : " + time2);
-                Log.i("TTT", "difference millis : " + (time2 - time1));
-                Log.i("TTT", "difference second : " + (time2 - time1) / 1000);
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;

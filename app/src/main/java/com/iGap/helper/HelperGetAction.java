@@ -1,5 +1,6 @@
 package com.iGap.helper;
 
+import android.util.Log;
 import com.iGap.Config;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -52,7 +53,6 @@ public class HelperGetAction {
         } else {
             int count = 0;
             StructAction latestStruct = null;
-            //for (StructAction struct : structActions) {
             Iterator<StructAction> iterator1 = structActions.iterator();
             while (iterator1.hasNext()) {
                 StructAction struct = iterator1.next();
@@ -123,6 +123,7 @@ public class HelperGetAction {
             StructAction struct = iterator.next();*/
         for (int i = (structActions.size() - 1); i >= 0; i--) {
             if (structActions.get(i).roomId == roomId) {
+                Log.i("VVV", "LatestAction : " + structActions.get(i).action);
                 return structActions.get(i).action;
             }
         }
@@ -143,19 +144,43 @@ public class HelperGetAction {
         while (iterator.hasNext()) {
             StructAction struct = iterator.next();*/
         if (action == ProtoGlobal.ClientAction.CANCEL) {
+            Log.i("VVV", "ClientAction.CANCEL");
             for (int i = 0; i < structActions.size(); i++) {
                 if (structActions.get(i).roomId == roomId && structActions.get(i).userId == userId) {
+                    Log.i("VVV", "CLEAR");
                     structActions.remove(i);
                 }
             }
 
         } else {
+
+            Log.i("VVV", "ADD");
             StructAction struct = new StructAction();
             struct.roomId = roomId;
             struct.userId = userId;
             struct.action = action;
-            structActions.add(struct);
+            if (structActions.size() > 0) {
+                for (StructAction structCheck : structActions) {
+                    boolean checkItemExist = false;
+                    if (structCheck.roomId == roomId & structCheck.userId == userId & structCheck.action.toString().equals(action.toString())) {
+                        Log.i("VVV", "CONTAINS");
+                        checkItemExist = true;
+                    }
+                    if (!checkItemExist) {
+                        structActions.add(struct);
+                        Log.i("VVV", "NEW ITEM");
+                    }
+
+                }
+            } else {
+                structActions.add(struct);
+                Log.i("VVV", "NEW ITEM ZERO");
+            }
+
         }
+        Log.i("VVV", "***");
+        Log.i("VVV", "**********");
+        Log.i("VVV", "***");
 
     }
 
