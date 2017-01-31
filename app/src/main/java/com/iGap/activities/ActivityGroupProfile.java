@@ -1322,7 +1322,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                         }
 
-                        @Override public void deney() {
+                        @Override
+                        public void deny() {
 
                         }
                     });
@@ -1346,7 +1347,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                         kickMember(contactItemGroupProfile.mContact.peerId);
 
-                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                    } else if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
 
                         kickAdmin(contactItemGroupProfile.mContact.peerId);
 
@@ -1360,7 +1361,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contactItemGroupProfile.mContact.peerId);
                     } else if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                        kickModerator(contacts.get(position).peerId);
+                        kickModerator(contactItemGroupProfile.mContact.peerId);
                     }
                 } else if (role == GroupChatRole.MODERATOR) {
 
@@ -1583,13 +1584,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                             useCamera();
                                         }
 
-                                        @Override public void deney() {
+                                        @Override
+                                        public void deny() {
 
                                         }
                                     });
                                 }
 
-                                @Override public void deney() {
+                                @Override
+                                public void deny() {
 
                                 }
                             });

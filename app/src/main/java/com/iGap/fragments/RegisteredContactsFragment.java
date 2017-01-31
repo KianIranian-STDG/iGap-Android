@@ -110,7 +110,8 @@ public class RegisteredContactsFragment extends Fragment {
                         importContactList();
                     }
 
-                    @Override public void deney() {
+                    @Override
+                    public void deny() {
 
                     }
                 });

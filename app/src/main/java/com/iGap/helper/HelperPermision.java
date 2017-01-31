@@ -322,7 +322,7 @@ public class HelperPermision {
             DialogInterface.OnClickListener onCancel = new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
 
-                    if (onGetPermission != null) onGetPermission.deney();
+                    if (onGetPermission != null) onGetPermission.deny();
                 }
             };
 
@@ -385,7 +385,7 @@ public class HelperPermision {
         if (allOk) {
             onGetPermission.Allow();
         } else {
-            onGetPermission.deney();
+            onGetPermission.deny();
         }
     }
 

@@ -753,7 +753,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     onLoadThumbnailFromLocal(holder, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT) {
-                        downLoadThumpnail(holder, attachment);
+                        downLoadThumbnail(holder, attachment);
                     }
                 }
             }
@@ -891,7 +891,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     }
 
-    private void downLoadThumpnail(final VH holder, RealmAttachment attachment) {
+    private void downLoadThumbnail(final VH holder, RealmAttachment attachment) {
 
         if (attachment == null) return;
 
@@ -905,7 +905,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         final String _path = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(name);
 
-        final String _messagID = mMessage.messageID;
+        final String _messageId = mMessage.messageID;
 
         if (token != null && token.length() > 0 && size > 0) {
 
@@ -918,7 +918,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             @Override public void run() {
                                 onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
 
-                                downloadedList.put(_messagID, _path);
+                                downloadedList.put(_messageId, _path);
                             }
                         });
                     }

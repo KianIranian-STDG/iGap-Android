@@ -103,7 +103,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 }
 
                 @Override
-                public void deney() {
+                public void deny() {
 
                     DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
                         @Override
@@ -119,7 +119,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                                     }
 
                                     @Override
-                                    public void deney() {
+                                    public void deny() {
                                         finish();
                                     }
                                 });

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -22,10 +21,8 @@ import com.iGap.module.StructSessionsGetActiveList;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileGetSelfRemove;
 import com.iGap.request.RequestUserProfileSetSelfRemove;
-
-import java.util.ArrayList;
-
 import io.realm.Realm;
+import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.R.id.st_layoutParent;
@@ -82,12 +79,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
                 FragmentActiveSessions fragmentActiveSessions = new FragmentActiveSessions();
 
-                getActivity()
-                        .getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .replace(st_layoutParent, fragmentActiveSessions, null)
-                        .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(st_layoutParent, fragmentActiveSessions, null).commit();
 
 
             }
@@ -99,12 +91,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             public void onClick(View view) {
 
                 FragmentBlockedUser fragmentBlockedUser = new FragmentBlockedUser();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null)
-                        .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null).commit();
             }
         });
 
@@ -119,7 +106,6 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         ltSelfDestruction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 selfDestructs();
             }
         });
@@ -184,10 +170,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             }
         };
 
-        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.self_destructs))
-                .titleGravity(GravityEnum.START)
-                .titleColor(getResources().getColor(android.R.color.black))
-                .items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
+        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.self_destructs)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -217,13 +200,10 @@ public class FragmentPrivacyAndSecurity extends Fragment {
                 }
                 return false;
             }
-        })
-                .positiveText(getResources().getString(R.string.B_ok))
-                .negativeText(getResources().getString(R.string.B_cancel))
-                .show();
+        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
     }
 
-    private void setTextSelfDestructs() {
+    private void setTextSelfDestructs() throws IllegalStateException {
         if (selfRemove != 0) {
             switch (selfRemove) {
                 case 1:

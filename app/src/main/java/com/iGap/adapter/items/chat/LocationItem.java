@@ -111,7 +111,8 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                                 //   }
                             }
 
-                            @Override public void deney() {
+                            @Override
+                            public void deny() {
 
                             }
                         });

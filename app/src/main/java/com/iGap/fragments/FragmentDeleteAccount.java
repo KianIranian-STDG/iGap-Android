@@ -92,7 +92,8 @@ public class FragmentDeleteAccount extends Fragment {
                     getActivity().registerReceiver(smsReceiver, filter);
                 }
 
-                @Override public void deney() {
+                @Override
+                public void deny() {
 
                 }
             });

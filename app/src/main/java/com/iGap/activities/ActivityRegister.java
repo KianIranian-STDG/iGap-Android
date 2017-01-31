@@ -169,7 +169,8 @@ public class ActivityRegister extends ActivityEnhanced {
                     registerReceiver(smsReceiver, filter);
                 }
 
-                @Override public void deney() {
+                @Override
+                public void deny() {
 
                 }
             });

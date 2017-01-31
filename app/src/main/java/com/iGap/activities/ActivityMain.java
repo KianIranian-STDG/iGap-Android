@@ -181,7 +181,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                     }
 
                     @Override
-                    public void deney() {
+                    public void deny() {
 
                     }
                 });

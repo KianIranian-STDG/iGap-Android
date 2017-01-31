@@ -3779,7 +3779,7 @@ public class ActivityChat extends ActivityEnhanced
                         AbstractMessage lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
                         if (lastMessageBeforeDeleted != null) {
                             RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID)).findFirst();
-                            if (realmRoomMessage != null) {
+                            if (realmRoom != null && realmRoomMessage != null) {
                                 realmRoom.setLastMessage(realmRoomMessage);
                                 realmRoom.setUpdatedTime(realmRoomMessage.getUpdateOrCreateTime() / 1000);
                             }

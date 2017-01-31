@@ -154,7 +154,8 @@ public class AttachFile {
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.PAINTING);
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -189,7 +190,8 @@ public class AttachFile {
                 }
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -327,7 +329,8 @@ public class AttachFile {
                 isInAttach = true;
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -348,7 +351,8 @@ public class AttachFile {
                 isInAttach = true;
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -368,7 +372,8 @@ public class AttachFile {
                 isInAttach = true;
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -393,7 +398,8 @@ public class AttachFile {
                 isInAttach = true;
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -462,7 +468,8 @@ public class AttachFile {
                 isInAttach = true;
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -477,7 +484,8 @@ public class AttachFile {
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -496,7 +504,8 @@ public class AttachFile {
                 isInAttach = true;
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -514,7 +523,8 @@ public class AttachFile {
 
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -580,7 +590,8 @@ public class AttachFile {
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
             }
 
-            @Override public void deney() {
+            @Override
+            public void deny() {
 
             }
         });

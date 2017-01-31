@@ -63,50 +63,25 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
 
     private void initLayoutMenu(View v) {
 
-        // init icon
-        TextView txtIconNewGroup = (TextView) v.findViewById(R.id.lm_txt_icon_group);
-        //
-
-        TextView txtIconNewChat = (TextView) v.findViewById(R.id.lm_txt_icon_new_chat);
-        //
-
-        TextView txtIconNewChannel = (TextView) v.findViewById(R.id.lm_txt_icon_channel);
-
-
-        TextView txtIconContacts = (TextView) v.findViewById(R.id.lm_txt_icon_contacts);
-        //
-
-        TextView txtIconInviteFriends = (TextView) v.findViewById(R.id.lm_txt_icon_invite_friends);
-
-
-        TextView txtIconSetting = (TextView) v.findViewById(R.id.lm_txt_icon_setting);
-
-
-        TextView txtIconiGapFAQ = (TextView) v.findViewById(R.id.lm_txt_icon_igap_faq);
-
-
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        String username = realmUserInfo.getUserInfo().getDisplayName();
-        String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
+        if (realmUserInfo != null) {
+            String username = realmUserInfo.getUserInfo().getDisplayName();
+            String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
 
+            imgUserPhoto = (ImageView) v.findViewById(R.id.lm_imv_user_picture);
+            txtUserName = (TextView) v.findViewById(R.id.lm_txt_user_name);
+            TextView txtPhoneNumber = (TextView) v.findViewById(R.id.lm_txt_phone_number);
+            txtUserName.setText(username);
+            txtPhoneNumber.setText(phoneNumber);
 
-        imgUserPhoto = (ImageView) v.findViewById(R.id.lm_imv_user_picture);
-        txtUserName = (TextView) v.findViewById(R.id.lm_txt_user_name);
-        TextView txtPhoneNumber = (TextView) v.findViewById(R.id.lm_txt_phone_number);
-
-
-        txtUserName.setText(username);
-        txtPhoneNumber.setText(phoneNumber);
-
-        if (HelperCalander.isLanguagePersian) {
-            txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
-            txtUserName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtUserName.getText().toString()));
+            if (HelperCalander.isLanguagePersian) {
+                txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
+                txtUserName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtUserName.getText().toString()));
+            }
+            new RequestUserInfo().userInfo(realmUserInfo.getUserId());
+            setImage(realmUserInfo.getUserId());
         }
-
-        new RequestUserInfo().userInfo(realmUserInfo.getUserId());
-
-        setImage(realmUserInfo.getUserId());
         realm.close();
 
         RelativeLayout layoutUserPicture = (RelativeLayout) v.findViewById(R.id.lm_layout_user_picture);
@@ -123,7 +98,8 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
                             ActivityMain.mLeftDrawerLayout.closeDrawer();
                         }
 
-                        @Override public void deney() {
+                        @Override
+                        public void deny() {
 
                         }
                     });
@@ -212,7 +188,8 @@ public class FragmentDrawerMenu extends MenuFragment implements OnUserInfoMyClie
                             ActivityMain.mLeftDrawerLayout.closeDrawer();
                         }
 
-                        @Override public void deney() {
+                        @Override
+                        public void deny() {
 
                         }
                     });

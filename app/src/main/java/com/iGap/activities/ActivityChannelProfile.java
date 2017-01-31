@@ -1132,7 +1132,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                             finish();
                         }
 
-                        @Override public void deney() {
+                        @Override
+                        public void deny() {
 
                         }
                     });
@@ -1450,13 +1451,15 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                                             useCamera();
                                         }
 
-                                        @Override public void deney() {
+                                        @Override
+                                        public void deny() {
 
                                         }
                                     });
                                 }
 
-                                @Override public void deney() {
+                                @Override
+                                public void deny() {
 
                                 }
                             });

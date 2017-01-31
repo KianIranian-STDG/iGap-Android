@@ -2018,13 +2018,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                         useCamera();
                                     }
 
-                                    @Override public void deney() {
+                                    @Override
+                                    public void deny() {
 
                                     }
                                 });
                             }
 
-                            @Override public void deney() {
+                            @Override
+                            public void deny() {
 
                             }
                         });

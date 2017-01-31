@@ -79,7 +79,8 @@ public class Activity_CreateQRCode extends ActivityEnhanced {
                             CreateBarcode();
                         }
 
-                        @Override public void deney() {
+                        @Override
+                        public void deny() {
 
                         }
                     });

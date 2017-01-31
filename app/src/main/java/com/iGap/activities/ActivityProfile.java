@@ -323,7 +323,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                 }
 
                 @Override
-                public void deney() {
+                public void deny() {
 
                 }
             });
@@ -361,14 +361,14 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                                                                                                                                                                                                                                      }
 
                                                                                                                                                                                                                                      @Override
-                                                                                                                                                                                                                                     public void deney() {
+                                                                                                                                                                                                                                     public void deny() {
 
                                                                                                                                                                                                                                      }
                                                                                                                                                                                                                                  });
                                                                                                                                                                                                                              }
 
                                                                                                                                                                                                                              @Override
-                                                                                                                                                                                                                             public void deney() {
+                                                                                                                                                                                                                             public void deny() {
 
                                                                                                                                                                                                                              }
                                                                                                                                                                                                                          });

@@ -51,8 +51,11 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chat.mInfo.getLastMessage().getMessageId()).findFirst().setStatus(status);
-                        notifyAdapterItemChanged(pos);
+                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chat.mInfo.getLastMessage().getMessageId()).findFirst();
+                        if (realmRoomMessage != null) {
+                            realmRoomMessage.setStatus(status);
+                            notifyAdapterItemChanged(pos);
+                        }
                     }
                 });
                 break;

@@ -160,7 +160,8 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                                             isInAttach = true;
                                         }
 
-                                        @Override public void deney() {
+                                        @Override
+                                        public void deny() {
 
                                         }
                                     });
@@ -185,13 +186,15 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                                                         useCamera();
                                                     }
 
-                                                    @Override public void deney() {
+                                                    @Override
+                                                    public void deny() {
 
                                                     }
                                                 });
                                             }
 
-                                            @Override public void deney() {
+                                            @Override
+                                            public void deny() {
 
                                             }
                                         });
@@ -307,7 +310,8 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                         showDialogSelectGallery();
                     }
 
-                    @Override public void deney() {
+                    @Override
+                    public void deny() {
 
                     }
                 });
@@ -947,14 +951,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
 
-        private ProgressBar prg;
-        private Activity myActivityReference;
-
-        public UploadTask(ProgressBar prg, Activity myActivityReference) {
-            this.prg = prg;
-            this.myActivityReference = myActivityReference;
-        }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -1045,7 +1041,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
             if (data != null) {
                 pathSaveImage = data.getData().toString();
                 avatarId = System.nanoTime();
-                new UploadTask(prgWaiting, getActivity()).execute(pathSaveImage, avatarId);
+                new UploadTask().execute(pathSaveImage, avatarId);
             }
         }
     }
