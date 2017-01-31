@@ -309,8 +309,10 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
     private void getRoom(final Long roomId, final ProtoGlobal.Room.Type type) {
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-            @Override
-            public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
+            @Override public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
+
+                if (!identity.equals(RequestClientGetRoom.CreateRoomMode.requestFromOwner.toString())) return;
+
 
                 try {
                     if (getActivity() != null) {
@@ -357,7 +359,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
             }
         };
 
-        new RequestClientGetRoom().clientGetRoom(roomId);
+        new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
     }
 
     private void setInviteLink() {

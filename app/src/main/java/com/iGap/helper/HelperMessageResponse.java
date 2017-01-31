@@ -88,7 +88,7 @@ public class HelperMessageResponse {
                     /**
                      * if first message received but the room doesn't exist, send request for create new room
                      */
-                    new RequestClientGetRoom().clientGetRoom(roomId);
+                    new RequestClientGetRoom().clientGetRoom(roomId, null);
                 } else {
 
                     if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {

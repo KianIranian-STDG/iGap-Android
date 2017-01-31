@@ -645,8 +645,10 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     private void getRoom(final long roomId, final ProtoGlobal.Room.Type typeCreate) {
 
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-            @Override
-            public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
+            @Override public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
+
+                if (!identity.equals(RequestClientGetRoom.CreateRoomMode.requestFromOwner.toString())) return;
+
                 try {
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -719,7 +721,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
             }
         };
 
-        new RequestClientGetRoom().clientGetRoom(roomId);
+        new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
     }
 
     private void showInitials() {

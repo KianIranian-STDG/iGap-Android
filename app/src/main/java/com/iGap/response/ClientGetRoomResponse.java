@@ -7,7 +7,6 @@ import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
-
 import io.realm.Realm;
 
 public class ClientGetRoomResponse extends MessageHandler {
@@ -53,7 +52,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                                         @Override
                                         public void onSuccess() {
                                             if (G.onClientGetRoomResponse != null) {
-                                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
+                                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identity);
                                             }
                                         }
                                     });
@@ -70,7 +69,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                         @Override
                         public void run() {
                             if (G.onClientGetRoomResponse != null) {
-                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom);
+                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identity);
                             }
                         }
                     }, 500);

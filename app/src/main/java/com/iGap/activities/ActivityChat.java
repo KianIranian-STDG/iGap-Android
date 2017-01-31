@@ -247,8 +247,9 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
 public class ActivityChat extends ActivityEnhanced
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction,
-        OnChannelGetMessagesStats {
+    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
+    OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction,
+    OnChannelGetMessagesStats {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;

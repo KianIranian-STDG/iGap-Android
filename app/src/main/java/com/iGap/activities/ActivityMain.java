@@ -288,8 +288,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-            @Override
-            public void onClientGetRoomResponse(final ProtoGlobal.Room room, final ProtoClientGetRoom.ClientGetRoomResponse.Builder builder) {
+            @Override public void onClientGetRoomResponse(final ProtoGlobal.Room room, final ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
                 if (G.currentActivity == ActivityMain.this) {
                     if (mAdapter != null) {
                         runOnUiThread(new Runnable() {

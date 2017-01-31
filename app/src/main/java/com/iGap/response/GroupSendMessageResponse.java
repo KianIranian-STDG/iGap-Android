@@ -99,7 +99,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
                 if (room == null) {
                     // make get room request
-                    new RequestClientGetRoom().clientGetRoom(builder.getRoomId());
+                    new RequestClientGetRoom().clientGetRoom(builder.getRoomId(), null);
                 } else {
                     if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
                         room.setUnreadCount(room.getUnreadCount() + 1);
