@@ -27,6 +27,7 @@ import com.google.android.vending.licensing.LicenseChecker;
 import com.google.android.vending.licensing.LicenseCheckerCallback;
 import com.google.android.vending.licensing.Policy;
 import com.google.android.vending.licensing.ServerManagedPolicy;
+import com.iGap.BuildConfig;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -154,7 +155,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         mLicenseCheckerCallback = new MyLicenseCheckerCallback();
         // Construct the LicenseChecker with a Policy.
         String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        mChecker = new LicenseChecker(this, new ServerManagedPolicy(this, new AESObfuscator(Config.SALT, "net.igap", android_id)), Config.BASE64_PUBLIC_KEY);
+        mChecker = new LicenseChecker(this, new ServerManagedPolicy(this, new AESObfuscator(Config.SALT, BuildConfig.APPLICATION_ID, android_id)), Config.BASE64_PUBLIC_KEY);
     }
 
     private void goToProgram(Bundle savedInstanceState) {
