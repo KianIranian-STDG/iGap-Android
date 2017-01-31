@@ -8,13 +8,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperString;
@@ -26,13 +24,11 @@ import com.iGap.module.HelperCopyFile;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityCrop extends ActivityEnhanced {
@@ -54,13 +50,11 @@ public class ActivityCrop extends ActivityEnhanced {
     AttachFile attachFile;
     private String path;
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
+    @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop);
 
@@ -75,18 +69,9 @@ public class ActivityCrop extends ActivityEnhanced {
         final Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                path = bundle.getString("IMAGE_CAMERA");
-                String newPath = "file://" + path;
-                uri = Uri.parse(newPath);
-                Log.i("CCCCCCXX", "onCreate:21 " + path);
-            } else {
-//                uri = Uri.parse(bundle.getString("IMAGE_CAMERA"));
-                path = bundle.getString("IMAGE_CAMERA");
-                String newPath = "file://" + path;
-                uri = Uri.parse(newPath);
-                Log.i("CCCCCCXX", "onCreate 24: " + path);
-            }
+            path = bundle.getString("IMAGE_CAMERA");
+            String newPath = "file://" + path;
+            uri = Uri.parse(newPath);
 
             page = bundle.getString("PAGE");
             type = bundle.getString("TYPE");
@@ -97,7 +82,6 @@ public class ActivityCrop extends ActivityEnhanced {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), imgPic);
             } else {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(uri.getPath()), imgPic);
-                Log.i("CCCCCCXX", "onCreate uri.getPath(): " + uri.getPath());
             }
             prgWaiting.setVisibility(View.GONE);
         }
@@ -107,33 +91,30 @@ public class ActivityCrop extends ActivityEnhanced {
         if (uri != null && !uri.toString().equals("")) {
             rippleCrop.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-                @Override
-                public void onComplete(RippleView rippleView) {
+                @Override public void onComplete(RippleView rippleView) {
                     CropImage.activity(uri)
-                            .setGuidelines(CropImageView.Guidelines.ON)
-                            .setMinCropResultSize(120, 120)
-                            .setAutoZoomEnabled(false)
-                            .setInitialCropWindowPaddingRatio(.08f) // padding window from all
-                            .setBorderCornerLength(50)
-                            .setBorderCornerOffset(0)
-                            .setAllowCounterRotation(true)
-                            .setBorderCornerThickness(8.0f)
-                            .setShowCropOverlay(true)
-                            .setAspectRatio(1, 1)
-                            .setFixAspectRatio(true)
-                            .setBorderCornerColor(getResources().getColor(R.color.whit_background))
-                            .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
-                            .setScaleType(CropImageView.ScaleType.FIT_CENTER)
-                            .start(ActivityCrop.this);
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setMinCropResultSize(120, 120)
+                        .setAutoZoomEnabled(false)
+                        .setInitialCropWindowPaddingRatio(.08f) // padding window from all
+                        .setBorderCornerLength(50)
+                        .setBorderCornerOffset(0)
+                        .setAllowCounterRotation(true)
+                        .setBorderCornerThickness(8.0f)
+                        .setShowCropOverlay(true)
+                        .setAspectRatio(1, 1)
+                        .setFixAspectRatio(true)
+                        .setBorderCornerColor(getResources().getColor(R.color.whit_background))
+                        .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
+                        .setScaleType(CropImageView.ScaleType.FIT_CENTER)
+                        .start(ActivityCrop.this);
                 }
             });
         }
 
-
         RippleView rippleBack = (RippleView) findViewById(R.id.pu_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) throws IOException {
+            @Override public void onComplete(RippleView rippleView) throws IOException {
 
                 if (type.equals("camera") || type.equals("crop_camera")) {
 
@@ -142,116 +123,111 @@ public class ActivityCrop extends ActivityEnhanced {
                     } else {
                         new AttachFile(ActivityCrop.this).requestTakePicture();
                     }
-
                 } else if (type.equals("gallery")) {
                     attachFile.requestOpenGalleryForImageSingleSelect();
                 }
-
             }
         });
         txtCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 finish();
             }
         });
 
         txtSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                //
+                //    if (path != null && type.equals("crop_camera")) {
+                //        pathImageUser = path;
+                //        switch (page) {
+                //            case "NewGroup":
+                //                String timeStampGroup = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                //                result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
+                //                HelperCopyFile.copyFile(pathImageUser, result);
+                //
+                //                break;
+                //            case "NewChanel":
+                //                String timeStampChannel = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                //                result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
+                //                HelperCopyFile.copyFile(pathImageUser, result);
+                //
+                //                break;
+                //            case "chat":
+                //                mediaStorageDir = new File(G.DIR_IMAGES);
+                //                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                //                fileChat = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
+                //                result = fileChat.toString();
+                //                HelperCopyFile.copyFile(pathImageUser, result);
+                //                break;
+                //            default:
+                //
+                //                result = G.imageFile.toString() + "_" + id + ".jpg";
+                //                HelperCopyFile.copyFile(pathImageUser, result);
+                //                break;
+                //        }
+                //        Log.i("CCCCC", "befor else onClick: " +result );
+                //    } else {
+                //        result = path;
+                //        Log.i("CCCCC", "else onClick: " +result );
+                //    }
+                //    if (page != null) {
+                //
+                //        Intent data = new Intent();
+                //        data.setData(Uri.parse(result));
+                //        setResult(Activity.RESULT_OK, data);
+                //        finish();
+                //    }
+                //
+                //} else {
 
-                    if (path != null && type.equals("crop_camera")) {
-                        pathImageUser = path;
-                        switch (page) {
-                            case "NewGroup":
-                                String timeStampGroup = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                                result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
-                                HelperCopyFile.copyFile(pathImageUser, result);
+                if (uri != null && type.equals("crop_camera")) {
+                    pathImageUser = getRealPathFromURI(uri);
+                    switch (page) {
+                        case "NewGroup":
+                            String timeStampGroup = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                            result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
+                            HelperCopyFile.copyFile(pathImageUser, result);
 
-                                break;
-                            case "NewChanel":
-                                String timeStampChannel = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                                result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
-                                HelperCopyFile.copyFile(pathImageUser, result);
+                            break;
+                        case "NewChanel":
+                            String timeStampChannel = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                            result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
+                            HelperCopyFile.copyFile(pathImageUser, result);
 
-                                break;
-                            case "chat":
-                                mediaStorageDir = new File(G.DIR_IMAGES);
-                                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                                fileChat = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
-                                result = fileChat.toString();
-                                HelperCopyFile.copyFile(pathImageUser, result);
-                                break;
-                            default:
+                            break;
+                        case "chat":
+                            mediaStorageDir = new File(G.DIR_IMAGES);
+                            fileChat = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
+                            result = fileChat.toString();
+                            HelperCopyFile.copyFile(pathImageUser, result);
+                            break;
+                        default:
 
-                                result = G.imageFile.toString() + "_" + id + ".jpg";
-                                HelperCopyFile.copyFile(pathImageUser, result);
-                                break;
-                        }
-                    } else {
-                        result = path;
+                            result = G.imageFile.toString() + "_" + id + ".jpg";
+                            HelperCopyFile.copyFile(pathImageUser, result);
+                            break;
                     }
-                    if (page != null) {
-
-                        Intent data = new Intent();
-                        data.setData(Uri.parse(result));
-                        setResult(Activity.RESULT_OK, data);
-                        finish();
-                    }
-
                 } else {
-
-                    if (uri != null && type.equals("crop_camera")) {
-                        pathImageUser = getRealPathFromURI(uri);
-                        switch (page) {
-                            case "NewGroup":
-                                String timeStampGroup = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                                result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
-                                HelperCopyFile.copyFile(pathImageUser, result);
-
-                                break;
-                            case "NewChanel":
-                                String timeStampChannel = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                                result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
-                                HelperCopyFile.copyFile(pathImageUser, result);
-
-                                break;
-                            case "chat":
-                                mediaStorageDir = new File(G.DIR_IMAGES);
-                                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                                fileChat = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
-                                result = fileChat.toString();
-                                HelperCopyFile.copyFile(pathImageUser, result);
-                                break;
-                            default:
-
-                                result = G.imageFile.toString() + "_" + id + ".jpg";
-                                HelperCopyFile.copyFile(pathImageUser, result);
-                                break;
-                        }
-                    } else {
-                        result = getRealPathFromURI(uri);
-                    }
-                    if (page != null) {
-
-                        Intent data = new Intent();
-                        data.setData(Uri.parse(result));
-                        setResult(Activity.RESULT_OK, data);
-                        finish();
-                    }
-
+                    result = getRealPathFromURI(uri);
                 }
+                if (page != null) {
+                    Intent data = new Intent();
+                    data.setData(Uri.parse(result));
+                    setResult(Activity.RESULT_OK, data);
+                    finish();
+                }
+
+                //}
             }
         });
     }
 
     //======================================================================================================// result from crop
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_TAKE_PICTURE) {
@@ -262,24 +238,21 @@ public class ActivityCrop extends ActivityEnhanced {
                 //File file = new File(imageUri.getPath());
             } else {
                 String filePath = null;
-                ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
                 filePath = "file://" + AttachFile.imagePath;
                 uri = Uri.parse(filePath);
                 imgPic.setImageURI(uri);
-
             }
-
         } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_image_from_gallery_single_select) {
             String filePath = null;
 
-//            filePath = AttachFile.getFilePathFromUri(data.getData());
+            //            filePath = AttachFile.getFilePathFromUri(data.getData());
             if (data.getData() == null) {
                 return;
             }
             filePath = "file://" + AttachFile.getFilePathFromUri(data.getData());
             uri = Uri.parse(filePath);
             imgPic.setImageURI(uri);
-
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) { // result for crop
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
@@ -314,5 +287,4 @@ public class ActivityCrop extends ActivityEnhanced {
         }
         return result;
     }
-
 }
