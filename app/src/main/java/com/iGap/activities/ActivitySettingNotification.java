@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -30,7 +29,6 @@ import com.iGap.module.SHP_SETTING;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySettingNotification extends AppCompatActivity {
@@ -227,18 +225,15 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                 sharedPreferences =
                                         getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which);
+                                editor.apply();
                                 switch (which) {
                                     case 0:
                                         txtVibrateMessage.setText(getResources().getString(R.string.array_Disable));
-                                        editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which);
-                                        editor.apply();
                                         break;
                                     case 1:
                                         txtVibrateMessage.setText(getResources().getString(R.string.array_Default));
-                                        editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which);
-                                        editor.apply();
-                                        AudioManager am =
-                                                (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                                        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                                         switch (am.getRingerMode()) {
                                             case AudioManager.RINGER_MODE_VIBRATE:
                                                 Vibrator vSilent =
@@ -251,24 +246,18 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                         break;
                                     case 2:
                                         txtVibrateMessage.setText(getResources().getString(R.string.array_Short));
-                                        editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which);
-                                        editor.apply();
                                         Vibrator vShort = (Vibrator) G.context.getSystemService(
                                                 Context.VIBRATOR_SERVICE);
                                         vShort.vibrate(200);
                                         break;
                                     case 3:
                                         txtVibrateMessage.setText(getResources().getString(R.string.array_Long));
-                                        editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which);
-                                        editor.apply();
                                         Vibrator vLong = (Vibrator) G.context.getSystemService(
                                                 Context.VIBRATOR_SERVICE);
                                         vLong.vibrate(500);
                                         break;
                                     case 4:
                                         txtVibrateMessage.setText(getResources().getString(R.string.array_Only_if_silent));
-                                        editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which);
-                                        editor.apply();
                                         AudioManager am2 =
                                                 (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -565,8 +554,24 @@ public class ActivitySettingNotification extends AppCompatActivity {
         });
 
         txtVibrateGroup = (TextView) findViewById(R.id.stns_txt_vibrate_group_text);
-        String vibrateGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Default));
-        txtVibrateGroup.setText(vibrateGroup);
+        int vibrateGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
+        switch (vibrateGroup) {
+            case 0:
+                txtVibrateGroup.setText(getResources().getString(R.string.array_Disable));
+                break;
+            case 1:
+                txtVibrateGroup.setText(getResources().getString(R.string.array_Default));
+                break;
+            case 2:
+                txtVibrateGroup.setText(getResources().getString(R.string.array_Short));
+                break;
+            case 3:
+                txtVibrateGroup.setText(getResources().getString(R.string.array_Long));
+                break;
+            case 4:
+                txtVibrateGroup.setText(getResources().getString(R.string.array_Only_if_silent));
+                break;
+        }
         ltVibrateGroup = (ViewGroup) findViewById(R.id.stns_layout_vibrate_group);
         ltVibrateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -581,16 +586,14 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                 sharedPreferences =
                                         getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, which);
+                                editor.apply();
                                 switch (which) {
                                     case 0:
                                         txtVibrateGroup.setText(getResources().getString(R.string.array_Disable));
-                                        editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Disable));
-                                        editor.apply();
                                         break;
                                     case 1:
                                         txtVibrateGroup.setText(getResources().getString(R.string.array_Default));
-                                        editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Default));
-                                        editor.apply();
 
                                         Vibrator vDefault = (Vibrator) G.context.getSystemService(
                                                 Context.VIBRATOR_SERVICE);
@@ -599,25 +602,18 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                         break;
                                     case 2:
                                         txtVibrateGroup.setText(getResources().getString(R.string.array_Short));
-                                        editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Short));
-                                        editor.apply();
                                         Vibrator vShort = (Vibrator) G.context.getSystemService(
                                                 Context.VIBRATOR_SERVICE);
                                         vShort.vibrate(200);
                                         break;
                                     case 3:
-                                        txtVibrateGroup.setText(getResources().getString(R.string.array_Short));
-                                        editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Long));
-                                        editor.apply();
+                                        txtVibrateGroup.setText(getResources().getString(R.string.array_Long));
                                         Vibrator vLong = (Vibrator) G.context.getSystemService(
                                                 Context.VIBRATOR_SERVICE);
                                         vLong.vibrate(500);
                                         break;
                                     case 4:
                                         txtVibrateGroup.setText(getResources().getString(R.string.array_Only_if_silent));
-                                        editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Only_if_silent));
-                                        editor.apply();
-
                                         AudioManager am2 =
                                                 (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -1136,7 +1132,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
                                 editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
                                 editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
-                                editor.putString(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, getResources().getString(R.string.array_Default));
+                                editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 0);
                                 editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_No_popup));
                                 editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 0);
                                 editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0);
