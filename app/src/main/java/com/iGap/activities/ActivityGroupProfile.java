@@ -31,7 +31,6 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -249,7 +248,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
         if (userInfo != null) userID = userInfo.getUserId();
 
-        realm.close();
+        //realm.close(); // in fillItem when make iterator with members client will be have error . This Realm instance has already been closed, making it unusable.
         initComponent();
 
         attachFile = new AttachFile(this);
@@ -475,8 +474,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         layoutDeleteAndLeftGroup = (LinearLayout) findViewById(R.id.agp_ll_delete_and_left_group);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting_addContact);
         ltLink = (ViewGroup) findViewById(R.id.agp_ll_link);
-        prgWait.getIndeterminateDrawable()
-                .setColorFilter(getResources().getColor(R.color.toolbar_background), PorterDuff.Mode.MULTIPLY);
+        prgWait.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), PorterDuff.Mode.MULTIPLY);
         imvGroupAvatar = (CircleImageView) findViewById(R.id.agp_imv_group_avatar);
 
         txtGroupNameTitle = (TextView) findViewById(R.id.agp_txt_group_name_title);
@@ -590,7 +588,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             });
 
         }
-        Log.i("VVVVVVVV", "onCreate: " + description);
         if (role != GroupChatRole.OWNER) {
             if (description.equals("")) {
                 llGroupDescription.setVisibility(View.GONE);
@@ -1148,22 +1145,23 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
 
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-
-                                RealmList<RealmMember> result = realmRoom.getGroupRoom().getMembers();
-
-                                String _Role = "";
-
-                                for (int i = 0; i < result.size(); i++) {
-                                    if (result.get(i).getPeerId() == user.getId()) {
-                                        _Role = result.get(i).getRole().toString();
-                                        break;
-                                    }
+                                RealmGroupRoom realmGroupRoom = null;
+                                if (realmRoom != null) {
+                                    realmGroupRoom = realmRoom.getGroupRoom();
                                 }
-
 
                                 final StructContactInfo struct = new StructContactInfo(user.getId(), user.getDisplayName(), user.getStatus().toString(), false, false, user.getPhone() + "");
                                 if (realmGroupRoom != null) {
+                                    RealmList<RealmMember> result = realmRoom.getGroupRoom().getMembers();
+
+                                    String _Role = "";
+
+                                    for (int i = 0; i < result.size(); i++) {
+                                        if (result.get(i).getPeerId() == user.getId()) {
+                                            _Role = result.get(i).getRole();
+                                            break;
+                                        }
+                                    }
                                     struct.role = _Role;
                                 }
                                 if (realmRegisteredInfo != null) {
@@ -2911,19 +2909,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this)
-                .title(title)
-                .customView(R.layout.dialog_remind_time, wrapInScrollView)
-                .positiveText(R.string.B_ok)
-                .autoDismiss(false)
-                .canceledOnTouchOutside(false)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+            }
+        }).show();
 
         View v = dialog.getCustomView();
 
@@ -2935,12 +2926,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
                 remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-//                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
             @Override
             public void onFinish() {
-//                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
                 remindTime.setText("00:00");
             }
         };

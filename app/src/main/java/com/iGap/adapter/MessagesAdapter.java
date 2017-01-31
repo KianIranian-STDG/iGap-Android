@@ -84,7 +84,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             @Override
             public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
                 if (getSelectedItems().size() == 0) {
-                    if (iMessageItem != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
+                    if (iMessageItem != null && item.mMessage != null && item.mMessage.senderID != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
                         if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return true;
                         }

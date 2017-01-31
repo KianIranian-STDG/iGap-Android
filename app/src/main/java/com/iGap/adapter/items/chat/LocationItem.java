@@ -116,7 +116,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
                             }
                         });
-                    } catch (IOException e) {
+                    } catch (IOException | IllegalStateException e) {
                         e.printStackTrace();
                     }
                 }

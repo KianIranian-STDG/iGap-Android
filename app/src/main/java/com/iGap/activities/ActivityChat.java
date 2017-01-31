@@ -829,7 +829,7 @@ public class ActivityChat extends ActivityEnhanced
                 scrollToEnd();
                 realm1.close();
             }
-        }, 300);
+        }, 50);
     }
 
     private void checkAction() {

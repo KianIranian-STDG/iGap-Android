@@ -3,7 +3,6 @@ package com.iGap.module;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-
 import com.iGap.G;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
@@ -12,12 +11,10 @@ import com.iGap.realm.RealmInviteFriendFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestUserContactImport;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * work with saved contacts in database
@@ -36,12 +33,9 @@ public class Contacts {
 
         RealmResults<RealmContacts> contacts;
         if (filter == null) {
-            contacts =
-                    realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+            contacts = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
         } else {
-            contacts = realm.where(RealmContacts.class)
-                    .contains(RealmContactsFields.DISPLAY_NAME, filter)
-                    .findAllSorted(RealmContactsFields.DISPLAY_NAME);
+            contacts = realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, filter).findAllSorted(RealmContactsFields.DISPLAY_NAME);
         }
 
         String lastHeader = "";
@@ -54,20 +48,16 @@ public class Contacts {
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, contacts.get(i).getId()).findFirst();
 
             // new header exists
-            if (lastHeader.isEmpty() || (!lastHeader.isEmpty()
-                    && !header.isEmpty()
-                    && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
+            if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
                 // TODO: 9/5/2016 [Alireza Eskandarpour Shoferi] implement contact last seen
-                StructContactInfo structContactInfo =
-                        new StructContactInfo(peerId, header, "", true, false, "");
+                StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", true, false, "");
                 structContactInfo.initials = contacts.get(i).getInitials();
                 structContactInfo.color = contacts.get(i).getColor();
                 //structContactInfo.avatar = contacts.get(i).getAvatar(); //TODO [Saeed Mozaffari] [2016-11-09 5:28 PM] - in code nabayd comment beshe va khat paiin ejrabeshe
                 structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
                 items.add(structContactInfo);
             } else {
-                StructContactInfo structContactInfo =
-                        new StructContactInfo(peerId, header, "", false, false, "");
+                StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", false, false, "");
                 structContactInfo.initials = contacts.get(i).getInitials();
                 structContactInfo.color = contacts.get(i).getColor();
                 //structContactInfo.avatar = contacts.get(i).getAvatar(); // //TODO [Saeed Mozaffari] [2016-11-09 5:28 PM] - in code nabayd comment beshe va khat paiin ejrabeshe
@@ -81,8 +71,7 @@ public class Contacts {
         return items;
     }
 
-    public static ArrayList<StructListOfContact> getListOfContact(
-            boolean sendToServer) { //get List Of Contact
+    public static ArrayList<StructListOfContact> getListOfContact(boolean sendToServer) { //get List Of Contact
 
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
@@ -92,34 +81,30 @@ public class Contacts {
             while (cur.moveToNext()) {
 
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                if (Integer.parseInt(
-                        cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)))
-                        > 0) {
-                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{
-                                    id
-                            }, null);
+                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{
+                            id
+                    }, null);
                     assert pCur != null;
                     while (pCur.moveToNext()) {
 
                         StructListOfContact itemContact = new StructListOfContact();
                         itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-                        itemContact.setPhone(pCur.getString(pCur.getColumnIndex(
-                                ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                        itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
                         contactList.add(itemContact);
-//                        Log.i("BBBBB", "getListOfContact: " + pCur.getString(pCur.getColumnIndex(
-//                                ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                        //                        Log.i("BBBBB", "getListOfContact: " + pCur.getString(pCur.getColumnIndex(
+                        //                                ContactsContract.CommonDataKinds.Phone.NUMBER)));
                         /**
                          * this part filter phone contact
                          * and get just mobile number
                          */
-//                        int phoneType = pCur.getInt(
-//                                pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                        //                        int phoneType = pCur.getInt(
+                        //                                pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
 
-//                        if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) { //
-//                            itemContact.setPhone(pCur.getString(pCur.getColumnIndex(
-//                                    ContactsContract.CommonDataKinds.Phone.NUMBER)));
-//                        }
+                        //                        if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) { //
+                        //                            itemContact.setPhone(pCur.getString(pCur.getColumnIndex(
+                        //                                    ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                        //                        }
                     }
                     pCur.close();
                 }
@@ -130,7 +115,7 @@ public class Contacts {
         ArrayList<StructListOfContact> resultContactList = new ArrayList<>();
         for (int i = 0; i < contactList.size(); i++) {
 
-            if (contactList.get(i).getPhone() != null) {
+            if (contactList.get(i).getPhone() != null && contactList.get(i).getDisplayName() != null) {
                 StructListOfContact itemContact = new StructListOfContact();
                 String[] sp = contactList.get(i).getDisplayName().split(" ");
                 if (sp.length == 1) {
@@ -176,8 +161,7 @@ public class Contacts {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    realm.delete(
-                            RealmInviteFriend.class);  // delete all item in invite friend database
+                    realm.delete(RealmInviteFriend.class);  // delete all item in invite friend database
                     for (int i = 0; i < size; i++) {
                         RealmInviteFriend item = realm.createObject(RealmInviteFriend.class);
                         item.setDisplayName(contactList.get(i).getDisplayName());
@@ -203,10 +187,7 @@ public class Contacts {
                                     str = str.substring(str.length() - 10, str.length());
                                 }
 
-                                realm.where(RealmInviteFriend.class)
-                                        .contains(RealmInviteFriendFields.PHONE, str)
-                                        .findAll()
-                                        .deleteAllFromRealm();
+                                realm.where(RealmInviteFriend.class).contains(RealmInviteFriendFields.PHONE, str).findAll().deleteAllFromRealm();
                             }
                         }
                     }
@@ -223,8 +204,7 @@ public class Contacts {
         ArrayList<StructContactInfo> list = new ArrayList<>();
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmInviteFriend> results = realm.where(RealmInviteFriend.class)
-                .findAllSorted(RealmInviteFriendFields.DISPLAY_NAME);
+        RealmResults<RealmInviteFriend> results = realm.where(RealmInviteFriend.class).findAllSorted(RealmInviteFriendFields.DISPLAY_NAME);
 
         if (results != null) {
             String lastHeader = "";
@@ -235,16 +215,10 @@ public class Contacts {
                 StructContactInfo item;
 
                 // new header exists
-                if (lastHeader.isEmpty() || (!lastHeader.isEmpty()
-                        && !header.isEmpty()
-                        && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
-                    item =
-                            new StructContactInfo(0, results.get(i).getDisplayName(), "", true, false,
-                                    results.get(i).getPhone());
+                if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
+                    item = new StructContactInfo(0, results.get(i).getDisplayName(), "", true, false, results.get(i).getPhone());
                 } else {
-                    item =
-                            new StructContactInfo(0, results.get(i).getDisplayName(), "", false, false,
-                                    results.get(i).getPhone());
+                    item = new StructContactInfo(0, results.get(i).getDisplayName(), "", false, false, results.get(i).getPhone());
                 }
                 lastHeader = header;
 

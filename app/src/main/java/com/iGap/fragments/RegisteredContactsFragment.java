@@ -242,38 +242,38 @@ public class RegisteredContactsFragment extends Fragment {
         G.onUserContactGetList = new OnUserContactGetList() {
             @Override
             public void onContactGetList() {
-//                if (contacts.size() == 0) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            contacts.clear();
-                            itemAdapter.clear();
-                            items.clear();
+                //                if (contacts.size() == 0) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        contacts.clear();
+                        itemAdapter.clear();
+                        items.clear();
 
-                            contacts = Contacts.retrieve(null);
-                            if (contacts != null && fastAdapter != null && itemAdapter != null) {
-                                for (StructContactInfo contact : contacts) {
-                                    items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
-                                }
-                                itemAdapter.add(items);
-
-                                //so the headers are aware of changes
-                                stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                                    @Override
-                                    public void onChanged() {
-                                        decoration.invalidateHeaders();
-                                    }
-                                });
-                                //restore selections (this has to be done after the items were added
-                                fastAdapter.withSavedInstanceState(savedInstanceState);
-                                fastAdapter.notifyDataSetChanged();
+                        contacts = Contacts.retrieve(null);
+                        if (contacts != null && fastAdapter != null && itemAdapter != null) {
+                            for (StructContactInfo contact : contacts) {
+                                items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
                             }
+                            itemAdapter.add(items);
 
-
+                            //so the headers are aware of changes
+                            stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                                @Override
+                                public void onChanged() {
+                                    decoration.invalidateHeaders();
+                                }
+                            });
+                            //restore selections (this has to be done after the items were added
+                            fastAdapter.withSavedInstanceState(savedInstanceState);
+                            fastAdapter.notifyDataSetChanged();
                         }
-                    });
-                }
-//            }
+
+
+                    }
+                });
+            }
+            //            }
         };
         if (contacts.size() == 0) {
             /**
@@ -414,14 +414,18 @@ public class RegisteredContactsFragment extends Fragment {
                             }, new Realm.Transaction.OnSuccess() {
                                 @Override
                                 public void onSuccess() {
-                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    prgWaiting.setVisibility(View.GONE);
-                                    Intent intent = new Intent(context, ActivityChat.class);
-                                    intent.putExtra("peerId", peerId);
-                                    intent.putExtra("RoomId", roomId);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    context.startActivity(intent);
-                                    getActivity().getSupportFragmentManager().popBackStack();
+                                    try {
+                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        prgWaiting.setVisibility(View.GONE);
+                                        Intent intent = new Intent(context, ActivityChat.class);
+                                        intent.putExtra("peerId", peerId);
+                                        intent.putExtra("RoomId", roomId);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        context.startActivity(intent);
+                                        getActivity().getSupportFragmentManager().popBackStack();
+                                    } catch (IllegalStateException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
 

@@ -10,7 +10,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
-
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
@@ -19,7 +18,6 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.HelperCopyFile;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructAdapterBackground;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,7 +25,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.chatBackground;
@@ -44,6 +41,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
     private AdapterChatBackground adapterChatBackgroundSetting;
     private List<StructAdapterBackground> items = new ArrayList<>();
     private int spanItemCount = 3;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -70,7 +68,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
             }
         });
 
-//        int wdith = G.context.getResources().getDisplayMetrics().widthPixels;
+        //        int wdith = G.context.getResources().getDisplayMetrics().widthPixels;
 
         try {
             copyFromAsset();
@@ -78,13 +76,13 @@ public class ActivityChatBackground extends ActivityEnhanced {
             e.printStackTrace();
         }
 
-//        if (wdith <= 600) {
-//            spanCount = 3;
-//        } else if (wdith <= 720) {
-//            spanCount = 4;
-//        } else if (wdith <= 720){
-//            spanCount = 4;
-//        }
+        //        if (wdith <= 600) {
+        //            spanCount = 3;
+        //        } else if (wdith <= 720) {
+        //            spanCount = 4;
+        //        } else if (wdith <= 720){
+        //            spanCount = 4;
+        //        }
 
         final GridLayoutManager gLayoutManager = new GridLayoutManager(ActivityChatBackground.this, spanItemCount);
 
@@ -164,8 +162,10 @@ public class ActivityChatBackground extends ActivityEnhanced {
             String pathImageUser = getRealPathFromURI(data.getData());
             HelperCopyFile.copyFile(pathImageUser, chatBackground.toString());
             items.clear();
-            AdapterChatBackground.imageLoader.clearDiskCache();
-            AdapterChatBackground.imageLoader.clearMemoryCache();
+            if (AdapterChatBackground.imageLoader != null) {
+                AdapterChatBackground.imageLoader.clearDiskCache();
+                AdapterChatBackground.imageLoader.clearMemoryCache();
+            }
             setItem();
 
         }

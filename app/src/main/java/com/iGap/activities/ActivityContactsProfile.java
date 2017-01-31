@@ -1046,8 +1046,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         return items;
     }
 
-    //TODO [Saeed Mozaffari] [2016-10-15 3:31 PM] - clearHistory , DeleteChat , use in ActivityMain , ActivityChat , ActivityContactsProfile .
-    // mitunim method ha ro tekrar nakonim va ye ja bashe va az chand ja farakhani konim
+    //TODO [Saeed Mozaffari] [2016-10-15 3:31 PM] - clearHistory , DeleteChat , use in ActivityMain , ActivityChat , ActivityContactsProfile . mitunim method ha ro tekrar nakonim va ye ja bashe va az chand ja farakhani konim
     private void clearHistory() {
 
         // make request for clearing messages
@@ -1063,7 +1062,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                        if (realmRoom.getLastMessage() != null) {
+                        if (realmRoom != null && realmRoom.getLastMessage() != null) {
                             element.setClearId(realmRoom.getLastMessage().getMessageId());
                             G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, realmRoom.getLastMessage().getMessageId());
                         }
