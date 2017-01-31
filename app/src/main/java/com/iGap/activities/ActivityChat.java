@@ -4045,55 +4045,6 @@ public class ActivityChat extends ActivityEnhanced
 
             isSendingRequestClientGetHistory = false;
 
-            //runOnUiThread(new Runnable() {
-            //    @Override
-            //    public void run() {
-            //        final Realm realm = Realm.getDefaultInstance();
-            //
-            //        List<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
-            //        for (ProtoGlobal.RoomMessage roomMessage : messages) {
-            //            RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-            //
-            //
-            //
-            //            if (message != null && !message.isDeleted()) {
-            //                realmRoomMessages.add(message);
-            //            }
-            //        }
-            //
-            //        Collections.sort(realmRoomMessages, SortMessages.ASC);
-            //
-            //        final List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
-            //
-            //        for (RealmRoomMessage message : realmRoomMessages) {
-            //
-            //            Log.e("ddd","bbbbbbb   "+message.getMessageId()+"  "+message.getUpdateTime()+"   "+message.getCreateTime());
-            //
-            //            String timeString = getTimeSettingMessage(message.getCreateTime());
-            //            if (timeString != null) {
-            //                RealmRoomMessage timeMessage = new RealmRoomMessage();
-            //                timeMessage.setMessageId(message.getMessageId() - 1L);
-            //                // -1 means time message
-            //                timeMessage.setUserId(-1);
-            //                timeMessage.setMessage(timeString);
-            //                timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-            //                lastResultMessages.add(timeMessage);
-            //            }
-            //
-            //            lastResultMessages.add(message);
-            //        }
-            //
-            //        Collections.sort(lastResultMessages, SortMessages.DESC);
-            //
-            //        for (RealmRoomMessage roomMessage : lastResultMessages) {
-            //            if (lastMessageId != roomMessage.getMessageId()) { //TODO [Saeed Mozaffari] [2016-12-01 10:04 AM] - dar get room history akharim payam duplicate mishod. in shart ro gozashtam , behtare bardashte beshe
-            //                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), true);
-            //            }
-            //        }
-            //
-            //        realm.close();
-            //    }
-            //});
 
             for (int i = 0; i < messages.size(); i++) {
                 G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, messages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
@@ -4136,11 +4087,12 @@ public class ActivityChat extends ActivityEnhanced
 
                     Collections.sort(lastResultMessages, SortMessages.DESC);
 
-                    if (mAdapter.getItemCount() > 0 && mAdapter.getAdapterItem(0).mMessage.isTimeOrLogMessage()) mAdapter.remove(0);
+                    if (mAdapter.getItemCount() > 0 && mAdapter.getAdapterItem(0) instanceof TimeItem) mAdapter.remove(0);
 
                     String topID = "";
-                    if (mAdapter.getItemCount() > 0) topID = mAdapter.getItem(0).mMessage.messageID;
-
+                    if (mAdapter.getItemCount() > 0) {
+                        topID = mAdapter.getAdapterItem(0) instanceof UnreadMessage ? mAdapter.getItem(1).mMessage.messageID : mAdapter.getItem(0).mMessage.messageID;
+                    }
 
 
                     for (RealmRoomMessage realmRoomMessage : lastResultMessages) {
