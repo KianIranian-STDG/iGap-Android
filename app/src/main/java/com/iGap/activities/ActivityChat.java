@@ -361,7 +361,7 @@ public class ActivityChat extends ActivityEnhanced
     Realm mRealm;
 
     private int countOfCurrentLoadInList = 0;
-    private int maxLoadFromLocalInOneStep = 50;
+    private int maxLoadFromLocalInOneStep = 200;
     private boolean isThereAnyMoreItemToLoadFromLocal = false;
     private boolean isThereAnyMoreItemToLoadFromServer = true;
     private boolean isSendingRequestClientGetHistory = false;
