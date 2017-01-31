@@ -610,12 +610,7 @@ public class G extends MultiDexApplication {
             }
         }
         setUserTextSize();
-
-        //G.onFileDownloadResponse = this;
-
-        saveLogcatToFile(context);
-
-        HelperDownloadFile helperDownloadFile = new HelperDownloadFile();
+        new HelperDownloadFile();
     }
 
     public static void makeFolder() {
@@ -636,17 +631,6 @@ public class G extends MultiDexApplication {
         new File(DIR_VIDEOS + "/" + file);
         new File(DIR_AUDIOS + "/" + file);
         new File(DIR_DOCUMENT + "/" + file);
-    }
-
-    public static void saveLogcatToFile(Context context) {
-        String fileName = "logcat_" + System.currentTimeMillis() + ".txt";
-        new File(context.getExternalCacheDir(), fileName).mkdirs();
-        File outputFile = new File(context.getExternalCacheDir(), fileName);
-        try {
-            @SuppressWarnings("unused") Process process = Runtime.getRuntime().exec("logcat -f " + outputFile.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void setFont() {

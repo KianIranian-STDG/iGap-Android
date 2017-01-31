@@ -115,7 +115,6 @@ import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.clientConditionGlobal;
-import static com.iGap.G.context;
 import static com.iGap.G.mFirstRun;
 import static com.iGap.R.string.updating;
 
@@ -164,8 +163,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         Tracker mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RoomList");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
-        G.saveLogcatToFile(context);
 
         new HelperGetDataFromOtherApp(getIntent());
 

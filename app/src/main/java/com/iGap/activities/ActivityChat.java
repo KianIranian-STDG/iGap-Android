@@ -310,7 +310,6 @@ public class ActivityChat extends ActivityEnhanced
     private TextView btnDown;
     private TextView txtChannelMute;
     //popular (chat , group , channel)
-
     public String title;
     public String phoneNumber;
     public static String titleStatic;
@@ -332,7 +331,6 @@ public class ActivityChat extends ActivityEnhanced
     private ChannelChatRole channelRole;
     private String channelParticipantsCountLabel;
     private PopupWindow popupWindow;
-    private String avatarPath;
     // save latest intent data and requestCode from result activity for set draft if not send
     // file yet
     private Uri latestUri;
@@ -363,11 +361,11 @@ public class ActivityChat extends ActivityEnhanced
     Realm mRealm;
 
     private int countOfCurrentLoadInList = 0;
-    private int maxLoadFromLockalInOneStep = 200;
+    private int maxLoadFromLocalInOneStep = 50;
     private boolean isThereAnyMoreItemToLoadFromLocal = false;
-    private boolean isThereAnyMoreItemToLoadFromserver = true;
-    private boolean isSendingRequestCliengGetHistory = false;
-    private ArrayList<RealmRoomMessage> mLockalList = new ArrayList<>();
+    private boolean isThereAnyMoreItemToLoadFromServer = true;
+    private boolean isSendingRequestClientGetHistory = false;
+    private ArrayList<RealmRoomMessage> mLocalList = new ArrayList<>();
 
 
     @Override
@@ -425,47 +423,27 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-
         chatTypeStatic = chatType;
         mRoomIdStatic = mRoomId;
         titleStatic = title;
-
-        /**
-         * call from ActivityGroupProfile for update group member number
-         */
-        onComplete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
-                txtLastSeen.setText(messageOne + " " + getResources().getString(member));
-                avi.setVisibility(View.GONE);
-
-                // change english number to persian number
-                if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
-
-            }
-        };
 
         musicPlayer = new MusicPlayer(mediaLayout);
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.uploaderUtil.setActivityCallbacks(this);
-
+        G.uploaderUtil.setActivityCallbacks(this);
         G.onUserInfoResponse = this;
         G.onClientGetRoomHistoryResponse = this;
         G.onChannelAddMessageReaction = this;
         G.onChannelGetMessagesStats = this;
-
         activityChatForFinish = this;
-
-
-        G.helperNotificationAndBadge.cancelNotification();
-        initCallbacks();
-
         activityChat = this;
         G.onSetAction = this;
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
-        G.uploaderUtil.setActivityCallbacks(this);
+
+        G.helperNotificationAndBadge.cancelNotification();
+        initCallbacks();
 
         HelperNotificationAndBadge.isChatRoomNow = true;
 
@@ -475,39 +453,11 @@ public class ActivityChat extends ActivityEnhanced
 
         mAdapter.notifyDataSetChanged();
 
-        onMusicListener = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageID, String beforMessageID) {
-
-                if (beforMessageID != null) {
-                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                        if (mAdapter.getItem(i).mMessage.messageID.equals(beforMessageID)) {
-                            mAdapter.notifyAdapterItemChanged(i);
-                            break;
-                        }
-                    }
-                }
-
-                if (messageID != null) {
-                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                        if (mAdapter.getItem(i).mMessage.messageID.equals(messageID)) {
-                            mAdapter.notifyAdapterItemChanged(i);
-                            break;
-                        }
-                    }
-                }
-
-
-            }
-        };
-
         if (isGoingFromUserLink) {
             new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
         }
 
-        //requestMessageHistory();
         setAvatar();
-
         initLayoutHashNavigation();
 
         realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
@@ -547,54 +497,6 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         }
-
-
-
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if (isGoingFromUserLink) {
-            new RequestClientUnsubscribeFromRoom().clientUnsubscribeFromRoom(mRoomId);
-        }
-
-        onMusicListener = null;
-    }
-
-    @Override
-    protected void onStop() {
-        setDraft();
-        HelperNotificationAndBadge.isChatRoomNow = false;
-
-        if (isNotJoin) {
-
-            //delete all  deleted row from datacase
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll().deleteAllFromRealm();
-                }
-            });
-            realm.close();
-        }
-
-        if (mRealm != null) mRealm.close();
-
-        super.onStop();
-    }
-
-
-    private void getChatHistory() {
-        Realm realm = Realm.getDefaultInstance();
-        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().size() < 3) {
-            isSendingRequestCliengGetHistory = true;
-            new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
-        }
-        realm.close();
     }
 
     @Override
@@ -604,66 +506,28 @@ public class ActivityChat extends ActivityEnhanced
 
         mRealm = Realm.getDefaultInstance();
         HelperGetMessageState.clearMessageViews();
-
-        avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
-        avi.setVisibility(View.GONE);
-
         checkIfOrientationChanged(getResources().getConfiguration());
-
-        appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
-
-        mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
-        lyt_user = (LinearLayout) findViewById(R.id.lyt_user);
-
-        // get sendByEnter action from setting value
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
-        sendByEnter = checkedSendByEnter == 1;
-
-        String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-        if (backGroundPath.length() > 0) {
-
-            File f = new File(backGroundPath);
-            if (f.exists()) {
-                Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                View chat = findViewById(ac_ll_parent);
-                chat.setBackgroundDrawable(d);
-            }
-        }
-
-        viewAttachFile = findViewById(R.id.layout_attach_file);
-        viewMicRecorder = findViewById(R.id.layout_mic_recorde);
-        voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile, this);
-
-        prgWaiting = (ProgressBar) findViewById(R.id.chl_prgWaiting);
-        prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
-
-        prgWaiting.setVisibility(View.VISIBLE);
-
-        lastDateCalendar.clear();
-
-
-        attachFile = new AttachFile(this);
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        pageSettings();
         initAttach();
 
-        //after get position from gps
-        complete = new OnComplete() {
-            @Override
-            public void complete(boolean result, final String messageOne, String MessageTow) {
-                HelperSetAction.sendCancel(messageId);
+        /**
+         * define views
+         */
+        avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
+        mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
+        lyt_user = (LinearLayout) findViewById(R.id.lyt_user);
+        viewAttachFile = findViewById(R.id.layout_attach_file);
+        viewMicRecorder = findViewById(R.id.layout_mic_recorde);
+        prgWaiting = (ProgressBar) findViewById(R.id.chl_prgWaiting);
 
-                String[] split = messageOne.split(",");
-                Double latitude = Double.parseDouble(split[0]);
-                Double longitude = Double.parseDouble(split[1]);
+        voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile, this);
+        attachFile = new AttachFile(this);
+        prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        prgWaiting.setVisibility(View.VISIBLE);
+        lastDateCalendar.clear();
 
-                FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
-
-                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap).commit();
-
-
-            }
-        };
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -869,32 +733,59 @@ public class ActivityChat extends ActivityEnhanced
 
         initComponent();
         initAppbarSelected();
+        manageForwardedMessage();
+        getChatHistory();
+        getDraft();
+        getUserInfo();
+        setUpEmojiPopup();
+        checkAction();
+    }
 
-        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
-            initLayoutChannelFooter();
-        }
-
+    /**
+     * do forward actions if any message forward to this room
+     */
+    private void manageForwardedMessage() {
         if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
             ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
             for (Parcelable messageInfo : messageInfos) {
                 sendForwardedMessage((StructMessageInfo) Parcels.unwrap(messageInfo));
             }
         }
+    }
 
-        clearHistoryFromContactsProfileInterface();
-        onDeleteChatFinishActivityInterface();
-        getChatHistory();
-        getDraft();
-        getUserInfo();
-        updateStatus();
-        setUpEmojiPopup();
-        checkAction();
-        G.onHelperSetAction = new OnHelperSetAction() {
-            @Override
-            public void onAction(ProtoGlobal.ClientAction ClientAction) {
-                HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
+    /**
+     * check and send request for get history if needed
+     */
+    private void getChatHistory() {
+        Realm realm = Realm.getDefaultInstance();
+        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().size() < 3) {
+            isSendingRequestClientGetHistory = true;
+            new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
+        }
+        realm.close();
+    }
+
+    /**
+     * get settings state and change view
+     */
+    private void pageSettings() {
+        /**
+         * get sendByEnter action from setting value
+         */
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
+        sendByEnter = checkedSendByEnter == 1;
+
+        String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+        if (backGroundPath.length() > 0) {
+
+            File f = new File(backGroundPath);
+            if (f.exists()) {
+                Drawable d = Drawable.createFromPath(f.getAbsolutePath());
+                View chat = findViewById(ac_ll_parent);
+                chat.setBackgroundDrawable(d);
             }
-        };
+        }
     }
 
     public void sendPosition(final Double latitude, final Double longitude, final String imagePath) {
@@ -971,72 +862,13 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
     }
 
-    /*private void checkAction() {
-        // check action for room
-        if ((mRoomId != 0) || (txtLastSeen != null)) {
-            String action = HelperSetAction.checkExistAction(mRoomId);
-            if (action != null) {
-                txtLastSeen.setText(action);
-            }
-        }
-    }*/
-
-    private void updateStatus() {
-        G.onUpdateUserStatusInChangePage = new OnUpdateUserStatusInChangePage() {
-            @Override
-            public void updateStatus(long peerId, String status, long lastSeen) {
-                if (chatType == CHAT) {
-                    setUserStatus(status, lastSeen);
-
-                    if (chatType == CHAT) {
-                        new RequestUserInfo().userInfo(peerId);
-                    }
-                }
-            }
-        };
-    }
-
     private void getUserInfo() {
-        /*
+        /**
          * client should send request for get user info because need to update user online timing
          */
         if (chatType == CHAT) {
             new RequestUserInfo().userInfo(chatPeerId);
         }
-    }
-
-    private void clearHistoryFromContactsProfileInterface() {
-        G.onClearChatHistory = new OnClearChatHistory() {
-            @Override
-            public void onClearChatHistory() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.clear();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-        };
-    }
-
-    private void onDeleteChatFinishActivityInterface() {
-        G.onDeleteChatFinishActivity = new OnDeleteChatFinishActivity() {
-            @Override
-            public void onFinish() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() { //TODO [Saeed Mozaffari] [2016-10-15 4:19 PM] -
-                        // runOnUiThread need here???
-                        finish();
-                    }
-                });
-            }
-        };
     }
 
     private void sendForwardedMessage(final StructMessageInfo messageInfo) {
@@ -1089,6 +921,9 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
+    /**
+     * initialize some callbacks that used in this page
+     */
     public void initCallbacks() {
         chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
@@ -1149,6 +984,111 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void onError(int majorCode, int minorCode) {
 
+            }
+        };
+
+        /**
+         * call from ActivityGroupProfile for update group member number
+         */
+        onComplete = new OnComplete() {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
+                txtLastSeen.setText(messageOne + " " + getResources().getString(member));
+                avi.setVisibility(View.GONE);
+
+                // change english number to persian number
+                if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+
+            }
+        };
+
+        onMusicListener = new OnComplete() {
+            @Override
+            public void complete(boolean result, String messageID, String beforMessageID) {
+
+                if (beforMessageID != null) {
+                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                        if (mAdapter.getItem(i).mMessage.messageID.equals(beforMessageID)) {
+                            mAdapter.notifyAdapterItemChanged(i);
+                            break;
+                        }
+                    }
+                }
+
+                if (messageID != null) {
+                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                        if (mAdapter.getItem(i).mMessage.messageID.equals(messageID)) {
+                            mAdapter.notifyAdapterItemChanged(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        };
+
+        /**
+         * after get position from gps
+         */
+        complete = new OnComplete() {
+            @Override
+            public void complete(boolean result, final String messageOne, String MessageTow) {
+                HelperSetAction.sendCancel(messageId);
+
+                String[] split = messageOne.split(",");
+                Double latitude = Double.parseDouble(split[0]);
+                Double longitude = Double.parseDouble(split[1]);
+
+                FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap).commit();
+            }
+        };
+
+        G.onHelperSetAction = new OnHelperSetAction() {
+            @Override
+            public void onAction(ProtoGlobal.ClientAction ClientAction) {
+                HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
+            }
+        };
+
+        G.onClearChatHistory = new OnClearChatHistory() {
+            @Override
+            public void onClearChatHistory() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.clear();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+        };
+
+        G.onDeleteChatFinishActivity = new OnDeleteChatFinishActivity() {
+            @Override
+            public void onFinish() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                });
+            }
+        };
+
+        G.onUpdateUserStatusInChangePage = new OnUpdateUserStatusInChangePage() {
+            @Override
+            public void updateStatus(long peerId, String status, long lastSeen) {
+                if (chatType == CHAT) {
+                    setUserStatus(status, lastSeen);
+
+                    if (chatType == CHAT) {
+                        new RequestUserInfo().userInfo(peerId);
+                    }
+                }
             }
         };
     }
@@ -1401,7 +1341,6 @@ public class ActivityChat extends ActivityEnhanced
         imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
 
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
-        MaterialDesignTextView imvMenuButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_menu_button);
 
         RippleView rippleMenuButton = (RippleView) findViewById(R.id.chl_ripple_menu_button);
         rippleMenuButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -1451,9 +1390,6 @@ public class ActivityChat extends ActivityEnhanced
                 } else {
                     sp14_Popup = 15;
                 }
-
-                Log.i("FFFFFF", "sp14_Popup: " + sp14_Popup);
-                Log.i("FFFFFF", "widthDpi: " + widthDpi);
 
                 text1.setTextSize(sp14_Popup);
                 text2.setTextSize(sp14_Popup);
@@ -1516,16 +1452,9 @@ public class ActivityChat extends ActivityEnhanced
                 if (popupWindow.isOutsideTouchable()) {
                     popupWindow.dismiss();
                 }
-                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        //TODO do sth here on dismiss
-                    }
-                });
 
                 popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
                 popupWindow.showAtLocation(rippleView, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
-                //                popupWindow.showAsDropDown(v);
 
                 text1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1647,16 +1576,26 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        switchAddItem(getLocalMessages(), true);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switchAddItem(getLocalMessages(), true);
+            }
+        }, 250);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ActivityChat.this);
-        // make start messages from bottom, this is exactly what Telegram and other messengers do
-        // for their messages list
+        /**
+         * make start messages from bottom, this is exactly what Telegram and other messengers do
+         * for their messages list
+         */
         layoutManager.setStackFromEnd(true);
-        // set behavior to RecyclerView
-        //CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
-        //params.setBehavior(new ShouldScrolledBehavior(layoutManager, mAdapter));
-        //recyclerView.setLayoutParams(params);
+
+        /**
+         * set behavior to RecyclerView
+         * CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
+         * params.setBehavior(new ShouldScrolledBehavior(layoutManager, mAdapter));
+         * recyclerView.setLayoutParams(params);
+         */
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
@@ -1709,14 +1648,6 @@ public class ActivityChat extends ActivityEnhanced
                 finish();
             }
         });
-
-     /*  rippleBackButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-
-
-            }
-        });*/
 
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2328,12 +2259,12 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    private void sheareDataToOtherProgram(StructMessageInfo messageInfo) {
+    private void shearedDataToOtherProgram(StructMessageInfo messageInfo) {
 
         if (messageInfo == null) return;
 
         Intent intent = new Intent(Intent.ACTION_SEND);
-        String choserDialogText = "";
+        String chooserDialogText = "";
 
         switch (messageInfo.messageType.toString()) {
 
@@ -2354,19 +2285,19 @@ public class ActivityChat extends ActivityEnhanced
             case "AUDIO_TEXT":
                 intent.setType("audio/*");
                 putExtra(intent, messageInfo);
-                choserDialogText = getString(R.string.share_audio_file);
+                chooserDialogText = getString(R.string.share_audio_file);
                 break;
             case "IMAGE":
             case "IMAGE_TEXT":
                 intent.setType("image/*");
                 putExtra(intent, messageInfo);
-                choserDialogText = getString(R.string.share_image);
+                chooserDialogText = getString(R.string.share_image);
                 break;
             case "VIDEO":
             case "VIDEO_TEXT":
                 intent.setType("video/*");
                 putExtra(intent, messageInfo);
-                choserDialogText = getString(R.string.share_video_file);
+                chooserDialogText = getString(R.string.share_video_file);
                 break;
             case "FILE":
             case "FILE_TEXT":
@@ -2381,7 +2312,7 @@ public class ActivityChat extends ActivityEnhanced
 
                     intent.setType(mimeType);
                     intent.putExtra(Intent.EXTRA_STREAM, uri);
-                    choserDialogText = getString(R.string.share_file);
+                    chooserDialogText = getString(R.string.share_file);
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -2394,7 +2325,7 @@ public class ActivityChat extends ActivityEnhanced
                 break;
         }
 
-        startActivity(Intent.createChooser(intent, choserDialogText));
+        startActivity(Intent.createChooser(intent, chooserDialogText));
     }
 
     private void putExtra(Intent intent, StructMessageInfo messageInfo) {
@@ -2502,6 +2433,41 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (isGoingFromUserLink) {
+            new RequestClientUnsubscribeFromRoom().clientUnsubscribeFromRoom(mRoomId);
+        }
+        onMusicListener = null;
+    }
+
+    @Override
+    protected void onStop() {
+        setDraft();
+        HelperNotificationAndBadge.isChatRoomNow = false;
+
+        if (isNotJoin) {
+
+            /**
+             * delete all  deleted row from database
+             */
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll().deleteAllFromRealm();
+                }
+            });
+            realm.close();
+        }
+
+        if (mRealm != null) mRealm.close();
+
+        super.onStop();
+    }
+
+    @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
 
         voiceRecord.dispatchTouchEvent(event);
@@ -2509,6 +2475,9 @@ public class ActivityChat extends ActivityEnhanced
         return super.dispatchTouchEvent(event);
     }
 
+    /**
+     * initialize boomMenu for use in attachment
+     */
     private void initAttach() {
 
         boomMenuButton = (BoomMenuButton) findViewById(R.id.am_boom);
@@ -2554,24 +2523,13 @@ public class ActivityChat extends ActivityEnhanced
         boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
             @Override
             public void onClick(int buttonIndex) {
-
-                Log.i("TAG123", "onClick: " + buttonIndex);
-
                 switch (buttonIndex) {
-
                     case 0:
-
-                        /*if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
-                            attachFile.showDialogOpenCamera(toolbar, prgWaiting);
-                        } else {
-                            attachFile.showDialogOpenCamera(toolbar, null);
-                        }*/
                         if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
                             attachFile.showDialogOpenCamera(toolbar, null);
                         } else {
                             attachFile.showDialogOpenCamera(toolbar, null);
                         }
-
                         break;
                     case 1:
                         try {
@@ -2668,11 +2626,6 @@ public class ActivityChat extends ActivityEnhanced
             if (requestCode == AttachFile.request_code_contact_phone) {
                 latestUri = data.getData();
                 sendMessage(requestCode, "");
-
-                //                if (mReplayLayout != null && userTriesReplay()) {
-                //                    mReplayLayout.setTag(null);
-                //                    mReplayLayout.setVisibility(View.GONE);
-                //                }
                 return;
             }
 
@@ -3360,6 +3313,10 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         txtNumberOfSelected = (TextView) findViewById(R.id.chl_txt_number_of_selected);
+
+        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
+            initLayoutChannelFooter();
+        }
     }
 
     public static void deleteSelectedMessages(final long RoomId, final ArrayList<Long> list, final ProtoGlobal.Room.Type chatType) {
@@ -3524,23 +3481,23 @@ public class ActivityChat extends ActivityEnhanced
                 timeMessage.setUserId(-1);
                 timeMessage.setMessage(timeString);
                 timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                mLockalList.add(timeMessage);
+                mLocalList.add(timeMessage);
             }
 
-            mLockalList.add(message);
+            mLocalList.add(message);
         }
 
-        Collections.sort(mLockalList, SortMessages.DESC);
+        Collections.sort(mLocalList, SortMessages.DESC);
 
         ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
 
-        for (int i = 0; i < mLockalList.size() && i < maxLoadFromLockalInOneStep; i++) {
-            messageInfos.add(StructMessageInfo.convert(mLockalList.get(i)));
+        for (int i = 0; i < mLocalList.size() && i < maxLoadFromLocalInOneStep; i++) {
+            messageInfos.add(StructMessageInfo.convert(mLocalList.get(i)));
         }
 
-        if (mLockalList.size() > maxLoadFromLockalInOneStep) {
+        if (mLocalList.size() > maxLoadFromLocalInOneStep) {
             isThereAnyMoreItemToLoadFromLocal = true;
-            countOfCurrentLoadInList = maxLoadFromLockalInOneStep;
+            countOfCurrentLoadInList = maxLoadFromLocalInOneStep;
         } else {
             isThereAnyMoreItemToLoadFromLocal = false;
         }
@@ -3550,7 +3507,7 @@ public class ActivityChat extends ActivityEnhanced
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (isThereAnyMoreItemToLoadFromLocal || isThereAnyMoreItemToLoadFromserver) {
+                if (isThereAnyMoreItemToLoadFromLocal || isThereAnyMoreItemToLoadFromServer) {
 
                     int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
@@ -3561,21 +3518,21 @@ public class ActivityChat extends ActivityEnhanced
                             Parcelable recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
 
                             ArrayList<StructMessageInfo> convertedMessages = new ArrayList<>();
-                            for (int i = countOfCurrentLoadInList; i < mLockalList.size() && i < maxLoadFromLockalInOneStep + countOfCurrentLoadInList; i++) {
-                                convertedMessages.add(StructMessageInfo.convert(mLockalList.get(i)));
+                            for (int i = countOfCurrentLoadInList; i < mLocalList.size() && i < maxLoadFromLocalInOneStep + countOfCurrentLoadInList; i++) {
+                                convertedMessages.add(StructMessageInfo.convert(mLocalList.get(i)));
                             }
                             switchAddItem(convertedMessages, true);
 
-                            if (mLockalList.size() > maxLoadFromLockalInOneStep + countOfCurrentLoadInList) {
+                            if (mLocalList.size() > maxLoadFromLocalInOneStep + countOfCurrentLoadInList) {
                                 isThereAnyMoreItemToLoadFromLocal = true;
-                                countOfCurrentLoadInList = maxLoadFromLockalInOneStep + countOfCurrentLoadInList;
+                                countOfCurrentLoadInList = maxLoadFromLocalInOneStep + countOfCurrentLoadInList;
                             } else {
                                 isThereAnyMoreItemToLoadFromLocal = false;
                             }
 
                             recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-                        } else if (isThereAnyMoreItemToLoadFromserver) {
-                            if (!isSendingRequestCliengGetHistory) requestMessageHistory();
+                        } else if (isThereAnyMoreItemToLoadFromServer) {
+                            if (!isSendingRequestClientGetHistory) requestMessageHistory();
                         }
                     }
                 } else {
@@ -3651,7 +3608,7 @@ public class ActivityChat extends ActivityEnhanced
         if (latestMessageIdHistory != oldestMessageId) {
             latestMessageIdHistory = oldestMessageId;
 
-            isSendingRequestCliengGetHistory = true;
+            isSendingRequestClientGetHistory = true;
             new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
 
             if (mAdapter.getAdapterItemCount() > 0) {
@@ -4086,7 +4043,7 @@ public class ActivityChat extends ActivityEnhanced
 
         if (roomId == mRoomId) {
 
-            isSendingRequestCliengGetHistory = false;
+            isSendingRequestClientGetHistory = false;
 
             //runOnUiThread(new Runnable() {
             //    @Override
@@ -4149,7 +4106,7 @@ public class ActivityChat extends ActivityEnhanced
                     if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
 
                     if (count < 1) {
-                        isThereAnyMoreItemToLoadFromserver = false;
+                        isThereAnyMoreItemToLoadFromServer = false;
                         return;
                     }
 
@@ -4210,7 +4167,7 @@ public class ActivityChat extends ActivityEnhanced
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                isSendingRequestCliengGetHistory = false;
+                isSendingRequestClientGetHistory = false;
                 if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
             }
         });
@@ -4655,7 +4612,8 @@ public class ActivityChat extends ActivityEnhanced
         realm.close();
     }
 
-    @Override public void onDownloadAllEqualCashId(String token, String messageID) {
+    @Override
+    public void onDownloadAllEqualCashId(String token, String messageID) {
 
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
 
@@ -4802,7 +4760,7 @@ public class ActivityChat extends ActivityEnhanced
                             startActivity(makeIntentForForwardMessages(message));
                         }
                     } else if (text.toString().equalsIgnoreCase(getString(R.string.share_item_dialog))) {
-                        sheareDataToOtherProgram(message);
+                        shearedDataToOtherProgram(message);
                     }
                 }
             }).show();
