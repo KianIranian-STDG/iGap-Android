@@ -92,7 +92,7 @@ public class ChatSendMessageResponse extends MessageHandler {
                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst();
                 if (room == null) {
                     // make get room request
-                    new RequestClientGetRoom().clientGetRoom(chatSendMessageResponse.getRoomId());
+                    new RequestClientGetRoom().clientGetRoom(chatSendMessageResponse.getRoomId(), null);
                 } else {
 
                     if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {

@@ -4,12 +4,21 @@ import com.iGap.proto.ProtoClientGetRoom;
 
 public class RequestClientGetRoom {
 
-    public void clientGetRoom(long roomId) {
-        ProtoClientGetRoom.ClientGetRoom.Builder clientGetRoom =
-                ProtoClientGetRoom.ClientGetRoom.newBuilder();
+    public enum CreateRoomMode {
+
+        requestFromServer,
+        requestFromOwner;
+    }
+
+    public void clientGetRoom(long roomId, CreateRoomMode mode) {
+        ProtoClientGetRoom.ClientGetRoom.Builder clientGetRoom = ProtoClientGetRoom.ClientGetRoom.newBuilder();
         clientGetRoom.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(602, clientGetRoom);
+        String identity = "";
+
+        if (mode != null) identity = mode.toString();
+
+        RequestWrapper requestWrapper = new RequestWrapper(602, clientGetRoom, identity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

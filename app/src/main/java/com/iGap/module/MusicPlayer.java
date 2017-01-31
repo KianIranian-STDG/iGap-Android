@@ -12,8 +12,8 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
@@ -26,9 +26,9 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -64,13 +64,12 @@ public class MusicPlayer {
     private static NotificationManager notificationManager;
     private static Notification notification;
     private static boolean isPause = false;
-    private static RealmList<RealmRoomMessage> mediaList;
+    private static ArrayList<RealmRoomMessage> mediaList;
     private static int selectedMedia = 0;
     private static Timer mTimer, mTimeSecend;
     private static long time = 0;
     private static double amoungToupdate;
     public static String strTimer = "";
-    private static Handler handler;
     public static String messageId = "";
 
 
@@ -79,7 +78,7 @@ public class MusicPlayer {
 
         remoteViews = new RemoteViews(G.context.getPackageName(), R.layout.music_layout_notification);
         notificationManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
-        handler = new Handler(G.context.getMainLooper());
+
 
         if (this.layoutTripMusic != null) this.layoutTripMusic.setVisibility(View.GONE);
 
@@ -188,8 +187,7 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
 
             if (!isShowMediaPlayer) {
-                if (handler != null)
-                handler.post(new Runnable() {
+                if (G.handler != null) G.handler.post(new Runnable() {
                     @Override public void run() {
                         try {
                             notificationManager.notify(notificationId, notification);
@@ -223,8 +221,7 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             if (!isShowMediaPlayer) {
-                if (handler != null)
-                handler.post(new Runnable() {
+                if (G.handler != null) G.handler.post(new Runnable() {
                     @Override public void run() {
                         try {
                             notificationManager.notify(notificationId, notification);
@@ -263,8 +260,7 @@ public class MusicPlayer {
             musicProgress = 0;
 
             if (!isShowMediaPlayer) {
-                if (handler != null)
-                handler.post(new Runnable() {
+                if (G.handler != null) G.handler.post(new Runnable() {
                     @Override public void run() {
                         try {
                             notificationManager.notify(notificationId, notification);
@@ -297,55 +293,74 @@ public class MusicPlayer {
     }
 
     public static void nextMusic() {
-        String beforMessageID = MusicPlayer.messageId;
 
-        selectedMedia++;
+        try {
+            String beforMessageID = MusicPlayer.messageId;
 
-        if (selectedMedia < mediaList.size()) {
-            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
-            if (onComplete != null) onComplete.complete(true, "update", "");
-        } else {
-            selectedMedia = 0;
-            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+            selectedMedia++;
+            if (selectedMedia < mediaList.size()) {
+                startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+                if (onComplete != null) onComplete.complete(true, "update", "");
+            } else {
+                selectedMedia = 0;
+                startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
-            if (onComplete != null) onComplete.complete(true, "update", "");
+                if (onComplete != null) onComplete.complete(true, "update", "");
+            }
+            if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+        } catch (Exception e) {
+
+            Log.e("dddd", "music player        nextMusic   " + e.toString());
         }
-        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+
     }
 
     private static void nextRandomMusic() {
-        String beforMessageID = MusicPlayer.messageId;
-        Random r = new Random();
-        selectedMedia = r.nextInt(mediaList.size() - 1);
-        startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
-        if (onComplete != null) onComplete.complete(true, "update", "");
+        try {
 
-        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+            String beforMessageID = MusicPlayer.messageId;
+            Random r = new Random();
+            selectedMedia = r.nextInt(mediaList.size() - 1);
+            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+
+            if (onComplete != null) onComplete.complete(true, "update", "");
+
+            if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+        } catch (Exception e) {
+
+            Log.e("dddd", "music player        nextRandomMusic   " + e.toString());
+        }
+
     }
 
 
     public static void previousMusic() {
 
-        selectedMedia--;
+        try {
+            selectedMedia--;
 
-        String beforMessageID = MusicPlayer.messageId;
+            String beforMessageID = MusicPlayer.messageId;
 
-        if (selectedMedia >= 0) {
-            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
-
-            if (onComplete != null) onComplete.complete(true, "update", "");
-        } else {
-            int index = mediaList.size() - 1;
-            if (index >= 0) {
-                selectedMedia = index;
+            if (selectedMedia >= 0) {
                 startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
                 if (onComplete != null) onComplete.complete(true, "update", "");
-            }
-        }
+            } else {
+                int index = mediaList.size() - 1;
+                if (index >= 0) {
+                    selectedMedia = index;
+                    startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
-        if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+                    if (onComplete != null) onComplete.complete(true, "update", "");
+                }
+            }
+
+            if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+        } catch (Exception e) {
+
+            Log.e("dddd", "music player        previousMusic   " + e.toString());
+    }
     }
 
     private static void closeLayoutMediaPlayer() {
@@ -356,8 +371,7 @@ public class MusicPlayer {
             mp = null;
         }
 
-        if (handler != null)
-        handler.post(new Runnable() {
+        if (G.handler != null) G.handler.post(new Runnable() {
             @Override public void run() {
                 try {
                     notificationManager.cancel(notificationId);
@@ -397,8 +411,7 @@ public class MusicPlayer {
 
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 if (!isShowMediaPlayer) {
-                    if (handler != null)
-                    handler.post(new Runnable() {
+                    if (G.handler != null) G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -439,8 +452,7 @@ public class MusicPlayer {
                 btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 if (!isShowMediaPlayer) {
-                    if (handler != null)
-                    handler.post(new Runnable() {
+                    if (G.handler != null) G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -525,7 +537,7 @@ public class MusicPlayer {
 
         getMusicInfo();
 
-        PendingIntent pi = PendingIntent.getActivity(G.context, 10,
+        PendingIntent pi = PendingIntent.getActivity(G.context, 15,
                 new Intent(G.context, ActivityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
@@ -567,8 +579,7 @@ public class MusicPlayer {
                 .setContentIntent(pi)
                 .setAutoCancel(false)
                 .build();
-        if (handler != null)
-        handler.post(new Runnable() {
+        if (G.handler != null) G.handler.post(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -576,6 +587,7 @@ public class MusicPlayer {
                         notificationManager.notify(notificationId, notification);
                     }
                 } catch (RuntimeException e) {
+                    Log.e("ddddd", "music player   update notification");
                 }
             }
         });
@@ -583,7 +595,7 @@ public class MusicPlayer {
 
     public static void fillMediaList() {
 
-        mediaList = new RealmList<>();
+        mediaList = new ArrayList<>();
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -710,7 +722,10 @@ public class MusicPlayer {
         musicInfoTitle = "";
 
         MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
-        Uri uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
+
+        Uri uri = null;
+
+        if (MusicPlayer.musicPath != null) uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
 
         if (uri != null) {
 
