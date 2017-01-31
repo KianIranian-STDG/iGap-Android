@@ -586,7 +586,6 @@ public class ActivityRegister extends ActivityEnhanced {
                             }
                             countDownTimer = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
 
-                                TextView txtTimerLand;
 
                                 public void onTick(long millisUntilFinished) {
 
@@ -599,7 +598,7 @@ public class ActivityRegister extends ActivityEnhanced {
                                         txtTimer.setVisibility(View.VISIBLE);
                                         txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                                     } else {
-                                        txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
+                                        TextView txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
                                         txtTimer.setVisibility(View.VISIBLE);
                                         txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                                     }
@@ -611,6 +610,7 @@ public class ActivityRegister extends ActivityEnhanced {
                                         txtTimer.setText("00:00");
                                         txtTimer.setVisibility(View.INVISIBLE);
                                     } else {
+                                        TextView txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
                                         txtTimerLand.setText("00:00");
                                         txtTimerLand.setVisibility(View.INVISIBLE);
                                     }

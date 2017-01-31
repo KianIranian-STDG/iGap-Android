@@ -149,7 +149,7 @@
                 <com.iGap.module.LinedEditText
                     android:id="@+id/ng_edt_description"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp100"
+                    android:layout_height="@dimen/dp140"
                     android:layout_below="@+id/ng_txtInput_newGroup"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"

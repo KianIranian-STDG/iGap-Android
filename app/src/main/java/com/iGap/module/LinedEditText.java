@@ -8,7 +8,6 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.EditText;
-
 import com.iGap.G;
 import com.iGap.R;
 
@@ -53,7 +52,7 @@ public class LinedEditText extends EditText {
         dashedLinePaint = new Paint();
         dashedLinePaint.setColor(G.context.getResources().getColor(R.color.line_edit_text));
         dashedLinePaint.setStyle(Paint.Style.STROKE);
-        initialCount = getMinLines();
+        initialCount = getMaxLines();
         setLines(initialCount);
     }
 
