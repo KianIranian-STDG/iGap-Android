@@ -537,7 +537,7 @@ public class MusicPlayer {
 
         getMusicInfo();
 
-        PendingIntent pi = PendingIntent.getActivity(G.context, 10,
+        PendingIntent pi = PendingIntent.getActivity(G.context, 15,
                 new Intent(G.context, ActivityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
