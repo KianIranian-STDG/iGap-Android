@@ -72,7 +72,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -966,12 +965,10 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                 FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
                 fileUploadStructure.openFile(filePath);
 
-                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }

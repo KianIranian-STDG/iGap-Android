@@ -213,7 +213,6 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -4866,12 +4865,11 @@ public class ActivityChat extends ActivityEnhanced
                 fileUploadStructure.openFile(filePath);
                 fileUploadStructure.text = messageText;
 
-                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
+
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }

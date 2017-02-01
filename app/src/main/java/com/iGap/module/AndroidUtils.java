@@ -9,12 +9,14 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -224,11 +226,34 @@ public final class AndroidUtils {
         return null;
     }
 
-    //public static byte[] getFileHashFromPath(String path){
-    //
-    //
-    //
-    //}
+    public static byte[] getFileHashFromPath(String path) {
+        File file = new File(path);
+        if (!file.exists()) return null;
+
+        InputStream is = null;
+        try {
+            is = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        byte[] hash;
+        int read;
+        byte[] buffer = new byte[8192];
+
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            while ((read = is.read(buffer)) > 0) {
+                digest.update(buffer, 0, read);
+            }
+            hash = digest.digest();
+        } catch (Exception e) {
+            Log.e("dddddd", " android utile  getFileHashFromPath   " + e.toString());
+            return null;
+        }
+
+        return hash;
+    }
 
 
 

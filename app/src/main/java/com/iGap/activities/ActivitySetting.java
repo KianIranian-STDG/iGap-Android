@@ -97,7 +97,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.Locale;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
@@ -2218,12 +2217,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
                 fileUploadStructure.openFile(filePath);
 
-                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }

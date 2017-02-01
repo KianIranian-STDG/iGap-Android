@@ -133,7 +133,6 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -2562,12 +2561,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
                 fileUploadStructure.openFile(filePath);
 
-                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }

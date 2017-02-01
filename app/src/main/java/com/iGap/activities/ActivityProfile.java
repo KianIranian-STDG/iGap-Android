@@ -53,7 +53,6 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
@@ -528,12 +527,10 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                 FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
                 fileUploadStructure.openFile(filePath);
 
-                byte[] fileHash = AndroidUtils.getFileHash(fileUploadStructure);
+                byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
