@@ -90,15 +90,16 @@ public class FragmentNotification extends Fragment {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                 if (realmRoom != null && realmRoom.getGroupRoom() != null) {
-
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                    if (realmGroupRoom.getRealmNotificationSetting() == null) {
-                        setRealm(realm, realmGroupRoom, null, null);
-                    } else {
+                    if (realmGroupRoom != null) {
+                        if (realmGroupRoom.getRealmNotificationSetting() == null) {
+                            setRealm(realm, realmGroupRoom, null, null);
+                        } else {
 
-                        realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+                            realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+                        }
+                        getRealm();
                     }
-                    getRealm();
                 }
 
                 realm.close();
@@ -109,15 +110,16 @@ public class FragmentNotification extends Fragment {
                 Realm realm = Realm.getDefaultInstance();
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-
                 if (realmRoom != null && realmRoom.getChannelRoom() != null) {
                     RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                    if (realmChannelRoom.getRealmNotificationSetting() == null) {
-                        setRealm(realm, null, realmChannelRoom, null);
-                    } else {
-                        realmNotificationSetting = realmChannelRoom.getRealmNotificationSetting();
+                    if (realmChannelRoom != null) {
+                        if (realmChannelRoom.getRealmNotificationSetting() == null) {
+                            setRealm(realm, null, realmChannelRoom, null);
+                        } else {
+                            realmNotificationSetting = realmChannelRoom.getRealmNotificationSetting();
+                        }
+                        getRealm();
                     }
-                    getRealm();
                 }
 
                 realm.close();
@@ -130,12 +132,14 @@ public class FragmentNotification extends Fragment {
 
                 if (realmRoom != null && realmRoom.getChatRoom() != null) {
                     RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                    if (realmChatRoom.getRealmNotificationSetting() == null) {
-                        setRealm(realm, null, null, realmChatRoom);
-                    } else {
-                        realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
+                    if (realmChatRoom != null) {
+                        if (realmChatRoom.getRealmNotificationSetting() == null) {
+                            setRealm(realm, null, null, realmChatRoom);
+                        } else {
+                            realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
+                        }
+                        getRealm();
                     }
-                    getRealm();
                 }
 
                 realm.close();

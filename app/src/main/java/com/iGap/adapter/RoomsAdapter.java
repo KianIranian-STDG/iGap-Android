@@ -18,22 +18,10 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         setHasStableIds(true);
     }
 
-   /* public void downloadingAvatarThumbnail(String token) {
-        for (Item item : getAdapterItems()) {
-            if (item.mInfo.getAvatar() != null && item.mInfo.getAvatar().getFile().getToken() != null && item.mInfo.getAvatar().getFile().getToken().equalsIgnoreCase(token)) {
-                item.onRequestDownloadAvatarThumbnail(token, true);
-                notifyAdapterDataSetChanged();
-                break;
-            }
-        }
-    }*/
-
     public void updateChat(long chatId, Item item) {
         List<Item> items = getAdapterItems();
         for (Item chat : items) {
-            Log.i("CCC", "updateChat chat 1 : " + chat.mInfo.getTitle());
             if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == chatId) {
-                Log.i("CCC", "updateChat chat 2 : " + chat.mInfo.getTitle());
                 int pos = items.indexOf(chat);
                 remove(pos);
                 add(0, item);
@@ -126,20 +114,20 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
      *
      * @return true if is valid and is exist otherwise return false
      */
-    public boolean checkValidationForRealm(RoomItem roomItem, RealmRoom realmRoom) {
-        if (roomItem.isEnabled() && realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted()) {
+    private boolean checkValidationForRealm(RoomItem roomItem, RealmRoom realmRoom) {
+        if (roomItem != null && roomItem.isEnabled() && realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted()) {
             return true;
         }
         return false;
     }
 
-    public void removeItemFromAdapter(final Long roomid) {
+    public void removeItemFromAdapter(final Long roomId) {
 
         List<Item> items = getAdapterItems();
 
         for (int i = 0; i < items.size(); i++) {
             try {
-                if (items.get(i).getInfo().getId() == roomid) {
+                if (items.get(i).getInfo().getId() == roomId) {
                     items.remove(i);
                     notifyAdapterItemRemoved(i);
                     break;

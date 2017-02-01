@@ -635,8 +635,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
-                //new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+                if (heartBeatTimeOut()) {
+                    //WebSocketClient.checkConnection();
+                }
                 new RequestClientGetRoomList().clientGetRoomList();
             }
         });
@@ -832,6 +833,20 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         }
     }
 
+    private boolean heartBeatTimeOut() {
+
+        long difference;
+
+        long currentTime = System.currentTimeMillis();
+        difference = (currentTime - G.latestHearBeatTime);
+
+        if (difference >= Config.HEART_BEAT_CHECKING_TIME_OUT) {
+            return true;
+        }
+
+        return false;
+    }
+
     private void testIsSecure() {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -868,14 +883,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         item.deleteFromRealm();
                     }
 
-
-
                     for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
-                        Log.i("YYY", "name : " + Room.getTitle() + " || update time : " + Room.getUpdatedTime());
                         if (Room.getLastMessage() != null) {
                             if (Room.getLastMessage().getUpdateTime() > 0) {
                                 if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) {
-                                    Log.i("YYY", "UPDATE");
                                     Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
                                 }
                             }
@@ -924,7 +935,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     protected void onResume() {
         super.onResume();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
 
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
@@ -1126,29 +1137,13 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     protected void onPause() {
         super.onPause();
 
-        LocalBroadcastManager.getInstance(ActivityMain.this).unregisterReceiver(reciverOnGroupChangeName);
+        LocalBroadcastManager.getInstance(ActivityMain.this).unregisterReceiver(receiverOnGroupChangeName);
     }
 
-    private BroadcastReceiver reciverOnGroupChangeName = new BroadcastReceiver() {
+    private BroadcastReceiver receiverOnGroupChangeName = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            //            final String name = intent.getExtras().getString("Name");
-            //            String description = intent.getExtras().getString("Description");
-            //            Long _roomid = intent.getExtras().getLong("RoomId");
-            //
-            //            for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
-            //                if (mAdapter.getItem(i).getInfo().getOwnerId() == _roomid) {
-            //                    Realm realm = Realm.getDefaultInstance();
-            //                    final int finalI = i;
-            //
-            //                         mAdapter.notifyAdapterItemChanged(i);
-            //
-            //                    break;
-            //                }
-            //            }
-
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -1175,145 +1170,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         return roomItem;
     }
 
-   /* @Override
-    public void onFileDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress) {
-        if (selector != ProtoFileDownload.FileDownload.Selector.FILE) {
-            // requested thumbnail
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Realm realm = Realm.getDefaultInstance();
-                    long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-                    for (RealmAvatar realmAvatar : realm.where(RealmAvatar.class).findAll()) {
-                        if (realmAvatar.getId() == userId) {
-                            RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst();
-                            if (avatar != null) {
-                                requestDownloadAvatar(true, token, avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
-                            }
-                            realm.close();
-
-                            mAdapter.downloadingAvatarThumbnail(token);
-                        }
-                    }
-                }
-            });
-        } else {
-            // TODO: 11/22/2016 [Alireza] implement
-        }
-    }
-
-    @Override
-    public void onAvatarDownload(final String token, final long offset, final ProtoFileDownload.FileDownload.Selector selector, final int progress, final long userId, final RoomType roomType) {
-        // empty
-    }
-
-    @Override
-    public void onError(int majorCode, int minorCode) {
-        //if (majorCode == 713 && minorCode == 1) {
-        //    runOnUiThread(new Runnable() {
-        //        @Override public void run() {
-        //            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-        //                getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
-        //
-        //            snack.setActionTyping("CANCEL", new View.OnClickListener() {
-        //                @Override public void onClick(View view) {
-        //                    snack.dismiss();
-        //                }
-        //            });
-        //            snack.show();
-        //        }
-        //    });
-        //} else if (majorCode == 713 && minorCode == 2) {
-        //    runOnUiThread(new Runnable() {
-        //        @Override public void run() {
-        //            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-        //                getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
-        //
-        //            snack.setActionTyping("CANCEL", new View.OnClickListener() {
-        //                @Override public void onClick(View view) {
-        //                    snack.dismiss();
-        //                }
-        //            });
-        //            snack.show();
-        //        }
-        //    });
-        //} else if (majorCode == 713 && minorCode == 3) {
-        //    runOnUiThread(new Runnable() {
-        //        @Override public void run() {
-        //            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-        //                getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
-        //
-        //            snack.setActionTyping("CANCEL", new View.OnClickListener() {
-        //                @Override public void onClick(View view) {
-        //                    snack.dismiss();
-        //                }
-        //            });
-        //            snack.show();
-        //        }
-        //    });
-        //} else if (majorCode == 713 && minorCode == 4) {
-        //    runOnUiThread(new Runnable() {
-        //        @Override public void run() {
-        //            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-        //                getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
-        //
-        //            snack.setActionTyping("CANCEL", new View.OnClickListener() {
-        //                @Override public void onClick(View view) {
-        //                    snack.dismiss();
-        //                }
-        //            });
-        //            snack.show();
-        //        }
-        //    });
-        //} else if (majorCode == 713 && minorCode == 5) {
-        //    runOnUiThread(new Runnable() {
-        //        @Override public void run() {
-        //            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-        //                getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
-        //
-        //            snack.setActionTyping("CANCEL", new View.OnClickListener() {
-        //                @Override public void onClick(View view) {
-        //                    snack.dismiss();
-        //                }
-        //            });
-        //            snack.show();
-        //        }
-        //    });
-        //} else if (majorCode == 714) {
-        //    runOnUiThread(new Runnable() {
-        //        @Override public void run() {
-        //            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-        //                getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
-        //
-        //            snack.setActionTyping("CANCEL", new View.OnClickListener() {
-        //                @Override public void onClick(View view) {
-        //                    snack.dismiss();
-        //                }
-        //            });
-        //            snack.show();
-        //        }
-        //    });
-        //} else if (majorCode == 715) {
-        //    runOnUiThread(new Runnable() {
-        //        @Override public void run() {
-        //            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content),
-        //                getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
-        //
-        //            snack.setActionTyping("CANCEL", new View.OnClickListener() {
-        //                @Override public void onClick(View view) {
-        //                    snack.dismiss();
-        //                }
-        //            });
-        //            snack.show();
-        //        }
-        //    });
-        //}
-    }
-
-    @Override
-    public void onBadDownload(String token) {
-        // empty
-    }*/
 
     @Override
     public void complete(boolean result, String messageOne, String MessageTow) {
@@ -1436,35 +1292,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         });
     }
 
-    /*private static void requestDownloadAvatar(boolean done, final String token, String name, int smallSize) {
-        final String fileName = "thumb_" + token + "_" + name;
-        if (done) {
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().setLocalThumbnailPath(G.DIR_TEMP + "/" + fileName);
-                }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    String filePath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.FILE.TOKEN, token).findFirst().getFile().getLocalThumbnailPath();
-                    G.onChangeUserPhotoListener.onChangePhoto(filePath);
-                    realm.close();
-                }
-            });
-
-            return; // necessary
-        }
-
-        ProtoFileDownload.FileDownload.Selector selector =
-                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-        String identity =
-                token + '*' + selector.toString() + '*' + smallSize + '*' + fileName + '*' + 0;
-
-        new RequestFileDownload().download(token, 0, smallSize,
-                selector, identity);
-    }*/
 
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
@@ -1595,7 +1422,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.i("XXX", "roomId : " + roomId);
                 mAdapter.notifyWithRoomId(roomId);
             }
         });

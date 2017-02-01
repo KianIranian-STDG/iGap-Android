@@ -819,7 +819,7 @@ public class ActivityChat extends ActivityEnhanced
         });
         realm.close();
 
-        G.handler.postDelayed(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 Realm realm1 = Realm.getDefaultInstance();
@@ -829,7 +829,7 @@ public class ActivityChat extends ActivityEnhanced
                 scrollToEnd();
                 realm1.close();
             }
-        }, 50);
+        });
     }
 
     private void checkAction() {
@@ -5030,16 +5030,6 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     //****** Channel Message Reaction
-
-   /* @Override
-    public void onVoteClick(final StructMessageInfo message, final int vote, final ProtoGlobal.RoomMessageReaction voteAction) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.updateVote(message.roomId, Long.parseLong(message.messageID), vote, voteAction);
-            }
-        });
-    }*/
 
     @Override
     public void onChannelAddMessageReaction(final long roomId, final long messageId, final String reactionCounterLabel, final ProtoGlobal.RoomMessageReaction reaction, final long forwardedMessageId) {

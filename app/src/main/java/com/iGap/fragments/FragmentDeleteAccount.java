@@ -39,8 +39,8 @@ import java.io.IOException;
  */
 public class FragmentDeleteAccount extends Fragment {
 
-    private String regex;
-    private String smsMessage;
+    private String regex = null;
+    private String smsMessage = null;
     private IncomingSms smsReceiver;
     private EditTextAdjustPan edtDeleteAccount;
     private RippleView txtSet;
@@ -67,7 +67,8 @@ public class FragmentDeleteAccount extends Fragment {
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                getSms(message);
+                                smsMessage = message;
+                                setCode();
                             }
                         }, 500);
 
@@ -127,6 +128,7 @@ public class FragmentDeleteAccount extends Fragment {
             @Override
             public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {
                 regex = tokenRegex;
+                setCode();
             }
 
             @Override
@@ -185,76 +187,67 @@ public class FragmentDeleteAccount extends Fragment {
 
                 if (edtDeleteAccount.getText().length() > 0) {
 
-                    new MaterialDialog.Builder(getActivity())
-                            .title(getResources().getString(R.string.delete_account))
-                            .titleColor(getResources().getColor(android.R.color.black))
-                            .content(R.string.sure_delete_account)
-                            .positiveText(getResources().getString(R.string.B_ok))
-                            .negativeText(getResources().getString(R.string.B_cancel))
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+                    new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.delete_account)).titleColor(getResources().getColor(android.R.color.black)).content(R.string.sure_delete_account).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
 
-//                                    String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
-                                    String verificationCode = edtDeleteAccount.getText().toString();
-                                    if (verificationCode != null && !verificationCode.isEmpty()) {
+                            //                                    String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
+                            String verificationCode = edtDeleteAccount.getText().toString();
+                            if (verificationCode != null && !verificationCode.isEmpty()) {
 
-                                        G.onUserDelete = new OnUserDelete() {
+                                G.onUserDelete = new OnUserDelete() {
+                                    @Override
+                                    public void onUserDeleteResponse() {
+                                        hideProgressBar();
+                                    }
+
+                                    @Override
+                                    public void Error(final int majorCode, final int minorCode, final int time) {
+
+                                        G.handler.post(new Runnable() {
                                             @Override
-                                            public void onUserDeleteResponse() {
+                                            public void run() {
                                                 hideProgressBar();
+                                                if (dialog.isShowing()) dialog.dismiss();
+                                                switch (majorCode) {
+                                                    case 158:
+                                                        dialogWaitTime(R.string.USER_DELETE_MAX_TRY_LOCK, time, majorCode);
+                                                        break;
+                                                }
                                             }
-
-                                            @Override
-                                            public void Error(final int majorCode, final int minorCode, final int time) {
-
-                                                G.handler.post(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        hideProgressBar();
-                                                        if (dialog.isShowing()) dialog.dismiss();
-                                                        switch (majorCode) {
-                                                            case 158:
-                                                                dialogWaitTime(R.string.USER_DELETE_MAX_TRY_LOCK, time, majorCode);
-                                                                break;
-                                                        }
-                                                    }
-                                                });
-
-                                            }
-
-                                            @Override
-                                            public void TimeOut() {
-                                                hideProgressBar();
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
-
-                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                snack.dismiss();
-                                                            }
-                                                        });
-                                                        snack.show();
-                                                    }
-                                                });
-                                            }
-                                        };
-
-                                        showProgressBar();
-                                        new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
+                                        });
 
                                     }
-                                }
-                            })
-                            .show();
+
+                                    @Override
+                                    public void TimeOut() {
+                                        hideProgressBar();
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
+                                };
+
+                                showProgressBar();
+                                new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
+
+                            }
+                        }
+                    }).show();
                 } else {
 
-                    final Snackbar snack =
-                            Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.please_enter_code_for_verify,
-                                    Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.please_enter_code_for_verify, Snackbar.LENGTH_LONG);
 
                     snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                         @Override
@@ -313,17 +306,16 @@ public class FragmentDeleteAccount extends Fragment {
 
     }
 
-    private void getSms(String message) {
-
-        countDownTimer.cancel();
-        String verificationCode = HelperString.regexExtractValue(message, regex);
-        if (verificationCode.length() > 0) {
-            edtDeleteAccount.setEnabled(true);
-            txtSet.setEnabled(true);
-            edtDeleteAccount.setText("" + verificationCode);
+    private void setCode() {
+        if (smsMessage != null && regex != null) {
+            countDownTimer.cancel();
+            String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
+            if (verificationCode.length() > 0) {
+                edtDeleteAccount.setEnabled(true);
+                txtSet.setEnabled(true);
+                edtDeleteAccount.setText("" + verificationCode);
+            }
         }
-
-//
     }
 
     @Override
@@ -358,28 +350,19 @@ public class FragmentDeleteAccount extends Fragment {
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title(title)
-                .customView(R.layout.dialog_remind_time, wrapInScrollView)
-                .positiveText(R.string.B_ok)
-                .autoDismiss(false)
-                .negativeText(R.string.B_cancel)
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
-                    }
-                })
-                .canceledOnTouchOutside(false)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                        new RequestUserGetDeleteToken().userGetDeleteToken();
-                    }
-                })
-                .show();
+        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).negativeText(R.string.B_cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
+            }
+        }).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+                new RequestUserGetDeleteToken().userGetDeleteToken();
+            }
+        }).show();
 
         View v = dialog.getCustomView();
 

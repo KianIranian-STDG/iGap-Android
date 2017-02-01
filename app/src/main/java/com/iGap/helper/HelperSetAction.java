@@ -22,7 +22,7 @@ public class HelperSetAction {
 
     public static void setActionTyping(final long roomId, ProtoGlobal.Room.Type chatType) {
 
-        if (!checkExistAction(roomId, ProtoGlobal.ClientAction.TYPING)) {
+        if (!checkExistAction(roomId, ProtoGlobal.ClientAction.TYPING) && chatType != null) {
             int randomNumber = HelperNumerical.generateRandomNumber(8);
 
             final StructAction structAction = new StructAction();
@@ -34,9 +34,9 @@ public class HelperSetAction {
 
             structActions.add(structAction);
 
-            if (structAction.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+            if (chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
                 new RequestGroupSetAction().groupSetAction(roomId, ProtoGlobal.ClientAction.TYPING, randomNumber);
-            } else if (structAction.chatType.toString().equals(ProtoGlobal.Room.Type.CHAT.toString())) {
+            } else if (chatType.toString().equals(ProtoGlobal.Room.Type.CHAT.toString())) {
                 new RequestChatSetAction().chatSetAction(roomId, ProtoGlobal.ClientAction.TYPING, randomNumber);
             }
             timeOutChecking(structAction);
@@ -90,7 +90,7 @@ public class HelperSetAction {
 
             structActions.add(structAction);
 
-            if (structAction.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+            if (chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
                 new RequestGroupSetAction().groupSetAction(roomId, action, randomNumber);
             } else {
                 new RequestChatSetAction().chatSetAction(roomId, action, randomNumber);

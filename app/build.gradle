@@ -59,7 +59,7 @@ dependencies {
   compile('com.afollestad.material-dialogs:core:0.9.0.1') {
     transitive = true
   }
-  compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+  compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
     transitive = true;
   }
   compile 'com.android.support:multidex:1.0.1'

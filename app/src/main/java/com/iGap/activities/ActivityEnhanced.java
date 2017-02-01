@@ -71,10 +71,6 @@ public class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onStart() {
 
-        if (heartBeatTimeOut()) {
-            //WebSocketClient.checkConnection();
-        }
-
         if (!G.isAppInFg) {
             G.isAppInFg = true;
             G.isChangeScrFg = false;
@@ -125,19 +121,4 @@ public class ActivityEnhanced extends AppCompatActivity {
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
     }
-
-    private boolean heartBeatTimeOut() {
-
-        long difference;
-
-        long currentTime = System.currentTimeMillis();
-        difference = (currentTime - G.latestHearBeatTime);
-
-        if (difference >= Config.HEART_BEAT_CHECKING_TIME_OUT) {
-            return true;
-        }
-
-        return false;
-    }
-
 }
