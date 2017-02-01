@@ -187,9 +187,11 @@ public class HelperDownloadFile {
 
             StructDownLoad item = list.get(primaryKey);
 
-            for (UpdateListener listener : item.listeners) {
-                if (listener != null) {
-                    listener.OnError(item.Token);
+            if (item != null && item.listeners != null) {
+                for (UpdateListener listener : item.listeners) {
+                    if (listener != null) {
+                        listener.OnError(item.Token);
+                    }
                 }
             }
 

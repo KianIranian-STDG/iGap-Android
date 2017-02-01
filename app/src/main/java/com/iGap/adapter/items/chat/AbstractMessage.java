@@ -705,11 +705,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     }
 
-                    if (attachment.getLocalFilePath() == null && attachment.getLocalThumbnailPath() == null) {
+                    boolean setDefualtImage = false;
+                    if (attachment.getLocalFilePath() == null && attachment.getLocalThumbnailPath() == null && _with == 0) {
                         _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
                         _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
+                        setDefualtImage = true;
                     }
-
 
 
                     int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight);
@@ -717,7 +718,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
                     }
 
-                    if (attachment.getLocalFilePath() == null && attachment.getLocalThumbnailPath() == null) {
+                    if (setDefualtImage) {
                         imageViewReservedSpace.setImageResource(R.mipmap.difaultimage);
                     }
 

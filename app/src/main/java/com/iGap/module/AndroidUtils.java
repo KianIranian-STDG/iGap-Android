@@ -224,6 +224,14 @@ public final class AndroidUtils {
         return null;
     }
 
+    //public static byte[] getFileHashFromPath(String path){
+    //
+    //
+    //
+    //}
+
+
+
     public static void cutFromTemp(ProtoGlobal.RoomMessageType messageType, String fileName) throws IOException {
         File cutTo = new File(suitableAppFilePath(messageType) + "/" + fileName);
         File cutFrom = new File(G.DIR_TEMP + "/" + fileName);
@@ -326,7 +334,7 @@ public final class AndroidUtils {
     public static int[] scaleDimenWithSavedRatio(Context context, float width, float height) {
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         float density = display.density * 0.9f;
-        float maxWidth = context.getResources().getDimension(R.dimen.dp220);
+        float maxWidth = context.getResources().getDimension(R.dimen.dp200);
         float newWidth;
         float newHeight;
 

@@ -12,17 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.iGap.R;
 import com.iGap.adapter.AdapterExplorer;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructExplorerItem;
-
 import java.io.File;
 import java.util.ArrayList;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -173,17 +170,19 @@ public class ActivityExplorer extends ActivityEnhanced {
 
             if (mode.equals("documnet")) {
 
-                String documentPath = Environment.getExternalStorageDirectory().toString() + "/Documents";
+                File file = new File(Environment.getExternalStorageDirectory().toString(), "Documents");
 
-                File file = new File(documentPath);
+                if (!file.exists()) {
+                    file = new File(Environment.getExternalStorageDirectory().toString(), "My Documents");
+                }
+
 
                 if (file.exists()) {
                     onItemClickInernal(0);
 
+                    int po = getItemId(file.getPath());
 
-                    int po = getItemId(Environment.getExternalStorageDirectory().toString(), "Documents");
-
-                    onItemClickInernal(po - 1);
+                    if (po >= 0) onItemClickInernal(po);
                 }
             }
             first = false;
@@ -192,37 +191,19 @@ public class ActivityExplorer extends ActivityEnhanced {
 
     }
 
-    private int getItemId(String path, String name) {
+    private int getItemId(String path) {
 
-        File fileDir = new File(path);
+        int setlectedItem = -1;
 
-        if (fileDir.isDirectory()) {
-
-            String[] tmpname = fileDir.list();
-
-            if (tmpname == null) {
-                return -1;
-            }
-
-
-            for (int i = 0; i < tmpname.length; i++) {
-
-                if (tmpname[i].startsWith(".")) {
-                    continue;
-                } else {
-                    File tmp = new File(fileDir.getAbsolutePath() + "/" + tmpname[i]);
-                    if (tmp.canRead()) {
-
-                        if (tmpname[i].equals(name))
-                            return i;
-
-
-                    }
-                }
+        for (int i = 0; i < item.size(); i++) {
+            if (item.get(i).path.equals(path)) {
+                setlectedItem = i;
+                break;
             }
         }
 
-        return -1;
+        return setlectedItem;
+
     }
 
     void fill(String nextnod, int position) {

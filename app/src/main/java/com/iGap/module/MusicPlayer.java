@@ -200,8 +200,7 @@ public class MusicPlayer {
                 if (onCompleteChat != null) {
                     onCompleteChat.complete(true, "play", "");
                 }
-
-            } else {
+            } else if (onComplete != null) {
                 onComplete.complete(true, "play", "");
             }
 
@@ -234,10 +233,11 @@ public class MusicPlayer {
                 if (onCompleteChat != null) {
                     onCompleteChat.complete(true, "pause", "");
                 }
-
-            } else {
+            } else if (onComplete != null) {
                 onComplete.complete(true, "pause", "");
             }
+
+
         } catch (Exception e) {
         }
 
@@ -277,10 +277,8 @@ public class MusicPlayer {
                     onCompleteChat.complete(true, "play", "");
                     onCompleteChat.complete(true, "updateTime", "00");
                 }
-
-            } else {
+            } else if (onComplete != null) {
                 onComplete.complete(true, "play", "");
-
                 onComplete.complete(true, "updateTime", "00");
             }
             stopTimer();
@@ -424,8 +422,7 @@ public class MusicPlayer {
                     if (onCompleteChat != null) {
                         onCompleteChat.complete(true, "pause", "");
                     }
-
-                } else {
+                } else if (onComplete != null) {
                     onComplete.complete(true, "pause", "");
                 }
 
@@ -465,8 +462,7 @@ public class MusicPlayer {
                     if (onCompleteChat != null) {
                         onCompleteChat.complete(true, "pause", "");
                     }
-
-                } else {
+                } else if (onComplete != null) {
                     onComplete.complete(true, "pause", "");
                 }
 
@@ -696,7 +692,9 @@ public class MusicPlayer {
         }
 
         if (isShowMediaPlayer) {
-            onComplete.complete(true, "updateTime", strTimer);
+            if (onComplete != null) {
+                onComplete.complete(true, "updateTime", strTimer);
+            }
         } else {
             if (onCompleteChat != null) {
                 onCompleteChat.complete(true, "updateTime", strTimer);
