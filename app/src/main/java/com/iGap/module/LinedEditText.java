@@ -52,7 +52,7 @@ public class LinedEditText extends EditText {
         dashedLinePaint = new Paint();
         dashedLinePaint.setColor(G.context.getResources().getColor(R.color.line_edit_text));
         dashedLinePaint.setStyle(Paint.Style.STROKE);
-        initialCount = getMaxLines();
+        initialCount = 4;
         setLines(initialCount);
     }
 
