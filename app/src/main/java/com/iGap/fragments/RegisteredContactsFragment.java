@@ -327,7 +327,7 @@ public class RegisteredContactsFragment extends Fragment {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final long roomId) {
-                    getActivity().runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -344,23 +344,18 @@ public class RegisteredContactsFragment extends Fragment {
 
                 @Override
                 public void onChatGetRoomTimeOut() {
-
-                    getActivity().runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             prgWaiting.setVisibility(View.GONE);
-
                         }
                     });
-
-
                 }
 
                 @Override
                 public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                    getActivity().runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

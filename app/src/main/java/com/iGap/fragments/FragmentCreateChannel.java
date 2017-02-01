@@ -414,11 +414,10 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
     @Override
     public void onError(int majorCode, int minorCode) {
-        getActivity().runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
-
                 snack.setAction(R.string.cancel, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -432,7 +431,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
     @Override
     public void onTimeOut() {
-        getActivity().runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);

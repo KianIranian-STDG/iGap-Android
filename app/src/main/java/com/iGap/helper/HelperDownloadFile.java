@@ -121,7 +121,7 @@ public class HelperDownloadFile {
         return false;
     }
 
-    public static void startDoanload(String token, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, UpdateListener update) {
+    public static void startDownload(String token, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, UpdateListener update) {
 
         StructDownLoad item;
 

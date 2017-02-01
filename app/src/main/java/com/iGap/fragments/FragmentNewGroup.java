@@ -18,7 +18,6 @@ import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -833,7 +832,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
 
-        Log.i("VVVVVV", "onAvatarAdd: " + roomId);
         HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
             @Override
             public void onAvatarAdd(final String avatarPath) {
@@ -913,7 +911,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     }
 
     private void startRoom(long roomId) {
-        Log.i("ZZZZZZZZ", "000run: " + roomId);
         Fragment fragment = ContactGroupFragment.newInstance();
         Bundle bundle = new Bundle();
         bundle.putLong("RoomId", roomId);

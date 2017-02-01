@@ -361,7 +361,7 @@ public class FragmentShowImage extends Fragment {
                         final String filePathTumpnail = G.DIR_TEMP + "/" + "thumb_" + rm.getAttachment().getToken() + "_" + rm.getAttachment().getName();
 
                         if (selector != null && fileSize > 0) {
-                            HelperDownloadFile.startDoanload(rm.getAttachment().getToken(), rm.getAttachment().getName(), fileSize, selector, "", new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getName(), fileSize, selector, "", new HelperDownloadFile.UpdateListener() {
                                 @Override public void OnProgress(String token, int progress) {
 
                                     if (progress == 100) {
@@ -432,7 +432,7 @@ public class FragmentShowImage extends Fragment {
 
 
 
-            HelperDownloadFile.startDoanload(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath,
+            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath,
                 new HelperDownloadFile.UpdateListener() {
                     @Override public void OnProgress(String token, final int progres) {
 

@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
@@ -38,12 +37,10 @@ import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchFragment extends Fragment {
 
@@ -319,10 +316,8 @@ public class SearchFragment extends Fragment {
         for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class).findAll()) {
             if (roomMessage != null) {
 
-                if (roomMessage.getMessage() == null)
-                    continue;
-                if (roomMessage.getMessage().length() < 1)
-                    continue;
+                if (roomMessage.getMessage() == null) continue;
+                if (roomMessage.getMessage().length() < 1) continue;
 
                 StructSearch item = new StructSearch();
 
@@ -383,7 +378,9 @@ public class SearchFragment extends Fragment {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             realm.close();
                             G.context.startActivity(intent);
-                            getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                            if (getActivity() != null) {
+                                getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                            }
                         }
                     });
                 }

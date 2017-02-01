@@ -909,7 +909,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (token != null && token.length() > 0 && size > 0) {
 
-            HelperDownloadFile.startDoanload(token, name, size, selector, "", new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(token, name, size, selector, "", new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(String token, int progress) {
 
@@ -959,7 +959,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.setVisibility(View.VISIBLE);
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
-            HelperDownloadFile.startDoanload(token, name, size, selector, _path, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(token, name, size, selector, _path, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String token, final int progress) {
 
