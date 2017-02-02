@@ -66,7 +66,11 @@ public final class AndroidUtils {
     }
 
     public static int[] getImageDimens(String filePath) {
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
         if (bitmap != null) {
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();

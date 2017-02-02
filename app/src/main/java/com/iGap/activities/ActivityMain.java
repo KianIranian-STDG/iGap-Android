@@ -571,6 +571,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         intent.putExtra("RoomId", item.mInfo.getId());
                         intent.putExtra("MUT", item.mInfo.getMute());
                         startActivity(intent);
+                        overridePendingTransition(0, 0);
 
                         if (ActivityMain.arcMenu != null && ActivityMain.arcMenu.isMenuOpened()) {
                             ActivityMain.arcMenu.toggleMenu();

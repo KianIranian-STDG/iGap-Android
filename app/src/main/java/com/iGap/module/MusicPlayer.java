@@ -71,6 +71,7 @@ public class MusicPlayer {
     private static double amoungToupdate;
     public static String strTimer = "";
     public static String messageId = "";
+    public static ArrayList<String> playedList = new ArrayList<>();
 
 
 
@@ -390,7 +391,9 @@ public class MusicPlayer {
         mediaThumpnail = null;
         MusicPlayer.roomId = roomId;
 
-
+        if (playedList.indexOf(messageID) == -1) {
+            playedList.add(messageID);
+        }
 
         if (layoutTripMusic.getVisibility() == View.GONE) {
             layoutTripMusic.setVisibility(View.VISIBLE);

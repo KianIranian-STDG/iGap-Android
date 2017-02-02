@@ -450,7 +450,9 @@ public class ActivityChat extends ActivityEnhanced
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
 
-        mAdapter.notifyDataSetChanged();
+        //update view for played music
+        mAdapter.updateChengedItem(MusicPlayer.playedList);
+        MusicPlayer.playedList.clear();
 
         if (isGoingFromUserLink) {
             new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
@@ -508,6 +510,8 @@ public class ActivityChat extends ActivityEnhanced
         checkIfOrientationChanged(getResources().getConfiguration());
         pageSettings();
         initAttach();
+
+        MusicPlayer.playedList.clear();
 
         /**
          * define views
@@ -2679,7 +2683,7 @@ public class ActivityChat extends ActivityEnhanced
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
                                 Uri uri = Uri.parse(listPathString.get(0));
                                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(uri));
                                 intent.putExtra("TYPE", "gallery");
                                 intent.putExtra("PAGE", "chat");
                                 startActivityForResult(intent, IntentRequests.REQ_CROP);
@@ -2696,7 +2700,7 @@ public class ActivityChat extends ActivityEnhanced
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
                                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
                                 Uri uri = Uri.parse(listPathString.get(0));
-                                uri = Uri.parse("file://" + AttachFile.getFilePathFromUri(data.getData()));
+                                uri = Uri.parse("file://" + AttachFile.getFilePathFromUri(uri));
                                 intent.putExtra("IMAGE_CAMERA", uri.toString());
                                 intent.putExtra("TYPE", "gallery");
                                 intent.putExtra("PAGE", "chat");
@@ -2731,8 +2735,8 @@ public class ActivityChat extends ActivityEnhanced
 
                             ImageHelper.correctRotateImage(listPathString.get(0), true);
                             Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
-                            String path = AttachFile.mCurrentPhotoPath;
-                            intent.putExtra("IMAGE_CAMERA", path);
+
+                            intent.putExtra("IMAGE_CAMERA", listPathString.get(0));
                             intent.putExtra("TYPE", "camera");
                             intent.putExtra("PAGE", "chat");
                             startActivityForResult(intent, IntentRequests.REQ_CROP);
@@ -2750,9 +2754,7 @@ public class ActivityChat extends ActivityEnhanced
 
                             Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
 
-                            String path = "file://" + AttachFile.imagePath;
-
-                            intent.putExtra("IMAGE_CAMERA", path);
+                            intent.putExtra("IMAGE_CAMERA", "file://" + listPathString.get(0));
                             intent.putExtra("TYPE", "camera");
                             intent.putExtra("PAGE", "chat");
                             startActivityForResult(intent, IntentRequests.REQ_CROP);

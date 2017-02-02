@@ -152,7 +152,7 @@ public class HelperNotificationAndBadge {
 
         Intent intent = new Intent(context, ActivityChat.class);
         intent.putExtra("RoomId", list.get(indexItem).roomId);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 10 + indexItem, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 30 + indexItem, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         ActivityPopUpNotification.isGoingToChatFromPopUp = true;
         remoteViewsLarge.setOnClickPendingIntent(resLayot, pendingIntent);
     }
@@ -311,10 +311,10 @@ public class HelperNotificationAndBadge {
         if (isFromOnRoom) {
             Intent intent = new Intent(context, ActivityChat.class);
             intent.putExtra("RoomId", roomId);
-            pi = PendingIntent.getActivity(context, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pi = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             ActivityPopUpNotification.isGoingToChatFromPopUp = true;
         } else {
-            pi = PendingIntent.getActivity(context, 10, new Intent(context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
+            pi = PendingIntent.getActivity(context, notificationId, new Intent(context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
 
