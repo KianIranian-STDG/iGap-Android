@@ -49,6 +49,10 @@ public class HelperAvatar {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                if (src == null) {
+                    return;
+                }
+
                 String avatarPath = copyAvatar(src, avatar);
                 RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatar.getId()).findFirst();
                 if (realmAvatar == null) {

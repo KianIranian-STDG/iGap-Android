@@ -1,8 +1,5 @@
 package com.iGap.module;
 
-/**
- * Created by Rahmani on 8/29/2016.
- */
 public class StructListOfContact {
 
     public String phone;

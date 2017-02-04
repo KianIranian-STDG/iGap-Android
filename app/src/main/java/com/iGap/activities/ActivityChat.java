@@ -389,7 +389,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        if (chatType != null) {
+        /*if (chatType != null) {
             if (chatType == CHAT) {
                 G.helperNotificationAndBadge.checkAlert(false, CHAT, mRoomId);
             } else if (chatType == GROUP) {
@@ -397,7 +397,7 @@ public class ActivityChat extends ActivityEnhanced
             } else if (chatType == CHANNEL) {
                 G.helperNotificationAndBadge.checkAlert(false, CHANNEL, mRoomId);
             }
-        }
+        }*/
     }
 
     @Override
@@ -1584,7 +1584,7 @@ public class ActivityChat extends ActivityEnhanced
             public void run() {
                 switchAddItem(getLocalMessages(), true);
             }
-        }, 50);
+        }, 100);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(ActivityChat.this);
         /**

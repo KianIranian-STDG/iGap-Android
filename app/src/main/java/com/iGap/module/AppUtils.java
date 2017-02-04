@@ -175,6 +175,9 @@ public final class AppUtils {
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
                 //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 break;
+            default:
+                view.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -227,6 +230,9 @@ public final class AppUtils {
                 } else {
                     DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 }
+                break;
+            default:
+                view.setVisibility(View.GONE);
                 break;
         }
     }
