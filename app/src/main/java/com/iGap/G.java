@@ -155,6 +155,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmMigrationClass;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserContactsGetBlockedList;
 import com.iGap.request.RequestUserContactsGetList;
@@ -250,6 +251,7 @@ public class G extends MultiDexApplication {
     public static long currentTime;
     public static long userId;
     public static long latestHearBeatTime = 0;
+    public static boolean firstTimeEnterToApp = true;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -257,9 +259,6 @@ public class G extends MultiDexApplication {
         MultiDex.install(this);
     }
 
-    public static Typeface ARIAL_TEXT;
-    public static Typeface YEKAN_FARSI;
-    public static Typeface YEKAN_BOLD;
     public static File imageFile;
     public static int COPY_BUFFER_SIZE = 1024;
     public static UploaderUtil uploaderUtil = new UploaderUtil();
@@ -760,6 +759,15 @@ public class G extends MultiDexApplication {
                     @Override
                     public void run() {
                         clientConditionGlobal = HelperClientCondition.computeClientCondition();
+                        /**
+                         * in first enter to app client send clientCondition after get room list
+                         * but, in another login when user not closed app after login client send
+                         * latest state to server  after login without get room list
+                         */
+                        if (!firstTimeEnterToApp) {
+                            new RequestClientCondition().clientCondition(clientConditionGlobal);
+                        }
+
                         getUserInfo();
                         importContact();
                         //sendWaitingRequestWrappers();

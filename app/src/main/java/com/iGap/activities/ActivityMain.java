@@ -115,6 +115,7 @@ import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.clientConditionGlobal;
+import static com.iGap.G.firstTimeEnterToApp;
 import static com.iGap.G.mFirstRun;
 import static com.iGap.R.string.updating;
 
@@ -136,7 +137,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private boolean keepMedia;
     private Typeface titleTypeface;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private static boolean firstTimeEnterToApp = true;
     private SharedPreferences sharedPreferences;
     private boolean isGetContactList = false;
 
