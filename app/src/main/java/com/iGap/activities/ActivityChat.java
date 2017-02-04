@@ -2699,9 +2699,6 @@ public class ActivityChat extends ActivityEnhanced
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
 
-                                //    ImageHelper.correctRotateImage(listPathString.get(0), true);
-
-
                                 Uri uri = Uri.parse(listPathString.get(0));
                                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
                                 intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(uri));

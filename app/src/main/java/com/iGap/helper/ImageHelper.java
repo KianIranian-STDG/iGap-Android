@@ -162,16 +162,9 @@ public class ImageHelper {
         return null;
     }
 
-    public static Bitmap correctRotate(String filepath) {
-
-        Bitmap bitmap = null;
+    public static Bitmap correctRotate(String filepath, Bitmap bitmap) {
 
         try {
-
-            if (filepath.length() > 0) {
-                File file = new File(filepath);
-                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-            }
 
             ExifInterface ei = new ExifInterface(filepath);
             int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
@@ -188,7 +181,7 @@ public class ImageHelper {
                     break;
             }
         } catch (IOException e) {
-            return null;
+            return bitmap;
         }
 
         return bitmap;

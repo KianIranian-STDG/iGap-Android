@@ -680,10 +680,13 @@ public class AttachFile {
 
             Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
 
+        bitmap = ImageHelper.correctRotate(galleryPath, bitmap);
+
             if (bitmap != null) {
                 Log.i("CCCCCCD", "0 result: " + result);
                 result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 1).getPath();
                 Log.i("CCCCCCD", "1 result: " + result);
+
                 ImageHelper.SaveBitmapToFile(result, bitmap);
             }
 
