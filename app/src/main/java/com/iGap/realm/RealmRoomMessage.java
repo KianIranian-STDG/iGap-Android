@@ -160,9 +160,9 @@ import org.parceler.Parcel;
     public static RealmRoomMessage putOrUpdateForwardOrReply(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
 
-        RealmRoomMessage message = putOrUpdate(input, roomId, false, true, realm);
+        RealmRoomMessage message = putOrUpdate(input, roomId, true, true, realm);
 
-
+        message.setShowMessage(true);
 
         realm.close();
 

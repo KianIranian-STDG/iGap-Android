@@ -384,7 +384,6 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void sendSeenStatus(RealmRoomMessage message) {
-                Log.i("QQQ", "sendSeenStatus ");
                 G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
             }
         });
@@ -736,7 +735,7 @@ public class ActivityChat extends ActivityEnhanced
 
         initComponent();
         initAppbarSelected();
-        manageForwardedMessage();
+        //manageForwardedMessage();
         getChatHistory();
         getDraft();
         getUserInfo();
@@ -884,30 +883,21 @@ public class ActivityChat extends ActivityEnhanced
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
                 if (roomMessage != null) {
-
-                    /*RealmRoomMessage _mes = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage() : roomMessage;
-                    RealmRoomMessage messageforwrad = realm.copyFromRealm(_mes);
-                    messageforwrad.setMessageId(messageId + 1);
-                    messageforwrad.setRoomId(mRoomId);
-                    messageforwrad.setShowMessage(false);
-                    messageforwrad = realm.copyToRealmOrUpdate(messageforwrad);*/
-
-
                     long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                     RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
-                    forwardedMessage.setForwardMessage(roomMessage);
+                    if (roomMessage.getForwardMessage() != null) {
+                        forwardedMessage.setForwardMessage(roomMessage.getForwardMessage());
+                    } else {
+                        forwardedMessage.setForwardMessage(roomMessage);
+                    }
                     forwardedMessage.setCreateTime(TimeUtils.currentLocalTime());
                     forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                     forwardedMessage.setRoomId(mRoomId);
                     forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                     forwardedMessage.setUserId(userId);
                     forwardedMessage.setShowMessage(true);
-                   /*if (messageInfo.channelExtra != null) {
-                        forwardedMessage.setChannelExtra(RealmChannelExtra.convert(messageInfo.channelExtra));
-                    }*/
 
                     realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setLastMessage(forwardedMessage);
-
                 }
             }
         }, new Realm.Transaction.OnSuccess() {
@@ -1583,6 +1573,8 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void run() {
                 switchAddItem(getLocalMessages(), true);
+
+                manageForwardedMessage();
             }
         }, 100);
 
