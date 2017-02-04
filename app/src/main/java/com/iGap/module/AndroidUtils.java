@@ -67,16 +67,19 @@ public final class AndroidUtils {
 
     public static int[] getImageDimens(String filePath) {
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
-        if (bitmap != null) {
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
+            BitmapFactory.decodeFile(filePath, options);
+
+            int width = options.outWidth;
+            int height = options.outHeight;
+
             return new int[]{width, height};
+        } catch (Exception e) {
+            return new int[] { 0, 0 };
         }
-        return new int[]{0, 0};
     }
 
     /**

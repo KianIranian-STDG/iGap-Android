@@ -35,25 +35,8 @@ public class ActivityEnhanced extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        checkLanguage(this);
 
-        //        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        //        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "en");
-        //        switch (language) {
-        //            case "فارسی":
-        //                setLocale("fa");
-        //                break;
-        //            case "English":
-        //                setLocale("en");
-        //                break;
-        //            case "العربی":
-        //                setLocale("ar");
-        //
-        //                break;
-        //            case "Deutsch":
-        //                setLocale("nl");
-        //
-        //                break;
-        //        }
 
 
     }
@@ -110,15 +93,29 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     }
 
+    /**
+     * check the selected language user and set the language if change it
+     */
 
-    public void setLocale(String lang) {
+    public static void checkLanguage(Context context) {
 
+        try {
+            String selectedLanguage = G.selectedLanguage;
 
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+            if (selectedLanguage == null) return;
+
+            String currentLalnguage = Locale.getDefault().getLanguage();
+
+            if (!selectedLanguage.equals(currentLalnguage)) {
+
+                Locale locale = new Locale(selectedLanguage);
+                Locale.setDefault(locale);
+                Configuration config = new Configuration();
+                config.locale = locale;
+                context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+            }
+        } catch (Exception e) {
+        }
 
     }
 }

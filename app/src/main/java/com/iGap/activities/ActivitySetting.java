@@ -82,6 +82,7 @@ import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
+import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserProfileCheckUsername;
@@ -130,6 +131,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private SharedPreferences sharedPreferences;
     private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
     private RelativeLayout ltClearCache;
+    private RelativeLayout lyCleanUp;
     private PopupWindow popupWindow;
     private int poRbDialogLangouage = -1;
     private String textLanguage = "English";
@@ -1333,18 +1335,22 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 setLocale("en");
                                 G.onRefreshActivity.refresh("en");
                                 HelperCalander.isLanguagePersian = false;
+                                G.selectedLanguage = "en";
                                 break;
                             case 1:
+                                G.selectedLanguage = "fa";
                                 setLocale("fa");
                                 G.onRefreshActivity.refresh("fa");
                                 HelperCalander.isLanguagePersian = true;
                                 break;
                             case 2:
+                                G.selectedLanguage = "ar";
                                 setLocale("ar");
                                 G.onRefreshActivity.refresh("ar");
                                 HelperCalander.isLanguagePersian = false;
                                 break;
                             case 3:
+                                G.selectedLanguage = "nl";
                                 setLocale("nl");
                                 G.onRefreshActivity.refresh("nl");
                                 HelperCalander.isLanguagePersian = false;
@@ -1365,6 +1371,27 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         txtSizeClearCach = (TextView) findViewById(R.id.st_txt_clearCache);
         txtSizeClearCach.setText(formatFileSize(total));
+
+        lyCleanUp = (RelativeLayout) findViewById(R.id.st_layout_cleanup);
+        lyCleanUp.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(R.string.do_you_want_to_clean_all_data_in_chat_rooms)
+                    .positiveText(R.string.ok)
+                    .cancelable(true)
+                    .negativeText(android.R.string.cancel)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            RealmRoomMessage.ClearAllMessage(true, 0);
+                        }
+                    })
+                    .build();
+
+                dialog.show();
+            }
+        });
+
 
         ltClearCache = (RelativeLayout) findViewById(R.id.st_layout_clearCache);
         ltClearCache.setOnClickListener(new View.OnClickListener() {

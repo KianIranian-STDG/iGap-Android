@@ -583,4 +583,29 @@ import org.parceler.Parcel;
         }
     }
 
+    public static void ClearAllMessage(boolean deleteAll, final long roomId) {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        if (deleteAll) {
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+
+                    realm.where(RealmRoomMessage.class).findAll().deleteAllFromRealm();
+                }
+            });
+        } else {
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
+                }
+            });
+        }
+
+        realm.close();
+    }
+
 }

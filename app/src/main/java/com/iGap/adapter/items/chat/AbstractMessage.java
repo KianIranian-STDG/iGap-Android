@@ -90,12 +90,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     protected void setTextIfNeeded(TextView view, String msg) {
 
-        msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
+
 
         if (!TextUtils.isEmpty(msg)) {
             if (mMessage.hasLinkInMessage) {
                 view.setText(HelperUrl.setUrlLink(msg, true, true, mMessage.messageID, true));
             } else {
+
+                msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
+
                 view.setText(msg);
             }
 
@@ -727,7 +730,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else if (messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                 ReserveSpaceGifImageView imageViewReservedSpace = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
                 if (imageViewReservedSpace != null) {
-                    int[] dimens = imageViewReservedSpace.reserveSpace(attachment.getWidth(), attachment.getHeight());
+
+                    int _with = attachment.getWidth();
+                    int _hight = attachment.getHeight();
+
+                    Log.e("dddd",
+                        attachment + "   " + attachment.getWidth() + "   " + attachment.getHeight() + "    " + attachment.getSmallThumbnail().getWidth() + "   " + attachment.getSmallThumbnail()
+                            .getHeight());
+
+                    if (_with == 0) {
+                        _with = (int) G.context.getResources().getDimension(R.dimen.dp200);
+                        _hight = (int) G.context.getResources().getDimension(R.dimen.dp200);
+                    }
+
+                    int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight);
                     ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
                 }
             }

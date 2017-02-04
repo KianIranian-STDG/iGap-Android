@@ -142,7 +142,7 @@ public class ImageHelper {
             BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
             //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE = 200;
+            final int REQUIRED_SIZE = 400;
             int width_tmp = o.outWidth, height_tmp = o.outHeight;
             int scale = 1;
             while (true) {
@@ -162,6 +162,37 @@ public class ImageHelper {
         return null;
     }
 
+    public static Bitmap correctRotate(String filepath) {
+
+        Bitmap bitmap = null;
+
+        try {
+
+            if (filepath.length() > 0) {
+                File file = new File(filepath);
+                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            }
+
+            ExifInterface ei = new ExifInterface(filepath);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    bitmap = rotateImage(bitmap, 90);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    bitmap = rotateImage(bitmap, 180);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    bitmap = rotateImage(bitmap, 270);
+                    break;
+            }
+        } catch (IOException e) {
+            return null;
+        }
+
+        return bitmap;
+    }
 
 
 }

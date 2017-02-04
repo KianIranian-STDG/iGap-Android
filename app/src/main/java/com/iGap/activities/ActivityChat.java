@@ -365,6 +365,7 @@ public class ActivityChat extends ActivityEnhanced
     private boolean isThereAnyMoreItemToLoadFromServer = true;
     private boolean isSendingRequestClientGetHistory = false;
     private ArrayList<RealmRoomMessage> mLocalList = new ArrayList<>();
+    private RecyclerView.OnScrollListener scrollListener;
 
 
     @Override
@@ -1349,18 +1350,21 @@ public class ActivityChat extends ActivityEnhanced
                 final TextView text3 = new TextView(ActivityChat.this);
                 final TextView text4 = new TextView(ActivityChat.this);
                 final TextView text5 = new TextView(ActivityChat.this);
+                final TextView text6 = new TextView(ActivityChat.this);
 
                 text1.setTextColor(getResources().getColor(android.R.color.black));
                 text2.setTextColor(getResources().getColor(android.R.color.black));
                 text3.setTextColor(getResources().getColor(android.R.color.black));
                 text4.setTextColor(getResources().getColor(android.R.color.black));
                 text5.setTextColor(getResources().getColor(android.R.color.black));
+                text6.setTextColor(getResources().getColor(android.R.color.black));
 
                 text1.setText(getResources().getString(R.string.Search));
                 text2.setText(getResources().getString(R.string.clear_history));
                 text3.setText(getResources().getString(R.string.delete_chat));
                 text4.setText(getResources().getString(R.string.mute_notification));
                 text5.setText(getResources().getString(R.string.chat_to_group));
+                text6.setText(getResources().getString(R.string.clean_up));
 
                 final int dim20 = (int) getResources().getDimension(R.dimen.dp20);
                 int dim16 = (int) getResources().getDimension(R.dimen.dp16);
@@ -1389,18 +1393,21 @@ public class ActivityChat extends ActivityEnhanced
                 text3.setTextSize(sp14_Popup);
                 text4.setTextSize(sp14_Popup);
                 text5.setTextSize(sp14_Popup);
+                text6.setTextSize(sp14_Popup);
 
                 text1.setPadding(dim20, dim12, dim12, dim20);
                 text2.setPadding(dim20, 0, dim12, dim20);
                 text3.setPadding(dim20, 0, dim12, dim20);
                 text4.setPadding(dim20, 0, dim12, dim20);
                 text5.setPadding(dim20, 0, dim12, (dim16));
+                text6.setPadding(dim20, 0, dim12, (dim16));
 
                 layoutDialog.addView(text1, params);
                 layoutDialog.addView(text2, params);
                 layoutDialog.addView(text3, params);
                 layoutDialog.addView(text4, params);
                 layoutDialog.addView(text5, params);
+                layoutDialog.addView(text6, params);
 
                 if (chatType == CHAT) {
                     text3.setVisibility(View.VISIBLE);
@@ -1431,6 +1438,7 @@ public class ActivityChat extends ActivityEnhanced
                     text3.setVisibility(View.GONE);
                     text4.setVisibility(View.GONE);
                     text5.setVisibility(View.GONE);
+                    text6.setVisibility(View.GONE);
                 }
                 realm.close();
 
@@ -1535,6 +1543,23 @@ public class ActivityChat extends ActivityEnhanced
                                 G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
                             }
                         }).show();
+                    }
+                });
+
+                text6.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+
+                        popupWindow.dismiss();
+
+                        RealmRoomMessage.ClearAllMessage(false, mRoomId);
+                        mAdapter.clear();
+
+                        isThereAnyMoreItemToLoadFromServer = true;
+                        isThereAnyMoreItemToLoadFromLocal = false;
+
+                        recyclerView.addOnScrollListener(scrollListener);
+
+                        requestMessageHistory();
                     }
                 });
             }
@@ -2673,6 +2698,10 @@ public class ActivityChat extends ActivityEnhanced
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
+
+                                //    ImageHelper.correctRotateImage(listPathString.get(0), true);
+
+
                                 Uri uri = Uri.parse(listPathString.get(0));
                                 Intent intent = new Intent(ActivityChat.this, ActivityCrop.class);
                                 intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(uri));
@@ -3495,7 +3524,7 @@ public class ActivityChat extends ActivityEnhanced
             isThereAnyMoreItemToLoadFromLocal = false;
         }
 
-        RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+        scrollListener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);

@@ -252,6 +252,7 @@ public class G extends MultiDexApplication {
     public static long userId;
     public static long latestHearBeatTime = 0;
     public static boolean firstTimeEnterToApp = true;
+    public static String selectedLanguage = "en";
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -639,29 +640,28 @@ public class G extends MultiDexApplication {
 
         switch (language) {
             case "فارسی":
-                setLocale("fa");
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+                selectedLanguage = "fa";
                 HelperCalander.isLanguagePersian = true;
                 break;
             case "English":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
-                setLocale("en");
+                selectedLanguage = "en";
                 HelperCalander.isLanguagePersian = false;
                 break;
             case "العربی":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
-                setLocale("ar");
+                selectedLanguage = "ar";
                 HelperCalander.isLanguagePersian = false;
                 break;
             case "Deutsch":
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
-                setLocale("nl");
+                selectedLanguage = "nl";
                 HelperCalander.isLanguagePersian = false;
                 break;
-            default:
-                CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
-                break;
+
         }
+
+        setLocale("selectedLanguage");
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
+
+
     }
 
     public void setLocale(String lang) {
