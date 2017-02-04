@@ -222,11 +222,9 @@ public class FragmentDeleteAccount extends Fragment {
                                     @Override
                                     public void TimeOut() {
                                         hideProgressBar();
-                                        getActivity().runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
+                                        G.handler.post(new Runnable() {
+                                            @Override public void run() {
                                                 final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
-
                                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
@@ -279,10 +277,8 @@ public class FragmentDeleteAccount extends Fragment {
 
         final TextView txtTimerLand = (TextView) view.findViewById(R.id.stda_txt_time);
 
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        G.handler.post(new Runnable() {
+            @Override public void run() {
                 countDownTimer = new CountDownTimer(1000 * 60, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -329,9 +325,9 @@ public class FragmentDeleteAccount extends Fragment {
     }
 
     private void showProgressBar() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+
+        G.handler.post(new Runnable() {
+            @Override public void run() {
                 prgWaiting.setVisibility(View.VISIBLE);
                 getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
@@ -339,9 +335,8 @@ public class FragmentDeleteAccount extends Fragment {
     }
 
     private void hideProgressBar() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        G.handler.post(new Runnable() {
+            @Override public void run() {
                 prgWaiting.setVisibility(View.GONE);
                 getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }

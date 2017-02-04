@@ -436,7 +436,11 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                 } else {
                     G.IMAGE_NEW_CHANEL.delete();
                 }
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                try {
+                    getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
             }
         });
     }
@@ -469,14 +473,12 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         G.onChannelCreate = new OnChannelCreate() {
             @Override
             public void onChannelCreate(final long roomIdR, final String inviteLink) {
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
                         createChannelRoom(roomIdR, inviteLink);
                         mInviteLink = inviteLink;
                         if (existAvatar) {
-//                            showProgressBar();
+                            //                            showProgressBar();
                             mInviteLink = inviteLink;
                             new RequestChannelAvatarAdd().channelAvatarAdd(roomIdR, token);
 
@@ -490,11 +492,11 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                             bundle.putString("TOKEN", token);
                             fragmentCreateChannel.setArguments(bundle);
                             getActivity().getSupportFragmentManager().beginTransaction()
-                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                    .replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment")
-                                    .commitAllowingStateLoss();
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment")
+                                .commitAllowingStateLoss();
                             getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-//                        getRoom(roomIdR, ProtoGlobal.Room.Type.CHANNEL);
+                            //                        getRoom(roomIdR, ProtoGlobal.Room.Type.CHANNEL);
                         }
                     }
                 });
@@ -502,25 +504,12 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
             @Override
             public void onError(int majorCode, int minorCode) {
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWaiting.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+                hideProgressBar();
             }
 
             @Override
             public void onTimeOut() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWaiting.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+                hideProgressBar();
             }
         };
 
@@ -571,26 +560,14 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
             @Override
             public void Error(int majorCode, int minorCode) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWaiting.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+
+                hideProgressBar();
+
             }
 
             @Override
             public void timeOut() {
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWaiting.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
-
+                hideProgressBar();
             }
         };
 
@@ -602,15 +579,13 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
             @Override
             public void onGroupCreate(final long roomIdR) {
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
                         roomId = roomIdR;
                         hideProgressBar();
                         getRoom(roomIdR, ProtoGlobal.Room.Type.GROUP);
                     }
                 });
-
 
                /* getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -694,27 +669,14 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
             public void onError(int majorCode, int minorCode) {
 
                 //TODO [Saeed Mozaffari] [2017-01-30 1:12 PM] - check get activity null state in app, hint: use handler instead of activity.
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWaiting.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
-
+                hideProgressBar();
 
             }
 
             @Override
             public void onTimeOut() {
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWaiting.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+                hideProgressBar();
 
             }
         };
@@ -812,9 +774,9 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     @Override
     public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
         // TODO: 10/20/2016 [Alireza] update view something like updating progress
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+
+        G.handler.post(new Runnable() {
+            @Override public void run() {
                 txtNextStep.setEnabled(false);
             }
         });
@@ -834,9 +796,9 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
             @Override
             public void onAvatarAdd(final String avatarPath) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
                         hideProgressBar();
                         setImage(avatarPath);
 
@@ -845,7 +807,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                         } else {
                             startRoom(roomId);
                         }
-
                     }
                 });
             }

@@ -169,8 +169,11 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppTheme22"/>
+
         <activity android:name=".activities.ActivitySetting" />
-        <activity android:name=".activities.ActivityContactsProfile"/>
+        <activity
+            android:name=".activities.ActivityContactsProfile"
+            android:exported="false" />
         <activity
             android:name=".activities.ActivitySelectChat"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"

@@ -209,7 +209,15 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         bundle.putString("TYPE", "ConvertToGroup");
                         bundle.putLong("ROOMID", roomId);
                         fragmentNewGroup.setArguments(bundle);
-                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment").commitAllowingStateLoss();
+
+                        try {
+                            getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment")
+                                .commitAllowingStateLoss();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
                     }
                 });
             }
@@ -426,7 +434,15 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void onComplete(RippleView rippleView) {
                 Fragment fragment = SearchFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
+
+                try {
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "Search_fragment")
+                        .commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
             }
         });
 
@@ -530,7 +546,17 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
-                ActivityMain.this.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+
+                try {
+                    ActivityMain.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+
                 arcMenu.toggleMenu();
             }
         });
@@ -544,7 +570,15 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
-                ActivityMain.this.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                try {
+                    ActivityMain.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
                 arcMenu.toggleMenu();
             }
         });
@@ -917,14 +951,35 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         ContactGroupFragment fragmentContactGroup = (ContactGroupFragment) getSupportFragmentManager().findFragmentByTag("contactGroup_fragment");
 
         if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
-            getSupportFragmentManager().beginTransaction().remove(fragmentNeGroup).commit();
+
+            try {
+                getSupportFragmentManager().beginTransaction().remove(fragmentNeGroup).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         } else if (fragmentCreateChannel != null && fragmentCreateChannel.isVisible()) {
-            getSupportFragmentManager().beginTransaction().remove(fragmentCreateChannel).commit();
+            try {
+                getSupportFragmentManager().beginTransaction().remove(fragmentCreateChannel).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+
         } else if (fragmentContactGroup != null && fragmentContactGroup.isVisible()) {
-            getSupportFragmentManager().beginTransaction().remove(fragmentContactGroup).commit();
+            try {
+                getSupportFragmentManager().beginTransaction().remove(fragmentContactGroup).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+            ;
         } else if (myFragment != null && myFragment.isVisible()) {
-            getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
+            try {
+                getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+
         } else if (mLeftDrawerLayout.isShownMenu()) {
             mLeftDrawerLayout.closeDrawer();
         } else {

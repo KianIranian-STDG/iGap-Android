@@ -285,10 +285,11 @@ public class AttachFile {
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
+            mediaStorageDir.mkdirs();
 
-                return null;
-            }
+            //if (!mediaStorageDir.mkdirs()) {
+            //    return null;
+            //}
         }
 
         File mediaFile;
@@ -301,7 +302,6 @@ public class AttachFile {
         } else {
             return null;
         }
-
         return mediaFile;
     }
 
