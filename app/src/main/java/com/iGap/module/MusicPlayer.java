@@ -188,14 +188,17 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
 
             if (!isShowMediaPlayer) {
-                if (G.handler != null) G.handler.post(new Runnable() {
-                    @Override public void run() {
-                        try {
-                            notificationManager.notify(notificationId, notification);
-                        } catch (RuntimeException e) {
+                if (G.handler != null) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                notificationManager.notify(notificationId, notification);
+                            } catch (RuntimeException e) {
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
 
                 if (onCompleteChat != null) {
@@ -221,14 +224,17 @@ public class MusicPlayer {
             btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             if (!isShowMediaPlayer) {
-                if (G.handler != null) G.handler.post(new Runnable() {
-                    @Override public void run() {
-                        try {
-                            notificationManager.notify(notificationId, notification);
-                        } catch (RuntimeException e) {
+                if (G.handler != null) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                notificationManager.notify(notificationId, notification);
+                            } catch (RuntimeException e) {
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
 
                 if (onCompleteChat != null) {
@@ -261,14 +267,17 @@ public class MusicPlayer {
             musicProgress = 0;
 
             if (!isShowMediaPlayer) {
-                if (G.handler != null) G.handler.post(new Runnable() {
-                    @Override public void run() {
-                        try {
-                            notificationManager.notify(notificationId, notification);
-                        } catch (RuntimeException e) {
+                if (G.handler != null) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                notificationManager.notify(notificationId, notification);
+                            } catch (RuntimeException e) {
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
 
 
@@ -359,7 +368,7 @@ public class MusicPlayer {
         } catch (Exception e) {
 
             Log.e("dddd", "music player        previousMusic   " + e.toString());
-    }
+        }
     }
 
     private static void closeLayoutMediaPlayer() {
@@ -370,14 +379,17 @@ public class MusicPlayer {
             mp = null;
         }
 
-        if (G.handler != null) G.handler.post(new Runnable() {
-            @Override public void run() {
-                try {
-                    notificationManager.cancel(notificationId);
-                } catch (RuntimeException e) {
+        if (G.handler != null) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        notificationManager.cancel(notificationId);
+                    } catch (RuntimeException e) {
+                    }
                 }
-            }
-        });
+            });
+        }
 
 
 
@@ -412,15 +424,17 @@ public class MusicPlayer {
 
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 if (!isShowMediaPlayer) {
-                    if (G.handler != null) G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                notificationManager.notify(notificationId, notification);
-                            } catch (RuntimeException e) {
+                    if (G.handler != null) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    notificationManager.notify(notificationId, notification);
+                                } catch (RuntimeException e) {
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
 
                     if (onCompleteChat != null) {
                         onCompleteChat.complete(true, "pause", "");
@@ -452,15 +466,17 @@ public class MusicPlayer {
                 btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 if (!isShowMediaPlayer) {
-                    if (G.handler != null) G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                notificationManager.notify(notificationId, notification);
-                            } catch (RuntimeException e) {
+                    if (G.handler != null) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    notificationManager.notify(notificationId, notification);
+                                } catch (RuntimeException e) {
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
 
                     if (onCompleteChat != null) {
                         onCompleteChat.complete(true, "pause", "");
@@ -536,8 +552,7 @@ public class MusicPlayer {
 
         getMusicInfo();
 
-        PendingIntent pi = PendingIntent.getActivity(G.context, 15,
-                new Intent(G.context, ActivityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getActivity(G.context, 15, new Intent(G.context, ActivityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
         remoteViews.setTextViewText(R.id.mln_txt_music_outher, MusicPlayer.musicInfoTitle);
@@ -570,26 +585,23 @@ public class MusicPlayer {
         PendingIntent pendingIntentClose = PendingIntent.getBroadcast(G.context, 4, intentClose, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
-        notification = new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music")
-                .setSmallIcon(R.mipmap.j_audio)
-                .setContentTitle(musicName)
+        notification = new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_audio).setContentTitle(musicName)
                 //  .setContentText(place)
-                .setContent(remoteViews)
-                .setContentIntent(pi)
-                .setAutoCancel(false)
-                .build();
-        if (G.handler != null) G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!isShowMediaPlayer) {
-                        notificationManager.notify(notificationId, notification);
+                .setContent(remoteViews).setContentIntent(pi).setAutoCancel(false).build();
+        if (G.handler != null) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (!isShowMediaPlayer) {
+                            notificationManager.notify(notificationId, notification);
+                        }
+                    } catch (RuntimeException e) {
+                        Log.e("ddddd", "music player   update notification");
                     }
-                } catch (RuntimeException e) {
-                    Log.e("ddddd", "music player   update notification");
                 }
-            }
-        });
+            });
+        }
     }
 
     public static void fillMediaList() {
@@ -599,14 +611,12 @@ public class MusicPlayer {
         Realm realm = Realm.getDefaultInstance();
 
         RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-            equalTo(RealmRoomMessageFields.DELETED, false).findAll();
+                equalTo(RealmRoomMessageFields.DELETED, false).findAll();
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage realmRoomMessage : roomMessages) {
 
-                if (realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString())
-                        || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString())
-                        || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
+                if (realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
 
                     mediaList.add(realmRoomMessage);
                 }
@@ -651,11 +661,12 @@ public class MusicPlayer {
             }
         }, 0, 1000);
 
-        if (amoungToupdate > 0) {
+        if (amoungToupdate >= 1) {
             mTimer = new Timer();
             mTimer.schedule(new TimerTask() {
 
-                @Override public void run() {
+                @Override
+                public void run() {
 
                     if (musicProgress < 100) {
                         musicProgress++;
@@ -663,8 +674,6 @@ public class MusicPlayer {
                         stopTimer();
                     }
                 }
-
-                ;
             }, 0, (int) amoungToupdate);
         }
     }

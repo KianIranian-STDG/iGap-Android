@@ -765,6 +765,7 @@ public class G extends MultiDexApplication {
                          * latest state to server  after login without get room list
                          */
                         if (!firstTimeEnterToApp) {
+                            Log.i("BBB", "RequestClientCondition after login ");
                             new RequestClientCondition().clientCondition(clientConditionGlobal);
                         }
 

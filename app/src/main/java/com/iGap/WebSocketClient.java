@@ -133,6 +133,7 @@ public class WebSocketClient {
                 if (G.allowForConnect) {
                     try {
                         if (finalWs != null) {
+                            //if (timeDifference(latestConnectionTryTiming)) {
                             Log.i("SOC_WebSocket", "Connecting");
                             /**
                              * in first make connection client should set latestConnectionTryTiming time
@@ -141,6 +142,7 @@ public class WebSocketClient {
                             latestConnectionTryTiming = System.currentTimeMillis();
                             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                             finalWs.connect();
+                            //}
                         }
                     } catch (WebSocketException e) {
                         e.printStackTrace();

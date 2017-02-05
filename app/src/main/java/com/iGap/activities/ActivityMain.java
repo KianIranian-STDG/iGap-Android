@@ -238,6 +238,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.i("BBB", "onClientGetRoomList 1");
                         /**
                          * to first enter to app , client first compute clientCondition then
                          * getRoomList and finally send condition that before get clientCondition;
@@ -245,8 +246,10 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                          */
                         if (firstTimeEnterToApp) {
                             firstTimeEnterToApp = false;
+                            Log.i("BBB", "sendClientCondition 2 ");
                             sendClientCondition();
                         } else {
+                            Log.i("BBB", "RequestClientCondition 3 ");
                             new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
                         }
 
