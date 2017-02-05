@@ -25,13 +25,18 @@ public class LastSeenTimeUtil {
     /**
      * if last seen bigger than 10 minutes return local time otherwise
      * return minutes from latest user seen
+     *
+     * @param lastSeen time in second state(not millis)
+     * @param update if set true time updating after each Config.LAST_SEEN_DELAY_CHECKING time and send callback to onLastSeenUpdateTiming
      */
-    public static String computeTime(long userId, long lastSeen) {
+    public static String computeTime(long userId, long lastSeen, boolean update) {
         if (timeOut(lastSeen * DateUtils.SECOND_IN_MILLIS)) {
             return computeDays(lastSeen);
         } else {
-            hashMapLastSeen.put(userId, lastSeen);
-            updateLastSeenTime();
+            if (update) {
+                hashMapLastSeen.put(userId, lastSeen);
+                updateLastSeenTime();
+            }
             return getMinute(lastSeen);
         }
     }
@@ -91,7 +96,6 @@ public class LastSeenTimeUtil {
                     TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, "yy-MM-dd") + " " +
                     exactlyTime;
         }
-        Log.i("TTT", "computeDays time : " + time);
         return time;
     }
 

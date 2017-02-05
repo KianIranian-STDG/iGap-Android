@@ -2,10 +2,8 @@ package com.iGap.adapter.items;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChannelProfile;
@@ -15,14 +13,13 @@ import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
+import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructContactInfo;
-import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.List;
 
 public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfile, ContactItemGroupProfile.ViewHolder> {
@@ -69,6 +66,7 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
                     public void run() {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                     }
+
                 });
             }
 
@@ -83,17 +81,9 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
             }
         });
 
-       /* if (mContact.avatar != null && mContact.avatar.getFile().isFileExistsOnLocal()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mContact.avatar.getFile().getLocalFilePath()), holder.image);
-        } else if (mContact.avatar != null && mContact.avatar.getFile().isThumbnailExistsOnLocal()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mContact.avatar.getFile().getLocalThumbnailPath()), holder.image);
-        } else {
-            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), mContact.initials, mContact.color));
-        }*/
         if (mContact.status != null) {
             if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                String timeUser = TimeUtils.toLocal(mContact.lastSeen * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
-                holder.subtitle.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
+                holder.subtitle.setText(LastSeenTimeUtil.computeTime(mContact.peerId, mContact.lastSeen, false));
             } else {
                 holder.subtitle.setText(mContact.status);
 
@@ -164,7 +154,7 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
         protected CustomTextViewMedium title;
         protected CustomTextViewMedium subtitle;
         protected View topLine;
-        protected TextView txtNomberOfSharedMedia;
+        protected TextView txtNumberOfSharedMedia;
         protected MaterialDesignTextView roleStar;
         protected MaterialDesignTextView btnMenu;
 
@@ -175,7 +165,7 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
             title = (CustomTextViewMedium) view.findViewById(R.id.cigp_txt_contact_name);
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.cigp_txt_contact_lastseen);
             topLine = view.findViewById(R.id.cigp_view_topLine);
-            txtNomberOfSharedMedia = (TextView) view.findViewById(R.id.cigp_txt_nomber_of_shared_media);
+            txtNumberOfSharedMedia = (TextView) view.findViewById(R.id.cigp_txt_nomber_of_shared_media);
             roleStar = (MaterialDesignTextView) view.findViewById(R.id.cigp_txt_member_role);
             btnMenu = (MaterialDesignTextView) view.findViewById(R.id.cigp_moreButton);
         }

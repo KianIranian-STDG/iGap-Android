@@ -725,7 +725,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         if (userStatus != null) {
             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                String status = LastSeenTimeUtil.computeTime(userId, time);
+                String status = LastSeenTimeUtil.computeTime(userId, time, false);
                 titleLastSeen.setText(status);
                 txtLastSeen.setText(status);
             } else {

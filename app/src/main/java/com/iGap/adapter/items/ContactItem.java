@@ -12,6 +12,7 @@ import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
+import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.StructContactInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
@@ -67,7 +68,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
             if (realmRegisteredInfo.getStatus() != null) {
                 if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                     String timeUser = TimeUtils.toLocal(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
-                    holder.subtitle.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
+                    holder.subtitle.setText(LastSeenTimeUtil.computeTime(mContact.peerId, realmRegisteredInfo.getLastSeen(), false));
                 } else {
                     holder.subtitle.setText(realmRegisteredInfo.getStatus());
                 }
