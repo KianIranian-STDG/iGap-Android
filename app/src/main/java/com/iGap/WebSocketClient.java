@@ -134,6 +134,11 @@ public class WebSocketClient {
                     try {
                         if (finalWs != null) {
                             Log.i("SOC_WebSocket", "Connecting");
+                            /**
+                             * in first make connection client should set latestConnectionTryTiming time
+                             * because when run reconnect method timeout checking
+                             */
+                            latestConnectionTryTiming = System.currentTimeMillis();
                             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                             finalWs.connect();
                         }
