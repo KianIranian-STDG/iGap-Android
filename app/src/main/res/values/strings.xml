@@ -761,6 +761,9 @@
     <string name="st_privacy_create_ticket">Support Request</string>
     <string name="st_privacy_iGap_home">iGap Home</string>
     <string name="you_have_to_get_storage_permision_for_continue">You have to get storage permision for continue.</string>
-    <string name="clean_up">Clean Up Chat Rooms</string>
+    <string name="clean_up_chat_rooms">Clean Up Chat Rooms</string>
+    <string name="clean_up">Clean Up</string>
     <string name="do_you_want_to_clean_all_data_in_chat_rooms">Do you want to clean all data in local chat rooms?</string>
+    <string name="pm">PM</string>
+    <string name="am">AM</string>
 </resources>

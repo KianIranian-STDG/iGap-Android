@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -67,7 +66,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
-    public ArrayMap<String, String> downloadedList = new ArrayMap<>();
+
     public ProtoGlobal.Room.Type type;
 
     enum DownLoadType {
@@ -255,18 +254,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
         Log.i("WWW", "12");
-
-        try {
-            if (downloadedList.containsKey(mMessage.messageID)) {
-                String _path = downloadedList.get(mMessage.messageID);
-                onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
-
-                if (holder.itemView != null) downloadedList.remove(mMessage.messageID);
-            }
-        } catch (Exception e) {
-
-        }
-
 
 
     }
@@ -693,8 +680,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (attachment != null) {
-            if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT ||
-                messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+            if (messageType == ProtoGlobal.RoomMessageType.IMAGE
+                || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT
+                || messageType == ProtoGlobal.RoomMessageType.VIDEO
+                || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
                 if (imageViewReservedSpace != null) {
 
@@ -708,13 +698,22 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     }
 
-                    boolean setDefualtImage = false;
-                    if (attachment.getLocalFilePath() == null && attachment.getLocalThumbnailPath() == null && _with == 0) {
-                        _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
-                        _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
-                        setDefualtImage = true;
-                    }
 
+                    boolean setDefualtImage = false;
+
+                    if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+                        if (attachment.getLocalFilePath() == null && attachment.getLocalThumbnailPath() == null && _with == 0) {
+                            _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
+                            _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
+                            setDefualtImage = true;
+                        }
+                    } else {
+                        if (attachment.getLocalThumbnailPath() == null && _with == 0) {
+                            _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
+                            _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
+                            setDefualtImage = true;
+                        }
+                    }
 
                     int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight);
                     if (dimens[0] != 0 && dimens[1] != 0) {
@@ -919,8 +918,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         final String _path = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(name);
 
-        final String _messageId = mMessage.messageID;
-
         if (token != null && token.length() > 0 && size > 0) {
 
             HelperDownloadFile.startDownload(token, name, size, selector, "", 2, new HelperDownloadFile.UpdateListener() {
@@ -930,9 +927,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (progress == 100) {
                         G.currentActivity.runOnUiThread(new Runnable() {
                             @Override public void run() {
-                                onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
 
-                                downloadedList.put(_messageId, _path);
+                                String type = mMessage.messageType.toString().toLowerCase();
+                                if (type.contains("image") || type.contains("video") || type.contains("gif")) onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
+
                             }
                         });
                     }
@@ -982,6 +980,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             if (progress == 100) {
                                 progressBar.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
+
                                 onLoadThumbnailFromLocal(holder, _path, LocalFileType.FILE);
 
                             } else {

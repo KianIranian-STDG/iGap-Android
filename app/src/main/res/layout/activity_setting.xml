@@ -593,7 +593,7 @@
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp8"
-                        android:text="@string/clean_up"
+                        android:text="@string/clean_up_chat_rooms"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/sp15"
                         android:textStyle="normal"

@@ -15,6 +15,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import io.github.meness.emoji.EmojiTextView;
+import io.meness.github.messageprogress.MessageProgress;
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
@@ -86,18 +87,22 @@ public class VideoWithTextItem
         }
 
 
-
-
-
-
     }
 
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
-        ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
 
-        holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+        if (fileType == LocalFileType.THUMBNAIL) {
+
+            ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
+
+            holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+        } else {
+            holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play, true);
+        }
+
     }
 
     @Override
