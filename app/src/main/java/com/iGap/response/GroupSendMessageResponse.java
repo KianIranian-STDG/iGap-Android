@@ -6,8 +6,6 @@ import com.iGap.G;
 import com.iGap.helper.HelperUserInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
-import com.iGap.realm.RealmClientCondition;
-import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -48,19 +46,6 @@ public class GroupSendMessageResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                // set info for clientCondition
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
-
-                long latestMessageId = computeLastMessageId(realm, builder.getRoomId());
-                /**
-                 * if received new message set info to RealmClientCondition
-                 */
-                if (realmClientCondition != null) {
-                    //if (builder.getRoomMessage().getMessageId() > latestMessageId) {
-                        realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
-                        realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
-                    //}
-                }
 
                 // because user may have more than one device, his another device should not be recipient
                 // but sender. so I check current userId with room message user id, and if not equals

@@ -34,11 +34,6 @@ public class HelperMessageResponse {
                 }
 
                 /**
-                 * set info for clientCondition
-                 */
-                HelperClientCondition.setMessageAndStatusVersion(realm, roomId, roomMessage);
-
-                /**
                  * because user may have more than one device, his another device should not
                  * be recipient but sender. so I check current userId with room message user id,
                  * and if not equals and response is null, so we sure recipient is another user
