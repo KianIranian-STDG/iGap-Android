@@ -20,8 +20,6 @@ import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Created by Maryam on 12/9/2016.
@@ -33,8 +31,9 @@ public class HelperDownloadFile {
     private OnFileDownloadResponse onFileDownloadResponse;
 
     private static int maxDownloadSize = 10;
-    private static Queue<String> queue = new LinkedList<String>();
+    // private static Queue<String> queue = new LinkedList<String>();
 
+    private static ArrayList<StructQueue> mQueue = new ArrayList<>();
 
     public HelperDownloadFile() {
 
@@ -47,6 +46,22 @@ public class HelperDownloadFile {
                     StructDownLoad item = list.get(PrimaryKey);
                     item.offset = offset;
                     item.progress = progress;
+
+                    if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+                        if (item.progress < 80) {
+                            if (mQueue.size() > 0) {
+                                if (mQueue.get(0).priority > item.priority) {
+
+                                    addItemToQueue(item.Token + item.selector, item.priority);
+                                    addDownloadFromQueue();
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+
+
                     requestDownloadFile(item);
                 }
             }
@@ -96,6 +111,12 @@ public class HelperDownloadFile {
         public int attampOnError = 2;
         public ProtoFileDownload.FileDownload.Selector selector;
         public String path = "";
+        int priority = 0;
+    }
+
+    private static class StructQueue {
+        String primaryKey;
+        int priority;
     }
 
     public interface UpdateListener {
@@ -106,7 +127,7 @@ public class HelperDownloadFile {
 
     private static boolean isNeedItemGoToQueue() {
 
-        if (queue.size() > 0) return true;
+        if (mQueue.size() > 0) return true;
 
         int count = 0;
 
@@ -121,7 +142,30 @@ public class HelperDownloadFile {
         return false;
     }
 
-    public static void startDownload(String token, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, UpdateListener update) {
+    private static void addItemToQueue(String primaryKey, int priority) {
+
+        boolean additem = false;
+
+        StructQueue sq = new StructQueue();
+        sq.priority = priority;
+        sq.primaryKey = primaryKey;
+
+        for (int i = mQueue.size() - 1; i >= 0; i--) {
+            if (priority > mQueue.get(i).priority) {
+                continue;
+            } else {
+                mQueue.add(i + 1, sq);
+                additem = true;
+                break;
+            }
+        }
+
+        if (!additem) {
+            mQueue.add(0, sq);
+        }
+    }
+
+    public static void startDownload(String token, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority, UpdateListener update) {
 
         StructDownLoad item;
 
@@ -135,7 +179,7 @@ public class HelperDownloadFile {
             item.name = name;
             item.moveToDirectoryPAth = moveToDirectoryPAth;
             item.size = size;
-
+            item.priority = periority;
             list.put(primaryKey, item);
 
         } else {
@@ -169,9 +213,11 @@ public class HelperDownloadFile {
             }
         }
 
-        if (isNeedItemGoToQueue()) {
-            queue.add(primaryKey);
-            return;
+        if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+            if (isNeedItemGoToQueue()) {
+                addItemToQueue(primaryKey, periority);
+                return;
+            }
         }
 
         requestDownloadFile(item);
@@ -205,9 +251,11 @@ public class HelperDownloadFile {
 
         // if any file exist in download queue add one to start download
 
-        for (int i = 0; i < queue.size(); i++) {
+        int count = mQueue.size();
+        for (int i = 0; i < count; i++) {
 
-            String _primaryKey = queue.poll();
+            String _primaryKey = mQueue.get(0).primaryKey;
+            mQueue.remove(0);
 
             if (list.containsKey(_primaryKey)) {
                 requestDownloadFile(list.get(_primaryKey));

@@ -9,6 +9,7 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import io.realm.Realm;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -52,6 +53,14 @@ public class LastSeenTimeUtil {
             switch (days) {
                 case 0:
                     time = TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+
+                    Calendar date = Calendar.getInstance();
+                    date.getInstance().setTimeInMillis(beforeMillis * DateUtils.SECOND_IN_MILLIS);
+
+                    if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) != date.get(Calendar.DAY_OF_YEAR)) {
+                        time = G.context.getResources().getString(R.string.yesterday) + " " + time;
+                    }
+
                     break;
                 case 1:
                     time = G.context.getResources().getString(R.string.last_seen) + " " +

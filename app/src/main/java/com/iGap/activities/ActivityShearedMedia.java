@@ -1024,7 +1024,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getMessageType() : mList.get(position).item.getMessageType();
 
             String dirPath = AndroidUtils.suitableAppFilePath(messageType) + "/" + at.getToken() + "_" + at.getName();
-            HelperDownloadFile.startDownload(at.getToken(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(at.getToken(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 1, new HelperDownloadFile.UpdateListener() {
                 @Override public void OnProgress(String token, final int progress) {
 
                     if (messageProgress != null) {
@@ -1176,7 +1176,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
 
-                            HelperDownloadFile.startDownload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "",
+                            HelperDownloadFile.startDownload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 2,
                                 new HelperDownloadFile.UpdateListener() {
                                     @Override public void OnProgress(String token, int progress) {
 

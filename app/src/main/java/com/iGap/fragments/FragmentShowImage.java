@@ -361,7 +361,7 @@ public class FragmentShowImage extends Fragment {
                         final String filePathTumpnail = G.DIR_TEMP + "/" + "thumb_" + rm.getAttachment().getToken() + "_" + rm.getAttachment().getName();
 
                         if (selector != null && fileSize > 0) {
-                            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getName(), fileSize, selector, "", new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getName(), fileSize, selector, "", 2, new HelperDownloadFile.UpdateListener() {
                                 @Override public void OnProgress(String token, int progress) {
 
                                     if (progress == 100) {
@@ -430,9 +430,7 @@ public class FragmentShowImage extends Fragment {
             String dirPath = AndroidUtils.suitableAppFilePath(rm.getMessageType()) + "/" +
                 rm.getAttachment().getToken() + "_" + rm.getAttachment().getName();
 
-
-
-            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath,
+            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2,
                 new HelperDownloadFile.UpdateListener() {
                     @Override public void OnProgress(String token, final int progres) {
 

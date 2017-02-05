@@ -217,7 +217,14 @@ public class HelperCalander {
 
                 CalendarTools convertTime = new CalendarTools();
                 convertTime.GregorianToPersian(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-                output = HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getDay();
+
+                if (HelperCalander.isLanguagePersian) {
+                    output = convertTime.getDay() + " " + HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1);
+                } else {
+                    output = HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getDay();
+                }
+
+
 
             } else {
 
@@ -230,10 +237,6 @@ public class HelperCalander {
                 } else {
                     output = TimeUtils.toLocal(date.getTimeInMillis(), "MMM dd");
                 }
-
-
-
-
 
             }
         }

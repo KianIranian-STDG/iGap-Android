@@ -734,10 +734,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     int _with = attachment.getWidth();
                     int _hight = attachment.getHeight();
 
-                    Log.e("dddd",
-                        attachment + "   " + attachment.getWidth() + "   " + attachment.getHeight() + "    " + attachment.getSmallThumbnail().getWidth() + "   " + attachment.getSmallThumbnail()
-                            .getHeight());
-
                     if (_with == 0) {
                         _with = (int) G.context.getResources().getDimension(R.dimen.dp200);
                         _hight = (int) G.context.getResources().getDimension(R.dimen.dp200);
@@ -851,7 +847,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        downLoadFile(holder, attachment);
+        downLoadFile(holder, attachment, 0);
 
     }
 
@@ -892,12 +888,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (mMessage.messageType == ProtoGlobal.RoomMessageType.GIF || mMessage.messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                         onPlayPauseGIF(holder, attachment.getLocalFilePath());
                     } else {
+                        progress.performProgress();
                         messageClickListener.onOpenClick(progress, mMessage, holder.getAdapterPosition());
                     }
                 }
             } else {
 
-                downLoadFile(holder, attachment);
+                downLoadFile(holder, attachment, 1);
             }
         }
     }
@@ -926,7 +923,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (token != null && token.length() > 0 && size > 0) {
 
-            HelperDownloadFile.startDownload(token, name, size, selector, "", new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(token, name, size, selector, "", 2, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(String token, int progress) {
 
@@ -949,7 +946,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     }
 
-    private void downLoadFile(final VH holder, RealmAttachment attachment) {
+    private void downLoadFile(final VH holder, RealmAttachment attachment, int priority) {
 
         if (attachment == null) return;
 
@@ -976,7 +973,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.setVisibility(View.VISIBLE);
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
-            HelperDownloadFile.startDownload(token, name, size, selector, _path, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(token, name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String token, final int progress) {
 
@@ -1075,7 +1072,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
             hideThumbnailIf(holder);
 
-            downLoadFile(holder, attachment);
+            downLoadFile(holder, attachment, 0);
 
         } else {
             if (attachment.isFileExistsOnLocal()) {
