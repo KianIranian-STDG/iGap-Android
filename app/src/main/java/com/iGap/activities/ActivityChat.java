@@ -1594,15 +1594,6 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                switchAddItem(getLocalMessages(), true);
-
-                manageForwardedMessage();
-            }
-        }, 100);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(ActivityChat.this);
         /**
          * make start messages from bottom, this is exactly what Telegram and other messengers do
@@ -1619,29 +1610,38 @@ public class ActivityChat extends ActivityEnhanced
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
-        if (messageId > 0) {
-            // TODO: 10/15/2016  if list biger then 50 item list should load some data we need
-            scrollPosition = 0;
-            for (AbstractMessage chatItem : mAdapter.getAdapterItems()) {
-                if (chatItem.mMessage.messageID.equals(messageId + "")) {
-                    break;
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switchAddItem(getLocalMessages(), true);
+                manageForwardedMessage();
+
+                if (messageId > 0) {
+                    // TODO: 10/15/2016  if list biger then 50 item list should load some data we need
+                    scrollPosition = 0;
+                    for (AbstractMessage chatItem : mAdapter.getAdapterItems()) {
+                        if (chatItem.mMessage.messageID.equals(messageId + "")) {
+                            break;
+                        }
+                        scrollPosition++;
+                    }
+                    recyclerView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.scrollToPosition(scrollPosition);
+                        }
+                    }, 1500);
+                } else {
+                    /**
+                     * show unread message
+                     */
+                    if (chatType != CHANNEL) {
+                        addLayoutUnreadMessage();
+                    }
                 }
-                scrollPosition++;
+
             }
-            recyclerView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    recyclerView.scrollToPosition(scrollPosition);
-                }
-            }, 1500);
-        } else {
-            /**
-             * show unread message
-             */
-            if (chatType != CHANNEL) {
-                addLayoutUnreadMessage();
-            }
-        }
+        }, 100);
 
         imvBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
