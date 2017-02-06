@@ -3419,19 +3419,19 @@ public class ActivityChat extends ActivityEnhanced
             public void onClick(View view) {
                 isMute = !isMute;
                 if (isMute) {
-                    txtChannelMute.setText(R.string.unmute);
+                    txtChannelMute.setText(R.string.mute);
                     txt_mute.setVisibility(View.VISIBLE);
                 } else {
-                    txtChannelMute.setText(R.string.mute);
+                    txtChannelMute.setText(R.string.unmute);
                     txt_mute.setVisibility(View.GONE);
                 }
             }
         });
 
         if (isMute) {
-            txtChannelMute.setText(R.string.unmute);
-        } else {
             txtChannelMute.setText(R.string.mute);
+        } else {
+            txtChannelMute.setText(R.string.unmute);
         }
     }
 

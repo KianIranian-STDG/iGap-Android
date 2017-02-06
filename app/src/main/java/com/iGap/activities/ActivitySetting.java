@@ -1958,7 +1958,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
 
         TextView txtVersionApp = (TextView) findViewById(R.id.st_txt_versionApp);
-        txtVersionApp.setText(getString(R.string.iGap_version) + " v " + getAppVersion());
+
+        txtVersionApp.setText(getString(R.string.iGap_version) + " " + getAppVersion());
 
         if (HelperCalander.isLanguagePersian) {
             txtVersionApp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVersionApp.getText().toString()));

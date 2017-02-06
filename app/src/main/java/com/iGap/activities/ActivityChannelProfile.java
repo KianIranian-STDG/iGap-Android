@@ -1304,7 +1304,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
 
         Bundle bundle = new Bundle();
-        bundle.putBoolean("DIALOG_SHOWING", true);
+        bundle.putBoolean("DIALOG_SHOWING", false);
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.coordinator, fragment).commit();

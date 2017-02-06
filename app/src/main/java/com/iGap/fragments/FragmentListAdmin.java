@@ -1,6 +1,5 @@
 package com.iGap.fragments;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -15,7 +14,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
@@ -32,7 +30,6 @@ import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +37,6 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentListAdmin extends Fragment {
-
 
     private static List<StructContactInfo> contacts;
 
@@ -67,15 +63,11 @@ public class FragmentListAdmin extends Fragment {
         return new FragmentListAdmin();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contact_group, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = this.getArguments();
@@ -97,22 +89,20 @@ public class FragmentListAdmin extends Fragment {
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
 
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
         layoutRoot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
             }
         });
 
         if (type.equals("ADMIN")) {
-//
+            //
             txtNumberOfMember.setText(getResources().getString(R.string.list_admin));
         } else {
             txtNumberOfMember.setText(getResources().getString(R.string.list_modereator));
@@ -120,7 +110,6 @@ public class FragmentListAdmin extends Fragment {
 
         MaterialDesignTextView txtDone = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_done);
         txtDone.setVisibility(View.GONE);
-
 
         //create our FastAdapter
         fastAdapter = new FastAdapter();
@@ -131,12 +120,11 @@ public class FragmentListAdmin extends Fragment {
         //===========
 
         G.updateListAfterKick = new UpdateListAfterKick() {
-            @Override
-            public void updateList(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
+            @Override public void updateList(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
                 if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+
+                    G.handler.post(new Runnable() {
+                        @Override public void run() {
                             if (role.toString().equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
                                 updateRoleToAdmin(memberId);
                             } else {
@@ -212,79 +200,40 @@ public class FragmentListAdmin extends Fragment {
         });*/
 
         G.onGroupKickModerator = new OnGroupKickModerator() {
-            @Override
-            public void onGroupKickModerator(long roomId, long memberId) {
+            @Override public void onGroupKickModerator(long roomId, long memberId) {
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWait.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+                hideProgressBar();
 
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWait.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+            @Override public void onError(int majorCode, int minorCode) {
 
+                hideProgressBar();
 
             }
 
-            @Override
-            public void timeOut() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWait.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+            @Override public void timeOut() {
+
+                hideProgressBar();
             }
         };
 
         G.onGroupKickAdmin = new OnGroupKickAdmin() {
-            @Override
-            public void onGroupKickAdmin(long roomId, long memberId) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWait.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+            @Override public void onGroupKickAdmin(long roomId, long memberId) {
+
+                hideProgressBar();
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWait.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+            @Override public void onError(int majorCode, int minorCode) {
+
+                hideProgressBar();
             }
 
-            @Override
-            public void onTimeOut() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWait.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+            @Override public void onTimeOut() {
+
+                hideProgressBar();
             }
         };
-
 
         //configure our fastAdapter
         //as we provide id's for the items we want the hasStableIds enabled to speed up things
@@ -297,8 +246,7 @@ public class FragmentListAdmin extends Fragment {
         rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
         //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration =
-                new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
         ContactItemGroupProfile.isShoMore = true;
@@ -312,41 +260,32 @@ public class FragmentListAdmin extends Fragment {
         List<IItem> items = new ArrayList<>();
         for (int i = 0; i < contacts.size(); i++) {
 
-
             if (type.equals("ADMIN")) {
                 if (contacts.get(i).role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
 
                     IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i))).withIdentifier(100 + contacts.indexOf(contacts.get(i)));
 
                     items.add(item);
-
-
                 }
             } else {
                 if (contacts.get(i).role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
 
                     IItem item = (new ContactItemGroupProfile().setContact(contacts.get(i))).withIdentifier(100 + contacts.indexOf(contacts.get(i)));
                     items.add(item);
-
-
                 }
             }
-
-
         }
         itemAdapter.add(items);
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
+            @Override public void onChanged() {
                 decoration.invalidateHeaders();
             }
         });
 
         //restore selections (this has to be done after the items were added
         fastAdapter.withSavedInstanceState(savedInstanceState);
-
     }
 
     private void groupKickMember() {
@@ -355,53 +294,31 @@ public class FragmentListAdmin extends Fragment {
 
     private void groupKickAdmin() {
         G.onGroupKickAdmin = new OnGroupKickAdmin() {
-            @Override
-            public void onGroupKickAdmin(long roomId, final long memberId) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWait.setVisibility(View.GONE);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            }
-                        });
+            @Override public void onGroupKickAdmin(long roomId, final long memberId) {
 
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         updateRole(memberId);
                     }
                 });
             }
 
-            @Override
-            public void onError(int majorCode, final int minorCode) {
+            @Override public void onError(int majorCode, final int minorCode) {
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        prgWait.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    }
-                });
+                hideProgressBar();
             }
 
-            @Override
-            public void onTimeOut() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+            @Override public void onTimeOut() {
+                hideProgressBar();
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
 
-                        prgWait.setVisibility(View.GONE);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                        final Snackbar snack =
-                                Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                        R.string.server_do_not_response,
-                                        Snackbar.LENGTH_LONG);
+                        final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.server_do_not_response, Snackbar.LENGTH_LONG);
 
                         snack.setAction(getResources().getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+                            @Override public void onClick(View view) {
                                 snack.dismiss();
                             }
                         });
@@ -412,8 +329,7 @@ public class FragmentListAdmin extends Fragment {
         };
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+    @Override public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
@@ -421,45 +337,59 @@ public class FragmentListAdmin extends Fragment {
 
     private void updateRole(final long memberId) {
 
-        getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+        G.handler.post(new Runnable() {
+            @Override public void run() {
+                List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
 
+                for (int i = 0; i < items.size(); i++) {
+                    if (items.get(i).mContact.peerId == memberId) {
+                        itemAdapter.remove(i);
 
-                                            for (int i = 0; i < items.size(); i++) {
-                                                if (items.get(i).mContact.peerId == memberId) {
-                                                    itemAdapter.remove(i);
-
-                                                    if (items.size() == 0) {
-                                                        getActivity().getSupportFragmentManager().popBackStack();
-                                                        return;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-        );
+                        if (items.size() == 0) {
+                            getActivity().getSupportFragmentManager().popBackStack();
+                            return;
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void updateRoleToAdmin(final long memberId) {
-        getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
 
-                                            List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+        G.handler.post(new Runnable() {
+            @Override public void run() {
 
-                                            for (int i = 0; i < items.size(); i++) {
-                                                if (items.get(i).mContact.peerId == memberId) {
-                                                    items.get(i).mContact.role = ProtoGlobal.GroupRoom.Role.ADMIN.toString();
-                                                    if (i < itemAdapter.getAdapterItemCount()) {
-                                                        IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
-                                                        itemAdapter.set(i, item);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-        );
+                List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+
+                for (int i = 0; i < items.size(); i++) {
+                    if (items.get(i).mContact.peerId == memberId) {
+                        items.get(i).mContact.role = ProtoGlobal.GroupRoom.Role.ADMIN.toString();
+                        if (i < itemAdapter.getAdapterItemCount()) {
+                            IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
+                            itemAdapter.set(i, item);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void showProgressBar() {
+        G.handler.post(new Runnable() {
+            @Override public void run() {
+                prgWait.setVisibility(View.VISIBLE);
+                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+    }
+
+    private void hideProgressBar() {
+        G.handler.post(new Runnable() {
+            @Override public void run() {
+                prgWait.setVisibility(View.GONE);
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
     }
 }
