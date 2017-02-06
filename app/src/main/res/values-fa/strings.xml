@@ -705,15 +705,17 @@
     <string name="un_block_user">"رفع مسدودیت مخاطب"</string>
 
 
-    <string name="USER_JOINED">"اضافه شدن کاربر"</string>
-    <string name="USER_DELETED">"پاک شدن کاربر"</string>
+  <string name="prefix">"توسط"</string>
+  <string name="USER_JOINED">"اضافه شدن"</string>
+  <string name="USER_DELETED">"پاک شدن"</string>
     <string name="ROOM_CREATED">"ایجاد صفحه"</string>
     <string name="MEMBER_ADDED">"اضافه شدن"</string>
-    <string name="MEMBER_KICKED">"بیرون انداختن"</string>
-    <string name="MEMBER_LEFT">"ترک کردن"</string>
+  <string name="MEMBER_KICKED">"بیرون انداخته شدن"</string>
+  <string name="MEMBER_LEFT">"صفحه را ترک کرد"</string>
     <string name="ROOM_CONVERTED_TO_PUBLIC">"تبدیل صفحه خصوصی به عمومی"</string>
     <string name="ROOM_CONVERTED_TO_PRIVATE">"تبدیل صفحه عمومی به خصوصی"</string>
-    <string name="MEMBER_JOINED_BY_INVITE_LINK">"اضافه شدن کاربر با دعوت "</string>
+  <string name="MEMBER_JOINED_BY_INVITE_LINK">" با دعوت "</string>
+  <string name="Room_Deleted">"حذف صفحه"</string>
     <string name="revoke">ابطال</string>
 
 

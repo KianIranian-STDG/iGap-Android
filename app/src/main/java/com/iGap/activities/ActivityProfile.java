@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -49,6 +48,7 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.io.File;
@@ -449,9 +449,11 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
     private void setImage(String path) {
         if (path != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(path);
+
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), btnSetImage);
             btnSetImage.setPadding(0, 0, 0, 0);
-            btnSetImage.setImageBitmap(bitmap);
+            //Bitmap bitmap = BitmapFactory.decodeFile(path);
+            //btnSetImage.setImageBitmap(bitmap);
         }
     }
 
