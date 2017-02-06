@@ -213,7 +213,7 @@ public class G extends MultiDexApplication {
     public static final String DIR_NOMEDIA = DIR_APP + "/.nomedia";
 
     public static final String CHAT_MESSAGE_TIME = "H:mm";
-    public static final String ROOM_LAST_MESSAGE_TIME = "h:mm a";
+
     // list of actionId that can be doing without login
     public static Boolean isImportContactToServer = false;
     public static Typeface iranSans;

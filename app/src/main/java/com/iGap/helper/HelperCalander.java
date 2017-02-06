@@ -203,7 +203,9 @@ public class HelperCalander {
 
         if (current.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR) && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
 
-            output = TimeUtils.toLocal(time, G.ROOM_LAST_MESSAGE_TIME);
+            output = HelperCalander.getClocktime(time);
+
+
         } else if (current.get(Calendar.DAY_OF_YEAR) < (date.get(Calendar.DAY_OF_YEAR) + 7)) {
 
             if (HelperCalander.isLanguagePersian) {
@@ -243,6 +245,23 @@ public class HelperCalander {
 
         return isLanguagePersian ? convertToUnicodeFarsiNumber(output) : output;
 
+    }
+
+    public static String getClocktime(Long timeinMili) {
+
+        String result;
+
+        if (HelperCalander.isLanguagePersian) {
+            result = TimeUtils.toLocal(timeinMili, "h:mm a");
+            String[] _date = result.split(" ");
+            if (_date.length > 1) {
+                result = _date[0] + " " + (_date[1].toLowerCase().equals("pm") ? G.context.getString(R.string.pm) : G.context.getString(R.string.am));
+            }
+        } else {
+            result = TimeUtils.toLocal(timeinMili, "h:mm a");
+        }
+
+        return result;
     }
 
     private static String getPersianStringDay(int dayOfWeek) {

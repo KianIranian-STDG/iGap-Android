@@ -13,7 +13,6 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
-import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
@@ -65,7 +64,9 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
 
         if (mContact.status != null) {
             if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                String timeUser = TimeUtils.toLocal(mContact.lastSeen * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
+                String timeUser = HelperCalander.getClocktime(mContact.lastSeen * DateUtils.SECOND_IN_MILLIS);
+                ;
+
                 holder.subtitle.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
             } else {
                 holder.subtitle.setText(mContact.status);

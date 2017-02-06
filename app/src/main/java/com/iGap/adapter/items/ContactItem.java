@@ -1,7 +1,6 @@
 package com.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import com.iGap.G;
@@ -14,7 +13,6 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.StructContactInfo;
-import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
@@ -67,7 +65,6 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
 
             if (realmRegisteredInfo.getStatus() != null) {
                 if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    String timeUser = TimeUtils.toLocal(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS, G.ROOM_LAST_MESSAGE_TIME);
                     holder.subtitle.setText(LastSeenTimeUtil.computeTime(mContact.peerId, realmRegisteredInfo.getLastSeen(), false));
                 } else {
                     holder.subtitle.setText(realmRegisteredInfo.getStatus());

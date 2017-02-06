@@ -42,7 +42,7 @@ public class HelperDownloadFile {
 
                 String PrimaryKey = token + selector;
 
-                if (list.containsKey(PrimaryKey)) {
+                if (list.size() > 0 && list.containsKey(PrimaryKey)) {
                     StructDownLoad item = list.get(PrimaryKey);
                     item.offset = offset;
                     item.progress = progress;
@@ -74,7 +74,7 @@ public class HelperDownloadFile {
 
                 String primaryKey = token + selector;
 
-                if (list.containsKey(primaryKey)) {
+                if (list.size() > 0 && list.containsKey(primaryKey)) {
                     StructDownLoad item = list.get(primaryKey);
 
                     item.attampOnError--;
