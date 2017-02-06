@@ -938,8 +938,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         G.currentActivity.runOnUiThread(new Runnable() {
                             @Override public void run() {
 
-                                String type = mMessage.messageType.toString().toLowerCase();
-                                if (type.contains("image") || type.contains("video") || type.contains("gif")) onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
+                                String type;
+                                if (mMessage.forwardedFrom != null) {
+                                    type = mMessage.forwardedFrom.getMessageType().toString().toLowerCase();
+                                } else {
+                                    type = mMessage.messageType.toString().toLowerCase();
+                                }
+                                if (type.contains("image") || type.contains("video") || type.contains("gif")) {
+                                    onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
+                                }
 
                             }
                         });
