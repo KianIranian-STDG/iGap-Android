@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
+import com.iGap.helper.HelperCalander;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MusicPlayer;
@@ -83,11 +84,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000);
 
-        holder.txt_Timer.post(new Runnable() {
-            @Override public void run() {
+
                 holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
-            }
-        });
+
 
         if (mMessage.messageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.onCompleteChat = holder.complete;
@@ -113,6 +112,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.mMessageID = mMessage.messageID;
 
+        if (HelperCalander.isLanguagePersian) holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
 
     }
 
@@ -202,6 +202,10 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                         txt_Timer.post(new Runnable() {
                             @Override public void run() {
                                 txt_Timer.setText(MessageTow + "/" + mTimeMusic);
+
+                                if (HelperCalander.isLanguagePersian) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
+
+
                                 musicSeekbar.setProgress(MusicPlayer.musicProgress);
                             }
                         });

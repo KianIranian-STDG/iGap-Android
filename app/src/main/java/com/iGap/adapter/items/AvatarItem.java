@@ -94,7 +94,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
                 final String filePathTumpnail = G.DIR_TEMP + "/" + "thumb_" + avatar.getToken() + "_" + avatar.getName();
 
                 if (selector != null && fileSize > 0) {
-                    HelperDownloadFile.startDownload(avatar.getToken(), avatar.getName(), fileSize, selector, "", 2, new HelperDownloadFile.UpdateListener() {
+                    HelperDownloadFile.startDownload(avatar.getToken(), avatar.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                         @Override public void OnProgress(String token, int progress) {
 
                             if (progress == 100) {
@@ -126,7 +126,7 @@ public class AvatarItem extends AbstractItem<AvatarItem, AvatarItem.ViewHolder> 
 
                         final String path = G.DIR_IMAGE_USER + "/" + avatar.getToken() + "_" + avatar.getName();
 
-                        HelperDownloadFile.startDownload(avatar.getToken(), avatar.getName(), avatar.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2,
+                        HelperDownloadFile.startDownload(avatar.getToken(), avatar.getName(), avatar.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 4,
                             new HelperDownloadFile.UpdateListener() {
                                 @Override public void OnProgress(String token, final int progres) {
 

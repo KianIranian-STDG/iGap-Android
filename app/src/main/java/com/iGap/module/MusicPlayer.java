@@ -22,6 +22,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.activities.ActivityMediaPlayer;
+import com.iGap.helper.HelperCalander;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
@@ -167,6 +168,10 @@ public class MusicPlayer {
                 btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
             }
         }
+
+        if (HelperCalander.isLanguagePersian) {
+            txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
+        }
     }
 
     public static void playAndPause() {
@@ -261,6 +266,12 @@ public class MusicPlayer {
 
     public static void stopSound() {
 
+        String zeroTime = "00";
+
+        if (HelperCalander.isLanguagePersian) {
+            zeroTime = HelperCalander.convertToUnicodeFarsiNumber(zeroTime);
+        }
+
         try {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
@@ -285,11 +296,11 @@ public class MusicPlayer {
 
                 if (onCompleteChat != null) {
                     onCompleteChat.complete(true, "play", "");
-                    onCompleteChat.complete(true, "updateTime", "00");
+                    onCompleteChat.complete(true, "updateTime", zeroTime);
                 }
             } else if (onComplete != null) {
                 onComplete.complete(true, "play", "");
-                onComplete.complete(true, "updateTime", "00");
+                onComplete.complete(true, "updateTime", zeroTime);
             }
             stopTimer();
         } catch (Exception e) {
@@ -517,6 +528,10 @@ public class MusicPlayer {
         updateProgress();
 
         if (updateList) fillMediaList();
+
+        if (HelperCalander.isLanguagePersian) {
+            txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
+        }
     }
 
     public static String milliSecondsToTimer(long milliseconds) {
@@ -617,8 +632,12 @@ public class MusicPlayer {
             for (RealmRoomMessage realmRoomMessage : roomMessages) {
 
                 if (realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
+                    try {
+                        if (new File(realmRoomMessage.getAttachment().getLocalFilePath()).exists()) mediaList.add(realmRoomMessage);
+                    } catch (Exception e) {
+                        Log.e("dddd", "music player   fillMediaList " + e.toString());
+                    }
 
-                    mediaList.add(realmRoomMessage);
                 }
             }
         }
@@ -692,6 +711,10 @@ public class MusicPlayer {
     private static void updatePlayerTime() {
 
         strTimer = MusicPlayer.milliSecondsToTimer(time);
+
+        if (HelperCalander.isLanguagePersian) {
+            strTimer = HelperCalander.convertToUnicodeFarsiNumber(strTimer);
+        }
 
         if (txt_music_time_counter != null) {
 

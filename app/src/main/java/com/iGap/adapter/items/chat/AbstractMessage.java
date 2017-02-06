@@ -903,7 +903,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             } else {
 
-                downLoadFile(holder, attachment, 1);
+                downLoadFile(holder, attachment, 2);
             }
         }
     }
@@ -930,7 +930,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (token != null && token.length() > 0 && size > 0) {
 
-            HelperDownloadFile.startDownload(token, name, size, selector, "", 2, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(token, name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(String token, int progress) {
 

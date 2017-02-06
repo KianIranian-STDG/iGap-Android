@@ -17,6 +17,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.R;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
@@ -77,6 +78,9 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
                         public void run() {
                             txt_Timer.setText(MessageTow);
                             musicSeekbar.setProgress(MusicPlayer.musicProgress);
+
+                            if (HelperCalander.isLanguagePersian) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
+
                         }
                     });
                 } else if (messageOne.equals("RepeatMode")) {
@@ -233,6 +237,12 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
                 MusicPlayer.nextMusic();
             }
         });
+
+        if (HelperCalander.isLanguagePersian) {
+            txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
+            txt_MusicTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_MusicTime.getText().toString()));
+        }
+
     }
 
     private void popUpMusicMenu() {
@@ -302,6 +312,10 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
             }
 
             setMusicInfo();
+        }
+
+        if (HelperCalander.isLanguagePersian) {
+            txt_MusicTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_MusicTime.getText().toString()));
         }
     }
 

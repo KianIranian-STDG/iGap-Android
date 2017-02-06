@@ -31,7 +31,6 @@ public class HelperDownloadFile {
     private OnFileDownloadResponse onFileDownloadResponse;
 
     private static int maxDownloadSize = 10;
-    // private static Queue<String> queue = new LinkedList<String>();
 
     private static ArrayList<StructQueue> mQueue = new ArrayList<>();
 
@@ -52,7 +51,7 @@ public class HelperDownloadFile {
                             if (mQueue.size() > 0) {
                                 if (mQueue.get(0).priority > item.priority) {
 
-                                    addItemToQueue(item.Token + item.selector, item.priority);
+                                    addItemToQueue(item.Token + item.selector, ++item.priority);
                                     addDownloadFromQueue();
                                     return;
                                 }
@@ -227,7 +226,7 @@ public class HelperDownloadFile {
 
         String primaryKey = token + ProtoFileDownload.FileDownload.Selector.FILE;
 
-        if (list.containsKey(primaryKey)) {
+        if (list.size() > 0 && list.containsKey(primaryKey)) {
 
             HelperCancelDownloadUpload.removeRequestQueue(list.get(primaryKey).identity);
 
@@ -257,7 +256,7 @@ public class HelperDownloadFile {
             String _primaryKey = mQueue.get(0).primaryKey;
             mQueue.remove(0);
 
-            if (list.containsKey(_primaryKey)) {
+            if (list.size() > 0 && list.containsKey(_primaryKey)) {
                 requestDownloadFile(list.get(_primaryKey));
                 break;
             }

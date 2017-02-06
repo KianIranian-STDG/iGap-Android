@@ -28,7 +28,7 @@
             android:id="@+id/imageView"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
-            android:src="@drawable/sample" />
+            />
 
         <RelativeLayout
             android:layout_width="match_parent"

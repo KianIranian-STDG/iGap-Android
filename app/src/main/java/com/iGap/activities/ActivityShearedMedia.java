@@ -207,23 +207,24 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         if (myFragment != null && myFragment.isVisible()) {
             getFragmentManager().beginTransaction().remove(myFragment).commit();
 
+            // for update view that image download in fragment show image
             int count = FragmentShowImage.downloadedList.size();
 
             for (int i = 0; i < count; i++) {
-                Long id = FragmentShowImage.downloadedList.get(i);
-                for (int j = mNewList.size(); j > 0; j--) {
-                    if (!mNewList.get(j - 1).isItemTime) {
-                        if (mNewList.get(j - 1).item.getMessageId() == id) {
-                            recyclerView.getAdapter().notifyItemChanged(j - 1);
-                            break;
+                String token = FragmentShowImage.downloadedList.get(i);
+                for (int j = mNewList.size() - 1; j >= 0; j--) {
+                    try {
+                        String mToken =
+                            mNewList.get(j).item.getForwardMessage() != null ? mNewList.get(j).item.getForwardMessage().getAttachment().getToken() : mNewList.get(j).item.getAttachment().getToken();
+                        if (mToken.equals(token)) {
+                            recyclerView.getAdapter().notifyItemChanged(j);
                         }
+                    } catch (NullPointerException e) {
                     }
                 }
-
-                adapter.needDownloadList.remove(id);
             }
-
             FragmentShowImage.downloadedList.clear();
+
         } else if (!adapter.resetSelected()) {
             super.onBackPressed();
         }
@@ -450,7 +451,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        layoutParams.width = (int) getResources().getDimension(R.dimen.dp220);
+        layoutParams.width = (int) getResources().getDimension(R.dimen.dp260);
         layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
 
         dialog.getWindow().setAttributes(layoutParams);
@@ -1024,7 +1025,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getMessageType() : mList.get(position).item.getMessageType();
 
             String dirPath = AndroidUtils.suitableAppFilePath(messageType) + "/" + at.getToken() + "_" + at.getName();
-            HelperDownloadFile.startDownload(at.getToken(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 1, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(at.getToken(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
                 @Override public void OnProgress(String token, final int progress) {
 
                     if (messageProgress != null) {
@@ -1176,7 +1177,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
 
-                            HelperDownloadFile.startDownload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 2,
+                            HelperDownloadFile.startDownload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4,
                                 new HelperDownloadFile.UpdateListener() {
                                     @Override public void OnProgress(String token, int progress) {
 

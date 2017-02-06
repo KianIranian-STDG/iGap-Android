@@ -17,7 +17,7 @@
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:layout_marginLeft="@dimen/dp8"
-            android:src="@drawable/sample" />
+            />
 
         <RelativeLayout
             android:layout_width="0dp"

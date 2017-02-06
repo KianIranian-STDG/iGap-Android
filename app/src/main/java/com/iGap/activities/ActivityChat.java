@@ -2417,13 +2417,16 @@ public class ActivityChat extends ActivityEnhanced
             int count = FragmentShowImage.downloadedList.size();
 
             for (int i = 0; i < count; i++) {
-                String id = FragmentShowImage.downloadedList.get(i) + "";
+                String token = FragmentShowImage.downloadedList.get(i) + "";
 
                 for (int j = mAdapter.getAdapterItemCount() - 1; j >= 0; j--) {
                     try {
-                        if (mAdapter.getItem(j).mMessage.messageID.equals(id)) {
+
+                        String mToken =
+                            mAdapter.getItem(j).mMessage.forwardedFrom != null ? mAdapter.getItem(j).mMessage.forwardedFrom.getAttachment().getToken() : mAdapter.getItem(j).mMessage.attachment.token;
+
+                        if (mToken.equals(token)) {
                             mAdapter.notifyItemChanged(j);
-                            break;
                         }
                     } catch (NullPointerException e) {
                     }
@@ -3534,7 +3537,6 @@ public class ActivityChat extends ActivityEnhanced
 
                         if (isThereAnyMoreItemToLoadFromLocal) {
 
-                            Parcelable recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
 
                             ArrayList<StructMessageInfo> convertedMessages = new ArrayList<>();
                             for (int i = countOfCurrentLoadInList; i < mLocalList.size() && i < maxLoadFromLocalInOneStep + countOfCurrentLoadInList; i++) {
@@ -3549,7 +3551,7 @@ public class ActivityChat extends ActivityEnhanced
                                 isThereAnyMoreItemToLoadFromLocal = false;
                             }
 
-                            recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+
                         } else if (isThereAnyMoreItemToLoadFromServer) {
                             if (!isSendingRequestClientGetHistory) requestMessageHistory();
                         }
@@ -3562,38 +3564,6 @@ public class ActivityChat extends ActivityEnhanced
         };
 
         recyclerView.addOnScrollListener(scrollListener);
-
-        //EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener(lastResultMessages, mAdapter) {
-        //    @Override
-        //    public void onLoadMore(EndlessRecyclerOnScrollListener listener, int page) {
-        //
-        //
-        //        Parcelable recyclerViewState;
-        //        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
-        //
-        //        List<RealmRoomMessage> roomMessages = listener.loadMore(page);
-        //        ArrayList<StructMessageInfo> convertedMessages = new ArrayList<>();
-        //
-        //        for (RealmRoomMessage roomMessage : roomMessages) {
-        //            convertedMessages.add(StructMessageInfo.convert(roomMessage));
-        //        }
-        //
-        //        switchAddItem(convertedMessages, true);
-        //        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-        //    }
-        //
-        //    @Override
-        //    public void onNoMore(EndlessRecyclerOnScrollListener listener) {
-        //      requestMessageHistory();
-        //    }
-        //};
-        //
-        //recyclerView.addOnScrollListener(new RecyclerViewPauseOnScrollListener(ImageLoader.getInstance(), false, true, endlessRecyclerOnScrollListener));
-        //
-        //ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
-        //for (RealmRoomMessage realmRoomMessage : endlessRecyclerOnScrollListener.loadMore(0)) {
-        //    messageInfos.add(StructMessageInfo.convert(realmRoomMessage));
-        //}
 
         realm.close();
 
@@ -3639,6 +3609,12 @@ public class ActivityChat extends ActivityEnhanced
                         }
                     });
                 }
+            } else {
+                recyclerView.post(new Runnable() {
+                    @Override public void run() {
+                        mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                    }
+                });
             }
 
         }
