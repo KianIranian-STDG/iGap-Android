@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/chatSubLayoutLog"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+    android:id="@+id/chatSubLayoutLog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
 
     <TextView
         android:id="@+id/text"
@@ -16,9 +16,10 @@
         android:paddingLeft="@dimen/dp24"
         android:paddingRight="@dimen/dp24"
         android:paddingTop="@dimen/dp4"
-        android:singleLine="true"
+        android:gravity="center"
+        android:singleLine="false"
         android:text="Today"
         android:textSize="@dimen/sp12"
-        app:textAllCaps="false"
+        android:textAllCaps="false"
         />
 </FrameLayout>

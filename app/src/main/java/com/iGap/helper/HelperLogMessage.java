@@ -80,10 +80,10 @@ public class HelperLogMessage {
 
             switch (messageLog.getType()) {
                 case USER_JOINED:
-                    finalMessage = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                    finalMessage = authorName + " " + logMessage;
                     break;
                 case USER_DELETED:
-                    finalMessage = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                    finalMessage = authorName + " " + logMessage;
                     break;
                 case ROOM_CREATED:
                     finalMessage = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
