@@ -5,6 +5,7 @@ import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.RoomType;
+import com.iGap.request.RequestClientGetRoom;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -27,6 +28,11 @@ public class RealmRoom extends RealmObject {
     private String sharedMediaCount = "";
     private String actionState;
     private boolean isDeleted = false;
+    /**
+     * client need keepRoom info for show in forward message that forward
+     * from a room that user don't have that room
+     */
+    private boolean keepRoom = false;
 
     public RealmRoom() {
 
@@ -52,6 +58,14 @@ public class RealmRoom extends RealmObject {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public boolean isKeepRoom() {
+        return keepRoom;
+    }
+
+    public void setKeepRoom(boolean keepRoom) {
+        this.keepRoom = keepRoom;
     }
 
     public void setUpdatedTime(long updatedTime) {
@@ -187,6 +201,15 @@ public class RealmRoom extends RealmObject {
             }
         });
 
+        realm.close();
+    }
+
+    public static void needGetRoom(long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom == null) {
+            new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.justInfo);
+        }
         realm.close();
     }
 

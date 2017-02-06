@@ -7,7 +7,10 @@ import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
+import com.iGap.request.RequestClientGetRoom;
 import io.realm.Realm;
+
+import static com.iGap.realm.RealmRoom.putOrUpdate;
 
 public class ClientGetRoomResponse extends MessageHandler {
 
@@ -33,6 +36,12 @@ public class ClientGetRoomResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(final Realm realm) {
+                if (identity.equals(RequestClientGetRoom.CreateRoomMode.justInfo.toString())) {
+                    RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom());
+                    realmRoom.setDeleted(true);
+                    realmRoom.setKeepRoom(true);
+                    return;
+                }
 
                 if (clientGetRoom.getRoom().getType() == ProtoGlobal.Room.Type.CHAT) {
 
@@ -46,7 +55,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                                     realm1.executeTransactionAsync(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
-                                            RealmRoom.putOrUpdate(clientGetRoom.getRoom());
+                                            putOrUpdate(clientGetRoom.getRoom());
                                         }
                                     }, new OnSuccess() {
                                         @Override
@@ -63,7 +72,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                     }).getUserInfo(clientGetRoom.getRoom().getChatRoomExtra().getPeer().getId());
 
                 } else {
-                    RealmRoom.putOrUpdate(clientGetRoom.getRoom());
+                    putOrUpdate(clientGetRoom.getRoom());
 
                     G.handler.postDelayed(new Runnable() {
                         @Override

@@ -7,7 +7,8 @@ public class RequestClientGetRoom {
     public enum CreateRoomMode {
 
         requestFromServer,
-        requestFromOwner;
+        requestFromOwner,
+        justInfo
     }
 
     public void clientGetRoom(long roomId, CreateRoomMode mode) {

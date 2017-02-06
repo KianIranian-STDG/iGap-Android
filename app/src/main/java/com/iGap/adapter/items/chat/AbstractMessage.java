@@ -557,6 +557,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         } else {
                             txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                         }
+                    } else {
+                        RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+                        if (realmRoom1 != null) {
+                            txtForwardFrom.setText(realmRoom1.getTitle());
+                            if (mMessage.isSenderMe()) {
+                                txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+                            } else {
+                                txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
+                            }
+                        }
                     }
                 }
                 realm.close();

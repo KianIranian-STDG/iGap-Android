@@ -211,10 +211,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                         fragmentNewGroup.setArguments(bundle);
 
                         try {
-                            getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment")
-                                .commitAllowingStateLoss();
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment").commitAllowingStateLoss();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -299,7 +296,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-            @Override public void onClientGetRoomResponse(final ProtoGlobal.Room room, final ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
+            @Override
+            public void onClientGetRoomResponse(final ProtoGlobal.Room room, final ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
                 if (G.currentActivity == ActivityMain.this) {
                     if (mAdapter != null) {
                         runOnUiThread(new Runnable() {
@@ -439,10 +437,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 Fragment fragment = SearchFragment.newInstance();
 
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "Search_fragment")
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -551,11 +546,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 fragment.setArguments(bundle);
 
                 try {
-                    ActivityMain.this.getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                    ActivityMain.this.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -574,11 +565,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    ActivityMain.this.getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                    ActivityMain.this.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -732,7 +719,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
                 }
 
                 // delete messages and rooms that was deleted
-                RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll();
+                RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
                 for (RealmRoom item : deletedRoomsList) {
                     realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();//delete all message in deleted room
                     item.deleteFromRealm();
@@ -905,6 +892,9 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         if (fromServer && G.socketConnection) {
             testIsSecure();
         } else {
+            if (firstTimeEnterToApp) {
+                testIsSecure();
+            }
             //contentLoading.hide();
             mAdapter.clear();
             Realm realm = Realm.getDefaultInstance();

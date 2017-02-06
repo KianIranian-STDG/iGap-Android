@@ -1,6 +1,7 @@
 package com.iGap.realm;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 import com.iGap.Config;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperLogMessage;
@@ -47,8 +48,10 @@ import org.parceler.Parcel;
     private boolean showMessage = true;
     private String authorHash;
     //TODO [Saeed Mozaffari] [2017-01-19 9:28 AM] - use RealmAuthor instead of author hash
+    private long authorRoomId;
     // for channel message should be exist in other rooms (forwarded message)
     private RealmChannelExtra channelExtra;
+
 
     public long getUpdateOrCreateTime() {
         return updateTime >= createTime ? updateTime : createTime;
@@ -170,19 +173,23 @@ import org.parceler.Parcel;
     }
 
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId, boolean showMessage, boolean forwardOrReply, Realm realm) {
-
-
-        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, input.getMessageId()).findFirst();
+        long messageId;
+        if (forwardOrReply) {
+            messageId = input.getMessageId() * 2;
+        } else {
+            messageId = input.getMessageId();
+        }
+        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
 
         if (message == null) {
-            message = realm.createObject(RealmRoomMessage.class, input.getMessageId());
+            message = realm.createObject(RealmRoomMessage.class, messageId);
             message.setRoomId(roomId);
 
             if (input.hasForwardFrom()) {
-                message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), roomId));
+                message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), -1));
             }
             if (input.hasReplyTo()) {
-                message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), roomId));
+                message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), -1));
             }
 
             message.setShowMessage(showMessage);
@@ -197,6 +204,17 @@ import org.parceler.Parcel;
             message.setUserId(input.getAuthor().getUser().getUserId());
         } else {
             message.setUserId(0);
+            message.setAuthorRoomId(input.getAuthor().getRoom().getRoomId());
+            /**
+             * if message is forward or reply check room exist or not for get info for
+             * that room (hint : reply not important for this subject)
+             * if this message isn't forward client before got this info and now don't
+             * need to get it again
+             */
+            if (forwardOrReply) {
+                Log.i("XXX", "input.getAuthor().getRoom().getRoomId() : " + input.getAuthor().getRoom().getRoomId());
+                //RealmRoom.needGetRoom(input.getAuthor().getRoom().getRoomId());
+            }
         }
         message.setAuthorHash(input.getAuthor().getHash());
 
@@ -254,7 +272,7 @@ import org.parceler.Parcel;
             realmChannelExtra.setViewsLabel(input.getChannelExtra().getViewsLabel());
             message.setChannelExtra(realmChannelExtra);
         }
-
+        Log.i("XXX", "END");
         return message;
     }
 
@@ -450,6 +468,14 @@ import org.parceler.Parcel;
         this.replyTo = replyTo;
     }
 
+    public long getAuthorRoomId() {
+        return authorRoomId;
+    }
+
+    public void setAuthorRoomId(long authorRoomId) {
+        this.authorRoomId = authorRoomId;
+    }
+
     public String getAuthorHash() {
         return authorHash;
     }
@@ -590,7 +616,8 @@ import org.parceler.Parcel;
         if (deleteAll) {
 
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
 
                     realm.where(RealmRoomMessage.class).findAll().deleteAllFromRealm();
                 }
@@ -598,7 +625,8 @@ import org.parceler.Parcel;
         } else {
 
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
 
                     realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
                 }

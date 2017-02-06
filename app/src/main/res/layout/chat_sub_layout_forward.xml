@@ -37,7 +37,6 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:minWidth="@dimen/dp100"
-            android:text="SAMPLE TEXT"
             android:textColor="@color/newBlack"
             android:textSize="@dimen/sp12"
             android:textStyle="bold"/>
