@@ -768,4 +768,7 @@
     <string name="do_you_want_to_clean_all_data_in_chat_rooms">Do you want to clean all data in local chat rooms?</string>
     <string name="pm">PM</string>
     <string name="am">AM</string>
+    <string name="message_selected">Message Selected</string>
+    <string name="messages_selected">Messages Selected</string>
+    <string name="forward_message">forward message</string>
 </resources>

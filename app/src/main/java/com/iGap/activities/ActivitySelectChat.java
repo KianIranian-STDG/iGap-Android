@@ -32,6 +32,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class ActivitySelectChat extends ActivityEnhanced {
 
     public static final String ARG_FORWARD_MESSAGE = "arg_forward_msg";
+    public static final String ARG_FORWARD_MESSAGE_COUNT = "arg_forward_msg_count";
     private RecyclerView mRecyclerView;
     private FastItemAdapter<RoomItem> mAdapter;
     private ArrayList<Parcelable> mForwardMessages;
@@ -83,6 +84,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
                     Intent intent = new Intent(ActivitySelectChat.this, ActivityChat.class);
                     intent.putExtra("RoomId", item.mInfo.getId());
                     intent.putParcelableArrayListExtra(ARG_FORWARD_MESSAGE, mForwardMessages);
+                    intent.putExtra(ARG_FORWARD_MESSAGE_COUNT, mForwardMessages.size());
                     startActivity(intent);
                     finish();
                 } else {

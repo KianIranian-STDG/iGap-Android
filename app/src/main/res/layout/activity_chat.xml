@@ -642,6 +642,12 @@
             />
 
         <include
+            layout="@layout/chat_sub_layout_has_forward"
+            android:id="@+id/ac_ll_forward"
+            android:visibility="gone"
+            />
+
+        <include
             layout="@layout/layout_attach_file"
             android:id="@+id/layout_attach_file"
             />

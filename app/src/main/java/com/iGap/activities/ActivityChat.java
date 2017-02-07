@@ -200,6 +200,7 @@ import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+import io.github.meness.emoji.EmojiTextView;
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
 import io.github.meness.emoji.listeners.OnEmojiClickedListener;
@@ -367,6 +368,7 @@ public class ActivityChat extends ActivityEnhanced
     private ArrayList<RealmRoomMessage> mLocalList = new ArrayList<>();
     private RecyclerView.OnScrollListener scrollListener;
 
+    private boolean hasForward = false;
 
     @Override
     protected void onStart() {
@@ -749,10 +751,86 @@ public class ActivityChat extends ActivityEnhanced
      */
     private void manageForwardedMessage() {
         if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
-            ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
-            for (Parcelable messageInfo : messageInfos) {
-                sendForwardedMessage((StructMessageInfo) Parcels.unwrap(messageInfo));
+
+            final LinearLayout ll_Forward = (LinearLayout) findViewById(R.id.ac_ll_forward);
+
+            if (hasForward) {
+
+                hasForward = false;
+                ll_Forward.setVisibility(View.GONE);
+
+                ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
+                for (Parcelable messageInfo : messageInfos) {
+                    sendForwardedMessage((StructMessageInfo) Parcels.unwrap(messageInfo));
+                }
+            } else {
+
+                ImageView imvCanselForward = (ImageView) findViewById(R.id.cslhf_imv_cansel);
+                imvCanselForward.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+
+                        ll_Forward.setVisibility(View.GONE);
+                        hasForward = false;
+
+                        if (edtChat.getText().length() == 0) {
+
+                            layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
+                                @Override public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    layoutAttachBottom.setVisibility(View.VISIBLE);
+                                }
+                            }).start();
+                            imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
+                                @Override public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    runOnUiThread(new Runnable() {
+                                        @Override public void run() {
+                                            imvSendButton.clearAnimation();
+                                            imvSendButton.setVisibility(View.GONE);
+                                        }
+                                    });
+                                }
+                            }).start();
+                        }
+                    }
+                });
+
+                layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
+                    @Override public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        layoutAttachBottom.setVisibility(View.GONE);
+                    }
+                }).start();
+
+                imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
+                    @Override public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                imvSendButton.clearAnimation();
+                                imvSendButton.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
+                }).start();
+
+                int _count = getIntent().getExtras().getInt(ActivitySelectChat.ARG_FORWARD_MESSAGE_COUNT);
+                String str = _count > 1 ? getString(R.string.messages_selected) : getString(R.string.message_selected);
+
+                EmojiTextView emMessage = (EmojiTextView) findViewById(R.id.cslhf_txt_message);
+
+                if (HelperCalander.isLanguagePersian) {
+
+                    emMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(_count + " " + str));
+                } else {
+
+                    emMessage.setText(_count + " " + str);
+                }
+
+                hasForward = true;
+                ll_Forward.setVisibility(View.VISIBLE);
             }
+
         }
     }
 
@@ -1709,6 +1787,10 @@ public class ActivityChat extends ActivityEnhanced
 
                 clearDraftRequest();
 
+                if (hasForward) {
+                    manageForwardedMessage();
+                }
+
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
 
                     // if need to add time before insert new message
@@ -1977,7 +2059,7 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (ll_attach_text.getVisibility() == View.GONE) {
+                if (ll_attach_text.getVisibility() == View.GONE && hasForward == false) {
 
                     if (edtChat.getText().length() > 0) {
                         layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
