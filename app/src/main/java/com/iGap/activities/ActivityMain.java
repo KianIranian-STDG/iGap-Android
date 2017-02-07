@@ -889,50 +889,48 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     private void getChatsList(boolean fromServer) {
         swipeRefreshLayout.setRefreshing(true);
-        if (fromServer && G.socketConnection) {
+        /*if (fromServer && G.socketConnection) {
             testIsSecure();
-        } else {
-            if (firstTimeEnterToApp) {
-                testIsSecure();
-            }
-            //contentLoading.hide();
-            mAdapter.clear();
-            Realm realm = Realm.getDefaultInstance();
-            List<RoomItem> roomItems = new ArrayList<>();
+        } else {*/
+        if (firstTimeEnterToApp) {
+            testIsSecure();
+        }
+        //contentLoading.hide();
+        mAdapter.clear();
+        Realm realm = Realm.getDefaultInstance();
+        List<RoomItem> roomItems = new ArrayList<>();
 
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
 
-                    // delete messages and rooms in the deleted room
-                    RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll();
-                    for (RealmRoom item : deletedRoomsList) {
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
-                        item.deleteFromRealm();
-                    }
+                // delete messages and rooms in the deleted room
+                RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll();
+                for (RealmRoom item : deletedRoomsList) {
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
+                    item.deleteFromRealm();
+                }
 
-                    for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
-                        if (Room.getLastMessage() != null) {
-                            if (Room.getLastMessage().getUpdateTime() > 0) {
-                                if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) {
-                                    Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
-                                }
+                for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
+                    if (Room.getLastMessage() != null) {
+                        if (Room.getLastMessage().getUpdateTime() > 0) {
+                            if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) {
+                                Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
                             }
                         }
                     }
-                    swipeRefreshLayout.setRefreshing(false);
                 }
-            });
-
-            for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
-                roomItems.add(new RoomItem().setInfo(realmRoom).setComplete(ActivityMain.this).withIdentifier(realmRoom.getId()));
+                swipeRefreshLayout.setRefreshing(false);
             }
+        });
 
-
-            mAdapter.add(roomItems);
-            //realm.close(); //TODO [Saeed Mozaffari] [2016-11-27 1:43 PM] - Check Close Realm
-
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
+            roomItems.add(new RoomItem().setInfo(realmRoom).setComplete(ActivityMain.this).withIdentifier(realmRoom.getId()));
         }
+
+
+        mAdapter.add(roomItems);
+        //realm.close(); //TODO [Saeed Mozaffari] [2016-11-27 1:43 PM] - Check Close Realm
     }
 
     @Override

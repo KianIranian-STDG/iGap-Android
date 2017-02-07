@@ -34,6 +34,7 @@ import com.iGap.R;
 import com.iGap.interfaces.OnVoiceRecord;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.ChatSendMessageUtil;
+import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
@@ -42,8 +43,6 @@ import com.iGap.module.UploadService;
 import com.iGap.module.VoiceRecord;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatRoom;
-import com.iGap.realm.RealmContacts;
-import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
@@ -148,13 +147,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON, WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
 
         setContentView(R.layout.activity_popup_notification);
@@ -182,44 +180,37 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     private io.github.meness.emoji.EmojiPopup emojiPopup;
 
     private void setUpEmojiPopup() {
-        emojiPopup = io.github.meness.emoji.EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent))
-                .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-                    @Override
-                    public void onEmojiBackspaceClicked(final View v) {
+        emojiPopup = io.github.meness.emoji.EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+            @Override
+            public void onEmojiBackspaceClicked(final View v) {
 
-                    }
-                })
-                .setOnEmojiClickedListener(new OnEmojiClickedListener() {
-                    @Override
-                    public void onEmojiClicked(final Emoji emoji) {
+            }
+        }).setOnEmojiClickedListener(new OnEmojiClickedListener() {
+            @Override
+            public void onEmojiClicked(final Emoji emoji) {
 
-                    }
-                })
-                .setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-                    @Override
-                    public void onEmojiPopupShown() {
-                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-                    }
-                })
-                .setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-                    @Override
-                    public void onKeyboardOpen(final int keyBoardHeight) {
+            }
+        }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
+            @Override
+            public void onEmojiPopupShown() {
+                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+            }
+        }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
+            @Override
+            public void onKeyboardOpen(final int keyBoardHeight) {
 
-                    }
-                })
-                .setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-                    @Override
-                    public void onEmojiPopupDismiss() {
-                        changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
-                    }
-                })
-                .setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-                    @Override
-                    public void onKeyboardClose() {
-                        emojiPopup.dismiss();
-                    }
-                })
-                .build(edtChat);
+            }
+        }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
+            @Override
+            public void onEmojiPopupDismiss() {
+                changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+            }
+        }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
+            @Override
+            public void onKeyboardClose() {
+                emojiPopup.dismiss();
+            }
+        }).build(edtChat);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -245,29 +236,14 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         realm.close();
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-
     private void setLastSeen(RealmRoom realmRoom, Realm realm) {
-
-        String lastSeen = "";
-
-        if (realmRoom.getType() == CHAT) {
-
-            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-            chatPeerId = realmChatRoom.getPeerId();
-
-            RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+        if (realmRoom.getChatRoom() != null) {
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmChatRoom.getPeerId()).findFirst();
             if (realmRegisteredInfo != null) {
-                lastSeen = Long.toString(realmRegisteredInfo.getLastSeen());
-            } else if (realmContacts != null) {
-                lastSeen = Long.toString(realmContacts.getLast_seen());
-            } else {
-                lastSeen = getString(R.string.last_seen);
+                txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
             }
         }
-
-        txtLastSeen.setText(lastSeen);
     }
 
     private void setAvatar(Realm realm) {
@@ -296,8 +272,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
                     // onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
                 }
-                imvUserPicture.setImageBitmap(
-                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+                imvUserPicture.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
             }
         } else {
             if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
@@ -319,11 +294,10 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             for (RealmRoomMessage roomMessage : realmRoomMessages) {
                 if (roomMessage != null) {
                     if (roomMessage.getUserId() != userId) {
-                        if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) ||
-                                roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
+                        if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
 
                             // if (roomMessage.getMessageType().toLowerCase().contains("text")) {
-                                unreadList.add(roomMessage);
+                            unreadList.add(roomMessage);
                             // }
                         }
                     }
@@ -342,8 +316,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (voiceRecord.getItemTag().equals("ivVoice"))
-            voiceRecord.dispatchTouchEvent(event);
+        if (voiceRecord.getItemTag().equals("ivVoice")) voiceRecord.dispatchTouchEvent(event);
         return super.dispatchTouchEvent(event);
     }
 
