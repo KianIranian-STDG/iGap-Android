@@ -800,9 +800,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(null, true);
 
                         switch (messageType) {
-                            case IMAGE:
-                            case IMAGE_TEXT:
-                                break;
                             case VIDEO:
                             case VIDEO_TEXT:
                                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
@@ -813,6 +810,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 break;
                             case FILE:
                             case FILE_TEXT:
+                            case IMAGE:
+                            case IMAGE_TEXT:
                                 holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -997,6 +996,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             if (progress == 100) {
                                 progressBar.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
+
+                                progressBar.performProgress();
 
                                 onLoadThumbnailFromLocal(holder, _path, LocalFileType.FILE);
 

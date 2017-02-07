@@ -775,7 +775,7 @@ public class HelperNotificationAndBadge {
         } catch (Exception e) {
         }
 
-        return false;
+        return true;
     }
 
 
