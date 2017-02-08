@@ -152,7 +152,7 @@ import com.iGap.module.UploaderUtil;
 import com.iGap.module.enums.ConnectionMode;
 import com.iGap.proto.ProtoClientCondition;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmMigrationClass;
+import com.iGap.realm.RealmMigration;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientCondition;
@@ -578,7 +578,7 @@ public class G extends MultiDexApplication {
         flaticon = Typeface.createFromAsset(this.getAssets(), "fonts/Flaticon.ttf");
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
 
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(1).migration(new RealmMigrationClass()).deleteRealmIfMigrationNeeded().build());
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).migration(new RealmMigration()).build());
 
         // Create global configuration and initialize ImageLoader with this config
         // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
