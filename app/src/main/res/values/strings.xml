@@ -771,4 +771,5 @@
     <string name="message_selected">Message Selected</string>
     <string name="messages_selected">Messages Selected</string>
     <string name="forward_message">forward message</string>
+    <string name="file_not_download_yet">File Not Downloaded Yet</string>
 </resources>

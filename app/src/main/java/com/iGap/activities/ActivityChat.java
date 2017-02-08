@@ -1790,7 +1790,7 @@ public class ActivityChat extends ActivityEnhanced
                 if (hasForward) {
                     manageForwardedMessage();
 
-                    if (edtChat.getText().length() == 0 && ll_attach_text.getVisibility() == View.GONE) {
+                    if (edtChat.getText().length() == 0) {
                         return;
                     }
                 }
@@ -2369,85 +2369,102 @@ public class ActivityChat extends ActivityEnhanced
 
         if (messageInfo == null) return;
 
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        String chooserDialogText = "";
+        try {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            String chooserDialogText = "";
 
-        switch (messageInfo.messageType.toString()) {
+            ProtoGlobal.RoomMessageType type = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType;
 
-            case "TEXT":
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, messageInfo.messageText);
-                break;
-            case "CONTACT":
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, messageInfo.userInfo.firstName + "\n" + messageInfo.userInfo.phone);
-                break;
-            case "LOCATION":
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, messageInfo.location.getLocationLat() + " " + messageInfo.location.getLocationLong());
-                break;
-            case "VOICE":
-            case "AUDIO":
-            case "AUDIO_TEXT":
-                intent.setType("audio/*");
-                putExtra(intent, messageInfo);
-                chooserDialogText = getString(R.string.share_audio_file);
-                break;
-            case "IMAGE":
-            case "IMAGE_TEXT":
-                intent.setType("image/*");
-                putExtra(intent, messageInfo);
-                chooserDialogText = getString(R.string.share_image);
-                break;
-            case "VIDEO":
-            case "VIDEO_TEXT":
-                intent.setType("video/*");
-                putExtra(intent, messageInfo);
-                chooserDialogText = getString(R.string.share_video_file);
-                break;
-            case "FILE":
-            case "FILE_TEXT":
+            switch (type.toString()) {
 
-                if (messageInfo.getAttachment().getLocalFilePath() != null) {
-                    Uri uri = Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath()));
-                    String mimeType = FileUtils.getMimeType(ActivityChat.this, uri);
+                case "TEXT":
+                    intent.setType("text/plain");
+                    String message = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessage() : messageInfo.messageText;
+                    intent.putExtra(Intent.EXTRA_TEXT, message);
+                    break;
+                case "CONTACT":
+                    intent.setType("text/plain");
+                    String messageContact;
+                    if (messageInfo.forwardedFrom != null) {
+                        messageContact = messageInfo.forwardedFrom.getRoomMessageContact().getFirstName()
+                            + " "
+                            + messageInfo.forwardedFrom.getRoomMessageContact().getLastName()
+                            + "\n"
+                            + messageInfo.forwardedFrom.getRoomMessageContact().getLastPhoneNumber();
+                    } else {
+                        messageContact = messageInfo.userInfo.firstName + "\n" + messageInfo.userInfo.phone;
+                    }
+                    intent.putExtra(Intent.EXTRA_TEXT, messageContact);
+                    break;
+                case "LOCATION":
+                    String imagePathPosition = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getLocation().getImagePath() : messageInfo.location.getImagePath();
+                    intent.setType("image/*");
+                    if (imagePathPosition != null) {
+                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(imagePathPosition)));
+                    }
+                    break;
+                case "VOICE":
+                case "AUDIO":
+                case "AUDIO_TEXT":
+                    intent.setType("audio/*");
+                    putExtra(intent, messageInfo);
+                    chooserDialogText = getString(R.string.share_audio_file);
+                    break;
+                case "IMAGE":
+                case "IMAGE_TEXT":
+                    intent.setType("image/*");
+                    putExtra(intent, messageInfo);
+                    chooserDialogText = getString(R.string.share_image);
+                    break;
+                case "VIDEO":
+                case "VIDEO_TEXT":
+                    intent.setType("video/*");
+                    putExtra(intent, messageInfo);
+                    chooserDialogText = getString(R.string.share_video_file);
+                    break;
+                case "FILE":
+                case "FILE_TEXT":
+                    String mfilepath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
+                    if (mfilepath != null) {
+                        Uri uri = Uri.fromFile(new File(mfilepath));
+                        String mimeType = FileUtils.getMimeType(ActivityChat.this, uri);
 
-                    if (mimeType == null || mimeType.length() < 1) {
-                        mimeType = "*/*";
+                        if (mimeType == null || mimeType.length() < 1) {
+                            mimeType = "*/*";
+                        }
+
+                        intent.setType(mimeType);
+                        intent.putExtra(Intent.EXTRA_STREAM, uri);
+                        chooserDialogText = getString(R.string.share_file);
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                Toast.makeText(G.context, R.string.file_not_download_yet, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
 
-                    intent.setType(mimeType);
-                    intent.putExtra(Intent.EXTRA_STREAM, uri);
-                    chooserDialogText = getString(R.string.share_file);
-                } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(G.context, "File Not Downloaded Yet", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+                    break;
+            }
 
-                break;
+            startActivity(Intent.createChooser(intent, chooserDialogText));
+        } catch (Exception e) {
+            Log.e("ddddd", "activity chat   shearedDataToOtherProgram   " + e.toString());
         }
 
-        startActivity(Intent.createChooser(intent, chooserDialogText));
+
     }
 
     private void putExtra(Intent intent, StructMessageInfo messageInfo) {
-        if (messageInfo.getAttachment() != null) {
 
-            if (messageInfo.getAttachment().getLocalFilePath() != null) {
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(messageInfo.getAttachment().getLocalFilePath())));
-            } else {
+        try {
+            String filePath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(G.context, "File Not Downloaded Yet", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            if (filePath != null) {
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
             }
+        } catch (Exception e) {
+            Log.e("ddddd", "activity chat   putExtra  " + e.toString());
         }
     }
 
@@ -2537,6 +2554,7 @@ public class ActivityChat extends ActivityEnhanced
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
+
             super.onBackPressed();
         }
     }
@@ -2549,6 +2567,8 @@ public class ActivityChat extends ActivityEnhanced
             new RequestClientUnsubscribeFromRoom().clientUnsubscribeFromRoom(mRoomId);
         }
         onMusicListener = null;
+
+        overridePendingTransition(0, 0);
     }
 
     @Override
