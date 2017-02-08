@@ -194,6 +194,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private TextView txtGroupLink;
     private boolean isPopup = false;
     private ViewGroup ltLink;
+    private int firstLimit = 0;
+    private int lastLimit = 10;
+
 
     private long startMessageId = 0;
 
@@ -599,17 +602,27 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onClick(View view) {
 
-                int count = items.size();
-                int listSize = contacts.size();
+                firstLimit = 0;
+                lastLimit += lastLimit;
 
-                for (int i = count; i < listSize && i < count + numberUploadItem; i++) {
+                int listSize = contacts.size();
+                int count = items.size();
+
+                if (lastLimit > listSize) lastLimit = listSize;
+
+                items.clear();
+                for (int i = firstLimit; i < lastLimit; i++) {
                     items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
                 }
 
                 itemAdapter.clear();
                 itemAdapter.add(items);
 
-                if (items.size() >= listSize) txtMore.setVisibility(View.GONE);
+                if ((listSize - lastLimit) > 0) {
+                    if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
+                } else {
+                    txtMore.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -1396,13 +1409,26 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         //txtMemberNumber.setText(listSize + "");
 
-        for (int i = 0; i < listSize; i++) {
+        if (listSize > lastLimit) {
+            if (txtMore != null) {
+                txtMore.setVisibility(View.VISIBLE);
 
-            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                for (int i = firstLimit; i < lastLimit; i++) {
+                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                }
+            }
+        } else {
+
+            if (txtMore != null) {
+                txtMore.setVisibility(View.GONE);
+
+                for (int i = 0; i < listSize; i++) {
+                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                }
+            }
         }
 
         //if (listSize < 4) txtMore.setVisibility(View.GONE);
-        txtMore.setVisibility(View.GONE);
 
         itemAdapter.add(items);
 

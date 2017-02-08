@@ -152,7 +152,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private TextView txtChannelName;
     TextView txtSharedMedia;
     private EditText edtRevoke;
-
+    private TextView txtMore;
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -182,6 +182,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private boolean isSignature;
     private TextView txtLinkTitle;
     private boolean isPopup = false;
+    private int firstLimit = 0;
+    private int lastLimit = 10;
 
     @Override
     protected void onResume() {
@@ -597,6 +599,35 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
 
         //memberNumber.setText(participantsCountLabel);
+
+        txtMore = (TextView) findViewById(R.id.agp_channel_txt_more);
+        txtMore.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                firstLimit = 0;
+                lastLimit += lastLimit;
+
+                int listSize = contacts.size();
+                int count = items.size();
+
+                if (lastLimit > listSize) lastLimit = listSize;
+
+                items.clear();
+                for (int i = firstLimit; i < lastLimit; i++) {
+                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                }
+
+                itemAdapter.clear();
+                itemAdapter.add(items);
+
+                if ((listSize - lastLimit) > 0) {
+                    if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
+                } else {
+                    txtMore.setVisibility(View.GONE);
+                }
+            }
+        });
+
 
         attachFile = new AttachFile(this);
 
@@ -1207,10 +1238,24 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         //txtMemberNumber.setText(listSize + "");
 
-        for (int i = 0; i < listSize; i++) {
-            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-        }
+        if (listSize > lastLimit) {
+            if (txtMore != null) {
+                txtMore.setVisibility(View.VISIBLE);
 
+                for (int i = firstLimit; i < lastLimit; i++) {
+                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                }
+            }
+        } else {
+
+            if (txtMore != null) {
+                txtMore.setVisibility(View.GONE);
+
+                for (int i = 0; i < listSize; i++) {
+                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                }
+            }
+        }
         itemAdapter.add(items);
 
         //so the headers are aware of changes

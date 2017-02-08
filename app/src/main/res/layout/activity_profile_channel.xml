@@ -395,6 +395,16 @@
                         android:visibility="visible"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+                    <TextView
+                        android:id="@+id/agp_channel_txt_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/dp12"
+                        android:text="@string/more"
+                        android:textSize="@dimen/sp16"
+                        />
+
                 </LinearLayout>
                 <!-- member list end -->
 
