@@ -369,6 +369,7 @@ public class ActivityChat extends ActivityEnhanced
     private RecyclerView.OnScrollListener scrollListener;
 
     private boolean hasForward = false;
+    ImageView imvCanselForward;
 
     @Override
     protected void onStart() {
@@ -756,8 +757,7 @@ public class ActivityChat extends ActivityEnhanced
 
             if (hasForward) {
 
-                hasForward = false;
-                ll_Forward.setVisibility(View.GONE);
+                imvCanselForward.performClick();
 
                 ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
                 for (Parcelable messageInfo : messageInfos) {
@@ -765,7 +765,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             } else {
 
-                ImageView imvCanselForward = (ImageView) findViewById(R.id.cslhf_imv_cansel);
+                imvCanselForward = (ImageView) findViewById(R.id.cslhf_imv_cansel);
                 imvCanselForward.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
 
@@ -1789,6 +1789,10 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (hasForward) {
                     manageForwardedMessage();
+
+                    if (edtChat.getText().length() == 0 && ll_attach_text.getVisibility() == View.GONE) {
+                        return;
+                    }
                 }
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
