@@ -12,10 +12,14 @@ public class RealmMigration implements io.realm.RealmMigration {
         RealmSchema schema = realm.getSchema();
         if (oldVersion == 1) {
             RealmObjectSchema roomSchema = schema.get("RealmRoom");
-            roomSchema.addField("keepRoom", boolean.class, FieldAttribute.REQUIRED);
+            if (roomSchema != null) {
+                roomSchema.addField("keepRoom", boolean.class, FieldAttribute.REQUIRED);
+            }
 
             RealmObjectSchema realmRoomMessageSchema = schema.get("RealmRoomMessage");
-            realmRoomMessageSchema.addField("authorRoomId", long.class, FieldAttribute.REQUIRED);
+            if (realmRoomMessageSchema != null) {
+                realmRoomMessageSchema.addField("authorRoomId", long.class, FieldAttribute.REQUIRED);
+            }
             oldVersion++;
         }
     }

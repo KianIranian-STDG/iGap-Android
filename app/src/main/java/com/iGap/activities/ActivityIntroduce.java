@@ -34,7 +34,6 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterViewPager;
 import com.iGap.helper.HelperPermision;
-import com.iGap.helper.HelperRealm;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnReceiveInfoLocation;
 import com.iGap.interfaces.OnReceivePageInfoTOS;
@@ -93,13 +92,13 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        isRealmDelete = sharedPreferences.getBoolean(SHP_SETTING.KEY_REALM_DELETE_ALL, true);
-        if (isRealmDelete) {
-            HelperRealm.realmTruncate();
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(SHP_SETTING.KEY_REALM_DELETE_ALL, false);
-            editor.apply();
-        }
+        //isRealmDelete = sharedPreferences.getBoolean(SHP_SETTING.KEY_REALM_DELETE_ALL, true);
+        //if (isRealmDelete) {
+        //    //HelperRealm.realmTruncate();
+        //    SharedPreferences.Editor editor = sharedPreferences.edit();
+        //    editor.putBoolean(SHP_SETTING.KEY_REALM_DELETE_ALL, false);
+        //    editor.apply();
+        //}
 
         G.makeFolder();
 

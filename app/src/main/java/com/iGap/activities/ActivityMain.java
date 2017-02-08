@@ -32,6 +32,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.WebSocketClient;
 import com.iGap.adapter.RoomsAdapter;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.fragments.ContactGroupFragment;
@@ -661,7 +662,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             @Override
             public void onRefresh() {
                 if (heartBeatTimeOut()) {
-                    //WebSocketClient.checkConnection();
+                    WebSocketClient.checkConnection();
                 }
                 new RequestClientGetRoomList().clientGetRoomList();
             }

@@ -169,6 +169,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.exceptions.RealmMigrationNeededException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -429,7 +430,7 @@ public class G extends MultiDexApplication {
 
     private static void getContactListFromServer() {
         //if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            new RequestUserContactsGetList().userContactGetList();
+        new RequestUserContactsGetList().userContactGetList();
         //}
     }
 
@@ -578,12 +579,8 @@ public class G extends MultiDexApplication {
         flaticon = Typeface.createFromAsset(this.getAssets(), "fonts/Flaticon.ttf");
         FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
 
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).migration(new RealmMigration()).deleteRealmIfMigrationNeeded().build());
+        realmConfiguration();
 
-        // Create global configuration and initialize ImageLoader with this config
-        // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Configuration
-        // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Display-Options
-        // https://github.com/nostra13/Android-Universal-Image-Loader/wiki/Useful-Info
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
         ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(defaultOptions).build());
 
@@ -604,6 +601,34 @@ public class G extends MultiDexApplication {
         }
         setUserTextSize();
         new HelperDownloadFile();
+    }
+
+    private void realmConfiguration() {
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).migration(new RealmMigration()).build());
+
+        try {
+            Realm.getDefaultInstance();
+        } catch (RealmMigrationNeededException e) {
+            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).deleteRealmIfMigrationNeeded().build());
+            try {
+                Realm.getDefaultInstance();
+            } catch (RealmMigrationNeededException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        try {
+            Realm realm = Realm.getDefaultInstance();
+            realm.where(RealmUserInfo.class).findFirst();
+        } catch (IllegalStateException e) {
+            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).deleteRealmIfMigrationNeeded().build());
+            try {
+                Realm realm = Realm.getDefaultInstance();
+                realm.where(RealmUserInfo.class).findFirst();
+            } catch (IllegalStateException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
     public static void makeFolder() {
