@@ -1721,18 +1721,18 @@ public class ActivityChat extends ActivityEnhanced
             }
         }, 100);
 
-        imvBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
-                    ActivityPopUpNotification.isGoingToChatFromPopUp = false;
-                    Intent intent = new Intent(context, ActivityMain.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
-                finish();
-            }
-        });
+        //imvBackButton.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
+        //            ActivityPopUpNotification.isGoingToChatFromPopUp = false;
+        //            Intent intent = new Intent(context, ActivityMain.class);
+        //            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //            startActivity(intent);
+        //        }
+        //        finish();
+        //    }
+        //});
 
         rippleBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1750,32 +1750,15 @@ public class ActivityChat extends ActivityEnhanced
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (chatType == CHAT && chatPeerId != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast
-                    // check for iGap message ==> chatPeerId == 134(alan baraye check kardane) ,
-                    // waiting for userDetail proto
-                    Intent intent = new Intent(G.context, ActivityContactsProfile.class);
-                    intent.putExtra("peerId", chatPeerId);
-                    intent.putExtra("RoomId", mRoomId);
-                    intent.putExtra("enterFrom", CHAT.toString());
-                    startActivity(intent);
-                } else if (chatType == GROUP) {
-                    if (!isChatReadOnly) {
-                        Intent intent = new Intent(G.context, ActivityGroupProfile.class);
-                        intent.putExtra("RoomId", mRoomId);
-                        startActivity(intent);
-                    }
-                } else if (chatType == CHANNEL) {
-                    Intent intent = new Intent(G.context, ActivityChannelProfile.class);
-                    intent.putExtra(Config.PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
-                    startActivity(intent);
-                }
+
+                goToProfile();
             }
         });
 
         lyt_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imvUserPicture.performClick();
+                goToProfile();
             }
         });
 
@@ -2114,6 +2097,28 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
+    }
+
+    private void goToProfile() {
+        if (chatType == CHAT && chatPeerId != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast
+            // check for iGap message ==> chatPeerId == 134(alan baraye check kardane) ,
+            // waiting for userDetail proto
+            Intent intent = new Intent(G.context, ActivityContactsProfile.class);
+            intent.putExtra("peerId", chatPeerId);
+            intent.putExtra("RoomId", mRoomId);
+            intent.putExtra("enterFrom", CHAT.toString());
+            startActivity(intent);
+        } else if (chatType == GROUP) {
+            if (!isChatReadOnly) {
+                Intent intent = new Intent(G.context, ActivityGroupProfile.class);
+                intent.putExtra("RoomId", mRoomId);
+                startActivity(intent);
+            }
+        } else if (chatType == CHANNEL) {
+            Intent intent = new Intent(G.context, ActivityChannelProfile.class);
+            intent.putExtra(Config.PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
+            startActivity(intent);
+        }
     }
 
     private void addLayoutUnreadMessage() {
