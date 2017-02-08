@@ -1772,25 +1772,33 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
             if (role == GroupChatRole.OWNER) {
 
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) { // ok
                     popup.getMenu().getItem(2).setVisible(false);
                     popup.getMenu().getItem(3).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) { //ok
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(1).setVisible(false);
                     popup.getMenu().getItem(3).setVisible(false);
                     popup.getMenu().getItem(4).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) { // ok
                     popup.getMenu().getItem(1).setVisible(false);
                     popup.getMenu().getItem(2).setVisible(false);
                     popup.getMenu().getItem(4).setVisible(false);
                 }
             } else if (role == GroupChatRole.ADMIN) {
 
+                /**
+                 *  ----------- Admin ---------------
+                 *  1- admin dose'nt access set another admin
+                 *  2- admin can set moderator
+                 *  3- can remove moderator
+                 *  4- can kick moderator and Member
+                 */
                 if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(2).setVisible(false);
                     popup.getMenu().getItem(3).setVisible(false);
+
                 } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(1).setVisible(false);

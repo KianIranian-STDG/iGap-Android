@@ -1335,6 +1335,14 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 }
             } else if (role == ChannelChatRole.ADMIN) {
 
+                /**
+                 *  ----------- Admin ---------------
+                 *  1- admin dose'nt access set another admin
+                 *  2- admin can set moderator
+                 *  3- can remove moderator
+                 *  4- can kick moderator and Member
+                 */
+
                 if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(2).setVisible(false);
