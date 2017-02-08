@@ -771,11 +771,13 @@ public class HelperNotificationAndBadge {
         List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
 
         try {
-            if (taskInfo.get(0).topActivity.getClassName().toString().contains("com.android.launcher")) return true;
+            if (taskInfo.get(0).topActivity.getClassName().toString().toLowerCase().contains("launcher")) return true;
         } catch (Exception e) {
         }
 
-        return true;
+        // com.android.launcher"
+
+        return false;
     }
 
 
