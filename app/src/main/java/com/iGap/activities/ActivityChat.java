@@ -4083,6 +4083,15 @@ public class ActivityChat extends ActivityEnhanced
         mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo));
         realm.close();
         scrollToEnd();
+
+        G.handler.post(new Runnable() {
+            @Override public void run() {
+                if (mReplayLayout != null) {
+                    mReplayLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
     }
 
     @Override
