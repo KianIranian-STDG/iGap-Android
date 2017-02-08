@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,7 @@ public class RegisteredContactsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.i("MMM", "onViewCreated");
         sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         isImportContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, false);
         if (!isImportContactList) {
@@ -238,6 +239,7 @@ public class RegisteredContactsFragment extends Fragment {
 
 
         items = new ArrayList<>();
+        Log.i("MMMM", "start retrieve ");
         contacts = Contacts.retrieve(null);
         G.onUserContactGetList = new OnUserContactGetList() {
             @Override
@@ -275,14 +277,17 @@ public class RegisteredContactsFragment extends Fragment {
             }
             //            }
         };
+        Log.i("MMM", "contacts : " + contacts.size());
         if (contacts.size() == 0) {
             /**
              * if contacts size is zero send request for get contacts list
              * for insuring that contacts not exist really or not
              */
+            Log.i("MMM", "RequestUserContactsGetList 1");
             new RequestUserContactsGetList().userContactGetList();
         } else {
             for (StructContactInfo contact : contacts) {
+                Log.i("MMM", "contact : " + contact);
                 items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
             }
             itemAdapter.add(items);

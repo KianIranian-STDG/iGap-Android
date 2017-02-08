@@ -767,7 +767,7 @@
   <string name="clean_up">پاک سازی چت روم</string>
   <string name="do_you_want_to_clean_all_data_in_chat_rooms">آیا مطمئن هستید که میخواهید کلیه اطلاعات چت ها را از دیتابیس داخلی حذف کنید ؟</string>
   <string name="pm">ب ظ</string>
-  <string name="am">غ ظ</string>
+  <string name="am">ق ظ</string>
   <string name="forward_message">ارسال پیام</string>
   <string name="message_selected">پیام انتخاب شده است</string>
   <string name="messages_selected">پیام انتخاب شده است</string>

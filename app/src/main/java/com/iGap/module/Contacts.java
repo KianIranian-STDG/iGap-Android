@@ -3,6 +3,7 @@ package com.iGap.module;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
@@ -42,25 +43,20 @@ public class Contacts {
         for (int i = 0; i < contacts.size(); i++) {
             String header = contacts.get(i).getDisplay_name();
             long peerId = contacts.get(i).getId();
-
-            //TODO [Saeed Mozaffari] [2016-11-09 5:26 PM] - Clear This Code nabayad ba RegisteredUserInfo gerfte beshe
-
+            Log.i("MMMM", "retrieve getDisplay_name : " + header);
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, contacts.get(i).getId()).findFirst();
 
             // new header exists
             if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
-                // TODO: 9/5/2016 [Alireza Eskandarpour Shoferi] implement contact last seen
                 StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", true, false, "");
                 structContactInfo.initials = contacts.get(i).getInitials();
                 structContactInfo.color = contacts.get(i).getColor();
-                //structContactInfo.avatar = contacts.get(i).getAvatar(); //TODO [Saeed Mozaffari] [2016-11-09 5:28 PM] - in code nabayd comment beshe va khat paiin ejrabeshe
                 structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
                 items.add(structContactInfo);
             } else {
                 StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", false, false, "");
                 structContactInfo.initials = contacts.get(i).getInitials();
                 structContactInfo.color = contacts.get(i).getColor();
-                //structContactInfo.avatar = contacts.get(i).getAvatar(); // //TODO [Saeed Mozaffari] [2016-11-09 5:28 PM] - in code nabayd comment beshe va khat paiin ejrabeshe
                 structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
                 items.add(structContactInfo);
             }
@@ -83,8 +79,8 @@ public class Contacts {
 
                     String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
                     if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                        Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] {
-                            id
+                        Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{
+                                id
                         }, null);
 
                         if (pCur != null) {
@@ -164,7 +160,8 @@ public class Contacts {
         if (size > 0) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     realm.delete(RealmInviteFriend.class);  // delete all item in invite friend database
                     for (int i = 0; i < size; i++) {
                         RealmInviteFriend item = realm.createObject(RealmInviteFriend.class);
@@ -181,7 +178,8 @@ public class Contacts {
             final RealmResults<RealmContacts> results = realm.where(RealmContacts.class).findAll();
             if (!results.isEmpty()) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         for (int i = 0; i < results.size(); i++) {
                             if (results.get(i).isValid()) {
                                 long phone = results.get(i).getPhone();

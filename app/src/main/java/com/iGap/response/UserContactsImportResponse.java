@@ -2,6 +2,7 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
+import com.iGap.request.RequestUserContactsGetList;
 
 public class UserContactsImportResponse extends MessageHandler {
 
@@ -20,6 +21,8 @@ public class UserContactsImportResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+
+        new RequestUserContactsGetList().userContactGetList();
         if (G.onContactImport != null) G.onContactImport.onContactImport();
     }
 

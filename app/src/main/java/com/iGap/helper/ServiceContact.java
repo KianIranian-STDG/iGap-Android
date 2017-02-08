@@ -9,11 +9,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.module.StructListOfContact;
 import com.iGap.request.RequestUserContactImport;
-
 import java.util.ArrayList;
 
 public class ServiceContact extends Service {
@@ -36,9 +35,7 @@ public class ServiceContact extends Service {
 
             @Override
             public void run() {
-                getApplicationContext().getContentResolver()
-                        .registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true,
-                                contentObserver);
+                getApplicationContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contentObserver);
             }
         }, 10000);
         return Service.START_NOT_STICKY;
@@ -60,24 +57,18 @@ public class ServiceContact extends Service {
             if (cur.getCount() > 0) {
                 while (cur.moveToNext()) {
                     StructListOfContact itemContact = new StructListOfContact();
-                    itemContact.setDisplayName(
-                            cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                    Log.i("MMMM", "ContactsContract.Contacts.DISPLAY_NAME : " + cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                    itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                     String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                    if (Integer.parseInt(cur.getString(
-                            cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                        Cursor pCur =
-                                cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                        new String[]{
-                                                id
-                                        }, null);
+                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                        Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{
+                                id
+                        }, null);
                         assert pCur != null;
                         while (pCur.moveToNext()) {
-                            int phoneType = pCur.getInt(
-                                    pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                            int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
                             if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
-                                itemContact.setPhone(pCur.getString(pCur.getColumnIndex(
-                                        ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                                itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
                             }
                         }
                         pCur.close();
@@ -113,9 +104,8 @@ public class ServiceContact extends Service {
                         itemContact.setLastName("");
                         itemContact.setPhone(contactList.get(i).getPhone());
                         itemContact.setDisplayName(contactList.get(i).displayName);
-
-                        resultContactList.add(itemContact);
                     }
+                    resultContactList.add(itemContact);
                 }
             }
             RequestUserContactImport listContact = new RequestUserContactImport();

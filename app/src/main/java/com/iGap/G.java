@@ -428,16 +428,9 @@ public class G extends MultiDexApplication {
     }
 
     private static void getContactListFromServer() {
-        G.onUserContactGetList = new OnUserContactGetList() {
-            @Override
-            public void onContactGetList() {
-
-            }
-        };
-
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        //if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             new RequestUserContactsGetList().userContactGetList();
-        }
+        //}
     }
 
     public static void getUserInfo() {

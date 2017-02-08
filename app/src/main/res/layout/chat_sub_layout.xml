@@ -148,7 +148,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginRight="@dimen/dp4"
-                        android:src="@drawable/ic_clock"/>
+                        />
 
                     <TextView
                         android:id="@+id/cs_txt_contact_time"
