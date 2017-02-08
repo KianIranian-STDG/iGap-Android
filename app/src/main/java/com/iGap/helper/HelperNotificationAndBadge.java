@@ -306,6 +306,7 @@ public class HelperNotificationAndBadge {
 
     private void setNotification() {
 
+
         PendingIntent pi;
 
         if (isFromOnRoom) {
@@ -590,6 +591,10 @@ public class HelperNotificationAndBadge {
         }
 
         realm.close();
+
+        if (list.size() == 0) {
+            return;
+        }
 
         if (unreadMessageCount + countChannelMessage == 0) {
             if (updateNotification) {
