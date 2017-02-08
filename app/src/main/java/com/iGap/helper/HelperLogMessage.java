@@ -1,5 +1,6 @@
 package com.iGap.helper;
 
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
@@ -30,7 +31,7 @@ public class HelperLogMessage {
         String authorName = "";
         String targetName = "";
         String logMessage;
-        String finalMessage = null;
+        String pershianResult = null;
         Realm realm = Realm.getDefaultInstance();
         ProtoGlobal.Room.Type typeRoom = null;
 
@@ -69,81 +70,102 @@ public class HelperLogMessage {
          * detect log message
          */
         logMessage = logMessageString(messageLog.getType());
+        String englishResult = "";
 
         /**
          * final message
          */
 
-        if (!HelperCalander.isLanguagePersian) {
-            finalMessage = authorName + " " + logMessage + " " + targetName;
-        } else {
+        englishResult = authorName + " " + logMessage + " " + targetName;
+
 
             switch (messageLog.getType()) {
                 case USER_JOINED:
-                    finalMessage = authorName + " " + logMessage;
+                    pershianResult = authorName + " " + logMessage;
                     break;
                 case USER_DELETED:
-                    finalMessage = authorName + " " + logMessage;
+                    pershianResult = authorName + " " + logMessage;
                     break;
                 case ROOM_CREATED:
-                    finalMessage = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                    pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                     break;
                 case MEMBER_ADDED:
-                    finalMessage = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                    pershianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                     break;
                 case MEMBER_KICKED:
-                    finalMessage = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                    pershianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                     break;
                 case MEMBER_LEFT:
-                    finalMessage = logMessage + " " + authorName;
+                    pershianResult = logMessage + " " + authorName;
                     break;
                 case ROOM_CONVERTED_TO_PUBLIC:
-                    finalMessage = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                    pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                     break;
                 case ROOM_CONVERTED_TO_PRIVATE:
-                    finalMessage = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                    pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                     break;
                 case MEMBER_JOINED_BY_INVITE_LINK:
-                    finalMessage = G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK) + " " + authorName + " " + logMessage;
+                    pershianResult = G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK) + " " + authorName + " " + logMessage;
                     break;
                 case ROOM_DELETED:
-                    finalMessage = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                    pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                     break;
             }
-        }
+
         realm.close();
-        return finalMessage;
+
+        return (englishResult + "\n" + pershianResult);
     }
 
     private static String logMessageString(ProtoGlobal.RoomMessageLog.Type type) {
 
-        String message = "";
+        int message = 0;
 
         if (type == USER_JOINED) {
-            message = G.context.getResources().getString(R.string.USER_JOINED);
+            message = R.string.USER_JOINED;
         } else if (type == USER_DELETED) {
-            message = G.context.getResources().getString(R.string.USER_DELETED);
+            message = R.string.USER_DELETED;
         } else if (type == ROOM_CREATED) {
-            message = G.context.getResources().getString(R.string.ROOM_CREATED);
+            message = R.string.ROOM_CREATED;
         } else if (type == MEMBER_ADDED) {
             //message = "member added";
-            message = G.context.getResources().getString(R.string.MEMBER_ADDED);
+            message = R.string.MEMBER_ADDED;
         } else if (type == MEMBER_KICKED) {
             //message = "member kicked";
-            message = G.context.getResources().getString(R.string.MEMBER_KICKED);
+            message = R.string.MEMBER_KICKED;
         } else if (type == MEMBER_LEFT) {
             //message = "member left";
-            message = G.context.getResources().getString(R.string.MEMBER_LEFT);
+            message = R.string.MEMBER_LEFT;
         } else if (type == ROOM_CONVERTED_TO_PUBLIC) {
-            message = G.context.getResources().getString(R.string.ROOM_CONVERTED_TO_PUBLIC);
+            message = R.string.ROOM_CONVERTED_TO_PUBLIC;
         } else if (type == ROOM_CONVERTED_TO_PRIVATE) {
-            message = G.context.getResources().getString(R.string.ROOM_CONVERTED_TO_PRIVATE);
+            message = R.string.ROOM_CONVERTED_TO_PRIVATE;
         } else if (type == MEMBER_JOINED_BY_INVITE_LINK) {
-            message = G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK);
+            message = R.string.MEMBER_JOINED_BY_INVITE_LINK;
         } else if (type == ROOM_DELETED) {
-            message = G.context.getResources().getString(R.string.Room_Deleted);
+            message = R.string.Room_Deleted;
         }
 
-        return message;
+        return "*" + message + "*";
     }
+
+    public static String convertLogmessage(String message) {
+        String result = "";
+        String str[] = message.split("\n");
+        String tmp;
+        try {
+            if (HelperCalander.isLanguagePersian) {
+                tmp = str[1];
+            } else {
+                tmp = str[0];
+            }
+            int indexFirst = tmp.indexOf("*");
+            int indexLast = tmp.lastIndexOf("*");
+            result = tmp.substring(0, indexFirst) + G.context.getString(Integer.parseInt(tmp.substring(indexFirst + 1, indexLast))) + tmp.substring(indexLast + 1);
+        } catch (Exception e) {
+            Log.e("dddddd", "helperLogmessage   convertLogmessage  " + e.toString());
+        }
+        return result;
+    }
+
 }

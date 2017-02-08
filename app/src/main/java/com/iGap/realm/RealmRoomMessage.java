@@ -365,7 +365,7 @@ import org.parceler.Parcel;
     }
 
     public String getLogMessage() {
-        return logMessage;
+        return HelperLogMessage.convertLogmessage(logMessage);
     }
 
     public void setLogMessage(String logMessage) {
