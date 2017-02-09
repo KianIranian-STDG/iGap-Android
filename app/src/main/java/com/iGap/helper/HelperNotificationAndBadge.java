@@ -321,9 +321,12 @@ public class HelperNotificationAndBadge {
 
         setRemoteViewsNormal();
 
-        String messageToshow = list.get(0).message;
-        if (list.get(0).message.length() > 40) {
-            messageToshow = messageToshow.substring(0, 40);
+        String messageToshow = "";
+        if (list.size() > 0) {
+            messageToshow = list.get(0).message;
+            if (list.get(0).message.length() > 40) {
+                messageToshow = messageToshow.substring(0, 40);
+            }
         }
 
         notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon()).setContentTitle(context.getString(R.string.new_message_recicve)).setContent(remoteViews).setContentIntent(pi).build();

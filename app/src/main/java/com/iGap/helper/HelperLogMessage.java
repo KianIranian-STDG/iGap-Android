@@ -1,6 +1,5 @@
 package com.iGap.helper;
 
-import android.util.Log;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
@@ -79,38 +78,38 @@ public class HelperLogMessage {
         englishResult = authorName + " " + logMessage + " " + targetName;
 
 
-            switch (messageLog.getType()) {
-                case USER_JOINED:
-                    pershianResult = authorName + " " + logMessage;
-                    break;
-                case USER_DELETED:
-                    pershianResult = authorName + " " + logMessage;
-                    break;
-                case ROOM_CREATED:
-                    pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
-                    break;
-                case MEMBER_ADDED:
-                    pershianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
-                    break;
-                case MEMBER_KICKED:
-                    pershianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
-                    break;
-                case MEMBER_LEFT:
-                    pershianResult = logMessage + " " + authorName;
-                    break;
-                case ROOM_CONVERTED_TO_PUBLIC:
-                    pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
-                    break;
-                case ROOM_CONVERTED_TO_PRIVATE:
-                    pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
-                    break;
-                case MEMBER_JOINED_BY_INVITE_LINK:
-                    pershianResult = G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK) + " " + authorName + " " + logMessage;
-                    break;
-                case ROOM_DELETED:
-                    pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
-                    break;
-            }
+        switch (messageLog.getType()) {
+            case USER_JOINED:
+                pershianResult = authorName + " " + logMessage;
+                break;
+            case USER_DELETED:
+                pershianResult = authorName + " " + logMessage;
+                break;
+            case ROOM_CREATED:
+                pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                break;
+            case MEMBER_ADDED:
+                pershianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                break;
+            case MEMBER_KICKED:
+                pershianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                break;
+            case MEMBER_LEFT:
+                pershianResult = logMessage + " " + authorName;
+                break;
+            case ROOM_CONVERTED_TO_PUBLIC:
+                pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                break;
+            case ROOM_CONVERTED_TO_PRIVATE:
+                pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                break;
+            case MEMBER_JOINED_BY_INVITE_LINK:
+                pershianResult = G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK) + " " + authorName + " " + logMessage;
+                break;
+            case ROOM_DELETED:
+                pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                break;
+        }
 
         realm.close();
 
@@ -151,19 +150,21 @@ public class HelperLogMessage {
 
     public static String convertLogmessage(String message) {
         String result = "";
-        String str[] = message.split("\n");
-        String tmp;
-        try {
-            if (HelperCalander.isLanguagePersian) {
-                tmp = str[1];
-            } else {
-                tmp = str[0];
+        if (message != null) {
+            String str[] = message.split("\n");
+            String tmp;
+            try {
+                if (HelperCalander.isLanguagePersian) {
+                    tmp = str[1];
+                } else {
+                    tmp = str[0];
+                }
+                int indexFirst = tmp.indexOf("*");
+                int indexLast = tmp.lastIndexOf("*");
+                result = tmp.substring(0, indexFirst) + G.context.getString(Integer.parseInt(tmp.substring(indexFirst + 1, indexLast))) + tmp.substring(indexLast + 1);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            int indexFirst = tmp.indexOf("*");
-            int indexLast = tmp.lastIndexOf("*");
-            result = tmp.substring(0, indexFirst) + G.context.getString(Integer.parseInt(tmp.substring(indexFirst + 1, indexLast))) + tmp.substring(indexLast + 1);
-        } catch (Exception e) {
-            Log.e("dddddd", "helperLogmessage   convertLogmessage  " + e.toString());
         }
         return result;
     }

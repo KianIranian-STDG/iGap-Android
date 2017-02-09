@@ -169,7 +169,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.exceptions.RealmMigrationNeededException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -604,31 +603,55 @@ public class G extends MultiDexApplication {
     }
 
     private void realmConfiguration() {
-        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).migration(new RealmMigration()).build());
 
-        try {
-            Realm.getDefaultInstance();
-        } catch (RealmMigrationNeededException e) {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        boolean isRealmDelete = sharedPreferences.getBoolean(SHP_SETTING.KEY_REALM_DELETE_ALL, true);
+        if (!isRealmDelete) {
+            Log.i("EEE", "Migrate");
+            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).migration(new RealmMigration()).build());
+        } else {
+            Log.i("EEE", "No Migrate");
             Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).deleteRealmIfMigrationNeeded().build());
-            try {
-                Realm.getDefaultInstance();
-            } catch (RealmMigrationNeededException e1) {
-                e1.printStackTrace();
-            }
         }
 
-        try {
-            Realm realm = Realm.getDefaultInstance();
-            realm.where(RealmUserInfo.class).findFirst();
-        } catch (IllegalStateException e) {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).deleteRealmIfMigrationNeeded().build());
-            try {
-                Realm realm = Realm.getDefaultInstance();
-                realm.where(RealmUserInfo.class).findFirst();
-            } catch (IllegalStateException e1) {
-                e1.printStackTrace();
-            }
-        }
+        //try {
+        //    Log.i("EEE", "Realm 1");
+        //    Realm realm = Realm.getDefaultInstance();
+        //    Log.i("EEE", "Realm 2");
+        //    realm.close();
+        //} catch (RealmMigrationNeededException e) {
+        //    Log.i("EEE", "RealmMigrationNeededException 1");
+        //    Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).deleteRealmIfMigrationNeeded().build());
+        //    try {
+        //        Log.i("EEE", "Second Realm 1");
+        //        Realm.getDefaultInstance();
+        //        Log.i("EEE", "Second Realm 2");
+        //    } catch (RealmMigrationNeededException e1) {
+        //        Log.i("EEE", "Second e1 : " + e1);
+        //    }
+        //}
+        //
+        //try {
+        //    Log.i("EEE", "Check Info 1");
+        //    Realm realm = Realm.getDefaultInstance();
+        //    Log.i("EEE", "Check Info 2");
+        //    realm.where(RealmUserInfo.class).findFirst();
+        //    Log.i("EEE", "Check Info 3");
+        //    realm.close();
+        //} catch (IllegalStateException e) {
+        //    Log.i("EEE", "Exception Check Info 1");
+        //    Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).deleteRealmIfMigrationNeeded().build());
+        //    Log.i("EEE", "Exception Check Info 2");
+        //    try {
+        //        Log.i("EEE", "Exception Check Info 3");
+        //        Realm realm = Realm.getDefaultInstance();
+        //        Log.i("EEE", "Exception Check Info 4");
+        //        realm.where(RealmUserInfo.class).findFirst();
+        //        Log.i("EEE", "Exception Check Info 5");
+        //    } catch (IllegalStateException e1) {
+        //        Log.i("EEE", "Exception Check Info 6 e1 : " + e1);
+        //    }
+        //}
     }
 
     public static void makeFolder() {

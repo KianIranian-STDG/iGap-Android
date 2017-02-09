@@ -241,7 +241,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         if (realmRoom.getChatRoom() != null) {
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmChatRoom.getPeerId()).findFirst();
             if (realmRegisteredInfo != null) {
-                txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+                if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+                } else {
+                    txtLastSeen.setText(realmRegisteredInfo.getStatus());
+                }
             }
         }
     }

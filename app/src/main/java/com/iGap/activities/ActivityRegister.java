@@ -62,7 +62,6 @@ import com.iGap.proto.ProtoUserRegister;
 import com.iGap.proto.ProtoUserVerify;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.realm.RealmUserInfoFields;
 import com.iGap.request.RequestInfoCountry;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserInfo;
@@ -1036,7 +1035,8 @@ public class ActivityRegister extends ActivityEnhanced {
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, userId).findFirst();
+                                //RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, userId).findFirst();
+                                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                                 if (userInfo == null) {
                                     userInfo = realm.createObject(RealmUserInfo.class);
                                     RealmRegisteredInfo registeredInfo = realm.createObject(RealmRegisteredInfo.class, userId);
