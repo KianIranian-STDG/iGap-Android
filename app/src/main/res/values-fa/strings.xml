@@ -450,6 +450,7 @@
     <string name="E_213">"خطای درونی سرور"</string>
     <string name="E_214">"این کار مجاز نیست."</string>
     <string name="E_154_1">کد نامعتبر:گرفتن کد</string>
+  <string name="E_233_1">شما توسط این کاربر مسدود شده اید .</string>
     <string name="E_154_2">کد نامعتبر:گرفتن دلیل</string>
     <string name="E_155">تخریب اکانت : خطای داخلی سرور</string>
     <string name="E_156">تخریب اکانت : کد اشتباه است</string>

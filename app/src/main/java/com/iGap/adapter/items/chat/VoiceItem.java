@@ -69,7 +69,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        AppUtils.rightFileThumbnailIcon(holder.thumbnail, mMessage.messageType, null);
+        ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
+
+        AppUtils.rightFileThumbnailIcon(holder.thumbnail, _type, null);
 
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID)).findFirst();

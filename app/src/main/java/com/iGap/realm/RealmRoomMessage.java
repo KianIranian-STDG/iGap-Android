@@ -609,17 +609,23 @@ import org.parceler.Parcel;
         }
     }
 
-    public static void ClearAllMessage(boolean deleteAll, final long roomId) {
+    public static void ClearAllMessage(boolean deleteAllMessage, final long roomId) {
 
         Realm realm = Realm.getDefaultInstance();
 
-        if (deleteAll) {
+        if (deleteAllMessage) {
 
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
 
                     realm.where(RealmRoomMessage.class).findAll().deleteAllFromRealm();
+                    RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAll();
+
+                    for (RealmRoom room : rooms) {
+                        room.setUnreadCount(0);
+                    }
+
                 }
             });
         } else {
@@ -629,6 +635,7 @@ import org.parceler.Parcel;
                 public void execute(Realm realm) {
 
                     realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().setUnreadCount(0);
                 }
             });
         }

@@ -148,6 +148,12 @@ public class HelperError {
             case 220:
                 error = G.context.getResources().getString(R.string.E_220);
                 break;
+            case 233:
+                if (minorCode == 1) {
+                    error = G.context.getResources().getString(R.string.E_233_1);
+                }
+
+                break;
             case 300:
                 if (minorCode == 1) {
                     error = G.context.getResources().getString(R.string.E_300_1);
