@@ -149,23 +149,27 @@ public class HelperLogMessage {
     }
 
     public static String convertLogmessage(String message) {
+
+        if (message == null || message.length() == 0) return null;
+
         String result = "";
-        if (message != null) {
-            String str[] = message.split("\n");
-            String tmp;
-            try {
-                if (HelperCalander.isLanguagePersian) {
-                    tmp = str[1];
-                } else {
-                    tmp = str[0];
-                }
-                int indexFirst = tmp.indexOf("*");
-                int indexLast = tmp.lastIndexOf("*");
-                result = tmp.substring(0, indexFirst) + G.context.getString(Integer.parseInt(tmp.substring(indexFirst + 1, indexLast))) + tmp.substring(indexLast + 1);
-            } catch (Exception e) {
-                e.printStackTrace();
+
+        String str[] = message.split("\n");
+        String tmp;
+
+        try {
+            if (HelperCalander.isLanguagePersian) {
+                tmp = str[1];
+            } else {
+                tmp = str[0];
             }
+            int indexFirst = tmp.indexOf("*");
+            int indexLast = tmp.lastIndexOf("*");
+            result = tmp.substring(0, indexFirst) + G.context.getString(Integer.parseInt(tmp.substring(indexFirst + 1, indexLast))) + tmp.substring(indexLast + 1);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return result;
     }
 

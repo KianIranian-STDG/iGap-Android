@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.PowerManager;
 import android.support.annotation.StringRes;
 import android.support.v4.view.PagerAdapter;
@@ -31,16 +30,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperNotificationAndBadge;
+import com.iGap.interfaces.IPopUpListener;
 import com.iGap.interfaces.OnVoiceRecord;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
-import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.UploadService;
 import com.iGap.module.VoiceRecord;
+import com.iGap.module.enums.StructPopUp;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -48,7 +49,6 @@ import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import io.github.meness.emoji.EmojiEditText;
 import io.github.meness.emoji.emoji.Emoji;
@@ -59,15 +59,11 @@ import io.github.meness.emoji.listeners.OnEmojiPopupShownListener;
 import io.github.meness.emoji.listeners.OnSoftKeyboardCloseListener;
 import io.github.meness.emoji.listeners.OnSoftKeyboardOpenListener;
 import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.iGap.G.context;
-import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
-import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 /**
  * Created by android3 on 10/31/2016.
@@ -76,12 +72,15 @@ import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 public class ActivityPopUpNotification extends AppCompatActivity {
 
     public static boolean isPopUpVisible = false;
-    public static OnComplete onComplete;
+
+    public static IPopUpListener popUpListener;
+
     public static boolean isGoingToChatFromPopUp = false;
+    public static String ARGUMENTLIST = "argument_list";
 
     //////////////////////////////////////////   appbar component
     ViewPager viewPager;
-    ArrayList<RealmRoomMessage> unreadList;
+    ArrayList<StructPopUp> mList;
     private TextView txtName;
     private TextView txtLastSeen;
 
@@ -121,7 +120,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         super.onPause();
         isPopUpVisible = false;
 
-        finish();
+        overridePendingTransition(0, 0);
     }
 
     @Override
@@ -130,7 +129,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             emojiPopup.dismiss();
         } else {
             super.onBackPressed();
-            overridePendingTransition(0, 0);
+
         }
     }
 
@@ -154,22 +153,16 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
+        mList = (ArrayList<StructPopUp>) HelperNotificationAndBadge.popUpList.clone();
+
+        if (mList == null) {
+            finish();
+            return;
+        }
 
         setContentView(R.layout.activity_popup_notification);
 
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                fillList();
-
-                if (unreadList != null) {
-                    if (unreadList.size() > 0) initComponnet = new InitComponnet();
-                }
-            }
-        }, 350);
-
+        initComponnet = new InitComponnet();
 
     }
 
@@ -216,15 +209,18 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     /////////////////////////////////////////////////////////////////////////////////////////
 
     private void setImageAndTextAppBar(int position) {
-        if (unreadList.isEmpty() || position > unreadList.size() - 1 || position < 0) {
+        if (mList.isEmpty() || position > mList.size() - 1 || position < 0) {
             return;
         }
 
         Realm realm = Realm.getDefaultInstance();
 
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, unreadList.get(position).getRoomId()).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mList.get(position).getRoomId()).findFirst();
 
         if (realmRoom != null) { // room exist
+
+            mList.get(position).setRoomType(realmRoom.getType().toString());
+
             initialize = realmRoom.getInitials();
             color = realmRoom.getColor();
 
@@ -286,43 +282,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }
     }
 
-    private void fillList() {
 
-        unreadList = new ArrayList<>();
-
-        Realm realm = Realm.getDefaultInstance();
-        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        RealmResults<RealmRoomMessage> realmRoomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
-
-        if (!realmRoomMessages.isEmpty()) {
-            for (RealmRoomMessage roomMessage : realmRoomMessages) {
-                if (roomMessage != null) {
-                    if (roomMessage.getUserId() != userId) {
-
-                        if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
-                            RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-
-                            if (realmRoom1 != null && realmRoom1.getType() != null && realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
-                                // if (roomMessage.getMessageType().toLowerCase().contains("text")) {
-                                unreadList.add(roomMessage);
-                                // }
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-        //   realm.close();
-
-        if (unreadList.size() < 1) {
-            finish();
-            overridePendingTransition(0, 0);
-        }
-
-    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -361,7 +321,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     private void goToChatActivity() {
 
         Intent intent = new Intent(context, ActivityChat.class);
-        intent.putExtra("RoomId", unreadList.get(viewPager.getCurrentItem()).getRoomId());
+        intent.putExtra("RoomId", mList.get(viewPager.getCurrentItem()).getRoomId());
         startActivity(intent);
 
         isGoingToChatFromPopUp = true;
@@ -385,22 +345,29 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         private void initMethode() {
 
-            onComplete = new OnComplete() {
-                @Override
-                public void complete(boolean result, String messageOne, String MessageTow) {
+            popUpListener = new IPopUpListener() {
+                @Override public void onMessageRecive(final ArrayList<StructPopUp> list) {
 
-                    viewPager.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            fillList();
+                    viewPager.post(new Runnable() {
+                        @Override public void run() {
+
+                            mList.clear();
+                            mList = (ArrayList<StructPopUp>) list.clone();
+
                             viewPager.setAdapter(mAdapter);
-                            btnMessageCounter.setText(1 + "/" + unreadList.size());
+                            btnMessageCounter.setText(1 + "/" + mList.size());
+
                             setImageAndTextAppBar(viewPager.getCurrentItem());
-                            listSize = unreadList.size();
+                            listSize = mList.size();
                         }
-                    }, 300);
+                    });
+
+
+
+
                 }
             };
+
 
             viewAttachFile = findViewById(R.id.apn_layout_attach_file);
 
@@ -412,13 +379,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
                     Intent uploadService = new Intent(ActivityPopUpNotification.this, UploadService.class);
                     uploadService.putExtra("Path", savedPath);
-                    uploadService.putExtra("Roomid", unreadList.get(viewPager.getCurrentItem()).getRoomId());
+                    uploadService.putExtra("Roomid", mList.get(viewPager.getCurrentItem()).getRoomId());
                     startService(uploadService);
 
                     // sendVoice(savedPath, unreadList.get(viewPager.getCurrentItem()).getRoomId());
 
                     finish();
-                    overridePendingTransition(0, 0);
                 }
 
                 @Override
@@ -441,7 +407,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 @Override
                 public void onComplete(RippleView rippleView) {
                     finish();
-                    overridePendingTransition(0, 0);
+
                 }
             });
 
@@ -477,7 +443,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             viewPager = (ViewPager) findViewById(R.id.apn_view_pager);
             mAdapter = new AdapterViewPagerClass();
             viewPager.setAdapter(mAdapter);
-            listSize = unreadList.size();
+            listSize = mList.size();
 
             btnMessageCounter.setText(1 + "/" + listSize);
 
@@ -599,20 +565,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
                     int position = viewPager.getCurrentItem();
 
-                    ProtoGlobal.Room.Type type = CHAT;
-
-                    if (unreadList.get(position).getMessageType().equals("GROUP")) {
-                        type = GROUP;
-                    }
-
-                    Long roomid = unreadList.get(position).getRoomId();
-
-                    sendMessage(edtChat.getText().toString(), roomid, type);
+                    sendMessage(edtChat.getText().toString(), mList.get(position).getRoomId(), ProtoGlobal.Room.Type.valueOf(mList.get(position).getRoomType()));
 
                     edtChat.setText("");
 
                     finish();
-                    overridePendingTransition(0, 0);
                 }
             });
         }
@@ -622,7 +579,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return unreadList.size();
+            return mList.size();
         }
 
         @Override
@@ -637,18 +594,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
 
             TextView txtMessage = (TextView) layout.findViewById(R.id.slapn_txt_message);
-
-            String _txt = unreadList.get(position).getMessage();
-
-            if (_txt == null || _txt.length() == 0) _txt = getTextOfMessageType(unreadList.get(position).getMessageType());
-
-            txtMessage.setText(_txt);
+            txtMessage.setText(mList.get(position).getMessage());
 
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     goToChatActivity();
-
                 }
             });
 

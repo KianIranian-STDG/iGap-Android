@@ -28,6 +28,7 @@ import com.iGap.activities.ActivityPopUpNotification;
 import com.iGap.module.AttachFile;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
+import com.iGap.module.enums.StructPopUp;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
@@ -82,6 +83,7 @@ public class HelperNotificationAndBadge {
     private long idRoom;
     private int delayAlarm = 5000;
     private long currentAlarm;
+    public static ArrayList<StructPopUp> popUpList = new ArrayList<>();
 
     public HelperNotificationAndBadge() {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -391,11 +393,9 @@ public class HelperNotificationAndBadge {
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         int checkAlert = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
         if (vipCheck == ENABLE) {
-            startActivityPopUpNotification(type);
             updateNotificationAndBadge(updateNotification, type);
         } else if (vipCheck == DEFAULT) {
             if (checkAlert == 1) {
-                startActivityPopUpNotification(type);
                 updateNotificationAndBadge(updateNotification, type);
             }
         } else if (vipCheck == DISABLE) {
@@ -507,19 +507,29 @@ public class HelperNotificationAndBadge {
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         long userId = realmUserInfo.getUserId();
         String authorHash = realmUserInfo.getAuthorHash();
-        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+
+        popUpList.clear();
+
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
+            .or()
+            .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString())
+            .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         if (!realmRoomMessages.isEmpty()) {
             for (RealmRoomMessage roomMessage : realmRoomMessages) {
+
                 if (roomMessage != null) {
                     if (roomMessage.getUserId() != userId) {
                         if (!roomMessage.getAuthorHash().equals(authorHash)) {// for channel message
                             RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
                             if (realmRoom1 != null && realmRoom1.getType() != null && realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
-                                if (roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString())) {
+
                                     unreadMessageCount++;
                                     messageOne = roomMessage.getMessage();
                                     senderId = roomMessage.getUserId();
+
+                                addItemToPopUPList(roomMessage);
 
                                     if (unreadMessageCount == 1 || unreadMessageCount == 2 || unreadMessageCount == 3) {
                                         Item item = new Item();
@@ -534,10 +544,9 @@ public class HelperNotificationAndBadge {
                                             if (roomMessage.getLogMessage() != null) {
                                                 text = roomMessage.getLogMessage();
                                             } else {
-                                                text = roomMessage.getMessage();
+                                                text = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getMessage() : roomMessage.getMessage();
                                             }
 
-                                            if (text.length() < 1) if (roomMessage.getForwardMessage() != null) text = roomMessage.getForwardMessage().getMessage();
                                             if (text.length() < 1) if (roomMessage.getReplyTo() != null) text = roomMessage.getReplyTo().getMessage();
                                             if (text.length() < 1) text = ActivityPopUpNotification.getTextOfMessageType(roomMessage.getMessageType());
                                         } catch (NullPointerException e) {
@@ -564,7 +573,7 @@ public class HelperNotificationAndBadge {
                                     }
 
                                     if (isAdd) senderList.add(roomMessage.getRoomId());
-                                }
+
                             } else {
                                 Log.i("CCCC", "IS CHANNEL");
                             }
@@ -572,6 +581,8 @@ public class HelperNotificationAndBadge {
                     }
                 }
             }
+
+            startActivityPopUpNotification(type, popUpList);
 
             countChannelMessage = 0;
             int countChat = 0;
@@ -701,7 +712,7 @@ public class HelperNotificationAndBadge {
         return intVibrator;
     }
 
-    private void startActivityPopUpNotification(ProtoGlobal.Room.Type type) {
+    private void startActivityPopUpNotification(ProtoGlobal.Room.Type type, ArrayList<StructPopUp> poList) {
 
 
         SharedPreferences sharedPreferences;
@@ -757,7 +768,7 @@ public class HelperNotificationAndBadge {
                 if (popUpSetting) {
                     if (getForegroundApp() || ActivityPopUpNotification.isPopUpVisible) { //check that any other program is in background
 
-                        goToPopUpActivity();
+                        goToPopUpActivity(poList);
 
                     }
                 }
@@ -782,17 +793,47 @@ public class HelperNotificationAndBadge {
         return false;
     }
 
+    private void addItemToPopUPList(RealmRoomMessage roomMessage) {
 
-    private void goToPopUpActivity() {
+        String text = "";
+
+        if (roomMessage.getLogMessage() != null) {
+            return;
+        }
+
+        StructPopUp sp = new StructPopUp(roomMessage.getRoomId());
+
+        try {
+
+            text = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getMessage() : roomMessage.getMessage();
+            if (text.length() < 1) if (roomMessage.getReplyTo() != null) text = roomMessage.getReplyTo().getMessage();
+            if (text.length() < 1) {
+                ProtoGlobal.RoomMessageType rmt = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getMessageType() : roomMessage.getMessageType();
+                text = ActivityPopUpNotification.getTextOfMessageType(rmt);
+            }
+
+            sp.setMessage(text);
+
+            popUpList.add(sp);
+        } catch (NullPointerException e) {
+
+        }
+    }
+
+    private void goToPopUpActivity(ArrayList<StructPopUp> poList) {
+
+        if (poList == null) return;
+        if (poList.size() == 0) return;
 
         if (ActivityPopUpNotification.isPopUpVisible) {
-            if (ActivityPopUpNotification.onComplete != null) {
-                ActivityPopUpNotification.onComplete.complete(true, "", "");
+            if (ActivityPopUpNotification.popUpListener != null) {
+                ActivityPopUpNotification.popUpListener.onMessageRecive(poList);
             }
         } else {
-            Intent popUpActivityIntent = new Intent(context, ActivityPopUpNotification.class);
-            popUpActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.getApplicationContext().startActivity(popUpActivityIntent);
+            Intent intent = new Intent(context, ActivityPopUpNotification.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            //  intent.putExtra(ActivityPopUpNotification.ARGUMENTLIST , poList);
+            context.getApplicationContext().startActivity(intent);
         }
 
     }
