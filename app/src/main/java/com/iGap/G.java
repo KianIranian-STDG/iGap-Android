@@ -31,6 +31,7 @@ import com.iGap.helper.HelperConnectionState;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.helper.HelperNotificationAndBadge;
+import com.iGap.helper.HelperTimeOut;
 import com.iGap.helper.MyService;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnChannelAddAdmin;
@@ -184,6 +185,7 @@ import javax.crypto.spec.SecretKeySpec;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static com.iGap.WebSocketClient.allowForReconnecting;
+import static com.iGap.WebSocketClient.reconnect;
 
 public class G extends MultiDexApplication {
 
@@ -507,64 +509,7 @@ public class G extends MultiDexApplication {
             hasNetworkBefore = true;
         }
 
-        BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //Log.e("DDDD", "Mobile data : " + Connectivity.haveMobileData(context));
-
-                if (Connectivity.isConnectedMobile(context)) {
-                    HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.MOBILE;
-                    Log.e("DDDD", "isConnectedMobile*");
-                } else if (Connectivity.isConnectedWifi(context)) {
-                    HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.WIFI;
-                    Log.e("DDDD", "isConnectedWifi*");
-                } else {
-                    Log.e("DDDD", "no connection");
-                }
-
-                if (HelperCheckInternetConnection.hasNetwork()) {
-                    Log.e("DDDD", "Has Network ");
-                    // Log.e("DDDD", "Current : " + HelperCheckInternetConnection.currentConnectivityType);
-                    // Log.e("DDDD", "latestConnectivityType : " + latestConnectivityType);
-
-                    if (!hasNetworkBefore) {
-                        Log.e("DDD", "before no network");
-                        latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
-                        hasNetworkBefore = true;
-                        allowForReconnecting = true;
-                        WebSocketClient.reconnect(true);
-                    } else {
-                        Log.e("DDD", "before has network");
-                        //if (latestConnectivityType == null || latestConnectivityType != HelperCheckInternetConnection.currentConnectivityType) {
-                        if (latestConnectivityType == null || latestConnectivityType != HelperCheckInternetConnection.currentConnectivityType) {
-                            Log.e("DDD", "change connectivity type");
-                            latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
-                            allowForReconnecting = true;
-                            WebSocket webSocket = WebSocketClient.getInstance();
-                            if (webSocket != null) {
-                                webSocket.disconnect();
-                            }
-                        } else {
-                            Log.e("DDD", "not change connectivity type");
-                        }
-                    }
-
-                   /* WebSocket webSocket = WebSocketClient.getInstance();
-                    if (webSocket != null) {
-                        webSocket.disconnect();
-                    }*/
-                } else {
-                    hasNetworkBefore = false;
-                    Log.e("ddd", "No Network");
-                    HelperConnectionState.connectionState(Config.ConnectionState.WAITING_FOR_NETWORK);
-                    G.socketConnection = false;
-                }
-            }
-        };
-
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        getApplicationContext().registerReceiver(networkStateReceiver, filter);
+        connectionManager();
 
         helperNotificationAndBadge = new HelperNotificationAndBadge();
 
@@ -844,5 +789,75 @@ public class G extends MultiDexApplication {
                 }
             }
         }, 1000);
+    }
+
+    private void connectionManager() {
+        BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (Connectivity.isConnectedMobile(context)) {
+                    /**
+                     * isConnectedMobile
+                     */
+                    HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.MOBILE;
+                } else if (Connectivity.isConnectedWifi(context)) {
+                    /**
+                     * isConnectedWifi
+                     */
+                    HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.WIFI;
+                } else {
+                    /**
+                     * no connection
+                     */
+                }
+
+                if (HelperCheckInternetConnection.hasNetwork()) {
+                    /**
+                     * Has Network
+                     */
+                    if (!hasNetworkBefore) {
+                        /**
+                         * before no network
+                         */
+                        latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
+                        hasNetworkBefore = true;
+                        allowForReconnecting = true;
+                        WebSocketClient.reconnect(true);
+                    } else {
+                        /**
+                         * before has network
+                         */
+                        if (latestConnectivityType == null || latestConnectivityType != HelperCheckInternetConnection.currentConnectivityType) {
+                            /**
+                             * change connectivity type
+                             */
+                            latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
+                            allowForReconnecting = true;
+                            WebSocket webSocket = WebSocketClient.getInstance();
+                            if (webSocket != null) {
+                                webSocket.disconnect();
+                            }
+                        } else {
+                            /**
+                             * not change connectivity type
+                             */
+                            if (HelperTimeOut.heartBeatTimeOut()) {
+                                reconnect(true);
+                            }
+                        }
+                    }
+                } else {
+                    /**
+                     * No Network
+                     */
+                    hasNetworkBefore = false;
+                    HelperConnectionState.connectionState(Config.ConnectionState.WAITING_FOR_NETWORK);
+                    G.socketConnection = false;
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getApplicationContext().registerReceiver(networkStateReceiver, filter);
     }
 }

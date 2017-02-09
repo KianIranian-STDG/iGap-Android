@@ -44,9 +44,6 @@ import java.util.List;
 
 import static com.iGap.G.context;
 
-/**
- * Created by android3 on 10/1/2016.
- */
 public class HelperNotificationAndBadge {
 
     private static final String strClose = "close";
@@ -321,12 +318,9 @@ public class HelperNotificationAndBadge {
 
         setRemoteViewsNormal();
 
-        String messageToshow = "";
-        if (list.size() > 0) {
-            messageToshow = list.get(0).message;
-            if (list.get(0).message.length() > 40) {
-                messageToshow = messageToshow.substring(0, 40);
-            }
+        String messageToshow = list.get(0).message;
+        if (list.get(0).message.length() > 40) {
+            messageToshow = messageToshow.substring(0, 40);
         }
 
         notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon()).setContentTitle(context.getString(R.string.new_message_recicve)).setContent(remoteViews).setContentIntent(pi).build();

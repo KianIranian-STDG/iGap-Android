@@ -2,11 +2,11 @@ package com.iGap.response;
 
 import android.support.annotation.CallSuper;
 import android.util.Log;
-import com.iGap.Config;
-import com.iGap.G;
 import com.iGap.WebSocketClient;
 import com.iGap.helper.HelperError;
 import com.iGap.proto.ProtoError;
+
+import static com.iGap.helper.HelperTimeOut.heartBeatTimeOut;
 
 public abstract class MessageHandler {
 
@@ -47,17 +47,4 @@ public abstract class MessageHandler {
         Log.i("MSGE", "MessageHandler error : " + actionId + " || " + message);
     }
 
-    private boolean heartBeatTimeOut() {
-
-        long difference;
-
-        long currentTime = System.currentTimeMillis();
-        difference = (currentTime - G.latestHearBeatTime);
-
-        if (difference >= Config.HEART_BEAT_CHECKING_TIME_OUT) {
-            return true;
-        }
-
-        return false;
-    }
 }
