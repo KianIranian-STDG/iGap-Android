@@ -195,7 +195,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private boolean isPopup = false;
     private ViewGroup ltLink;
     private int firstLimit = 0;
-    private int lastLimit = 10;
+    private int lastLimit = 4;
 
 
     private long startMessageId = 0;
@@ -2357,24 +2357,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         txtMemberNumber.setText((items.size() + 1) + "");
                     }
                 });
-                        /*runOnUiThread(new Runnable() {
-                                          @Override
-                                          public void run() {
-
-                                              List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-
-                                              for (int i = 0; i < items.size(); i++) {
-                                                  if (items.get(i).mContact.peerId == UserId) {
-                                                      items.get(i).mContact.role = role.toString();
-                                                      if (i < itemAdapter.getAdapterItemCount()) {
-                                                          IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
-                                                          itemAdapter.set(i, item);
-                                                      }
-                                                  }
-                                              }
-                                          }
-                                      }
-                        );*/
 
 
                 runOnUiThread(new Runnable() { //TODO [Saeed Mozaffari] [2016-11-12 5:15 PM] - get member list from group and add new member . like get member list response
@@ -2390,8 +2372,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             struct.color = realmRegistered.getColor();
                             struct.lastSeen = realmRegistered.getLastSeen();
                             struct.status = realmRegistered.getStatus();
-                            IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
-                            itemAdapter.add(item);
+                            contacts.add(struct);
+                            refreshListMember();
 
                         } else {
 
@@ -2433,7 +2415,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         });
                         for (int i = 0; i < items.size(); i++) {
                             if (items.get(i).mContact.peerId == memberId) {
-                                itemAdapter.remove(i);
+                                //itemAdapter.remove(i);
+                                contacts.remove(i);
+                                refreshListMember();
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
@@ -2967,6 +2951,27 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         };
         countWaitTimer.start();
+    }
+
+    private void refreshListMember() {
+
+        int listSize = contacts.size();
+
+        if (lastLimit > listSize) lastLimit = listSize;
+
+        items.clear();
+        for (int i = firstLimit; i < lastLimit; i++) {
+            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+        }
+
+        itemAdapter.clear();
+        itemAdapter.add(items);
+
+        if ((listSize - lastLimit) > 0) {
+            if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
+        } else {
+            txtMore.setVisibility(View.GONE);
+        }
     }
 
 }

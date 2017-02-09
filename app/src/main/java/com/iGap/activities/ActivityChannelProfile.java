@@ -1567,8 +1567,10 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                         struct.lastSeen = realmRegistered.getLastSeen();
                         struct.status = realmRegistered.getStatus();
                         struct.role = role.toString();
-                        IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
-                        itemAdapter.add(item);
+                        contacts.add(struct);
+                        refreshListMember();
+                        //IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
+                        //itemAdapter.add(item);
                     } else {
                         new RequestUserInfo().userInfo(userId, roomId + "");
                     }
@@ -1589,7 +1591,9 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
                     for (int i = 0; i < items.size(); i++) {
                         if (items.get(i).mContact.peerId == memberId) {
-                            itemAdapter.remove(i);
+                            //itemAdapter.remove(i);
+                            contacts.remove(i);
+                            refreshListMember();
                         }
                     }
                     //updateMemberCount(roomIdResponse);
@@ -2717,6 +2721,27 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         };
         countWaitTimer.start();
+    }
+
+    private void refreshListMember() {
+
+        int listSize = contacts.size();
+
+        if (lastLimit > listSize) lastLimit = listSize;
+
+        items.clear();
+        for (int i = firstLimit; i < lastLimit; i++) {
+            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+        }
+
+        itemAdapter.clear();
+        itemAdapter.add(items);
+
+        if ((listSize - lastLimit) > 0) {
+            if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
+        } else {
+            txtMore.setVisibility(View.GONE);
+        }
     }
 
 
