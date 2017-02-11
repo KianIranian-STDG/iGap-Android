@@ -87,17 +87,6 @@
                             android:orientation="horizontal"
                             >
 
-                            <com.iGap.module.MaterialDesignTextView
-                                android:id="@+id/chl_txt_mute"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="@dimen/dp8"
-                                android:paddingRight="@dimen/dp8"
-                                android:text="@string/md_muted"
-                                android:textAppearance="@style/TextIconAppearance_toolbar"
-                                android:textColor="@android:color/white"
-                                android:textSize="@dimen/sp14"
-                                android:visibility="gone"/>
 
                             <TextView
                                 android:id="@+id/chl_txt_name"
@@ -472,16 +461,67 @@
 
             />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/chl_recycler_view_chat"
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:overScrollMode="never"
-            android:scrollbars="none"
             >
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/chl_recycler_view_chat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                >
+
+            </android.support.v7.widget.RecyclerView>
+
+
+            <FrameLayout
+                android:id="@+id/ac_ll_scrool_navigate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_margin="@dimen/dp12"
+                android:layout_gravity="bottom|right"
+                >
+
+                <com.iGap.module.MaterialDesignTextView
+                    android:id="@+id/ac_txt_down_navigation"
+                    android:layout_width="@dimen/dp44"
+                    android:layout_height="@dimen/dp44"
+                    android:layout_marginTop="@dimen/dp12"
+                    android:gravity="center"
+                    android:background="@drawable/circle_mic"
+                    android:text="@string/md_arrow_down"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:textColor="@color/white"
+                    />
+
+
+                <TextView
+                    android:id="@+id/cs_txt_unread_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    android:background="@drawable/oval_red"
+                    android:gravity="center"
+                    android:minHeight="@dimen/dp20"
+                    android:minWidth="@dimen/dp20"
+                    android:singleLine="true"
+                    android:text="1"
+                    android:visibility="gone"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp10"
+                    />
+
+            </FrameLayout>
+
+
+        </FrameLayout>
 
 
         <LinearLayout

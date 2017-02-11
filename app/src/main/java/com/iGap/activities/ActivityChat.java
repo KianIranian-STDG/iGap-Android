@@ -278,7 +278,7 @@ public class ActivityChat extends ActivityEnhanced
     private LinearLayout toolbar;
     private TextView txtName;
     private TextView txtLastSeen;
-    private TextView txt_mute;
+
     private ImageView imvUserPicture;
     private RecyclerView recyclerView;
     private MaterialDesignTextView imvSmileButton;
@@ -316,7 +316,7 @@ public class ActivityChat extends ActivityEnhanced
     public static String titleStatic;
     private String initialize;
     private String color;
-    private boolean isMute = false;
+
     private boolean isChatReadOnly = false;
     //chat
     private long chatPeerId;
@@ -371,6 +371,15 @@ public class ActivityChat extends ActivityEnhanced
 
     private boolean hasForward = false;
     ImageView imvCanselForward;
+
+    private int countLoadItemToChat = 0;
+    private FrameLayout llScroolNavigate;
+    private TextView txtNewUnreadMessage;
+    private int countNewMessage = 0;
+    private int lastPosition = 0;
+    private boolean firsInitScroolPosition = false;
+
+
 
     @Override
     protected void onStart() {
@@ -539,7 +548,7 @@ public class ActivityChat extends ActivityEnhanced
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mRoomId = extras.getLong("RoomId");
-            isMuteNotification = extras.getBoolean("MUT");
+
 
             isGoingFromUserLink = extras.getBoolean("GoingFromUserLink");
             isNotJoin = extras.getBoolean("ISNotJoin");
@@ -620,6 +629,7 @@ public class ActivityChat extends ActivityEnhanced
                 initialize = realmRoom.getInitials();
                 color = realmRoom.getColor();
                 isChatReadOnly = realmRoom.getReadOnly();
+                countLoadItemToChat = realmRoom.getUnreadCount();
 
                 if (isChatReadOnly) {
                     viewAttachFile.setVisibility(View.GONE);
@@ -1346,6 +1356,7 @@ public class ActivityChat extends ActivityEnhanced
         if (realmRoom != null) {
 
             iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
+            isMuteNotification = realmRoom.getMute();
         }
         realm.close();
 
@@ -1412,12 +1423,6 @@ public class ActivityChat extends ActivityEnhanced
         // change english number to persian number
         if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
-        txt_mute = (TextView) findViewById(R.id.chl_txt_mute);
-
-
-        if (isMute) {
-            txt_mute.setVisibility(View.VISIBLE);
-        }
 
         imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
 
@@ -1513,10 +1518,8 @@ public class ActivityChat extends ActivityEnhanced
                 if (realmRoom != null) {
 
                     if (realmRoom.getMute()) {
-                        iconMute.setVisibility(View.VISIBLE);
                         text4.setText(getResources().getString(R.string.unmute_notification));
                     } else {
-                        iconMute.setVisibility(View.GONE);
                         text4.setText(getResources().getString(R.string.mute_notification));
                     }
                 } else {
@@ -1588,32 +1591,6 @@ public class ActivityChat extends ActivityEnhanced
 
                         onSelectRoomMenu("txtMuteNotification", (int) mRoomId);
 
-                        final Realm realm = Realm.getDefaultInstance();
-                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                        if (realmRoom != null) {
-                            if (realmRoom.getMute()) {
-                                iconMute.setVisibility(View.VISIBLE);
-                                text4.setText(getResources().getString(R.string.unmute_notification));
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-
-                                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setMute(true);
-                                    }
-                                });
-                            } else {
-                                iconMute.setVisibility(View.GONE);
-                                text4.setText(getResources().getString(R.string.mute_notification));
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-
-                                        realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setMute(false);
-                                    }
-                                });
-                            }
-                        }
-                        realm.close();
                         popupWindow.dismiss();
                     }
                 });
@@ -1731,18 +1708,66 @@ public class ActivityChat extends ActivityEnhanced
             }
         }, 100);
 
-        //imvBackButton.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
-        //            ActivityPopUpNotification.isGoingToChatFromPopUp = false;
-        //            Intent intent = new Intent(context, ActivityMain.class);
-        //            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //            startActivity(intent);
-        //        }
-        //        finish();
-        //    }
-        //});
+        llScroolNavigate = (FrameLayout) findViewById(R.id.ac_ll_scrool_navigate);
+        txtNewUnreadMessage = (TextView) findViewById(R.id.cs_txt_unread_message);
+
+        llScroolNavigate.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                llScroolNavigate.setVisibility(View.GONE);
+                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1 - countNewMessage);
+                countNewMessage = 0;
+            }
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+
+                if (!firsInitScroolPosition) {
+                    lastPosition = lastVisiblePosition;
+                    firsInitScroolPosition = true;
+                }
+
+                int state = lastPosition - lastVisiblePosition;
+
+                if (state > 0) {
+                    // up
+
+                    if (countNewMessage == 0) {
+                        llScroolNavigate.setVisibility(View.GONE);
+                    } else {
+                        llScroolNavigate.setVisibility(View.VISIBLE);
+
+                        txtNewUnreadMessage.setText(countNewMessage + "");
+                        txtNewUnreadMessage.setVisibility(View.VISIBLE);
+                    }
+
+                    lastPosition = lastVisiblePosition;
+                } else if (state < 0) {
+                    //down
+
+                    if (mAdapter.getItemCount() - lastVisiblePosition > 10) {
+                        llScroolNavigate.setVisibility(View.VISIBLE);
+                        if (countNewMessage > 0) {
+                            txtNewUnreadMessage.setText(countNewMessage + "");
+                            txtNewUnreadMessage.setVisibility(View.VISIBLE);
+                        } else {
+                            txtNewUnreadMessage.setVisibility(View.GONE);
+                        }
+                    } else {
+                        llScroolNavigate.setVisibility(View.GONE);
+                        countNewMessage = 0;
+                    }
+
+                    lastPosition = lastVisiblePosition;
+                }
+            }
+        });
+
+
 
         rippleBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3537,21 +3562,16 @@ public class ActivityChat extends ActivityEnhanced
         txtChannelMute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isMute = !isMute;
-                if (isMute) {
-                    txtChannelMute.setText(R.string.mute);
-                    txt_mute.setVisibility(View.VISIBLE);
-                } else {
-                    txtChannelMute.setText(R.string.unmute);
-                    txt_mute.setVisibility(View.GONE);
-                }
+
+                onSelectRoomMenu("txtMuteNotification", (int) mRoomId);
+
             }
         });
 
-        if (isMute) {
-            txtChannelMute.setText(R.string.mute);
-        } else {
+        if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
+        } else {
+            txtChannelMute.setText(R.string.mute);
         }
     }
 
@@ -3632,6 +3652,10 @@ public class ActivityChat extends ActivityEnhanced
         Collections.sort(mLocalList, SortMessages.DESC);
 
         ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
+
+        if (countLoadItemToChat > maxLoadFromLocalInOneStep) {
+            maxLoadFromLocalInOneStep = countLoadItemToChat;
+        }
 
         for (int i = 0; i < mLocalList.size() && i < maxLoadFromLocalInOneStep; i++) {
             messageInfos.add(StructMessageInfo.convert(mLocalList.get(i)));
@@ -4007,7 +4031,7 @@ public class ActivityChat extends ActivityEnhanced
                                     }
 
                                     switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
-                                    scrollToEnd();
+                                    setBtnDownVisible();
                                 } else {
                                     // user has received the message, so I make a new delivered update status request
                                     if (roomType == CHAT) {
@@ -4021,7 +4045,7 @@ public class ActivityChat extends ActivityEnhanced
                                 if (roomId == mRoomId) {
                                     // I'm sender . but another account sent this message and i received it.
                                     switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
-                                    scrollToEnd();
+                                    setBtnDownVisible();
                                 }
                             }
                         }
@@ -4031,6 +4055,13 @@ public class ActivityChat extends ActivityEnhanced
                 });
             }
         }, 400);
+    }
+
+    private void setBtnDownVisible() {
+        countNewMessage++;
+        llScroolNavigate.setVisibility(View.VISIBLE);
+        txtNewUnreadMessage.setText(countNewMessage + "");
+        txtNewUnreadMessage.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -4333,6 +4364,17 @@ public class ActivityChat extends ActivityEnhanced
                 realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item).findFirst().setMute(isMuteNotification);
             }
         });
+
+        if (isMuteNotification) {
+            ((TextView) findViewById(R.id.chl_txt_mute_channel)).setText(R.string.unmute);
+            iconMute.setVisibility(View.VISIBLE);
+        } else {
+            ((TextView) findViewById(R.id.chl_txt_mute_channel)).setText(R.string.mute);
+            iconMute.setVisibility(View.GONE);
+        }
+
+
+
         realm.close();
     }
     //    delete & clear History & mutNotification

@@ -594,7 +594,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
                         Intent intent = new Intent(ActivityMain.this, ActivityChat.class);
                         intent.putExtra("RoomId", item.mInfo.getId());
-                        intent.putExtra("MUT", item.mInfo.getMute());
+
                         startActivity(intent);
                         overridePendingTransition(0, 0);
 

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -44,10 +43,10 @@ public class MyDialog {
         TextView txtCancel = (TextView) dialog.findViewById(R.id.cm_txt_cancle);
 
         if (isMute) {
-            txtMuteNotification.setText(context.getString(R.string.mute));
+            txtMuteNotification.setText(context.getString(R.string.unmute));
             iconMuteNotification.setText(context.getString(R.string.md_muted));
         } else {
-            txtMuteNotification.setText(context.getString(R.string.unmute));
+            txtMuteNotification.setText(context.getString(R.string.mute));
             iconMuteNotification.setText(context.getString(R.string.md_unMuted));
 
         }
