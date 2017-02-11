@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -26,7 +25,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,13 +138,10 @@ import static com.iGap.G.firstTimeEnterToApp;
 import static com.iGap.G.mFirstRun;
 import static com.iGap.R.string.updating;
 
-public class ActivityMain extends ActivityEnhanced
-    implements OnUserInfoMyClient, NavigationView.OnNavigationItemSelectedListener, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse,
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse,
     OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition {
 
-    //public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
-    //private static int drawerWith = 0;
     FloatingActionButton btnStartNewChat;
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
@@ -415,7 +410,7 @@ public class ActivityMain extends ActivityEnhanced
     }
 
     /**
-     * init floating menu drawer
+     * init  menu drawer
      */
 
     private void initDrawerMenu() {
@@ -441,7 +436,7 @@ public class ActivityMain extends ActivityEnhanced
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        //NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //navigationView.setNavigationItemSelectedListener(this);
 
         Realm realm = Realm.getDefaultInstance();
@@ -1753,12 +1748,6 @@ public class ActivityMain extends ActivityEnhanced
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody") @Override public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-
-        return true;
     }
 
     public void setImage(long userId) {

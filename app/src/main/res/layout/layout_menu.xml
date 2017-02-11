@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootMenu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:ignore="MissingPrefix"
-    android:background="@color/white"
-    android:id="@+id/rootMenu"
     >
 
 
@@ -23,57 +23,54 @@
         android:orientation="vertical"
         >
 
-      <RelativeLayout
-          android:id="@+id/lm_layout_user_picture"
+      <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp200"
+          android:orientation="horizontal"
           >
+        <LinearLayout
+            android:id="@+id/lm_layout_user_picture"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
 
-        <!--<ImageView-->
-        <!--android:id="@+id/nav_header_background"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:src="@mipmap/background_menu"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--/>-->
 
+          <com.iGap.module.CircleImageView
+              android:id="@+id/lm_imv_user_picture"
+              android:layout_width="@dimen/dp80"
+              android:layout_height="@dimen/dp80"
+              android:layout_margin="@dimen/dp16"
+              android:src="@mipmap/empty"
+              />
 
-        <com.iGap.module.CircleImageView
-            android:id="@+id/lm_imv_user_picture"
-            android:layout_width="@dimen/dp80"
-            android:layout_height="@dimen/dp80"
-            android:layout_margin="@dimen/dp16"
-            android:src="@mipmap/empty"
-            />
+          <TextView
+              android:id="@+id/lm_txt_user_name"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="@dimen/dp8"
+              android:layout_marginLeft="@dimen/dp16"
+              android:layout_marginStart="@dimen/dp16"
+              android:singleLine="true"
+              android:text="Domenika faniz"
+              android:textColor="@color/black_register"
+              android:textSize="@dimen/sp18"
+              fontPath="fonts/IRANSansMobile_Bold.ttf"
+              />
 
-        <TextView
-            android:id="@+id/lm_txt_user_name"
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lm_imv_user_picture"
-            android:layout_marginStart="@dimen/dp16"
-            android:layout_marginLeft="@dimen/dp16"
-            android:layout_marginBottom="@dimen/dp8"
-            android:singleLine="true"
-            android:text="Domenika faniz"
-            android:textColor="@color/black_register"
-            android:textSize="@dimen/sp18"
-            />
-
-        <TextView
-            android:id="@+id/lm_txt_phone_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lm_txt_user_name"
-            android:layout_marginStart="@dimen/dp16"
-            android:layout_marginLeft="@dimen/dp16"
-            android:singleLine="true"
-            android:text="+98 9125544669"
-            android:textColor="@color/black_register"
-            android:textSize="@dimen/sp14"
-            />
-
+          <TextView
+              android:id="@+id/lm_txt_phone_number"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/dp16"
+              android:layout_marginStart="@dimen/dp16"
+              android:singleLine="true"
+              android:text="+98 9125544669"
+              android:textColor="@color/black_register"
+              android:textSize="@dimen/sp14"
+              />
+        </LinearLayout>
         <com.iGap.module.MaterialDesignTextView
             android:id="@+id/lm_txt_cloud"
             android:layout_width="wrap_content"
@@ -81,18 +78,17 @@
             android:layout_below="@+id/lm_txt_user_name"
             android:layout_marginEnd="@dimen/dp16"
             android:layout_marginRight="@dimen/dp16"
+            android:background="@drawable/bg_message_image_time"
+            android:padding="4dp"
             android:singleLine="true"
             android:text="@string/md_cloud"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@color/white"
             android:textSize="@dimen/sp26"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:padding="4dp"
-            android:background="@drawable/bg_message_image_time"
-            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/dp16"
             />
-
-      </RelativeLayout>
+      </LinearLayout>
 
       <View
           android:layout_width="match_parent"
@@ -113,14 +109,14 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical"
-            android:paddingStart="@dimen/dp8"
-            android:paddingLeft="@dimen/dp8"
             android:paddingEnd="@dimen/dp8"
+            android:paddingLeft="@dimen/dp8"
             android:paddingRight="@dimen/dp8"
+            android:paddingStart="@dimen/dp8"
             >
 
 
-          <RelativeLayout
+          <LinearLayout
               android:id="@+id/lm_ll_new_chat"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -129,6 +125,17 @@
               style="@style/NavigationDrawer.Item"
               >
 
+            <com.iGap.module.MaterialDesignTextView
+                android:id="@+id/lm_txt_icon_new_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:minWidth="@dimen/dp32"
+                android:text="@string/md_user_shape"
+                android:textAppearance="@style/TextIconAppearance.menu"
+                android:textSize="@dimen/sp22"
+
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -139,28 +146,14 @@
                 android:paddingRight="@dimen/dp8"
                 android:paddingTop="@dimen/dp12"
                 android:text="@string/New_Chat"
-                android:layout_toEndOf="@+id/lm_txt_icon_new_chat"
-                android:layout_toRightOf="@+id/lm_txt_icon_new_chat"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp14"
                 />
-            <com.iGap.module.MaterialDesignTextView
-                android:id="@+id/lm_txt_icon_new_chat"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:minWidth="@dimen/dp32"
-                android:text="@string/md_user_shape"
-                android:textAppearance="@style/TextIconAppearance.menu"
-                android:textSize="@dimen/sp22"
-                android:layout_centerInParent="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                />
 
-          </RelativeLayout>
 
-          <RelativeLayout
+          </LinearLayout>
+
+          <LinearLayout
               android:id="@+id/lm_ll_new_group"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -177,9 +170,7 @@
                 android:minWidth="@dimen/dp32"
                 android:text="@string/md_users_social_symbol"
                 android:textAppearance="@style/TextIconAppearance.menu"
-                android:layout_centerInParent="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+
                 android:textSize="@dimen/sp22"
                 />
 
@@ -195,15 +186,13 @@
                 android:text="@string/New_Group"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp14"
-                android:layout_toEndOf="@+id/lm_txt_icon_group"
-                android:layout_toRightOf="@+id/lm_txt_icon_group"
 
                 />
 
-          </RelativeLayout>
+          </LinearLayout>
 
 
-          <RelativeLayout
+          <LinearLayout
               android:id="@+id/lm_ll_new_channle"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -223,9 +212,7 @@
                 android:textColor="@color/gray_4c"
                 android:textSize="@dimen/sp18"
                 fontPath="fonts/iGap_font.ttf"
-                android:layout_centerInParent="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+
 
                 />
 
@@ -243,11 +230,10 @@
                 android:text="@string/New_Chanel"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp14"
-                android:layout_toEndOf="@+id/lm_txt_icon_channel"
-                android:layout_toRightOf="@+id/lm_txt_icon_channel"
+
                 />
 
-          </RelativeLayout>
+          </LinearLayout>
 
           <View
               android:layout_width="match_parent"
@@ -257,7 +243,7 @@
               />
 
 
-          <RelativeLayout
+          <LinearLayout
               android:id="@+id/lm_ll_contacts"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -276,9 +262,7 @@
                 android:text="@string/md_user_account_box"
                 android:textAppearance="@style/TextIconAppearance.menu"
                 android:textSize="@dimen/sp22"
-                android:layout_centerInParent="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+
                 />
 
             <TextView
@@ -293,13 +277,12 @@
                 android:text="@string/contacts"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp14"
-                android:layout_toEndOf="@+id/lm_txt_icon_contacts"
-                android:layout_toRightOf="@+id/lm_txt_icon_contacts"
+
                 />
 
-          </RelativeLayout>
+          </LinearLayout>
 
-          <RelativeLayout
+          <LinearLayout
               android:id="@+id/lm_ll_invite_friends"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -319,9 +302,6 @@
                 android:text="@string/md_add_user_button"
                 android:textAppearance="@style/TextIconAppearance.menu"
                 android:textSize="@dimen/sp22"
-                android:layout_centerInParent="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 />
 
             <TextView
@@ -337,13 +317,12 @@
                 android:text="@string/Invite_Friends"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp14"
-                android:layout_toEndOf="@+id/lm_txt_icon_invite_friends"
-                android:layout_toRightOf="@+id/lm_txt_icon_invite_friends"
+
                 />
 
-          </RelativeLayout>
+          </LinearLayout>
 
-          <RelativeLayout
+          <LinearLayout
               android:id="@+id/lm_ll_setting"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -362,9 +341,7 @@
                 android:text="@string/md_settings_cogwheel_button"
                 android:textAppearance="@style/TextIconAppearance.menu"
                 android:textSize="@dimen/sp22"
-                android:layout_centerInParent="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+
                 />
 
             <TextView
@@ -379,13 +356,12 @@
                 android:text="@string/chi_title_setting"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp14"
-                android:layout_toEndOf="@+id/lm_txt_icon_setting"
-                android:layout_toRightOf="@+id/lm_txt_icon_setting"
+
                 />
 
-          </RelativeLayout>
+          </LinearLayout>
 
-          <RelativeLayout
+          <LinearLayout
               android:id="@+id/lm_ll_igap_faq"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -403,9 +379,7 @@
                 android:text="@string/md_exit_app"
                 android:textAppearance="@style/TextIconAppearance.menu"
                 android:textSize="@dimen/sp22"
-                android:layout_centerInParent="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+
                 />
 
             <TextView
@@ -421,11 +395,9 @@
                 android:text="@string/log_out"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp14"
-                android:layout_toEndOf="@+id/lm_txt_icon_igap_faq"
-                android:layout_toRightOf="@+id/lm_txt_icon_igap_faq"
                 />
 
-          </RelativeLayout>
+          </LinearLayout>
         </LinearLayout>
       </FrameLayout>
     </LinearLayout>
