@@ -229,6 +229,7 @@ import static com.iGap.R.id.ac_ll_parent;
 import static com.iGap.R.id.replyFrom;
 import static com.iGap.R.string.member;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
+import static com.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_FILE;
@@ -745,6 +746,7 @@ public class ActivityChat extends ActivityEnhanced
         getUserInfo();
         setUpEmojiPopup();
         checkAction();
+        insertShearedData();
     }
 
     /**
@@ -767,7 +769,8 @@ public class ActivityChat extends ActivityEnhanced
 
                 imvCanselForward = (ImageView) findViewById(R.id.cslhf_imv_cansel);
                 imvCanselForward.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         ll_Forward.setVisibility(View.GONE);
                         hasForward = false;
@@ -775,16 +778,19 @@ public class ActivityChat extends ActivityEnhanced
                         if (edtChat.getText().length() == 0) {
 
                             layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                                @Override public void onAnimationEnd(Animator animation) {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
                                     layoutAttachBottom.setVisibility(View.VISIBLE);
                                 }
                             }).start();
                             imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                                @Override public void onAnimationEnd(Animator animation) {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
                                     runOnUiThread(new Runnable() {
-                                        @Override public void run() {
+                                        @Override
+                                        public void run() {
                                             imvSendButton.clearAnimation();
                                             imvSendButton.setVisibility(View.GONE);
                                         }
@@ -796,17 +802,20 @@ public class ActivityChat extends ActivityEnhanced
                 });
 
                 layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                    @Override public void onAnimationEnd(Animator animation) {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         layoutAttachBottom.setVisibility(View.GONE);
                     }
                 }).start();
 
                 imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                    @Override public void onAnimationEnd(Animator animation) {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 imvSendButton.clearAnimation();
                                 imvSendButton.setVisibility(View.VISIBLE);
                             }
@@ -1625,7 +1634,8 @@ public class ActivityChat extends ActivityEnhanced
                 });
 
                 text6.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         popupWindow.dismiss();
 
@@ -2344,26 +2354,29 @@ public class ActivityChat extends ActivityEnhanced
 
             if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.message) {
                 String message = HelperGetDataFromOtherApp.message;
+                edtChat.setText(message);
+                imvSendButton.performClick();
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.image) {
-
+                sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(0).getPath());
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.video) {
-
+                sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(0).getPath());
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.audio) {
-
+                sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(0).getPath());
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.file) {
 
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
 
-                    HelperGetDataFromOtherApp.FileType fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
-
-                    if (fileType == HelperGetDataFromOtherApp.FileType.image) {
-
-                    } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
-
-                    } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
-
-                    } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
-
+                    if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
+                        HelperGetDataFromOtherApp.FileType fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
+                        if (fileType == HelperGetDataFromOtherApp.FileType.image) {
+                            sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                        } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
+                            sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                        } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
+                            sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                        } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
+                            sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                        }
                     }
                 }
             }
@@ -2391,11 +2404,7 @@ public class ActivityChat extends ActivityEnhanced
                     intent.setType("text/plain");
                     String messageContact;
                     if (messageInfo.forwardedFrom != null) {
-                        messageContact = messageInfo.forwardedFrom.getRoomMessageContact().getFirstName()
-                            + " "
-                            + messageInfo.forwardedFrom.getRoomMessageContact().getLastName()
-                            + "\n"
-                            + messageInfo.forwardedFrom.getRoomMessageContact().getLastPhoneNumber();
+                        messageContact = messageInfo.forwardedFrom.getRoomMessageContact().getFirstName() + " " + messageInfo.forwardedFrom.getRoomMessageContact().getLastName() + "\n" + messageInfo.forwardedFrom.getRoomMessageContact().getLastPhoneNumber();
                     } else {
                         messageContact = messageInfo.userInfo.firstName + "\n" + messageInfo.userInfo.phone;
                     }
@@ -2443,7 +2452,8 @@ public class ActivityChat extends ActivityEnhanced
                         chooserDialogText = getString(R.string.share_file);
                     } else {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 Toast.makeText(G.context, R.string.file_not_download_yet, Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -2530,8 +2540,7 @@ public class ActivityChat extends ActivityEnhanced
                 for (int j = mAdapter.getAdapterItemCount() - 1; j >= 0; j--) {
                     try {
 
-                        String mToken =
-                            mAdapter.getItem(j).mMessage.forwardedFrom != null ? mAdapter.getItem(j).mMessage.forwardedFrom.getAttachment().getToken() : mAdapter.getItem(j).mMessage.attachment.token;
+                        String mToken = mAdapter.getItem(j).mMessage.forwardedFrom != null ? mAdapter.getItem(j).mMessage.forwardedFrom.getAttachment().getToken() : mAdapter.getItem(j).mMessage.attachment.token;
 
                         if (mToken.equals(token)) {
                             mAdapter.notifyItemChanged(j);
@@ -2952,7 +2961,7 @@ public class ActivityChat extends ActivityEnhanced
             case AttachFile.requestOpenGalleryForVideoMultipleSelect:
                 txtFileNameForSend.setText(getString(R.string.multi_video_selected_for_send));
                 break;
-            case AttachFile.request_code_VIDEO_CAPTURED:
+            case request_code_VIDEO_CAPTURED:
 
                 if (listPathString.size() == 1) {
                     txtFileNameForSend.setText(getString(R.string.video_selected_for_send));
@@ -3073,7 +3082,7 @@ public class ActivityChat extends ActivityEnhanced
                 break;
 
             case AttachFile.requestOpenGalleryForVideoMultipleSelect:
-            case AttachFile.request_code_VIDEO_CAPTURED:
+            case request_code_VIDEO_CAPTURED:
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
                 duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath) / 1000;
@@ -3722,7 +3731,8 @@ public class ActivityChat extends ActivityEnhanced
                 }
             } else {
                 recyclerView.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
                     }
                 });
@@ -4110,7 +4120,8 @@ public class ActivityChat extends ActivityEnhanced
         scrollToEnd();
 
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (mReplayLayout != null) {
                     mReplayLayout.setVisibility(View.GONE);
                 }

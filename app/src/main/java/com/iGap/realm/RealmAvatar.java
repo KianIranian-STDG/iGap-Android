@@ -30,16 +30,17 @@ public class RealmAvatar extends RealmObject {
      */
 
     public static RealmAvatar put(long ownerId, ProtoGlobal.Avatar input, boolean sendAvatarToBottom) {
+        Realm realm = Realm.getDefaultInstance();
         if (!input.hasFile()) {
-            deleteAllAvatars(ownerId);
+            deleteAllAvatars(ownerId, realm);
             return null;
         }
 
-        Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmAvatar> ownerAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAll();
 
         boolean exists = false;
         for (RealmAvatar avatar : ownerAvatars) {
+
             if (avatar.getFile() != null && avatar.getFile().getToken().equalsIgnoreCase(input.getFile().getToken())) {
                 exists = true;
                 break;
@@ -136,18 +137,11 @@ public class RealmAvatar extends RealmObject {
      *
      * @param ownerId use this id for delete from RealmAvatar
      */
-    private static void deleteAllAvatars(final long ownerId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<RealmAvatar> ownerAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAll();
-                if (ownerAvatars.size() > 0) {
-                    ownerAvatars.deleteAllFromRealm();
-                }
-            }
-        });
-        realm.close();
+    private static void deleteAllAvatars(final long ownerId, Realm realm) {
+        RealmResults<RealmAvatar> ownerAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAll();
+        if (ownerAvatars.size() > 0) {
+            ownerAvatars.deleteAllFromRealm();
+        }
     }
 
     /**
