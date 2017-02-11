@@ -30,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.interfaces.IPopUpListener;
 import com.iGap.interfaces.OnVoiceRecord;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -153,7 +152,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-        mList = (ArrayList<StructPopUp>) HelperNotificationAndBadge.popUpList.clone();
+        mList = (ArrayList<StructPopUp>) getIntent().getExtras().getSerializable(ARGUMENTLIST);
 
         if (mList == null) {
             finish();

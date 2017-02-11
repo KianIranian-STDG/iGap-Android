@@ -83,7 +83,7 @@ public class HelperNotificationAndBadge {
     private long idRoom;
     private int delayAlarm = 5000;
     private long currentAlarm;
-    public static ArrayList<StructPopUp> popUpList = new ArrayList<>();
+    public ArrayList<StructPopUp> popUpList = new ArrayList<>();
 
     public HelperNotificationAndBadge() {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -832,7 +832,7 @@ public class HelperNotificationAndBadge {
         } else {
             Intent intent = new Intent(context, ActivityPopUpNotification.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            //  intent.putExtra(ActivityPopUpNotification.ARGUMENTLIST , poList);
+            intent.putExtra(ActivityPopUpNotification.ARGUMENTLIST, poList);
             context.getApplicationContext().startActivity(intent);
         }
 

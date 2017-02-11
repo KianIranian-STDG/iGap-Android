@@ -1,10 +1,12 @@
 package com.iGap.module.enums;
 
+import java.io.Serializable;
+
 /**
  * Created by android3 on 2/9/2017.
  */
 
-public class StructPopUp {
+public class StructPopUp implements Serializable {
 
     private Long roomId;
     private String message;
