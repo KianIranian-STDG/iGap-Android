@@ -731,7 +731,6 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             public void onSuccess() {
                 List<RoomItem> roomItems = new ArrayList<>();
                 for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
-                    Log.i("YYY", "name : " + item.getTitle() + " || last message" + item.getLastMessage().getMessage() + "  ||  update time : " + item.getUpdatedTime());
                     roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
                 }
                 mAdapter.clear();

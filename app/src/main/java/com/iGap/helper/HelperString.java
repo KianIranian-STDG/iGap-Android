@@ -156,12 +156,34 @@ public class HelperString {
         return m.matches();
     }
 
-    public static boolean mainPath(String path) {
+    public static boolean isExternal(String path) {
         String[] pathList = path.split("/");
-        if (pathList.length > 0 && pathList[0].equals("external")) {
-            return false;
+        for (String pa : pathList) {
+            if (pa.equals("external")) {
+                return true;
+            }
         }
-        return true;
+        return false;
+    }
+
+    public static boolean isDocument(String path) {
+        String[] pathList = path.split("/");
+        for (String pa : pathList) {
+            if (pa.equals("document")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isStorage(String path) {
+        String[] pathList = path.split("/");
+        for (String pa : pathList) {
+            if (pa.equals("storage")) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

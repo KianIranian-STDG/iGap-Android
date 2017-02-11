@@ -90,6 +90,7 @@ import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperSetAction;
+import com.iGap.helper.HelperString;
 import com.iGap.helper.HelperUrl;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.IMessageItem;
@@ -135,6 +136,7 @@ import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
+import com.iGap.module.PathUtils;
 import com.iGap.module.ResendMessage;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
@@ -1712,7 +1714,8 @@ public class ActivityChat extends ActivityEnhanced
         txtNewUnreadMessage = (TextView) findViewById(R.id.cs_txt_unread_message);
 
         llScroolNavigate.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 llScroolNavigate.setVisibility(View.GONE);
                 recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1 - countNewMessage);
@@ -1721,7 +1724,8 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
@@ -2382,11 +2386,17 @@ public class ActivityChat extends ActivityEnhanced
                 edtChat.setText(message);
                 imvSendButton.performClick();
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.image) {
-                sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(0).getPath());
+                for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
+                    sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                }
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.video) {
-                sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(0).getPath());
+                for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
+                    sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                }
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.audio) {
-                sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(0).getPath());
+                for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
+                    sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                }
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.file) {
 
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
@@ -3035,6 +3045,32 @@ public class ActivityChat extends ActivityEnhanced
         long fileSize = 0;
         int[] imageDimens = {0, 0};
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
+
+        Log.i("ZZZ", "sendMessage filePath : " + filePath);
+        if (HelperString.isExternal(filePath)) {
+            Log.i("ZZZ", "is not isExternal ");
+            filePath = AndroidUtils.getRealPathFromURI(getApplicationContext(), Uri.parse("content://media" + filePath));
+        } else {
+            Log.i("ZZZ", "is isExternal ");
+        }
+
+        if (HelperString.isDocument(filePath)) {
+            Log.i("ZZZ", "isDocument ");
+            Log.i("ZZZ", "isDocument : " + Uri.parse("content://com.android.providers.downloads.documents" + filePath));
+            filePath = PathUtils.getPath(getApplicationContext(), Uri.parse("content://com.android.providers.downloads.documents" + filePath));
+        } else {
+            Log.i("ZZZ", "is not Document ");
+        }
+
+
+       /* if (HelperString.isStorage(filePath)) {
+            Log.i("ZZZ", "storage ");
+            Log.i("ZZZ", "storage : " + Uri.parse("file:///storage" + filePath));
+            filePath = PathUtils.getPath(getApplicationContext(), Uri.parse("content://com.android.providers.downloads.documents" + filePath));
+        } else {
+            Log.i("ZZZ", "is not storage ");
+        }*/
+
         StructMessageInfo messageInfo = null;
 
         switch (requestCode) {
@@ -3189,6 +3225,8 @@ public class ActivityChat extends ActivityEnhanced
         final long finalDuration = duration;
         final long finalFileSize = fileSize;
         final int[] finalImageDimens = imageDimens;
+
+
 
         //messageInfo.channelExtra = StructChannelExtra.makeDefaultStructure(messageId, mRoomId);
 

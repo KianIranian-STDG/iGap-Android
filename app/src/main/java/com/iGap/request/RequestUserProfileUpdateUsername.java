@@ -6,9 +6,7 @@ public class RequestUserProfileUpdateUsername {
 
     public void userProfileUpdateUsername(String username) {
 
-        ProtoUserProfileUpdateUsername.UserProfileUpdateUsername.Builder builder =
-                ProtoUserProfileUpdateUsername.UserProfileUpdateUsername.newBuilder();
-
+        ProtoUserProfileUpdateUsername.UserProfileUpdateUsername.Builder builder = ProtoUserProfileUpdateUsername.UserProfileUpdateUsername.newBuilder();
         builder.setUsername(username);
 
         RequestWrapper requestWrapper = new RequestWrapper(123, builder);

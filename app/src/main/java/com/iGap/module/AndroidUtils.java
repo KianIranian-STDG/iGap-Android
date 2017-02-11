@@ -2,17 +2,20 @@ package com.iGap.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoGlobal;
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,16 +56,45 @@ public final class AndroidUtils {
 
     public static String getAudioArtistName(String filePath) {
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
-        metaRetriever.setDataSource(filePath);
+        Uri uri;
+        if (!HelperString.isExternal(filePath)) {
+            uri = Uri.parse(filePath);
+        } else {
+            uri = Uri.parse("content://media" + filePath);
+        }
+
+        metaRetriever.setDataSource(G.context, uri);
         return metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
     }
 
     public static long getAudioDuration(Context context, String filePath) {
-        Uri uri = Uri.parse(filePath);
+
+        Uri uri;
+        if (!HelperString.isExternal(filePath)) {
+            uri = Uri.parse(filePath);
+        } else {
+            uri = Uri.parse("content://media" + filePath);
+        }
+
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(context, uri);
         String durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
         return Integer.parseInt(durationStr);
+    }
+
+    public static String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] projection = {MediaStore.Audio.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, projection, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 
     public static int[] getImageDimens(String filePath) {
@@ -78,7 +110,7 @@ public final class AndroidUtils {
 
             return new int[]{width, height};
         } catch (Exception e) {
-            return new int[] { 0, 0 };
+            return new int[]{0, 0};
         }
     }
 

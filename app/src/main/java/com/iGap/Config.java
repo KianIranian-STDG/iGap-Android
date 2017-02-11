@@ -17,7 +17,7 @@ public class Config {
     public static final int COUNTER_TIMER = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final int COUNTER_TIMER_DELAY = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int ACTION_CHECKING = 500;
-    public static int UPDATE_STATUS_TIME = 2000; // after this time check that program is in background
+    public static final int UPDATE_STATUS_TIME = 2000; // after this time check that program is in background
     public static final int ACTION_TIME_OUT = 2000;
     public static final int GET_MESSAGE_STATE_TIME_OUT = 5000;
     public static final int GET_MESSAGE_STATE_TIME_OUT_CHECKING = 1000;

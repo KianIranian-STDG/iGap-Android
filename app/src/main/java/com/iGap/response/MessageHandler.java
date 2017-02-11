@@ -28,7 +28,8 @@ public abstract class MessageHandler {
     @CallSuper
     public void timeOut() {
         if (heartBeatTimeOut()) {
-            WebSocketClient.checkConnection();
+            //WebSocketClient.checkConnection();
+            WebSocketClient.reconnect(true);
         }
         Log.i("MSGT", "MessageHandler timeOut : " + actionId + " || " + message);
         error();
