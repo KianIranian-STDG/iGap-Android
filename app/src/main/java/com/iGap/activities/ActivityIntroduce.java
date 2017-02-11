@@ -44,6 +44,7 @@ import com.iGap.request.RequestInfoLocation;
 import com.iGap.request.RequestInfoPage;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 import io.realm.Realm;
+import java.io.File;
 import java.io.IOException;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -409,6 +410,18 @@ public class ActivityIntroduce extends ActivityEnhanced {
     }
 
     private void startRegistration() {
+
+        // delete  content of folder chat background in the first registeration
+        File root = new File(G.DIR_CHAT_BACKGROUND);
+        File[] Files = root.listFiles();
+        if (Files != null) {
+            for (int j = 0; j < Files.length; j++) {
+                Files[j].delete();
+            }
+        }
+
+
+
         registrationTry = true;
         Thread thread = new Thread(new Runnable() {
             @Override
