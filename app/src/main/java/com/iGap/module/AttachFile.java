@@ -662,19 +662,19 @@ public class AttachFile {
 
         if (galleryPath.contains(G.DIR_APP)) { // file one time send and compress
 
-            File file = new File(galleryPath);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                result = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file).getPath();
+            //            File file = new File(galleryPath);
+            //
+            //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            //                result = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file).getPath();
+            ////                result = Uri.fromFile(file).getPath();
+            //                Log.i("CCCCCCD", "getPath: " + file.getPath());
+            //                Log.i("CCCCCCD", "toString: " + file.toString());
+            //                Log.i("CCCCCCD", "getAbsolutePath: " + file.getAbsolutePath());
+            //            } else {
 //                result = Uri.fromFile(file).getPath();
-                Log.i("CCCCCCD", "getPath: " + file.getPath());
-                Log.i("CCCCCCD", "toString: " + file.toString());
-                Log.i("CCCCCCD", "getAbsolutePath: " + file.getAbsolutePath());
-            } else {
-                result = Uri.fromFile(file).getPath();
-            }
+            //            }
 
-            return result;
+            return galleryPath;
         }
 
 

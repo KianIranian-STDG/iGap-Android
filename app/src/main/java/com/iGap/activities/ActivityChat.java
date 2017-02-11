@@ -2836,7 +2836,7 @@ public class ActivityChat extends ActivityEnhanced
                 for (final String path : listPathString) {
                     if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !path.toLowerCase().endsWith(".gif")) {
                         String localpathNew = attachFile.saveGalleryPicToLocal(path);
-                        sendMessage(requestCode, path);
+                        sendMessage(requestCode, localpathNew);
 
                     } else {
                         sendMessage(requestCode, path);
