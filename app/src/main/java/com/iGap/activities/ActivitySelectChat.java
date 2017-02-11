@@ -59,7 +59,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
     }
 
     private void initComponent() {
-        MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.cl_btn_menu);
+        //MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.cl_btn_menu);
 
         MaterialDesignTextView btnSearch =
                 (MaterialDesignTextView) findViewById(R.id.amr_btn_search);

@@ -7,6 +7,12 @@
         <item name="colorPrimaryDark">@color/greenStatus</item>
         <item name="colorAccent">@color/green</item>
         <item name="android:buttonStyle">@style/Button</item>
+        <item name="drawerArrowStyle">@style/MaterialDrawer.DrawerArrowStyle</item>
+    </style>
+
+    <style name="MaterialDrawer.DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">false</item>
+        <item name="color">@android:color/white</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button">

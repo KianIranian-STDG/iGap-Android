@@ -773,4 +773,6 @@
     <string name="messages_selected">Messages Selected</string>
     <string name="forward_message">forward message</string>
     <string name="file_not_download_yet">File Not Downloaded Yet</string>
+    <string name="navigation_drawer_open">open</string>
+    <string name="navigation_drawer_close">close</string>
 </resources>

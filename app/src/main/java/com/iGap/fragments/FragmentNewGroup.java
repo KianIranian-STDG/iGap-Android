@@ -34,7 +34,6 @@ import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.activities.ActivityCrop;
-import com.iGap.activities.ActivityMain;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperPermision;
@@ -655,7 +654,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                                             .replace(fragmentContainer, fragment, "contactGroup_fragment")
                                             .commitAllowingStateLoss();
                                     getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                                    ActivityMain.mLeftDrawerLayout.closeDrawer();
+                                    //ActivityMain.mLeftDrawerLayout.closeDrawer();
                                 }
                             }
                         });
@@ -889,7 +888,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
                 .replace(fragmentContainer, fragment, "contactGroup_fragment")
                 .commitAllowingStateLoss();
         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-        ActivityMain.mLeftDrawerLayout.closeDrawer();
+        //ActivityMain.mLeftDrawerLayout.closeDrawer();
     }
 
     private void startChannelRoom(long roomId) {

@@ -8,25 +8,34 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.Config;
@@ -37,7 +46,6 @@ import com.iGap.adapter.RoomsAdapter;
 import com.iGap.adapter.items.RoomItem;
 import com.iGap.fragments.ContactGroupFragment;
 import com.iGap.fragments.FragmentCreateChannel;
-import com.iGap.fragments.FragmentDrawerMenu;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;
@@ -47,14 +55,18 @@ import com.iGap.helper.HelperCalculateKeepMedia;
 import com.iGap.helper.HelperClientCondition;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
+import com.iGap.helper.HelperImageBackColor;
+import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.ServiceContact;
 import com.iGap.interfaces.OnActivityMainStart;
 import com.iGap.interfaces.OnAvatarGet;
+import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnChannelDelete;
 import com.iGap.interfaces.OnChannelLeft;
 import com.iGap.interfaces.OnChatClearMessageResponse;
 import com.iGap.interfaces.OnChatDelete;
+import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.interfaces.OnChatUpdateStatusResponse;
 import com.iGap.interfaces.OnClientCondition;
@@ -70,13 +82,14 @@ import com.iGap.interfaces.OnRefreshActivity;
 import com.iGap.interfaces.OnSetActionInRoom;
 import com.iGap.interfaces.OnUpdateAvatar;
 import com.iGap.interfaces.OnUserContactImport;
+import com.iGap.interfaces.OnUserInfoMyClient;
 import com.iGap.interfaces.OnUserInfoResponse;
+import com.iGap.interfaces.OnUserSessionLogout;
 import com.iGap.interfaces.OpenFragment;
 import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
-import com.iGap.libs.flowingdrawer.FlowingView;
-import com.iGap.libs.flowingdrawer.LeftDrawerLayout;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.Contacts;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
@@ -93,38 +106,47 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.iGap.realm.RealmUserInfo;
 import com.iGap.realm.enums.ChannelChatRole;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.request.RequestChannelDelete;
 import com.iGap.request.RequestChannelLeft;
 import com.iGap.request.RequestChatDelete;
+import com.iGap.request.RequestChatGetRoom;
 import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupLeft;
 import com.iGap.request.RequestUserContactsGetList;
+import com.iGap.request.RequestUserInfo;
+import com.iGap.request.RequestUserSessionLogout;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItemAdapter;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.clientConditionGlobal;
+import static com.iGap.G.context;
 import static com.iGap.G.firstTimeEnterToApp;
 import static com.iGap.G.mFirstRun;
 import static com.iGap.R.string.updating;
 
-public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition {
+public class ActivityMain extends ActivityEnhanced
+    implements OnUserInfoMyClient, NavigationView.OnNavigationItemSelectedListener, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse,
+    OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition {
 
-    public static LeftDrawerLayout mLeftDrawerLayout;
+    //public static LeftDrawerLayout mLeftDrawerLayout;
     public static boolean isMenuButtonAddShown = false;
-    private static int drawerWith = 0;
+    //private static int drawerWith = 0;
     FloatingActionButton btnStartNewChat;
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
@@ -140,6 +162,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
     private SwipeRefreshLayout swipeRefreshLayout;
     private SharedPreferences sharedPreferences;
     private boolean isGetContactList = false;
+    private ImageView imgNavImage;
+    private DrawerLayout drawer;
 
     private void scrollToTop() {
         recyclerView.postDelayed(new Runnable() {
@@ -396,17 +420,256 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     private void initDrawerMenu() {
 
-        mLeftDrawerLayout = (LeftDrawerLayout) findViewById(R.id.id_drawerlayout);
-        FlowingView mFlowingView = (FlowingView) findViewById(R.id.sv);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentDrawerMenu mMenuFragment = (FragmentDrawerMenu) fm.findFragmentById(R.id.id_container_menu);
-        if (mMenuFragment == null) {
-            fm.beginTransaction().add(R.id.id_container_menu, mMenuFragment = new FragmentDrawerMenu()).commit();
-        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
-        mLeftDrawerLayout.setFluidView(mFlowingView);
-        mLeftDrawerLayout.setMenuFragment(mMenuFragment);
-        drawerWith = (int) getResources().getDimension(R.dimen.dp200);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                // Do whatever you want here
+                if (arcMenu.isMenuOpened()) {
+                    arcMenu.toggleMenu();
+                }
+            }
+        };
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        //navigationView.setNavigationItemSelectedListener(this);
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo != null) {
+            String username = realmUserInfo.getUserInfo().getDisplayName();
+            String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
+
+            imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
+            TextView txtNavName = (TextView) findViewById(R.id.lm_txt_user_name);
+            TextView txtNavPhone = (TextView) findViewById(R.id.lm_txt_phone_number);
+            txtNavName.setText(username);
+            txtNavPhone.setText(phoneNumber);
+
+            if (HelperCalander.isLanguagePersian) {
+                txtNavPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavPhone.getText().toString()));
+                txtNavName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavName.getText().toString()));
+            }
+            new RequestUserInfo().userInfo(realmUserInfo.getUserId());
+            setImage(realmUserInfo.getUserId());
+        }
+        realm.close();
+
+        ViewGroup navBackGround = (ViewGroup) findViewById(R.id.lm_layout_user_picture);
+        navBackGround.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                Realm realm = Realm.getDefaultInstance();
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo != null) {
+                    long username = realmUserInfo.getUserId();
+                    chatGetRoom(username);
+                }
+                realm.close();
+            }
+        });
+
+        ViewGroup itemNavChat = (ViewGroup) findViewById(R.id.lm_ll_new_chat);
+        itemNavChat.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                final Fragment fragment = RegisteredContactsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "Contacts");
+                fragment.setArguments(bundle);
+
+                try {
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+        });
+
+        ViewGroup itemNavGroup = (ViewGroup) findViewById(R.id.lm_ll_new_group);
+        itemNavGroup.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TYPE", "NewGroup");
+                fragment.setArguments(bundle);
+
+                try {
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+        });
+
+        ViewGroup itemNavChanel = (ViewGroup) findViewById(R.id.lm_ll_new_channle);
+        itemNavChanel.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TYPE", "NewChanel");
+                fragment.setArguments(bundle);
+                try {
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+        });
+
+        ViewGroup itemNavContacts = (ViewGroup) findViewById(R.id.lm_ll_contacts);
+        itemNavContacts.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                Fragment fragment = RegisteredContactsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "New Chat");
+                fragment.setArguments(bundle);
+
+                try {
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+        });
+
+        ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
+        itemNavSend.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you !");
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+            }
+        });
+        ViewGroup itemNavSetting = (ViewGroup) findViewById(R.id.lm_ll_setting);
+        itemNavSetting.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                try {
+                    HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
+                        @Override public void Allow() {
+                            Intent intent = new Intent(G.context, ActivitySetting.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            //ActivityMain.mLeftDrawerLayout.closeDrawer();
+                        }
+
+                        @Override public void deny() {
+
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        ViewGroup itemNavOut = (ViewGroup) findViewById(R.id.lm_ll_igap_faq);
+        itemNavOut.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
+                    .content(R.string.content_log_out)
+                    .positiveText(getResources().getString(R.string.B_ok))
+                    .negativeText(getResources().getString(R.string.B_cancel))
+                    .iconRes(R.mipmap.exit_to_app_button)
+                    .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            //                                showProgressBar();
+                            G.onUserSessionLogout = new OnUserSessionLogout() {
+                                @Override public void onUserSessionLogout() {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override public void run() {
+                                            HelperLogout.logout();
+                                            //                                                hideProgressBar();
+                                        }
+                                    });
+                                }
+
+                                @Override public void onError() {
+                                    runOnUiThread(new Runnable() {
+                                        @Override public void run() {
+                                            //                                                hideProgressBar();
+                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                @Override public void onClick(View view) {
+                                                    snack.dismiss();
+                                                }
+                                            });
+                                            snack.show();
+                                        }
+                                    });
+                                }
+
+                                @Override public void onTimeOut() {
+                                    runOnUiThread(new Runnable() {
+                                        @Override public void run() {
+                                            //                                                hideProgressBar();
+                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                @Override public void onClick(View view) {
+                                                    snack.dismiss();
+                                                }
+                                            });
+                                            snack.show();
+                                        }
+                                    });
+                                }
+                            };
+
+                            new RequestUserSessionLogout().userSessionLogout();
+                        }
+                    })
+
+                    .show();
+            }
+        });
+
+        drawer.closeDrawer(GravityCompat.START);
+
+        //mLeftDrawerLayout = (LeftDrawerLayout) findViewById(R.id.id_drawerlayout);
+        //FlowingView mFlowingView = (FlowingView) findViewById(R.id.sv);
+        //FragmentManager fm = getSupportFragmentManager();
+        //FragmentDrawerMenu mMenuFragment = (FragmentDrawerMenu) fm.findFragmentById(R.id.id_container_menu);
+        //if (mMenuFragment == null) {
+        //    fm.beginTransaction().add(R.id.id_container_menu, mMenuFragment = new FragmentDrawerMenu()).commit();
+        //}
+
+        //mLeftDrawerLayout.setFluidView(mFlowingView);
+        //mLeftDrawerLayout.setMenuFragment(mMenuFragment);
+        //drawerWith = (int) getResources().getDimension(R.dimen.dp200);
     }
 
     @Override
@@ -416,11 +679,11 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             clickPosition = (int) ev.getX();
         }
 
-        if (ev.getAction() == MotionEvent.ACTION_UP) {
-            if (ev.getX() > drawerWith) {
-                if (ev.getX() <= clickPosition + 20) mLeftDrawerLayout.closeDrawer();
-            }
-        }
+        //if (ev.getAction() == MotionEvent.ACTION_UP) {
+        //    if (ev.getX() > drawerWith) {
+        //        if (ev.getX() <= clickPosition + 20) mLeftDrawerLayout.closeDrawer();
+        //    }
+        //}
 
         return super.dispatchTouchEvent(ev);
     }
@@ -430,7 +693,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         contentLoading = (ContentLoadingProgressBar) findViewById(R.id.loadingContent);
         contentLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
-        RippleView rippleMenu = (RippleView) findViewById(R.id.cl_ripple_menu);
+        //RippleView rippleMenu = (RippleView) findViewById(R.id.cl_ripple_menu);
         RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
         rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -488,19 +751,18 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         };
 
-        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-
-            @Override
-            public void onComplete(RippleView rippleView) {
-                mLeftDrawerLayout.toggle();
-            }
-        });
+        //rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        //
+        //    @Override
+        //    public void onComplete(RippleView rippleView) {
+        //        mLeftDrawerLayout.toggle();
+        //    }
+        //});
     }
 
     private void initFloatingButtonCreateNew() {
 
         arcMenu = (ArcMenu) findViewById(R.id.ac_arc_button_add);
-
         arcMenu.setStateChangeListener(new StateChangeListener() {
             @Override
             public void onMenuOpened() {
@@ -641,7 +903,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
         recyclerView.setAdapter(mAdapter);
 
         appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
-        final RelativeLayout toolbar = (RelativeLayout) findViewById(R.id.toolbar);
+        final ViewGroup toolbar = (ViewGroup) findViewById(R.id.toolbar);
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
             @Override
             public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
@@ -741,7 +1003,7 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        mLeftDrawerLayout.toggle();
+        //mLeftDrawerLayout.toggle();
         return false;
     }
 
@@ -970,9 +1232,8 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             } catch (Exception e) {
                 e.getStackTrace();
             }
-
-        } else if (mLeftDrawerLayout.isShownMenu()) {
-            mLeftDrawerLayout.closeDrawer();
+        } else if (this.drawer.isDrawerOpen(GravityCompat.START)) {
+            this.drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -1493,4 +1754,104 @@ public class ActivityMain extends ActivityEnhanced implements OnComplete, OnChat
             }
         });
     }
+
+    @SuppressWarnings("StatementWithEmptyBody") @Override public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+
+        return true;
+    }
+
+    public void setImage(long userId) {
+
+        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgNavImage);
+                    }
+                });
+            }
+
+            @Override public void onShowInitials(final String initials, final String color) {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+                    }
+                });
+            }
+        });
+
+        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
+            @Override public void onChangePhoto(final String imagePath) {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        if (imagePath == null || !new File(imagePath).exists()) {
+                            Realm realm1 = Realm.getDefaultInstance();
+                            RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
+                            imgNavImage.setImageBitmap(
+                                HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(),
+                                    realmUserInfo.getUserInfo().getColor()));
+                            realm1.close();
+                        } else {
+                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);
+                        }
+                    }
+                });
+            }
+
+            @Override public void onChangeInitials(final String initials, final String color) {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+                    }
+                });
+            }
+        };
+        //realm.close();
+    }
+
+    @Override public void onUserInfoMyClient(ProtoGlobal.RegisteredUser user, String identity) {
+        setImage(user.getId());
+    }
+
+    private void chatGetRoom(final long peerId) {
+        final Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+
+        if (realmRoom != null) {
+
+            Intent intent = new Intent(context, ActivityChat.class);
+            intent.putExtra("RoomId", realmRoom.getId());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            //            getActivity().getSupportFragmentManager().popBackStack();
+        } else {
+
+            G.onChatGetRoom = new OnChatGetRoom() {
+                @Override public void onChatGetRoom(final long roomId) {
+                    Intent intent = new Intent(context, ActivityChat.class);
+                    intent.putExtra("peerId", peerId);
+                    intent.putExtra("RoomId", roomId);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+
+                @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+
+                }
+
+                @Override public void onChatGetRoomTimeOut() {
+
+                }
+
+                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                }
+            };
+
+            new RequestChatGetRoom().chatGetRoom(peerId);
+        }
+        realm.close();
+    }
+
 }

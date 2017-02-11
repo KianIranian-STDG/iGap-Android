@@ -19,9 +19,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
-
 import com.iGap.R;
-
+import com.iGap.helper.HelperCalander;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +96,13 @@ public class ArcMenu
         }
 
         if (mMenuSideEnum == MenuSideEnum.ARC_LEFT) {
-            mQuadrantAngle = POSITIVE_QUADRANT;
+
+            if (!HelperCalander.isLanguagePersian) {
+                mQuadrantAngle = 90;
+            } else {
+                mQuadrantAngle = -90;
+            }
+
         } else {
             mQuadrantAngle = NEGATIVE_QUADRANT;
         }
@@ -154,7 +159,7 @@ public class ArcMenu
                 leftPoint = (int) (mCurrentRadius * Math.cos(Math.toRadians(totalAngleForChild)));
                 topPoint = (int) (mCurrentRadius * Math.sin(Math.toRadians(totalAngleForChild)));
 
-                if (mMenuSideEnum == MenuSideEnum.ARC_RIGHT) {
+                if (mMenuSideEnum == MenuSideEnum.ARC_RIGHT || HelperCalander.isLanguagePersian) {
                     left = cx + leftPoint;
                     top = cy + topPoint;
                 } else {
@@ -177,7 +182,7 @@ public class ArcMenu
      */
     //TODO: work on fixing this
     private void layoutMenu() {
-        if (mMenuSideEnum == MenuSideEnum.ARC_RIGHT) {
+        if (mMenuSideEnum == MenuSideEnum.ARC_RIGHT || HelperCalander.isLanguagePersian) {
             cx = 0 + menuMargin;
             cy = getMeasuredHeight() - fabMenu.getMeasuredHeight() - menuMargin;
         } else {

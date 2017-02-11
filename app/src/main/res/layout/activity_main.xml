@@ -1,49 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragmentContainer"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr">
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start"
+    >
 
-    <com.iGap.libs.flowingdrawer.LeftDrawerLayout
-        android:id="@+id/id_drawerlayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+  <RelativeLayout
+      android:id="@+id/fragmentContainer"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
 
-        <include layout="@layout/activity_main_rooms" />
-
-        <RelativeLayout
-            android:layout_width="@dimen/dp220"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:clipChildren="false">
-
-            <com.iGap.libs.flowingdrawer.FlowingView
-                android:id="@+id/sv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <FrameLayout
-                android:id="@+id/id_container_menu"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="@dimen/dp8" />
-
-        </RelativeLayout>
-
-    </com.iGap.libs.flowingdrawer.LeftDrawerLayout>
+    <include layout="@layout/activity_main_rooms" />
 
     <android.support.v4.widget.ContentLoadingProgressBar
-        android:layout_width="64dp"
         android:id="@+id/loadingContent"
-        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_centerInParent="true"
         android:visibility="gone"
-        android:layout_height="64dp"
+        style="?android:attr/progressBarStyleLarge"
         />
-</RelativeLayout>
+  </RelativeLayout>
+
+  <android.support.design.widget.NavigationView
+      android:id="@+id/nav_view"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="start"
+      android:fitsSystemWindows="true"
+      >
+
+    <include layout="@layout/layout_menu" />
+
+  </android.support.design.widget.NavigationView>
+
+</android.support.v4.widget.DrawerLayout>

@@ -24,7 +24,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.activities.ActivityMain;
 import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnChannelCheckUsername;
 import com.iGap.interfaces.OnChannelUpdateUsername;
@@ -332,7 +331,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
                                         .replace(fragmentContainer, fragment, "contactGroup_fragment").commitAllowingStateLoss();
                                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
-                                ActivityMain.mLeftDrawerLayout.closeDrawer();
+                                //ActivityMain.mLeftDrawerLayout.closeDrawer();
                             }
                         });
                     }

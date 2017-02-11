@@ -45,7 +45,6 @@ import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.fragments.FragmentDeleteAccount;
-import com.iGap.fragments.FragmentDrawerMenu;
 import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.helper.HelperAvatar;
@@ -584,10 +583,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                             public void execute(Realm realm) {
                                                 realm.where(RealmUserInfo.class).findFirst().getUserInfo().setDisplayName(nickName);
                                                 txtNickNameTitle.setText(nickName);
-                                                FragmentDrawerMenu.txtUserName.setText(nickName);
+                                                //FragmentDrawerMenu.txtUserName.setText(nickName);
 
                                                 if (HelperCalander.isLanguagePersian) {
-                                                    FragmentDrawerMenu.txtUserName.setText(HelperCalander.convertToUnicodeFarsiNumber(nickName));
+                                                    //FragmentDrawerMenu.txtUserName.setText(HelperCalander.convertToUnicodeFarsiNumber(nickName));
                                                 }
                                             }
                                         });
