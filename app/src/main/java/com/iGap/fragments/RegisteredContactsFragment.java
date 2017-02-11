@@ -137,6 +137,17 @@ public class RegisteredContactsFragment extends Fragment {
         if (bundle != null) {
             title = bundle.getString("TITLE");
         }
+
+        if (title != null) {
+
+            if (title.equals("New Chat")) {
+                title = G.context.getString(R.string.New_Chat);
+            } else if (title.equals("Contacts")) {
+                title = G.context.getString(R.string.contacts);
+            }
+        }
+
+
         //create our FastAdapter
         fastAdapter = new FastAdapter();
         fastAdapter.withSelectable(true);
@@ -205,7 +216,7 @@ public class RegisteredContactsFragment extends Fragment {
 
                 FragmentAddContact fragment = FragmentAddContact.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "add_contact");
+                bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
                 fragment.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).add(R.id.fragmentContainer, fragment).commit();
 

@@ -42,6 +42,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static com.iGap.G.context;
 
@@ -604,24 +605,34 @@ public class HelperNotificationAndBadge {
             return;
         }
 
-        if (unreadMessageCount + countChannelMessage == 0) {
-            if (updateNotification) {
-                //  notificationManager.cancel(notificationId);
-            }
-            try {
-                //   ShortcutBadger.applyCount(context, 0);
-            } catch (RuntimeException e) {
-            }
-        } else {
-            if (updateNotification) {
-                setNotification();
+        try {
+            ShortcutBadger.applyCount(context, unreadMessageCount);
+        } catch (Exception e) {
 
-            }
-            try {
-                // ShortcutBadger.applyCount(context, unreadMessageCount);
-            } catch (RuntimeException e) {
-            }
         }
+
+        try {
+            if (unreadMessageCount + countChannelMessage == 0) {
+                if (updateNotification) {
+                    //  notificationManager.cancel(notificationId);
+                }
+            } else {
+                if (updateNotification) {
+                    setNotification();
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+
+
+
+
+
+
+
+
     }
 
     public void cancelNotification() {

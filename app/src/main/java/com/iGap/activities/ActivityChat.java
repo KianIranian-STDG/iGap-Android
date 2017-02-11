@@ -223,6 +223,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import me.leolin.shortcutbadger.ShortcutBadger;
 import org.parceler.Parcels;
 
 import static com.iGap.G.chatSendMessageUtil;
@@ -404,15 +405,11 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        /*if (chatType != null) {
-            if (chatType == CHAT) {
-                G.helperNotificationAndBadge.checkAlert(false, CHAT, mRoomId);
-            } else if (chatType == GROUP) {
-                G.helperNotificationAndBadge.checkAlert(false, GROUP, mRoomId);
-            } else if (chatType == CHANNEL) {
-                G.helperNotificationAndBadge.checkAlert(false, CHANNEL, mRoomId);
-            }
-        }*/
+        try {
+            ShortcutBadger.applyCount(context, 0);
+        } catch (Exception e) {
+        }
+
     }
 
     @Override
