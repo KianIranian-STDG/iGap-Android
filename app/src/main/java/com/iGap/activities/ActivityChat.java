@@ -3216,6 +3216,7 @@ public class ActivityChat extends ActivityEnhanced
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, finalMessageId);
 
                 roomMessage.setMessageType(finalMessageType);
