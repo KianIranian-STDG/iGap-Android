@@ -7,7 +7,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmUserInfo;
-
 import io.realm.Realm;
 
 public class ChatSetActionResponse extends MessageHandler {
@@ -34,7 +33,7 @@ public class ChatSetActionResponse extends MessageHandler {
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null && realmUserInfo.getUserId() != builder.getUserId()) {
+                //if (realmUserInfo != null && realmUserInfo.getUserId() != builder.getUserId()) {
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -56,7 +55,7 @@ public class ChatSetActionResponse extends MessageHandler {
                             }
                         }
                     });
-                }
+                //}
                 realm.close();
             }
         });

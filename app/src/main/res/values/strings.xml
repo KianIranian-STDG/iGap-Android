@@ -775,4 +775,5 @@
     <string name="file_not_download_yet">File Not Downloaded Yet</string>
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
+    <string name="my_cloud">my cloud</string>
 </resources>

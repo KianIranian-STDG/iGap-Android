@@ -369,16 +369,14 @@ public class ActivityChat extends ActivityEnhanced
     private RecyclerView.OnScrollListener scrollListener;
 
     private boolean hasForward = false;
-    ImageView imvCanselForward;
+    private ImageView imvCancelForward;
 
     private int countLoadItemToChat = 0;
-    private FrameLayout llScroolNavigate;
+    private FrameLayout llScrollNavigate;
     private TextView txtNewUnreadMessage;
     private int countNewMessage = 0;
     private int lastPosition = 0;
-    private boolean firsInitScroolPosition = false;
-
-
+    private boolean firsInitScrollPosition = false;
 
     @Override
     protected void onStart() {
@@ -404,8 +402,8 @@ public class ActivityChat extends ActivityEnhanced
         try {
             ShortcutBadger.applyCount(context, 0);
         } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
     @Override
@@ -540,7 +538,6 @@ public class ActivityChat extends ActivityEnhanced
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mRoomId = extras.getLong("RoomId");
-
 
             isGoingFromUserLink = extras.getBoolean("GoingFromUserLink");
             isNotJoin = extras.getBoolean("ISNotJoin");
@@ -762,7 +759,7 @@ public class ActivityChat extends ActivityEnhanced
 
             if (hasForward) {
 
-                imvCanselForward.performClick();
+                imvCancelForward.performClick();
 
                 ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
                 for (Parcelable messageInfo : messageInfos) {
@@ -770,8 +767,8 @@ public class ActivityChat extends ActivityEnhanced
                 }
             } else {
 
-                imvCanselForward = (ImageView) findViewById(R.id.cslhf_imv_cansel);
-                imvCanselForward.setOnClickListener(new View.OnClickListener() {
+                imvCancelForward = (ImageView) findViewById(R.id.cslhf_imv_cansel);
+                imvCancelForward.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -935,14 +932,18 @@ public class ActivityChat extends ActivityEnhanced
                         txtLastSeen.setText(realmRoom.getActionState());
                         avi.setVisibility(View.VISIBLE);
                     } else if (chatType == CHAT) {
-                        if (userStatus != null) {
-                            if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true));
-                            } else {
-                                txtLastSeen.setText(userStatus);
+                        if (RealmRoom.isCloudRoom(mRoomId)) {
+                            txtLastSeen.setText(getResources().getString(R.string.my_cloud));
+                        } else {
+                            if (userStatus != null) {
+                                if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true));
+                                } else {
+                                    txtLastSeen.setText(userStatus);
+                                }
                             }
-                            avi.setVisibility(View.GONE);
                         }
+                        avi.setVisibility(View.GONE);
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(member));
@@ -1701,14 +1702,14 @@ public class ActivityChat extends ActivityEnhanced
             }
         }, 100);
 
-        llScroolNavigate = (FrameLayout) findViewById(R.id.ac_ll_scrool_navigate);
+        llScrollNavigate = (FrameLayout) findViewById(R.id.ac_ll_scrool_navigate);
         txtNewUnreadMessage = (TextView) findViewById(R.id.cs_txt_unread_message);
 
-        llScroolNavigate.setOnClickListener(new View.OnClickListener() {
+        llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                llScroolNavigate.setVisibility(View.GONE);
+                llScrollNavigate.setVisibility(View.GONE);
 
                 if (countNewMessage > 0) {
 
@@ -1748,9 +1749,9 @@ public class ActivityChat extends ActivityEnhanced
 
                 int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
-                if (!firsInitScroolPosition) {
+                if (!firsInitScrollPosition) {
                     lastPosition = lastVisiblePosition;
-                    firsInitScroolPosition = true;
+                    firsInitScrollPosition = true;
                 }
 
                 int state = lastPosition - lastVisiblePosition;
@@ -1759,9 +1760,9 @@ public class ActivityChat extends ActivityEnhanced
                     // up
 
                     if (countNewMessage == 0) {
-                        llScroolNavigate.setVisibility(View.GONE);
+                        llScrollNavigate.setVisibility(View.GONE);
                     } else {
-                        llScroolNavigate.setVisibility(View.VISIBLE);
+                        llScrollNavigate.setVisibility(View.VISIBLE);
 
                         txtNewUnreadMessage.setText(countNewMessage + "");
                         txtNewUnreadMessage.setVisibility(View.VISIBLE);
@@ -1772,7 +1773,7 @@ public class ActivityChat extends ActivityEnhanced
                     //down
 
                     if (mAdapter.getItemCount() - lastVisiblePosition > 10) {
-                        llScroolNavigate.setVisibility(View.VISIBLE);
+                        llScrollNavigate.setVisibility(View.VISIBLE);
                         if (countNewMessage > 0) {
                             txtNewUnreadMessage.setText(countNewMessage + "");
                             txtNewUnreadMessage.setVisibility(View.VISIBLE);
@@ -1780,7 +1781,7 @@ public class ActivityChat extends ActivityEnhanced
                             txtNewUnreadMessage.setVisibility(View.GONE);
                         }
                     } else {
-                        llScroolNavigate.setVisibility(View.GONE);
+                        llScrollNavigate.setVisibility(View.GONE);
                         countNewMessage = 0;
                     }
 
@@ -2220,17 +2221,22 @@ public class ActivityChat extends ActivityEnhanced
     private void setUserStatus(String status, long time) {
         userStatus = status;
         userTime = time;
-        if (status != null) {
-            if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true));
-            } else {
-                txtLastSeen.setText(status);
-            }
+        if (RealmRoom.isCloudRoom(mRoomId)) {
+            txtLastSeen.setText(getResources().getString(R.string.my_cloud));
             avi.setVisibility(View.GONE);
-            // change english number to persian number
-            if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+        } else {
+            if (status != null) {
+                if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true));
+                } else {
+                    txtLastSeen.setText(status);
+                }
+                avi.setVisibility(View.GONE);
+                // change english number to persian number
+                if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
-            checkAction();
+                checkAction();
+            }
         }
     }
 
@@ -4082,19 +4088,13 @@ public class ActivityChat extends ActivityEnhanced
         LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
 
         if (llm.findLastVisibleItemPosition() + 5 > recyclerView.getAdapter().getItemCount()) {
-
             scrollToEnd();
         } else {
-
             countNewMessage++;
-            llScroolNavigate.setVisibility(View.VISIBLE);
+            llScrollNavigate.setVisibility(View.VISIBLE);
             txtNewUnreadMessage.setText(countNewMessage + "");
             txtNewUnreadMessage.setVisibility(View.VISIBLE);
         }
-
-
-
-
     }
 
     @Override
@@ -4981,9 +4981,11 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
 
-        if (mRoomId == roomId && this.userId != userId) {
-            final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
+        final boolean isCloudRoom = RealmRoom.isCloudRoom(mRoomId);
+        if (mRoomId == roomId && (this.userId != userId || (isCloudRoom))) {
             Realm realm = Realm.getDefaultInstance();
+            final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
+
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -5001,11 +5003,15 @@ public class ActivityChat extends ActivityEnhanced
                         avi.setVisibility(View.VISIBLE);
                         txtLastSeen.setText(action);
                     } else if (chatType == CHAT) {
-                        if (userStatus != null) {
-                            if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true));
-                            } else {
-                                txtLastSeen.setText(userStatus);
+                        if (isCloudRoom) {
+                            txtLastSeen.setText(getResources().getString(R.string.my_cloud));
+                        } else {
+                            if (userStatus != null) {
+                                if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true));
+                                } else {
+                                    txtLastSeen.setText(userStatus);
+                                }
                             }
                         }
                         avi.setVisibility(View.GONE);
@@ -5036,11 +5042,11 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onLastSeenUpdate(final long userId, final String showLastSeen) {
+    public void onLastSeenUpdate(final long userIdR, final String showLastSeen) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (chatType == CHAT && userId == chatPeerId) {
+                if (chatType == CHAT && userIdR == chatPeerId && userId != userIdR) { // userId != userIdR means that , this isn't update status for own user
                     txtLastSeen.setText(showLastSeen);
                     avi.setVisibility(View.GONE);
                     // change english number to persian number

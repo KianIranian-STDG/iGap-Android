@@ -213,6 +213,19 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
+    public static boolean isCloudRoom(long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo != null) {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == realmUserInfo.getUserId()) {
+                return true;
+            }
+        }
+        realm.close();
+        return false;
+    }
+
     public long getId() {
         return id;
     }
