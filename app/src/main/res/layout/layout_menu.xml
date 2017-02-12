@@ -25,7 +25,7 @@
 
       <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="@dimen/dp200"
+          android:layout_height="@dimen/dp180"
           android:orientation="horizontal"
           >
         <LinearLayout
@@ -78,22 +78,21 @@
             android:layout_below="@+id/lm_txt_user_name"
             android:layout_marginEnd="@dimen/dp16"
             android:layout_marginRight="@dimen/dp16"
-            android:background="@drawable/bg_message_image_time"
-            android:padding="4dp"
+            android:background="@drawable/cloud_background_navigation"
+            android:padding="12dp"
             android:singleLine="true"
             android:text="@string/md_cloud"
             android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp26"
+            android:textSize="@dimen/sp20"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp18"
             />
       </LinearLayout>
 
       <View
           android:layout_width="match_parent"
           android:layout_height="1px"
-
           android:layout_marginLeft="@dimen/dp8"
           android:layout_marginRight="@dimen/dp8"
           android:background="@color/gray"

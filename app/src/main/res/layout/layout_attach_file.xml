@@ -94,14 +94,6 @@
                     android:textColor="@color/gray_6c"
                     android:textSize="@dimen/sp28"/>
 
-                <com.nightonke.boommenu.BoomMenuButton
-                    android:id="@+id/am_boom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:boom_button_color="@android:color/transparent"
-                    app:boom_button_pressed_color="@android:color/transparent"
-                    app:boom_inActionBar="false"/>
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_mic_button"

@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -56,6 +57,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.cocosw.bottomsheet.BottomSheet;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.IntentRequests;
@@ -195,11 +197,6 @@ import com.iGap.request.RequestUserContactsBlock;
 import com.iGap.request.RequestUserContactsUnblock;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.IItemAdapter;
-import com.nightonke.boommenu.BoomMenuButton;
-import com.nightonke.boommenu.Types.BoomType;
-import com.nightonke.boommenu.Types.ButtonType;
-import com.nightonke.boommenu.Types.PlaceType;
-import com.nightonke.boommenu.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.github.meness.emoji.EmojiTextView;
@@ -257,7 +254,7 @@ public class ActivityChat extends ActivityEnhanced
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
     private AttachFile attachFile;
-    private BoomMenuButton boomMenuButton;
+    private BottomSheet.Builder bottomSheet;
     private LinearLayout mediaLayout;
     public static MusicPlayer musicPlayer;
     private boolean isNeedAddTime = true;
@@ -2013,9 +2010,9 @@ public class ActivityChat extends ActivityEnhanced
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        boomMenuButton.boom();
+                        bottomSheet.show();
                     }
-                }, 200);
+                }, 100);
             }
         });
 
@@ -2588,8 +2585,6 @@ public class ActivityChat extends ActivityEnhanced
 
         } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
-        } else if (boomMenuButton.isOpen()) {
-            boomMenuButton.dismiss();
         } else if (emojiPopup != null && emojiPopup.isShowing()) {
             emojiPopup.dismiss();
         } else {
@@ -2655,107 +2650,70 @@ public class ActivityChat extends ActivityEnhanced
      */
     private void initAttach() {
 
-        boomMenuButton = (BoomMenuButton) findViewById(R.id.am_boom);
-
-        Drawable[] subButtonDrawables = new Drawable[3];
-        int[] drawablesResource = new int[]{
-                R.mipmap.am_camera, R.mipmap.am_music, R.mipmap.am_paint, R.mipmap.am_picture, R.mipmap.am_document, R.mipmap.am_location, R.mipmap.am_video, R.mipmap.am_file, R.mipmap.am_contact
-        };
-        for (int i = 0; i < 3; i++)
-            subButtonDrawables[i] = ContextCompat.getDrawable(G.context, drawablesResource[i]);
-
-        int[][] subButtonColors = new int[3][2];
-        for (int i = 0; i < 3; i++) {
-            subButtonColors[i][1] = ContextCompat.getColor(G.context, R.color.start_background);
-            subButtonColors[i][0] = Util.getInstance().getPressedColor(subButtonColors[i][1]);
-        }
-
-        BoomMenuButton.Builder bb = new BoomMenuButton.Builder();
-
-        bb.addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_camera), subButtonColors[0], getResources().getString(R.string.am_camera))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_picture), subButtonColors[0], getResources().getString(R.string.am_picture))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_video), subButtonColors[0], getResources().getString(R.string.am_video))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_music), subButtonColors[0], getResources().getString(R.string.am_music))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_document), subButtonColors[0], getResources().getString(R.string.am_document))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_file), subButtonColors[0], getResources().getString(R.string.am_file))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_paint), subButtonColors[0], getResources().getString(R.string.am_paint))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_location), subButtonColors[0], getResources().getString(R.string.am_location))
-                .addSubButton(ContextCompat.getDrawable(G.context, R.mipmap.am_contact), subButtonColors[0], getResources().getString(R.string.am_contact))
-                .autoDismiss(true)
-                .cancelable(true)
-                .duration(500)
-                .delay(10)
-                .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-                .subButtonTextColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black))
-                .button(ButtonType.CIRCLE)
-                .boom(BoomType.PARABOLA)
-                .place(PlaceType.CIRCLE_9_1)
-                .subButtonTextColor(ContextCompat.getColor(G.context, R.color.colorAccent))
-                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-                .init(boomMenuButton);
-        boomMenuButton.setTextViewColor(getResources().getColor(R.color.am_iconFab_black));
-
-        boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
-            @Override
-            public void onClick(int buttonIndex) {
-                switch (buttonIndex) {
-                    case 0:
+        bottomSheet = new BottomSheet.Builder(this, R.style.BottomSheet_StyleDialog).grid().sheet(R.menu.bottom_sheet).listener(new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case R.id.camera:
                         if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
                             attachFile.showDialogOpenCamera(toolbar, null);
                         } else {
                             attachFile.showDialogOpenCamera(toolbar, null);
                         }
                         break;
-                    case 1:
+                    case R.id.picture:
                         try {
                             attachFile.requestOpenGalleryForImageMultipleSelect();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case 2:
+                    case R.id.video:
                         try {
                             attachFile.requestOpenGalleryForVideoMultipleSelect();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case 3:
+                    case R.id.music:
                         try {
                             attachFile.requestPickAudio();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case 4:
+                    case R.id.document:
                         try {
                             attachFile.requestOpenDocumentFolder();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case 5:
+                    case R.id.close:
+
+                        break;
+
+                    case R.id.file:
                         try {
                             attachFile.requestPickFile();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case 6:
+                    case R.id.paint:
                         try {
                             attachFile.requestPaint();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case 7:
+                    case R.id.location:
                         try {
                             attachFile.requestGetPosition(complete);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case 8:
+                    case R.id.contact:
                         try {
                             attachFile.requestPickContact();
                         } catch (IOException e) {
@@ -2766,7 +2724,6 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        boomMenuButton.setTextViewColor(ContextCompat.getColor(G.context, R.color.am_iconFab_black));
     }
 
     private boolean userTriesReplay() {
