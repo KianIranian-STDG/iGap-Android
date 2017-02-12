@@ -457,10 +457,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
         realm.close();
 
-        ViewGroup navBackGround = (ViewGroup) findViewById(R.id.lm_layout_user_picture);
+        final ViewGroup navBackGround = (ViewGroup) findViewById(R.id.lm_layout_user_picture);
         navBackGround.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
 
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
                 Realm realm = Realm.getDefaultInstance();
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
@@ -471,10 +476,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
+        TextView txtCloud = (TextView) findViewById(R.id.lm_txt_cloud);
+        txtCloud.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                navBackGround.performClick();
+            }
+        });
+
         ViewGroup itemNavChat = (ViewGroup) findViewById(R.id.lm_ll_new_chat);
         itemNavChat.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
+
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "Contacts");
@@ -495,7 +512,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ViewGroup itemNavGroup = (ViewGroup) findViewById(R.id.lm_ll_new_group);
         itemNavGroup.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
@@ -515,7 +536,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ViewGroup itemNavChanel = (ViewGroup) findViewById(R.id.lm_ll_new_channle);
         itemNavChanel.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewChanel");
@@ -534,7 +559,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ViewGroup itemNavContacts = (ViewGroup) findViewById(R.id.lm_ll_contacts);
         itemNavContacts.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
                 Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "New Chat");
@@ -555,7 +584,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
         itemNavSend.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you !");
@@ -566,7 +599,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ViewGroup itemNavSetting = (ViewGroup) findViewById(R.id.lm_ll_setting);
         itemNavSetting.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
                 try {
                     HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
                         @Override public void Allow() {
@@ -589,7 +626,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ViewGroup itemNavOut = (ViewGroup) findViewById(R.id.lm_ll_igap_faq);
         itemNavOut.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
                 new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
                     .content(R.string.content_log_out)
                     .positiveText(getResources().getString(R.string.B_ok))
@@ -649,19 +690,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        drawer.closeDrawer(GravityCompat.START);
-
-        //mLeftDrawerLayout = (LeftDrawerLayout) findViewById(R.id.id_drawerlayout);
-        //FlowingView mFlowingView = (FlowingView) findViewById(R.id.sv);
-        //FragmentManager fm = getSupportFragmentManager();
-        //FragmentDrawerMenu mMenuFragment = (FragmentDrawerMenu) fm.findFragmentById(R.id.id_container_menu);
-        //if (mMenuFragment == null) {
-        //    fm.beginTransaction().add(R.id.id_container_menu, mMenuFragment = new FragmentDrawerMenu()).commit();
-        //}
-
-        //mLeftDrawerLayout.setFluidView(mFlowingView);
-        //mLeftDrawerLayout.setMenuFragment(mMenuFragment);
-        //drawerWith = (int) getResources().getDimension(R.dimen.dp200);
+        G.handler.post(new Runnable() {
+            @Override public void run() {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
     }
 
     @Override

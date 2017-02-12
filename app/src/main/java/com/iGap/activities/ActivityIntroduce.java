@@ -591,7 +591,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         ObjectAnimator txt_scaleY3 = ObjectAnimator.ofFloat(txt3, "scaleY", 0, 1);
         final AnimatorSet scaleDown = new AnimatorSet();
         scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(txt_scaleX3).with(txt_scaleY3).with(txt_fade1).with(txt_fade2).with(txt_fade3);
-        scaleDown.setDuration(1000);
+        scaleDown.setDuration(500);
         scaleDown.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -645,7 +645,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         final AnimatorSet scaleDown = new AnimatorSet();
         scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(txt_scaleX3).with(txt_scaleY3).with(txt_fade1).with(txt_fade2).with(txt_fade3);
-        scaleDown.setDuration(1000);
+        scaleDown.setDuration(500);
         scaleDown.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -694,7 +694,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             final AnimatorSet scaleDown = new AnimatorSet();
             scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(txt_fade1).with(txt_fade2);
 
-            scaleDown.setDuration(1000);
+            scaleDown.setDuration(500);
             scaleDown.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -747,7 +747,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         ObjectAnimator btn_fade1 = ObjectAnimator.ofFloat(start, "alpha", 0, 1);
         final AnimatorSet scaleDown = new AnimatorSet();
         scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(btn_scaleX1).with(btn_scaleY1).with(btn_fade1).with(txt_fade1).with(txt_fade2);
-        scaleDown.setDuration(1000);
+        scaleDown.setDuration(500);
         scaleDown.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -816,7 +816,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         final AnimatorSet scaleDown = new AnimatorSet();
         scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(txt_fade1).with(txt_fade2);
 
-        scaleDown.setDuration(1000);
+        scaleDown.setDuration(500);
         scaleDown.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -862,7 +862,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         AnimatorSet scaleDown = new AnimatorSet();
         scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX).with(txt_scaleY).with(fade2).with(fade3).with(txt_scaleX2).with(txt_scaleY2).with(btn_scaleX2).with(btn_scaleY2).with(txt_fade1);
-        scaleDown.setDuration(1000);
+        scaleDown.setDuration(500);
         scaleDown.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
