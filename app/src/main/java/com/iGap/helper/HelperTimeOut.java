@@ -11,7 +11,7 @@ public class HelperTimeOut {
      * @param timeout if don't fill time use from Config.DEFAULT_TIME_OUT(10 second)
      */
 
-    public static boolean timeoutChecking(long firstTime, long secondTime, int timeout) {
+    public static boolean timeoutChecking(long firstTime, long secondTime, long timeout) {
         long difference;
         if (firstTime == 0) {
             firstTime = System.currentTimeMillis();

@@ -4,6 +4,7 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import com.iGap.helper.HelperConnectionState;
 import com.iGap.helper.HelperSetAction;
+import com.iGap.helper.HelperTimeOut;
 import com.iGap.response.HandleResponse;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -26,6 +27,7 @@ public class WebSocketClient {
     private static int count = 0;
     private static long latestConnectionTryTiming;
     private static WebSocketState connectionState;
+    private static long latestConnectionOpenTime = 0;
 
     /**
      * add webSocketConnection listeners and try for connect
@@ -44,6 +46,7 @@ public class WebSocketClient {
 
                 @Override
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                    latestConnectionOpenTime = System.currentTimeMillis();
                     Log.i("SOC_WebSocket", "onConnected");
                     waitingForReconnecting = false;
                     if (G.isSecure) {
@@ -214,7 +217,7 @@ public class WebSocketClient {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (timeDifference(latestConnectionTryTiming) && connectionState != WebSocketState.CONNECTING) {
+                    if (timeDifference(latestConnectionTryTiming) && connectionState != WebSocketState.CONNECTING && (connectionState != WebSocketState.OPEN || (HelperTimeOut.timeoutChecking(0, latestConnectionOpenTime, Config.CONNECTION_OPEN_TIME_OUT)))) {
                         HelperSetAction.clearAllActions();
                         Log.e("DDD", "reconnect 1");
                         if (allowForReconnecting) {

@@ -251,10 +251,10 @@ public class G extends MultiDexApplication {
     public static List<String> downloadingTokens = new ArrayList<>();
     public static long currentTime;
     public static long userId;
-    public static long latestHearBeatTime = 0;
+    public static long latestHearBeatTime = System.currentTimeMillis();
     public static boolean firstTimeEnterToApp = true;
     public static String selectedLanguage = "en";
-    public static long serverHeartBeatTiming = 0;
+    public static long serverHeartBeatTiming = 60 * 1000;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -794,9 +794,13 @@ public class G extends MultiDexApplication {
                         } else {
                             /**
                              * not change connectivity type
+                             * hint : if call twice or more this receiver , in second time will be called this section .
                              */
                             if (HelperTimeOut.heartBeatTimeOut()) {
+                                Log.i("HHH", "connectionManager heartBeatTimeOut");
                                 reconnect(true);
+                            } else {
+                                Log.i("HHH", "connectionManager Not Time Out HeartBeat");
                             }
                         }
                     }
