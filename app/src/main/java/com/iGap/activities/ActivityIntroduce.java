@@ -626,7 +626,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             public void run() {
                 scaleDown.start();
             }
-        }, 1000);
+        }, 500);
     }
 
     private void animationOutPage1(final ImageView logo, final ViewGroup txt1, final TextView txt2, final TextView txt3) {
@@ -726,7 +726,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 public void run() {
                     scaleDown.start();
                 }
-            }, 1000);
+            }, 500);
         }
     }
 
@@ -796,7 +796,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             public void run() {
                 scaleDown.start();
             }
-        }, 1000);
+        }, 500);
     }
 
     private void animationOut(final ImageView logo, final TextView txt1, final TextView txt2) {

@@ -466,6 +466,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
                 Realm realm = Realm.getDefaultInstance();
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
@@ -473,6 +476,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     chatGetRoom(username);
                 }
                 realm.close();
+                    }
+                }, 256);
             }
         });
 
@@ -489,8 +494,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.handler.post(new Runnable() {
                     @Override public void run() {
                         drawer.closeDrawer(GravityCompat.START);
+
                     }
                 });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
+
 
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
@@ -506,6 +517,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
+                    }
+                }, 256);
             }
         });
 
@@ -517,6 +530,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
@@ -530,6 +547,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
+                    }
+                }, 256);
             }
         });
 
@@ -541,6 +560,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
+
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewChanel");
@@ -553,6 +577,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
+                    }
+                }, 256);
             }
         });
 
@@ -564,6 +590,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
+
                 Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "New Chat");
@@ -578,6 +609,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
+                    }
+                }, 256);
             }
         });
 
@@ -589,11 +622,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
+
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you !");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
+                    }
+                }, 256);
             }
         });
         ViewGroup itemNavSetting = (ViewGroup) findViewById(R.id.lm_ll_setting);
@@ -604,6 +644,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
+
                 try {
                     HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
                         @Override public void Allow() {
@@ -620,6 +665,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                    }
+                }, 256);
             }
         });
 
@@ -631,6 +678,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
+
                 new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
                     .content(R.string.content_log_out)
                     .positiveText(getResources().getString(R.string.B_ok))
@@ -687,12 +739,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     })
 
                     .show();
-            }
-        });
-
-        G.handler.post(new Runnable() {
-            @Override public void run() {
-                drawer.closeDrawer(GravityCompat.START);
+                    }
+                }, 256);
             }
         });
     }

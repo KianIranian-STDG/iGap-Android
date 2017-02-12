@@ -14,4 +14,18 @@
     <item name="android:paddingRight">@dimen/messageContainerPaddingLeftRight</item>
     <!-- <item name="android:paddingTop">@dimen/messageContainerPadding</item>  -->
   </style>
+
+  <style name="BottomSheet.StyleDialog" parent="BottomSheet.Dialog">
+    <item name="android:backgroundDimAmount">0.5</item>
+    <item name="android:layoutDirection">rtl</item>
+    <item name="android:windowAnimationStyle">@style/BottomSheet.Animation</item>
+    <item name="android:textColorPrimary">#DDffffff</item>
+    <item name="android:textColorSecondary">@color/black_register</item>
+    <item name="android:textColorHint">@color/black_register</item>
+    <item name="android:tint">@color/green</item>
+    <item name="bs_dialogBackground">@color/white</item>
+    <item name="bs_dividerColor">@color/gray_3c</item>
+    <item name="bs_numColumns">5</item>
+    <!--<item name="bs_listStyle">@style/BottomSheet.StyleList</item>-->
+  </style>
 </resources>

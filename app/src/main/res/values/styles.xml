@@ -13,6 +13,7 @@
 
     <style name="BottomSheet.StyleDialog" parent="BottomSheet.Dialog">
         <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:layoutDirection">rtl</item>
         <item name="android:windowAnimationStyle">@style/BottomSheet.Animation</item>
         <item name="android:textColorPrimary">#DDffffff</item>
         <item name="android:textColorSecondary">@color/black_register</item>
