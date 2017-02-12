@@ -933,7 +933,7 @@ public class ActivityChat extends ActivityEnhanced
                         avi.setVisibility(View.VISIBLE);
                     } else if (chatType == CHAT) {
                         if (RealmRoom.isCloudRoom(mRoomId)) {
-                            txtLastSeen.setText(getResources().getString(R.string.my_cloud));
+                            txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
                         } else {
                             if (userStatus != null) {
                                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -2222,7 +2222,7 @@ public class ActivityChat extends ActivityEnhanced
         userStatus = status;
         userTime = time;
         if (RealmRoom.isCloudRoom(mRoomId)) {
-            txtLastSeen.setText(getResources().getString(R.string.my_cloud));
+            txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
             avi.setVisibility(View.GONE);
         } else {
             if (status != null) {
@@ -5004,7 +5004,7 @@ public class ActivityChat extends ActivityEnhanced
                         txtLastSeen.setText(action);
                     } else if (chatType == CHAT) {
                         if (isCloudRoom) {
-                            txtLastSeen.setText(getResources().getString(R.string.my_cloud));
+                            txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
                         } else {
                             if (userStatus != null) {
                                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
