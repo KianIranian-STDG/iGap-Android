@@ -1709,8 +1709,35 @@ public class ActivityChat extends ActivityEnhanced
             public void onClick(View v) {
 
                 llScroolNavigate.setVisibility(View.GONE);
-                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1 - countNewMessage);
+
+                if (countNewMessage > 0) {
+
+                    for (int i = 0; i < mAdapter.getItemCount(); i++) {
+
+                        if (mAdapter.getItem(i) instanceof UnreadMessage) mAdapter.remove(i);
+                    }
+
+                    RealmRoomMessage unreadMessage = new RealmRoomMessage();
+                    unreadMessage.setMessageId(TimeUtils.currentLocalTime());
+                    // -1 means time message
+                    unreadMessage.setUserId(-1);
+                    unreadMessage.setMessage(countNewMessage + " " + getString(R.string.unread_message));
+                    unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+                    int _posi = recyclerView.getAdapter().getItemCount() - countNewMessage;
+                    mAdapter.add(_posi, new UnreadMessage(ActivityChat.this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
+
+                    LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    llm.scrollToPositionWithOffset(_posi, 0);
+
                 countNewMessage = 0;
+                } else {
+                    recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1 - countNewMessage);
+                }
+
+
+
+
+
             }
         });
 
@@ -4050,10 +4077,23 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void setBtnDownVisible() {
-        countNewMessage++;
-        llScroolNavigate.setVisibility(View.VISIBLE);
-        txtNewUnreadMessage.setText(countNewMessage + "");
-        txtNewUnreadMessage.setVisibility(View.VISIBLE);
+
+        LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+        if (llm.findLastVisibleItemPosition() + 5 > recyclerView.getAdapter().getItemCount()) {
+
+            scrollToEnd();
+        } else {
+
+            countNewMessage++;
+            llScroolNavigate.setVisibility(View.VISIBLE);
+            txtNewUnreadMessage.setText(countNewMessage + "");
+            txtNewUnreadMessage.setVisibility(View.VISIBLE);
+        }
+
+
+
+
     }
 
     @Override
