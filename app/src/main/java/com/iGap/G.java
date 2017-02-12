@@ -565,11 +565,16 @@ public class G extends MultiDexApplication {
         new File(DIR_TEMP).mkdirs();
 
         String file = ".nomedia";
-        new File(DIR_APP + "/" + file);
-        new File(DIR_IMAGES + "/" + file);
-        new File(DIR_VIDEOS + "/" + file);
-        new File(DIR_AUDIOS + "/" + file);
-        new File(DIR_DOCUMENT + "/" + file);
+        new File(DIR_APP + "/" + file).mkdirs();
+        new File(DIR_IMAGES + "/" + file).mkdirs();
+        new File(DIR_VIDEOS + "/" + file).mkdirs();
+        new File(DIR_AUDIOS + "/" + file).mkdirs();
+        new File(DIR_DOCUMENT + "/" + file).mkdirs();
+        new File(DIR_CHAT_BACKGROUND + "/" + file).mkdirs();
+        new File(DIR_NEW_GROUP + "/" + file).mkdirs();
+        new File(DIR_NEW_CHANEL + "/" + file).mkdirs();
+        new File(DIR_IMAGE_USER + "/" + file).mkdirs();
+        new File(DIR_TEMP + "/" + file).mkdirs();
     }
 
     public void setFont() {
