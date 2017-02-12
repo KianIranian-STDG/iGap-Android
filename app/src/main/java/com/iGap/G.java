@@ -115,7 +115,6 @@ import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserContactDelete;
 import com.iGap.interfaces.OnUserContactEdit;
 import com.iGap.interfaces.OnUserContactGetList;
-import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.interfaces.OnUserContactsBlock;
 import com.iGap.interfaces.OnUserContactsUnBlock;
 import com.iGap.interfaces.OnUserDelete;
@@ -159,7 +158,6 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserContactsGetBlockedList;
-import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
@@ -218,7 +216,7 @@ public class G extends MultiDexApplication {
     public static final String CHAT_MESSAGE_TIME = "H:mm";
 
     // list of actionId that can be doing without login
-    public static Boolean isImportContactToServer = false;
+
     public static Typeface iranSans;
     public static Typeface flaticon;
     public static Context context;
@@ -284,7 +282,7 @@ public class G extends MultiDexApplication {
     public static OnUserProfileSetNickNameResponse onUserProfileSetNickNameResponse;
     public static OnInfoCountryResponse onInfoCountryResponse;
     public static OnInfoTime onInfoTime;
-    public static OnUserContactImport onContactImport;
+    //   public static OnUserContactImport onContactImport;
     public static OnUserContactEdit onUserContactEdit;
     public static OnUserContactGetList onUserContactGetList;
     public static OnUserContactDelete onUserContactdelete;
@@ -417,24 +415,17 @@ public class G extends MultiDexApplication {
 
     public static void importContact() {
 
-        G.onContactImport = new OnUserContactImport() {
-            @Override
-            public void onContactImport() {
-                getContactListFromServer();
-            }
-        };
+        //G.onContactImport = new OnUserContactImport() {
+        //    @Override
+        //    public void onContactImport() {
+        //
+        //    }
+        //};
 
         // this can be go in the activity for check permission in api 6+
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             Contacts.getListOfContact(true);
-            isImportContactToServer = true;
         }
-    }
-
-    private static void getContactListFromServer() {
-        //if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-        new RequestUserContactsGetList().userContactGetList();
-        //}
     }
 
     public static void getUserInfo() {

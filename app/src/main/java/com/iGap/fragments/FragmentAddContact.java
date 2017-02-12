@@ -22,12 +22,10 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAddContact;
 import com.iGap.helper.HelperPermision;
-import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructListOfContact;
 import com.iGap.request.RequestUserContactImport;
-import com.iGap.request.RequestUserContactsGetList;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -179,13 +177,12 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             }
         });
 
-        G.onContactImport = new OnUserContactImport() {
-            @Override
-            public void onContactImport() {
-                new RequestUserContactsGetList().userContactGetList();
-
-            }
-        };
+        //G.onContactImport = new OnUserContactImport() {
+        //    @Override
+        //    public void onContactImport() {
+        //
+        //    }
+        //};
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         rippleSet = (RippleView) view.findViewById(R.id.ac_ripple_set);
@@ -227,13 +224,12 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             }
         });
 
-        G.onContactImport = new OnUserContactImport() {
-            @Override
-            public void onContactImport() {
-                if (RegisteredContactsFragment.onImportComplete != null)
-                    RegisteredContactsFragment.onImportComplete.complete(true, "", "");
-            }
-        };
+        //G.onContactImport = new OnUserContactImport() {
+        //    @Override
+        //    public void onContactImport() {
+        //
+        //    }
+        //};
 
     }
 

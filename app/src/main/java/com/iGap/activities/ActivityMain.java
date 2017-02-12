@@ -79,7 +79,6 @@ import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnRefreshActivity;
 import com.iGap.interfaces.OnSetActionInRoom;
 import com.iGap.interfaces.OnUpdateAvatar;
-import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.interfaces.OnUserInfoMyClient;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserSessionLogout;
@@ -115,7 +114,6 @@ import com.iGap.request.RequestClientCondition;
 import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupLeft;
-import com.iGap.request.RequestUserContactsGetList;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserSessionLogout;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -386,14 +384,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      */
     private void importContactList() {
 
-        G.onContactImport = new OnUserContactImport() {
-            @Override
-            public void onContactImport() {
-
-                new RequestUserContactsGetList().userContactGetList();
-                G.isImportContactToServer = true;
-            }
-        };
+        //G.onContactImport = new OnUserContactImport() {
+        //    @Override
+        //    public void onContactImport() {
+        //
+        //    }
+        //};
 
         Contacts.getListOfContact(true);
     }

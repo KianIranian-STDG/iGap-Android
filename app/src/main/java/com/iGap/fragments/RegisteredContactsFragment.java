@@ -26,12 +26,10 @@ import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserContactGetList;
-import com.iGap.interfaces.OnUserContactImport;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.MaterialDesignTextView;
-import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
@@ -70,7 +68,7 @@ public class RegisteredContactsFragment extends Fragment {
     private ProgressBar prgWaiting;
     private ItemAdapter itemAdapter;
     private List<IItem> items;
-    public static OnComplete onImportComplete;
+
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -84,14 +82,13 @@ public class RegisteredContactsFragment extends Fragment {
 
     private void importContactList() {
 
-        G.onContactImport = new OnUserContactImport() {
-            @Override
-            public void onContactImport() {
-
-                new RequestUserContactsGetList().userContactGetList();
-                G.isImportContactToServer = true;
-            }
-        };
+        //G.onContactImport = new OnUserContactImport() {
+        //    @Override
+        //    public void onContactImport() {
+        //
+        //
+        //    }
+        //};
 
         Contacts.getListOfContact(true);
 
@@ -315,12 +312,6 @@ public class RegisteredContactsFragment extends Fragment {
             fastAdapter.withSavedInstanceState(savedInstanceState);
         }
 
-        onImportComplete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
-                new RequestUserContactsGetList().userContactGetList();
-            }
-        };
 
 
     }
