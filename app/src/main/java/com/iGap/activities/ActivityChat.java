@@ -872,8 +872,9 @@ public class ActivityChat extends ActivityEnhanced
             File f = new File(backGroundPath);
             if (f.exists()) {
                 Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                View chat = findViewById(ac_ll_parent);
-                chat.setBackgroundDrawable(d);
+                //View chat = findViewById(ac_ll_parent);
+                ////chat.setBackgroundDrawable(d);
+                getWindow().setBackgroundDrawable(d);
             }
         }
     }
