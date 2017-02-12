@@ -31,7 +31,7 @@
         >
 
       <com.iGap.module.MaterialDesignTextView
-          android:layout_width="@dimen/dp60"
+          android:layout_width="@dimen/dp52"
           android:layout_height="match_parent"
           android:gravity="center"
           android:text="@string/md_back_arrow"
@@ -65,7 +65,7 @@
         >
 
       <com.iGap.module.MaterialDesignTextView
-          android:layout_width="@dimen/dp48"
+          android:layout_width="@dimen/dp52"
           android:layout_height="match_parent"
           android:gravity="center"
           android:text="@string/md_add_plus_button"

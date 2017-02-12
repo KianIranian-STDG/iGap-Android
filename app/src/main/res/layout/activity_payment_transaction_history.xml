@@ -28,7 +28,7 @@
 
             <com.iGap.module.MaterialDesignTextView
                 android:textAppearance="@style/TextIconAppearance_toolbar"
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/md_back_arrow"

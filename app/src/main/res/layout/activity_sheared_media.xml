@@ -145,7 +145,7 @@
 
                 <com.iGap.module.MaterialDesignTextView
                     android:id="@+id/asm_btn_close_layout"
-                    android:layout_width="@dimen/dp48"
+                    android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
@@ -195,7 +195,7 @@
                 app:rv_ripplePadding="5dp">
 
                 <com.iGap.module.MaterialDesignTextView
-                    android:layout_width="@dimen/dp60"
+                    android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"

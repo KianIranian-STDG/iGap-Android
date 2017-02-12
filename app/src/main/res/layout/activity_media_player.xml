@@ -25,7 +25,7 @@
 
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/ml_btn_back"
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
@@ -76,7 +76,7 @@
 
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/ml_btn_music_menu"
-                android:layout_width="@dimen/dp60"
+                android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
