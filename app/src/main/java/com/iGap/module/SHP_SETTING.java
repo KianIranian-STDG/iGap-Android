@@ -6,6 +6,8 @@ public class SHP_SETTING {
     public static final String CHECK_11 = "CHECK_11";
     public static final String KEY_REALM_DELETE_ALL = "KEY_REALM_DELETE_ALL";
 
+    public static final String DELETE_FOLDER_BACKGROUND = "delete_folder_background";
+
     public static final String FILE_NAME = "setting";
     public static final String KEY_MESSAGE_TEXT_SIZE = "message_text_size";
     public static final String KEY_LANGUAGE = "language";

@@ -116,6 +116,17 @@ public class ActivityIntroduce extends ActivityEnhanced {
             editor.apply();
         }
 
+        boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
+
+        if (deleteFolderBackground) {
+
+            deleteContentFolderChatBackground();
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
+            editor.apply();
+        }
+
         G.makeFolder();
 
         try {
@@ -415,7 +426,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         realm.close();
     }
 
-    private void startRegistration() {
+    private void deleteContentFolderChatBackground() {
 
         // delete  content of folder chat background in the first registeration
         File root = new File(G.DIR_CHAT_BACKGROUND);
@@ -425,8 +436,9 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 Files[j].delete();
             }
         }
+    }
 
-
+    private void startRegistration() {
 
         registrationTry = true;
         Thread thread = new Thread(new Runnable() {
