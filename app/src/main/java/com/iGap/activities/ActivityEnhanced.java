@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperSetStatusBarColor;
 import com.iGap.module.AttachFile;
 import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.request.RequestUserUpdateStatus;
@@ -33,6 +34,9 @@ public class ActivityEnhanced extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        HelperSetStatusBarColor.setColor(this);
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         checkLanguage(this);
