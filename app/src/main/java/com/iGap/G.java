@@ -168,6 +168,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import io.fabric.sdk.android.Fabric;
+import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import java.io.File;
@@ -255,6 +256,7 @@ public class G extends MultiDexApplication {
     public static long latestHearBeatTime = 0;
     public static boolean firstTimeEnterToApp = true;
     public static String selectedLanguage = "en";
+    public static long serverHeartBeatTiming = 0;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -548,55 +550,15 @@ public class G extends MultiDexApplication {
     }
 
     private void realmConfiguration() {
-
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        boolean isRealmDelete = sharedPreferences.getBoolean(SHP_SETTING.KEY_REALM_DELETE_ALL, true);
-        if (!isRealmDelete) {
-            Log.i("EEE", "Migrate");
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).migration(new RealmMigration()).build());
-        } else {
-            Log.i("EEE", "No Migrate");
+        RealmConfiguration configuration = new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).migration(new RealmMigration()).build();
+        DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);
+        dynamicRealm.getVersion(); // Returns version of Realm file on disk
+        if (dynamicRealm.getVersion() == -1) {
             Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).deleteRealmIfMigrationNeeded().build());
+        } else {
+            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).migration(new RealmMigration()).build());
         }
-
-        //try {
-        //    Log.i("EEE", "Realm 1");
-        //    Realm realm = Realm.getDefaultInstance();
-        //    Log.i("EEE", "Realm 2");
-        //    realm.close();
-        //} catch (RealmMigrationNeededException e) {
-        //    Log.i("EEE", "RealmMigrationNeededException 1");
-        //    Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).deleteRealmIfMigrationNeeded().build());
-        //    try {
-        //        Log.i("EEE", "Second Realm 1");
-        //        Realm.getDefaultInstance();
-        //        Log.i("EEE", "Second Realm 2");
-        //    } catch (RealmMigrationNeededException e1) {
-        //        Log.i("EEE", "Second e1 : " + e1);
-        //    }
-        //}
-        //
-        //try {
-        //    Log.i("EEE", "Check Info 1");
-        //    Realm realm = Realm.getDefaultInstance();
-        //    Log.i("EEE", "Check Info 2");
-        //    realm.where(RealmUserInfo.class).findFirst();
-        //    Log.i("EEE", "Check Info 3");
-        //    realm.close();
-        //} catch (IllegalStateException e) {
-        //    Log.i("EEE", "Exception Check Info 1");
-        //    Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).deleteRealmIfMigrationNeeded().build());
-        //    Log.i("EEE", "Exception Check Info 2");
-        //    try {
-        //        Log.i("EEE", "Exception Check Info 3");
-        //        Realm realm = Realm.getDefaultInstance();
-        //        Log.i("EEE", "Exception Check Info 4");
-        //        realm.where(RealmUserInfo.class).findFirst();
-        //        Log.i("EEE", "Exception Check Info 5");
-        //    } catch (IllegalStateException e1) {
-        //        Log.i("EEE", "Exception Check Info 6 e1 : " + e1);
-        //    }
-        //}
+        dynamicRealm.close();
     }
 
     public static void makeFolder() {

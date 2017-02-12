@@ -103,10 +103,16 @@ public class ActivityIntroduce extends ActivityEnhanced {
         //    editor.apply();
         //}
 
-        boolean version10 = sharedPreferences.getBoolean(SHP_SETTING.CHECK_10, true);
-        if (version10) {
+        //boolean version10 = sharedPreferences.getBoolean(SHP_SETTING.CHECK_10, true);
+        //if (version10) {
+        //    SharedPreferences.Editor editor = sharedPreferences.edit();
+        //    editor.putBoolean(SHP_SETTING.CHECK_10, false);
+        //    editor.apply();
+        //}
+        boolean version11 = sharedPreferences.getBoolean(SHP_SETTING.CHECK_11, true);
+        if (version11) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(SHP_SETTING.CHECK_10, false);
+            editor.putBoolean(SHP_SETTING.CHECK_11, false);
             editor.apply();
         }
 

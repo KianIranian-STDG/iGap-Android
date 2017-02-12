@@ -3,6 +3,7 @@ package com.iGap.module;
 public class SHP_SETTING {
 
     public static final String CHECK_10 = "CHECK_10";
+    public static final String CHECK_11 = "CHECK_11";
     public static final String KEY_REALM_DELETE_ALL = "KEY_REALM_DELETE_ALL";
 
     public static final String FILE_NAME = "setting";

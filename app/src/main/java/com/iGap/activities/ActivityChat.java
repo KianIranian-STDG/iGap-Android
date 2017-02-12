@@ -361,7 +361,6 @@ public class ActivityChat extends ActivityEnhanced
     ViewGroup vgSpamUser;
     TextView txtSpamUser;
     TextView txtSpamClose;
-    RealmRegisteredInfo realmRegisteredInfo;
     Realm mRealm;
 
     private int countOfCurrentLoadInList = 0;
@@ -418,7 +417,7 @@ public class ActivityChat extends ActivityEnhanced
 
 
         final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
-        updateUnreadCountRealm.executeTransactionAsync(new Realm.Transaction() {
+        updateUnreadCountRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -426,11 +425,6 @@ public class ActivityChat extends ActivityEnhanced
                     room.setUnreadCount(0);
                     realm.copyToRealmOrUpdate(room);
                 }
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                updateUnreadCountRealm.close();
             }
         });
 
@@ -472,41 +466,43 @@ public class ActivityChat extends ActivityEnhanced
 
         setAvatar();
         initLayoutHashNavigation();
+        showSpamBar(updateUnreadCountRealm);
+        updateUnreadCountRealm.close();
+    }
 
-        realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-        RealmContacts realmContacts = mRealm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-
-        if (phoneNumber == null) {
-            if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
-                vgSpamUser.setVisibility(View.VISIBLE);
-            }
-        }
-
-        if (realmRegisteredInfo != null) {
-            if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
-
-                if (realmRegisteredInfo.isBlockUser()) {
-                    blockUser = true;
-                    txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+    private void showSpamBar(Realm realm) {
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+        RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        if (realmRegisteredInfo != null && realmUserInfo != null && realmRegisteredInfo.getId() != realmUserInfo.getUserId()) {
+            if (phoneNumber == null && realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
                     vgSpamUser.setVisibility(View.VISIBLE);
                 }
             }
-        }
 
-        if (realmContacts != null) {
-            if (realmContacts.isBlockUser()) {
+            if (realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
 
-                if (realmRegisteredInfo != null) {
-                    if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
-
+                    if (realmRegisteredInfo.isBlockUser()) {
                         blockUser = true;
                         txtSpamUser.setText(getResources().getString(R.string.un_block_user));
                         vgSpamUser.setVisibility(View.VISIBLE);
                     }
-                } else {
-                    blockUser = true;
-                    txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-                    vgSpamUser.setVisibility(View.VISIBLE);
+                }
+            }
+
+            if (realmContacts != null && realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                if (realmContacts.isBlockUser()) {
+                    if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
+                        blockUser = true;
+                        txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                        vgSpamUser.setVisibility(View.VISIBLE);
+                    } else {
+                        blockUser = true;
+                        txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                        vgSpamUser.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }
@@ -682,6 +678,7 @@ public class ActivityChat extends ActivityEnhanced
 
             //*****block or unBlock User Start
 
+            final RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
             vgSpamUser = (ViewGroup) findViewById(R.id.layout_add_contact);
             txtSpamUser = (TextView) findViewById(R.id.chat_txt_addContact);
             txtSpamClose = (TextView) findViewById(R.id.chat_txt_close);
@@ -689,12 +686,12 @@ public class ActivityChat extends ActivityEnhanced
                 @Override
                 public void onClick(View view) {
                     vgSpamUser.setVisibility(View.GONE);
-                    if (realmRegisteredInfo != null) {
+                    if (registeredInfo != null) {
 
                         mRealm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                realmRegisteredInfo.setDoNotshowSpamBar(true);
+                                registeredInfo.setDoNotshowSpamBar(true);
                             }
                         });
 
@@ -2374,8 +2371,9 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void insertShearedData() {
-
+        Log.i("ZZZ", "insertShearedData 1");
         if (HelperGetDataFromOtherApp.hasSharedData) {
+            Log.i("ZZZ", "insertShearedData 2");
             HelperGetDataFromOtherApp.hasSharedData = false;
 
             if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.message) {
@@ -2395,9 +2393,10 @@ public class ActivityChat extends ActivityEnhanced
                     sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
                 }
             } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.file) {
-
+                Log.i("ZZZ", "insertShearedData 3");
+                Log.i("ZZZ", "HelperGetDataFromOtherApp.messageFileAddress.size() 3 : " + HelperGetDataFromOtherApp.messageFileAddress.size());
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-
+                    Log.i("ZZZ", "HelperGetDataFromOtherApp.fileTypeArray.size() : " + HelperGetDataFromOtherApp.fileTypeArray.size());
                     if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
                         HelperGetDataFromOtherApp.FileType fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
                         if (fileType == HelperGetDataFromOtherApp.FileType.image) {
@@ -2407,6 +2406,7 @@ public class ActivityChat extends ActivityEnhanced
                         } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
                             sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
                         } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
+                            Log.i("ZZZ", "insertShearedData 4");
                             sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
                         }
                     }
@@ -3060,13 +3060,13 @@ public class ActivityChat extends ActivityEnhanced
         }
 
 
-       /* if (HelperString.isStorage(filePath)) {
-            Log.i("ZZZ", "storage ");
-            Log.i("ZZZ", "storage : " + Uri.parse("file:///storage" + filePath));
-            filePath = PathUtils.getPath(getApplicationContext(), Uri.parse("content://com.android.providers.downloads.documents" + filePath));
-        } else {
-            Log.i("ZZZ", "is not storage ");
-        }*/
+        //if (HelperString.isStorage(filePath)) {
+        //    Log.i("ZZZ", "storage ");
+        //    Log.i("ZZZ", "storage : " + Uri.parse("file:///storage" + filePath));
+        //    filePath = PathUtils.getPath(getApplicationContext(), Uri.parse("content://com.android.providers.downloads.documents" + filePath));
+        //} else {
+        //    Log.i("ZZZ", "is not storage ");
+        //}
 
         StructMessageInfo messageInfo = null;
 

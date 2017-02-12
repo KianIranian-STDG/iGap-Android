@@ -282,6 +282,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        firstTimeEnterToApp = false;
                         getChatsList(false);
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                     }

@@ -36,7 +36,7 @@ public class HelperTimeOut {
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - G.latestHearBeatTime);
 
-        if (difference >= Config.HEART_BEAT_CHECKING_TIME_OUT) {
+        if (difference >= (G.serverHeartBeatTiming + Config.HEART_BEAT_CHECKING_TIME_OUT)) { // server hearBeat timing and plus with Config.HEART_BEAT_CHECKING_TIME_OUT
             return true;
         }
 

@@ -7,7 +7,6 @@ import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoConnectionSecuring;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestWrapper;
-
 import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -37,6 +36,7 @@ public class ConnectionSecuringResponse extends MessageHandler {
         G.currentTime = builder.getResponse().getTimestamp();
         String publicKey = builder.getPublicKey();
         int symmetricKeyLength = builder.getSymmetricKeyLength();
+        G.serverHeartBeatTiming = (builder.getHeartbeatInterval() * 1000);
 
         String key = HelperString.generateKey(symmetricKeyLength);
         if (G.symmetricKey != null) {

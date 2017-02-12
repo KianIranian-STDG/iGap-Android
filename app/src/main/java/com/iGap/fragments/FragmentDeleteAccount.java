@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.BuildConfig;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperPermision;
@@ -281,7 +282,15 @@ public class FragmentDeleteAccount extends Fragment {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                countDownTimer = new CountDownTimer(1000 * 60, 1000) {
+
+                long time;
+                if (BuildConfig.DEBUG) {
+                    time = 3 * 1000;
+                } else {
+                    time = 1000 * 60;
+                }
+
+                countDownTimer = new CountDownTimer(time, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         int seconds = (int) ((millisUntilFinished) / 1000);
