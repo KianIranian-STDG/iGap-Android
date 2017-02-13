@@ -613,7 +613,7 @@ public class ActivityRegister extends ActivityEnhanced {
                         @Override
                         public void run() {
                             edtPhoneNumber.setEnabled(true);
-                            rg_prg_verify_connect.setVisibility(View.INVISIBLE);
+                            rg_prg_verify_connect.setVisibility(View.GONE);
                             rg_img_verify_connect.setImageResource(R.mipmap.alert);
                             rg_img_verify_connect.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
                             rg_img_verify_connect.setVisibility(View.VISIBLE);
@@ -668,7 +668,7 @@ public class ActivityRegister extends ActivityEnhanced {
     // error verify sms and open rg_dialog for enter sms code
     private void errorVerifySms(Reason reason) { //when don't receive sms and open rg_dialog for enter code
 
-        rg_prg_verify_sms.setVisibility(View.INVISIBLE);
+        rg_prg_verify_sms.setVisibility(View.GONE);
         rg_img_verify_sms.setImageResource(R.mipmap.alert);
         rg_img_verify_sms.setVisibility(View.VISIBLE);
         rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
@@ -753,7 +753,7 @@ public class ActivityRegister extends ActivityEnhanced {
                             countDownTimer.cancel();
                         }
 
-                        rg_prg_verify_connect.setVisibility(View.INVISIBLE);
+                        rg_prg_verify_connect.setVisibility(View.GONE);
                         rg_img_verify_connect.setVisibility(View.VISIBLE);
                         if (rg_img_verify_sms != null) rg_img_verify_sms.setVisibility(View.GONE);
                         rg_txt_verify_connect.setTextAppearance(G.context, R.style.RedHUGEText);
@@ -911,7 +911,7 @@ public class ActivityRegister extends ActivityEnhanced {
                     @Override
                     public void run() {
                         rg_txt_verify_sms.setText(getString(R.string.your_login_code_is) + verificationCode);
-                        rg_prg_verify_sms.setVisibility(View.INVISIBLE);
+                        rg_prg_verify_sms.setVisibility(View.GONE);
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
                         rg_img_verify_sms.setImageResource(R.mipmap.check);
                         rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
@@ -919,7 +919,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
                         newUser = newUserR;
                         token = tokenR;
-                        rg_prg_verify_generate.setVisibility(View.INVISIBLE);
+                        rg_prg_verify_generate.setVisibility(View.GONE);
                         rg_img_verify_generate.setVisibility(View.VISIBLE);
                         rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
@@ -1041,7 +1041,7 @@ public class ActivityRegister extends ActivityEnhanced {
                             }
                         });
 
-                        rg_prg_verify_register.setVisibility(View.INVISIBLE);
+                        rg_prg_verify_register.setVisibility(View.GONE);
                         rg_img_verify_register.setVisibility(View.VISIBLE);
                         rg_txt_verify_register.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
@@ -1167,7 +1167,7 @@ public class ActivityRegister extends ActivityEnhanced {
         String verificationCode = HelperString.regexExtractValue(message, regexFetchCodeVerification);
         countDownTimer.cancel(); //cancel method CountDown and continue process verify
 
-        rg_prg_verify_sms.setVisibility(View.INVISIBLE);
+        rg_prg_verify_sms.setVisibility(View.GONE);
         rg_img_verify_sms.setVisibility(View.VISIBLE);
         rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
         userVerify(userName, verificationCode);
@@ -1197,7 +1197,7 @@ public class ActivityRegister extends ActivityEnhanced {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                rg_prg_verify_sms.setVisibility(View.INVISIBLE);
+                rg_prg_verify_sms.setVisibility(View.GONE);
                 rg_img_verify_sms.setVisibility(View.VISIBLE);
                 rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
 

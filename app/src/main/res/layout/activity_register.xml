@@ -189,7 +189,7 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp4"
@@ -218,16 +218,14 @@
                     android:id="@+id/rg_txt_verify_connect"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_toEndOf="@+id/rg_prg_verify_connect"
-                    android:layout_toRightOf="@+id/rg_prg_verify_connect"
                     android:gravity="center_vertical"
                     android:text="@string/rg_verify_register1"
                     android:textColor="@color/rg_text_dark_verify"
                     android:textSize="@dimen/sp13"/>
 
-            </RelativeLayout>
+            </LinearLayout>
             <!--2-->
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp4"
@@ -256,8 +254,6 @@
                     android:id="@+id/rg_txt_verify_sms"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_toEndOf="@+id/rg_prg_verify_sms"
-                    android:layout_toRightOf="@+id/rg_prg_verify_sms"
                     android:gravity="center_vertical"
                     android:singleLine="true"
                     android:text="@string/rg_verify_register2"
@@ -270,8 +266,6 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp4"
                     android:layout_marginStart="@dimen/dp4"
-                    android:layout_toEndOf="@+id/rg_txt_verify_sms"
-                    android:layout_toRightOf="@+id/rg_txt_verify_sms"
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="05:00"
@@ -279,10 +273,10 @@
                     android:textSize="@dimen/sp14"
                     android:visibility="invisible"/>
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <!--3-->
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp4"
@@ -311,17 +305,15 @@
                     android:id="@+id/rg_txt_verify_key"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_toEndOf="@+id/rg_prg_verify_key"
-                    android:layout_toRightOf="@+id/rg_prg_verify_key"
                     android:gravity="center_vertical"
                     android:text="@string/rg_verify_register3"
                     android:textColor="@color/rg_text_verify"
                     android:textSize="@dimen/sp13"/>
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <!--4-->
-            <RelativeLayout
+            <LinearLayout
 
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp20"
@@ -351,15 +343,12 @@
                     android:id="@+id/rg_txt_verify_server"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_toEndOf="@+id/rg_prg_verify_server"
-                    android:layout_toRightOf="@+id/rg_prg_verify_server"
-                    android:layout_weight=".80"
                     android:gravity="center_vertical"
                     android:text="@string/rg_verify_register4"
                     android:textColor="@color/rg_text_verify"
                     android:textSize="@dimen/sp13"/>
 
-            </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <com.uncopt.android.widget.text.justify.JustifiedTextView
