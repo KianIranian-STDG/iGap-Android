@@ -101,6 +101,23 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:theme="@style/AppThemeTranslucent">
 
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="igap.net"
+                    android:scheme="http" />
+                <data
+                    android:host="igap.net"
+                    android:scheme="https" />
+                <data
+                    android:host="resolve"
+                    android:scheme="igap" />
+            </intent-filter>
+
             <!-- this part add app logo to list of share -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>

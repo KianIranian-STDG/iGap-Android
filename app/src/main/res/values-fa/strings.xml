@@ -775,4 +775,5 @@
   <string name="file_not_download_yet">فایل دانلود نشده است</string>
   <string name="navigation_drawer_close">بستن</string>
   <string name="chat_with_yourself">فضای ابری من</string>
+  <string name="can_not_connent_to_server">اتصال با سرور برقرار نشد.</string>
 </resources>

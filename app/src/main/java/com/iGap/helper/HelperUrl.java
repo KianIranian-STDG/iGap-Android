@@ -49,8 +49,6 @@ import java.util.regex.Pattern;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
 
-import static com.iGap.G.context;
-
 /**
  * Created by android3 on 11/26/2016.
  */
@@ -425,14 +423,14 @@ public class HelperUrl {
 
         G.onClientCheckInviteLink = new OnClientCheckInviteLink() {
             @Override public void onClientCheckInviteLinkResponse(ProtoGlobal.Room room) {
-                dialogWaiting.dismiss();
+                closeDialogWaiting();
                 openDialogJoin(room, token);
             }
 
             @Override public void onError(int majorCode, int minorCode) {
                 Log.e("ddd", majorCode + "   " + minorCode);
 
-                dialogWaiting.dismiss();
+                closeDialogWaiting();
             }
         };
 
@@ -529,7 +527,7 @@ public class HelperUrl {
         G.onClientJoinByInviteLink = new OnClientJoinByInviteLink() {
             @Override public void onClientJoinByInviteLinkResponse() {
 
-                dialogWaiting.dismiss();
+                closeDialogWaiting();
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
@@ -549,7 +547,7 @@ public class HelperUrl {
             }
 
             @Override public void onError(int majorCode, int minorCode) {
-                dialogWaiting.dismiss();
+                closeDialogWaiting();
             }
         };
 
@@ -562,21 +560,28 @@ public class HelperUrl {
 
         if (userName == null || userName.length() < 1) return;
 
-        showIndeterminateProgressDialog();
+
 
         // this methode check user name and if it is ok go to room
         G.onClientResolveUsername = new OnClientResolveUsername() {
             @Override public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
-                dialogWaiting.dismiss();
+                closeDialogWaiting();
                 openChat(userName, type, user, room);
             }
 
             @Override public void onError(int majorCode, int minorCode) {
-                dialogWaiting.dismiss();
+                Log.e("qqqqqqqqq", "majorCode" + majorCode + "   " + minorCode);
+                closeDialogWaiting();
             }
         };
 
+        showIndeterminateProgressDialog();
+
         new RequestClientResolveUsername().channelAddMessageReaction(userName);
+    }
+
+    private static void closeDialogWaiting() {
+        if (dialogWaiting != null) if (dialogWaiting.isShowing()) dialogWaiting.dismiss();
     }
 
     private static void openChat(String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
@@ -599,11 +604,10 @@ public class HelperUrl {
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
 
         if (realmRoom != null) {
-            Intent intent = new Intent(context, ActivityChat.class);
+            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.currentActivity.startActivity(intent);
-
             realm.close();
         } else {
 
@@ -611,20 +615,20 @@ public class HelperUrl {
 
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override public void onChatGetRoom(long roomId) {
-                    dialogWaiting.dismiss();
+                    closeDialogWaiting();
                 }
 
                 @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
                     addchatToDatabaseAndGoToChat(user, room.getId());
-                    dialogWaiting.dismiss();
+                    closeDialogWaiting();
                 }
 
                 @Override public void onChatGetRoomTimeOut() {
-                    dialogWaiting.dismiss();
+                    closeDialogWaiting();
                 }
 
                 @Override public void onChatGetRoomError(int majorCode, int minorCode) {
-                    dialogWaiting.dismiss();
+                    closeDialogWaiting();
                 }
             };
 
@@ -634,23 +638,36 @@ public class HelperUrl {
 
     public static void showIndeterminateProgressDialog() {
 
-        G.currentActivity.runOnUiThread(new Runnable() {
-            @Override public void run() {
-                dialogWaiting = new MaterialDialog.Builder(G.currentActivity).title(R.string.please_wait)
-                    .content(R.string.please_wait)
-                    .progress(true, 0)
-                    .cancelable(false)
-                    .progressIndeterminateStyle(false)
-                    .show();
+        try {
+            if (G.currentActivity != null) {
+                G.currentActivity.runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        if (dialogWaiting != null && dialogWaiting.isShowing()) {
+
+                        } else {
+                            dialogWaiting = new MaterialDialog.Builder(G.currentActivity).title(R.string.please_wait)
+                                .content(R.string.please_wait)
+                                .progress(true, 0)
+                                .cancelable(false)
+                                .progressIndeterminateStyle(false)
+                                .show();
+                        }
+                    }
+                });
             }
-        });
+        } catch (Exception e) {
+            Log.e("dddd", "helper url     showIndeterminateProgressDialog    " + e.toString());
+        }
+
+
+
+
     }
 
     private static void addchatToDatabaseAndGoToChat(final ProtoGlobal.RegisteredUser user, final long roomid) {
 
         new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
             @Override public void run() {
-
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
@@ -677,11 +694,11 @@ public class HelperUrl {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override public void onSuccess() {
 
-                        Intent intent = new Intent(context, ActivityChat.class);
+                        Intent intent = new Intent(G.currentActivity, ActivityChat.class);
                         intent.putExtra("peerId", user.getId());
                         intent.putExtra("RoomId", roomid);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
+                        G.currentActivity.startActivity(intent);
 
                         realm.close();
                     }
@@ -751,4 +768,77 @@ public class HelperUrl {
             }
         });
     }
+
+    //************************************  go to room by urlLink   *********************************************************************
+
+    public static void getLinkinfo(final Intent intent, final Activity activity) {
+
+        String action = intent.getAction();
+
+        if (action == null) return;
+
+        if (action.equals(Intent.ACTION_VIEW)) {
+            G.currentActivity = activity;
+            showIndeterminateProgressDialog();
+            checkConnection(intent.getData(), 0);
+        }
+    }
+
+    private static void checkConnection(final Uri path, int countTime) {
+
+        countTime++;
+
+        if (G.userLogin) {
+            getToRoom(path);
+        } else {
+            if (countTime < 15) {
+                final int finalCountTime = countTime;
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
+                        checkConnection(path, finalCountTime);
+                    }
+                }, 1000);
+            } else {
+                closeDialogWaiting();
+                HelperError.showSnackMessage(G.context.getString(R.string.can_not_connent_to_server));
+            }
+        }
+    }
+
+    private static void getToRoom(Uri path) {
+
+        if (path != null) {
+            if (path.toString().toLowerCase().contains(igapSite2)) {
+
+                String url = path.toString();
+                int index = url.lastIndexOf("/");
+                if (index >= 0 && index < url.length() - 1) {
+                    String token = url.substring(index + 1);
+
+                    if (url.toLowerCase().contains("join")) {
+                        checkAndJoinToRoom(token);
+                    } else {
+                        checkUsernameAndGoToRoom(token);
+                    }
+
+                    Log.e("ddd", "token = " + token);
+                }
+            } else {
+
+                String domain = path.getQueryParameter("domain");
+
+                if (domain.length() > 0) {
+                    checkUsernameAndGoToRoom(domain);
+                }
+
+                Log.e("ddd", "domain  =  " + domain);
+            }
+        } else {
+            closeDialogWaiting();
+        }
+    }
+
+
+
 }

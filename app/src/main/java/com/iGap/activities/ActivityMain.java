@@ -56,6 +56,7 @@ import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperUrl;
 import com.iGap.helper.ServiceContact;
 import com.iGap.interfaces.OnActivityMainStart;
 import com.iGap.interfaces.OnAvatarGet;
@@ -1534,6 +1535,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             }
         };
+
+        HelperUrl.getLinkinfo(getIntent(), ActivityMain.this);
+        getIntent().setData(null);
+
+
     }
 
     @Override

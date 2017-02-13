@@ -776,4 +776,5 @@
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
     <string name="chat_with_yourself">My Cloud</string>
+    <string name="can_not_connent_to_server">Can Not Connect To Server.</string>
 </resources>
