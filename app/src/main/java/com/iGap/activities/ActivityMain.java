@@ -136,8 +136,7 @@ import static com.iGap.G.firstTimeEnterToApp;
 import static com.iGap.G.mFirstRun;
 import static com.iGap.R.string.updating;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse,
-    OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition {
 
     public static boolean isMenuButtonAddShown = false;
     FloatingActionButton btnStartNewChat;
@@ -459,23 +458,26 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         final ViewGroup navBackGround = (ViewGroup) findViewById(R.id.lm_layout_user_picture);
         navBackGround.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    long username = realmUserInfo.getUserId();
-                    chatGetRoom(username);
-                }
-                realm.close();
+                    @Override
+                    public void run() {
+                        Realm realm = Realm.getDefaultInstance();
+                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                        if (realmUserInfo != null) {
+                            long username = realmUserInfo.getUserId();
+                            chatGetRoom(username);
+                        }
+                        realm.close();
                     }
                 }, 256);
             }
@@ -483,40 +485,40 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         TextView txtCloud = (TextView) findViewById(R.id.lm_txt_cloud);
         txtCloud.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 navBackGround.performClick();
             }
         });
 
         ViewGroup itemNavChat = (ViewGroup) findViewById(R.id.lm_ll_new_chat);
         itemNavChat.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         drawer.closeDrawer(GravityCompat.START);
 
                     }
                 });
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
 
 
-                final Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "Contacts");
-                fragment.setArguments(bundle);
+                        final Fragment fragment = RegisteredContactsFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("TITLE", "Contacts");
+                        fragment.setArguments(bundle);
 
-                try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
                     }
                 }, 256);
             }
@@ -524,29 +526,29 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         ViewGroup itemNavGroup = (ViewGroup) findViewById(R.id.lm_ll_new_group);
         itemNavGroup.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE", "NewGroup");
-                fragment.setArguments(bundle);
+                        FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("TYPE", "NewGroup");
+                        fragment.setArguments(bundle);
 
-                try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
                     }
                 }, 256);
             }
@@ -554,29 +556,29 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         ViewGroup itemNavChanel = (ViewGroup) findViewById(R.id.lm_ll_new_channle);
         itemNavChanel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
 
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE", "NewChanel");
-                fragment.setArguments(bundle);
-                try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
+                        FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("TYPE", "NewChanel");
+                        fragment.setArguments(bundle);
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
                     }
                 }, 256);
             }
@@ -584,31 +586,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         ViewGroup itemNavContacts = (ViewGroup) findViewById(R.id.lm_ll_contacts);
         itemNavContacts.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
 
-                Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "New Chat");
-                fragment.setArguments(bundle);
+                        Fragment fragment = RegisteredContactsFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("TITLE", "New Chat");
+                        fragment.setArguments(bundle);
 
-                try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
                     }
                 }, 256);
             }
@@ -616,55 +617,63 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
         itemNavSend.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
 
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you !");
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you !");
+                        sendIntent.setType("text/plain");
+                        startActivity(sendIntent);
                     }
                 }, 256);
             }
         });
         ViewGroup itemNavSetting = (ViewGroup) findViewById(R.id.lm_ll_setting);
         itemNavSetting.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
 
-                try {
-                    HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
-                        @Override public void Allow() {
-                            Intent intent = new Intent(G.context, ActivitySetting.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            //ActivityMain.mLeftDrawerLayout.closeDrawer();
+                        try {
+                            HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
+                                @Override
+                                public void Allow() {
+                                    Intent intent = new Intent(G.context, ActivitySetting.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    //ActivityMain.mLeftDrawerLayout.closeDrawer();
+                                }
+
+                                @Override
+                                public void deny() {
+
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-
-                        @Override public void deny() {
-
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                     }
                 }, 256);
             }
@@ -672,73 +681,85 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         ViewGroup itemNavOut = (ViewGroup) findViewById(R.id.lm_ll_igap_faq);
         itemNavOut.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
 
-                new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                    .content(R.string.content_log_out)
-                    .positiveText(getResources().getString(R.string.B_ok))
-                    .negativeText(getResources().getString(R.string.B_cancel))
-                    .iconRes(R.mipmap.exit_to_app_button)
-                    .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            //                                showProgressBar();
-                            G.onUserSessionLogout = new OnUserSessionLogout() {
-                                @Override public void onUserSessionLogout() {
+                        new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
+                                .content(R.string.content_log_out)
+                                .positiveText(getResources().getString(R.string.B_ok))
+                                .negativeText(getResources().getString(R.string.B_cancel))
+                                .iconRes(R.mipmap.exit_to_app_button)
+                                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        //                                showProgressBar();
+                                        G.onUserSessionLogout = new OnUserSessionLogout() {
+                                            @Override
+                                            public void onUserSessionLogout() {
 
-                                    runOnUiThread(new Runnable() {
-                                        @Override public void run() {
-                                            HelperLogout.logout();
-                                            //                                                hideProgressBar();
-                                        }
-                                    });
-                                }
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        HelperLogout.logout();
+                                                        //                                                hideProgressBar();
+                                                    }
+                                                });
+                                            }
 
-                                @Override public void onError() {
-                                    runOnUiThread(new Runnable() {
-                                        @Override public void run() {
-                                            //                                                hideProgressBar();
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
+                                            @Override
+                                            public void onError() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        //                                                hideProgressBar();
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
 
-                                @Override public void onTimeOut() {
-                                    runOnUiThread(new Runnable() {
-                                        @Override public void run() {
-                                            //                                                hideProgressBar();
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
-                            };
+                                            @Override
+                                            public void onTimeOut() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        //                                                hideProgressBar();
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
+                                        };
 
-                            new RequestUserSessionLogout().userSessionLogout();
-                        }
-                    })
+                                        new RequestUserSessionLogout().userSessionLogout();
+                                    }
+                                })
 
-                    .show();
+                                .show();
                     }
                 }, 256);
             }
@@ -1755,7 +1776,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                 String action = HelperGetAction.getAction(roomId, type, clientAction);
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                 if (realmRoom != null) {
-                                    realmRoom.setActionState(action);
+                                    realmRoom.setActionState(action, userId);
                                 }
                             }
                         }
@@ -1831,17 +1852,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public void setImage(long userId) {
 
         HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
-            @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+            @Override
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgNavImage);
                     }
                 });
             }
 
-            @Override public void onShowInitials(final String initials, final String color) {
+            @Override
+            public void onShowInitials(final String initials, final String color) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
                     }
                 });
@@ -1849,15 +1874,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
-            @Override public void onChangePhoto(final String imagePath) {
+            @Override
+            public void onChangePhoto(final String imagePath) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         if (imagePath == null || !new File(imagePath).exists()) {
                             Realm realm1 = Realm.getDefaultInstance();
                             RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
-                            imgNavImage.setImageBitmap(
-                                HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(),
-                                    realmUserInfo.getUserInfo().getColor()));
+                            imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
                             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);
@@ -1866,9 +1891,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 });
             }
 
-            @Override public void onChangeInitials(final String initials, final String color) {
+            @Override
+            public void onChangeInitials(final String initials, final String color) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
                     }
                 });
@@ -1877,7 +1904,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //realm.close();
     }
 
-    @Override public void onUserInfoMyClient(ProtoGlobal.RegisteredUser user, String identity) {
+    @Override
+    public void onUserInfoMyClient(ProtoGlobal.RegisteredUser user, String identity) {
         setImage(user.getId());
     }
 
@@ -1895,7 +1923,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else {
 
             G.onChatGetRoom = new OnChatGetRoom() {
-                @Override public void onChatGetRoom(final long roomId) {
+                @Override
+                public void onChatGetRoom(final long roomId) {
                     Intent intent = new Intent(context, ActivityChat.class);
                     intent.putExtra("peerId", peerId);
                     intent.putExtra("RoomId", roomId);
@@ -1903,15 +1932,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     context.startActivity(intent);
                 }
 
-                @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+                @Override
+                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
 
                 }
 
-                @Override public void onChatGetRoomTimeOut() {
+                @Override
+                public void onChatGetRoomTimeOut() {
 
                 }
 
-                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+                @Override
+                public void onChatGetRoomError(int majorCode, int minorCode) {
 
                 }
             };

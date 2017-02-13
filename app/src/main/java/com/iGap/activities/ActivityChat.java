@@ -930,7 +930,7 @@ public class ActivityChat extends ActivityEnhanced
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (realmRoom.getActionState() != null) {
+                    if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((RealmRoom.isCloudRoom(mRoomId) || (!RealmRoom.isCloudRoom(mRoomId) && realmRoom.getActionStateUserId() != userId)))) {
                         txtLastSeen.setText(realmRoom.getActionState());
                         avi.setVisibility(View.VISIBLE);
                     } else if (chatType == CHAT) {
@@ -4991,7 +4991,7 @@ public class ActivityChat extends ActivityEnhanced
                 public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                     if (realmRoom != null) {
-                        realmRoom.setActionState(action);
+                        realmRoom.setActionState(action, userId);
                     }
                 }
             });

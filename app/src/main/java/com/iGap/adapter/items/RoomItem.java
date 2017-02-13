@@ -39,6 +39,9 @@ import java.util.List;
 
 import static android.view.View.GONE;
 import static com.iGap.G.context;
+import static com.iGap.G.userId;
+import static com.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
+import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 /**
  * chat item for main displaying chats
@@ -98,7 +101,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         super.bindView(holder, payloads);
 
         if (mInfo != null && mInfo.isValid() && !mInfo.isDeleted()) {
-            if (mInfo.getActionState() != null) {
+            if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (!RealmRoom.isCloudRoom(mInfo.getId()) && mInfo.getActionStateUserId() != userId))))) {
                 //holder.messageStatus.setVisibility(GONE);
                 holder.lastMessageSender.setVisibility(View.GONE);
                 holder.lastMessage.setVisibility(View.VISIBLE);

@@ -235,7 +235,7 @@ public class HelperSetAction {
             @Override
             public void execute(Realm realm) {
                 for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                    realmRoom.setActionState(null);
+                    realmRoom.setActionState(null, 0);
                 }
             }
         });

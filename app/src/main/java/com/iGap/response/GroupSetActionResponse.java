@@ -7,7 +7,6 @@ import com.iGap.proto.ProtoGroupSetAction;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmUserInfo;
-
 import io.realm.Realm;
 
 public class GroupSetActionResponse extends MessageHandler {
@@ -42,7 +41,7 @@ public class GroupSetActionResponse extends MessageHandler {
                             String action = HelperGetAction.getAction(builder.getRoomId(), ProtoGlobal.Room.Type.GROUP, builder.getAction());
                             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
                             if (realmRoom != null) {
-                                realmRoom.setActionState(action);
+                                realmRoom.setActionState(action, builder.getUserId());
                             }
                         }
                     }, new Realm.Transaction.OnSuccess() {

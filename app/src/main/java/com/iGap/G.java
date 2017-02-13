@@ -541,13 +541,13 @@ public class G extends MultiDexApplication {
     }
 
     private void realmConfiguration() {
-        RealmConfiguration configuration = new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).migration(new RealmMigration()).build();
+        RealmConfiguration configuration = new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(3).migration(new RealmMigration()).build();
         DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);
         dynamicRealm.getVersion(); // Returns version of Realm file on disk
         if (dynamicRealm.getVersion() == -1) {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).deleteRealmIfMigrationNeeded().build());
+            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(3).deleteRealmIfMigrationNeeded().build());
         } else {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(2).migration(new RealmMigration()).build());
+            Realm.setDefaultConfiguration(new RealmConfiguration.Builder(getApplicationContext()).name("iGapLocalDatabase.realm").schemaVersion(3).migration(new RealmMigration()).build());
         }
         dynamicRealm.close();
     }
