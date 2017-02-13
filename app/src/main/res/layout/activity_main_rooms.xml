@@ -16,6 +16,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
+        app:layout_scrollFlags="scroll|enterAlways"
         >
       <android.support.v7.widget.Toolbar
           android:id="@+id/main_toolbar"
@@ -23,7 +24,7 @@
           android:layout_height="@dimen/dp60"
           app:contentInsetLeft="0dp"
           app:contentInsetStart="0dp"
-          app:layout_scrollFlags="scroll|enterAlways"
+
           >
 
         <LinearLayout
