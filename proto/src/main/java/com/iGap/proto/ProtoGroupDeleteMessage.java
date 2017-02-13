@@ -6,14 +6,11 @@ package com.iGap.proto;
 public final class ProtoGroupDeleteMessage {
   private ProtoGroupDeleteMessage() {
   }
-  public static void registerAllExtensions(
-          com.google.protobuf.ExtensionRegistryLite registry) {
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
-  public static void registerAllExtensions(
-          com.google.protobuf.ExtensionRegistry registry) {
-    registerAllExtensions(
-            (com.google.protobuf.ExtensionRegistryLite) registry);
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface GroupDeleteMessageOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.GroupDeleteMessage)
@@ -45,8 +42,7 @@ public final class ProtoGroupDeleteMessage {
   /**
    * Protobuf type {@code proto.GroupDeleteMessage}
    */
-  public static final class GroupDeleteMessage extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public static final class GroupDeleteMessage extends com.google.protobuf.GeneratedMessageV3 implements
           // @@protoc_insertion_point(message_implements:proto.GroupDeleteMessage)
           GroupDeleteMessageOrBuilder {
     // Use GroupDeleteMessage.newBuilder() to construct.
@@ -63,10 +59,7 @@ public final class ProtoGroupDeleteMessage {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private GroupDeleteMessage(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    private GroupDeleteMessage(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -111,22 +104,17 @@ public final class ProtoGroupDeleteMessage {
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessage_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessage_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.class, com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.Builder.class);
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+      return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.class, com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -178,8 +166,7 @@ public final class ProtoGroupDeleteMessage {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (request_ != null) {
         output.writeMessage(1, getRequest());
       }
@@ -197,16 +184,13 @@ public final class ProtoGroupDeleteMessage {
 
       size = 0;
       if (request_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(1, getRequest());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getRequest());
       }
       if (roomId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(2, roomId_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt64Size(2, roomId_);
       }
       if (messageId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(3, messageId_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt64Size(3, messageId_);
       }
       memoizedSize = size;
       return size;
@@ -226,13 +210,10 @@ public final class ProtoGroupDeleteMessage {
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
       if (hasRequest()) {
-        result = result && getRequest()
-                .equals(other.getRequest());
+        result = result && getRequest().equals(other.getRequest());
       }
-      result = result && (getRoomId()
-              == other.getRoomId());
-      result = result && (getMessageId()
-              == other.getMessageId());
+      result = result && (getRoomId() == other.getRoomId());
+      result = result && (getMessageId() == other.getMessageId());
       return result;
     }
 
@@ -248,73 +229,43 @@ public final class ProtoGroupDeleteMessage {
         hash = (53 * hash) + getRequest().hashCode();
       }
       hash = (37 * hash) + ROOM_ID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getRoomId());
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getRoomId());
       hash = (37 * hash) + MESSAGE_ID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getMessageId());
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getMessageId());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(
-            com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(
-            com.google.protobuf.ByteString data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(
-            com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
@@ -327,33 +278,26 @@ public final class ProtoGroupDeleteMessage {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
-    protected Builder newBuilderForType(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
      * Protobuf type {@code proto.GroupDeleteMessage}
      */
-    public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.GroupDeleteMessage)
             com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessage_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessage_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.class, com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.Builder.class);
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+        return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.class, com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.newBuilder()
@@ -361,8 +305,7 @@ public final class ProtoGroupDeleteMessage {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -386,8 +329,7 @@ public final class ProtoGroupDeleteMessage {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessage_descriptor;
       }
 
@@ -419,27 +361,19 @@ public final class ProtoGroupDeleteMessage {
       public Builder clone() {
         return (Builder) super.clone();
       }
-      public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
-      public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-      public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-      public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+      public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-      public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -452,8 +386,7 @@ public final class ProtoGroupDeleteMessage {
       }
 
       public Builder mergeFrom(com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage other) {
-        if (other == com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.getDefaultInstance())
-          return this;
+        if (other == com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -471,10 +404,7 @@ public final class ProtoGroupDeleteMessage {
         return true;
       }
 
-      public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
         com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessage parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -490,8 +420,7 @@ public final class ProtoGroupDeleteMessage {
       }
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -527,8 +456,7 @@ public final class ProtoGroupDeleteMessage {
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      public Builder setRequest(
-              com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
+      public Builder setRequest(com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
         if (requestBuilder_ == null) {
           request_ = builderForValue.build();
           onChanged();
@@ -544,8 +472,7 @@ public final class ProtoGroupDeleteMessage {
       public Builder mergeRequest(com.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-            request_ =
-                    com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+            request_ = com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -585,19 +512,15 @@ public final class ProtoGroupDeleteMessage {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-          return request_ == null ?
-                  com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>
-      getRequestFieldBuilder() {
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
+          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -657,13 +580,11 @@ public final class ProtoGroupDeleteMessage {
         onChanged();
         return this;
       }
-      public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
-      public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -681,12 +602,8 @@ public final class ProtoGroupDeleteMessage {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<GroupDeleteMessage>
-            PARSER = new com.google.protobuf.AbstractParser<GroupDeleteMessage>() {
-      public GroupDeleteMessage parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
+    private static final com.google.protobuf.Parser<GroupDeleteMessage> PARSER = new com.google.protobuf.AbstractParser<GroupDeleteMessage>() {
+      public GroupDeleteMessage parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
         return new GroupDeleteMessage(input, extensionRegistry);
       }
     };
@@ -741,8 +658,7 @@ public final class ProtoGroupDeleteMessage {
   /**
    * Protobuf type {@code proto.GroupDeleteMessageResponse}
    */
-  public static final class GroupDeleteMessageResponse extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public static final class GroupDeleteMessageResponse extends com.google.protobuf.GeneratedMessageV3 implements
           // @@protoc_insertion_point(message_implements:proto.GroupDeleteMessageResponse)
           GroupDeleteMessageResponseOrBuilder {
     // Use GroupDeleteMessageResponse.newBuilder() to construct.
@@ -760,10 +676,7 @@ public final class ProtoGroupDeleteMessage {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private GroupDeleteMessageResponse(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    private GroupDeleteMessageResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -813,22 +726,17 @@ public final class ProtoGroupDeleteMessage {
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessageResponse_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessageResponse_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.class, com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder.class);
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+      return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.class, com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -889,8 +797,7 @@ public final class ProtoGroupDeleteMessage {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (response_ != null) {
         output.writeMessage(1, getResponse());
       }
@@ -911,20 +818,16 @@ public final class ProtoGroupDeleteMessage {
 
       size = 0;
       if (response_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(1, getResponse());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getResponse());
       }
       if (roomId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(2, roomId_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt64Size(2, roomId_);
       }
       if (messageId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(3, messageId_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt64Size(3, messageId_);
       }
       if (deleteVersion_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(4, deleteVersion_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt64Size(4, deleteVersion_);
       }
       memoizedSize = size;
       return size;
@@ -944,15 +847,11 @@ public final class ProtoGroupDeleteMessage {
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
       if (hasResponse()) {
-        result = result && getResponse()
-                .equals(other.getResponse());
+        result = result && getResponse().equals(other.getResponse());
       }
-      result = result && (getRoomId()
-              == other.getRoomId());
-      result = result && (getMessageId()
-              == other.getMessageId());
-      result = result && (getDeleteVersion()
-              == other.getDeleteVersion());
+      result = result && (getRoomId() == other.getRoomId());
+      result = result && (getMessageId() == other.getMessageId());
+      result = result && (getDeleteVersion() == other.getDeleteVersion());
       return result;
     }
 
@@ -968,76 +867,45 @@ public final class ProtoGroupDeleteMessage {
         hash = (53 * hash) + getResponse().hashCode();
       }
       hash = (37 * hash) + ROOM_ID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getRoomId());
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getRoomId());
       hash = (37 * hash) + MESSAGE_ID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getMessageId());
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getMessageId());
       hash = (37 * hash) + DELETE_VERSION_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getDeleteVersion());
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getDeleteVersion());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(
-            com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(
-            com.google.protobuf.ByteString data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(
-            com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
@@ -1055,28 +923,22 @@ public final class ProtoGroupDeleteMessage {
     }
 
     @java.lang.Override
-    protected Builder newBuilderForType(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
      * Protobuf type {@code proto.GroupDeleteMessageResponse}
      */
-    public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.GroupDeleteMessageResponse)
             com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessageResponse_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessageResponse_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.class, com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder.class);
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+        return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.class, com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.newBuilder()
@@ -1084,8 +946,7 @@ public final class ProtoGroupDeleteMessage {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1111,8 +972,7 @@ public final class ProtoGroupDeleteMessage {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.iGap.proto.ProtoGroupDeleteMessage.internal_static_proto_GroupDeleteMessageResponse_descriptor;
       }
 
@@ -1145,27 +1005,19 @@ public final class ProtoGroupDeleteMessage {
       public Builder clone() {
         return (Builder) super.clone();
       }
-      public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
-      public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-      public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-      public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+      public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-      public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1178,8 +1030,7 @@ public final class ProtoGroupDeleteMessage {
       }
 
       public Builder mergeFrom(com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse other) {
-        if (other == com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.getDefaultInstance())
-          return this;
+        if (other == com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1200,10 +1051,7 @@ public final class ProtoGroupDeleteMessage {
         return true;
       }
 
-      public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
         com.iGap.proto.ProtoGroupDeleteMessage.GroupDeleteMessageResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -1219,8 +1067,7 @@ public final class ProtoGroupDeleteMessage {
       }
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1256,8 +1103,7 @@ public final class ProtoGroupDeleteMessage {
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      public Builder setResponse(
-              com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
+      public Builder setResponse(com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
         if (responseBuilder_ == null) {
           response_ = builderForValue.build();
           onChanged();
@@ -1273,8 +1119,7 @@ public final class ProtoGroupDeleteMessage {
       public Builder mergeResponse(com.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-            response_ =
-                    com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+            response_ = com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1314,19 +1159,15 @@ public final class ProtoGroupDeleteMessage {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-          return response_ == null ?
-                  com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>
-      getResponseFieldBuilder() {
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1412,13 +1253,11 @@ public final class ProtoGroupDeleteMessage {
         onChanged();
         return this;
       }
-      public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
-      public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -1436,12 +1275,8 @@ public final class ProtoGroupDeleteMessage {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<GroupDeleteMessageResponse>
-            PARSER = new com.google.protobuf.AbstractParser<GroupDeleteMessageResponse>() {
-      public GroupDeleteMessageResponse parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
+    private static final com.google.protobuf.Parser<GroupDeleteMessageResponse> PARSER = new com.google.protobuf.AbstractParser<GroupDeleteMessageResponse>() {
+      public GroupDeleteMessageResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
         return new GroupDeleteMessageResponse(input, extensionRegistry);
       }
     };
@@ -1461,24 +1296,16 @@ public final class ProtoGroupDeleteMessage {
 
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_proto_GroupDeleteMessage_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_GroupDeleteMessage_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_proto_GroupDeleteMessageResponse_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_GroupDeleteMessageResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_GroupDeleteMessage_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_GroupDeleteMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_GroupDeleteMessageResponse_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_GroupDeleteMessageResponse_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
-  getDescriptor() {
+  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
-  private static com.google.protobuf.Descriptors.FileDescriptor
-          descriptor;
+  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
             "\n\030GroupDeleteMessage.proto\022\005proto\032\rReque" +
@@ -1491,28 +1318,18 @@ public final class ProtoGroupDeleteMessage {
                     "(\004B)\n\016com.iGap.protoB\027ProtoGroupDeleteMe" +
                     "ssageb\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-            new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-              public com.google.protobuf.ExtensionRegistry assignDescriptors(
-                      com.google.protobuf.Descriptors.FileDescriptor root) {
-                descriptor = root;
-                return null;
-              }
-            };
-    com.google.protobuf.Descriptors.FileDescriptor
-            .internalBuildGeneratedFileFrom(descriptorData,
-                    new com.google.protobuf.Descriptors.FileDescriptor[]{
-                            com.iGap.proto.ProtoRequest.getDescriptor(),
-                            com.iGap.proto.ProtoResponse.getDescriptor(),
-                    }, assigner);
-    internal_static_proto_GroupDeleteMessage_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_GroupDeleteMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_proto_GroupDeleteMessage_descriptor,
-            new java.lang.String[]{"Request", "RoomId", "MessageId",});
-    internal_static_proto_GroupDeleteMessageResponse_descriptor =
-            getDescriptor().getMessageTypes().get(1);
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+      public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
+        descriptor = root;
+        return null;
+      }
+    };
+    com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
+            com.iGap.proto.ProtoRequest.getDescriptor(), com.iGap.proto.ProtoResponse.getDescriptor(),
+    }, assigner);
+    internal_static_proto_GroupDeleteMessage_descriptor = getDescriptor().getMessageTypes().get(0);
+    internal_static_proto_GroupDeleteMessage_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_GroupDeleteMessage_descriptor, new java.lang.String[]{"Request", "RoomId", "MessageId",});
+    internal_static_proto_GroupDeleteMessageResponse_descriptor = getDescriptor().getMessageTypes().get(1);
     internal_static_proto_GroupDeleteMessageResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_GroupDeleteMessageResponse_descriptor,

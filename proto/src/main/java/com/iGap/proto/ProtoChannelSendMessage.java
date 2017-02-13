@@ -511,16 +511,13 @@ public final class ProtoChannelSendMessage {
           .computeMessageSize(6, getLocation());
       }
       if (contact_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(7, getContact());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(7, getContact());
       }
       if (replyTo_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(8, replyTo_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt64Size(8, replyTo_);
       }
       if (forwardFrom_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(9, getForwardFrom());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(9, getForwardFrom());
       }
       memoizedSize = size;
       return size;
@@ -2496,12 +2493,11 @@ public final class ProtoChannelSendMessage {
       "cation\030\006 \001(\0132\032.proto.RoomMessageLocation" +
               "\022*\n\007contact\030\007 \001(\0132\031.proto.RoomMessageCon" +
               "tact\022\020\n\010reply_to\030\010 \001(\004\0223\n\014forward_from\030\t" +
-              " \001(\0132\035.proto.RoomMessageForwardFrom\"z\n\032C",
-            "hannelSendMessageResponse\022!\n\010response\030\001 " +
-                    "\001(\0132\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022(\n" +
-                    "\014room_message\030\003 \001(\0132\022.proto.RoomMessageB" +
-                    ")\n\016com.iGap.protoB\027ProtoChannelSendMessa" +
-                    "geb\006proto3"
+              " \001(\0132\035.proto.RoomMessageForwardFrom\"z\n\032C", "hannelSendMessageResponse\022!\n\010response\030\001 " +
+            "\001(\0132\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022(\n" +
+            "\014room_message\030\003 \001(\0132\022.proto.RoomMessageB" +
+            ")\n\016com.iGap.protoB\027ProtoChannelSendMessa" +
+            "geb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2522,8 +2518,7 @@ public final class ProtoChannelSendMessage {
       getDescriptor().getMessageTypes().get(0);
     internal_static_proto_ChannelSendMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_ChannelSendMessage_descriptor,
-            new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
+        internal_static_proto_ChannelSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
     internal_static_proto_ChannelSendMessageResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChannelSendMessageResponse_fieldAccessorTable = new

@@ -2,7 +2,6 @@ package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.ChannelChatRole;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -16,11 +15,11 @@ public class RealmChannelRoom extends RealmObject {
     private int avatarCount;
     private RealmNotificationSetting realmNotificationSetting;
     private RealmList<RealmMember> members;
-    //    private String invite_link;
     private String invite_token;
     private String username;
     private boolean isPrivate;
     private boolean isSignature = false;
+    private long seenId;
 
     /**
      * convert ProtoGlobal.ChannelRoom to RealmChannelRoom
@@ -143,5 +142,13 @@ public class RealmChannelRoom extends RealmObject {
 
     public void setSignature(boolean signature) {
         isSignature = signature;
+    }
+
+    public long getSeenId() {
+        return seenId;
+    }
+
+    public void setSeenId(long seenId) {
+        this.seenId = seenId;
     }
 }

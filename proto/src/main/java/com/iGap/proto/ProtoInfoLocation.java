@@ -6,14 +6,11 @@ package com.iGap.proto;
 public final class ProtoInfoLocation {
   private ProtoInfoLocation() {
   }
-  public static void registerAllExtensions(
-          com.google.protobuf.ExtensionRegistryLite registry) {
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
-  public static void registerAllExtensions(
-          com.google.protobuf.ExtensionRegistry registry) {
-    registerAllExtensions(
-            (com.google.protobuf.ExtensionRegistryLite) registry);
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface InfoLocationOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.InfoLocation)
@@ -35,8 +32,7 @@ public final class ProtoInfoLocation {
   /**
    * Protobuf type {@code proto.InfoLocation}
    */
-  public static final class InfoLocation extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public static final class InfoLocation extends com.google.protobuf.GeneratedMessageV3 implements
           // @@protoc_insertion_point(message_implements:proto.InfoLocation)
           InfoLocationOrBuilder {
     // Use InfoLocation.newBuilder() to construct.
@@ -51,10 +47,7 @@ public final class ProtoInfoLocation {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private InfoLocation(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    private InfoLocation(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -89,22 +82,17 @@ public final class ProtoInfoLocation {
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocation_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocation_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      com.iGap.proto.ProtoInfoLocation.InfoLocation.class, com.iGap.proto.ProtoInfoLocation.InfoLocation.Builder.class);
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+      return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocation_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoInfoLocation.InfoLocation.class, com.iGap.proto.ProtoInfoLocation.InfoLocation.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -138,8 +126,7 @@ public final class ProtoInfoLocation {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (request_ != null) {
         output.writeMessage(1, getRequest());
       }
@@ -151,8 +138,7 @@ public final class ProtoInfoLocation {
 
       size = 0;
       if (request_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(1, getRequest());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getRequest());
       }
       memoizedSize = size;
       return size;
@@ -172,8 +158,7 @@ public final class ProtoInfoLocation {
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
       if (hasRequest()) {
-        result = result && getRequest()
-                .equals(other.getRequest());
+        result = result && getRequest().equals(other.getRequest());
       }
       return result;
     }
@@ -194,63 +179,35 @@ public final class ProtoInfoLocation {
       return hash;
     }
 
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(
-            com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(
-            com.google.protobuf.ByteString data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(
-            com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocation parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
@@ -263,33 +220,26 @@ public final class ProtoInfoLocation {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
-    protected Builder newBuilderForType(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
      * Protobuf type {@code proto.InfoLocation}
      */
-    public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.InfoLocation)
             com.iGap.proto.ProtoInfoLocation.InfoLocationOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocation_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocation_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        com.iGap.proto.ProtoInfoLocation.InfoLocation.class, com.iGap.proto.ProtoInfoLocation.InfoLocation.Builder.class);
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+        return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocation_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoInfoLocation.InfoLocation.class, com.iGap.proto.ProtoInfoLocation.InfoLocation.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoInfoLocation.InfoLocation.newBuilder()
@@ -297,8 +247,7 @@ public final class ProtoInfoLocation {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -318,8 +267,7 @@ public final class ProtoInfoLocation {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocation_descriptor;
       }
 
@@ -349,27 +297,19 @@ public final class ProtoInfoLocation {
       public Builder clone() {
         return (Builder) super.clone();
       }
-      public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
-      public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-      public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-      public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+      public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-      public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -382,8 +322,7 @@ public final class ProtoInfoLocation {
       }
 
       public Builder mergeFrom(com.iGap.proto.ProtoInfoLocation.InfoLocation other) {
-        if (other == com.iGap.proto.ProtoInfoLocation.InfoLocation.getDefaultInstance())
-          return this;
+        if (other == com.iGap.proto.ProtoInfoLocation.InfoLocation.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -395,10 +334,7 @@ public final class ProtoInfoLocation {
         return true;
       }
 
-      public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
         com.iGap.proto.ProtoInfoLocation.InfoLocation parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -414,8 +350,7 @@ public final class ProtoInfoLocation {
       }
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -451,8 +386,7 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      public Builder setRequest(
-              com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
+      public Builder setRequest(com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
         if (requestBuilder_ == null) {
           request_ = builderForValue.build();
           onChanged();
@@ -468,8 +402,7 @@ public final class ProtoInfoLocation {
       public Builder mergeRequest(com.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-            request_ =
-                    com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+            request_ = com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -509,19 +442,15 @@ public final class ProtoInfoLocation {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-          return request_ == null ?
-                  com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>
-      getRequestFieldBuilder() {
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
+          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -529,13 +458,11 @@ public final class ProtoInfoLocation {
         }
         return requestBuilder_;
       }
-      public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
-      public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -553,12 +480,8 @@ public final class ProtoInfoLocation {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<InfoLocation>
-            PARSER = new com.google.protobuf.AbstractParser<InfoLocation>() {
-      public InfoLocation parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
+    private static final com.google.protobuf.Parser<InfoLocation> PARSER = new com.google.protobuf.AbstractParser<InfoLocation>() {
+      public InfoLocation parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
         return new InfoLocation(input, extensionRegistry);
       }
     };
@@ -602,8 +525,7 @@ public final class ProtoInfoLocation {
     /**
      * <code>optional string iso_code = 2;</code>
      */
-    com.google.protobuf.ByteString
-    getIsoCodeBytes();
+    com.google.protobuf.ByteString getIsoCodeBytes();
 
     /**
      * <code>optional uint32 calling_code = 3;</code>
@@ -617,8 +539,7 @@ public final class ProtoInfoLocation {
     /**
      * <code>optional string name = 4;</code>
      */
-    com.google.protobuf.ByteString
-    getNameBytes();
+    com.google.protobuf.ByteString getNameBytes();
 
     /**
      * <code>optional string pattern = 5;</code>
@@ -627,8 +548,7 @@ public final class ProtoInfoLocation {
     /**
      * <code>optional string pattern = 5;</code>
      */
-    com.google.protobuf.ByteString
-    getPatternBytes();
+    com.google.protobuf.ByteString getPatternBytes();
 
     /**
      * <code>optional string regex = 6;</code>
@@ -637,14 +557,12 @@ public final class ProtoInfoLocation {
     /**
      * <code>optional string regex = 6;</code>
      */
-    com.google.protobuf.ByteString
-    getRegexBytes();
+    com.google.protobuf.ByteString getRegexBytes();
   }
   /**
    * Protobuf type {@code proto.InfoLocationResponse}
    */
-  public static final class InfoLocationResponse extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public static final class InfoLocationResponse extends com.google.protobuf.GeneratedMessageV3 implements
           // @@protoc_insertion_point(message_implements:proto.InfoLocationResponse)
           InfoLocationResponseOrBuilder {
     // Use InfoLocationResponse.newBuilder() to construct.
@@ -664,10 +582,7 @@ public final class ProtoInfoLocation {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private InfoLocationResponse(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    private InfoLocationResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -731,22 +646,17 @@ public final class ProtoInfoLocation {
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocationResponse_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocationResponse_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.class, com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.Builder.class);
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+      return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocationResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.class, com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -780,8 +690,7 @@ public final class ProtoInfoLocation {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         isoCode_ = s;
         return s;
@@ -790,13 +699,10 @@ public final class ProtoInfoLocation {
     /**
      * <code>optional string iso_code = 2;</code>
      */
-    public com.google.protobuf.ByteString
-    getIsoCodeBytes() {
+    public com.google.protobuf.ByteString getIsoCodeBytes() {
       java.lang.Object ref = isoCode_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         isoCode_ = b;
         return b;
       } else {
@@ -823,8 +729,7 @@ public final class ProtoInfoLocation {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         name_ = s;
         return s;
@@ -833,13 +738,10 @@ public final class ProtoInfoLocation {
     /**
      * <code>optional string name = 4;</code>
      */
-    public com.google.protobuf.ByteString
-    getNameBytes() {
+    public com.google.protobuf.ByteString getNameBytes() {
       java.lang.Object ref = name_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         name_ = b;
         return b;
       } else {
@@ -857,8 +759,7 @@ public final class ProtoInfoLocation {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         pattern_ = s;
         return s;
@@ -867,13 +768,10 @@ public final class ProtoInfoLocation {
     /**
      * <code>optional string pattern = 5;</code>
      */
-    public com.google.protobuf.ByteString
-    getPatternBytes() {
+    public com.google.protobuf.ByteString getPatternBytes() {
       java.lang.Object ref = pattern_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         pattern_ = b;
         return b;
       } else {
@@ -891,8 +789,7 @@ public final class ProtoInfoLocation {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         regex_ = s;
         return s;
@@ -901,13 +798,10 @@ public final class ProtoInfoLocation {
     /**
      * <code>optional string regex = 6;</code>
      */
-    public com.google.protobuf.ByteString
-    getRegexBytes() {
+    public com.google.protobuf.ByteString getRegexBytes() {
       java.lang.Object ref = regex_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         regex_ = b;
         return b;
       } else {
@@ -925,8 +819,7 @@ public final class ProtoInfoLocation {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (response_ != null) {
         output.writeMessage(1, getResponse());
       }
@@ -953,15 +846,13 @@ public final class ProtoInfoLocation {
 
       size = 0;
       if (response_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(1, getResponse());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getResponse());
       }
       if (!getIsoCodeBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, isoCode_);
       }
       if (callingCode_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt32Size(3, callingCode_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3, callingCode_);
       }
       if (!getNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, name_);
@@ -990,19 +881,13 @@ public final class ProtoInfoLocation {
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
       if (hasResponse()) {
-        result = result && getResponse()
-                .equals(other.getResponse());
+        result = result && getResponse().equals(other.getResponse());
       }
-      result = result && getIsoCode()
-              .equals(other.getIsoCode());
-      result = result && (getCallingCode()
-              == other.getCallingCode());
-      result = result && getName()
-              .equals(other.getName());
-      result = result && getPattern()
-              .equals(other.getPattern());
-      result = result && getRegex()
-              .equals(other.getRegex());
+      result = result && getIsoCode().equals(other.getIsoCode());
+      result = result && (getCallingCode() == other.getCallingCode());
+      result = result && getName().equals(other.getName());
+      result = result && getPattern().equals(other.getPattern());
+      result = result && getRegex().equals(other.getRegex());
       return result;
     }
 
@@ -1032,63 +917,35 @@ public final class ProtoInfoLocation {
       return hash;
     }
 
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(
-            com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(
-            com.google.protobuf.ByteString data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(
-            com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
@@ -1106,28 +963,22 @@ public final class ProtoInfoLocation {
     }
 
     @java.lang.Override
-    protected Builder newBuilderForType(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
      * Protobuf type {@code proto.InfoLocationResponse}
      */
-    public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.InfoLocationResponse)
             com.iGap.proto.ProtoInfoLocation.InfoLocationResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocationResponse_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocationResponse_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.class, com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.Builder.class);
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+        return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocationResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.class, com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.newBuilder()
@@ -1135,8 +986,7 @@ public final class ProtoInfoLocation {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1166,8 +1016,7 @@ public final class ProtoInfoLocation {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.iGap.proto.ProtoInfoLocation.internal_static_proto_InfoLocationResponse_descriptor;
       }
 
@@ -1202,27 +1051,19 @@ public final class ProtoInfoLocation {
       public Builder clone() {
         return (Builder) super.clone();
       }
-      public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
-      public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-      public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-      public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+      public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-      public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1235,8 +1076,7 @@ public final class ProtoInfoLocation {
       }
 
       public Builder mergeFrom(com.iGap.proto.ProtoInfoLocation.InfoLocationResponse other) {
-        if (other == com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.getDefaultInstance())
-          return this;
+        if (other == com.iGap.proto.ProtoInfoLocation.InfoLocationResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1267,10 +1107,7 @@ public final class ProtoInfoLocation {
         return true;
       }
 
-      public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
         com.iGap.proto.ProtoInfoLocation.InfoLocationResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -1286,8 +1123,7 @@ public final class ProtoInfoLocation {
       }
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1323,8 +1159,7 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      public Builder setResponse(
-              com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
+      public Builder setResponse(com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
         if (responseBuilder_ == null) {
           response_ = builderForValue.build();
           onChanged();
@@ -1340,8 +1175,7 @@ public final class ProtoInfoLocation {
       public Builder mergeResponse(com.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-            response_ =
-                    com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+            response_ = com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1381,19 +1215,15 @@ public final class ProtoInfoLocation {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-          return response_ == null ?
-                  com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>
-      getResponseFieldBuilder() {
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1409,8 +1239,7 @@ public final class ProtoInfoLocation {
       public java.lang.String getIsoCode() {
         java.lang.Object ref = isoCode_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           isoCode_ = s;
           return s;
@@ -1421,13 +1250,10 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string iso_code = 2;</code>
        */
-      public com.google.protobuf.ByteString
-      getIsoCodeBytes() {
+      public com.google.protobuf.ByteString getIsoCodeBytes() {
         java.lang.Object ref = isoCode_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           isoCode_ = b;
           return b;
         } else {
@@ -1437,8 +1263,7 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string iso_code = 2;</code>
        */
-      public Builder setIsoCode(
-              java.lang.String value) {
+      public Builder setIsoCode(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1459,8 +1284,7 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string iso_code = 2;</code>
        */
-      public Builder setIsoCodeBytes(
-              com.google.protobuf.ByteString value) {
+      public Builder setIsoCodeBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1504,8 +1328,7 @@ public final class ProtoInfoLocation {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           name_ = s;
           return s;
@@ -1516,13 +1339,10 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string name = 4;</code>
        */
-      public com.google.protobuf.ByteString
-      getNameBytes() {
+      public com.google.protobuf.ByteString getNameBytes() {
         java.lang.Object ref = name_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           name_ = b;
           return b;
         } else {
@@ -1532,8 +1352,7 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string name = 4;</code>
        */
-      public Builder setName(
-              java.lang.String value) {
+      public Builder setName(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1554,8 +1373,7 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string name = 4;</code>
        */
-      public Builder setNameBytes(
-              com.google.protobuf.ByteString value) {
+      public Builder setNameBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1573,8 +1391,7 @@ public final class ProtoInfoLocation {
       public java.lang.String getPattern() {
         java.lang.Object ref = pattern_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           pattern_ = s;
           return s;
@@ -1585,13 +1402,10 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string pattern = 5;</code>
        */
-      public com.google.protobuf.ByteString
-      getPatternBytes() {
+      public com.google.protobuf.ByteString getPatternBytes() {
         java.lang.Object ref = pattern_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           pattern_ = b;
           return b;
         } else {
@@ -1601,8 +1415,7 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string pattern = 5;</code>
        */
-      public Builder setPattern(
-              java.lang.String value) {
+      public Builder setPattern(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1623,8 +1436,7 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string pattern = 5;</code>
        */
-      public Builder setPatternBytes(
-              com.google.protobuf.ByteString value) {
+      public Builder setPatternBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1642,8 +1454,7 @@ public final class ProtoInfoLocation {
       public java.lang.String getRegex() {
         java.lang.Object ref = regex_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           regex_ = s;
           return s;
@@ -1654,13 +1465,10 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string regex = 6;</code>
        */
-      public com.google.protobuf.ByteString
-      getRegexBytes() {
+      public com.google.protobuf.ByteString getRegexBytes() {
         java.lang.Object ref = regex_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           regex_ = b;
           return b;
         } else {
@@ -1670,8 +1478,7 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string regex = 6;</code>
        */
-      public Builder setRegex(
-              java.lang.String value) {
+      public Builder setRegex(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1692,8 +1499,7 @@ public final class ProtoInfoLocation {
       /**
        * <code>optional string regex = 6;</code>
        */
-      public Builder setRegexBytes(
-              com.google.protobuf.ByteString value) {
+      public Builder setRegexBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1703,13 +1509,11 @@ public final class ProtoInfoLocation {
         onChanged();
         return this;
       }
-      public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
-      public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -1727,12 +1531,8 @@ public final class ProtoInfoLocation {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<InfoLocationResponse>
-            PARSER = new com.google.protobuf.AbstractParser<InfoLocationResponse>() {
-      public InfoLocationResponse parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
+    private static final com.google.protobuf.Parser<InfoLocationResponse> PARSER = new com.google.protobuf.AbstractParser<InfoLocationResponse>() {
+      public InfoLocationResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
         return new InfoLocationResponse(input, extensionRegistry);
       }
     };
@@ -1752,24 +1552,16 @@ public final class ProtoInfoLocation {
 
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_proto_InfoLocation_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_InfoLocation_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_proto_InfoLocationResponse_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_InfoLocationResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_InfoLocation_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_InfoLocation_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_InfoLocationResponse_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_InfoLocationResponse_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
-  getDescriptor() {
+  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
-  private static com.google.protobuf.Descriptors.FileDescriptor
-          descriptor;
+  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
             "\n\022InfoLocation.proto\022\005proto\032\rRequest.pro" +
@@ -1781,25 +1573,17 @@ public final class ProtoInfoLocation {
                     "\n\005regex\030\006 \001(\tB#\n\016com.iGap.protoB\021ProtoIn" +
                     "foLocationb\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-            new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-              public com.google.protobuf.ExtensionRegistry assignDescriptors(
-                      com.google.protobuf.Descriptors.FileDescriptor root) {
-                descriptor = root;
-                return null;
-              }
-            };
-    com.google.protobuf.Descriptors.FileDescriptor
-            .internalBuildGeneratedFileFrom(descriptorData,
-                    new com.google.protobuf.Descriptors.FileDescriptor[]{
-                            com.iGap.proto.ProtoRequest.getDescriptor(),
-                            com.iGap.proto.ProtoResponse.getDescriptor(),
-                    }, assigner);
-    internal_static_proto_InfoLocation_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_InfoLocation_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_proto_InfoLocation_descriptor,
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+      public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
+        descriptor = root;
+        return null;
+      }
+    };
+    com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
+            com.iGap.proto.ProtoRequest.getDescriptor(), com.iGap.proto.ProtoResponse.getDescriptor(),
+    }, assigner);
+    internal_static_proto_InfoLocation_descriptor = getDescriptor().getMessageTypes().get(0);
+    internal_static_proto_InfoLocation_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_InfoLocation_descriptor,
         new java.lang.String[] { "Request", });
     internal_static_proto_InfoLocationResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);

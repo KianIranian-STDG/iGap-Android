@@ -6,14 +6,11 @@ package com.iGap.proto;
 public final class ProtoFileUploadInit {
   private ProtoFileUploadInit() {
   }
-  public static void registerAllExtensions(
-          com.google.protobuf.ExtensionRegistryLite registry) {
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
-  public static void registerAllExtensions(
-          com.google.protobuf.ExtensionRegistry registry) {
-    registerAllExtensions(
-            (com.google.protobuf.ExtensionRegistryLite) registry);
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface FileUploadInitOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.FileUploadInit)
@@ -59,14 +56,12 @@ public final class ProtoFileUploadInit {
     /**
      * <code>optional string file_name = 6;</code>
      */
-    com.google.protobuf.ByteString
-    getFileNameBytes();
+    com.google.protobuf.ByteString getFileNameBytes();
   }
   /**
    * Protobuf type {@code proto.FileUploadInit}
    */
-  public static final class FileUploadInit extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public static final class FileUploadInit extends com.google.protobuf.GeneratedMessageV3 implements
           // @@protoc_insertion_point(message_implements:proto.FileUploadInit)
           FileUploadInitOrBuilder {
     // Use FileUploadInit.newBuilder() to construct.
@@ -86,10 +81,7 @@ public final class ProtoFileUploadInit {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private FileUploadInit(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    private FileUploadInit(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -150,22 +142,17 @@ public final class ProtoFileUploadInit {
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInit_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInit_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      com.iGap.proto.ProtoFileUploadInit.FileUploadInit.class, com.iGap.proto.ProtoFileUploadInit.FileUploadInit.Builder.class);
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+      return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInit_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoFileUploadInit.FileUploadInit.class, com.iGap.proto.ProtoFileUploadInit.FileUploadInit.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -235,8 +222,7 @@ public final class ProtoFileUploadInit {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         fileName_ = s;
         return s;
@@ -245,13 +231,10 @@ public final class ProtoFileUploadInit {
     /**
      * <code>optional string file_name = 6;</code>
      */
-    public com.google.protobuf.ByteString
-    getFileNameBytes() {
+    public com.google.protobuf.ByteString getFileNameBytes() {
       java.lang.Object ref = fileName_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         fileName_ = b;
         return b;
       } else {
@@ -269,8 +252,7 @@ public final class ProtoFileUploadInit {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (request_ != null) {
         output.writeMessage(1, getRequest());
       }
@@ -297,24 +279,19 @@ public final class ProtoFileUploadInit {
 
       size = 0;
       if (request_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(1, getRequest());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getRequest());
       }
       if (!firstBytes_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeBytesSize(2, firstBytes_);
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(2, firstBytes_);
       }
       if (!lastBytes_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeBytesSize(3, lastBytes_);
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(3, lastBytes_);
       }
       if (size_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeInt64Size(4, size_);
+        size += com.google.protobuf.CodedOutputStream.computeInt64Size(4, size_);
       }
       if (!fileHash_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeBytesSize(5, fileHash_);
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(5, fileHash_);
       }
       if (!getFileNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, fileName_);
@@ -337,19 +314,13 @@ public final class ProtoFileUploadInit {
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
       if (hasRequest()) {
-        result = result && getRequest()
-                .equals(other.getRequest());
+        result = result && getRequest().equals(other.getRequest());
       }
-      result = result && getFirstBytes()
-              .equals(other.getFirstBytes());
-      result = result && getLastBytes()
-              .equals(other.getLastBytes());
-      result = result && (getSize()
-              == other.getSize());
-      result = result && getFileHash()
-              .equals(other.getFileHash());
-      result = result && getFileName()
-              .equals(other.getFileName());
+      result = result && getFirstBytes().equals(other.getFirstBytes());
+      result = result && getLastBytes().equals(other.getLastBytes());
+      result = result && (getSize() == other.getSize());
+      result = result && getFileHash().equals(other.getFileHash());
+      result = result && getFileName().equals(other.getFileName());
       return result;
     }
 
@@ -369,8 +340,7 @@ public final class ProtoFileUploadInit {
       hash = (37 * hash) + LAST_BYTES_FIELD_NUMBER;
       hash = (53 * hash) + getLastBytes().hashCode();
       hash = (37 * hash) + SIZE_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getSize());
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getSize());
       hash = (37 * hash) + FILE_HASH_FIELD_NUMBER;
       hash = (53 * hash) + getFileHash().hashCode();
       hash = (37 * hash) + FILE_NAME_FIELD_NUMBER;
@@ -380,63 +350,35 @@ public final class ProtoFileUploadInit {
       return hash;
     }
 
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(
-            com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(
-            com.google.protobuf.ByteString data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(
-            com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInit parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
@@ -449,33 +391,26 @@ public final class ProtoFileUploadInit {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
-    protected Builder newBuilderForType(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
      * Protobuf type {@code proto.FileUploadInit}
      */
-    public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.FileUploadInit)
             com.iGap.proto.ProtoFileUploadInit.FileUploadInitOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInit_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInit_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        com.iGap.proto.ProtoFileUploadInit.FileUploadInit.class, com.iGap.proto.ProtoFileUploadInit.FileUploadInit.Builder.class);
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+        return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInit_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoFileUploadInit.FileUploadInit.class, com.iGap.proto.ProtoFileUploadInit.FileUploadInit.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoFileUploadInit.FileUploadInit.newBuilder()
@@ -483,8 +418,7 @@ public final class ProtoFileUploadInit {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -514,8 +448,7 @@ public final class ProtoFileUploadInit {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInit_descriptor;
       }
 
@@ -550,27 +483,19 @@ public final class ProtoFileUploadInit {
       public Builder clone() {
         return (Builder) super.clone();
       }
-      public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
-      public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-      public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-      public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+      public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-      public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -583,8 +508,7 @@ public final class ProtoFileUploadInit {
       }
 
       public Builder mergeFrom(com.iGap.proto.ProtoFileUploadInit.FileUploadInit other) {
-        if (other == com.iGap.proto.ProtoFileUploadInit.FileUploadInit.getDefaultInstance())
-          return this;
+        if (other == com.iGap.proto.ProtoFileUploadInit.FileUploadInit.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -612,10 +536,7 @@ public final class ProtoFileUploadInit {
         return true;
       }
 
-      public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
         com.iGap.proto.ProtoFileUploadInit.FileUploadInit parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -631,8 +552,7 @@ public final class ProtoFileUploadInit {
       }
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -668,8 +588,7 @@ public final class ProtoFileUploadInit {
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      public Builder setRequest(
-              com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
+      public Builder setRequest(com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
         if (requestBuilder_ == null) {
           request_ = builderForValue.build();
           onChanged();
@@ -685,8 +604,7 @@ public final class ProtoFileUploadInit {
       public Builder mergeRequest(com.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-            request_ =
-                    com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+            request_ = com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -726,19 +644,15 @@ public final class ProtoFileUploadInit {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-          return request_ == null ?
-                  com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>
-      getRequestFieldBuilder() {
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
+          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -867,8 +781,7 @@ public final class ProtoFileUploadInit {
       public java.lang.String getFileName() {
         java.lang.Object ref = fileName_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           fileName_ = s;
           return s;
@@ -879,13 +792,10 @@ public final class ProtoFileUploadInit {
       /**
        * <code>optional string file_name = 6;</code>
        */
-      public com.google.protobuf.ByteString
-      getFileNameBytes() {
+      public com.google.protobuf.ByteString getFileNameBytes() {
         java.lang.Object ref = fileName_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           fileName_ = b;
           return b;
         } else {
@@ -895,8 +805,7 @@ public final class ProtoFileUploadInit {
       /**
        * <code>optional string file_name = 6;</code>
        */
-      public Builder setFileName(
-              java.lang.String value) {
+      public Builder setFileName(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -917,8 +826,7 @@ public final class ProtoFileUploadInit {
       /**
        * <code>optional string file_name = 6;</code>
        */
-      public Builder setFileNameBytes(
-              com.google.protobuf.ByteString value) {
+      public Builder setFileNameBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -928,13 +836,11 @@ public final class ProtoFileUploadInit {
         onChanged();
         return this;
       }
-      public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
-      public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -952,12 +858,8 @@ public final class ProtoFileUploadInit {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<FileUploadInit>
-            PARSER = new com.google.protobuf.AbstractParser<FileUploadInit>() {
-      public FileUploadInit parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
+    private static final com.google.protobuf.Parser<FileUploadInit> PARSER = new com.google.protobuf.AbstractParser<FileUploadInit>() {
+      public FileUploadInit parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
         return new FileUploadInit(input, extensionRegistry);
       }
     };
@@ -1001,8 +903,7 @@ public final class ProtoFileUploadInit {
     /**
      * <code>optional string token = 2;</code>
      */
-    com.google.protobuf.ByteString
-    getTokenBytes();
+    com.google.protobuf.ByteString getTokenBytes();
 
     /**
      * <code>optional double progress = 3;</code>
@@ -1022,8 +923,7 @@ public final class ProtoFileUploadInit {
   /**
    * Protobuf type {@code proto.FileUploadInitResponse}
    */
-  public static final class FileUploadInitResponse extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public static final class FileUploadInitResponse extends com.google.protobuf.GeneratedMessageV3 implements
           // @@protoc_insertion_point(message_implements:proto.FileUploadInitResponse)
           FileUploadInitResponseOrBuilder {
     // Use FileUploadInitResponse.newBuilder() to construct.
@@ -1042,10 +942,7 @@ public final class ProtoFileUploadInit {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private FileUploadInitResponse(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    private FileUploadInitResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -1101,22 +998,17 @@ public final class ProtoFileUploadInit {
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInitResponse_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInitResponse_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.class, com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.Builder.class);
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+      return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInitResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.class, com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -1150,8 +1042,7 @@ public final class ProtoFileUploadInit {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         token_ = s;
         return s;
@@ -1160,13 +1051,10 @@ public final class ProtoFileUploadInit {
     /**
      * <code>optional string token = 2;</code>
      */
-    public com.google.protobuf.ByteString
-    getTokenBytes() {
+    public com.google.protobuf.ByteString getTokenBytes() {
       java.lang.Object ref = token_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         token_ = b;
         return b;
       } else {
@@ -1211,8 +1099,7 @@ public final class ProtoFileUploadInit {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (response_ != null) {
         output.writeMessage(1, getResponse());
       }
@@ -1236,23 +1123,19 @@ public final class ProtoFileUploadInit {
 
       size = 0;
       if (response_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(1, getResponse());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getResponse());
       }
       if (!getTokenBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, token_);
       }
       if (progress_ != 0D) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeDoubleSize(3, progress_);
+        size += com.google.protobuf.CodedOutputStream.computeDoubleSize(3, progress_);
       }
       if (offset_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeInt64Size(4, offset_);
+        size += com.google.protobuf.CodedOutputStream.computeInt64Size(4, offset_);
       }
       if (limit_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeInt32Size(5, limit_);
+        size += com.google.protobuf.CodedOutputStream.computeInt32Size(5, limit_);
       }
       memoizedSize = size;
       return size;
@@ -1272,19 +1155,12 @@ public final class ProtoFileUploadInit {
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
       if (hasResponse()) {
-        result = result && getResponse()
-                .equals(other.getResponse());
+        result = result && getResponse().equals(other.getResponse());
       }
-      result = result && getToken()
-              .equals(other.getToken());
-      result = result && (
-              java.lang.Double.doubleToLongBits(getProgress())
-                      == java.lang.Double.doubleToLongBits(
-                      other.getProgress()));
-      result = result && (getOffset()
-              == other.getOffset());
-      result = result && (getLimit()
-              == other.getLimit());
+      result = result && getToken().equals(other.getToken());
+      result = result && (java.lang.Double.doubleToLongBits(getProgress()) == java.lang.Double.doubleToLongBits(other.getProgress()));
+      result = result && (getOffset() == other.getOffset());
+      result = result && (getLimit() == other.getLimit());
       return result;
     }
 
@@ -1302,11 +1178,9 @@ public final class ProtoFileUploadInit {
       hash = (37 * hash) + TOKEN_FIELD_NUMBER;
       hash = (53 * hash) + getToken().hashCode();
       hash = (37 * hash) + PROGRESS_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              java.lang.Double.doubleToLongBits(getProgress()));
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(java.lang.Double.doubleToLongBits(getProgress()));
       hash = (37 * hash) + OFFSET_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getOffset());
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getOffset());
       hash = (37 * hash) + LIMIT_FIELD_NUMBER;
       hash = (53 * hash) + getLimit();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -1314,63 +1188,35 @@ public final class ProtoFileUploadInit {
       return hash;
     }
 
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(
-            com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(
-            com.google.protobuf.ByteString data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(
-            com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
@@ -1383,33 +1229,26 @@ public final class ProtoFileUploadInit {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
-    protected Builder newBuilderForType(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
      * Protobuf type {@code proto.FileUploadInitResponse}
      */
-    public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.FileUploadInitResponse)
             com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInitResponse_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInitResponse_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.class, com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.Builder.class);
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+        return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInitResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.class, com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.newBuilder()
@@ -1417,8 +1256,7 @@ public final class ProtoFileUploadInit {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1446,8 +1284,7 @@ public final class ProtoFileUploadInit {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.iGap.proto.ProtoFileUploadInit.internal_static_proto_FileUploadInitResponse_descriptor;
       }
 
@@ -1481,27 +1318,19 @@ public final class ProtoFileUploadInit {
       public Builder clone() {
         return (Builder) super.clone();
       }
-      public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
-      public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-      public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-      public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+      public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-      public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1514,8 +1343,7 @@ public final class ProtoFileUploadInit {
       }
 
       public Builder mergeFrom(com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse other) {
-        if (other == com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.getDefaultInstance())
-          return this;
+        if (other == com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1540,10 +1368,7 @@ public final class ProtoFileUploadInit {
         return true;
       }
 
-      public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
         com.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -1559,8 +1384,7 @@ public final class ProtoFileUploadInit {
       }
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1596,8 +1420,7 @@ public final class ProtoFileUploadInit {
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      public Builder setResponse(
-              com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
+      public Builder setResponse(com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
         if (responseBuilder_ == null) {
           response_ = builderForValue.build();
           onChanged();
@@ -1613,8 +1436,7 @@ public final class ProtoFileUploadInit {
       public Builder mergeResponse(com.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-            response_ =
-                    com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+            response_ = com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1654,19 +1476,15 @@ public final class ProtoFileUploadInit {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-          return response_ == null ?
-                  com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>
-      getResponseFieldBuilder() {
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1682,8 +1500,7 @@ public final class ProtoFileUploadInit {
       public java.lang.String getToken() {
         java.lang.Object ref = token_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           token_ = s;
           return s;
@@ -1694,13 +1511,10 @@ public final class ProtoFileUploadInit {
       /**
        * <code>optional string token = 2;</code>
        */
-      public com.google.protobuf.ByteString
-      getTokenBytes() {
+      public com.google.protobuf.ByteString getTokenBytes() {
         java.lang.Object ref = token_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           token_ = b;
           return b;
         } else {
@@ -1710,8 +1524,7 @@ public final class ProtoFileUploadInit {
       /**
        * <code>optional string token = 2;</code>
        */
-      public Builder setToken(
-              java.lang.String value) {
+      public Builder setToken(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1732,8 +1545,7 @@ public final class ProtoFileUploadInit {
       /**
        * <code>optional string token = 2;</code>
        */
-      public Builder setTokenBytes(
-              com.google.protobuf.ByteString value) {
+      public Builder setTokenBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1821,13 +1633,11 @@ public final class ProtoFileUploadInit {
         onChanged();
         return this;
       }
-      public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
-      public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -1845,12 +1655,8 @@ public final class ProtoFileUploadInit {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<FileUploadInitResponse>
-            PARSER = new com.google.protobuf.AbstractParser<FileUploadInitResponse>() {
-      public FileUploadInitResponse parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
+    private static final com.google.protobuf.Parser<FileUploadInitResponse> PARSER = new com.google.protobuf.AbstractParser<FileUploadInitResponse>() {
+      public FileUploadInitResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
         return new FileUploadInitResponse(input, extensionRegistry);
       }
     };
@@ -1870,24 +1676,16 @@ public final class ProtoFileUploadInit {
 
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_proto_FileUploadInit_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_FileUploadInit_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_proto_FileUploadInitResponse_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_proto_FileUploadInitResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_FileUploadInit_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_FileUploadInit_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_FileUploadInitResponse_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_FileUploadInitResponse_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
-  getDescriptor() {
+  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
-  private static com.google.protobuf.Descriptors.FileDescriptor
-          descriptor;
+  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
             "\n\024FileUploadInit.proto\022\005proto\032\rRequest.p" +
@@ -1901,24 +1699,17 @@ public final class ProtoFileUploadInit {
                     "imit\030\005 \001(\005B%\n\016com.iGap.protoB\023ProtoFileU" +
                     "ploadInitb\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-            new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-              public com.google.protobuf.ExtensionRegistry assignDescriptors(
-                      com.google.protobuf.Descriptors.FileDescriptor root) {
-                descriptor = root;
-                return null;
-              }
-            };
-    com.google.protobuf.Descriptors.FileDescriptor
-            .internalBuildGeneratedFileFrom(descriptorData,
-                    new com.google.protobuf.Descriptors.FileDescriptor[]{
-                            com.iGap.proto.ProtoRequest.getDescriptor(),
-                            com.iGap.proto.ProtoResponse.getDescriptor(),
-                    }, assigner);
-    internal_static_proto_FileUploadInit_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_FileUploadInit_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+      public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
+        descriptor = root;
+        return null;
+      }
+    };
+    com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
+            com.iGap.proto.ProtoRequest.getDescriptor(), com.iGap.proto.ProtoResponse.getDescriptor(),
+    }, assigner);
+    internal_static_proto_FileUploadInit_descriptor = getDescriptor().getMessageTypes().get(0);
+    internal_static_proto_FileUploadInit_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_FileUploadInit_descriptor,
         new java.lang.String[] { "Request", "FirstBytes", "LastBytes", "Size", "FileHash", "FileName", });
     internal_static_proto_FileUploadInitResponse_descriptor =

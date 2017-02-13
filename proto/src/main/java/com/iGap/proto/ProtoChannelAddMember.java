@@ -2075,8 +2075,7 @@ public final class ProtoChannelAddMember {
               "berResponse\022!\n\010response\030\001 \001(\0132\017.proto.Re" +
               "sponse\022\017\n\007room_id\030\002 \001(\004\022\017\n\007user_id\030\003 \001(\004" +
               "\022%\n\004role\030\004 \001(\0162\027.proto.ChannelRoom.RoleB" +
-              "\'\n\016com.iGap.protoB\025ProtoChannelAddMember",
-            "b\006proto3"
+              "\'\n\016com.iGap.protoB\025ProtoChannelAddMember", "b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2103,8 +2102,7 @@ public final class ProtoChannelAddMember {
       internal_static_proto_ChannelAddMember_descriptor.getNestedTypes().get(0);
     internal_static_proto_ChannelAddMember_Member_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_ChannelAddMember_Member_descriptor,
-            new java.lang.String[]{"UserId",});
+        internal_static_proto_ChannelAddMember_Member_descriptor, new java.lang.String[]{"UserId",});
     internal_static_proto_ChannelAddMemberResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChannelAddMemberResponse_fieldAccessorTable = new

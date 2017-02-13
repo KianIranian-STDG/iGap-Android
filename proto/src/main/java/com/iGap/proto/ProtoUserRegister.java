@@ -6,14 +6,11 @@ package com.iGap.proto;
 public final class ProtoUserRegister {
   private ProtoUserRegister() {
   }
-  public static void registerAllExtensions(
-          com.google.protobuf.ExtensionRegistryLite registry) {
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
-  public static void registerAllExtensions(
-          com.google.protobuf.ExtensionRegistry registry) {
-    registerAllExtensions(
-            (com.google.protobuf.ExtensionRegistryLite) registry);
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface UserRegisterOrBuilder extends
       // @@protoc_insertion_point(interface_extends:proto.UserRegister)
@@ -44,14 +41,12 @@ public final class ProtoUserRegister {
     /**
      * <code>optional string country_code = 3;</code>
      */
-    com.google.protobuf.ByteString
-    getCountryCodeBytes();
+    com.google.protobuf.ByteString getCountryCodeBytes();
   }
   /**
    * Protobuf type {@code proto.UserRegister}
    */
-  public static final class UserRegister extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public static final class UserRegister extends com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:proto.UserRegister)
       UserRegisterOrBuilder {
     // Use UserRegister.newBuilder() to construct.
@@ -68,9 +63,7 @@ public final class ProtoUserRegister {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private UserRegister(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+    private UserRegister(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
@@ -117,22 +110,17 @@ public final class ProtoUserRegister {
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      com.iGap.proto.ProtoUserRegister.UserRegister.class, com.iGap.proto.ProtoUserRegister.UserRegister.Builder.class);
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+      return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoUserRegister.UserRegister.class, com.iGap.proto.ProtoUserRegister.UserRegister.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -175,8 +163,7 @@ public final class ProtoUserRegister {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         countryCode_ = s;
         return s;
@@ -185,13 +172,10 @@ public final class ProtoUserRegister {
     /**
      * <code>optional string country_code = 3;</code>
      */
-    public com.google.protobuf.ByteString
-    getCountryCodeBytes() {
+    public com.google.protobuf.ByteString getCountryCodeBytes() {
       java.lang.Object ref = countryCode_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         countryCode_ = b;
         return b;
       } else {
@@ -209,8 +193,7 @@ public final class ProtoUserRegister {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (request_ != null) {
         output.writeMessage(1, getRequest());
       }
@@ -228,12 +211,10 @@ public final class ProtoUserRegister {
 
       size = 0;
       if (request_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(1, getRequest());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getRequest());
       }
       if (phoneNumber_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(2, phoneNumber_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt64Size(2, phoneNumber_);
       }
       if (!getCountryCodeBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, countryCode_);
@@ -256,13 +237,10 @@ public final class ProtoUserRegister {
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
       if (hasRequest()) {
-        result = result && getRequest()
-                .equals(other.getRequest());
+        result = result && getRequest().equals(other.getRequest());
       }
-      result = result && (getPhoneNumber()
-              == other.getPhoneNumber());
-      result = result && getCountryCode()
-              .equals(other.getCountryCode());
+      result = result && (getPhoneNumber() == other.getPhoneNumber());
+      result = result && getCountryCode().equals(other.getCountryCode());
       return result;
     }
 
@@ -278,8 +256,7 @@ public final class ProtoUserRegister {
         hash = (53 * hash) + getRequest().hashCode();
       }
       hash = (37 * hash) + PHONE_NUMBER_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getPhoneNumber());
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getPhoneNumber());
       hash = (37 * hash) + COUNTRY_CODE_FIELD_NUMBER;
       hash = (53 * hash) + getCountryCode().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -302,48 +279,29 @@ public final class ProtoUserRegister {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+    public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegister parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoUserRegister.UserRegister parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegister parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+    public static com.iGap.proto.ProtoUserRegister.UserRegister parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(
-            com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
@@ -356,33 +314,26 @@ public final class ProtoUserRegister {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
-    protected Builder newBuilderForType(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
      * Protobuf type {@code proto.UserRegister}
      */
-    public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:proto.UserRegister)
         com.iGap.proto.ProtoUserRegister.UserRegisterOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        com.iGap.proto.ProtoUserRegister.UserRegister.class, com.iGap.proto.ProtoUserRegister.UserRegister.Builder.class);
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+        return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoUserRegister.UserRegister.class, com.iGap.proto.ProtoUserRegister.UserRegister.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoUserRegister.UserRegister.newBuilder()
@@ -390,8 +341,7 @@ public final class ProtoUserRegister {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -415,8 +365,7 @@ public final class ProtoUserRegister {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_descriptor;
       }
 
@@ -448,27 +397,19 @@ public final class ProtoUserRegister {
       public Builder clone() {
         return (Builder) super.clone();
       }
-      public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
-      public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-      public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-      public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+      public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-      public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              Object value) {
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -481,8 +422,7 @@ public final class ProtoUserRegister {
       }
 
       public Builder mergeFrom(com.iGap.proto.ProtoUserRegister.UserRegister other) {
-        if (other == com.iGap.proto.ProtoUserRegister.UserRegister.getDefaultInstance())
-          return this;
+        if (other == com.iGap.proto.ProtoUserRegister.UserRegister.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -501,10 +441,7 @@ public final class ProtoUserRegister {
         return true;
       }
 
-      public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
         com.iGap.proto.ProtoUserRegister.UserRegister parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -520,8 +457,7 @@ public final class ProtoUserRegister {
       }
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -557,8 +493,7 @@ public final class ProtoUserRegister {
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      public Builder setRequest(
-              com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
+      public Builder setRequest(com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
         if (requestBuilder_ == null) {
           request_ = builderForValue.build();
           onChanged();
@@ -574,8 +509,7 @@ public final class ProtoUserRegister {
       public Builder mergeRequest(com.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-            request_ =
-                    com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+            request_ = com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -615,19 +549,15 @@ public final class ProtoUserRegister {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-          return request_ == null ?
-                  com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>
-      getRequestFieldBuilder() {
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
+          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -669,8 +599,7 @@ public final class ProtoUserRegister {
       public java.lang.String getCountryCode() {
         java.lang.Object ref = countryCode_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           countryCode_ = s;
           return s;
@@ -681,13 +610,10 @@ public final class ProtoUserRegister {
       /**
        * <code>optional string country_code = 3;</code>
        */
-      public com.google.protobuf.ByteString
-      getCountryCodeBytes() {
+      public com.google.protobuf.ByteString getCountryCodeBytes() {
         java.lang.Object ref = countryCode_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           countryCode_ = b;
           return b;
         } else {
@@ -697,8 +623,7 @@ public final class ProtoUserRegister {
       /**
        * <code>optional string country_code = 3;</code>
        */
-      public Builder setCountryCode(
-              java.lang.String value) {
+      public Builder setCountryCode(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -719,8 +644,7 @@ public final class ProtoUserRegister {
       /**
        * <code>optional string country_code = 3;</code>
        */
-      public Builder setCountryCodeBytes(
-              com.google.protobuf.ByteString value) {
+      public Builder setCountryCodeBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -754,12 +678,8 @@ public final class ProtoUserRegister {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<UserRegister>
-            PARSER = new com.google.protobuf.AbstractParser<UserRegister>() {
-      public UserRegister parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
+    private static final com.google.protobuf.Parser<UserRegister> PARSER = new com.google.protobuf.AbstractParser<UserRegister>() {
+      public UserRegister parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
         return new UserRegister(input, extensionRegistry);
       }
     };
@@ -803,8 +723,7 @@ public final class ProtoUserRegister {
     /**
      * <code>optional string username = 2;</code>
      */
-    com.google.protobuf.ByteString
-    getUsernameBytes();
+    com.google.protobuf.ByteString getUsernameBytes();
 
     /**
      * <code>optional uint64 user_id = 3;</code>
@@ -815,18 +734,15 @@ public final class ProtoUserRegister {
      * <code>optional string author_hash = 4;</code>
      */
     java.lang.String getAuthorHash();
-
     /**
      * <code>optional string author_hash = 4;</code>
      */
-    com.google.protobuf.ByteString
-    getAuthorHashBytes();
+    com.google.protobuf.ByteString getAuthorHashBytes();
 
     /**
      * <code>optional .proto.UserRegisterResponse.Method method = 5;</code>
      */
     int getMethodValue();
-
     /**
      * <code>optional .proto.UserRegisterResponse.Method method = 5;</code>
      */
@@ -841,12 +757,10 @@ public final class ProtoUserRegister {
      * <code>repeated uint64 sms_number = 7;</code>
      */
     java.util.List<java.lang.Long> getSmsNumberList();
-
     /**
      * <code>repeated uint64 sms_number = 7;</code>
      */
     int getSmsNumberCount();
-
     /**
      * <code>repeated uint64 sms_number = 7;</code>
      */
@@ -856,12 +770,10 @@ public final class ProtoUserRegister {
      * <code>optional string verify_code_regex = 8;</code>
      */
     java.lang.String getVerifyCodeRegex();
-
     /**
      * <code>optional string verify_code_regex = 8;</code>
      */
-    com.google.protobuf.ByteString
-    getVerifyCodeRegexBytes();
+    com.google.protobuf.ByteString getVerifyCodeRegexBytes();
 
     /**
      * <code>optional uint32 verify_code_digit_count = 9;</code>
@@ -871,8 +783,7 @@ public final class ProtoUserRegister {
   /**
    * Protobuf type {@code proto.UserRegisterResponse}
    */
-  public static final class UserRegisterResponse extends
-          com.google.protobuf.GeneratedMessageV3 implements
+  public static final class UserRegisterResponse extends com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:proto.UserRegisterResponse)
       UserRegisterResponseOrBuilder {
     // Use UserRegisterResponse.newBuilder() to construct.
@@ -895,8 +806,7 @@ public final class ProtoUserRegister {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private UserRegisterResponse(
-            com.google.protobuf.CodedInputStream input,
+    private UserRegisterResponse(com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -993,8 +903,7 @@ public final class ProtoUserRegister {
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-                e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
           smsNumber_ = java.util.Collections.unmodifiableList(smsNumber_);
@@ -1002,23 +911,19 @@ public final class ProtoUserRegister {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-                  com.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, com.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
+          .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, com.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
     }
 
     /**
      * Protobuf enum {@code proto.UserRegisterResponse.Method}
      */
-    public enum Method
-            implements com.google.protobuf.ProtocolMessageEnum {
+    public enum Method implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>VERIFY_CODE_SMS = 0;</code>
        */
@@ -1076,38 +981,30 @@ public final class ProtoUserRegister {
         }
       }
 
-      public static com.google.protobuf.Internal.EnumLiteMap<Method>
-      internalGetValueMap() {
+      public static com.google.protobuf.Internal.EnumLiteMap<Method> internalGetValueMap() {
         return internalValueMap;
       }
-      private static final com.google.protobuf.Internal.EnumLiteMap<
-              Method> internalValueMap =
-              new com.google.protobuf.Internal.EnumLiteMap<Method>() {
-                public Method findValueByNumber(int number) {
-                  return Method.forNumber(number);
-                }
+      private static final com.google.protobuf.Internal.EnumLiteMap<Method> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<Method>() {
+        public Method findValueByNumber(int number) {
+          return Method.forNumber(number);
+        }
             };
 
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-      getValueDescriptor() {
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-      getDescriptorForType() {
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-      getDescriptor() {
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
         return com.iGap.proto.ProtoUserRegister.UserRegisterResponse.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final Method[] VALUES = values();
 
-      public static Method valueOf(
-              com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      public static Method valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-                  "EnumValueDescriptor is not for this type.");
+          throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -1156,8 +1053,7 @@ public final class ProtoUserRegister {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         username_ = s;
         return s;
@@ -1166,13 +1062,10 @@ public final class ProtoUserRegister {
     /**
      * <code>optional string username = 2;</code>
      */
-    public com.google.protobuf.ByteString
-    getUsernameBytes() {
+    public com.google.protobuf.ByteString getUsernameBytes() {
       java.lang.Object ref = username_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         username_ = b;
         return b;
       } else {
@@ -1191,7 +1084,6 @@ public final class ProtoUserRegister {
 
     public static final int AUTHOR_HASH_FIELD_NUMBER = 4;
     private volatile java.lang.Object authorHash_;
-
     /**
      * <code>optional string author_hash = 4;</code>
      */
@@ -1200,24 +1092,19 @@ public final class ProtoUserRegister {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         authorHash_ = s;
         return s;
       }
     }
-
     /**
      * <code>optional string author_hash = 4;</code>
      */
-    public com.google.protobuf.ByteString
-    getAuthorHashBytes() {
+    public com.google.protobuf.ByteString getAuthorHashBytes() {
       java.lang.Object ref = authorHash_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         authorHash_ = b;
         return b;
       } else {
@@ -1227,14 +1114,12 @@ public final class ProtoUserRegister {
 
     public static final int METHOD_FIELD_NUMBER = 5;
     private int method_;
-
     /**
      * <code>optional .proto.UserRegisterResponse.Method method = 5;</code>
      */
     public int getMethodValue() {
       return method_;
     }
-
     /**
      * <code>optional .proto.UserRegisterResponse.Method method = 5;</code>
      */
@@ -1245,7 +1130,6 @@ public final class ProtoUserRegister {
 
     public static final int RESEND_DELAY_FIELD_NUMBER = 6;
     private int resendDelay_;
-
     /**
      * <code>optional uint32 resend_delay = 6;</code>
      */
@@ -1255,7 +1139,6 @@ public final class ProtoUserRegister {
 
     public static final int SMS_NUMBER_FIELD_NUMBER = 7;
     private java.util.List<java.lang.Long> smsNumber_;
-
     /**
      * <code>repeated uint64 sms_number = 7;</code>
      */
@@ -1263,14 +1146,12 @@ public final class ProtoUserRegister {
         getSmsNumberList() {
       return smsNumber_;
     }
-
     /**
      * <code>repeated uint64 sms_number = 7;</code>
      */
     public int getSmsNumberCount() {
       return smsNumber_.size();
     }
-
     /**
      * <code>repeated uint64 sms_number = 7;</code>
      */
@@ -1281,7 +1162,6 @@ public final class ProtoUserRegister {
 
     public static final int VERIFY_CODE_REGEX_FIELD_NUMBER = 8;
     private volatile java.lang.Object verifyCodeRegex_;
-
     /**
      * <code>optional string verify_code_regex = 8;</code>
      */
@@ -1290,24 +1170,19 @@ public final class ProtoUserRegister {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         verifyCodeRegex_ = s;
         return s;
       }
     }
-
     /**
      * <code>optional string verify_code_regex = 8;</code>
      */
-    public com.google.protobuf.ByteString
-    getVerifyCodeRegexBytes() {
+    public com.google.protobuf.ByteString getVerifyCodeRegexBytes() {
       java.lang.Object ref = verifyCodeRegex_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
-                com.google.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
         verifyCodeRegex_ = b;
         return b;
       } else {
@@ -1317,7 +1192,6 @@ public final class ProtoUserRegister {
 
     public static final int VERIFY_CODE_DIGIT_COUNT_FIELD_NUMBER = 9;
     private int verifyCodeDigitCount_;
-
     /**
      * <code>optional uint32 verify_code_digit_count = 9;</code>
      */
@@ -1335,8 +1209,7 @@ public final class ProtoUserRegister {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       getSerializedSize();
       if (response_ != null) {
         output.writeMessage(1, getResponse());
@@ -1377,38 +1250,32 @@ public final class ProtoUserRegister {
 
       size = 0;
       if (response_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(1, getResponse());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getResponse());
       }
       if (!getUsernameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, username_);
       }
       if (userId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt64Size(3, userId_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt64Size(3, userId_);
       }
       if (!getAuthorHashBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, authorHash_);
       }
       if (method_ != com.iGap.proto.ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeEnumSize(5, method_);
+        size += com.google.protobuf.CodedOutputStream.computeEnumSize(5, method_);
       }
       if (resendDelay_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt32Size(6, resendDelay_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(6, resendDelay_);
       }
       {
         int dataSize = 0;
         for (int i = 0; i < smsNumber_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-                  .computeUInt64SizeNoTag(smsNumber_.get(i));
+          dataSize += com.google.protobuf.CodedOutputStream.computeUInt64SizeNoTag(smsNumber_.get(i));
         }
         size += dataSize;
         if (!getSmsNumberList().isEmpty()) {
           size += 1;
-          size += com.google.protobuf.CodedOutputStream
-                  .computeInt32SizeNoTag(dataSize);
+          size += com.google.protobuf.CodedOutputStream.computeInt32SizeNoTag(dataSize);
         }
         smsNumberMemoizedSerializedSize = dataSize;
       }
@@ -1416,8 +1283,7 @@ public final class ProtoUserRegister {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, verifyCodeRegex_);
       }
       if (verifyCodeDigitCount_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeUInt32Size(9, verifyCodeDigitCount_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(9, verifyCodeDigitCount_);
       }
       memoizedSize = size;
       return size;
@@ -1437,24 +1303,16 @@ public final class ProtoUserRegister {
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
       if (hasResponse()) {
-        result = result && getResponse()
-                .equals(other.getResponse());
+        result = result && getResponse().equals(other.getResponse());
       }
-      result = result && getUsername()
-              .equals(other.getUsername());
-      result = result && (getUserId()
-              == other.getUserId());
-      result = result && getAuthorHash()
-              .equals(other.getAuthorHash());
+      result = result && getUsername().equals(other.getUsername());
+      result = result && (getUserId() == other.getUserId());
+      result = result && getAuthorHash().equals(other.getAuthorHash());
       result = result && method_ == other.method_;
-      result = result && (getResendDelay()
-              == other.getResendDelay());
-      result = result && getSmsNumberList()
-              .equals(other.getSmsNumberList());
-      result = result && getVerifyCodeRegex()
-              .equals(other.getVerifyCodeRegex());
-      result = result && (getVerifyCodeDigitCount()
-              == other.getVerifyCodeDigitCount());
+      result = result && (getResendDelay() == other.getResendDelay());
+      result = result && getSmsNumberList().equals(other.getSmsNumberList());
+      result = result && getVerifyCodeRegex().equals(other.getVerifyCodeRegex());
+      result = result && (getVerifyCodeDigitCount() == other.getVerifyCodeDigitCount());
       return result;
     }
 
@@ -1472,8 +1330,7 @@ public final class ProtoUserRegister {
       hash = (37 * hash) + USERNAME_FIELD_NUMBER;
       hash = (53 * hash) + getUsername().hashCode();
       hash = (37 * hash) + USER_ID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-              getUserId());
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getUserId());
       hash = (37 * hash) + AUTHOR_HASH_FIELD_NUMBER;
       hash = (53 * hash) + getAuthorHash().hashCode();
       hash = (37 * hash) + METHOD_FIELD_NUMBER;
@@ -1514,42 +1371,25 @@ public final class ProtoUserRegister {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseDelimitedFrom(
-            java.io.InputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(
-            com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
+    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -1560,8 +1400,7 @@ public final class ProtoUserRegister {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -1573,8 +1412,7 @@ public final class ProtoUserRegister {
     /**
      * Protobuf type {@code proto.UserRegisterResponse}
      */
-    public static final class Builder extends
-            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:proto.UserRegisterResponse)
         com.iGap.proto.ProtoUserRegister.UserRegisterResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -1582,11 +1420,9 @@ public final class ProtoUserRegister {
         return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
         return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                    com.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, com.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
+            .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, com.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoUserRegister.UserRegisterResponse.newBuilder()
@@ -1594,8 +1430,7 @@ public final class ProtoUserRegister {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1631,8 +1466,7 @@ public final class ProtoUserRegister {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_descriptor;
       }
 
@@ -1677,29 +1511,21 @@ public final class ProtoUserRegister {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
-      public Builder setField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
-
-      public Builder clearField(
-              com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
-      public Builder clearOneof(
-              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-      public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+      public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-      public Builder addRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
@@ -1759,10 +1585,7 @@ public final class ProtoUserRegister {
         return true;
       }
 
-      public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
         com.iGap.proto.ProtoUserRegister.UserRegisterResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -1779,8 +1602,7 @@ public final class ProtoUserRegister {
       private int bitField0_;
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1816,8 +1638,7 @@ public final class ProtoUserRegister {
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      public Builder setResponse(
-              com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
+      public Builder setResponse(com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
         if (responseBuilder_ == null) {
           response_ = builderForValue.build();
           onChanged();
@@ -1833,8 +1654,7 @@ public final class ProtoUserRegister {
       public Builder mergeResponse(com.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-            response_ =
-                    com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+            response_ = com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1874,19 +1694,15 @@ public final class ProtoUserRegister {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-          return response_ == null ?
-                  com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
-              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>
-      getResponseFieldBuilder() {
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1902,8 +1718,7 @@ public final class ProtoUserRegister {
       public java.lang.String getUsername() {
         java.lang.Object ref = username_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           username_ = s;
           return s;
@@ -1918,9 +1733,7 @@ public final class ProtoUserRegister {
           getUsernameBytes() {
         java.lang.Object ref = username_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           username_ = b;
           return b;
         } else {
@@ -1930,8 +1743,7 @@ public final class ProtoUserRegister {
       /**
        * <code>optional string username = 2;</code>
        */
-      public Builder setUsername(
-              java.lang.String value) {
+      public Builder setUsername(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
   }
@@ -1952,8 +1764,7 @@ public final class ProtoUserRegister {
       /**
        * <code>optional string username = 2;</code>
        */
-      public Builder setUsernameBytes(
-              com.google.protobuf.ByteString value) {
+      public Builder setUsernameBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1991,15 +1802,13 @@ public final class ProtoUserRegister {
       }
 
       private java.lang.Object authorHash_ = "";
-
       /**
        * <code>optional string author_hash = 4;</code>
        */
       public java.lang.String getAuthorHash() {
         java.lang.Object ref = authorHash_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-                  (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           authorHash_ = s;
           return s;
@@ -2007,38 +1816,31 @@ public final class ProtoUserRegister {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string author_hash = 4;</code>
        */
-      public com.google.protobuf.ByteString
-      getAuthorHashBytes() {
+      public com.google.protobuf.ByteString getAuthorHashBytes() {
         java.lang.Object ref = authorHash_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
           authorHash_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string author_hash = 4;</code>
        */
-      public Builder setAuthorHash(
-              java.lang.String value) {
+      public Builder setAuthorHash(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         authorHash_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string author_hash = 4;</code>
        */
@@ -2048,17 +1850,15 @@ public final class ProtoUserRegister {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string author_hash = 4;</code>
        */
-      public Builder setAuthorHashBytes(
-              com.google.protobuf.ByteString value) {
+      public Builder setAuthorHashBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         authorHash_ = value;
         onChanged();
         return this;
@@ -2135,7 +1935,6 @@ public final class ProtoUserRegister {
       }
 
       private java.util.List<java.lang.Long> smsNumber_ = java.util.Collections.emptyList();
-
       private void ensureSmsNumberIsMutable() {
         if (!((bitField0_ & 0x00000040) == 0x00000040)) {
           smsNumber_ = new java.util.ArrayList<java.lang.Long>(smsNumber_);
@@ -2186,8 +1985,7 @@ public final class ProtoUserRegister {
       public Builder addAllSmsNumber(
           java.lang.Iterable<? extends java.lang.Long> values) {
         ensureSmsNumberIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-                values, smsNumber_);
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(values, smsNumber_);
         onChanged();
         return this;
       }
@@ -2224,8 +2022,7 @@ public final class ProtoUserRegister {
           getVerifyCodeRegexBytes() {
         java.lang.Object ref = verifyCodeRegex_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-                  com.google.protobuf.ByteString.copyFromUtf8(
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           verifyCodeRegex_ = b;
           return b;
@@ -2236,8 +2033,7 @@ public final class ProtoUserRegister {
       /**
        * <code>optional string verify_code_regex = 8;</code>
        */
-      public Builder setVerifyCodeRegex(
-              java.lang.String value) {
+      public Builder setVerifyCodeRegex(java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2258,8 +2054,7 @@ public final class ProtoUserRegister {
       /**
        * <code>optional string verify_code_regex = 8;</code>
        */
-      public Builder setVerifyCodeRegexBytes(
-              com.google.protobuf.ByteString value) {
+      public Builder setVerifyCodeRegexBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2321,10 +2116,7 @@ public final class ProtoUserRegister {
 
     private static final com.google.protobuf.Parser<UserRegisterResponse>
         PARSER = new com.google.protobuf.AbstractParser<UserRegisterResponse>() {
-      public UserRegisterResponse parsePartialFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws com.google.protobuf.InvalidProtocolBufferException {
+      public UserRegisterResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
           return new UserRegisterResponse(input, extensionRegistry);
       }
     };
@@ -2344,24 +2136,19 @@ public final class ProtoUserRegister {
 
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_proto_UserRegister_descriptor;
+  private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_UserRegister_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_UserRegister_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_proto_UserRegisterResponse_descriptor;
+  private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_UserRegisterResponse_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_proto_UserRegisterResponse_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
-  getDescriptor() {
+  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-          descriptor;
-
+  private static  com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
             "\n\022UserRegister.proto\022\005proto\032\rRequest.pro" +
@@ -2373,26 +2160,23 @@ public final class ProtoUserRegister {
                     "\030\003 \001(\004\022\023\n\013author_hash\030\004 \001(\t\0222\n\006method\030\005 " +
                     "\001(\0162\".proto.UserRegisterResponse.Method\022" +
                     "\024\n\014resend_delay\030\006 \001(\r\022\022\n\nsms_number\030\007 \003(" +
-                    "\004\022\031\n\021verify_code_regex\030\010 \001(\t\022\037\n\027verify_c",
-            "ode_digit_count\030\t \001(\r\"Q\n\006Method\022\023\n\017VERIF" +
-                    "Y_CODE_SMS\020\000\022\026\n\022VERIFY_CODE_SOCKET\020\001\022\032\n\026" +
-                    "VERIFY_CODE_SMS_SOCKET\020\002B#\n\016com.iGap.pro" +
+                    "\004\022\031\n\021verify_code_regex\030\010 \001(\t\022\037\n\027verify_c", "ode_digit_count\030\t \001(\r\"Q\n\006Method\022\023\n\017VERIF" +
+            "Y_CODE_SMS\020\000\022\026\n\022VERIFY_CODE_SOCKET\020\001\022\032\n\026" +
+            "VERIFY_CODE_SMS_SOCKET\020\002B#\n\016com.iGap.pro" +
       "toB\021ProtoUserRegisterb\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-            new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
           public com.google.protobuf.ExtensionRegistry assignDescriptors(
               com.google.protobuf.Descriptors.FileDescriptor root) {
             descriptor = root;
             return null;
           }
-            };
+    };
     com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-              new com.google.protobuf.Descriptors.FileDescriptor[]{
-                      com.iGap.proto.ProtoRequest.getDescriptor(),
+      .internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
+              com.iGap.proto.ProtoRequest.getDescriptor(),
           com.iGap.proto.ProtoResponse.getDescriptor(),
-              }, assigner);
+      }, assigner);
     internal_static_proto_UserRegister_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_proto_UserRegister_fieldAccessorTable = new
@@ -2402,9 +2186,7 @@ public final class ProtoUserRegister {
     internal_static_proto_UserRegisterResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_UserRegisterResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_proto_UserRegisterResponse_descriptor,
-            new java.lang.String[]{"Response", "Username", "UserId", "AuthorHash", "Method", "ResendDelay", "SmsNumber", "VerifyCodeRegex", "VerifyCodeDigitCount", });
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserRegisterResponse_descriptor, new java.lang.String[]{"Response", "Username", "UserId", "AuthorHash", "Method", "ResendDelay", "SmsNumber", "VerifyCodeRegex", "VerifyCodeDigitCount",});
     com.iGap.proto.ProtoRequest.getDescriptor();
     com.iGap.proto.ProtoResponse.getDescriptor();
   }

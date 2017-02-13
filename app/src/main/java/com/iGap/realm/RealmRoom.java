@@ -132,6 +132,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getChannelRoom().setInviteLink(room.getChannelRoomExtra().getPrivateExtra().getInviteLink());
                 realmRoom.getChannelRoom().setInvite_token(room.getChannelRoomExtra().getPrivateExtra().getInviteToken());
                 realmRoom.getChannelRoom().setUsername(room.getChannelRoomExtra().getPublicExtra().getUsername());
+                realmRoom.getChannelRoom().setSeenId(room.getChannelRoomExtra().getSeenId());
                 realmRoom.getChannelRoom().setPrivate(room.getChannelRoomExtra().hasPrivateExtra());
                 break;
             case CHAT:
