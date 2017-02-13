@@ -96,7 +96,7 @@
     <string name="log_out">Logout</string>
     <string name="delete_account">Delete Account</string>
     <string name="mute">Mute</string>
-    <string name="unmute">Unmute</string>
+    <string name="unmute">Un Mute</string>
     <string name="mute_notification">Mute Notify</string>
     <string name="unmute_notification">Un-mute Notify</string>
     <string name="clear_history">Clear History</string>
@@ -170,7 +170,7 @@
     <string name="st_auto_download_data">auto download (cellular data)</string>
     <string name="st_auto_download_wifi">auto download (Wi-Fi)</string>
     <string name="st_auto_download_roaming">auto download (roaming)</string>
-    <string name="st_auto_gif">Autoplay GIFs</string>
+    <string name="st_auto_gif">Auto Play GIFs</string>
     <string name="st_save_to_gallery">Save to Gallery</string>
     <string name="st_title_support">Support</string>
     <string name="st_ask_question">Ask a Question</string>
@@ -217,7 +217,7 @@
     <string name="Last_Seen">Last Seen</string>
     <string name="Groups">Groups</string>
     <string name="Security">Security</string>
-    <string name="Passcode_Lock">Passcode Lock</string>
+    <string name="Passcode_Lock">Pass Code Lock</string>
     <string name="Two_Step_Verification">Two-Step Verification</string>
     <string name="Active_Sessions">Active Sessions</string>
     <string name="Account_Self_destruction">Account self-destructs</string>
@@ -433,7 +433,7 @@
     <string name="E_617">There is not any other massage for viewing.</string>
     <string name="E_713_1">Bad payload: Invalid token</string>
     <string name="E_713_2">Bad payload: Invalid offset</string>
-    <string name="E_713_3">Bad payload: Invalid maxlimit</string>
+    <string name="E_713_3">Bad payload: Invalid max limit</string>
     <string name="E_713_4">Bad payload: Invalid selector</string>
     <string name="E_713_5">Bad payload: Invalid offset</string>
     <string name="E_714">Internal Server Error</string>
@@ -615,7 +615,7 @@
     <string name="waiting_for_connection">Waiting for Connecting to Server</string>
     <string name="array_delete_photo_group">Delete Photo</string>
     <string name="to_delete_chat">Delete Chat</string>
-    <string name="picture_save_to_galary">"picture saved to galary"</string>
+    <string name="picture_save_to_galary">"picture saved to gallery"</string>
     <string name="my_location_title">My Location</string>
     <string name="shared_image">Shared images</string>
     <string name="shared_video">Shared video</string>
@@ -749,7 +749,7 @@
     <string name="permission_location">Location</string>
     <string name="permission_record_audio">Record Audio</string>
     <string name="permission_phone">Call Phone</string>
-    <string name="permission_sms">Recive Sms</string>
+    <string name="permission_sms">Receive Sms</string>
 
     <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>

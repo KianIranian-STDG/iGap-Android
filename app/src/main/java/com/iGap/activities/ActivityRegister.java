@@ -144,16 +144,6 @@ public class ActivityRegister extends ActivityEnhanced {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
                         rg_txt_verify_sms.setText(message);
                         receiveVerifySms(message);
-                        Log.i("CCCCCCC", "ActivityRegister phoneNumber: " + phoneNumber);
-                        Log.i("CCCCCCC", "ActivityRegister message: " + message);
-
-                        //G.handler.postDelayed(new Runnable() {
-                        //    @Override
-                        //    public void run() {
-                        //        IncomingSms.markMessageRead(phoneNumber, message);
-                        //    }
-                        //}, 2000);
-
                     }
                 } catch (Exception e1) {
                     e1.getStackTrace();
