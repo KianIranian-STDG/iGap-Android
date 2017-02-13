@@ -228,6 +228,7 @@ import static com.iGap.G.context;
 import static com.iGap.R.id.ac_ll_parent;
 import static com.iGap.R.id.replyFrom;
 import static com.iGap.R.string.member;
+import static com.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
@@ -1731,15 +1732,10 @@ public class ActivityChat extends ActivityEnhanced
                     LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
                     llm.scrollToPositionWithOffset(_posi, 0);
 
-                countNewMessage = 0;
+                    countNewMessage = 0;
                 } else {
                     recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1 - countNewMessage);
                 }
-
-
-
-
-
             }
         });
 
@@ -2407,23 +2403,24 @@ public class ActivityChat extends ActivityEnhanced
             Log.i("ZZZ", "insertShearedData 2");
             HelperGetDataFromOtherApp.hasSharedData = false;
 
-            if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.message) {
+            if (messageType == HelperGetDataFromOtherApp.FileType.message) {
                 String message = HelperGetDataFromOtherApp.message;
                 edtChat.setText(message);
                 imvSendButton.performClick();
-            } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.image) {
+            } else if (messageType == HelperGetDataFromOtherApp.FileType.image) {
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
                     sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
                 }
-            } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.video) {
+            } else if (messageType == HelperGetDataFromOtherApp.FileType.video) {
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
                     sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
                 }
-            } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.audio) {
+            } else if (messageType == HelperGetDataFromOtherApp.FileType.audio) {
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
                     sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
                 }
-            } else if (HelperGetDataFromOtherApp.messageType == HelperGetDataFromOtherApp.FileType.file) {
+            } else if (messageType == HelperGetDataFromOtherApp.FileType.file) {
+
                 Log.i("ZZZ", "insertShearedData 3");
                 Log.i("ZZZ", "HelperGetDataFromOtherApp.messageFileAddress.size() 3 : " + HelperGetDataFromOtherApp.messageFileAddress.size());
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
@@ -2443,6 +2440,7 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
             }
+            HelperGetDataFromOtherApp.messageType = null;
         }
     }
 
@@ -2685,7 +2683,8 @@ public class ActivityChat extends ActivityEnhanced
     private void initAttach() {
 
         bottomSheet = new BottomSheet.Builder(this, R.style.BottomSheet_StyleDialog).grid().sheet(R.menu.bottom_sheet).listener(new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case R.id.camera:
                         if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {

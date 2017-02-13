@@ -186,5 +186,13 @@ public class HelperString {
         return false;
     }
 
+    public static String dotSplit(String text) {
+        String[] parts = text.split("\\.");
+        if (parts.length > 0) {
+            return parts[parts.length - 1];
+        } else {
+            return null;
+        }
+    }
 
 }

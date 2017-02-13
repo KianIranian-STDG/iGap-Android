@@ -21,7 +21,7 @@ public class HelperGetDataFromOtherApp {
 
     public static boolean hasSharedData = false;
     // after use intent set this to false
-    public static FileType messageType;
+    public static FileType messageType = null;
     public static String message = "";
     public static ArrayList<Uri> messageFileAddress;
     public static ArrayList<FileType> fileTypeArray = new ArrayList<FileType>();
@@ -117,10 +117,13 @@ public class HelperGetDataFromOtherApp {
     private void SetOutPutSingleFile(FileType type) {
 
         Uri fileAddressUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
-        Log.i("ZZZ", "SetOutPutSingleFile fileAddressUri : " + fileAddressUri);
         if (fileAddressUri != null) {
             hasSharedData = true;
             messageType = type;
+            String extension = HelperString.dotSplit(fileAddressUri.getPath());
+            if (extension != null && extension.equals("mp4")) {
+                messageType = FileType.video;
+            }
             messageFileAddress = new ArrayList<Uri>();
             messageFileAddress.add(fileAddressUri);
         }
@@ -137,10 +140,14 @@ public class HelperGetDataFromOtherApp {
             messageType = type;
             messageFileAddress = fileAddressUri;
 
-            Log.i("ZZZ", "fileAddressUri : " + fileAddressUri);
             for (int i = 0; i < messageFileAddress.size(); i++) {
-                Log.i("ZZZ", "fileAddressUri.get(i) : " + fileAddressUri.get(i));
                 FileType fileType = getMimeType(fileAddressUri.get(i));
+
+                String extension = HelperString.dotSplit(fileAddressUri.get(i).getPath());
+                if (extension != null && extension.equals("mp4")) {
+                    fileType = FileType.video;
+                }
+
                 fileTypeArray.add(fileType);
             }
         }
