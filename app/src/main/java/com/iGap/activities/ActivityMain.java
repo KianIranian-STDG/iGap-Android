@@ -156,6 +156,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private boolean isGetContactList = false;
     private ImageView imgNavImage;
     private DrawerLayout drawer;
+    private Toolbar mainToolbar;
 
     private void scrollToTop() {
         recyclerView.postDelayed(new Runnable() {
@@ -411,11 +412,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void initDrawerMenu() {
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
+        mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(mainToolbar);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mainToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
             }
@@ -997,7 +998,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         recyclerView.setAdapter(mAdapter);
 
         appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
-        final ViewGroup toolbar = (ViewGroup) findViewById(R.id.toolbar);
+        final ViewGroup toolbar = (ViewGroup) findViewById(R.id.rootToolbar);
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
             @Override
             public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {

@@ -3,8 +3,7 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="@dimen/dp68"
-              android:layoutDirection="ltr">
-
+    >
 
     <FrameLayout
         android:layout_width="@dimen/dp68"
@@ -22,8 +21,6 @@
         android:layout_width="@dimen/dp4"
         android:layout_height="match_parent"
         android:background="#f1f265"
-
-
         android:visibility="gone"/>
 
     <LinearLayout
@@ -37,8 +34,6 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:paddingTop="@dimen/dp12">
-
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -46,7 +41,6 @@
                 android:layout_weight="1"
                 android:gravity="top|left"
                 android:orientation="vertical">
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -60,6 +54,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginRight="@dimen/dp8"
+                        android:layout_marginEnd="@dimen/dp8"
                         android:paddingBottom="2dp"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp14"/>
@@ -81,12 +76,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp4"
+                        android:layout_marginStart="@dimen/dp4"
                         android:text="@string/md_muted"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/sp14"/>
-
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -107,7 +101,6 @@
                         android:id="@+id/cs_txt_last_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layoutDirection="ltr"
                         android:paddingBottom="1dp"
                         android:singleLine="true"
                         android:text="LAST MESSAGE"
@@ -134,7 +127,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/dp8"
+                android:layout_marginEnd="@dimen/dp8"
                 android:gravity="top|center_horizontal"
+                android:paddingEnd="@dimen/dp20"
+                android:paddingRight="@dimen/dp20"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -148,6 +144,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginRight="@dimen/dp4"
+                        android:layout_marginEnd="@dimen/dp4"
                         />
 
                     <TextView
@@ -161,7 +158,6 @@
 
 
                 </LinearLayout>
-
                 <TextView
                     android:id="@+id/cs_txt_unread_message"
                     android:layout_width="wrap_content"
@@ -178,12 +174,13 @@
                     android:textSize="@dimen/sp10"/>
             </LinearLayout>
         </LinearLayout>
-
-
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/gray_3c"/>
+            android:background="@color/gray_3c"
+            android:layout_marginEnd="@dimen/dp20"
+            android:layout_marginRight="@dimen/dp20"
+            />
 
     </LinearLayout>
 
