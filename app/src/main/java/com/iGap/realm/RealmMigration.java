@@ -15,16 +15,13 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema roomSchema = schema.get("RealmRoom");
             if (roomSchema != null) {
                 roomSchema.addField("keepRoom", boolean.class, FieldAttribute.REQUIRED);
-                /**
-                 * added from 2=>3
-                 */
-                roomSchema.addField("actionStateUserId", long.class, FieldAttribute.REQUIRED);
             }
 
             RealmObjectSchema realmRoomMessageSchema = schema.get("RealmRoomMessage");
             if (realmRoomMessageSchema != null) {
                 realmRoomMessageSchema.addField("authorRoomId", long.class, FieldAttribute.REQUIRED);
             }
+            oldVersion++;
         }
 
         if (oldVersion == 2) {
@@ -32,6 +29,12 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (roomSchema != null) {
                 roomSchema.addField("actionStateUserId", long.class, FieldAttribute.REQUIRED);
             }
+
+            RealmObjectSchema realmChannelRoomSchema = schema.get("RealmChannelRoom");
+            if (realmChannelRoomSchema != null) {
+                realmChannelRoomSchema.addField("seenId", long.class, FieldAttribute.REQUIRED);
+            }
+            oldVersion++;
         }
     }
 }
