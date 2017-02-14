@@ -981,9 +981,12 @@ public class ActivityChat extends ActivityEnhanced
                     RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
                     if (roomMessage.getForwardMessage() != null) {
                         forwardedMessage.setForwardMessage(roomMessage.getForwardMessage());
+                        forwardedMessage.setHasMessageLink(roomMessage.getForwardMessage().getHasMessageLink());
                     } else {
                         forwardedMessage.setForwardMessage(roomMessage);
+                        forwardedMessage.setHasMessageLink(roomMessage.getHasMessageLink());
                     }
+
                     forwardedMessage.setCreateTime(TimeUtils.currentLocalTime());
                     forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                     forwardedMessage.setRoomId(mRoomId);

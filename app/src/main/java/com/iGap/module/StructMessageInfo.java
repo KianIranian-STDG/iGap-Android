@@ -277,7 +277,7 @@ public class StructMessageInfo implements Parcelable {
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.roomId = roomMessage.getRoomId();
         messageInfo.status = roomMessage.getStatus();
-        messageInfo.hasLinkInMessage = roomMessage.getHasMessageLink();
+        messageInfo.hasLinkInMessage = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getHasMessageLink() : roomMessage.getHasMessageLink();
         messageInfo.messageID = Long.toString(roomMessage.getMessageId());
         messageInfo.isEdited = roomMessage.isEdited();
         if (!roomMessage.isSenderMe()) {

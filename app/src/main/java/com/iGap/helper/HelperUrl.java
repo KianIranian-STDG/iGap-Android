@@ -443,7 +443,7 @@ public class HelperUrl {
 
         final Realm realm = Realm.getDefaultInstance();
 
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
 
         if (realmRoom != null) {
 
@@ -455,6 +455,17 @@ public class HelperUrl {
 
             return;
         }
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+
+                RealmRoom realmRoom = RealmRoom.putOrUpdate(room);
+                realmRoom.setDeleted(true);
+            }
+        });
+
+
+
 
         realm.close();
 
@@ -507,6 +518,7 @@ public class HelperUrl {
 
                 dialog.show();
 
+
                 HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
                     @Override public void onAvatarGet(final String avatarPath, long roomId) {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
@@ -530,14 +542,23 @@ public class HelperUrl {
                 closeDialogWaiting();
 
                 Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
-                        RealmRoom realmRoom = RealmRoom.putOrUpdate(room);
-                        if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                            realmRoom.setReadOnly(false);
+
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+
+                if (realmRoom != null) {
+
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override public void execute(Realm realm) {
+
+                            if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                realmRoom.setReadOnly(false);
+                            }
+
+                            realmRoom.setDeleted(false);
                         }
-                    }
-                });
+                    });
+                }
+
 
                 realm.close();
 

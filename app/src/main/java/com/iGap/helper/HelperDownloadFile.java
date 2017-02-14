@@ -47,8 +47,8 @@ public class HelperDownloadFile {
                     item.progress = progress;
 
                     if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-                        if (item.progress < 80) {
-                            if (mQueue.size() > 0) {
+
+                        if (mQueue.size() > 0) {
                                 if (mQueue.get(0).priority > item.priority) {
 
                                     addItemToQueue(item.Token + item.selector, ++item.priority);
@@ -56,7 +56,6 @@ public class HelperDownloadFile {
                                     return;
                                 }
                             }
-                        }
                     }
 
 
