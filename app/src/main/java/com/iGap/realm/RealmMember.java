@@ -2,7 +2,6 @@ package com.iGap.realm;
 
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoChannelGetMemberList;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -10,8 +9,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmMember extends RealmObject {
 
-    @PrimaryKey
-    private long id;
+    @PrimaryKey private long id;
 
     private long peerId;
     private String role;
@@ -64,9 +62,8 @@ public class RealmMember extends RealmObject {
                     }
 
                     if (realmMem == null) {
-                        realmMem = realm.createObject(RealmMember.class);
+                        realmMem = realm.createObject(RealmMember.class, SUID.id().get());
                     }
-                    realmMem.setId(SUID.id().get());
                     realmMem.setRole(member.getRole().toString());
                     realmMem.setPeerId(member.getUserId());
 
