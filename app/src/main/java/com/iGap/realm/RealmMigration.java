@@ -34,7 +34,6 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmChannelRoomSchema != null) {
                 realmChannelRoomSchema.addField("seenId", long.class, FieldAttribute.REQUIRED);
             }
-            oldVersion++;
         }
     }
 }

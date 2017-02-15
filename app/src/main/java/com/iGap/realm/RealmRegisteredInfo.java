@@ -206,8 +206,6 @@ public class RealmRegisteredInfo extends RealmObject {
      */
 
     public void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo info) {
-
-        info.setId(registeredUser.getId());
         info.setUsername(registeredUser.getUsername());
         info.setPhoneNumber(Long.toString(registeredUser.getPhone()));
         info.setFirstName(registeredUser.getFirstName());

@@ -3,7 +3,6 @@ package com.iGap.response;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import com.iGap.G;
 import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoGlobal;
@@ -41,14 +40,14 @@ public class UserContactsGetListResponse extends MessageHandler {
                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
                     if (realmRegisteredInfo == null) {
-                        realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
+                        realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, registerUser.getId());
                         realmRegisteredInfo.setDoNotshowSpamBar(false);
                     }
                     realmRegisteredInfo.fillRegisteredUserInfo(registerUser, realmRegisteredInfo);
 
-                    // because we have a realm just for avatars don't need to call put twice here
+                    //TODO [Saeed Mozaffari] [2017-02-14 11:20 AM] -check it and after delete following code ==> because we have a realm just for avatars don't need to call put twice here
                     RealmAvatar.put(registerUser.getId(), registerUser.getAvatar(), true);
-                    Log.i("MMMM", "builder getDisplayName : " + registerUser.getDisplayName());
+
                     RealmContacts listResponse = realm.createObject(RealmContacts.class);
                     listResponse.setId(registerUser.getId());
                     listResponse.setUsername(registerUser.getUsername());
@@ -62,7 +61,6 @@ public class UserContactsGetListResponse extends MessageHandler {
                     listResponse.setLast_seen(registerUser.getLastSeen());
                     listResponse.setAvatarCount(registerUser.getAvatarCount());
                     listResponse.setCacheId(registerUser.getCacheId());
-
                     listResponse.setAvatar(RealmAvatar.put(registerUser.getId(), registerUser.getAvatar(), true));
                 }
             }
@@ -83,14 +81,11 @@ public class UserContactsGetListResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-        Log.i("MMMM", "builder getDisplayName timeOut");
-
     }
 
     @Override
     public void error() {
         super.error();
-        Log.i("MMMM", "builder getDisplayName error");
     }
 }
 

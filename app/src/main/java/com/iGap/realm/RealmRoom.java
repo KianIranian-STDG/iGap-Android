@@ -1,6 +1,5 @@
 package com.iGap.realm;
 
-import android.util.Log;
 import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
@@ -47,7 +46,6 @@ public class RealmRoom extends RealmObject {
     public long getUpdatedTime() {
         if (getLastMessage() != null && getLastMessage().isValid()) {
             if (getLastMessage().getUpdateOrCreateTime() > updatedTime) {
-                Log.i("YYYY", "getUpdateOrCreateTime : " + getLastMessage().getUpdateOrCreateTime());
                 return getLastMessage().getUpdateOrCreateTime();
             }
         }

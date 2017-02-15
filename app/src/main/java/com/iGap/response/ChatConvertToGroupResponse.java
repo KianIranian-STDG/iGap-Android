@@ -9,7 +9,6 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
-
 import io.realm.Realm;
 
 public class ChatConvertToGroupResponse extends MessageHandler {
@@ -37,7 +36,6 @@ public class ChatConvertToGroupResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                realmRoom.setId(builder.getRoomId());
                 realmRoom.setType(RoomType.GROUP);
                 realmRoom.setTitle(builder.getName());
                 RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
