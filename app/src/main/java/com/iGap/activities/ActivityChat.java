@@ -2893,28 +2893,6 @@ public class ActivityChat extends ActivityEnhanced
 
     }
 
-    private int getSelectedList() {
-        int count = fastItemAdapter.getItemCount();
-        listPathString.clear();
-        for (int i = 0; i < count; i++) {
-            AdapterBottomSheet ab = (AdapterBottomSheet) fastItemAdapter.getAdapterItem(i);
-            if (!ab.mList.isSelected) {
-                listPathString.add(ab.mList.getPath());
-            }
-        }
-        return listPathString.size();
-    }
-
-    //private void unSelectList(){
-    //
-    //    int count=fastItemAdapter.getItemCount();
-    //    for (int i = 0; i < count; i++) {
-    //        AdapterBottomSheet ab= (AdapterBottomSheet) fastItemAdapter.getAdapterItem(i);
-    //        ab.mList.setSelected(true);
-    //
-    //    }
-    //}
-
     private boolean userTriesReplay() {
         return mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo;
     }

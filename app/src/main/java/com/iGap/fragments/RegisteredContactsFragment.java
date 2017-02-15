@@ -1,5 +1,6 @@
 package com.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -68,6 +69,7 @@ public class RegisteredContactsFragment extends Fragment {
     private ProgressBar prgWaiting;
     private ItemAdapter itemAdapter;
     private List<IItem> items;
+    private Activity mActivity;
 
 
     public static RegisteredContactsFragment newInstance() {
@@ -163,8 +165,8 @@ public class RegisteredContactsFragment extends Fragment {
             @Override
             public boolean onClick(View v, IAdapter adapter, ContactItem item, int position) {
 
-                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                prgWaiting.setVisibility(View.VISIBLE);
+                showProgress();
+
                 chatGetRoom(item.mContact.peerId);
                 return false;
             }
@@ -322,8 +324,7 @@ public class RegisteredContactsFragment extends Fragment {
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
         if (realmRoom != null) {
-            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            prgWaiting.setVisibility(View.GONE);
+            hideProgress();
             Intent intent = new Intent(context, ActivityChat.class);
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -334,13 +335,7 @@ public class RegisteredContactsFragment extends Fragment {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final long roomId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            prgWaiting.setVisibility(View.GONE);
-                        }
-                    });
+                    hideProgress();
                     getUserInfo(peerId, roomId);
                 }
 
@@ -351,24 +346,16 @@ public class RegisteredContactsFragment extends Fragment {
 
                 @Override
                 public void onChatGetRoomTimeOut() {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            prgWaiting.setVisibility(View.GONE);
-                        }
-                    });
+
+                    hideProgress();
+
                 }
 
                 @Override
                 public void onChatGetRoomError(int majorCode, int minorCode) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            prgWaiting.setVisibility(View.GONE);
-                        }
-                    });
+
+                    hideProgress();
+
                 }
 
             };
@@ -417,8 +404,7 @@ public class RegisteredContactsFragment extends Fragment {
                                 @Override
                                 public void onSuccess() {
                                     try {
-                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        prgWaiting.setVisibility(View.GONE);
+                                        hideProgress();
                                         Intent intent = new Intent(context, ActivityChat.class);
                                         intent.putExtra("peerId", peerId);
                                         intent.putExtra("RoomId", roomId);
@@ -441,26 +427,14 @@ public class RegisteredContactsFragment extends Fragment {
 
             @Override
             public void onUserInfoTimeOut() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        prgWaiting.setVisibility(View.GONE);
 
-                    }
-                });
-
+                hideProgress();
             }
 
             @Override
             public void onUserInfoError(int majorCode, int minorCode) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        prgWaiting.setVisibility(View.GONE);
-                    }
-                });
+
+                hideProgress();
 
             }
         };
@@ -494,6 +468,28 @@ public class RegisteredContactsFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
+    private void hideProgress() {
 
+        G.handler.post(new Runnable() {
 
+            @Override public void run() {
+                mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                prgWaiting.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void showProgress() {
+        G.handler.post(new Runnable() {
+            @Override public void run() {
+                mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                prgWaiting.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    @Override public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = activity;
+    }
 }

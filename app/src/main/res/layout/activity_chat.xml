@@ -398,7 +398,7 @@
                         android:text="@string/md_back_arrow"
                         android:textAppearance="@style/TextIconAppearance.all"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18"
+
 
                         />
                 </com.iGap.libs.rippleeffect.RippleView>
@@ -435,7 +435,6 @@
                         android:text="@string/md_close_button"
                         android:textAppearance="@style/TextIconAppearance.all"
                         android:textColor="#dededd"
-                        android:textSize="@dimen/sp14"
                         />
                 </com.iGap.libs.rippleeffect.RippleView>
 
@@ -555,7 +554,7 @@
                 android:text="@string/md_close_button"
                 android:textAppearance="@style/TextIconAppearance.all"
                 android:textColor="@color/red"
-                android:textSize="@dimen/sp18"
+
                 />
         </LinearLayout>
 
@@ -578,7 +577,7 @@
                 android:background="@null"
                 android:text="@string/md_expand_arrow"
                 android:textColor="@color/green"
-                android:textSize="@dimen/sp22"
+
                 />
 
             <TextView
@@ -602,7 +601,7 @@
                 android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:text="@string/md_downwards_arrow"
                 android:textColor="@color/green"
-                android:textSize="@dimen/sp22"
+
                 />
         </LinearLayout>
 
