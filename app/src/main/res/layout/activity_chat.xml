@@ -575,6 +575,7 @@
                 android:layout_height="match_parent"
                 android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:background="@null"
+                android:gravity="center"
                 android:text="@string/md_expand_arrow"
                 android:textColor="@color/green"
 
@@ -595,9 +596,10 @@
 
             <com.iGap.module.MaterialDesignTextView
                 android:id="@+id/ac_btn_message_down"
-                android:layout_width="@dimen/dp40"
+                android:layout_width="@dimen/dp48"
                 android:layout_height="match_parent"
                 android:background="@null"
+                android:gravity="center"
                 android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:text="@string/md_downwards_arrow"
                 android:textColor="@color/green"
