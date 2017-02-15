@@ -2,7 +2,6 @@ package com.iGap.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,14 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SHP_SETTING;
-
-import static com.iGap.adapter.AdapterChatBackground.imageLoader;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,8 +67,8 @@ public class FragmentFullChatBackground extends Fragment {
 
         imgFullImage = (ImageView) view.findViewById(R.id.stchf_fullImage);
 //        Bitmap b = BitmapFactory.decodeFile(fullImage);
-        Bitmap b = imageLoader.loadImageSync("file://" + fullImage);
-        imgFullImage.setImageBitmap(b);
+
+        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(fullImage), imgFullImage);
 
         txtSet = (MaterialDesignTextView) view.findViewById(R.id.stcbf_txt_set);
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

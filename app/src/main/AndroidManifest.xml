@@ -40,6 +40,11 @@
             android:name=".activities.ActivityChat"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+
+        <activity
+            android:name=".activities.ActivityChatBackground"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale" />
+
         <activity
             android:name=".activities.ActivityShearedMedia"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"/>
@@ -206,7 +211,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activities.ActivityChatBackground"/>
         <activity android:name=".activities.ActivityWebView"/>
         <activity android:name=".activities.ActivityNewChanelFinish"/>
         <activity android:name=".activities.ActivityChannelProfile"/>

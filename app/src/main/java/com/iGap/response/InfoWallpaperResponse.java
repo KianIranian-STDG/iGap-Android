@@ -1,6 +1,9 @@
 package com.iGap.response;
 
+import com.iGap.G;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoInfoWallpaper;
+import java.util.List;
 
 public class InfoWallpaperResponse extends MessageHandler {
 
@@ -20,7 +23,11 @@ public class InfoWallpaperResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoInfoWallpaper.InfoWallpaperResponse.Builder builder = (ProtoInfoWallpaper.InfoWallpaperResponse.Builder) message;
-        builder.getWallpaperList();
+        List<ProtoGlobal.Wallpaper> wallpaperList = builder.getWallpaperList();
+
+        if (G.onGetWallpaper != null) {
+            G.onGetWallpaper.onGetWallpaperList(wallpaperList);
+        }
     }
 
     @Override

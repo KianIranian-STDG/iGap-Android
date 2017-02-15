@@ -97,7 +97,6 @@ import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperSetAction;
-import com.iGap.helper.HelperString;
 import com.iGap.helper.HelperUrl;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.IMessageItem;
@@ -144,7 +143,6 @@ import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.MyType;
 import com.iGap.module.OnComplete;
-import com.iGap.module.PathUtils;
 import com.iGap.module.ResendMessage;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
@@ -2046,7 +2044,8 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         imvAttachFileButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(final View view) {
+            @Override
+            public void onClick(View view) {
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -2054,9 +2053,7 @@ public class ActivityChat extends ActivityEnhanced
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
                         bottomSheetDialog.show();
-
                     }
                 }, 100);
             }
@@ -2419,46 +2416,50 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void insertShearedData() {
-        Log.i("ZZZ", "insertShearedData 1");
         if (HelperGetDataFromOtherApp.hasSharedData) {
-            Log.i("ZZZ", "insertShearedData 2");
-            HelperGetDataFromOtherApp.hasSharedData = false;
 
+            HelperGetDataFromOtherApp.hasSharedData = false;
             if (messageType == HelperGetDataFromOtherApp.FileType.message) {
+
                 String message = HelperGetDataFromOtherApp.message;
                 edtChat.setText(message);
                 imvSendButton.performClick();
+
             } else if (messageType == HelperGetDataFromOtherApp.FileType.image) {
+
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                    sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                    sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                 }
+
             } else if (messageType == HelperGetDataFromOtherApp.FileType.video) {
+
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                    sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                    sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                 }
+
             } else if (messageType == HelperGetDataFromOtherApp.FileType.audio) {
+
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                    sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                    sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                 }
+
             } else if (messageType == HelperGetDataFromOtherApp.FileType.file) {
 
-                Log.i("ZZZ", "insertShearedData 3");
-                Log.i("ZZZ", "HelperGetDataFromOtherApp.messageFileAddress.size() 3 : " + HelperGetDataFromOtherApp.messageFileAddress.size());
                 for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                    Log.i("ZZZ", "HelperGetDataFromOtherApp.fileTypeArray.size() : " + HelperGetDataFromOtherApp.fileTypeArray.size());
+
                     if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
                         HelperGetDataFromOtherApp.FileType fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
                         if (fileType == HelperGetDataFromOtherApp.FileType.image) {
-                            sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                            sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                         } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
-                            sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                            sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                         } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
-                            sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                            sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                         } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
-                            Log.i("ZZZ", "insertShearedData 4");
-                            sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).getPath());
+                            sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                         }
                     }
+
                 }
             }
             HelperGetDataFromOtherApp.messageType = null;
@@ -2546,10 +2547,8 @@ public class ActivityChat extends ActivityEnhanced
 
             startActivity(Intent.createChooser(intent, chooserDialogText));
         } catch (Exception e) {
-            Log.e("ddddd", "activity chat   shearedDataToOtherProgram   " + e.toString());
+            e.printStackTrace();
         }
-
-
     }
 
     private void putExtra(Intent intent, StructMessageInfo messageInfo) {
@@ -2721,7 +2720,8 @@ public class ActivityChat extends ActivityEnhanced
         ViewGroup contact = (ViewGroup) viewBottomSheet.findViewById(R.id.contact);
 
         onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {
-            @Override public void path(String path, boolean isCheck) {
+            @Override
+            public void path(String path, boolean isCheck) {
 
                 if (isCheck) {
                     listPathString.add(path);
@@ -2763,7 +2763,8 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override public void onDismiss(DialogInterface dialog) {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
 
                 dialog.dismiss();
                 send.setText(getResources().getString(R.string.md_arrow_down));
@@ -2777,7 +2778,8 @@ public class ActivityChat extends ActivityEnhanced
         listPathString = new ArrayList<>();
 
         camera.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 bottomSheetDialog.dismiss();
 
                 if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
@@ -2788,7 +2790,8 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         picture.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
                     attachFile.requestOpenGalleryForImageMultipleSelect();
@@ -2798,7 +2801,8 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         video.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
                     attachFile.requestOpenGalleryForVideoMultipleSelect();
@@ -2808,7 +2812,8 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         music.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
                     attachFile.requestPickAudio();
@@ -2818,7 +2823,8 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         document.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 bottomSheetDialog.dismiss();
                 try {
@@ -2829,7 +2835,8 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         close.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 if (isCheckBottomSheet) {
                     bottomSheetDialog.dismiss();
@@ -2850,7 +2857,8 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         file.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
                     attachFile.requestPickFile();
@@ -2860,7 +2868,8 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         paint.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
                     attachFile.requestPaint();
@@ -2870,7 +2879,8 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         location.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
                     attachFile.requestGetPosition(complete);
@@ -2880,7 +2890,8 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
         contact.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
                     attachFile.requestPickContact();
@@ -3167,30 +3178,13 @@ public class ActivityChat extends ActivityEnhanced
         int[] imageDimens = {0, 0};
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
-        Log.i("ZZZ", "sendMessage filePath : " + filePath);
-        if (HelperString.isExternal(filePath)) {
-            Log.i("ZZZ", "is not isExternal ");
-            filePath = AndroidUtils.getRealPathFromURI(getApplicationContext(), Uri.parse("content://media" + filePath));
-        } else {
-            Log.i("ZZZ", "is isExternal ");
+        /**
+         * check if path is uri detect real path from uri
+         */
+        String path = AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(filePath));
+        if (path != null) {
+            filePath = path;
         }
-
-        if (HelperString.isDocument(filePath)) {
-            Log.i("ZZZ", "isDocument ");
-            Log.i("ZZZ", "isDocument : " + Uri.parse("content://com.android.providers.downloads.documents" + filePath));
-            filePath = PathUtils.getPath(getApplicationContext(), Uri.parse("content://com.android.providers.downloads.documents" + filePath));
-        } else {
-            Log.i("ZZZ", "is not Document ");
-        }
-
-
-        //if (HelperString.isStorage(filePath)) {
-        //    Log.i("ZZZ", "storage ");
-        //    Log.i("ZZZ", "storage : " + Uri.parse("file:///storage" + filePath));
-        //    filePath = PathUtils.getPath(getApplicationContext(), Uri.parse("content://com.android.providers.downloads.documents" + filePath));
-        //} else {
-        //    Log.i("ZZZ", "is not storage ");
-        //}
 
         StructMessageInfo messageInfo = null;
 
@@ -4557,41 +4551,42 @@ public class ActivityChat extends ActivityEnhanced
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
             @Override
             public void onChange(final RealmClientCondition element) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
+                if (element.isLoaded() && element.isValid()) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
-                        if (realmRoom.getLastMessage() != null) {
-                            element.setClearId(realmRoom.getLastMessage().getMessageId());
+                            if (realmRoom.isLoaded() && realmRoom.isValid() && realmRoom.getLastMessage() != null) {
+                                element.setClearId(realmRoom.getLastMessage().getMessageId());
 
-                            G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
-                        }
-
-                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
-                        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-                            if (realmRoomMessage != null) {
-                                // delete chat history message
-                                realmRoomMessage.deleteFromRealm();
+                                G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
                             }
+
+                            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
+                            for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                                if (realmRoomMessage != null) {
+                                    // delete chat history message
+                                    realmRoomMessage.deleteFromRealm();
+                                }
+                            }
+
+                            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
+                            if (room != null) {
+                                room.setUnreadCount(0);
+                                room.setLastMessage(null);
+
+                                realm.copyToRealmOrUpdate(room);
+                            }
+                            // finally delete whole chat history
+                            realmRoomMessages.deleteAllFromRealm();
                         }
+                    });
 
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
-                        if (room != null) {
-                            room.setUnreadCount(0);
-                            room.setLastMessage(null);
+                    element.removeChangeListeners();
 
-                            realm.copyToRealmOrUpdate(room);
-                        }
-                        // finally delete whole chat history
-                        realmRoomMessages.deleteAllFromRealm();
-                    }
-                });
-
-                element.removeChangeListeners();
-
-                G.onClearChatHistory.onClearChatHistory();
-
+                    G.onClearChatHistory.onClearChatHistory();
+                }
                 realm.close();
             }
         });
@@ -5409,7 +5404,7 @@ public class ActivityChat extends ActivityEnhanced
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);

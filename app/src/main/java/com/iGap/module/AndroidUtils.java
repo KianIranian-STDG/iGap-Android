@@ -97,6 +97,17 @@ public final class AndroidUtils {
         }
     }
 
+    public static String pathFromContentUri(Context context, Uri contentUri) {
+        if (contentUri != null && contentUri.getScheme() != null) {
+            if (contentUri.getScheme().equals("content")) {
+                return getRealPathFromURI(context, contentUri);
+            } else if (contentUri.getScheme().equals("file")) {
+                return contentUri.getPath();
+            }
+        }
+        return null;
+    }
+
     public static int[] getImageDimens(String filePath) {
 
         try {

@@ -79,6 +79,7 @@ import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileDownloaded;
 import com.iGap.interfaces.OnFileUploadStatusResponse;
 import com.iGap.interfaces.OnGetUserInfo;
+import com.iGap.interfaces.OnGetWallpaper;
 import com.iGap.interfaces.OnGroupAddAdmin;
 import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.interfaces.OnGroupAddModerator;
@@ -381,6 +382,7 @@ public class G extends MultiDexApplication {
     public static OnUserContactsBlock onUserContactsBlock;
     public static OnUserContactsUnBlock onUserContactsUnBlock;
     public static OnClientCondition onClientCondition;
+    public static OnGetWallpaper onGetWallpaper;
 
 
     public static File chatBackground;
