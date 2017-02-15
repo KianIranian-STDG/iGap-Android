@@ -121,6 +121,9 @@ public class HelperGetDataFromOtherApp {
             hasSharedData = true;
             messageType = type;
             String extension = HelperString.dotSplit(fileAddressUri.getPath());
+            /**
+             * check mp4 because telegram sometimes send mp4 format with image type!!!
+             */
             if (extension != null && extension.equals("mp4")) {
                 messageType = FileType.video;
             }
