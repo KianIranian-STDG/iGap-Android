@@ -1,93 +1,122 @@
 package com.iGap.adapter;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
-import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.activities.ActivityChatBackground;
 import com.iGap.fragments.FragmentFullChatBackground;
-import com.iGap.module.StructAdapterBackground;
+import com.iGap.helper.HelperDownloadFile;
+import com.iGap.module.AndroidUtils;
+import com.iGap.module.AttachFile;
+import com.iGap.proto.ProtoFileDownload;
+import com.iGap.proto.ProtoGlobal;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.util.List;
+import io.meness.github.messageprogress.MessageProgress;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static ImageLoader imageLoader;
     private final int CHOOSE = 0;
     private final int ALL = 1;
-    int selected_position = 1;
-    private List<StructAdapterBackground> items;
-    private Uri uriIntent;
 
-    public AdapterChatBackground(List<StructAdapterBackground> items) {
-        this.items = items;
+    int selected_position = 1;
+
+    private ArrayList<ActivityChatBackground.StructWallpaper> mList;
+
+    public AdapterChatBackground(ArrayList<ActivityChatBackground.StructWallpaper> List) {
+        this.mList = List;
     }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == CHOOSE) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.adapter_background_choose, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_choose, parent, false);
             return new ViewHolderImage(view);
         } else {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.adapter_background_image, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_image, parent, false);
             return new ViewHolderItem(view);
         }
     }
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final StructAdapterBackground item = items.get(position);
+    @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
-        imageLoader = ImageLoader.getInstance();
-        switch (holder.getItemViewType()) {
-            case CHOOSE: {
-                ViewHolderImage holder1 = (ViewHolderImage) holder;
-            }
-            break;
-            case ALL: {
+        if (holder.getItemViewType() == ALL) {
 
-                ViewHolderItem holder2 = (ViewHolderItem) holder;
-                if (position == 1 && G.chatBackground.exists()) {
+            final ViewHolderItem holder2 = (ViewHolderItem) holder;
 
-                    Bitmap bmp = imageLoader.loadImageSync("file://" + G.chatBackground);
-                    holder2.img.setImageBitmap(bmp);
+            if (mList.get(position).getWallpaperType() == ActivityChatBackground.WallpaperType.proto) {
+                ProtoGlobal.File pf = mList.get(position).getProtoWallpaper().getFile();
+                final String path = G.DIR_TEMP + "/" + "thumb_" + pf.getCacheId() + "_" + pf.getName();
+                if (!new File(path).exists()) {
+                    HelperDownloadFile.startDownload(pf.getToken(), pf.getName(), pf.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4,
+                        new HelperDownloadFile.UpdateListener() {
+                            @Override public void OnProgress(String token, int progress) {
+                                if (progress == 100) {
+                                    G.currentActivity.runOnUiThread(new Runnable() {
+                                        @Override public void run() {
+                                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), holder2.img);
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override public void OnError(String token) {
+                            }
+                        });
                 } else {
-                    Bitmap bmp = imageLoader.loadImageSync("file://" + item.getPathImage());
-                    holder2.img.setImageBitmap(bmp);
+                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), holder2.img);
+                }
+            } else {
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mList.get(position).getPath()), holder2.img);
+            }
+
+            String bigImagePath;
+            if (mList.get(position).getWallpaperType() == ActivityChatBackground.WallpaperType.proto) {
+                ProtoGlobal.File pf = mList.get(position).getProtoWallpaper().getFile();
+                bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+            } else {
+                bigImagePath = mList.get(position).getPath();
+            }
+
+            if (new File(bigImagePath).exists()) {
+                holder2.messageProgress.setVisibility(View.GONE);
+                // ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(bigImagePath), holder2.img);
+                holder2.mPath = bigImagePath;
+            } else {
+                holder2.messageProgress.setVisibility(View.VISIBLE);
+                if (HelperDownloadFile.isDownLoading(mList.get(position).getProtoWallpaper().getFile().getToken())) {
+                    startDownload(position, holder2.messageProgress, holder2.contentLoading);
                 }
 
+                holder2.messageProgress.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View view) {
+                        downloadFile(position, holder2.messageProgress, holder2.contentLoading);
+                    }
+                });
 
-                if (selected_position == position) {
-                    holder2.itemView.setBackgroundColor(
-                            G.context.getResources().getColor(R.color.toolbar_background));
-                    holder2.itemView.setPadding((int) G.context.getResources().getDimension(R.dimen.dp4)
-                            , (int) G.context.getResources().getDimension(R.dimen.dp4),
-                            (int) G.context.getResources().getDimension(R.dimen.dp4),
-                            (int) G.context.getResources().getDimension(R.dimen.dp4));
-                } else {
-                    holder2.itemView.setBackgroundColor(Color.TRANSPARENT);
-                }
             }
-            break;
+
+            if (selected_position == position) {
+                holder2.itemView.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                holder2.itemView.setPadding((int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4),
+                    (int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4));
+            } else {
+                holder2.itemView.setBackgroundColor(Color.TRANSPARENT);
+            }
+
         }
     }
 
@@ -103,7 +132,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return mList.size();
     }
 
     public class ViewHolderImage extends RecyclerView.ViewHolder {
@@ -112,7 +141,9 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
         public ViewHolderImage(View itemView) {
             super(itemView);
+
             imageView = (ImageView) itemView.findViewById(R.id.imgBackgroundImage);
+
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -120,28 +151,30 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                             .negativeText(G.context.getString(R.string.cancel))
                             .items(R.array.profile)
                             .itemsCallback(new MaterialDialog.ListCallback() {
-                                @Override
-                                public void onSelection(MaterialDialog dialog, View view, int which,
-                                                        CharSequence text) {
+                                @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                    AttachFile attachFile = new AttachFile(G.currentActivity);
 
                                     if (text.toString().equals(G.context.getString(R.string.from_camera))) {
-                                        if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(G.chatBackground));
-                                            G.currentActivity.startActivityForResult(intent, IntentRequests.REQ_CAMERA);
-                                            dialog.dismiss();
-                                        } else {
-                                            Toast.makeText(G.currentActivity, G.context.getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
+                                        try {
+                                            attachFile.requestTakePicture();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
                                         }
                                     } else {
-                                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                        G.currentActivity.startActivityForResult(intent, IntentRequests.REQ_GALLERY);
+                                        try {
+                                            attachFile.requestOpenGalleryForImageSingleSelect();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
 
-                                        dialog.dismiss();
+
                                     }
+
+                                    dialog.dismiss();
+
                                 }
-                            })
-                            .show();
+                            }).show();
                 }
             });
         }
@@ -150,35 +183,103 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     private class ViewHolderItem extends RecyclerView.ViewHolder {
 
         private ImageView img;
+        public MessageProgress messageProgress;
+        public ContentLoadingProgressBar contentLoading;
+        public String mPath = "";
 
         ViewHolderItem(View itemView) {
             super(itemView);
 
             img = (ImageView) itemView.findViewById(R.id.imgBackground);
-            itemView.setOnClickListener(new View.OnClickListener() {
+
+            messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
+            messageProgress.withDrawable(R.drawable.ic_download, true);
+
+            contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);
+            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+
+            img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    // Updating old as well as new positions
-                    notifyItemChanged(selected_position);
-                    selected_position = getLayoutPosition();
-                    notifyItemChanged(selected_position);
-                    StructAdapterBackground item = items.get(getPosition());
+                    if (mPath.length() > 0) {
 
-                    FragmentFullChatBackground fragmentActivity = new FragmentFullChatBackground();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("IMAGE", item.getPathImage());
-                    fragmentActivity.setArguments(bundle);
-                    ((FragmentActivity) G.currentActivity).getSupportFragmentManager()
-                            .beginTransaction()
-                            .addToBackStack(null)
-                            .replace(R.id.stcb_root, fragmentActivity, null)
-                            .commit();
+                        // Updating old as well as new positions
+                        notifyItemChanged(selected_position);
+                        selected_position = getLayoutPosition();
+                        notifyItemChanged(selected_position);
 
-                    ActivityChatBackground.savePath = item.getPathImage();
-                    // Do your another stuff for your onClick
+                        FragmentFullChatBackground fragmentActivity = new FragmentFullChatBackground();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("IMAGE", mPath);
+                        fragmentActivity.setArguments(bundle);
+                        ((FragmentActivity) G.currentActivity).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.stcb_root, fragmentActivity, null).commit();
+
+                        ActivityChatBackground.savePath = mPath;
+                        // Do your another stuff for your onClick
+                    }
                 }
             });
         }
     }
+
+    //*******************************************************************************
+
+    private void startDownload(final int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
+
+        contentLoading.setVisibility(View.VISIBLE);
+        messageProgress.withDrawable(R.drawable.ic_cancel, true);
+
+        ProtoGlobal.File pf = mList.get(position).getProtoWallpaper().getFile();
+
+        String path = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+
+        HelperDownloadFile.startDownload(pf.getToken(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2, new HelperDownloadFile.UpdateListener() {
+            @Override public void OnProgress(String token, final int progress) {
+
+                if (messageProgress != null) {
+
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            if (progress < 100) {
+                                messageProgress.withProgress(progress);
+                            } else {
+                                messageProgress.withProgress(0);
+                                messageProgress.setVisibility(View.GONE);
+                                contentLoading.setVisibility(View.GONE);
+                                notifyItemChanged(position);
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override public void OnError(String token) {
+
+                G.currentActivity.runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        messageProgress.withProgress(0);
+                        messageProgress.withDrawable(R.drawable.ic_download, true);
+                        contentLoading.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+    }
+
+    private void stopDownload(int position) {
+
+        HelperDownloadFile.stopDownLoad(mList.get(position).getProtoWallpaper().getFile().getToken());
+    }
+
+    private void downloadFile(int position, MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
+
+        if (HelperDownloadFile.isDownLoading(mList.get(position).getProtoWallpaper().getFile().getToken())) {
+            stopDownload(position);
+        } else {
+            startDownload(position, messageProgress, contentLoading);
+        }
+    }
+
+
 }

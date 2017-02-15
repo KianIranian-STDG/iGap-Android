@@ -1,4 +1,7 @@
 <resources>
+
+    <bool name="isTablet">false</bool>
+
     <dimen name="messageContainerPadding">6dp</dimen>
     <dimen name="messageContainerPaddingBottom">4dp</dimen>
     <dimen name="messageContainerPaddingLeftRight">10dp</dimen>

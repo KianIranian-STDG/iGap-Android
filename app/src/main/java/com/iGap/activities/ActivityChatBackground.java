@@ -2,32 +2,30 @@ package com.iGap.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.util.Log;
 import android.view.ViewTreeObserver;
 import com.iGap.G;
-import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.adapter.AdapterChatBackground;
+import com.iGap.helper.ImageHelper;
+import com.iGap.interfaces.OnGetWallpaper;
 import com.iGap.libs.rippleeffect.RippleView;
-import com.iGap.module.HelperCopyFile;
+import com.iGap.module.AttachFile;
 import com.iGap.module.MaterialDesignTextView;
-import com.iGap.module.StructAdapterBackground;
+import com.iGap.module.TimeUtils;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.proto.ProtoInfoWallpaper;
+import com.iGap.realm.RealmWallpaper;
+import com.iGap.request.RequestInfoWallpaper;
+import io.realm.Realm;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
-import static com.iGap.G.chatBackground;
 
 public class ActivityChatBackground extends ActivityEnhanced {
 
@@ -39,8 +37,49 @@ public class ActivityChatBackground extends ActivityEnhanced {
     private RippleView rippleBack;
     private RecyclerView rcvContent;
     private AdapterChatBackground adapterChatBackgroundSetting;
-    private List<StructAdapterBackground> items = new ArrayList<>();
+
     private int spanItemCount = 3;
+
+    public ArrayList<StructWallpaper> wList;
+
+    public enum WallpaperType {
+        addNew,
+        lockal,
+        proto
+    }
+
+    public class StructWallpaper {
+
+        private WallpaperType wallpaperType;
+        private String path;
+        private ProtoGlobal.Wallpaper protoWallpaper;
+
+        public WallpaperType getWallpaperType() {
+            return wallpaperType;
+        }
+
+        public void setWallpaperType(WallpaperType wallpaperType) {
+            this.wallpaperType = wallpaperType;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public ProtoGlobal.Wallpaper getProtoWallpaper() {
+            return protoWallpaper;
+        }
+
+        public void setProtoWallpaper(ProtoGlobal.Wallpaper protoWallpaper) {
+            this.protoWallpaper = protoWallpaper;
+        }
+    }
+
+
 
     @Override
     protected void onResume() {
@@ -59,6 +98,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_background);
 
+
         txtBack = (MaterialDesignTextView) findViewById(R.id.stcb_txt_back);
         rippleBack = (RippleView) findViewById(R.id.stcb_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -68,34 +108,17 @@ public class ActivityChatBackground extends ActivityEnhanced {
             }
         });
 
-        //        int wdith = G.context.getResources().getDisplayMetrics().widthPixels;
-
-        try {
-            copyFromAsset();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //        if (wdith <= 600) {
-        //            spanCount = 3;
-        //        } else if (wdith <= 720) {
-        //            spanCount = 4;
-        //        } else if (wdith <= 720){
-        //            spanCount = 4;
-        //        }
 
         final GridLayoutManager gLayoutManager = new GridLayoutManager(ActivityChatBackground.this, spanItemCount);
 
+        fillList(true);
+
         rcvContent = (RecyclerView) findViewById(R.id.rcvContent);
-        adapterChatBackgroundSetting = new AdapterChatBackground(items);
+        adapterChatBackgroundSetting = new AdapterChatBackground(wList);
         rcvContent.setAdapter(adapterChatBackgroundSetting);
-        rcvContent.setDrawingCacheEnabled(true);
-        rcvContent.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        rcvContent.setItemViewCacheSize(100);
         rcvContent.setLayoutManager(gLayoutManager);
         rcvContent.clearAnimation();
-        setItem();
-        adapterChatBackgroundSetting.notifyDataSetChanged();
+
 
         rcvContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -114,97 +137,126 @@ public class ActivityChatBackground extends ActivityEnhanced {
         });
     }
 
-    public void setItem() {
 
-        addFile = new File(G.DIR_CHAT_BACKGROUND);
-        File file[] = addFile.listFiles();
-        for (int i = 0; i < file.length; i++) {
-            StructAdapterBackground item = new StructAdapterBackground();
-            if (!file[i].getPath().equals(chatBackground.toString())) {
-                item.setId(i);
-                item.setPathImage(file[i].toString());
-                items.add(item);
-            }
-        }
 
-        int intPlus = 1;
-        if (chatBackground.exists()) intPlus = 2;
-        for (int i = 0; i < intPlus; i++) {
-            StructAdapterBackground item = new StructAdapterBackground();
-            if (chatBackground.exists() && i == 0) {
-                item.setId(i);
-                item.setPathImage(chatBackground.toString());
-            } else {
-                item.setId(i);
-            }
-
-            items.add(0, item);
-        }
-        adapterChatBackgroundSetting.notifyDataSetChanged();
-    }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == IntentRequests.REQ_CAMERA && resultCode == RESULT_OK) {// result for camera
+        String filePath = null;
 
-            if (data != null) {
+        switch (requestCode) {
+            case AttachFile.request_code_TAKE_PICTURE:
 
-                items.clear();
-                AdapterChatBackground.imageLoader.clearDiskCache();
-                AdapterChatBackground.imageLoader.clearMemoryCache();
-                setItem();
-            }
-        } else if (requestCode == IntentRequests.REQ_GALLERY && resultCode == RESULT_OK) {// result for gallery
-
-            String pathImageUser = getRealPathFromURI(data.getData());
-            HelperCopyFile.copyFile(pathImageUser, chatBackground.toString());
-            items.clear();
-            if (AdapterChatBackground.imageLoader != null) {
-                AdapterChatBackground.imageLoader.clearDiskCache();
-                AdapterChatBackground.imageLoader.clearMemoryCache();
-            }
-            setItem();
-
-        }
-    }
-
-    private String getRealPathFromURI(Uri contentURI) {
-        String result;
-        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
-            result = contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-        return result;
-    }
-
-    private void copyFromAsset() throws IOException {
-        String[] files = null;
-        files = getAssets().list("back");
-
-        if (chatBackground.length() == 0) {
-            for (String file : files) {
-
-                InputStream inputStream = getAssets().open("back/" + file);
-                String outFileName = chatBackground.toString() + file;
-                OutputStream outputStream = new FileOutputStream(outFileName);
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = inputStream.read(buffer)) > 0) {
-                    outputStream.write(buffer, 0, len);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                    filePath = AttachFile.mCurrentPhotoPath;
+                } else {
+                    ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                    filePath = AttachFile.imagePath;
                 }
-                outputStream.flush();
-                outputStream.close();
-                inputStream.close();
+                break;
+            case AttachFile.request_code_image_from_gallery_single_select:
+
+                if (data.getData() != null) {
+                    filePath = AttachFile.getFilePathFromUri(data.getData());
+                }
+
+                break;
+        }
+
+        if (filePath != null) {
+
+            if (new File(filePath).exists()) {
+                RealmWallpaper.updateField(null, filePath);
+
+                fillList(false);
+                rcvContent.setAdapter(new AdapterChatBackground(wList));
 
             }
+
         }
+    }
+
+    private void getImageListFromServer() {
+
+        G.onGetWallpaper = new OnGetWallpaper() {
+            @Override public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
+
+                RealmWallpaper.updateField(list, "");
+
+                fillList(false);
+
+                adapterChatBackgroundSetting.notifyDataSetChanged();
+            }
+        };
+
+        ProtoInfoWallpaper.InfoWallpaper.Fit fit = ProtoInfoWallpaper.InfoWallpaper.Fit.PHONE;
+        if (getResources().getBoolean(R.bool.isTablet)) {
+            fit = ProtoInfoWallpaper.InfoWallpaper.Fit.TABLET;
+        }
+
+        new RequestInfoWallpaper().infoWallpaper(fit);
+
+        Log.e("qqqqqq", "  RequestInfoWallpaper  ");
+    }
+
+    private void fillList(boolean getInfoFromServer) {
+
+        wList = new ArrayList<>();
+
+        //add item 0 add new background from lockal
+        StructWallpaper sw = new StructWallpaper();
+        sw.setWallpaperType(WallpaperType.addNew);
+        wList.add(sw);
+
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).findFirst();
+
+        if (realmWallpaper != null) {
+
+            if (realmWallpaper.getLockalList() != null) {
+                for (String lockalPath : realmWallpaper.getLockalList()) {
+                    if (new File(lockalPath).exists()) {
+                        StructWallpaper _swl = new StructWallpaper();
+                        _swl.setWallpaperType(WallpaperType.lockal);
+                        _swl.setPath(lockalPath);
+                        wList.add(_swl);
+                    }
+                }
+            }
+
+            if (realmWallpaper.getWallPaperList() != null) {
+                for (ProtoGlobal.Wallpaper wallpaper : realmWallpaper.getWallPaperList()) {
+                    StructWallpaper _swp = new StructWallpaper();
+                    _swp.setWallpaperType(WallpaperType.proto);
+                    _swp.setProtoWallpaper(wallpaper);
+                    wList.add(_swp);
+                }
+            }
+
+            if (getInfoFromServer) {
+
+                long time = realmWallpaper.getLastTimeGetList();
+                if (time > 0) {
+
+                    if (time + (2 * 60 * 60 * 1000) < TimeUtils.currentLocalTime()) {
+                        getImageListFromServer();
+                    }
+                } else {
+                    getImageListFromServer();
+                }
+            }
+        } else {
+            if (getInfoFromServer) {
+                getImageListFromServer();
+            }
+        }
+
+        realm.close();
+
     }
 }

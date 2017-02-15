@@ -5,5 +5,7 @@ package com.iGap.module.enums;
  */
 
 public enum AttachmentFor {
-    AVATAR, MESSAGE_ATTACHMENT
+    AVATAR,
+    MESSAGE_ATTACHMENT,
+    WALLPAPER
 }

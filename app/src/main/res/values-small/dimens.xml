@@ -1,6 +1,8 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
 
+    <bool name="isTablet">false</bool>
+
     <dimen name="messageContainerPadding">5dp</dimen>
     <dimen name="messageContainerPaddingBottom">3dp</dimen>
     <dimen name="messageContainerPaddingLeftRight">8dp</dimen>
