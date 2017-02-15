@@ -1,10 +1,23 @@
 package com.iGap.request;
 
+import com.iGap.Config;
+import com.iGap.G;
 import com.iGap.proto.ProtoClientCondition;
 
 public class RequestClientCondition {
 
     public void clientCondition(ProtoClientCondition.ClientCondition.Builder clientCondition) {
+
+        if (G.onUpdating != null) {
+            G.onUpdating.onUpdating();
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    G.onUpdating.onCancelUpdating();
+                }
+            }, Config.UPDATING_TIME_SHOWING);
+        }
+
         RequestWrapper requestWrapper = new RequestWrapper(600, clientCondition);
         try {
             RequestQueue.sendRequest(requestWrapper);

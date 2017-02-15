@@ -80,6 +80,7 @@ import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnRefreshActivity;
 import com.iGap.interfaces.OnSetActionInRoom;
 import com.iGap.interfaces.OnUpdateAvatar;
+import com.iGap.interfaces.OnUpdating;
 import com.iGap.interfaces.OnUserInfoMyClient;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserSessionLogout;
@@ -158,6 +159,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private ImageView imgNavImage;
     private DrawerLayout drawer;
     private Toolbar mainToolbar;
+    private Config.ConnectionState latestConnectionState;
 
     private void scrollToTop() {
         recyclerView.postDelayed(new Runnable() {
@@ -352,6 +354,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         };
 
         initComponent();
+        connectionState();
         initRecycleView();
         initFloatingButtonCreateNew();
         initDrawerMenu();
@@ -774,13 +777,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             clickPosition = (int) ev.getX();
         }
-
-        //if (ev.getAction() == MotionEvent.ACTION_UP) {
-        //    if (ev.getX() > drawerWith) {
-        //        if (ev.getX() <= clickPosition + 20) mLeftDrawerLayout.closeDrawer();
-        //    }
-        //}
-
         return super.dispatchTouchEvent(ev);
     }
 
@@ -789,7 +785,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         contentLoading = (ContentLoadingProgressBar) findViewById(R.id.loadingContent);
         contentLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
-        //RippleView rippleMenu = (RippleView) findViewById(R.id.cl_ripple_menu);
         RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
         rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -804,13 +799,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
         if (!HelperCalander.isLanguagePersian) {
             titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
         } else {
             titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
         }
+    }
 
+    private void connectionState() {
+        final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
         if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
             txtIgap.setText(R.string.waiting_for_network);
             txtIgap.setTypeface(null, Typeface.BOLD);
@@ -827,17 +824,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.onConnectionChangeState = new OnConnectionChangeState() {
             @Override
-            public void onChangeState(final Config.ConnectionState connectionState) {
+            public void onChangeState(final Config.ConnectionState connectionStateR) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        txtIgap.setTypeface(null, Typeface.BOLD);
-                        if (connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
+                        G.connectionState = connectionStateR;
+                        if (connectionStateR == Config.ConnectionState.WAITING_FOR_NETWORK) {
                             txtIgap.setText(R.string.waiting_for_network);
-                        } else if (connectionState == Config.ConnectionState.CONNECTING) {
+                            txtIgap.setTypeface(null, Typeface.BOLD);
+                        } else if (connectionStateR == Config.ConnectionState.CONNECTING) {
                             txtIgap.setText(R.string.connecting);
-                        } else if (connectionState == Config.ConnectionState.UPDATING) {
-                            txtIgap.setText(updating);
+                            txtIgap.setTypeface(null, Typeface.BOLD);
+                        } else if (connectionStateR == Config.ConnectionState.UPDATING) {
+                            txtIgap.setText(R.string.updating);
+                            txtIgap.setTypeface(null, Typeface.BOLD);
                         } else {
                             txtIgap.setText(R.string.igap);
                             txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
@@ -847,13 +847,31 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        //rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-        //
-        //    @Override
-        //    public void onComplete(RippleView rippleView) {
-        //        mLeftDrawerLayout.toggle();
-        //    }
-        //});
+        G.onUpdating = new OnUpdating() {
+            @Override
+            public void onUpdating() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        latestConnectionState = G.connectionState;
+                        G.connectionState = Config.ConnectionState.UPDATING;
+                        txtIgap.setText(R.string.updating);
+                        txtIgap.setTypeface(null, Typeface.BOLD);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelUpdating() {
+                /**
+                 * if yet still G.connectionState is in update state
+                 * show latestState that was in previous state
+                 */
+                if (G.connectionState == Config.ConnectionState.UPDATING) {
+                    G.onConnectionChangeState.onChangeState(latestConnectionState);
+                }
+            }
+        };
     }
 
     private void initFloatingButtonCreateNew() {

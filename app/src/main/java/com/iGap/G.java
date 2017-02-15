@@ -109,6 +109,7 @@ import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnSetActionInRoom;
 import com.iGap.interfaces.OnUpdateAvatar;
 import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
+import com.iGap.interfaces.OnUpdating;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarGetList;
 import com.iGap.interfaces.OnUserAvatarResponse;
@@ -271,6 +272,7 @@ public class G extends MultiDexApplication {
     public static OnFileUploadStatusResponse onFileUploadStatusResponse;
     public static Config.ConnectionState connectionState;
     public static OnConnectionChangeState onConnectionChangeState;
+    public static OnUpdating onUpdating;
     public static OnReceiveInfoLocation onReceiveInfoLocation;
     public static OnUserRegistration onUserRegistration;
     public static OnClientSearchRoomHistory onClientSearchRoomHistory;

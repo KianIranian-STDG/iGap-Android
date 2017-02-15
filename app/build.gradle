@@ -98,5 +98,6 @@ dependencies {
   compile project(path: ':lvl')
   compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
   compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
+  compile 'com.cocosw:bottomsheet:1.+@aar'
   compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
 }
