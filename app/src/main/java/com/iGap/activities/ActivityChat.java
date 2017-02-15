@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -30,7 +31,10 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
@@ -57,11 +61,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.cocosw.bottomsheet.BottomSheet;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
+import com.iGap.adapter.AdapterBottomSheet;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.adapter.items.chat.AudioItem;
@@ -117,6 +121,7 @@ import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnHelperSetAction;
 import com.iGap.interfaces.OnLastSeenUpdateTiming;
+import com.iGap.interfaces.OnPathAdapterBottomSheet;
 import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
 import com.iGap.interfaces.OnUserContactsBlock;
@@ -143,6 +148,7 @@ import com.iGap.module.ResendMessage;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
 import com.iGap.module.SortMessages;
+import com.iGap.module.StructBottomSheet;
 import com.iGap.module.StructChannelExtra;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
@@ -197,6 +203,7 @@ import com.iGap.request.RequestUserContactsBlock;
 import com.iGap.request.RequestUserContactsUnblock;
 import com.iGap.request.RequestUserInfo;
 import com.mikepenz.fastadapter.IItemAdapter;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.github.meness.emoji.EmojiTextView;
@@ -248,6 +255,7 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
+
 public class ActivityChat extends ActivityEnhanced
         implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction,
         OnChannelGetMessagesStats {
@@ -255,7 +263,6 @@ public class ActivityChat extends ActivityEnhanced
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
     private AttachFile attachFile;
-    private BottomSheet.Builder bottomSheet;
     private LinearLayout mediaLayout;
     public static MusicPlayer musicPlayer;
     private boolean isNeedAddTime = true;
@@ -379,6 +386,15 @@ public class ActivityChat extends ActivityEnhanced
     private int lastPosition = 0;
     private boolean firsInitScrollPosition = false;
 
+    private RecyclerView rcvBottomSheet;
+    private ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<>();
+    private FastItemAdapter fastItemAdapter;
+    private BottomSheetDialog bottomSheetDialog;
+    private static List<StructBottomSheet> contacts;
+    private boolean isCheckBottomSheet = false;
+    public static OnPathAdapterBottomSheet onPathAdapterBottomSheet;
+    private ImageView send;
+    private TextView txtCountItem;
     @Override
     protected void onStart() {
         super.onStart();
@@ -410,7 +426,6 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     protected void onResume() {
         super.onResume();
-
 
         final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
         updateUnreadCountRealm.executeTransaction(new Realm.Transaction() {
@@ -1681,7 +1696,7 @@ public class ActivityChat extends ActivityEnhanced
                 manageForwardedMessage();
 
                 if (messageId > 0) {
-                    // TODO: 10/15/2016  if list biger then 50 item list should load some data we need
+                    // TODO: 10/15/2016  if list biger then 50 mList list should load some data we need
                     scrollPosition = 0;
                     for (AbstractMessage chatItem : mAdapter.getAdapterItems()) {
                         if (chatItem.mMessage.messageID.equals(messageId + "")) {
@@ -2034,11 +2049,11 @@ public class ActivityChat extends ActivityEnhanced
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
+                itemAdapterBottomSheet();
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        bottomSheet.show();
+                        bottomSheetDialog.show();
                     }
                 }, 100);
             }
@@ -2685,82 +2700,212 @@ public class ActivityChat extends ActivityEnhanced
      */
     private void initAttach() {
 
-        bottomSheet = new BottomSheet.Builder(this, R.style.BottomSheet_StyleDialog).grid().sheet(R.menu.bottom_sheet).listener(new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case R.id.camera:
-                        if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
-                            attachFile.showDialogOpenCamera(toolbar, null);
-                        } else {
-                            attachFile.showDialogOpenCamera(toolbar, null);
-                        }
-                        break;
-                    case R.id.picture:
-                        try {
-                            attachFile.requestOpenGalleryForImageMultipleSelect();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.video:
-                        try {
-                            attachFile.requestOpenGalleryForVideoMultipleSelect();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.music:
-                        try {
-                            attachFile.requestPickAudio();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.document:
-                        try {
-                            attachFile.requestOpenDocumentFolder();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.close:
+        fastItemAdapter = new FastItemAdapter();
 
-                        break;
+        View view = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
-                    case R.id.file:
-                        try {
-                            attachFile.requestPickFile();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+        send = (ImageView) view.findViewById(R.id.send);
+        txtCountItem = (TextView) view.findViewById(R.id.txtNumberItem);
+        ViewGroup camera = (ViewGroup) view.findViewById(R.id.camera);
+        ViewGroup picture = (ViewGroup) view.findViewById(R.id.picture);
+        ViewGroup video = (ViewGroup) view.findViewById(R.id.video);
+        ViewGroup music = (ViewGroup) view.findViewById(R.id.music);
+        ViewGroup document = (ViewGroup) view.findViewById(R.id.document);
+        ViewGroup close = (ViewGroup) view.findViewById(R.id.close);
+        ViewGroup file = (ViewGroup) view.findViewById(R.id.file);
+        ViewGroup paint = (ViewGroup) view.findViewById(R.id.paint);
+        ViewGroup location = (ViewGroup) view.findViewById(R.id.location);
+        ViewGroup contact = (ViewGroup) view.findViewById(R.id.contact);
+
+        onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {
+            @Override public void path(String path, boolean isCheck) {
+
+                if (isCheck) {
+                    listPathString.add(path);
+                } else {
+                    listPathString.remove(path);
+                }
+
+                listPathString.size();
+                if (listPathString.size() > 0) {
+                    send.setImageResource(R.mipmap.ic_send_black_24dp);
+                    isCheckBottomSheet = true;
+                    txtCountItem.setText("" + listPathString.size() + " item");
+                } else {
+                    send.setImageResource(R.mipmap.ic_close);
+                    isCheckBottomSheet = false;
+                    txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
+                }
+            }
+        };
+
+        rcvBottomSheet = (RecyclerView) view.findViewById(R.id.rcvContent);
+        rcvBottomSheet.setLayoutManager(new GridLayoutManager(ActivityChat.this, 1, GridLayoutManager.HORIZONTAL, false));
+        rcvBottomSheet.setItemAnimator(new DefaultItemAnimator());
+        //rcvBottomSheet.setDrawingCacheEnabled(true);
+        //rcvBottomSheet.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        //rcvBottomSheet.setItemViewCacheSize(100);
+        rcvBottomSheet.setAdapter(fastItemAdapter);
+        bottomSheetDialog = new BottomSheetDialog(ActivityChat.this);
+        bottomSheetDialog.setContentView(view);
+
+        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override public void onDismiss(DialogInterface dialog) {
+
+                Log.i("VVVVVVV", "00 onDismiss: " + dialog);
+                dialog.dismiss();
+                send.setImageResource(R.mipmap.ic_close);
+                txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
+                Log.i("SSSSSSSS", "onBackPressed:0 ");
+            }
+        });
+
+        bottomSheetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override public void onShow(DialogInterface dialog) {
+                Log.i("VVVVVVV", "11 onDismiss: " + dialog);
+            }
+        });
+
+        fastItemAdapter.withSelectable(true);
+        listPathString = new ArrayList<>();
+
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+
+                if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
+                    attachFile.showDialogOpenCamera(toolbar, null);
+                } else {
+                    attachFile.showDialogOpenCamera(toolbar, null);
+                }
+            }
+        });
+        picture.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+                try {
+                    attachFile.requestOpenGalleryForImageMultipleSelect();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        video.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+                try {
+                    attachFile.requestOpenGalleryForVideoMultipleSelect();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        music.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+                try {
+                    attachFile.requestPickAudio();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        document.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                bottomSheetDialog.dismiss();
+                try {
+                    attachFile.requestOpenDocumentFolder();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                if (isCheckBottomSheet) {
+                    bottomSheetDialog.dismiss();
+                    for (String path : listPathString) {
+                        if (!path.toLowerCase().endsWith(".gif")) {
+                            String localpathNew = attachFile.saveGalleryPicToLocal(path);
+                            sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localpathNew);
+                            fastItemAdapter.clear();
+                            send.setImageResource(R.mipmap.ic_close);
+                            txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
                         }
-                        break;
-                    case R.id.paint:
-                        try {
-                            attachFile.requestPaint();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.location:
-                        try {
-                            attachFile.requestGetPosition(complete);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.contact:
-                        try {
-                            attachFile.requestPickContact();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        break;
+                    }
+                } else {
+                    bottomSheetDialog.dismiss();
+                }
+
+            }
+        });
+        file.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+                try {
+                    attachFile.requestPickFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        paint.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+                try {
+                    attachFile.requestPaint();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+                try {
+                    attachFile.requestGetPosition(complete);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        contact.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+                try {
+                    attachFile.requestPickContact();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
 
+
     }
+
+    private int getSelectedList() {
+        int count = fastItemAdapter.getItemCount();
+        listPathString.clear();
+        for (int i = 0; i < count; i++) {
+            AdapterBottomSheet ab = (AdapterBottomSheet) fastItemAdapter.getAdapterItem(i);
+            if (!ab.mList.isSelected) {
+                listPathString.add(ab.mList.getPath());
+            }
+        }
+        return listPathString.size();
+    }
+
+    //private void unSelectList(){
+    //
+    //    int count=fastItemAdapter.getItemCount();
+    //    for (int i = 0; i < count; i++) {
+    //        AdapterBottomSheet ab= (AdapterBottomSheet) fastItemAdapter.getAdapterItem(i);
+    //        ab.mList.setSelected(true);
+    //
+    //    }
+    //}
 
     private boolean userTriesReplay() {
         return mReplayLayout != null && mReplayLayout.getTag() instanceof StructMessageInfo;
@@ -4818,7 +4963,7 @@ public class ActivityChat extends ActivityEnhanced
             List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
 
             Realm realm = Realm.getDefaultInstance();
-            // if user clicked on any message which he wasn't its sender, remove edit item option
+            // if user clicked on any message which he wasn't its sender, remove edit mList option
             if (chatType == CHANNEL) {
                 if (channelRole == ChannelChatRole.MEMBER) {
                     items.remove(getString(R.string.edit_item_dialog));
@@ -5267,6 +5412,49 @@ public class ActivityChat extends ActivityEnhanced
                 });
             }
         }
+    }
+
+    public static ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {
+        Uri uri;
+        Cursor cursor;
+        int column_index_data, column_index_folder_name;
+        ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<StructBottomSheet>();
+        String absolutePathOfImage = null;
+        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        String[] projection = {
+            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+        };
+
+        cursor = activity.getContentResolver().query(uri, projection, null, null, null);
+
+        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+
+        while (cursor.moveToNext()) {
+            absolutePathOfImage = cursor.getString(column_index_data);
+
+            StructBottomSheet item = new StructBottomSheet();
+            item.setPath(absolutePathOfImage);
+            item.isSelected = true;
+            listOfAllImages.add(item);
+        }
+
+        return listOfAllImages;
+    }
+
+    public void itemAdapterBottomSheet() {
+        listPathString.clear();
+        fastItemAdapter.clear();
+        itemGalleryList = getAllShownImagesPath(ActivityChat.this);
+        int itemSize = itemGalleryList.size();
+        for (int i = 0; i < itemSize; i++) {
+            fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
+        }
+
+        itemGalleryList.clear();
+        Log.i("SSSSSSSS", "itemAdapterBottomSheet: ");
+
     }
 }
 

@@ -179,7 +179,7 @@
     <string name="st_ask_question">"سؤالی بپرسید."</string>
     <string name="st_About_iGap">"دربارهٔ آی‌گپ"</string>
     <string name="st_privacy_policy">"اصل حریم خصوصی"</string>
-    <string name="st_keepMedia">"فایل‌های چند رسانه‌ای را نگه دار."</string>
+  <string name="st_keepMedia">"فایل‌های چند رسانه‌ای را نگه دار"</string>
 <string name="st_dialog_content_keepMedia">"‫تصاویر، ویدئوها و دیگر فایل‌های ذخیره شده در فضای ابری که شما به آنها دسترسی داشته اید، به منظور  ایجاد فضای خالی از دستگاه پاک می شوند. همه ی رسانه ها در بخش ذخیره سازی فضای ابری نگه داری می شوند و در صورت نیاز می توان آن را مجدداً دانلود کرد.
 "</string>
     <string name="st_titleToolbar_page_Notification_and_sounds">"اعلانات پیام"</string>
@@ -715,7 +715,7 @@
   <string name="MEMBER_LEFT">"صفحه را ترک کرد"</string>
     <string name="ROOM_CONVERTED_TO_PUBLIC">"تبدیل صفحه خصوصی به عمومی"</string>
     <string name="ROOM_CONVERTED_TO_PRIVATE">"تبدیل صفحه عمومی به خصوصی"</string>
-  <string name="MEMBER_JOINED_BY_INVITE_LINK">" با دعوت "</string>
+  <string name="MEMBER_JOINED_BY_INVITE_LINK">"با دعوت به صفحه اضافه شد"</string>
   <string name="Room_Deleted">"حذف صفحه"</string>
     <string name="revoke">ابطال</string>
 

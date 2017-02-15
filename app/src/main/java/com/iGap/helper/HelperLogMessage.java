@@ -1,5 +1,6 @@
 package com.iGap.helper;
 
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
@@ -104,7 +105,12 @@ public class HelperLogMessage {
                 pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                 break;
             case MEMBER_JOINED_BY_INVITE_LINK:
-                pershianResult = G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK) + " " + authorName + " " + logMessage;
+                pershianResult = logMessage + " " + authorName;
+
+                Log.i("NNNNNNN", " G.context.getResources(): " + G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK));
+                Log.i("NNNNNNN", " authorName: " + authorName);
+                Log.i("NNNNNNN", " logMessage: " + logMessage);
+                Log.i("NNNNNNN", " logMessage: " + targetName);
                 break;
             case ROOM_DELETED:
                 pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
@@ -172,5 +178,4 @@ public class HelperLogMessage {
 
         return result;
     }
-
 }

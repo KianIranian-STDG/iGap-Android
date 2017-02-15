@@ -22,7 +22,7 @@
         <item name="bs_dialogBackground">@color/white</item>
         <item name="bs_dividerColor">@color/gray_3c</item>
         <item name="bs_numColumns">5</item>
-        <!--<item name="bs_listStyle">@style/BottomSheet.StyleList</item>-->
+        <!--<mList name="bs_listStyle">@style/BottomSheet.StyleList</mList>-->
     </style>
 
     <style name="MaterialDrawer.DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
@@ -63,7 +63,7 @@
 
         <item name="android:paddingLeft">@dimen/messageContainerPaddingLeftRight</item>
         <item name="android:paddingRight">@dimen/messageContainerPaddingLeftRight</item>
-        <!-- <item name="android:paddingTop">@dimen/messageContainerPadding</item>  -->
+        <!-- <mList name="android:paddingTop">@dimen/messageContainerPadding</mList>  -->
     </style>
 
     <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>
