@@ -77,11 +77,12 @@ public class Contacts {
             if (cur.getCount() > 0) {
                 while (cur.moveToNext()) {
 
-                    String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                    int id = 0;
+                    id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
+
                     if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                        Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{
-                                id
-                        }, null);
+                        Cursor pCur =
+                            cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { String.valueOf(id) }, null);
 
                         if (pCur != null) {
 
@@ -160,8 +161,7 @@ public class Contacts {
         if (size > 0) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+                @Override public void execute(Realm realm) {
                     realm.delete(RealmInviteFriend.class);  // delete all item in invite friend database
                     for (int i = 0; i < size; i++) {
                         RealmInviteFriend item = realm.createObject(RealmInviteFriend.class);
@@ -178,8 +178,7 @@ public class Contacts {
             final RealmResults<RealmContacts> results = realm.where(RealmContacts.class).findAll();
             if (!results.isEmpty()) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         for (int i = 0; i < results.size(); i++) {
                             if (results.get(i).isValid()) {
                                 long phone = results.get(i).getPhone();
