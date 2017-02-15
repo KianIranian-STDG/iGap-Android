@@ -158,9 +158,17 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
                                     RealmRegisteredInfo realmRegisteredInfo = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessage.getUserId()).findFirst();
                                     if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
                                         if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                                            lastMessageSender = " : " + realmRegisteredInfo.getDisplayName();
+                                            if (HelperCalander.isLanguagePersian) {
+                                                lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
+                                            } else {
+                                                lastMessageSender = " :" + realmRegisteredInfo.getDisplayName();
+                                            }
                                         } else {
-                                            lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
+                                            if (HelperCalander.isLanguagePersian) {
+                                                lastMessageSender = " :" + realmRegisteredInfo.getDisplayName();
+                                            } else {
+                                                lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
+                                            }
                                         }
                                     }
                                 }

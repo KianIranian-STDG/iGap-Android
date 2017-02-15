@@ -2,6 +2,7 @@ package com.iGap.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.R;
 import com.iGap.adapter.items.RoomItem;
+import com.iGap.helper.HelperCalander;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
 import com.iGap.module.ShouldScrolledBehavior;
@@ -37,7 +39,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private FastItemAdapter<RoomItem> mAdapter;
     private ArrayList<Parcelable> mForwardMessages;
     private SwipeRefreshLayout swipeRefreshLayout;
-
+    private Typeface titleTypeface;
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -61,10 +63,18 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private void initComponent() {
         //MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.cl_btn_menu);
 
-        MaterialDesignTextView btnSearch =
-                (MaterialDesignTextView) findViewById(R.id.amr_btn_search);
+        MaterialDesignTextView btnSearch = (MaterialDesignTextView) findViewById(R.id.amr_btn_search);
+        btnSearch.setVisibility(View.GONE);
 
         TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
+
+        if (!HelperCalander.isLanguagePersian) {
+            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        } else {
+            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+        }
+
+        txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
