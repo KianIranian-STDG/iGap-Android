@@ -27,6 +27,7 @@
     <dimen name="sp28">42sp</dimen>
     <dimen name="sp32">48sp</dimen>
     <dimen name="sp36">54sp</dimen>
+    <dimen name="sp48">72sp</dimen>
 
 
     <dimen name="dp4">6dp</dimen>

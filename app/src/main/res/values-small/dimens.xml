@@ -31,7 +31,7 @@
     <dimen name="sp28">21sp</dimen>
     <dimen name="sp32">24sp</dimen>
     <dimen name="sp36">27sp</dimen>
-
+    <dimen name="sp48">36sp</dimen>
 
     <dimen name="dp4">3dp</dimen>
     <dimen name="dp6">4dp</dimen>

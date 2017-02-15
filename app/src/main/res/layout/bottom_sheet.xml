@@ -37,7 +37,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="bottom"
           android:orientation="horizontal"
-          android:padding="8dp"
+          android:padding="@dimen/dp4"
           >
 
 
@@ -66,7 +66,7 @@
               android:layout_gravity="center_horizontal"
               android:text="@string/am_document"
               android:textColor="@color/gray_4c"
-              android:textSize="14sp"
+              android:textSize="@dimen/sp12"
               />
         </LinearLayout>
 
@@ -96,7 +96,7 @@
               android:singleLine="true"
               android:text="@string/am_music"
               android:textColor="@color/gray_4c"
-              android:textSize="14sp"
+              android:textSize="@dimen/sp12"
               />
         </LinearLayout>
         <LinearLayout
@@ -124,7 +124,7 @@
               android:layout_gravity="center_horizontal"
               android:text="@string/am_video"
               android:textColor="@color/gray_4c"
-              android:textSize="14sp"
+              android:textSize="@dimen/sp12"
               />
         </LinearLayout>
         <LinearLayout
@@ -154,7 +154,7 @@
               android:singleLine="true"
               android:text="@string/am_picture"
               android:textColor="@color/gray_4c"
-              android:textSize="14sp"
+              android:textSize="@dimen/sp12"
               />
         </LinearLayout>
         <LinearLayout
@@ -183,7 +183,8 @@
               android:singleLine="true"
               android:text="@string/am_camera"
               android:textColor="@color/gray_4c"
-              android:textSize="14sp"
+              android:textSize="@dimen/sp12"
+              android:id="@+id/textView5"
               />
         </LinearLayout>
 
@@ -194,7 +195,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="bottom"
           android:orientation="horizontal"
-          android:padding="8dp"
+          android:padding="@dimen/dp4"
           >
 
         <LinearLayout
@@ -222,7 +223,7 @@
               android:layout_gravity="center_horizontal"
               android:text="@string/am_contact"
               android:textColor="@color/gray_4c"
-              android:textSize="14sp"
+              android:textSize="@dimen/sp12"
               />
         </LinearLayout>
 
@@ -252,7 +253,7 @@
               android:singleLine="true"
               android:text="@string/am_location"
               android:textColor="@color/gray_4c"
-              android:textSize="14sp"
+              android:textSize="@dimen/sp12"
               />
         </LinearLayout>
 
@@ -282,7 +283,7 @@
               android:singleLine="true"
               android:text="@string/am_paint"
               android:textColor="@color/gray_4c"
-              android:textSize="14sp"
+              android:textSize="@dimen/sp12"
               />
         </LinearLayout>
 
@@ -311,7 +312,7 @@
               android:layout_gravity="center_horizontal"
               android:text="@string/am_file"
               android:textColor="@color/gray_4c"
-              android:textSize="14sp"
+              android:textSize="@dimen/sp12"
               />
         </LinearLayout>
 
@@ -347,7 +348,7 @@
               android:layout_gravity="center_horizontal"
               android:text="@string/navigation_drawer_close"
               android:textColor="@color/gray_4c"
-              android:textSize="14sp"
+              android:textSize="@dimen/sp12"
               />
         </LinearLayout>
 

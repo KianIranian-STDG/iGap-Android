@@ -30,6 +30,7 @@
     <dimen name="sp28">28sp</dimen>
     <dimen name="sp32">32sp</dimen>
     <dimen name="sp36">36sp</dimen>
+    <dimen name="sp48">48sp</dimen>
 
     <dimen name="dp4">4dp</dimen>
     <dimen name="dp6">6dp</dimen>
