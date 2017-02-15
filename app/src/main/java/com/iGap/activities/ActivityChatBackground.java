@@ -145,6 +145,10 @@ public class ActivityChatBackground extends ActivityEnhanced {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+
         String filePath = null;
 
         switch (requestCode) {
@@ -160,7 +164,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
                 break;
             case AttachFile.request_code_image_from_gallery_single_select:
 
-                if (data.getData() != null) {
+                if (data != null && data.getData() != null) {
                     filePath = AttachFile.getFilePathFromUri(data.getData());
                 }
 
