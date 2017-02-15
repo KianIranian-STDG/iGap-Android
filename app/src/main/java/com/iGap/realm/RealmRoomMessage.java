@@ -61,7 +61,10 @@ import org.parceler.Parcel;
         Realm realm = Realm.getDefaultInstance();
 
         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, fakeMessageId).findFirst();
-        message.setMessageId(newMessageId);
+        if (message != null) {
+            message.deleteFromRealm();
+        }
+        //message.setMessageId(newMessageId);
 
         realm.close();
         return message;
