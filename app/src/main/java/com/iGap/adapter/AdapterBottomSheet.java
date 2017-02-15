@@ -66,6 +66,7 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
         imageLoader.displayImage("file://" + mList.getPath(), holder.imgSrc);
 
+
         if (mList.isSelected) {
             holder.checkBoxSelect.setChecked(false);
         } else {
@@ -78,9 +79,11 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
                 if (holder.checkBoxSelect.isChecked()) {
                     holder.checkBoxSelect.setChecked(false);
                     ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
+                    mList.setSelected(true);
                 } else {
                     holder.checkBoxSelect.setChecked(true);
                     ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
+                    mList.setSelected(false);
                 }
             }
         });
@@ -90,9 +93,11 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
                 if (holder.checkBoxSelect.isChecked()) {
                     holder.checkBoxSelect.setChecked(false);
                     ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
+                    mList.setSelected(false);
                 } else {
                     holder.checkBoxSelect.setChecked(true);
                     ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
+                    mList.setSelected(true);
                 }
             }
         });

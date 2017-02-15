@@ -31,6 +31,7 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -393,8 +394,9 @@ public class ActivityChat extends ActivityEnhanced
     private static List<StructBottomSheet> contacts;
     private boolean isCheckBottomSheet = false;
     public static OnPathAdapterBottomSheet onPathAdapterBottomSheet;
-    private ImageView send;
+    private TextView send;
     private TextView txtCountItem;
+    private View viewBottomSheet;
     @Override
     protected void onStart() {
         super.onStart();
@@ -2044,8 +2046,7 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         imvAttachFileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(final View view) {
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -2053,7 +2054,9 @@ public class ActivityChat extends ActivityEnhanced
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+
                         bottomSheetDialog.show();
+
                     }
                 }, 100);
             }
@@ -2702,20 +2705,20 @@ public class ActivityChat extends ActivityEnhanced
 
         fastItemAdapter = new FastItemAdapter();
 
-        View view = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
+        viewBottomSheet = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
-        send = (ImageView) view.findViewById(R.id.send);
-        txtCountItem = (TextView) view.findViewById(R.id.txtNumberItem);
-        ViewGroup camera = (ViewGroup) view.findViewById(R.id.camera);
-        ViewGroup picture = (ViewGroup) view.findViewById(R.id.picture);
-        ViewGroup video = (ViewGroup) view.findViewById(R.id.video);
-        ViewGroup music = (ViewGroup) view.findViewById(R.id.music);
-        ViewGroup document = (ViewGroup) view.findViewById(R.id.document);
-        ViewGroup close = (ViewGroup) view.findViewById(R.id.close);
-        ViewGroup file = (ViewGroup) view.findViewById(R.id.file);
-        ViewGroup paint = (ViewGroup) view.findViewById(R.id.paint);
-        ViewGroup location = (ViewGroup) view.findViewById(R.id.location);
-        ViewGroup contact = (ViewGroup) view.findViewById(R.id.contact);
+        send = (TextView) viewBottomSheet.findViewById(R.id.send);
+        txtCountItem = (TextView) viewBottomSheet.findViewById(R.id.txtNumberItem);
+        ViewGroup camera = (ViewGroup) viewBottomSheet.findViewById(R.id.camera);
+        ViewGroup picture = (ViewGroup) viewBottomSheet.findViewById(R.id.picture);
+        ViewGroup video = (ViewGroup) viewBottomSheet.findViewById(R.id.video);
+        ViewGroup music = (ViewGroup) viewBottomSheet.findViewById(R.id.music);
+        ViewGroup document = (ViewGroup) viewBottomSheet.findViewById(R.id.document);
+        ViewGroup close = (ViewGroup) viewBottomSheet.findViewById(R.id.close);
+        ViewGroup file = (ViewGroup) viewBottomSheet.findViewById(R.id.file);
+        ViewGroup paint = (ViewGroup) viewBottomSheet.findViewById(R.id.paint);
+        ViewGroup location = (ViewGroup) viewBottomSheet.findViewById(R.id.location);
+        ViewGroup contact = (ViewGroup) viewBottomSheet.findViewById(R.id.contact);
 
         onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {
             @Override public void path(String path, boolean isCheck) {
@@ -2728,43 +2731,47 @@ public class ActivityChat extends ActivityEnhanced
 
                 listPathString.size();
                 if (listPathString.size() > 0) {
-                    send.setImageResource(R.mipmap.ic_send_black_24dp);
+                    send.setText(getResources().getString(R.string.md_send_button));
+                    send.setTextSize(getResources().getDimension(R.dimen.sp16));
                     isCheckBottomSheet = true;
                     txtCountItem.setText("" + listPathString.size() + " item");
                 } else {
-                    send.setImageResource(R.mipmap.ic_close);
+                    send.setText(getResources().getString(R.string.md_arrow_down));
+                    send.setTextSize(48);
                     isCheckBottomSheet = false;
                     txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
                 }
             }
         };
 
-        rcvBottomSheet = (RecyclerView) view.findViewById(R.id.rcvContent);
+        rcvBottomSheet = (RecyclerView) viewBottomSheet.findViewById(R.id.rcvContent);
         rcvBottomSheet.setLayoutManager(new GridLayoutManager(ActivityChat.this, 1, GridLayoutManager.HORIZONTAL, false));
         rcvBottomSheet.setItemAnimator(new DefaultItemAnimator());
-        //rcvBottomSheet.setDrawingCacheEnabled(true);
-        //rcvBottomSheet.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        //rcvBottomSheet.setItemViewCacheSize(100);
+        rcvBottomSheet.setDrawingCacheEnabled(true);
+        rcvBottomSheet.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        rcvBottomSheet.setItemViewCacheSize(100);
         rcvBottomSheet.setAdapter(fastItemAdapter);
         bottomSheetDialog = new BottomSheetDialog(ActivityChat.this);
-        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.setContentView(viewBottomSheet);
+
+        bottomSheetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override public void onShow(DialogInterface dialogInterface) {
+                BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialogInterface;
+                FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(android.support.design.R.id.design_bottom_sheet);
+                BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
 
         bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override public void onDismiss(DialogInterface dialog) {
 
-                Log.i("VVVVVVV", "00 onDismiss: " + dialog);
                 dialog.dismiss();
-                send.setImageResource(R.mipmap.ic_close);
+                send.setText(getResources().getString(R.string.md_arrow_down));
+                send.setTextSize(48);
                 txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
-                Log.i("SSSSSSSS", "onBackPressed:0 ");
             }
         });
 
-        bottomSheetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override public void onShow(DialogInterface dialog) {
-                Log.i("VVVVVVV", "11 onDismiss: " + dialog);
-            }
-        });
 
         fastItemAdapter.withSelectable(true);
         listPathString = new ArrayList<>();
@@ -2831,7 +2838,8 @@ public class ActivityChat extends ActivityEnhanced
                             String localpathNew = attachFile.saveGalleryPicToLocal(path);
                             sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localpathNew);
                             fastItemAdapter.clear();
-                            send.setImageResource(R.mipmap.ic_close);
+                            send.setText(getResources().getString(R.string.md_arrow_down));
+                            send.setTextSize(48);
                             txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
                         }
                     }
@@ -5453,7 +5461,6 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         itemGalleryList.clear();
-        Log.i("SSSSSSSS", "itemAdapterBottomSheet: ");
 
     }
 }
