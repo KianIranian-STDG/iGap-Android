@@ -53,7 +53,7 @@ public class LastSeenTimeUtil {
 
         String time = "";
         String exactlyTime = " " + G.context.getResources().getString(R.string.at) + " " + HelperCalander.getClocktime(beforeMillis * DateUtils.SECOND_IN_MILLIS);
-        ;
+
 
 
         long currentMillis = System.currentTimeMillis();
@@ -96,9 +96,11 @@ public class LastSeenTimeUtil {
                     break;
             }
         } else {
-            time = G.context.getResources().getString(R.string.last_seen) + " " +
-                    TimeUtils.toLocal(beforeMillis * DateUtils.SECOND_IN_MILLIS, "yy-MM-dd") + " " +
-                    exactlyTime;
+            time = G.context.getResources().getString(R.string.last_seen) + " " + HelperCalander.checkHijriAndReturnTime(beforeMillis) + " " + exactlyTime;
+
+
+
+
         }
         return time;
     }
