@@ -186,6 +186,7 @@
         <activity android:name=".activities.ActivitySettingNotification"/>
         <activity
             android:name=".activities.ActivityRegister"
+            android:screenOrientation="portrait"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:windowSoftInputMode="adjustPan"/>
         <activity

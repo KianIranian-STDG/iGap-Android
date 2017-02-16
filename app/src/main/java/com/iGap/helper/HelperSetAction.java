@@ -90,10 +90,12 @@ public class HelperSetAction {
 
             structActions.add(structAction);
 
-            if (chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
-                new RequestGroupSetAction().groupSetAction(roomId, action, randomNumber);
-            } else {
-                new RequestChatSetAction().chatSetAction(roomId, action, randomNumber);
+            if (chatType != null) {
+                if (chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+                    new RequestGroupSetAction().groupSetAction(roomId, action, randomNumber);
+                } else {
+                    new RequestChatSetAction().chatSetAction(roomId, action, randomNumber);
+                }
             }
         }
     }

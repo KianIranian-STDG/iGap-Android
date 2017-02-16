@@ -49,6 +49,7 @@ import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
+import com.iGap.helper.HelperError;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
@@ -311,38 +312,38 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             @Override
             public void onUserProfileGetGenderError() {
-//               runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), ""+R.string.error, Snackbar.LENGTH_LONG);
-//
-//                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                snack.dismiss();
-//                            }
-//                        });
-//                        snack.show();
-//                    }
-//                });
+                //               runOnUiThread(new Runnable() {
+                //                    @Override
+                //                    public void run() {
+                //                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), ""+R.string.error, Snackbar.LENGTH_LONG);
+                //
+                //                        snack.setAction(R.string.cancel, new View.OnClickListener() {
+                //                            @Override
+                //                            public void onClick(View view) {
+                //                                snack.dismiss();
+                //                            }
+                //                        });
+                //                        snack.show();
+                //                    }
+                //                });
             }
 
             @Override
             public void onUserProfileGetGenderTimeOut() {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), ""+R.string.time_out, Snackbar.LENGTH_LONG);
-//
-//                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                snack.dismiss();
-//                            }
-//                        });
-//                        snack.show();
-//                    }
-//                });
+                //                runOnUiThread(new Runnable() {
+                //                    @Override
+                //                    public void run() {
+                //                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), ""+R.string.time_out, Snackbar.LENGTH_LONG);
+                //
+                //                        snack.setAction(R.string.cancel, new View.OnClickListener() {
+                //                            @Override
+                //                            public void onClick(View view) {
+                //                                snack.dismiss();
+                //                            }
+                //                        });
+                //                        snack.show();
+                //                    }
+                //                });
             }
         };
         new RequestUserProfileGetGender().userProfileGetGender();
@@ -676,36 +677,28 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     }
                 };
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(getResources()
-                        .getString(R.string.st_Gander)).titleGravity(GravityEnum.START)
-                        .titleColor(getResources().getColor(android.R.color.black))
-                        .items(R.array.array_gander)
-                        .itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Gander)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.array_gander).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                switch (which) {
-                                    case 0: {
-                                        new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
-                                        break;
-                                    }
-                                    case 1: {
-                                        new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
-                                        break;
-                                    }
-                                }
-                                return false;
+                        switch (which) {
+                            case 0: {
+                                new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
+                                break;
                             }
-                        }).positiveText(getResources()
-                        .getString(R.string.B_ok))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                showProgressBar();
+                            case 1: {
+                                new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
+                                break;
                             }
-                        })
-                        .show();
+                        }
+                        return false;
+                    }
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        showProgressBar();
+                    }
+                }).show();
 
 
             }
@@ -1373,19 +1366,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         lyCleanUp = (RelativeLayout) findViewById(R.id.st_layout_cleanup);
         lyCleanUp.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
-                MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(R.string.do_you_want_to_clean_all_data_in_chat_rooms)
-                    .positiveText(R.string.ok)
-                    .cancelable(true)
-                    .negativeText(android.R.string.cancel)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(R.string.do_you_want_to_clean_all_data_in_chat_rooms).positiveText(R.string.ok).cancelable(true).negativeText(android.R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            RealmRoomMessage.ClearAllMessage(true, 0);
-                        }
-                    })
-                    .build();
+                        RealmRoomMessage.ClearAllMessage(true, 0);
+                    }
+                }).build();
 
                 dialog.show();
             }
@@ -1430,8 +1420,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         if (checkBoxPhoto.isChecked()) {
                             for (File file : filePhoto.listFiles()) {
-                                if (!file.isDirectory())
-                                    file.delete();
+                                if (!file.isDirectory()) file.delete();
                             }
                         }
                         if (checkBoxVideo.isChecked()) {
@@ -1538,8 +1527,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize))
-                        .titleGravity(GravityEnum.START)
-                        .titleColor(getResources().getColor(android.R.color.black)).items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
+                        .titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
                         .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -1920,12 +1908,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtWebViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-//                intent.putExtra("PATH", "https://www.igap.net/en/");
-//                startActivity(intent);
+                //                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
+                //                intent.putExtra("PATH", "https://www.igap.net/en/");
+                //                startActivity(intent);
 
-//                Uri uri =  Uri.parse( "https://www.igap.net/en/" );
-//                mCustomTabsHelperFragment.mayLaunchUrl(uri, null, null);
+                //                Uri uri =  Uri.parse( "https://www.igap.net/en/" );
+                //                mCustomTabsHelperFragment.mayLaunchUrl(uri, null, null);
 
                 openBrowser("https://www.igap.net/en/");
 
@@ -1936,9 +1924,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtWebViewBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-//                intent.putExtra("PATH", "https://blog.igap.net");
-//                startActivity(intent);
+                //                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
+                //                intent.putExtra("PATH", "https://blog.igap.net");
+                //                startActivity(intent);
                 openBrowser("https://blog.igap.net");
             }
         });
@@ -1947,9 +1935,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtCreateTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-//                intent.putExtra("PATH", "https://support.igap.net");
-//                startActivity(intent);
+                //                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
+                //                intent.putExtra("PATH", "https://support.igap.net");
+                //                startActivity(intent);
 
                 openBrowser("https://support.igap.net");
             }
@@ -1974,26 +1962,20 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         int mColorPrimary = getResources().getColor(R.color.green);
         final Uri PROJECT_URI = Uri.parse(s);
 
-        CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder()
-                .enableUrlBarHiding()
-                .setToolbarColor(mColorPrimary)
-                .setShowTitle(true)
-                .build();
+        CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();
 
-        mCustomTabsHelperFragment.setConnectionCallback(
-                new CustomTabsActivityHelper.ConnectionCallback() {
-                    @Override
-                    public void onCustomTabsConnected() {
-                        mCustomTabsHelperFragment.mayLaunchUrl(PROJECT_URI, null, null);
-                    }
+        mCustomTabsHelperFragment.setConnectionCallback(new CustomTabsActivityHelper.ConnectionCallback() {
+            @Override
+            public void onCustomTabsConnected() {
+                mCustomTabsHelperFragment.mayLaunchUrl(PROJECT_URI, null, null);
+            }
 
-                    @Override
-                    public void onCustomTabsDisconnected() {
-                    }
-                });
+            @Override
+            public void onCustomTabsDisconnected() {
+            }
+        });
 
-        CustomTabsHelperFragment.open(ActivitySetting.this, mCustomTabsIntent, PROJECT_URI,
-                mCustomTabsFallback);
+        CustomTabsHelperFragment.open(ActivitySetting.this, mCustomTabsIntent, PROJECT_URI, mCustomTabsFallback);
 
 
     }
@@ -2259,8 +2241,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             super.onPostExecute(result);
             myActivityReference.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             prg.setVisibility(View.GONE);
-            identityCurrent = Long.toString(result.messageId);
-            G.uploaderUtil.startUploading(result, identityCurrent);
+            if (result != null) {
+                identityCurrent = Long.toString(result.messageId);
+                G.uploaderUtil.startUploading(result, identityCurrent);
+            } else {
+                HelperError.getErrorFromCode(-1, 0);
+            }
         }
     }
 
@@ -2316,19 +2302,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this)
-                .title(title)
-                .customView(R.layout.dialog_remind_time, wrapInScrollView)
-                .positiveText(R.string.B_ok)
-                .autoDismiss(false)
-                .canceledOnTouchOutside(false)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+            }
+        }).show();
 
         View v = dialog.getCustomView();
 
@@ -2340,31 +2319,30 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
                 remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-//                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
             @Override
             public void onFinish() {
-//                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
             }
         };
         countWaitTimer.start();
     }
 
-    private final CustomTabsActivityHelper.CustomTabsFallback mCustomTabsFallback =
-            new CustomTabsActivityHelper.CustomTabsFallback() {
-                @Override
-                public void openUri(Activity activity, Uri uri) {
-//                    Toast.makeText(activity, R.string.custom_tabs_failed, Toast.LENGTH_SHORT)
-//                            .show();
-                    try {
-                        activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                    } catch (ActivityNotFoundException e) {
-                        e.printStackTrace();
-//                        Toast.makeText(activity, R.string.activity_not_found, Toast.LENGTH_SHORT)
-//                                .show();
-                    }
-                }
-            };
+    private final CustomTabsActivityHelper.CustomTabsFallback mCustomTabsFallback = new CustomTabsActivityHelper.CustomTabsFallback() {
+        @Override
+        public void openUri(Activity activity, Uri uri) {
+            //                    Toast.makeText(activity, R.string.custom_tabs_failed, Toast.LENGTH_SHORT)
+            //                            .show();
+            try {
+                activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                //                        Toast.makeText(activity, R.string.activity_not_found, Toast.LENGTH_SHORT)
+                //                                .show();
+            }
+        }
+    };
 
 }

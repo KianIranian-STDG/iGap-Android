@@ -347,6 +347,8 @@ public class HelperError {
                 break;
             case 99999: // client errors
                 error = "Offset is negative";
+            case -1: // client errors
+                error = G.context.getResources().getString(R.string.please_try_again);
                 break;
 
         }
