@@ -13,15 +13,12 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by android3 on 2/14/2017.
- */
 
 public class RealmWallpaper extends RealmObject {
 
     private long lastTimeGetList;
     private byte[] wallPaperList;
-    private byte[] lockalList;
+    private byte[] localList;
 
     public List<ProtoGlobal.Wallpaper> getWallPaperList() {
         return wallPaperList == null ? null : (List<ProtoGlobal.Wallpaper>) SerializationUtils.deserialize(wallPaperList);
@@ -31,12 +28,12 @@ public class RealmWallpaper extends RealmObject {
         this.wallPaperList = SerializationUtils.serialize(wallpaperListProto);
     }
 
-    public ArrayList<String> getLockalList() {
-        return lockalList == null ? null : ((ArrayList<String>) SerializationUtils.deserialize(lockalList));
+    public ArrayList<String> getLocalList() {
+        return localList == null ? null : ((ArrayList<String>) SerializationUtils.deserialize(localList));
     }
 
-    public void setLockalList(ArrayList<String> list) {
-        this.lockalList = SerializationUtils.serialize(list);
+    public void setLocalList(ArrayList<String> list) {
+        this.localList = SerializationUtils.serialize(list);
     }
 
     public long getLastTimeGetList() {
@@ -72,16 +69,16 @@ public class RealmWallpaper extends RealmObject {
 
                 if (lockaPath.length() > 0) {
 
-                    ArrayList<String> lockalList = item.getLockalList();
+                    ArrayList<String> lockalList = item.getLocalList();
 
                     if (lockalList == null) {
 
                         lockalList = new ArrayList<String>();
                         lockalList.add(lockaPath);
-                        item.setLockalList(lockalList);
+                        item.setLocalList(lockalList);
                     } else if (lockalList.indexOf(lockaPath) == -1) {
                         lockalList.add(lockaPath);
-                        item.setLockalList(lockalList);
+                        item.setLocalList(lockalList);
                     }
                 }
             }

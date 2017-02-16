@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ViewTreeObserver;
 import com.iGap.G;
 import com.iGap.R;
@@ -203,15 +202,13 @@ public class ActivityChatBackground extends ActivityEnhanced {
         }
 
         new RequestInfoWallpaper().infoWallpaper(fit);
-
-        Log.e("qqqqqq", "  RequestInfoWallpaper  ");
     }
 
     private void fillList(boolean getInfoFromServer) {
 
         wList = new ArrayList<>();
 
-        //add item 0 add new background from lockal
+        //add item 0 add new background from local
         StructWallpaper sw = new StructWallpaper();
         sw.setWallpaperType(WallpaperType.addNew);
         wList.add(sw);
@@ -222,12 +219,12 @@ public class ActivityChatBackground extends ActivityEnhanced {
 
         if (realmWallpaper != null) {
 
-            if (realmWallpaper.getLockalList() != null) {
-                for (String lockalPath : realmWallpaper.getLockalList()) {
-                    if (new File(lockalPath).exists()) {
+            if (realmWallpaper.getLocalList() != null) {
+                for (String localPath : realmWallpaper.getLocalList()) {
+                    if (new File(localPath).exists()) {
                         StructWallpaper _swl = new StructWallpaper();
                         _swl.setWallpaperType(WallpaperType.lockal);
-                        _swl.setPath(lockalPath);
+                        _swl.setPath(localPath);
                         wList.add(_swl);
                     }
                 }

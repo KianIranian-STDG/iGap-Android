@@ -11,13 +11,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 repositories {
-  maven { url 'https://raw.github.com/Raizlabs/maven-releases/master/releases' }
-  maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
   maven { url 'https://maven.fabric.io/public' }
 }
 
 apply plugin: 'realm-android'
-
 
 android {
   compileSdkVersion 25
@@ -27,8 +24,8 @@ android {
     applicationId "net.iGap"
     minSdkVersion 15
     targetSdkVersion 25
-    versionCode 11
-    versionName "0.0.11"
+    versionCode 12
+    versionName "0.0.12"
     multiDexEnabled true
   }
   buildTypes {
@@ -85,6 +82,7 @@ dependencies {
   compile 'com.hanks.animatecheckbox:library:0.1'
   compile 'org.parceler:parceler-api:1.1.6'
   testCompile 'junit:junit:4.12'
+  annotationProcessor 'org.parceler:parceler:1.1.6'
   provided 'com.android.support:support-annotations:25.1.1'
   compile 'com.android.support:gridlayout-v7:25.1.1'
   compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.1'
@@ -97,5 +95,6 @@ dependencies {
   compile 'com.google.android.gms:play-services-maps:9.8.0'
   compile project(path: ':lvl')
   compile 'com.cocosw:bottomsheet:1.+@aar'
+  compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
   compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
 }
