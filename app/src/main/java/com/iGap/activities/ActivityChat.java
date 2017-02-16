@@ -392,7 +392,7 @@ public class ActivityChat extends ActivityEnhanced
     private static List<StructBottomSheet> contacts;
     private boolean isCheckBottomSheet = false;
     public static OnPathAdapterBottomSheet onPathAdapterBottomSheet;
-    private TextView send;
+    private ImageView send;
     private TextView txtCountItem;
     private View viewBottomSheet;
 
@@ -2708,8 +2708,7 @@ public class ActivityChat extends ActivityEnhanced
 
         viewBottomSheet = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
-        send = (TextView) viewBottomSheet.findViewById(R.id.send);
-        send.setTextSize(getResources().getDimension(R.dimen.sp28));
+        send = (ImageView) viewBottomSheet.findViewById(R.id.send);
         txtCountItem = (TextView) viewBottomSheet.findViewById(R.id.txtNumberItem);
         ViewGroup camera = (ViewGroup) viewBottomSheet.findViewById(R.id.camera);
         ViewGroup picture = (ViewGroup) viewBottomSheet.findViewById(R.id.picture);
@@ -2734,13 +2733,11 @@ public class ActivityChat extends ActivityEnhanced
 
                 listPathString.size();
                 if (listPathString.size() > 0) {
-                    send.setText(getResources().getString(R.string.md_send_button));
-                    send.setTextSize(getResources().getDimension(R.dimen.sp16));
+                    send.setImageResource(R.mipmap.send2);
                     isCheckBottomSheet = true;
                     txtCountItem.setText("" + listPathString.size() + " item");
                 } else {
-                    send.setText(getResources().getString(R.string.md_arrow_down));
-                    send.setTextSize(getResources().getDimension(R.dimen.sp28));
+                    send.setImageResource(R.mipmap.ic_close);
                     isCheckBottomSheet = false;
                     txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
                 }
@@ -2771,8 +2768,7 @@ public class ActivityChat extends ActivityEnhanced
             public void onDismiss(DialogInterface dialog) {
 
                 dialog.dismiss();
-                send.setText(getResources().getString(R.string.md_arrow_down));
-                send.setTextSize(getResources().getDimension(R.dimen.sp28));
+                send.setImageResource(R.mipmap.ic_close);
                 txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
             }
         });
@@ -2849,8 +2845,7 @@ public class ActivityChat extends ActivityEnhanced
                             String localpathNew = attachFile.saveGalleryPicToLocal(path);
                             sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localpathNew);
                             fastItemAdapter.clear();
-                            send.setText(getResources().getString(R.string.md_arrow_down));
-                            send.setTextSize(getResources().getDimension(R.dimen.sp28));
+                            send.setImageResource(R.mipmap.ic_close);
                             txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
                         }
                     }

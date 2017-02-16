@@ -326,17 +326,14 @@
             android:layout_weight="1"
             android:orientation="vertical"
             >
-          <com.iGap.module.MaterialDesignTextView
+          <ImageView
               android:id="@+id/send"
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
-              android:padding="2dp"
-              android:text="@string/md_arrow_down"
               android:tint="@color/green"
+              android:src="@mipmap/ic_close"
               android:gravity="center"
               android:textColor="@color/green"
-              android:textAppearance="@style/TextIconAppearance_toolbar"
-
               />
 
           <TextView
