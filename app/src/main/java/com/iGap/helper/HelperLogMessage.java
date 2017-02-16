@@ -1,6 +1,5 @@
 package com.iGap.helper;
 
-import android.util.Log;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
@@ -87,8 +86,6 @@ public class HelperLogMessage {
         }
 
         englishResult = authorName + " " + logMessage + " " + targetName;
-
-        Log.i("DDDDDDDDD", "typeRoom: " + typeRoom + "_____" + finalTypeRoom);
 
         switch (messageLog.getType()) {
             case USER_JOINED:
