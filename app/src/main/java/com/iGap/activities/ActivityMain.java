@@ -159,7 +159,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private ImageView imgNavImage;
     private DrawerLayout drawer;
     private Toolbar mainToolbar;
-    private Config.ConnectionState latestConnectionState;
 
     private void scrollToTop() {
         recyclerView.postDelayed(new Runnable() {
@@ -853,7 +852,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        latestConnectionState = G.connectionState;
                         G.connectionState = Config.ConnectionState.UPDATING;
                         txtIgap.setText(R.string.updating);
                         txtIgap.setTypeface(null, Typeface.BOLD);
@@ -868,7 +866,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                  * show latestState that was in previous state
                  */
                 if (G.connectionState == Config.ConnectionState.UPDATING) {
-                    G.onConnectionChangeState.onChangeState(latestConnectionState);
+                    G.onConnectionChangeState.onChangeState(Config.ConnectionState.IGAP);
                 }
             }
         };

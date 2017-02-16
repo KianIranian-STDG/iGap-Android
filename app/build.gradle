@@ -42,7 +42,7 @@ android {
 
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
-  compile('com.mikepenz:fastadapter:2.1.5@aar') {
+  compile('com.mikepenz:fastadapter:2.1.6@aar') {
     transitive = true
   }
   compile 'com.mikepenz:fastadapter-commons:2.1.0@aar'
@@ -94,7 +94,6 @@ dependencies {
   compile 'com.google.android.gms:play-services-analytics:9.8.0'
   compile 'com.google.android.gms:play-services-maps:9.8.0'
   compile project(path: ':lvl')
-  compile 'com.cocosw:bottomsheet:1.+@aar'
   compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
   compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
 }
