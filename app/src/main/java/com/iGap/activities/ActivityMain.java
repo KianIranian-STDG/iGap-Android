@@ -1272,6 +1272,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //contentLoading.hide();
         mAdapter.clear();
         Realm realm = Realm.getDefaultInstance();
+        realm.setAutoRefresh(true);
         List<RoomItem> roomItems = new ArrayList<>();
 
         realm.executeTransaction(new Realm.Transaction() {
