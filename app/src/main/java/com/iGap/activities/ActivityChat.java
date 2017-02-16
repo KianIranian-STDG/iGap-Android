@@ -3561,22 +3561,9 @@ public class ActivityChat extends ActivityEnhanced
         rippleCopySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                for (AbstractMessage messageID : mAdapter.getSelectedItems()) {////TODO [Saeed
-                    // Mozaffari] [2016-09-13 6:39 PM] - code is wrong
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("Copied Text", messageID.mMessage.messageText);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(G.context, R.string.text_copied, Toast.LENGTH_SHORT).show();
 
-                    mAdapter.deselect();
-                    toolbar.setVisibility(View.VISIBLE);
-                    ll_AppBarSelected.setVisibility(View.GONE);
-                    findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
-                    // gone replay layout
-                    if (mReplayLayout != null) {
-                        mReplayLayout.setVisibility(View.GONE);
-                    }
-                }
+                copySelectedItemTextToClipboard();
+
             }
         });
         RippleView rippleForwardSelected = (RippleView) findViewById(R.id.chl_ripple_forward_selected);
@@ -3643,6 +3630,35 @@ public class ActivityChat extends ActivityEnhanced
             initLayoutChannelFooter();
         }
     }
+
+    public void copySelectedItemTextToClipboard() {
+
+        boolean showToast = false;
+
+        for (AbstractMessage _message : mAdapter.getSelectedItems()) {
+
+            String text = _message.mMessage.forwardedFrom != null ? _message.mMessage.forwardedFrom.getMessage() : _message.mMessage.messageText;
+
+            if (text == null || text.length() == 0) continue;
+
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", text);
+            clipboard.setPrimaryClip(clip);
+        }
+
+        if (showToast) Toast.makeText(G.context, R.string.text_copied, Toast.LENGTH_SHORT).show();
+
+        mAdapter.deselect();
+        toolbar.setVisibility(View.VISIBLE);
+        ll_AppBarSelected.setVisibility(View.GONE);
+        findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
+        // gone replay layout
+        if (mReplayLayout != null) {
+            mReplayLayout.setVisibility(View.GONE);
+        }
+    }
+
+
 
     public static void deleteSelectedMessages(final long RoomId, final ArrayList<Long> list, final ProtoGlobal.Room.Type chatType) {
 
@@ -4971,9 +4987,15 @@ public class ActivityChat extends ActivityEnhanced
                     if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
                         // copy message
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("Copied Text", message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText);
-                        clipboard.setPrimaryClip(clip);
-                        Toast.makeText(G.context, R.string.text_copied, Toast.LENGTH_SHORT).show();
+                        String _text = message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText;
+                        if (_text != null && _text.length() > 0) {
+                            ClipData clip = ClipData.newPlainText("Copied Text", _text);
+                            clipboard.setPrimaryClip(clip);
+                            Toast.makeText(G.context, R.string.text_copied, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(G.context, R.string.text_is_empty, Toast.LENGTH_SHORT).show();
+                        }
+
                     } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
                         final Realm realmCondition = Realm.getDefaultInstance();
                         final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirstAsync();

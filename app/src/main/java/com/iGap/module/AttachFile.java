@@ -22,7 +22,6 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -656,41 +655,26 @@ public class AttachFile {
     }
 
     public String saveGalleryPicToLocal(String galleryPath) {
-        Log.i("CCCCCCD", "0 getPath: " + galleryPath);
+
             String result = "";
             if (galleryPath == null) return "";
 
-        if (galleryPath.contains(G.DIR_APP)) { // file one time send and compress
+        if (ImageHelper.isNeedtoCompress(new File(galleryPath))) {
 
-            //            File file = new File(galleryPath);
-            //
-            //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            //                result = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file).getPath();
-            ////                result = Uri.fromFile(file).getPath();
-            //                Log.i("CCCCCCD", "getPath: " + file.getPath());
-            //                Log.i("CCCCCCD", "toString: " + file.toString());
-            //                Log.i("CCCCCCD", "getAbsolutePath: " + file.getAbsolutePath());
-            //            } else {
-//                result = Uri.fromFile(file).getPath();
-            //            }
+            Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
+            bitmap = ImageHelper.correctRotate(galleryPath, bitmap);
+
+            if (bitmap != null) {
+                result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 1).getPath();
+                ImageHelper.SaveBitmapToFile(result, bitmap);
+            }
+
+            return result;
+        } else {
 
             return galleryPath;
         }
 
 
-            Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
-
-        bitmap = ImageHelper.correctRotate(galleryPath, bitmap);
-
-            if (bitmap != null) {
-
-                result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 1).getPath();
-
-                ImageHelper.SaveBitmapToFile(result, bitmap);
-            }
-
-        //  Log.e("ddd","result  "+result+"     "+galleryPath);
-
-            return result;
     }
 }

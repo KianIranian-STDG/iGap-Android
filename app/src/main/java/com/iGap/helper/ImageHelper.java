@@ -162,6 +162,25 @@ public class ImageHelper {
         return null;
     }
 
+    public static boolean isNeedtoCompress(File file) {
+
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        try {
+            BitmapFactory.decodeStream(new FileInputStream(file), null, o);
+
+            if (o.outWidth > 500 || o.outHeight > 500) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (FileNotFoundException e) {
+
+        }
+
+        return true;
+    }
+
     public static Bitmap correctRotate(String filepath, Bitmap bitmap) {
 
         try {

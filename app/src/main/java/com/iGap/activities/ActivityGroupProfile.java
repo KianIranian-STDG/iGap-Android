@@ -1320,7 +1320,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
 
                                 intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
-                                intent.putExtra("RoomId", roomId);
+                                intent.putExtra("RoomId", selectedChatRoomID);
                                 intent.putExtra("enterFrom", GROUP.toString());
                             }
 

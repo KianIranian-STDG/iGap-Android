@@ -928,11 +928,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);
                 contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
 
-
-                if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getToken())) {
-                    startDownload(position, messageProgress, contentLoading);
+                if (mList.get(position).item.getAttachment() != null) {
+                    if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getToken())) {
+                        startDownload(position, messageProgress, contentLoading);
+                    }
                 }
-
                 messageProgress.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
 
