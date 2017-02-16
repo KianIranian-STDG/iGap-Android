@@ -129,8 +129,7 @@
                 android:layout_marginRight="@dimen/dp8"
                 android:layout_marginEnd="@dimen/dp8"
                 android:gravity="top|center_horizontal"
-                android:paddingEnd="@dimen/dp12"
-                android:paddingRight="@dimen/dp12"
+
                 android:orientation="vertical">
 
                 <LinearLayout

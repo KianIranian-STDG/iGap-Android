@@ -2709,6 +2709,7 @@ public class ActivityChat extends ActivityEnhanced
         viewBottomSheet = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
         send = (TextView) viewBottomSheet.findViewById(R.id.send);
+        send.setTextSize(getResources().getDimension(R.dimen.sp28));
         txtCountItem = (TextView) viewBottomSheet.findViewById(R.id.txtNumberItem);
         ViewGroup camera = (ViewGroup) viewBottomSheet.findViewById(R.id.camera);
         ViewGroup picture = (ViewGroup) viewBottomSheet.findViewById(R.id.picture);
@@ -2739,7 +2740,7 @@ public class ActivityChat extends ActivityEnhanced
                     txtCountItem.setText("" + listPathString.size() + " item");
                 } else {
                     send.setText(getResources().getString(R.string.md_arrow_down));
-                    send.setTextSize(48);
+                    send.setTextSize(getResources().getDimension(R.dimen.sp28));
                     isCheckBottomSheet = false;
                     txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
                 }
@@ -2771,7 +2772,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 dialog.dismiss();
                 send.setText(getResources().getString(R.string.md_arrow_down));
-                send.setTextSize(48);
+                send.setTextSize(getResources().getDimension(R.dimen.sp28));
                 txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
             }
         });
@@ -2849,7 +2850,7 @@ public class ActivityChat extends ActivityEnhanced
                             sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localpathNew);
                             fastItemAdapter.clear();
                             send.setText(getResources().getString(R.string.md_arrow_down));
-                            send.setTextSize(48);
+                            send.setTextSize(getResources().getDimension(R.dimen.sp28));
                             txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
                         }
                     }
@@ -5403,7 +5404,7 @@ public class ActivityChat extends ActivityEnhanced
     public static ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {
         Uri uri;
         Cursor cursor;
-        int column_index_data, column_index_folder_name;
+        int column_index_data = 0, column_index_folder_name;
         ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<StructBottomSheet>();
         String absolutePathOfImage = null;
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -5414,8 +5415,12 @@ public class ActivityChat extends ActivityEnhanced
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
 
-        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+        if (cursor != null) {
+            column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        }
+        if (cursor != null) {
+            column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+        }
 
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(column_index_data);
@@ -5423,7 +5428,7 @@ public class ActivityChat extends ActivityEnhanced
             StructBottomSheet item = new StructBottomSheet();
             item.setPath(absolutePathOfImage);
             item.isSelected = true;
-            listOfAllImages.add(item);
+            listOfAllImages.add(0, item);
         }
 
         return listOfAllImages;

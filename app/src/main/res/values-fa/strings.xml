@@ -709,15 +709,17 @@
   <string name="prefix">"توسط"</string>
   <string name="USER_JOINED">"به آی گپ پیوست"</string>
   <string name="USER_DELETED">" آی گپ را ترک کرد"</string>
-    <string name="ROOM_CREATED">"ایجاد صفحه"</string>
+  <string name="ROOM_CREATED">"ایجاد"</string>
     <string name="MEMBER_ADDED">"اضافه شدن"</string>
   <string name="MEMBER_KICKED">"بیرون انداخته شدن"</string>
-  <string name="MEMBER_LEFT">"صفحه را ترک کرد"</string>
-    <string name="ROOM_CONVERTED_TO_PUBLIC">"تبدیل صفحه خصوصی به عمومی"</string>
-    <string name="ROOM_CONVERTED_TO_PRIVATE">"تبدیل صفحه عمومی به خصوصی"</string>
-  <string name="MEMBER_JOINED_BY_INVITE_LINK">"با دعوت به صفحه اضافه شد"</string>
-  <string name="Room_Deleted">"حذف صفحه"</string>
+  <string name="MEMBER_LEFT">"را ترک کرد"</string>
+  <string name="ROOM_CONVERTED_TO_PUBLIC">"از خصوصی به عمومی تبدیل شد"</string>
+  <string name="ROOM_CONVERTED_TO_PRIVATE">"از عمومی به خصوصی تبدیل شد"</string>
+  <string name="MEMBER_JOINED_BY_INVITE_LINK">"با دعوت به"</string>
+  <string name="MEMBER_JOINED_BY_INVITE_LINK_2">"اضافه شد"</string>
+  <string name="Room_Deleted">"حذف"</string>
     <string name="revoke">ابطال</string>
+  <string name="page">صفحه</string>
 
 
     <string name="send_position">ارسال موقعیت</string>

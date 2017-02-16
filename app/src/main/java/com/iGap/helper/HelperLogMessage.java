@@ -76,8 +76,19 @@ public class HelperLogMessage {
          * final message
          */
 
+        String finalTypeRoom;
+
+        if (typeRoom.toString().equals("CHANNEL")) {
+            finalTypeRoom = G.context.getResources().getString(R.string.channel);
+        } else if (typeRoom.toString().equals("GROUP")) {
+            finalTypeRoom = G.context.getResources().getString(R.string.group);
+        } else {
+            finalTypeRoom = G.context.getResources().getString(R.string.page);
+        }
+
         englishResult = authorName + " " + logMessage + " " + targetName;
 
+        Log.i("DDDDDDDDD", "typeRoom: " + typeRoom + "_____" + finalTypeRoom);
 
         switch (messageLog.getType()) {
             case USER_JOINED:
@@ -87,7 +98,12 @@ public class HelperLogMessage {
                 pershianResult = authorName + " " + logMessage;
                 break;
             case ROOM_CREATED:
-                pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+
+                if (typeRoom.toString().equals("CHANNEL")) {
+                    pershianResult = logMessage + " " + finalTypeRoom + " " + authorName;
+                } else {
+                    pershianResult = logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                }
                 break;
             case MEMBER_ADDED:
                 pershianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
@@ -96,24 +112,20 @@ public class HelperLogMessage {
                 pershianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                 break;
             case MEMBER_LEFT:
-                pershianResult = logMessage + " " + authorName;
+                pershianResult = authorName + " " + finalTypeRoom + " " + logMessage;
                 break;
             case ROOM_CONVERTED_TO_PUBLIC:
-                pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                pershianResult = finalTypeRoom + " " + authorName + " " + logMessage;
                 break;
             case ROOM_CONVERTED_TO_PRIVATE:
-                pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                pershianResult = finalTypeRoom + " " + authorName + " " + logMessage;
                 break;
             case MEMBER_JOINED_BY_INVITE_LINK:
-                pershianResult = logMessage + " " + authorName;
+                pershianResult = authorName + " " + logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK_2);
 
-                Log.i("NNNNNNN", " G.context.getResources(): " + G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK));
-                Log.i("NNNNNNN", " authorName: " + authorName);
-                Log.i("NNNNNNN", " logMessage: " + logMessage);
-                Log.i("NNNNNNN", " logMessage: " + targetName);
                 break;
             case ROOM_DELETED:
-                pershianResult = logMessage + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                pershianResult = logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                 break;
         }
 
