@@ -16,6 +16,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
@@ -45,7 +46,6 @@ import com.iGap.request.RequestClientResolveUsername;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
 
@@ -55,32 +55,13 @@ import org.chromium.customtabsclient.CustomTabsActivityHelper;
 
 public class HelperUrl {
 
-    ////**********************************************************************************************************
-    //
-    //
-    //        String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
-    //        Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
-    //
-    ////**********************************************************************************************************
-    //
-    //    // NOTES:   1) \w includes 0-9, a-z, A-Z, _
-    ////          2) The leading '-' is the '-' character. It must go first in character class expression
-    //    private static final String VALID_CHARS = "-\\w+&@#/%=~()|";
-    //    private static final String VALID_NON_TERMINAL = "?!:,.;";
-    //
-    //    // Notes on the expression:
-    ////  1) Any number of leading '(' (left parenthesis) accepted.  Will be dealt with.
-    ////  2) s? ==> the s is optional so either [http, https] accepted as scheme
-    ////  3) All valid chars accepted and then one or more
-    ////  4) Case insensitive so that the scheme can be hTtPs (for example) if desired
-    //    private static final Pattern URI_FINDER_PATTERN = Pattern.compile("\\(*https?://["+ VALID_CHARS + VALID_NON_TERMINAL + "]*[" +VALID_CHARS + "]",
-    //            Pattern.CASE_INSENSITIVE );
-    ////**********************************************************************************************************
+
 
     public static int LinkColor = Color.GRAY;
     //  public static String igapSite1 = "igap.im/";
     public static String igapSite2 = "igap.net/";
     public static MaterialDialog dialogWaiting;
+    public static String igapResolve = "igap://resolve?";
 
     public static SpannableStringBuilder setUrlLink(String text, boolean withClickable, boolean withHash, String messageID, boolean withAtSign) {
 
@@ -94,23 +75,9 @@ public class HelperUrl {
 
         if (withHash) strBuilder = analaysHash(strBuilder, messageID);
 
-        Pattern urlPattern = Pattern.compile("(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*" + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
-            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+        String newText = text.toLowerCase();
 
-        Matcher matcher = urlPattern.matcher(text);
-        while (matcher.find()) {
-            int matchStart = matcher.start(1);
-            int matchEnd = matcher.end();
-
-            // strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite1) ||
-            if (strBuilder.toString().substring(matchStart, matchEnd).toLowerCase().contains(igapSite2)) {
-                //  insertIgapLink(strBuilder, matchStart, matchEnd);
-            } else {
-                insertLinkSpan(strBuilder, matchStart, matchEnd, withClickable);
-            }
-        }
-
-        String[] list = text.toLowerCase().split(" ");
+        String[] list = newText.replace(System.getProperty("line.separator"), " ").split(" ");
 
         int count = 0;
 
@@ -120,14 +87,38 @@ public class HelperUrl {
 
             if (str.contains(igapSite2)) {
                 insertIgapLink(strBuilder, count, count + str.length());
+            } else if (str.contains(igapResolve)) {
+                insertIgapResolveLink(strBuilder, count, count + str.length());
+            } else if (isTextLink(str)) {
+                insertLinkSpan(strBuilder, count, count + str.length(), withClickable);
             }
             count += str.length() + 1;
         }
 
 
 
-
         return strBuilder;
+    }
+
+    private static boolean isTextLink(String text) {
+
+        if ((text.startsWith("www.") && text.length() > 7) || (text.startsWith("http://") && text.length() > 10) || (text.startsWith("https://") && text.length() > 11) || (text.startsWith("ftp://")
+            && text.length() > 9) || (text.startsWith("ftps://") && text.length() > 10) || (text.startsWith("gopher:") && text.length() > 11)) {
+            return true;
+        } else if ((text.contains(".com") || text.contains(".net") || text.contains(".org") || text.contains(".edu") || text.contains(".gov") ||
+            text.contains(".biz") || text.contains(".int") || text.contains(".inf") || text.contains(".web") || text.contains(".name") ||
+            text.contains(".ac") || text.contains(".ws") || text.contains(".us") || text.contains(".tv") || text.contains(".museum") ||
+            text.contains(".aero") || text.contains(".mil") || text.contains(".cat") || text.contains(".coop") || text.contains(".jobs") ||
+            text.contains(".mobi") || text.contains(".pro") || text.contains(".travel") || text.contains(".ir") || text.contains(".uk")) && text.length() > 7) {
+            return true;
+        } else {
+            Matcher m = Patterns.WEB_URL.matcher(text);
+            while (m.find()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static void insertLinkSpan(final SpannableStringBuilder strBuilder, final int start, final int end, final boolean withclickable) {
@@ -243,6 +234,31 @@ public class HelperUrl {
 
 
                     Log.e("ddd", "token = " + token);
+                }
+            }
+
+            @Override public void updateDrawState(TextPaint ds) {
+                ds.linkColor = LinkColor;
+                super.updateDrawState(ds);
+            }
+        };
+
+        strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    private static void insertIgapResolveLink(final SpannableStringBuilder strBuilder, final int start, final int end) {
+
+        ClickableSpan clickable = new ClickableSpan() {
+            public void onClick(View view) {
+
+                String url = strBuilder.toString().substring(start, end);
+
+                Uri path = Uri.parse(url);
+
+                String domain = path.getQueryParameter("domain");
+
+                if (domain.length() > 0) {
+                    checkUsernameAndGoToRoom(domain);
                 }
             }
 
@@ -393,7 +409,6 @@ public class HelperUrl {
     //*********************************************************************************************************
 
     public static boolean hasInMessageLink(String message) {
-        boolean result = false;
 
         message = message.toLowerCase();
 
@@ -401,15 +416,17 @@ public class HelperUrl {
 
         if (message.contains(igapSite2)) return true;
 
-        Pattern urlPattern = Pattern.compile("(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*" + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
-            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+        if (message.contains(igapResolve)) return true;
 
-        Matcher matcher = urlPattern.matcher(message);
-        while (matcher.find()) {
-            result = true;
+        String[] list = message.replace(System.getProperty("line.separator"), " ").split(" ");
+        for (int i = 0; i < list.length; i++) {
+            String str = list[i];
+            if (isTextLink(str)) {
+                return true;
+            }
         }
 
-        return result;
+        return false;
     }
 
 
