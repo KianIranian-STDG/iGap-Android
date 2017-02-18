@@ -27,7 +27,6 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -153,6 +152,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     TextView txtSharedMedia;
     private EditText edtRevoke;
     private TextView txtMore;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -237,15 +237,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         //channel info
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-        if (realmRoom == null) {
-
-            Log.e("dddd", "activity channel profile   room is null  ");
+        if (realmRoom == null || realmRoom.getChannelRoom() == null) {
+            //HelperError.showSnackMessage(getClientErrorCode(-2, 0));
             finish();
             return;
         }
-
-
         RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
         title = realmRoom.getTitle();
         initials = realmRoom.getInitials();
@@ -256,8 +252,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         linkUsername = realmChannelRoom.getUsername();
         isSignature = realmChannelRoom.isSignature();
         fab = (FloatingActionButton) findViewById(R.id.pch_fab_addToChannel);
-        Log.i("XXXXXX", "channel inviteLink: " + inviteLink);
-        Log.i("XXXXXX", "channel linkUsername: " + linkUsername);
         try {
             if (realmRoom.getLastMessage() != null) {
                 noLastMessage = realmRoom.getLastMessage().getMessageId();
@@ -602,7 +596,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         txtMore = (TextView) findViewById(R.id.agp_channel_txt_more);
         txtMore.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 firstLimit = 0;
                 lastLimit += lastLimit;

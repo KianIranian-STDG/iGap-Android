@@ -1790,7 +1790,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                     List<RoomItem> items = mAdapter.getAdapterItems();
                                     type = null;
                                     for (int i = 0; i < items.size(); i++) {
-                                        if (items.get(i).getInfo().isValid() && items.get(i).getInfo().getId() == roomId) {
+                                        if (items.get(i).getInfo() != null && items.get(i).getInfo().isValid() && items.get(i).getInfo().getId() == roomId) {
                                             type = items.get(i).getInfo().getType();
                                         }
                                     }

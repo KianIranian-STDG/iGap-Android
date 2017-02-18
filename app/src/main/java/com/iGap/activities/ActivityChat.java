@@ -625,7 +625,12 @@ public class ActivityChat extends ActivityEnhanced
             Realm realm = Realm.getDefaultInstance();
 
             //get userId . use in chat set action.
-            userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo == null) {
+                finish();
+                return;
+            }
+            userId = realmUserInfo.getUserId();
 
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
@@ -4432,7 +4437,9 @@ public class ActivityChat extends ActivityEnhanced
 
                     for (RealmRoomMessage realmRoomMessage : lastResultMessages) {
 
-                        if (topID.compareTo(realmRoomMessage.getMessageId() + "") <= 0 && topID.length() > 0) continue;
+                        if (realmRoomMessage == null || (topID.compareTo(realmRoomMessage.getMessageId() + "") <= 0 && topID.length() > 0)) {
+                            continue;
+                        }
 
                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), true);
                     }

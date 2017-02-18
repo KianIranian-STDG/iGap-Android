@@ -215,7 +215,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_profile);
-
         Bundle extras = getIntent().getExtras();
         roomId = extras.getLong("RoomId");
 
@@ -224,6 +223,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         //group info
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom == null || realmRoom.getGroupRoom() == null) {
+            //HelperError.showSnackMessage(getClientErrorCode(-2, 0));
+            finish();
+            return;
+        }
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
         title = realmRoom.getTitle();
         initials = realmRoom.getInitials();

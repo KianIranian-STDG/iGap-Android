@@ -85,11 +85,14 @@ public class ResendMessage implements IResendMessage {
             if (all) {
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID)).findFirst();
                 if (roomMessage != null) {
-                    ProtoGlobal.Room.Type roomType = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst().getType();
-                    if (roomMessage.getAttachment() == null) {
-                        G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
-                    } else {
-                        new ActivityChat.UploadTask().execute(roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getRoomId(), roomMessage.getMessage());
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                    if (realmRoom != null) {
+                        if (roomMessage.getAttachment() == null) {
+                            ProtoGlobal.Room.Type roomType = realmRoom.getType();
+                            G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
+                        } else {
+                            new ActivityChat.UploadTask().execute(roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getRoomId(), roomMessage.getMessage());
+                        }
                     }
                 }
             } else {

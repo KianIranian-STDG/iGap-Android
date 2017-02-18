@@ -189,27 +189,29 @@ public class FragmentNotification extends Fragment {
                                     public void execute(Realm realm) {
                                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                                        switch (page) {
-                                            case "GROUP": {
-                                                if (realmRoom.getGroupRoom() != null) {
-                                                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                    realmGroupRoom.getRealmNotificationSetting().setNotification(0);
+                                        if (realmRoom != null) {
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    if (realmRoom.getGroupRoom() != null) {
+                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                                                        realmGroupRoom.getRealmNotificationSetting().setNotification(0);
+                                                    }
+                                                    break;
                                                 }
-                                                break;
-                                            }
-                                            case "CHANNEL": {
-                                                if (realmRoom.getChannelRoom() != null) {
-                                                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                    realmChannelRoom.getRealmNotificationSetting().setNotification(0);
+                                                case "CHANNEL": {
+                                                    if (realmRoom.getChannelRoom() != null) {
+                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                                                        realmChannelRoom.getRealmNotificationSetting().setNotification(0);
+                                                    }
+                                                    break;
                                                 }
-                                                break;
-                                            }
-                                            case "CONTACT": {
-                                                if (realmRoom.getChatRoom() != null) {
-                                                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                    realmChatRoom.getRealmNotificationSetting().setNotification(0);
+                                                case "CONTACT": {
+                                                    if (realmRoom.getChatRoom() != null) {
+                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                                        realmChatRoom.getRealmNotificationSetting().setNotification(0);
+                                                    }
+                                                    break;
                                                 }
-                                                break;
                                             }
                                         }
                                     }
@@ -224,30 +226,31 @@ public class FragmentNotification extends Fragment {
                                     @Override
                                     public void execute(Realm realm) {
                                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                        if (realmRoom != null) {
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    if (realmRoom.getGroupRoom() != null) {
 
-                                        switch (page) {
-                                            case "GROUP": {
-                                                if (realmRoom.getGroupRoom() != null) {
+                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                                                        realmGroupRoom.getRealmNotificationSetting().setNotification(1);
+                                                    }
+                                                    break;
+                                                }
+                                                case "CHANNEL": {
+                                                    if (realmRoom.getChannelRoom() != null) {
 
-                                                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                    realmGroupRoom.getRealmNotificationSetting().setNotification(1);
+                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                                                        realmChannelRoom.getRealmNotificationSetting().setNotification(1);
+                                                    }
+                                                    break;
                                                 }
-                                                break;
-                                            }
-                                            case "CHANNEL": {
-                                                if (realmRoom.getChannelRoom() != null) {
-
-                                                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                    realmChannelRoom.getRealmNotificationSetting().setNotification(1);
+                                                case "CONTACT": {
+                                                    if (realmRoom.getChatRoom() != null) {
+                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                                        realmChatRoom.getRealmNotificationSetting().setNotification(1);
+                                                    }
+                                                    break;
                                                 }
-                                                break;
-                                            }
-                                            case "CONTACT": {
-                                                if (realmRoom.getChatRoom() != null) {
-                                                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                    realmChatRoom.getRealmNotificationSetting().setNotification(1);
-                                                }
-                                                break;
                                             }
                                         }
                                     }
@@ -262,31 +265,32 @@ public class FragmentNotification extends Fragment {
                                     @Override
                                     public void execute(Realm realm) {
                                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                        if (realmRoom != null) {
+                                            switch (page) {
+                                                case "GROUP": {
+                                                    if (realmRoom.getGroupRoom() != null) {
 
-                                        switch (page) {
-                                            case "GROUP": {
-                                                if (realmRoom.getGroupRoom() != null) {
-
-                                                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                    realmGroupRoom.getRealmNotificationSetting().setNotification(2);
+                                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                                                        realmGroupRoom.getRealmNotificationSetting().setNotification(2);
+                                                    }
+                                                    break;
                                                 }
-                                                break;
-                                            }
-                                            case "CHANNEL": {
-                                                if (realmRoom.getChannelRoom() != null) {
+                                                case "CHANNEL": {
+                                                    if (realmRoom.getChannelRoom() != null) {
 
-                                                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                    realmChannelRoom.getRealmNotificationSetting().setNotification(2);
+                                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                                                        realmChannelRoom.getRealmNotificationSetting().setNotification(2);
+                                                    }
+                                                    break;
                                                 }
-                                                break;
-                                            }
-                                            case "CONTACT": {
-                                                if (realmRoom.getChatRoom() != null) {
+                                                case "CONTACT": {
+                                                    if (realmRoom.getChatRoom() != null) {
 
-                                                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                    realmChatRoom.getRealmNotificationSetting().setNotification(2);
+                                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                                        realmChatRoom.getRealmNotificationSetting().setNotification(2);
+                                                    }
+                                                    break;
                                                 }
-                                                break;
                                             }
                                         }
                                     }
@@ -305,7 +309,6 @@ public class FragmentNotification extends Fragment {
         ltSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("CCCCCCCC", "onClick: " + realmIdSound);
                 new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(realmIdSound, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, final int which, final CharSequence text) {
@@ -363,31 +366,32 @@ public class FragmentNotification extends Fragment {
                             @Override
                             public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                                switch (page) {
-                                    case "GROUP": {
-                                        if (realmRoom.getGroupRoom() != null) {
-                                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                            realmGroupRoom.getRealmNotificationSetting().setSound(text.toString());
-                                            realmGroupRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                                if (realmRoom != null) {
+                                    switch (page) {
+                                        case "GROUP": {
+                                            if (realmRoom.getGroupRoom() != null) {
+                                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                                                realmGroupRoom.getRealmNotificationSetting().setSound(text.toString());
+                                                realmGroupRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                                            }
+                                            break;
                                         }
-                                        break;
-                                    }
-                                    case "CHANNEL": {
-                                        if (realmRoom.getChannelRoom() != null) {
-                                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                            realmChannelRoom.getRealmNotificationSetting().setSound(text.toString());
-                                            realmChannelRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                                        case "CHANNEL": {
+                                            if (realmRoom.getChannelRoom() != null) {
+                                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                                                realmChannelRoom.getRealmNotificationSetting().setSound(text.toString());
+                                                realmChannelRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                                            }
+                                            break;
                                         }
-                                        break;
-                                    }
-                                    case "CONTACT": {
-                                        if (realmRoom.getChatRoom() != null) {
-                                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                            realmChatRoom.getRealmNotificationSetting().setSound(text.toString());
-                                            realmChatRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                                        case "CONTACT": {
+                                            if (realmRoom.getChatRoom() != null) {
+                                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                                realmChatRoom.getRealmNotificationSetting().setSound(text.toString());
+                                                realmChatRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                                            }
+                                            break;
                                         }
-                                        break;
                                     }
                                 }
                             }

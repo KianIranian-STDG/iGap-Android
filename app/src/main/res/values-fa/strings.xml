@@ -780,4 +780,5 @@
   <string name="can_not_connent_to_server">اتصال با سرور برقرار نشد.</string>
   <string name="text_is_empty">پیام خالی است.</string>
   <string name="please_try_again">لطفاً مجدداً تلاش نمایید</string>
+  <string name="room_not_exist">صفحه ای با این شناسه یافت نشد</string>
 </resources>

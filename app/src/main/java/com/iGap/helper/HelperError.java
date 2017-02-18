@@ -356,6 +356,20 @@ public class HelperError {
         return error;
     }
 
+    /**
+     * use this method for detect text internal client error
+     */
+    public static String getClientErrorCode(int majorCode, int minorCode) {
+        String error = "";
+        switch (majorCode) {
+            case -2:
+                error = G.context.getResources().getString(R.string.room_not_exist);
+                break;
+        }
+        return error;
+    }
+
+
     public static void showSnackMessage(final String message) {
 
         if (message.length() > 0) {
