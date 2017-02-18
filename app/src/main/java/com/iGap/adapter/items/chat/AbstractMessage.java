@@ -1014,13 +1014,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override public void run() {
-
-                        }
-                    });
-
-                    progressBar.post(new Runnable() {
-                        @Override
-                        public void run() {
                             progressBar.withProgress(0);
                             progressBar.withDrawable(R.drawable.ic_download, true);
                             contentLoading.setVisibility(View.GONE);

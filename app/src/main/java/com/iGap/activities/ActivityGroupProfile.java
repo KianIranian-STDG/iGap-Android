@@ -447,7 +447,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                ActivityChat.clearHistory(roomId);
+                                if (ActivityChat.onComplete != null) {
+                                    ActivityChat.onComplete.complete(false, roomId + "", "");
+                                }
+
                             }
                         }).negativeText(R.string.B_cancel).show();
 

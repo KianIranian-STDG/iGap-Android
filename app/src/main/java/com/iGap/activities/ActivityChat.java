@@ -400,7 +400,7 @@ public class ActivityChat extends ActivityEnhanced
     protected void onStart() {
         super.onStart();
 
-        RealmRoomMessage.fetchMessages(mRoomId, new OnActivityChatStart() {
+        RealmRoomMessage.fetchMessagesBB(mRoomId, new OnActivityChatStart() {
             @Override
             public void resendMessage(RealmRoomMessage message) {
                 G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
@@ -1099,16 +1099,23 @@ public class ActivityChat extends ActivityEnhanced
         };
 
         /**
-         * call from ActivityGroupProfile for update group member number
+         * call from ActivityGroupProfile for update group member number or clear history
          */
         onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
-                txtLastSeen.setText(messageOne + " " + getResources().getString(member));
-                avi.setVisibility(View.GONE);
 
-                // change english number to persian number
-                if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                if (result) {
+                    txtLastSeen.setText(messageOne + " " + getResources().getString(member));
+                    avi.setVisibility(View.GONE);
+
+                    // change english number to persian number
+                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                } else {
+                    clearHistory(Long.parseLong(messageOne));
+                }
+
+
 
             }
         };
@@ -1759,7 +1766,18 @@ public class ActivityChat extends ActivityEnhanced
 
                     countNewMessage = 0;
                 } else {
-                    recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1 - countNewMessage);
+
+                    LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                    int lastposition = llm.findLastVisibleItemPosition();
+
+                    if (lastposition + 50 > mAdapter.getItemCount()) {
+                        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                    } else {
+                        recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                    }
+
+
                 }
             }
         });
@@ -4564,9 +4582,11 @@ public class ActivityChat extends ActivityEnhanced
     }
     //    delete & clear History & mutNotification
 
-    public static void clearHistory(long item) {
+    public void clearHistory(long item) {
         final long chatId = item;
 
+        isThereAnyMoreItemToLoadFromLocal = false;
+        isThereAnyMoreItemToLoadFromServer = false;
 
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();

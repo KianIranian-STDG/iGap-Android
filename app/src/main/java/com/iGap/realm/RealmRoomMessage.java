@@ -151,6 +151,58 @@ import org.parceler.Parcel;
         });
     }
 
+    public static void fetchMessagesBB(final long roomId, final OnActivityChatStart callback) {
+
+        final Realm realm = Realm.getDefaultInstance();
+
+        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+
+        final RealmResults<RealmRoomMessage> realmRoomMessages =
+            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findAll();
+
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+
+                if (realmClientCondition != null) {
+                    for (RealmRoomMessage roomMessage : realmRoomMessages) {
+                        if (roomMessage != null) {
+                            if (roomMessage.getUserId() != userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
+                                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                                RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
+                                realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
+
+                                realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                callback.sendSeenStatus(roomMessage);
+                            } else {
+                                if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
+                                    /**
+                                     * check timeout, because when forward message to room ,message state is sending
+                                     * and add forward message to Realm from here and finally client have duplicated message
+                                     */
+                                    if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
+                                        if (roomMessage.getAttachment() != null) {
+                                            if (!MessagesAdapter.hasUploadRequested(roomMessage.getMessageId())) {
+                                                callback.resendMessageNeedsUpload(roomMessage);
+                                            }
+                                        } else {
+                                            callback.resendMessage(roomMessage);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        realm.close();
+    }
+
+
+
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
 
