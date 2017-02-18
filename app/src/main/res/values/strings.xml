@@ -608,7 +608,7 @@
     <string name="server_do_not_response">Server don\'t response</string>
     <string name="share_image_from_igap">Share image from iGap</string>
     <string name="TERMINATE">"TERMINATE"</string>
-    <string name="iGap_version">"iGap for Android v"</string>
+    <string name="iGap_version">"iGap Android Client V"</string>
 
     <string name="do_you_want_to_delete_this_group">Are you sure to delete this group?</string>
     <string name="do_you_want_to_leave_this_group">Are you sure to left this group?</string>
