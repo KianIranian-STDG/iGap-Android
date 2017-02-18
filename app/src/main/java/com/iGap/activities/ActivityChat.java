@@ -5138,15 +5138,10 @@ public class ActivityChat extends ActivityEnhanced
             Realm realm = Realm.getDefaultInstance();
             final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
 
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    if (realmRoom != null) {
-                        realmRoom.setActionState(action, userId);
-                    }
-                }
-            });
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                realmRoom.setActionState(action, userId);
+            }
             realm.close();
             runOnUiThread(new Runnable() {
                 @Override

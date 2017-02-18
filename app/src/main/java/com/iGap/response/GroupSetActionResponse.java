@@ -1,11 +1,9 @@
 package com.iGap.response;
 
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.helper.HelperGetAction;
-import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSetAction;
-import com.iGap.realm.RealmRoom;
-import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
 
@@ -27,7 +25,7 @@ public class GroupSetActionResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoGroupSetAction.GroupSetActionResponse.Builder builder = (ProtoGroupSetAction.GroupSetActionResponse.Builder) message;
-
+        Log.i("VVV", "GroupSetActionResponse : " + builder.getAction());
 
         G.handler.post(new Runnable() {
             @Override
@@ -35,18 +33,9 @@ public class GroupSetActionResponse extends MessageHandler {
                 final Realm realm = Realm.getDefaultInstance();
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null && realmUserInfo.getUserId() != builder.getUserId()) {
-                    realm.executeTransactionAsync(new Realm.Transaction() {
+                    realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            String action = HelperGetAction.getAction(builder.getRoomId(), ProtoGlobal.Room.Type.GROUP, builder.getAction());
-                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                            if (realmRoom != null) {
-                                realmRoom.setActionState(action, builder.getUserId());
-                            }
-                        }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
                             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                             if (realmUserInfo.getUserInfo().getId() != builder.getUserId()) {
                                 HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
@@ -59,12 +48,10 @@ public class GroupSetActionResponse extends MessageHandler {
                                     G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
                                 }
                             }
-                            realm.close();
                         }
                     });
-                } else {
-                    realm.close();
                 }
+                realm.close();
             }
         });
 
