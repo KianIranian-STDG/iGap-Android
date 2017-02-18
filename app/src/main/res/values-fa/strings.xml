@@ -612,7 +612,7 @@
     <string name="server_do_not_response">سرور پاسخ نمی‌دهد.</string>
     <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آی‌گپ</string>
     <string name="TERMINATE">پایان</string>
-  <string name="iGap_version">آی‌گپ برای اندروید نسخه</string>
+    <string name="iGap_version">آی گپ اندروید نسخه</string>
     <string name="do_you_want_left_this">آیااز ترک ایتم انتخاب شده اطمینان دارید؟</string>
 
     <string name="do_you_want_to_leave_this_group">آیا مطمئنید که می‌خواهید این گروه را ترک کنید؟</string>
