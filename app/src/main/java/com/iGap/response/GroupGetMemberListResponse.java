@@ -6,7 +6,6 @@ import com.iGap.proto.ProtoGroupGetMemberList;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -50,12 +49,10 @@ public class GroupGetMemberListResponse extends MessageHandler {
                     }
 
                     if (realmMem == null) {
-                        realmMem = realm.createObject(RealmMember.class);
+                        realmMem = realm.createObject(RealmMember.class, SUID.id().get());
                     }
-                    realmMem.setId(SUID.id().get());
                     realmMem.setRole(member.getRole().toString());
                     realmMem.setPeerId(member.getUserId());
-
                     if (newUser) {
                         newMembers.add(realmMem);
                     }

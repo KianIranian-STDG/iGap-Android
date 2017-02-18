@@ -31,6 +31,7 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -155,6 +156,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     LinearLayout layoutSetting;
     LinearLayout layoutSetAdmin;
+    View viewLineAdmin;
     LinearLayout layoutSetModereator;
     LinearLayout layoutMemberCanAddMember;
     LinearLayout layoutNotificatin;
@@ -236,6 +238,18 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         inviteLink = realmGroupRoom.getInvite_link();
         linkUsername = realmGroupRoom.getUsername();
         isPrivate = realmGroupRoom.isPrivate();
+        participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
+        members = realmGroupRoom.getMembers();
+        memberList = realmGroupRoom.getMembers();
+        description = realmGroupRoom.getDescription();
+
+        ViewGroup listMemberGroup = (ViewGroup) findViewById(R.id.agp_root_layout_group_add_member);
+        listMemberGroup.setVisibility(View.VISIBLE);
+        if (role == GroupChatRole.MODERATOR || role == GroupChatRole.MEMBER) {
+            if (!isPrivate) {
+                listMemberGroup.setVisibility(View.GONE);
+            }
+        }
 
         try {
             if (realmRoom.getLastMessage() != null) {
@@ -245,10 +259,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             e.getStackTrace();
         }
 
-        participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
-        members = realmGroupRoom.getMembers();
-        memberList = realmGroupRoom.getMembers();
-        description = realmGroupRoom.getDescription();
+
 
 
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -477,6 +488,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         layoutSetting = (LinearLayout) findViewById(R.id.agp_ll_seetting);
         layoutSetAdmin = (LinearLayout) findViewById(R.id.agp_ll_set_admin);
+        viewLineAdmin = (View) findViewById(R.id.agp_ll_line_admin);
         layoutSetModereator = (LinearLayout) findViewById(R.id.agp_ll_set_modereator);
         layoutMemberCanAddMember = (LinearLayout) findViewById(R.id.agp_ll_member_can_add_member);
         layoutNotificatin = (LinearLayout) findViewById(R.id.agp_ll_notification);
@@ -485,7 +497,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         ltLink = (ViewGroup) findViewById(R.id.agp_ll_link);
         prgWait.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), PorterDuff.Mode.MULTIPLY);
         imvGroupAvatar = (CircleImageView) findViewById(R.id.agp_imv_group_avatar);
-
+        TextView txtDeleteGroup = (TextView) findViewById(R.id.agp_txt_str_delete_and_leave_group);
         txtGroupNameTitle = (TextView) findViewById(R.id.agp_txt_group_name_title);
         txtGroupNameTitle.setText(title);
 
@@ -503,7 +515,21 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         LinearLayout llGroupName = (LinearLayout) findViewById(R.id.agp_ll_group_name);
         LinearLayout llGroupDescription = (LinearLayout) findViewById(R.id.agp_ll_group_description);
 
+        /**
+         *  visibility layout Description
+         */
+        if (role == GroupChatRole.OWNER) {
+            llGroupDescription.setVisibility(View.VISIBLE);
+        } else {
+            if (description.length() == 0) {
+                llGroupDescription.setVisibility(View.GONE);
+            }
+        }
+
         if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+
+            ltLink.setVisibility(View.VISIBLE);
+
             llGroupName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -517,18 +543,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     ChangeGroupDescription();
                 }
             });
-        }
-
-
-        if (isPrivate && (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN)) {
-
-            ltLink.setVisibility(View.VISIBLE);
         } else {
             ltLink.setVisibility(View.GONE);
-        }
-
-        if (!isPrivate) {
-            ltLink.setVisibility(View.VISIBLE);
         }
 
 
@@ -683,7 +699,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         });
 
-        TextView txtDeleteGroup = (TextView) findViewById(R.id.agp_txt_str_delete_and_leave_group);
 
         if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
             txtDeleteGroup.setText(getString(R.string.delete_group));
@@ -1155,6 +1170,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+
                 if (identity != null && Long.parseLong(identity) == roomId) {
                     if (!userExistInList(user.getId())) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
                         runOnUiThread(new Runnable() {
@@ -1171,10 +1187,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                                 final StructContactInfo struct = new StructContactInfo(user.getId(), user.getDisplayName(), user.getStatus().toString(), false, false, user.getPhone() + "");
                                 if (realmGroupRoom != null) {
-                                    RealmList<RealmMember> result = realmRoom.getGroupRoom().getMembers();
+                                    RealmList<RealmMember> result = realmGroupRoom.getMembers();
 
                                     String _Role = "";
-
+                                    Log.i("CCCCCCDDDDDD", "result.size(): " + result.size());
                                     for (int i = 0; i < result.size(); i++) {
                                         if (result.get(i).getPeerId() == user.getId()) {
                                             _Role = result.get(i).getRole();
@@ -1182,14 +1198,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                         }
                                     }
                                     struct.role = _Role;
+                                    Log.i("CCCCCCDDDDDD", "_Role: " + _Role);
                                 }
+
                                 if (realmRegisteredInfo != null) {
                                     struct.avatar = realmRegisteredInfo.getLastAvatar();
                                     struct.initials = realmRegisteredInfo.getInitials();
                                     struct.color = realmRegisteredInfo.getColor();
                                     struct.lastSeen = realmRegisteredInfo.getLastSeen();
                                     struct.status = realmRegisteredInfo.getStatus();
-                                    struct.role = role.toString();
                                 }
 
 
@@ -1486,11 +1503,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 } else {
                     contacts.add(s);
                 }
-
-
             }
-
-
         }
 
         realm.close();
@@ -1513,14 +1526,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         if (role == GroupChatRole.MEMBER) {
 
             layoutSetAdmin.setVisibility(View.GONE);
+            viewLineAdmin.setVisibility(View.GONE);
             layoutSetModereator.setVisibility(View.GONE);
             layoutMemberCanAddMember.setVisibility(View.GONE);
         } else if (role == GroupChatRole.MODERATOR) {
             layoutSetAdmin.setVisibility(View.GONE);
+            viewLineAdmin.setVisibility(View.GONE);
             layoutSetModereator.setVisibility(View.GONE);
         } else if (role == GroupChatRole.ADMIN) {
-
             layoutSetAdmin.setVisibility(View.GONE);
+            viewLineAdmin.setVisibility(View.GONE);
         } else if (role == GroupChatRole.OWNER) {
 
         }

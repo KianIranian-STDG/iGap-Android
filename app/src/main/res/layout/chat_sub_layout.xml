@@ -129,7 +129,6 @@
                 android:layout_marginRight="@dimen/dp8"
                 android:layout_marginEnd="@dimen/dp8"
                 android:gravity="top|center_horizontal"
-
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -161,7 +160,7 @@
                     android:id="@+id/cs_txt_unread_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:layout_marginTop="@dimen/dp4"
                     android:background="@drawable/oval_red"
                     android:gravity="center"

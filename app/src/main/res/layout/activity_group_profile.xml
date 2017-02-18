@@ -184,12 +184,13 @@
                         android:text="@string/info"
                         android:textColor="@color/green"
                         android:textSize="@dimen/sp18"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:id="@+id/textView6"
+                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="left"
                         android:orientation="horizontal">
 
 
@@ -197,7 +198,7 @@
                             android:id="@+id/agp_ll_group_name"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight=".5"
                             android:orientation="vertical"
                             android:paddingLeft="@dimen/dp12"
                             android:paddingRight="@dimen/dp12">
@@ -229,7 +230,8 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="@dimen/dp140"
+                            android:layout_width="0dp"
+                            android:layout_weight=".5"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingLeft="@dimen/dp12"
@@ -265,7 +267,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="left"
                         android:orientation="horizontal">
 
 
@@ -273,7 +274,7 @@
                             android:id="@+id/agp_ll_group_description"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight=".5"
                             android:orientation="vertical"
                             android:paddingLeft="@dimen/dp12"
                             android:paddingRight="@dimen/dp12"
@@ -299,8 +300,8 @@
                                 android:paddingEnd="@dimen/dp4"
                                 android:paddingStart="@dimen/dp4"
                                 android:paddingTop="@dimen/dp4"
-                                android:singleLine="true"
                                 android:text=""
+                                android:maxLength="255"
                                 android:textColor="@color/gray_5c"
                                 android:textSize="@dimen/sp13"
                                 />
@@ -310,7 +311,8 @@
 
                         <LinearLayout
                             android:id="@+id/agp_ll_link"
-                            android:layout_width="@dimen/dp140"
+                            android:layout_width="0dp"
+                            android:layout_weight=".5"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingLeft="@dimen/dp12"
@@ -384,6 +386,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/agp_root_layout_group_add_member"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/gray_f2"
@@ -507,6 +510,7 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/agp_ll_line_admin"
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:background="@color/background_editText"/>
