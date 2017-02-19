@@ -129,7 +129,7 @@ public class HelperMessageResponse {
         long latestMessageId = 0;
         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         if (realmRoomMessages.size() > 0) {
-            realmRoomMessage = realmRoomMessages.last();
+            realmRoomMessage = realmRoomMessages.first();
         }
         if (realmRoomMessage != null) {
             latestMessageId = realmRoomMessage.getMessageId();

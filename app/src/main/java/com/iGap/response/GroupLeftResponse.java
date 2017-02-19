@@ -9,7 +9,7 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-
+import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
 
 public class GroupLeftResponse extends MessageHandler {
@@ -38,25 +38,31 @@ public class GroupLeftResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null) {
-                    realmRoom.deleteFromRealm();
-                }
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
 
-                if (!builder.getResponse().getId().isEmpty()) { // if own send request for left
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findFirst();
-                    if (realmRoomMessage != null) {
-                        realmRoomMessage.deleteFromRealm();
+                if (realmUserInfo != null && realmUserInfo.getUserId() == memberId) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    if (realmRoom != null) {
+                        realmRoom.deleteFromRealm();
                     }
 
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-                    if (realmClientCondition != null) {
-                        realmClientCondition.deleteFromRealm();
-                    }
+                    if (!builder.getResponse().getId().isEmpty()) { // if own send request for left
+                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findFirst();
+                        if (realmRoomMessage != null) {
+                            realmRoomMessage.deleteFromRealm();
+                        }
 
-                    if (G.onGroupLeft != null) {
-                        G.onGroupLeft.onGroupLeft(roomId, memberId);
+                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                        if (realmClientCondition != null) {
+                            realmClientCondition.deleteFromRealm();
+                        }
+
+                        if (G.onGroupLeft != null) {
+                            G.onGroupLeft.onGroupLeft(roomId, memberId);
+                        }
                     }
+                } else {
+                    //TODO [Saeed Mozaffari] [2017-02-19 12:34 PM] - remove from member list for this roomId (builder.getRoomId())
                 }
             }
         });

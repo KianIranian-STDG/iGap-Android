@@ -115,7 +115,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
      * @return true if is valid and is exist otherwise return false
      */
     private boolean checkValidationForRealm(RoomItem roomItem, RealmRoom realmRoom) {
-        if (roomItem != null && roomItem.isEnabled() && realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted()) {
+        if (roomItem != null && roomItem.isEnabled() && realmRoom != null && realmRoom.isValid() && realmRoom.isManaged() && !realmRoom.isDeleted()) {
             return true;
         }
         return false;

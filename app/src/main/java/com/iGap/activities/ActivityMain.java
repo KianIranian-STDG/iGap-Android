@@ -1282,14 +1282,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 // delete messages and rooms in the deleted room
                 RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll();
                 for (RealmRoom item : deletedRoomsList) {
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
+                    Log.i("GGG", "getTitle : " + item.getTitle());
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findFirst().deleteFromRealm();
                     item.deleteFromRealm();
                 }
 
+                /**
+                 * set update time for last message in room update time
+                 */
                 for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
                     if (Room.getLastMessage() != null) {
                         if (Room.getLastMessage().getUpdateTime() > 0) {
-                            if (Room.getLastMessage().getUpdateTime() > Room.getUpdatedTime()) {
+                            if (Room.getLastMessage().getUpdateTime() != Room.getUpdatedTime()) {
                                 Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
                             }
                         }
@@ -1300,6 +1304,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
+            Log.i("EEE", "Room Title : " + realmRoom.getTitle());
+            Log.i("EEE", "realmRoom.getUpdatedTime : " + realmRoom.getUpdatedTime());
+            Log.i("EEE", "getLastMessage().getUpdateTime() : " + realmRoom.getLastMessage().getUpdateTime());
+            Log.i("EEE", "getLastMessage().getCreateTime() : " + realmRoom.getLastMessage().getCreateTime());
+            Log.i("EEE", "**********************************");
             roomItems.add(new RoomItem().setInfo(realmRoom).setComplete(ActivityMain.this).withIdentifier(realmRoom.getId()));
         }
 

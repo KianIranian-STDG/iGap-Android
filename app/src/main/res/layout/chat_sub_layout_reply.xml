@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:text="SAMPLE TEXT"
+            android:text=""
             android:textColor="@color/colorOldBlack"
             android:textSize="@dimen/sp12"
             android:textStyle="bold"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="SAMPLE TEXT"
+            android:text=""
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp16"
             android:padding="0dp"/>
