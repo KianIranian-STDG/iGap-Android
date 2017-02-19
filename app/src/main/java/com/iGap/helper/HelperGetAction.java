@@ -82,7 +82,7 @@ public class HelperGetAction {
                             action = convertActionEnum(latestStruct.action) + " " + realmRegisteredInfo.getDisplayName();
                         }
                     } else {
-                        action = realmRegisteredInfo.getDisplayName() + G.context.getResources().getString(R.string.is) + convertActionEnum(latestStruct.action);
+                        action = realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
                     }
 
                     return action;
@@ -124,7 +124,7 @@ public class HelperGetAction {
                         return HelperConvertEnumToString.convertActionEnum(latestAction) + " " + concatenatedNames;
                     }
                 } else {
-                    return concatenatedNames + G.context.getResources().getString(R.string.are) + convertActionEnum(latestAction);
+                    return concatenatedNames + " " + G.context.getResources().getString(R.string.are) + " " + convertActionEnum(latestAction);
                 }
             } else {
                 if (HelperCalander.isLanguagePersian) {
@@ -132,7 +132,7 @@ public class HelperGetAction {
                     return convertActionEnum(latestAction) + " " + count + " " + G.context.getResources().getString(R.string.members_are);
                 } else {
 
-                    return count + " " + G.context.getResources().getString(R.string.members_are) + convertActionEnum(latestAction);
+                    return count + " " + G.context.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);
                 }
 
             }
