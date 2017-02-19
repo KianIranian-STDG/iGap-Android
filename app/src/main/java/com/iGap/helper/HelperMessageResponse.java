@@ -124,15 +124,19 @@ public class HelperMessageResponse {
         }
     }
 
+    /**
+     * compute last messageId that exist in RealmRoomMessage for messages that
+     * not in sending or failed state because that messages have fake messageId
+     */
     public static long computeLastMessageId(Realm realm, long roomId) {
-        RealmRoomMessage realmRoomMessage = null;
         long latestMessageId = 0;
         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-        if (realmRoomMessages.size() > 0) {
-            realmRoomMessage = realmRoomMessages.first();
-        }
-        if (realmRoomMessage != null) {
-            latestMessageId = realmRoomMessage.getMessageId();
+        for (RealmRoomMessage realmRoomMessage1 : realmRoomMessages) {
+            if (realmRoomMessage1 != null && realmRoomMessage1.getStatus() != null) {
+                if (realmRoomMessage1.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENT.toString()) || realmRoomMessage1.getStatus().equals(ProtoGlobal.RoomMessageStatus.DELIVERED.toString()) || realmRoomMessage1.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                    return realmRoomMessage1.getMessageId();
+                }
+            }
         }
         return latestMessageId;
     }

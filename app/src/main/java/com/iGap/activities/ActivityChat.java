@@ -25,6 +25,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.ArrayRes;
@@ -2052,7 +2053,11 @@ public class ActivityChat extends ActivityEnhanced
 
                         scrollToEnd();
 
-                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                        if (G.userLogin) {
+                            new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                        } else {
+                            makeFailed(Long.parseLong(identity));
+                        }
 
                         edtChat.setText("");
 
@@ -4523,7 +4528,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onUploadStarted(FileUploadStructure struct) {
+    public void onUploadStarted(final FileUploadStructure struct) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
         if (roomMessage != null) {
@@ -4531,6 +4536,14 @@ public class ActivityChat extends ActivityEnhanced
             // message doesn't exists
             if (message == null) {
                 switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+                if (!G.userLogin) {
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            makeFailed(struct.messageId);
+                        }
+                    }, 200);
+                }
             } else {
                 // message already exists, happens when re-upload an attachment
             }
@@ -5298,6 +5311,38 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         return action;
+    }
+
+    /**
+     * change message status from sending to failed
+     *
+     * @param fakeMessageId messageId that create when created this message
+     */
+    private void makeFailed(final long fakeMessageId) {
+        // message failed
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, fakeMessageId).findFirst();
+                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+                        }
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, fakeMessageId).findFirst();
+                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private class SearchHash {

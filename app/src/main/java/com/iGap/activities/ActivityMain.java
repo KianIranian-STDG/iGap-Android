@@ -1306,8 +1306,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
             Log.i("EEE", "Room Title : " + realmRoom.getTitle());
             Log.i("EEE", "realmRoom.getUpdatedTime : " + realmRoom.getUpdatedTime());
-            Log.i("EEE", "getLastMessage().getUpdateTime() : " + realmRoom.getLastMessage().getUpdateTime());
-            Log.i("EEE", "getLastMessage().getCreateTime() : " + realmRoom.getLastMessage().getCreateTime());
+            if (realmRoom.getLastMessage() != null) {
+                Log.i("EEE", "getLastMessage().getUpdateTime() : " + realmRoom.getLastMessage().getUpdateTime());
+                Log.i("EEE", "getLastMessage().getCreateTime() : " + realmRoom.getLastMessage().getCreateTime());
+            }
             Log.i("EEE", "**********************************");
             roomItems.add(new RoomItem().setInfo(realmRoom).setComplete(ActivityMain.this).withIdentifier(realmRoom.getId()));
         }

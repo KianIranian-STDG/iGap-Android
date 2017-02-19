@@ -51,7 +51,7 @@ public class ChannelSendMessageResponse extends MessageHandler {
                     @Override
                     public void execute(Realm realm) {
                         final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
-                        if (message != null) {
+                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
                         }
                     }
@@ -59,7 +59,7 @@ public class ChannelSendMessageResponse extends MessageHandler {
                     @Override
                     public void onSuccess() {
                         final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
-                        if (message != null) {
+                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                             G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
                         }
                     }
