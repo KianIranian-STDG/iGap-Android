@@ -1,6 +1,7 @@
 package com.iGap.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -55,6 +56,8 @@ public class FragmentBlockedUser extends Fragment {
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.fbu_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fbu_ripple_back_Button);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

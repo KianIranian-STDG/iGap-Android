@@ -3,6 +3,7 @@ package com.iGap.activities;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -22,7 +23,6 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -56,6 +56,7 @@ public class ActivityWebView extends ActivityEnhanced {
             Bundle bundle = getIntent().getExtras();
             key = bundle.getString("PATH");
         }
+
 
         allLayoutToolbar = (ViewGroup) findViewById(R.id.stfaq_allLayout_toolbar);
         searchView = (SearchView) findViewById(R.id.stfaq_searchView);
@@ -257,6 +258,13 @@ public class ActivityWebView extends ActivityEnhanced {
         });
         txtTitle = (TextView) findViewById(R.id.stfaq_txt_titleToolbar);
         txtTitle.setText(webView.getUrl());
+
+        allLayoutToolbar.setBackgroundColor(Color.parseColor(G.appBarColor));
+        searchView.setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        findViewById(R.id.stfaq_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        findViewById(R.id.stfaq_webView).setBackgroundColor(Color.parseColor(G.appBarColor));
+       
     }
 
     @Override

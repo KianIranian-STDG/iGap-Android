@@ -234,6 +234,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         appBarLayout = (AppBarLayout) findViewById(R.id.asm_appbar_shared_media);
 
+        findViewById(R.id.asm_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        findViewById(R.id.asm_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
+
+
         FragmentShowImage.appBarLayout = appBarLayout;
 
         MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.asm_btn_back);

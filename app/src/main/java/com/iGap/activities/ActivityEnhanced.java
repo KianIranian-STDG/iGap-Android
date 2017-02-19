@@ -28,13 +28,13 @@ public class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         G.currentActivity = this;
     }
 
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         HelperSetStatusBarColor.setColor(this);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -101,6 +102,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
         prgWait = (ProgressBar) findViewById(R.id.prg);
 
         G.uploaderUtil.setActivityCallbacks(this);
+
+        findViewById(R.id.ap_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         txtTitle = (TextView) findViewById(R.id.pu_titleToolbar);
 

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -488,6 +490,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         TextView txtCloud = (TextView) findViewById(R.id.lm_txt_cloud);
+        txtCloud.setTextColor(Color.parseColor(G.appBarColor));
         txtCloud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -873,7 +876,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void initFloatingButtonCreateNew() {
-
         arcMenu = (ArcMenu) findViewById(R.id.ac_arc_button_add);
         arcMenu.setStateChangeListener(new StateChangeListener() {
             @Override
@@ -1366,6 +1368,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onResume() {
         super.onResume();
+
+        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+        arcMenu.setBackgroundTintColor();
+
+        btnStartNewChat.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+        btnCreateNewGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+        btnCreateNewChannel.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
         LocalBroadcastManager.getInstance(this).registerReceiver(receiverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
 

@@ -76,6 +76,10 @@ public class SearchFragment extends Fragment {
 
     private void initComponent(View view) {
 
+        view.findViewById(R.id.sfl_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.sfl_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
+
+
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override

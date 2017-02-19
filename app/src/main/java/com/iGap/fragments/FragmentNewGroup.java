@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -258,6 +259,9 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.ng_prgWaiting);
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+        view.findViewById(R.id.ng_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.ang_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         prgWaiting.setVisibility(View.GONE);
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

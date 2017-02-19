@@ -1,5 +1,6 @@
 package com.iGap.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -77,6 +78,9 @@ public class FragmentListAdmin extends Fragment {
             roomType = bundle.getString("ROOM_TYPE");
             roomId = bundle.getLong("ID");
         }
+
+        view.findViewById(R.id.fcg_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.fcg_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
         layoutRoot = (ViewGroup) view.findViewById(R.id.fcg_layoutRoot);

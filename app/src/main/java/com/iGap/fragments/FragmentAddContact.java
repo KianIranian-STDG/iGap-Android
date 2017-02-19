@@ -3,6 +3,7 @@ package com.iGap.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -71,6 +72,8 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             }
         });
 
+        view.findViewById(R.id.fac_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.fac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
         txtSet.setTextColor(getResources().getColor(R.color.line_edit_text));

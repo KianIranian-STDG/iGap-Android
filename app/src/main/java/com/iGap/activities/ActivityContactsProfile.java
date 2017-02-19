@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -592,12 +594,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
         }
 
-
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.acp_collapsing_toolbar_layout);
+        collapsingToolbarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
 
 
         titleToolbar.setText(displayName);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.chi_appbar);
+        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener()
 

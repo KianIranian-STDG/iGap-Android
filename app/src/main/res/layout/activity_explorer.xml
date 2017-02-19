@@ -29,7 +29,7 @@
             app:layout_scrollFlags="scroll|enterAlways">
 
             <LinearLayout
-
+                android:id="@+id/ae_ll_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
                 android:background="@color/green"
@@ -82,11 +82,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#34a49f"/>
 
     </android.support.design.widget.AppBarLayout>
 

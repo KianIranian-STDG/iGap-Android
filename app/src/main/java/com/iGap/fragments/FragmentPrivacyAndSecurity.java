@@ -1,6 +1,7 @@
 package com.iGap.fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -51,7 +52,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.fpac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         Realm realm = Realm.getDefaultInstance();
         selfRemove = realm.where(RealmUserInfo.class).findFirst().getSelfRemove();

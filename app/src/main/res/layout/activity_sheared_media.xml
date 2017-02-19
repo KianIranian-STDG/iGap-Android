@@ -19,6 +19,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/asm_appbar_shared_media"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -30,7 +31,7 @@
             app:layout_scrollFlags="scroll|enterAlways">
 
             <LinearLayout
-
+                android:id="@+id/asm_ll_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
                 android:background="@color/green"
@@ -99,6 +100,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/asm_view_line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#34a49f"/>

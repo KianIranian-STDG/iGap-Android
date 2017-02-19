@@ -3,6 +3,7 @@ package com.iGap.fragments;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -106,6 +107,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(FragmentMap.this);
 
         Button btnSendPosition = (Button) view.findViewById(R.id.mf_btn_send_position);
+        btnSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (mode == Mode.sendPosition) {
 

@@ -10,6 +10,7 @@
               tools:context="com.iGap.fragments.FragmentDeleteAccount">
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/fda_ll_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="@color/toolbar_background"
@@ -81,6 +82,7 @@
     </android.support.v7.widget.Toolbar>
 
     <View
+        android:id="@+id/fda_view_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#34a49f"/>

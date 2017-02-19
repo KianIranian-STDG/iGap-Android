@@ -257,6 +257,8 @@ public class G extends MultiDexApplication {
     public static boolean firstTimeEnterToApp = true;
     public static String selectedLanguage = "en";
     public static long serverHeartBeatTiming = 60 * 1000;
+    public static String appBarColor;
+    public static String notificationColor;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -481,6 +483,10 @@ public class G extends MultiDexApplication {
             Intent intent = new Intent(this, MyService.class);
             startService(intent);
         }
+
+        appBarColor = shKeepAlive.getString(SHP_SETTING.KEY_APP_BAR_COLOR, "#3dbcb3");
+        notificationColor = shKeepAlive.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, "#f23131");
+
 
         setFont();
         makeFolder();

@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnGetPermission;
@@ -104,6 +105,7 @@ public class Activity_QrPayment extends ActivityEnhanced {
                 }
             });
 
+            findViewById(R.id.apqp_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
             CardView cardViewEComerece = (CardView) findViewById(R.id.aqp_cardview_e_commerece);
             cardViewEComerece.setOnClickListener(new View.OnClickListener() {

@@ -1,9 +1,10 @@
 package com.iGap.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 
@@ -32,6 +33,7 @@ public class Activity_ChargeOut extends ActivityEnhanced {
             }
         });
 
+        findViewById(R.id.apco_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         TextView txtCancel = (TextView) findViewById(R.id.aco_txt_cancel);
         txtCancel.setOnClickListener(new View.OnClickListener() {

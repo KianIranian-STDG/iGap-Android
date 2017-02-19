@@ -1,15 +1,15 @@
 package com.iGap.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +44,7 @@ public class Activity_charge_balance extends ActivityEnhanced {
             }
         });
 
+        findViewById(R.id.apcb_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         TextView txtCancel = (TextView) findViewById(R.id.acb_txt_cancel);
         txtCancel.setOnClickListener(new View.OnClickListener() {

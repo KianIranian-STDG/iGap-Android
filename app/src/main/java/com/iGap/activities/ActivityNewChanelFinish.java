@@ -1,16 +1,16 @@
 package com.iGap.activities;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
-
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityNewChanelFinish extends ActivityEnhanced {
@@ -42,6 +42,9 @@ public class ActivityNewChanelFinish extends ActivityEnhanced {
         radioButtonPublic = (RadioButton) findViewById(R.id.nclf_radioButton_Public);
         radioButtonPublic.setChecked(true);
         radioButtonPrivate = (RadioButton) findViewById(R.id.nclf_radioButton_private);
+
+        findViewById(R.id.nclf_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        findViewById(R.id.ancf_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         edtLink = (EditText) findViewById(R.id.nclf_edt_link);
 

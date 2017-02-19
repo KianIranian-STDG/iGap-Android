@@ -2,6 +2,7 @@ package com.iGap.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -40,6 +41,9 @@ public class FragmentFullChatBackground extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.ffcb_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.ffcb_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         final String fullImage = getArguments().getString("IMAGE");
 

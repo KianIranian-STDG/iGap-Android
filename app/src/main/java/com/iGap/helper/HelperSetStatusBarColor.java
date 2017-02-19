@@ -4,12 +4,13 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import com.iGap.R;
+import com.iGap.G;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.lang.reflect.Field;
 
@@ -33,10 +34,10 @@ public class HelperSetStatusBarColor {
         //
         //}
 
-        hackStatusBarColor(activity, R.color.iGapColor);
+        hackStatusBarColor(activity, G.appBarColor);
     }
 
-    @SuppressLint("NewApi") @SuppressWarnings("deprecation") private static View hackStatusBarColor(final Activity act, final int colorResID) {
+    @SuppressLint("NewApi") @SuppressWarnings("deprecation") private static View hackStatusBarColor(final Activity act, final String colorResID) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             try {
 
@@ -51,7 +52,7 @@ public class HelperSetStatusBarColor {
 
                                 int statusBarHeight = (int) Math.ceil(25 * vg.getContext().getResources().getDisplayMetrics().density);
                                 statusBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight));
-                                statusBar.setBackgroundColor(act.getResources().getColor(colorResID));
+                                statusBar.setBackgroundColor(Color.parseColor(colorResID));
                                 //  statusBar.setId();
                                 vg.addView(statusBar, 0);
                             }
@@ -65,12 +66,12 @@ public class HelperSetStatusBarColor {
         } else if (act.getWindow() != null) {
             act.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             act.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            act.getWindow().setStatusBarColor(act.getResources().getColor(colorResID));
+            act.getWindow().setStatusBarColor(Color.parseColor(colorResID));
         }
         return null;
     }
 
-    private static boolean applyColoredStatusBar(Activity act, int colorResID) {
+    private static boolean applyColoredStatusBar(Activity act, String color) {
         final Window window = act.getWindow();
         final int flag;
         if (window != null) {
@@ -97,7 +98,7 @@ public class HelperSetStatusBarColor {
                     // enable navigation bar tint
                     tintManager.setNavigationBarTintEnabled(true);
 
-                    tintManager.setTintColor(colorResID);
+                    tintManager.setTintColor(Color.parseColor(color));
                 }
             }
         }

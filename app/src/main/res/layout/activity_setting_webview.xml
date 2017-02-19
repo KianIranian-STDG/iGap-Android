@@ -9,7 +9,6 @@
         android:id="@+id/stfaq_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-        android:background="@color/toolbar_background"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp">
 
@@ -127,7 +126,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#34a49f"
         android:layout_alignTop="@+id/stfaq_webView"
         />
 

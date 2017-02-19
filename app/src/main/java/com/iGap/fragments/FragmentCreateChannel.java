@@ -3,6 +3,7 @@ package com.iGap.fragments;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -86,6 +87,9 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
 
         }
+
+        view.findViewById(R.id.fch_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.view).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.fch_prgWaiting_addContact);
         prgWaiting.setVisibility(View.GONE);

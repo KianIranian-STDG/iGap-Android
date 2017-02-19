@@ -21,6 +21,7 @@
         <com.iGap.module.MyAppBarLayout
             android:id="@+id/ac_appBarLayout"
             android:layout_width="match_parent"
+            android:background="@color/white"
             android:layout_height="wrap_content"
             app:popupTheme="@style/ThemeOverlay.AppCompat"
             >
@@ -37,7 +38,6 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/green"
                     android:orientation="horizontal"
                     >
 

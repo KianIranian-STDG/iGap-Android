@@ -1,6 +1,7 @@
 package com.iGap.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -74,6 +75,9 @@ public class FragmentNotification extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.toolbar2).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.fn_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         page = getArguments().getString("PAGE");
         roomId = getArguments().getLong("ID");

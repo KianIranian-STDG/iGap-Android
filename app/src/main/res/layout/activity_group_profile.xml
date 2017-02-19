@@ -24,6 +24,7 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/agp_colapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:contentScrim="@color/toolbar_background"

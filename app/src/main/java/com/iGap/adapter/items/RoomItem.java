@@ -425,8 +425,11 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             lastMessageSender = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message_sender);
             lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
             unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
+
             mute = (TextView) view.findViewById(R.id.cs_txt_mute);
             messageStatus = (ImageView) view.findViewById(R.id.cslr_txt_tic);
+
+            AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
 
         }
     }

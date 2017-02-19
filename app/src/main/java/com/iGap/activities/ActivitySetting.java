@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,6 +20,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -31,6 +34,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -93,6 +97,9 @@ import com.iGap.request.RequestUserProfileSetGender;
 import com.iGap.request.RequestUserProfileSetNickname;
 import com.iGap.request.RequestUserProfileUpdateUsername;
 import com.iGap.request.RequestUserSessionLogout;
+import com.larswerkman.holocolorpicker.ColorPicker;
+import com.larswerkman.holocolorpicker.OpacityBar;
+import com.larswerkman.holocolorpicker.SVBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -140,7 +147,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtWebViewBlog, txtWebViewHome, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
     private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
     private AppBarLayout appBarLayout;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
     private Uri uriIntent;
+    private ImageView imgAppBarSelected;
+    private ImageView imgNotificationColor;
     private long idAvatar;
     private File nameImageFile;
     private FloatingActionButton fab;
@@ -1013,6 +1023,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         appBarLayout = (AppBarLayout) findViewById(R.id.st_appbar);
+        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.st_collapsing_layout);
+        collapsingToolbarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
+
+
         final TextView titleToolbar = (TextView) findViewById(R.id.st_txt_titleToolbar);
         final ViewGroup viewGroup = (ViewGroup) findViewById(R.id.st_parentLayoutCircleImage);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -1563,6 +1580,47 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        imgAppBarSelected = (ImageView) findViewById(R.id.asn_img_title_bar_color);
+        GradientDrawable bgShape = (GradientDrawable) imgAppBarSelected.getBackground();
+        bgShape.setColor(Color.parseColor(G.appBarColor));
+
+        TextView txtSelectAppColor = (TextView) findViewById(R.id.asn_txt_app_title_bar_color);
+        txtSelectAppColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                showSelectAppColorDialog(true);
+            }
+        });
+
+        imgAppBarSelected.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                showSelectAppColorDialog(true);
+            }
+        });
+
+        imgNotificationColor = (ImageView) findViewById(R.id.asn_img_notification_color);
+        GradientDrawable bgShapeNotification = (GradientDrawable) imgNotificationColor.getBackground();
+        bgShapeNotification.setColor(Color.parseColor(G.notificationColor));
+
+        imgNotificationColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                showSelectAppColorDialog(false);
+            }
+        });
+
+        TextView txtNotificatinColor = (TextView) findViewById(R.id.asn_txt_app_notification_color);
+        txtNotificatinColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                showSelectAppColorDialog(false);
+            }
+        });
+
+
+
+
+
+
         ltInAppBrowser = (TextView) findViewById(R.id.st_txt_inAppBrowser);
         toggleInAppBrowser = (ToggleButton) findViewById(R.id.st_toggle_inAppBrowser);
         int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
@@ -1955,6 +2013,68 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         realm.close();
 
         showImage();
+    }
+
+    private void showSelectAppColorDialog(final boolean forAppColor) {
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        boolean wrapInScrollView = true;
+
+        String titleMessage = forAppColor ? getResources().getString(R.string.app_theme) : getResources().getString(R.string.app_notif_color);
+
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.stns_popup_colorpicer, wrapInScrollView)
+            .positiveText(getResources().getString(R.string.set))
+            .negativeText(getResources().getString(R.string.DISCARD))
+            .title(titleMessage)
+            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                }
+            })
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                }
+            })
+            .build();
+
+        View view1 = dialog.getCustomView();
+        assert view1 != null;
+        final ColorPicker picker = (ColorPicker) view1.findViewById(R.id.picker);
+        SVBar svBar = (SVBar) view1.findViewById(R.id.svbar);
+        OpacityBar opacityBar = (OpacityBar) view1.findViewById(R.id.opacitybar);
+        picker.addSVBar(svBar);
+        picker.addOpacityBar(opacityBar);
+
+        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                dialog.dismiss();
+
+                if (forAppColor) {
+
+                    GradientDrawable bgShape = (GradientDrawable) imgAppBarSelected.getBackground();
+                    G.appBarColor = "#" + Integer.toHexString(picker.getColor());
+                    bgShape.setColor(picker.getColor());
+                    editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
+                    editor.apply();
+
+                    ActivitySetting.this.recreate();
+                    G.onRefreshActivity.refresh(G.selectedLanguage);
+                } else {
+
+                    GradientDrawable bgShape = (GradientDrawable) imgNotificationColor.getBackground();
+                    G.notificationColor = "#" + Integer.toHexString(picker.getColor());
+                    bgShape.setColor(picker.getColor());
+                    editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
+                    editor.apply();
+
+                    G.onRefreshActivity.refresh(G.selectedLanguage);
+                }
+            }
+        });
+
+        dialog.show();
     }
 
     private void openBrowser(String s) {

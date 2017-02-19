@@ -79,6 +79,10 @@ public class SHP_SETTING {
     // keep media
     public static final String KEY_KEEP_MEDIA = "KEY_KEEP_MEDIA";
 
+    public static final String KEY_APP_BAR_COLOR = "KEY_APP_BAR_COLOR";
+    public static final String KEY_NOTIFICATION_COLOR = "KEY_NOTIFICATION_COLOR";
+
+
     // ========================================================================================== chat background
 
     public static final String KEY_PATH_CHAT_BACKGROUND = "KEY_PATH_CHAT_BACKGROUND";

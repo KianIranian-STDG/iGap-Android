@@ -1,6 +1,7 @@
 package com.iGap.fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
@@ -28,7 +28,6 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +54,8 @@ public class NotRegisteredContactsFragment extends Fragment {
         if (bundle != null) {
             title = bundle.getString("TITLE");
         }
+
+        view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         //create our FastAdapter
         fastAdapter = new FastAdapter();

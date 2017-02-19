@@ -3,6 +3,7 @@ package com.iGap.fragments;
 
 import android.content.Context;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -124,6 +125,10 @@ public class FragmentDeleteAccount extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.fda_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.fda_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
+
 
         G.onUserGetDeleteToken = new OnUserGetDeleteToken() {
             @Override

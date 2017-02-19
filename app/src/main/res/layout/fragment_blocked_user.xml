@@ -11,6 +11,7 @@
 
 
   <LinearLayout
+      android:id="@+id/fbu_ll_toolbar"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
       android:background="@color/green"

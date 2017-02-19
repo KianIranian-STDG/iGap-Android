@@ -782,6 +782,9 @@
   <string name="text_is_empty">Text Is Empty</string>
   <string name="please_try_again">Please Try Again</string>
   <string name="room_not_exist">There is no room with this ID</string>
+  <string name="app_theme">Default Theme Color</string>
+  <string name="app_notif_color">Default Notification Color</string>
+  <string name="theme">Theme</string>
   <string name="is"> is </string>
   <string name="are"> are </string>
   <string name="members_are"> members are </string>

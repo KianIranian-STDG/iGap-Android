@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -361,6 +363,12 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         });
         appBarLayout = (AppBarLayout) findViewById(R.id.pch_appbar);
+        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.acp_ll_collapsing_toolbar_layout);
+        collapsingToolbarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
+
         titleToolbar = (TextView) findViewById(R.id.pch_txt_titleToolbar);
         titleToolbar.setText("" + title);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {

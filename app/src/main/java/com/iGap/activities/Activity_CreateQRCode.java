@@ -1,6 +1,7 @@
 package com.iGap.activities;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,6 +13,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnGetPermission;
@@ -48,6 +50,7 @@ public class Activity_CreateQRCode extends ActivityEnhanced {
             }
         });
 
+        findViewById(R.id.apcac_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         RippleView rippleCreate = (RippleView) findViewById(R.id.acqc_ripple_plus);
         rippleCreate.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

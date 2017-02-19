@@ -3,6 +3,7 @@ package com.iGap.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterExplorer;
 import com.iGap.helper.HelperMimeType;
@@ -63,6 +65,9 @@ public class ActivityExplorer extends ActivityEnhanced {
         recyclerView.setItemViewCacheSize(100);
         mLayoutManager = new LinearLayoutManager(ActivityExplorer.this);
         recyclerView.setLayoutManager(mLayoutManager);
+
+        findViewById(R.id.ae_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+
 
         item = new ArrayList<StructExplorerItem>();
         node = new ArrayList<String>();

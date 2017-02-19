@@ -22,6 +22,7 @@
             android:background="@color/toolbar_background">
 
             <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/acp_ll_collapsing_toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:contentScrim="@color/toolbar_background"

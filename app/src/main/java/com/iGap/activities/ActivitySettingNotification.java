@@ -3,6 +3,7 @@ package com.iGap.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -64,6 +65,8 @@ public class ActivitySettingNotification extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         txtBack = (TextView) findViewById(R.id.stns_txt_back);
+
+        findViewById(R.id.asn_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         RippleView rippleBack = (RippleView) findViewById(R.id.stns_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

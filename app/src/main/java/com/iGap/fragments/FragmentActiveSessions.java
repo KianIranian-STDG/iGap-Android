@@ -1,6 +1,6 @@
 package com.iGap.fragments;
 
-
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
@@ -36,7 +35,6 @@ import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +68,8 @@ public class FragmentActiveSessions extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.acs_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.stas_prgWaiting);
         prgWaiting.setVisibility(View.VISIBLE);

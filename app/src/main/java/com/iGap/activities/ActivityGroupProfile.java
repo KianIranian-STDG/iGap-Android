@@ -18,6 +18,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -521,6 +522,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         txtMemberNumber = (TextView) findViewById(R.id.agp_txt_member_number);
         appBarLayout = (AppBarLayout) findViewById(R.id.agp_appbar);
+        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.agp_colapsing_toolbar);
+        collapsingToolbarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
 
         LinearLayout llGroupName = (LinearLayout) findViewById(R.id.agp_ll_group_name);
         LinearLayout llGroupDescription = (LinearLayout) findViewById(R.id.agp_ll_group_description);

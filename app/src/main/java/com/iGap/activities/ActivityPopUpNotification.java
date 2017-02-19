@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.annotation.StringRes;
@@ -409,6 +410,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
                 }
             });
+
+            findViewById(R.id.apn_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
             txtName = (TextView) findViewById(R.id.apn_txt_name);
             txtName.setOnClickListener(new View.OnClickListener() {

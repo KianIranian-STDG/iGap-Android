@@ -863,12 +863,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         View thumbnail = holder.itemView.findViewById(R.id.thumbnail);
 
-
-        if (mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
-            if (thumbnail != null) {
-                thumbnail.setVisibility(View.INVISIBLE);
-            }
-        }
+        //if (mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
+        //    if (thumbnail != null) {
+        //        thumbnail.setVisibility(View.INVISIBLE);
+        //    }
+        //}
 
         if (MessagesAdapter.hasUploadRequested(Long.parseLong(mMessage.messageID))) {
             messageClickListener.onUploadCancel(progress, mMessage, holder.getAdapterPosition());

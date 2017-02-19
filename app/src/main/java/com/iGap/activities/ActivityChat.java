@@ -545,6 +545,9 @@ public class ActivityChat extends ActivityEnhanced
         viewMicRecorder = findViewById(R.id.layout_mic_recorde);
         prgWaiting = (ProgressBar) findViewById(R.id.chl_prgWaiting);
 
+        findViewById(R.id.toolbarContainer).setBackgroundColor(Color.parseColor(G.appBarColor));
+        findViewById(R.id.ac_green_line).setBackgroundColor(Color.parseColor(G.appBarColor));
+
         voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile, this);
         attachFile = new AttachFile(this);
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
@@ -1739,6 +1742,11 @@ public class ActivityChat extends ActivityEnhanced
 
         llScrollNavigate = (FrameLayout) findViewById(R.id.ac_ll_scrool_navigate);
         txtNewUnreadMessage = (TextView) findViewById(R.id.cs_txt_unread_message);
+        AndroidUtils.setBackgroundShapeColor(txtNewUnreadMessage, Color.parseColor(G.notificationColor));
+
+        MaterialDesignTextView txtNavigationLayout = (MaterialDesignTextView) findViewById(R.id.ac_txt_down_navigation);
+        AndroidUtils.setBackgroundShapeColor(txtNavigationLayout, Color.parseColor(G.appBarColor));
+
 
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override

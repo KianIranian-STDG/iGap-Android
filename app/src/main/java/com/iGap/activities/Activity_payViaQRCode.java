@@ -1,12 +1,13 @@
 package com.iGap.activities;
 
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 
@@ -86,6 +87,7 @@ public class Activity_payViaQRCode extends ActivityEnhanced implements QRCodeRea
             }
         });
 
+        findViewById(R.id.appvqc_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         RippleView rippleCreate = (RippleView) findViewById(R.id.apvq_ripple_plus);
         rippleCreate.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

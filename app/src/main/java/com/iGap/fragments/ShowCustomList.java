@@ -1,5 +1,6 @@
 package com.iGap.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemGroup;
@@ -82,6 +84,9 @@ public class ShowCustomList extends Fragment {
 
             singleSelect = bundle.getBoolean("SINGLE_SELECT");
         }
+
+        view.findViewById(R.id.fcg_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.fcg_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);

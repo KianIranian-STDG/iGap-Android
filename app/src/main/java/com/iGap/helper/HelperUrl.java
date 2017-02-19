@@ -103,7 +103,7 @@ public class HelperUrl {
 
     private static boolean isTextLink(String text) {
 
-        if ((text.startsWith("www.") && text.length() > 7) || (text.startsWith("http://") && text.length() > 10) || (text.startsWith("https://") && text.length() > 11) || (text.startsWith("ftp://")
+        if ((text.startsWith("http://") && text.length() > 10) || (text.startsWith("https://") && text.length() > 11) || (text.startsWith("ftp://")
             && text.length() > 9) || (text.startsWith("ftps://") && text.length() > 10) || (text.startsWith("gopher:") && text.length() > 11)) {
             return true;
         }
@@ -572,9 +572,6 @@ public class HelperUrl {
                 TextView txtMemeberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
                 txtMemeberNumber.setText(finalMemberNumber);
 
-                dialog.show();
-
-
                 HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
                     @Override public void onAvatarGet(final String avatarPath, long roomId) {
                         ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
@@ -584,6 +581,11 @@ public class HelperUrl {
                         imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
+
+                dialog.show();
+
+
+
             }
         });
     }

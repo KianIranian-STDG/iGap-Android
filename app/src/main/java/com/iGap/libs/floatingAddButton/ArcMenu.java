@@ -19,6 +19,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperCalander;
 import java.util.ArrayList;
@@ -55,6 +56,11 @@ public class ArcMenu
         }
     };
 
+    public void setBackgroundTintColor() {
+
+        fabMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+    }
+
     public ArcMenu(Context context) {
         super(context);
     }
@@ -70,7 +76,9 @@ public class ArcMenu
         Resources resources = getResources();
 
         mDrawable = attr.getDrawable(R.styleable.ArcMenu_menu_scr);
-        mColorStateList = attr.getColorStateList(R.styleable.ArcMenu_menu_color);
+        //  mColorStateList = attr.getColorStateList(R.styleable.ArcMenu_menu_color);
+        mColorStateList = ColorStateList.valueOf(Color.parseColor(G.appBarColor));
+
         mFinalRadius = attr.getDimension(R.styleable.ArcMenu_menu_radius,
                 resources.getDimension(R.dimen.dp100));
         mElevation = attr.getDimension(R.styleable.ArcMenu_menu_elevation,
@@ -90,10 +98,9 @@ public class ArcMenu
         mRippleColor = attr.getColor(R.styleable.ArcMenu_menu_ripple_color,
                 getThemeAccentColor(getContext(), R.attr.colorControlHighlight));
 
-        if (mColorStateList == null) {
-            mColorStateList =
-                    ColorStateList.valueOf(getThemeAccentColor(getContext(), R.attr.colorAccent));
-        }
+        //if (mColorStateList == null) {
+        //    mColorStateList = ColorStateList.valueOf(getThemeAccentColor(getContext(), R.attr.colorAccent));
+        //}
 
         if (mMenuSideEnum == MenuSideEnum.ARC_LEFT) {
 
@@ -301,7 +308,7 @@ public class ArcMenu
                 toggleVisibilityOfAllChildViews(mIsOpened);
 
                 fabMenu.setRotation(45);
-                fabMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2caaa3")));
+                // fabMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     fabMenu.setElevation(0);
@@ -364,8 +371,7 @@ public class ArcMenu
             public void onAnimationStart(Animator animation) {
 
                 fabMenu.setRotation(0);
-                fabMenu.setBackgroundTintList(
-                        ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                //  fabMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     fabMenu.setElevation(mElevation);

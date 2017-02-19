@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -173,6 +174,7 @@ public class ActivityRegister extends ActivityEnhanced {
         edtPhoneNumber = (MaskedEditText) findViewById(R.id.rg_edt_PhoneNumber);
         txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
 
+        findViewById(R.id.ar_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         int portrait = getResources().getConfiguration().orientation;
         if (portrait == 1) {

@@ -1,6 +1,7 @@
 package com.iGap.activities;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,16 +14,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.AdapterComment;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructCommentInfo;
-
-import java.util.ArrayList;
-
 import io.github.meness.emoji.EmojiEditText;
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
@@ -31,6 +29,7 @@ import io.github.meness.emoji.listeners.OnEmojiPopupDismissListener;
 import io.github.meness.emoji.listeners.OnEmojiPopupShownListener;
 import io.github.meness.emoji.listeners.OnSoftKeyboardCloseListener;
 import io.github.meness.emoji.listeners.OnSoftKeyboardOpenListener;
+import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -122,6 +121,9 @@ public class ActivityComment extends ActivityEnhanced {
     private void initComponent() {
 
         initLayoutAttachText();
+
+        findViewById(R.id.acs_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        findViewById(R.id.asc_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         layoutReplay = new FragmentSubLayoutReplay(findViewById(R.id.acs_ll_replay));
 

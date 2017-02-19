@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -13,6 +17,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperString;
@@ -448,4 +453,23 @@ public final class AndroidUtils {
         int c = s.codePointAt(0);
         return c >= 0x0600 && c <= 0x06FF;
     }
+
+    public static void setBackgroundShapeColor(View view, int color) {
+
+        Drawable background = view.getBackground();
+        if (background instanceof ShapeDrawable) {
+            // cast to 'ShapeDrawable'
+            ShapeDrawable shapeDrawable = (ShapeDrawable) background;
+            shapeDrawable.getPaint().setColor(color);
+        } else if (background instanceof GradientDrawable) {
+            // cast to 'GradientDrawable'
+            GradientDrawable gradientDrawable = (GradientDrawable) background;
+            gradientDrawable.setColor(color);
+        } else if (background instanceof ColorDrawable) {
+            // alpha value may need to be set again after this call
+            ColorDrawable colorDrawable = (ColorDrawable) background;
+            colorDrawable.setColor(color);
+        }
+    }
+
 }
