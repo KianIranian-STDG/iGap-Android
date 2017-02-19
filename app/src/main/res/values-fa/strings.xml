@@ -734,9 +734,9 @@
     <string name="permission_record_audio">ظبط صدا را بدهید</string>
     <string name="permission_phone">گوشی را بدهید</string>
     <string name="permission_sms">پیامک ها را بدهید</string>
-    <string name="st_privacy_blog">وبلاگ آی گپ</string>
+    <string name="st_privacy_blog">بلاگ رسمی آی گپ</string>
     <string name="st_privacy_create_ticket">درخواست پشتیبانی</string>
-    <string name="st_privacy_iGap_home">صفحه نخست آی گپ</string>
+    <string name="st_privacy_iGap_home">صفحه رسمی آی گپ</string>
 
   <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
   <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
