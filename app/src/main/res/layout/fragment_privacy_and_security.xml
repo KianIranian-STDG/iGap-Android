@@ -35,7 +35,6 @@
                 android:text="@string/st_title_Privacy_Security"
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/sp18"
-                android:textStyle="bold"
                 android:visibility="visible"/>
 
             <com.iGap.libs.rippleeffect.RippleView

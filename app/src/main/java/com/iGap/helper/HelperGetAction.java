@@ -1,6 +1,5 @@
 package com.iGap.helper;
 
-import android.util.Log;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -119,19 +118,23 @@ public class HelperGetAction {
                 if (HelperCalander.isLanguagePersian) {
                     if (Character.getDirectionality(concatenatedNames.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
 
-                        Log.i("NNNNHHHHHH", "0g: " + concatenatedNames + HelperConvertEnumToString.convertActionEnum(latestAction));
-                        return concatenatedNames + HelperConvertEnumToString.convertActionEnum(latestAction);
+                        return concatenatedNames + " " + HelperConvertEnumToString.convertActionEnum(latestAction);
                     } else {
 
-                        Log.i("NNNNHHHHHH", "1g: " + HelperConvertEnumToString.convertActionEnum(latestAction) + concatenatedNames);
-                        return HelperConvertEnumToString.convertActionEnum(latestAction) + concatenatedNames;
+                        return HelperConvertEnumToString.convertActionEnum(latestAction) + " " + concatenatedNames;
                     }
                 } else {
-                    Log.i("NNNNHHHHHH", "2g: " + concatenatedNames + G.context.getResources().getString(R.string.are) + convertActionEnum(latestAction));
                     return concatenatedNames + G.context.getResources().getString(R.string.are) + convertActionEnum(latestAction);
                 }
             } else {
-                return count + G.context.getResources().getString(R.string.members_are) + convertActionEnum(latestAction);
+                if (HelperCalander.isLanguagePersian) {
+
+                    return convertActionEnum(latestAction) + " " + count + " " + G.context.getResources().getString(R.string.members_are);
+                } else {
+
+                    return count + " " + G.context.getResources().getString(R.string.members_are) + convertActionEnum(latestAction);
+                }
+
             }
         }
     }

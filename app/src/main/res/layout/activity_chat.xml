@@ -118,6 +118,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:layoutDirection="locale"
                             >
 
                             <TextView
@@ -126,6 +127,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="top"
                                 android:singleLine="true"
+                                android:textDirection="ltr"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/sp12"
                                 />

@@ -787,5 +787,5 @@
 
   <string name="is"></string>
   <string name="are"></string>
-  <string name="members_are"></string>
+  <string name="members_are"> نفر </string>
 </resources>
