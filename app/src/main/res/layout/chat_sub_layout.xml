@@ -105,6 +105,7 @@
                         android:singleLine="true"
                         android:text="LAST MESSAGE"
                         android:textColor="#FF616161"
+                        android:textDirection="ltr"
                         android:textSize="@dimen/sp13"/>
 
                     <com.wang.avi.AVLoadingIndicatorView

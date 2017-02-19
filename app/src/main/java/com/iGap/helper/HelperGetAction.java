@@ -1,6 +1,9 @@
 package com.iGap.helper;
 
+import android.util.Log;
 import com.iGap.Config;
+import com.iGap.G;
+import com.iGap.R;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
@@ -8,6 +11,8 @@ import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static com.iGap.helper.HelperConvertEnumToString.convertActionEnum;
 
 public class HelperGetAction {
 
@@ -21,12 +26,11 @@ public class HelperGetAction {
 
     public static String getAction(long roomId, ProtoGlobal.Room.Type type, ProtoGlobal.ClientAction clientAction) {
         if (type == ProtoGlobal.Room.Type.CHAT) {
-            String action = HelperConvertEnumToString.convertActionEnum(clientAction);
+            String action = convertActionEnum(clientAction);
             if (action != null) {
                 return action;
             }
             return null;
-
         } else if (type == ProtoGlobal.Room.Type.GROUP) {
 
             final String actionText = HelperGetAction.getMultipleAction(roomId);
@@ -71,9 +75,16 @@ public class HelperGetAction {
 
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, latestStruct.userId).findFirst();
                 if (realmRegisteredInfo != null) {
-
-                    String action = realmRegisteredInfo.getDisplayName() + " is " + HelperConvertEnumToString.convertActionEnum(latestStruct.action);
-                    realm.close();
+                    String action;
+                    if (HelperCalander.isLanguagePersian) {
+                        if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                            action = realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
+                        } else {
+                            action = convertActionEnum(latestStruct.action) + " " + realmRegisteredInfo.getDisplayName();
+                        }
+                    } else {
+                        action = realmRegisteredInfo.getDisplayName() + G.context.getResources().getString(R.string.is) + convertActionEnum(latestStruct.action);
+                    }
 
                     return action;
                 } else {
@@ -105,11 +116,23 @@ public class HelperGetAction {
                 }
                 concatenatedNames = concatenatedNames.substring(0, concatenatedNames.length() - 1);
 
-                return concatenatedNames + " are " + HelperConvertEnumToString.convertActionEnum(latestAction);
-            } else {
-                return count + " members are " + HelperConvertEnumToString.convertActionEnum(latestAction);
-            }
+                if (HelperCalander.isLanguagePersian) {
+                    if (Character.getDirectionality(concatenatedNames.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
 
+                        Log.i("NNNNHHHHHH", "0g: " + concatenatedNames + HelperConvertEnumToString.convertActionEnum(latestAction));
+                        return concatenatedNames + HelperConvertEnumToString.convertActionEnum(latestAction);
+                    } else {
+
+                        Log.i("NNNNHHHHHH", "1g: " + HelperConvertEnumToString.convertActionEnum(latestAction) + concatenatedNames);
+                        return HelperConvertEnumToString.convertActionEnum(latestAction) + concatenatedNames;
+                    }
+                } else {
+                    Log.i("NNNNHHHHHH", "2g: " + concatenatedNames + G.context.getResources().getString(R.string.are) + convertActionEnum(latestAction));
+                    return concatenatedNames + G.context.getResources().getString(R.string.are) + convertActionEnum(latestAction);
+                }
+            } else {
+                return count + G.context.getResources().getString(R.string.members_are) + convertActionEnum(latestAction);
+            }
         }
     }
 
@@ -152,7 +175,6 @@ public class HelperGetAction {
                     structActions.remove(i);
                 }
             }
-
         } else {
 
             if (structActions.size() > 0) {

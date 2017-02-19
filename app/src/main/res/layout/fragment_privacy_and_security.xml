@@ -239,7 +239,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@color/st_background2"
                 android:orientation="vertical"
                 >
 
@@ -265,6 +265,7 @@
                     android:paddingBottom="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
+                    android:paddingTop="@dimen/dp12"
                     android:text="@string/Security"
                     android:textColor="@color/green"
                     android:textSize="@dimen/sp18"
@@ -321,7 +322,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/st_background2"
+                android:background="@color/white"
                 android:orientation="vertical">
 
                 <TextView
