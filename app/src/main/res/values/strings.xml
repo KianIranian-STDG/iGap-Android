@@ -762,9 +762,9 @@
   <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
 
   <string name="channel_public_hint_revoke">Channel Public Link</string>
-  <string name="st_privacy_blog">iGap Blog</string>
+  <string name="st_privacy_blog">iGap Official Blog</string>
   <string name="st_privacy_create_ticket">Support Request</string>
-  <string name="st_privacy_iGap_home">iGap Home</string>
+  <string name="st_privacy_iGap_home">iGap Official Home</string>
   <string name="you_have_to_get_storage_permision_for_continue">You have to get storage permission for continue.</string>
   <string name="clean_up_chat_rooms">Clean Up Chat Rooms</string>
   <string name="clean_up">Clean Up</string>
