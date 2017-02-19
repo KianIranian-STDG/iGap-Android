@@ -781,8 +781,8 @@
   <string name="text_is_empty">پیام خالی است.</string>
   <string name="please_try_again">لطفاً مجدداً تلاش نمایید</string>
   <string name="room_not_exist">صفحه ای با این شناسه یافت نشد</string>
-  <string name="app_theme">رنگ پیش فرض برنامه</string>
-  <string name="app_notif_color">رنگ پیش فرض اعلانات</string>
+  <string name="app_theme">رنگ پوسته آی گپ</string>
+  <string name="app_notif_color">رنگ اعلانات در آی گپ</string>g>
   <string name="theme">ظاهر برنامه</string>
 
   <string name="is"></string>
