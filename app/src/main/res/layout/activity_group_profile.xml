@@ -265,20 +265,48 @@
 
 
                     <LinearLayout
+                        android:id="@+id/agp_ll_link"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/dp12"
+                        android:paddingRight="@dimen/dp12"
+                        >
 
+                        <TextView
+                            android:id="@+id/agp_txt_link_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/dp4"
+                            android:paddingStart="@dimen/dp4"
+                            android:singleLine="true"
+                            android:text="@string/group_link"
+                            android:textColor="@color/black_register"
+                            android:textSize="@dimen/sp15"
+                            />
 
+                        <TextView
+                            android:id="@+id/agp_txt_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/dp12"
+                            android:paddingEnd="@dimen/dp4"
+                            android:paddingStart="@dimen/dp4"
+                            android:paddingTop="@dimen/dp4"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textColor="@color/gray_5c"
+                            android:textSize="@dimen/sp13"
+                            />
+
+                    </LinearLayout>
                         <LinearLayout
                             android:id="@+id/agp_ll_group_description"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight=".5"
                             android:orientation="vertical"
                             android:paddingLeft="@dimen/dp12"
                             android:paddingRight="@dimen/dp12"
-
                             >
 
                             <TextView
@@ -305,46 +333,6 @@
                                 android:textColor="@color/gray_5c"
                                 android:textSize="@dimen/sp13"
                                 />
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:id="@+id/agp_ll_link"
-                            android:layout_width="0dp"
-                            android:layout_weight=".5"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingLeft="@dimen/dp12"
-                            android:paddingRight="@dimen/dp12">
-
-                            <TextView
-                                android:id="@+id/agp_txt_link_title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingEnd="@dimen/dp4"
-                                android:paddingStart="@dimen/dp4"
-                                android:singleLine="true"
-                                android:text="@string/group_link"
-                                android:textColor="@color/black_register"
-                                android:textSize="@dimen/sp15"
-                                />
-
-                            <TextView
-                                android:id="@+id/agp_txt_link"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingBottom="@dimen/dp12"
-                                android:paddingEnd="@dimen/dp4"
-                                android:paddingStart="@dimen/dp4"
-                                android:paddingTop="@dimen/dp4"
-                                android:singleLine="true"
-                                android:text=""
-                                android:textColor="@color/gray_5c"
-                                android:textSize="@dimen/sp13"/>
-
-                        </LinearLayout>
-
                     </LinearLayout>
 
                     <LinearLayout

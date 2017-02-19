@@ -320,7 +320,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
 
         if (role != ChannelChatRole.OWNER) {
-            if (description.equals("")) {
+            if (description.length() == 0) {
                 lytChannelDescription.setVisibility(View.GONE);
             }
         }

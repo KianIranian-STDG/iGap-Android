@@ -15,6 +15,7 @@ public class StructContactInfo {
     public String color;
     public String role = ProtoGlobal.GroupRoom.Role.MEMBER.toString();
     public RealmAvatar avatar;
+    public long userID;
 
     public StructContactInfo(long peerId, String displayName, String status, boolean isHeader, boolean isSelected, String phone) {
         this.peerId = peerId;

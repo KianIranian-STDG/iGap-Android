@@ -2,6 +2,7 @@ package com.iGap.adapter.items;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.iGap.G;
@@ -54,6 +55,7 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
             holder.topLine.setVisibility(View.GONE);
         }
 
+        Log.i("CCCCCCXXZZZ", "bindView: " + mContact.role);
         holder.title.setText(mContact.displayName);
 
         setRoleStarColor(holder.roleStar);
@@ -88,6 +90,10 @@ public class ContactItemGroupProfile extends AbstractItem<ContactItemGroupProfil
                 holder.subtitle.setText(mContact.status);
 
             }
+        }
+
+        if (mContact.peerId == mContact.userID) {
+            holder.btnMenu.setVisibility(View.GONE);
         }
 
         if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {

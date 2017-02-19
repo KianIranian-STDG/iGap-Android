@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
@@ -29,9 +30,15 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -58,6 +65,7 @@ import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
+import com.iGap.helper.HelperUrl;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
@@ -267,6 +275,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         //realm.close(); // in fillItem when make iterator with members client will be have error . This Realm instance has already been closed, making it unusable.
         initComponent();
+        //descriptionLink();
 
         attachFile = new AttachFile(this);
 
@@ -505,8 +514,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         txtGroupName.setText(title);
 
         txtGroupDescription = (TextView) findViewById(R.id.agp_txt_group_description);
-        txtGroupDescription.setText(description);
 
+        txtGroupDescription.setText(HelperUrl.setUrlLink(description, true, false, null, true));
+        txtGroupDescription.setMovementMethod(LinkMovementMethod.getInstance());
         txtNumberOfSharedMedia = (TextView) findViewById(R.id.agp_txt_number_of_shared_media);
 
         txtMemberNumber = (TextView) findViewById(R.id.agp_txt_member_number);
@@ -520,15 +530,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
          */
         if (role == GroupChatRole.OWNER) {
             llGroupDescription.setVisibility(View.VISIBLE);
-        } else {
-            if (description.length() == 0) {
-                llGroupDescription.setVisibility(View.GONE);
-            }
-        }
-
-        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
-
-            ltLink.setVisibility(View.VISIBLE);
 
             llGroupName.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -543,6 +544,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     ChangeGroupDescription();
                 }
             });
+        } else {
+            if (description.length() == 0) {
+                llGroupDescription.setVisibility(View.GONE);
+            }
+        }
+
+        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+            ltLink.setVisibility(View.VISIBLE);
         } else {
             ltLink.setVisibility(View.GONE);
         }
@@ -1190,7 +1199,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                     RealmList<RealmMember> result = realmGroupRoom.getMembers();
 
                                     String _Role = "";
-                                    Log.i("CCCCCCDDDDDD", "result.size(): " + result.size());
                                     for (int i = 0; i < result.size(); i++) {
                                         if (result.get(i).getPeerId() == user.getId()) {
                                             _Role = result.get(i).getRole();
@@ -1198,7 +1206,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                         }
                                     }
                                     struct.role = _Role;
-                                    Log.i("CCCCCCDDDDDD", "_Role: " + _Role);
                                 }
 
                                 if (realmRegisteredInfo != null) {
@@ -1207,6 +1214,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                     struct.color = realmRegisteredInfo.getColor();
                                     struct.lastSeen = realmRegisteredInfo.getLastSeen();
                                     struct.status = realmRegisteredInfo.getStatus();
+                                    struct.userID = userID;
                                 }
 
 
@@ -1496,7 +1504,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 s.color = realmRegisteredInfo.getColor();
                 s.lastSeen = realmRegisteredInfo.getLastSeen();
                 s.status = realmRegisteredInfo.getStatus();
-
+                s.userID = userID;
                 if (s.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                     contacts.add(0, s);
 
@@ -1820,15 +1828,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
             if (role == GroupChatRole.OWNER) {
 
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) { // ok
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                     popup.getMenu().getItem(2).setVisible(false);
                     popup.getMenu().getItem(3).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) { //ok
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
                     popup.getMenu().getItem(0).setVisible(false);
                     popup.getMenu().getItem(1).setVisible(false);
                     popup.getMenu().getItem(3).setVisible(false);
                     popup.getMenu().getItem(4).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) { // ok
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
                     popup.getMenu().getItem(1).setVisible(false);
                     popup.getMenu().getItem(2).setVisible(false);
                     popup.getMenu().getItem(4).setVisible(false);
@@ -2438,7 +2446,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         for (int i = 0; i < items.size(); i++) {
                             if (items.get(i).mContact.peerId == memberId) {
                                 //itemAdapter.remove(i);
-                                contacts.remove(i);
+                                contacts.remove(i);// check shavad
                                 refreshListMember();
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
@@ -2994,6 +3002,70 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         } else {
             txtMore.setVisibility(View.GONE);
         }
+    }
+
+    private void descriptionLink() {
+        SpannableString wordToSpan;
+        String a[] = description.split(" ");
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+
+        for (int i = 0; i < a.length; i++) {
+            if (a[i].matches("\\@") || a[i].matches("\\\\w+")) { //check if only digits. Could also be text.matches("[0-9]+")
+
+                wordToSpan = new SpannableString(a[i]);
+                wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                wordToSpan.setSpan(new ClickableSpan() {
+                    @Override public void onClick(View v) {
+                        TextView tv = (TextView) v;
+                        if (tv.getText() instanceof Spannable) {
+
+                            String valuesSpan;
+                            Spanned s = (Spanned) tv.getText();
+                            int start = s.getSpanStart(this);
+                            int end = s.getSpanEnd(this);
+                            valuesSpan = s.subSequence(start, end).toString();
+                        }
+                        new MaterialDialog.Builder(ActivityGroupProfile.this).items(R.array.phone_profile_chanel)
+                            .negativeText(getString(R.string.cancel))
+                            .itemsCallback(new MaterialDialog.ListCallback() {
+                                @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                    switch (which) {
+                                        case 0:
+                                            break;
+                                        case 1:
+                                            break;
+                                        case 2:
+                                            break;
+                                    }
+                                }
+                            })
+                            .show();
+                    }
+                }, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else if (a[i].matches("\\@(\\w+)")) {
+
+                wordToSpan = new SpannableString(a[i]);
+                wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                wordToSpan.setSpan(new ClickableSpan() {
+                    @Override public void onClick(View v) {
+                        String valuesSpan;
+                        TextView tv = (TextView) v;
+                        if (tv.getText() instanceof Spannable) {
+                            Spanned s = (Spanned) tv.getText();
+                            int start = s.getSpanStart(this);
+                            int end = s.getSpanEnd(this);
+                            valuesSpan = s.subSequence(start, end).toString();
+                        }
+                    }
+                }, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else {
+                wordToSpan = new SpannableString(a[i]);
+                wordToSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            builder.append(wordToSpan).append(" ");
+        }
+        txtGroupDescription.setText(builder);
     }
 
 }
