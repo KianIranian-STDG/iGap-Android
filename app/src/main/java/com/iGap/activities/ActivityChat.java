@@ -409,7 +409,7 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void resendMessageNeedsUpload(RealmRoomMessage message) {
-                new UploadTask().execute(message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getRoomId(), message.getMessage());
+                new UploadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getRoomId(), message.getMessage());
             }
 
             @Override
@@ -1069,12 +1069,12 @@ public class ActivityChat extends ActivityEnhanced
             public void onChatDeleteMessage(long deleteVersion, final long messageId, long roomId, ProtoResponse.Response response) {
                 if (response.getId().isEmpty()) { // another account deleted this message
 
-                    Realm realm = Realm.getDefaultInstance();
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                    if (roomMessage != null) {
-                        roomMessage.setDeleted(true);
-                    }
-                    realm.close();
+                    //Realm realm = Realm.getDefaultInstance();
+                    //RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                    //if (roomMessage != null) {
+                    //    roomMessage.setDeleted(true);
+                    //}
+                    //realm.close();
 
                     // if deleted message is for current room clear from adapter
                     if (roomId == mRoomId) {
@@ -3437,7 +3437,8 @@ public class ActivityChat extends ActivityEnhanced
                 }
 
                 if (finalFilePath != null && finalMessageType != CONTACT) {
-                    new UploadTask().execute(finalFilePath, finalMessageId, finalMessageType, mRoomId, getWrittenMessage());
+                    Log.i("ZZZ", "UploadTask 1");
+                    new UploadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, finalFilePath, finalMessageId, finalMessageType, mRoomId, getWrittenMessage());
                 } else {
                     ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
                     if (finalMessageType == CONTACT) {
@@ -4320,7 +4321,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        new UploadTask().execute(savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, mRoomId, getWrittenMessage());
+        new UploadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, mRoomId, getWrittenMessage());
 
         StructMessageInfo messageInfo;
 
@@ -4537,14 +4538,18 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onUploadStarted(final FileUploadStructure struct) {
+        Log.i("ZZZ", "onUploadStarted UploadTask 5");
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
         if (roomMessage != null) {
             AbstractMessage message = mAdapter.getItemByFileIdentity(struct.messageId);
             // message doesn't exists
             if (message == null) {
+                Log.i("ZZZ", "onUploadStarted UploadTask 6");
                 switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+                Log.i("ZZZ", "onUploadStarted UploadTask 7");
                 if (!G.userLogin) {
+                    Log.i("ZZZ", "onUploadStarted UploadTask 8A");
                     G.handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -4553,6 +4558,7 @@ public class ActivityChat extends ActivityEnhanced
                     }, 200);
                 }
             } else {
+                Log.i("ZZZ", "user is login onUploadStarted UploadTask 8B");
                 // message already exists, happens when re-upload an attachment
             }
         }
@@ -5264,12 +5270,13 @@ public class ActivityChat extends ActivityEnhanced
                 String fileName = file.getName();
                 long fileSize = file.length();
                 Log.i("TTT", "fileSize test : " + fileSize);
+                Log.i("ZZZ", "UploadTask 2");
                 FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, roomId);
                 fileUploadStructure.openFile(filePath);
                 fileUploadStructure.text = messageText;
 
                 byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
-
+                Log.i("ZZZ", "UploadTask 3");
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;
@@ -5286,7 +5293,7 @@ public class ActivityChat extends ActivityEnhanced
             if (result != null) {
                 if (MessagesAdapter.uploading != null) {
                     MessagesAdapter.uploading.put(result.messageId, 0);
-
+                    Log.i("ZZZ", "UploadTask 4");
                     G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
                     HelperSetAction.setActionFiles(mRoomIdStatic, result.messageId, getAction(result.messageType), chatTypeStatic);
                 }
