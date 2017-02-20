@@ -93,11 +93,11 @@ public class GroupSendMessageResponse extends MessageHandler {
                     if (room.getLastMessage() != null) {
                         if (room.getLastMessage().getMessageId() <= roomMessage.getMessageId()) {
                             room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId()));
-                            room.setUpdatedTime(roomMessage.getUpdateTime());
+                            //room.setUpdatedTime(roomMessage.getUpdateTime());
                         }
                     } else {
                         room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId()));
-                        room.setUpdatedTime(roomMessage.getUpdateTime());
+                        //room.setUpdatedTime(roomMessage.getUpdateTime());
                     }
                 }
             }

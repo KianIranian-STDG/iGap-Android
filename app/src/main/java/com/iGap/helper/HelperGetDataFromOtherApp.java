@@ -73,7 +73,8 @@ public class HelperGetDataFromOtherApp {
 
         String action = intent.getAction();
         String type = intent.getType();
-        Log.i("ZZZ", "type : " + type);
+        Log.i("SSS", "type : " + type);
+        Log.i("SSS", "checkData 1");
         if (action == null || type == null) return;
 
         if (Intent.ACTION_SEND.equals(action)) {
@@ -115,7 +116,7 @@ public class HelperGetDataFromOtherApp {
     //*****************************************************************************************************
 
     private void SetOutPutSingleFile(FileType type) {
-
+        Log.i("SSS", "SetOutPutSingleFile 2");
         Uri fileAddressUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
         if (fileAddressUri != null) {
             hasSharedData = true;

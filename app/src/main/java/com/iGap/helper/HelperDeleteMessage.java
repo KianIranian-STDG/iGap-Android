@@ -5,7 +5,8 @@ import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineDelete;
-
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
 
 public final class HelperDeleteMessage {
@@ -21,6 +22,18 @@ public final class HelperDeleteMessage {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+
+                /**
+                 * if another account deleted this message set deleted true
+                 * otherwise before this state was set
+                 */
+                if (response.getId().isEmpty()) {
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                    if (roomMessage != null) {
+                        roomMessage.setDeleted(true);
+                    }
+                }
+
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.setDeleteVersion(deleteVersion);

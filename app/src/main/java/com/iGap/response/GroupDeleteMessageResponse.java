@@ -5,6 +5,8 @@ import com.iGap.proto.ProtoGroupDeleteMessage;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineDelete;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
 
 public class GroupDeleteMessageResponse extends MessageHandler {
@@ -29,9 +31,22 @@ public class GroupDeleteMessageResponse extends MessageHandler {
         final ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder groupDeleteMessage = (ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
+
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+
+                /**
+                 * if another account deleted this message set deleted true
+                 * otherwise before this state was set
+                 */
+                if (groupDeleteMessage.getResponse().getId().isEmpty()) {
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, groupDeleteMessage.getMessageId()).findFirst();
+                    if (roomMessage != null) {
+                        roomMessage.setDeleted(true);
+                    }
+                }
+
                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, groupDeleteMessage.getRoomId()).findFirst();
                 if (realmClientCondition != null) {
                     realmClientCondition.setDeleteVersion(groupDeleteMessage.getDeleteVersion());

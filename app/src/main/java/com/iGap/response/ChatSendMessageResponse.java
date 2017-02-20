@@ -91,11 +91,11 @@ public class ChatSendMessageResponse extends MessageHandler {
                     if (room.getLastMessage() != null) {
                         if (room.getLastMessage().getMessageId() <= roomMessage.getMessageId()) {
                             room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId()));
-                            room.setUpdatedTime(roomMessage.getUpdateTime());
+                            //room.setUpdatedTime(roomMessage.getUpdateTime());
                         }
                     } else {
                         room.setLastMessage(RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId()));
-                        room.setUpdatedTime(roomMessage.getUpdateTime());
+                        //room.setUpdatedTime(roomMessage.getUpdateTime());
                     }
                 }
             }

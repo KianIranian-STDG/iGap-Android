@@ -1217,7 +1217,6 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
-
         if (prgWaiting != null) prgWaiting.setVisibility(View.GONE);
 
         long identifier = SUID.id().get();
@@ -1226,114 +1225,90 @@ public class ActivityChat extends ActivityEnhanced
             if (!messageInfo.isTimeOrLogMessage()) {
                 switch (messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType) {
                     case TEXT:
-                        //if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        //}
                         break;
                     case IMAGE:
-                        // if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        //}
                         break;
                     case IMAGE_TEXT:
-                        //if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        // }
                         break;
                     case VIDEO:
-                        //  if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        //  }
                         break;
                     case VIDEO_TEXT:
-                        // if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        // }
                         break;
                     case LOCATION:
-                        // if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        //  }
                         break;
                     case FILE:
                     case FILE_TEXT:
-                        //  if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        //  }
                         break;
                     case VOICE:
-                        //  if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        //  }
                         break;
                     case AUDIO:
                     case AUDIO_TEXT:
-                        // if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        //  }
                         break;
                     case CONTACT:
-                        // if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        // }
                         break;
                     case GIF:
-                        // if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        // }
                         break;
                     case GIF_TEXT:
-                        // if (chatType != CHANNEL) {
                         if (!addTop) {
                             mAdapter.add(new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(0, new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                        // }
                         break;
                     case LOG:
                         if (!addTop) {
@@ -2051,10 +2026,7 @@ public class ActivityChat extends ActivityEnhanced
                                     }
                                 }
                             });
-
-
                         }
-
                         mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(SUID.id().get()));
 
                         realm.close();
@@ -2261,7 +2233,6 @@ public class ActivityChat extends ActivityEnhanced
             unreadMessage.setUserId(-1);
             unreadMessage.setMessage(unreadMessageCount + " " + getString(R.string.unread_message));
             unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-
             mAdapter.add(unreadPosition + 1, new UnreadMessage(this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
 
             LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -2454,54 +2425,65 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void insertShearedData() {
-        if (HelperGetDataFromOtherApp.hasSharedData) {
+        /**
+         * run this method with delay , because client get local message with delay
+         * for show messages with async state and before run getLocalMessage this shared
+         * item added to realm and view, and after that getLocalMessage called and new item
+         * got from realm and add to view again but in this time from getLocalMessage method
+         */
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (HelperGetDataFromOtherApp.hasSharedData) {
 
-            HelperGetDataFromOtherApp.hasSharedData = false;
-            if (messageType == HelperGetDataFromOtherApp.FileType.message) {
+                    HelperGetDataFromOtherApp.hasSharedData = false;
+                    if (messageType == HelperGetDataFromOtherApp.FileType.message) {
 
-                String message = HelperGetDataFromOtherApp.message;
-                edtChat.setText(message);
-                imvSendButton.performClick();
+                        String message = HelperGetDataFromOtherApp.message;
+                        edtChat.setText(message);
+                        imvSendButton.performClick();
 
-            } else if (messageType == HelperGetDataFromOtherApp.FileType.image) {
+                    } else if (messageType == HelperGetDataFromOtherApp.FileType.image) {
 
-                for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                    sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                }
-
-            } else if (messageType == HelperGetDataFromOtherApp.FileType.video) {
-
-                for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                    sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                }
-
-            } else if (messageType == HelperGetDataFromOtherApp.FileType.audio) {
-
-                for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                    sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                }
-
-            } else if (messageType == HelperGetDataFromOtherApp.FileType.file) {
-
-                for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-
-                    if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
-                        HelperGetDataFromOtherApp.FileType fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
-                        if (fileType == HelperGetDataFromOtherApp.FileType.image) {
+                        for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
                             sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                        } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
+                        }
+
+                    } else if (messageType == HelperGetDataFromOtherApp.FileType.video) {
+
+                        for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
                             sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                        } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
+                        }
+
+                    } else if (messageType == HelperGetDataFromOtherApp.FileType.audio) {
+
+                        for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
                             sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                        } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
-                            sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                        }
+
+                    } else if (messageType == HelperGetDataFromOtherApp.FileType.file) {
+
+                        for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
+
+                            if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
+                                HelperGetDataFromOtherApp.FileType fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
+                                if (fileType == HelperGetDataFromOtherApp.FileType.image) {
+                                    sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
+                                    sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
+                                    sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
+                                    sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                }
+                            }
+
                         }
                     }
-
+                    HelperGetDataFromOtherApp.messageType = null;
                 }
             }
-            HelperGetDataFromOtherApp.messageType = null;
-        }
+        }, 300);
     }
 
     private void shearedDataToOtherProgram(StructMessageInfo messageInfo) {
@@ -3437,7 +3419,6 @@ public class ActivityChat extends ActivityEnhanced
                 }
 
                 if (finalFilePath != null && finalMessageType != CONTACT) {
-                    Log.i("ZZZ", "UploadTask 1");
                     new UploadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, finalFilePath, finalMessageId, finalMessageType, mRoomId, getWrittenMessage());
                 } else {
                     ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
@@ -4168,7 +4149,6 @@ public class ActivityChat extends ActivityEnhanced
             timeMessage.setUserId(-1);
             timeMessage.setMessage(timeString);
             timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-
             switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(timeMessage))), false);
         }
     }
@@ -4236,7 +4216,6 @@ public class ActivityChat extends ActivityEnhanced
                                         if (isNeedAddTime) {
                                             addTimeToList(SUID.id().get());
                                         }
-
                                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
                                         setBtnDownVisible();
                                     } else {
@@ -4360,7 +4339,6 @@ public class ActivityChat extends ActivityEnhanced
             structChannelExtra.signature = "";
         }
         messageInfo.channelExtra = structChannelExtra;
-
         mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo));
         realm.close();
         scrollToEnd();
@@ -4472,7 +4450,6 @@ public class ActivityChat extends ActivityEnhanced
                         if (realmRoomMessage == null || (topID.compareTo(realmRoomMessage.getMessageId() + "") <= 0 && topID.length() > 0)) {
                             continue;
                         }
-
                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), true);
                     }
 
@@ -4545,11 +4522,8 @@ public class ActivityChat extends ActivityEnhanced
             AbstractMessage message = mAdapter.getItemByFileIdentity(struct.messageId);
             // message doesn't exists
             if (message == null) {
-                Log.i("ZZZ", "onUploadStarted UploadTask 6");
                 switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
-                Log.i("ZZZ", "onUploadStarted UploadTask 7");
                 if (!G.userLogin) {
-                    Log.i("ZZZ", "onUploadStarted UploadTask 8A");
                     G.handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -4557,9 +4531,6 @@ public class ActivityChat extends ActivityEnhanced
                         }
                     }, 200);
                 }
-            } else {
-                Log.i("ZZZ", "user is login onUploadStarted UploadTask 8B");
-                // message already exists, happens when re-upload an attachment
             }
         }
         realm.close();
@@ -5269,14 +5240,11 @@ public class ActivityChat extends ActivityEnhanced
                 File file = new File(filePath);
                 String fileName = file.getName();
                 long fileSize = file.length();
-                Log.i("TTT", "fileSize test : " + fileSize);
-                Log.i("ZZZ", "UploadTask 2");
                 FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, roomId);
                 fileUploadStructure.openFile(filePath);
                 fileUploadStructure.text = messageText;
 
                 byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
-                Log.i("ZZZ", "UploadTask 3");
                 fileUploadStructure.setFileHash(fileHash);
 
                 return fileUploadStructure;
@@ -5293,7 +5261,6 @@ public class ActivityChat extends ActivityEnhanced
             if (result != null) {
                 if (MessagesAdapter.uploading != null) {
                     MessagesAdapter.uploading.put(result.messageId, 0);
-                    Log.i("ZZZ", "UploadTask 4");
                     G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
                     HelperSetAction.setActionFiles(mRoomIdStatic, result.messageId, getAction(result.messageType), chatTypeStatic);
                 }
