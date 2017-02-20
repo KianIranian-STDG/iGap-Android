@@ -206,7 +206,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private boolean isPopup = false;
     private ViewGroup ltLink;
     private int firstLimit = 0;
-    private int lastLimit = 4;
+    private int lastLimit = 50;
 
 
     private long startMessageId = 0;

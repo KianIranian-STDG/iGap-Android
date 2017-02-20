@@ -141,4 +141,17 @@ public class HelperMessageResponse {
         return latestMessageId;
     }
 
+    //public static long computeLastMessageId(Realm realm, long roomId) {
+    //    RealmRoomMessage realmRoomMessage = null;
+    //    long latestMessageId = 0;
+    //    RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+    //    if (realmRoomMessages.size() > 0) {
+    //        realmRoomMessage = realmRoomMessages.last();
+    //    }
+    //    if (realmRoomMessage != null) {
+    //        latestMessageId = realmRoomMessage.getMessageId();
+    //    }
+    //    return latestMessageId;
+    //}
+
 }

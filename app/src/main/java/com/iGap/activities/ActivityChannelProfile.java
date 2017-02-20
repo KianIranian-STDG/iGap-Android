@@ -185,7 +185,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private TextView txtLinkTitle;
     private boolean isPopup = false;
     private int firstLimit = 0;
-    private int lastLimit = 10;
+    private int lastLimit = 50;
 
     @Override
     protected void onResume() {

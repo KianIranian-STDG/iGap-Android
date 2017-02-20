@@ -139,6 +139,7 @@ import static com.iGap.G.context;
 import static com.iGap.G.firstTimeEnterToApp;
 import static com.iGap.G.mFirstRun;
 import static com.iGap.R.string.updating;
+import static com.iGap.realm.RealmRoomFields.UPDATED_TIME;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition {
 
@@ -1106,7 +1107,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onSuccess() {
                 List<RoomItem> roomItems = new ArrayList<>();
-                for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING)) {
+                for (RealmRoom item : realm.where(RealmRoom.class).findAllSorted(UPDATED_TIME, Sort.DESCENDING)) {
                     roomItems.add(new RoomItem().setInfo(item).withIdentifier(item.getId()));
                 }
                 mAdapter.clear();
@@ -1285,7 +1286,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll();
                 for (RealmRoom item : deletedRoomsList) {
                     Log.i("GGG", "getTitle : " + item.getTitle());
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findFirst().deleteFromRealm();
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
                     item.deleteFromRealm();
                 }
 
@@ -1295,8 +1296,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
                     if (Room.getLastMessage() != null) {
                         if (Room.getLastMessage().getUpdateTime() > 0) {
-                            if (Room.getLastMessage().getUpdateTime() != Room.getUpdatedTime()) {
-                                Room.setUpdatedTime(Room.getLastMessage().getUpdateTime());
+                            if (Room.getLastMessage().getUpdateOrCreateTime() != Room.getUpdatedTime()) {
+                                Room.setUpdatedTime(Room.getLastMessage().getUpdateOrCreateTime());
                             }
                         }
                     }
