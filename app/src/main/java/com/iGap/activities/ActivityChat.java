@@ -1435,9 +1435,10 @@ public class ActivityChat extends ActivityEnhanced
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.2);
 
         RippleView rippleMenuButton = (RippleView) findViewById(R.id.chl_ripple_menu_button);
-        rippleMenuButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
+        rippleMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
+            public void onClick(View rippleView) {
 
                 LinearLayout layoutDialog = new LinearLayout(ActivityChat.this);
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
