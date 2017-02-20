@@ -78,19 +78,19 @@
   <string name="gif_message">Gif Message</string>
   <string name="voice_message">Voice Message</string>
   <string name="typing">typing</string>
-  <string name="sending_image">sending Image</string>
-  <string name="capturing_image">capturing Image</string>
-  <string name="sending_video">sending Video</string>
-  <string name="capturing_video">capturing Video</string>
-  <string name="sending_audio">sending Audio</string>
-  <string name="recording_voice">recording Voice</string>
-  <string name="sending_voice">sending Voice</string>
-  <string name="sending_document">sending Document</string>
-  <string name="sending_gif">sending Gif</string>
-  <string name="sending_file">sending File</string>
+  <string name="sending_image">Sending image</string>
+  <string name="capturing_image">Capturing image</string>
+  <string name="sending_video">Sending Video</string>
+  <string name="capturing_video">Capturing Video</string>
+  <string name="sending_audio">Sending Audio</string>
+  <string name="recording_voice">Recording Voice</string>
+  <string name="sending_voice">Sending Voice</string>
+  <string name="sending_document">Sending Document</string>
+  <string name="sending_gif">Sending Gif</string>
+  <string name="sending_file">Sending File</string>
   <string name="sending_location">Sending Location</string>
-  <string name="choosing_contact">choosing Contact</string>
-  <string name="painting">painting</string>
+  <string name="choosing_contact">Choosing Contact</string>
+  <string name="painting">Painting</string>
 
   <!-- Action Box -->
   <string name="log_out">Logout</string>
@@ -146,19 +146,19 @@
   <string formatted="false" name="video_duration">%s (%s)</string>
 
   <!-- setting -->
-  <string name="st_Info">Info</string>
+  <string name="st_Info">Account info</string>
   <string name="st_Language">Language</string>
   <string name="st_titleToolbar">Settings</string>
-  <string name="st_title_general">General</string>
+  <string name="st_title_general">General Setting</string>
   <string name="st_username">Username</string>
   <string name="st_nickname">Nickname</string>
   <string name="st_contactName">Contact Name</string>
   <string name="st_phoneNumber">Phone Number</string>
-  <string name="st_title_info">Info</string>
+  <string name="st_title_info">Account info</string>
   <string name="st_title_notification_sounds">Notifications and Sounds</string>
   <string name="st_title_Clear_Cache">Clear Cache</string>
   <string name="st_title_Privacy_Security">Privacy and Security</string>
-  <string name="st_title_message">Message</string>
+  <string name="st_title_message">Room Message</string>
   <string name="st_title_message_textSize">Messages Text Size</string>
   <string name="st_stickers">Stickers and Picture</string>
   <string name="st_chatBackground">Chat Background</string>
@@ -166,13 +166,13 @@
   <string name="st_inApp_Browser">In-App browser</string>
   <string name="st_crop">Crop and Resize</string>
   <string name="st_send_by_enter">Send by pressing Enter Key</string>
-  <string name="st_title_Media">Media</string>
-  <string name="st_auto_download_data">auto download (cellular data)</string>
-  <string name="st_auto_download_wifi">auto download (Wi-Fi)</string>
-  <string name="st_auto_download_roaming">auto download (roaming)</string>
+  <string name="st_title_Media">Multi Media</string>
+  <string name="st_auto_download_data">Auto download (Cellular data)</string>
+  <string name="st_auto_download_wifi">Auto download (Wi-Fi)</string>
+  <string name="st_auto_download_roaming">Auto download (Roaming)</string>
   <string name="st_auto_gif">Auto Play GIFs</string>
   <string name="st_save_to_gallery">Save to Gallery</string>
-  <string name="st_title_support">Support</string>
+  <string name="st_title_support">iGap Support</string>
   <string name="st_ask_question">Ask a Question</string>
   <string name="st_About_iGap">About iGap</string>
   <string name="st_privacy_policy">Privacy Policy</string>
@@ -773,9 +773,9 @@
   <string name="am">AM</string>
   <string name="message_selected">Message Selected</string>
   <string name="messages_selected">Messages Selected</string>
-  <string name="forward_message">forward message</string>
+  <string name="forward_message">Forward message</string>
   <string name="file_not_download_yet">File Not Downloaded Yet</string>
-  <string name="navigation_drawer_open">open</string>
+  <string name="navigation_drawer_open">Open</string>
   <string name="navigation_drawer_close">close</string>
   <string name="chat_with_yourself">My Cloud</string>
   <string name="can_not_connent_to_server">Can Not Connect To Server.</string>
