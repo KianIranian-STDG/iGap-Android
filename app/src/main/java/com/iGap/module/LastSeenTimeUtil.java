@@ -76,7 +76,7 @@ public class LastSeenTimeUtil {
                     time = HelperCalander.getClocktime(beforeMillis * DateUtils.SECOND_IN_MILLIS, ltr);
 
                     Calendar date = Calendar.getInstance();
-                    date.getInstance().setTimeInMillis(beforeMillis * DateUtils.SECOND_IN_MILLIS);
+                    date.setTimeInMillis(beforeMillis * DateUtils.SECOND_IN_MILLIS);
 
                     if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) != date.get(Calendar.DAY_OF_YEAR)) {
                         time = G.context.getResources().getString(R.string.yesterday) + " " + time;

@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import android.os.Handler;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserInfo;
@@ -27,13 +28,13 @@ public class UserInfoResponse extends MessageHandler {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+
 
                         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId()).findFirst();
                         if (realmRegisteredInfo == null) {
@@ -53,6 +54,9 @@ public class UserInfoResponse extends MessageHandler {
                         realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
                         RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar(), true);
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
 
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         if (realmUserInfo != null && (builder.getUser().getId() == realmUserInfo.getUserId())) {
@@ -72,6 +76,12 @@ public class UserInfoResponse extends MessageHandler {
                         if (G.onUserInfoForAvatar != null) {
                             G.onUserInfoForAvatar.onUserInfoForAvatar(builder.getUser());
                         }
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
                     }
                 });
             }

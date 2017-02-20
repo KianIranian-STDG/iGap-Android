@@ -512,100 +512,109 @@ public class HelperUrl {
             return;
         }
 
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
-
-                RealmRoom realmRoom = RealmRoom.putOrUpdate(room);
-                realmRoom.setDeleted(true);
-            }
-        });
-
-
-
-
-        realm.close();
-
-        String title = G.context.getString(R.string.do_you_want_to_join_to_this);
-        String memberNumber = "";
-        final CircleImageView[] imageView = new CircleImageView[1];
-
-        switch (room.getType()) {
-            case CHANNEL:
-                title += G.context.getString(R.string.channel);
-                memberNumber = room.getChannelRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member);
-                break;
-            case GROUP:
-                title += G.context.getString(R.string.group);
-                memberNumber = room.getGroupRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member);
-                break;
-        }
-
-        final String finalMemberNumber = memberNumber;
-        final String finalTitle = title;
-
-        G.currentActivity.runOnUiThread(new Runnable() {
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
             @Override public void run() {
+                final Realm realm = Realm.getDefaultInstance();
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle)
-                    .customView(R.layout.dialog_alert_join, true).positiveText(R.string.join)
-                    .cancelable(false)
-                    .negativeText(android.R.string.cancel)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
 
-                            joinToRoom(token, room);
+                        RealmRoom realmRoom = RealmRoom.putOrUpdate(room);
+                        realmRoom.setDeleted(true);
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
+
+                        String title = G.context.getString(R.string.do_you_want_to_join_to_this);
+                        String memberNumber = "";
+                        final CircleImageView[] imageView = new CircleImageView[1];
+
+                        switch (room.getType()) {
+                            case CHANNEL:
+                                title += G.context.getString(R.string.channel);
+                                memberNumber = room.getChannelRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member);
+                                break;
+                            case GROUP:
+                                title += G.context.getString(R.string.group);
+                                memberNumber = room.getGroupRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member);
+                                break;
                         }
-                    })
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            final Realm realm = Realm.getDefaultInstance();
+                        final String finalMemberNumber = memberNumber;
+                        final String finalTitle = title;
 
-                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+                        G.currentActivity.runOnUiThread(new Runnable() {
+                            @Override public void run() {
 
-                            if (realmRoom != null) {
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
-                                        realmRoom.deleteFromRealm();
+                                final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle)
+                                    .customView(R.layout.dialog_alert_join, true)
+                                    .positiveText(R.string.join)
+                                    .cancelable(false)
+                                    .negativeText(android.R.string.cancel)
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                            joinToRoom(token, room);
+                                        }
+                                    })
+                                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                            final Realm realm = Realm.getDefaultInstance();
+
+                                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+
+                                            if (realmRoom != null) {
+                                                realm.executeTransaction(new Realm.Transaction() {
+                                                    @Override public void execute(Realm realm) {
+                                                        realmRoom.deleteFromRealm();
+                                                    }
+                                                });
+                                            }
+
+                                            realm.close();
+                                        }
+                                    })
+                                    .build();
+
+                                imageView[0] = (CircleImageView) dialog.findViewById(R.id.daj_img_room_picture);
+
+                                TextView txtRoomName = (TextView) dialog.findViewById(R.id.daj_txt_room_name);
+                                txtRoomName.setText(room.getTitle());
+
+                                TextView txtMemeberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
+                                txtMemeberNumber.setText(finalMemberNumber);
+
+                                HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+                                    @Override public void onAvatarGet(final String avatarPath, long roomId) {
+                                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
+                                    }
+
+                                    @Override public void onShowInitials(String initials, String color) {
+                                        imageView[0].setImageBitmap(
+                                            HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                                     }
                                 });
-                            }
+                                dialog.show();
 
-                            realm.close();
-                        }
-                    })
-                    .build();
-
-                imageView[0] = (CircleImageView) dialog.findViewById(R.id.daj_img_room_picture);
-
-                TextView txtRoomName = (TextView) dialog.findViewById(R.id.daj_txt_room_name);
-                txtRoomName.setText(room.getTitle());
-
-                TextView txtMemeberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
-                txtMemeberNumber.setText(finalMemberNumber);
-
-                G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
-                        HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
-                            @Override public void onAvatarGet(final String avatarPath, long roomId) {
-                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
-                            }
-
-                            @Override public void onShowInitials(String initials, String color) {
-                                imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                             }
                         });
+
+                        realm.close();
                     }
-                }, 400);
-
-
-
-                dialog.show();
-
-
-
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
             }
         });
+
+
+
+
+
+
     }
 
     private static void joinToRoom(String token, final ProtoGlobal.Room room) {
