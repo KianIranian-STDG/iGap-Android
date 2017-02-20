@@ -865,6 +865,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
 
         if (text.length() == 0) {
+
+            countOFImage = countOFVIDEO = countOFAUDIO = countOFVOICE = countOFGIF = countOFFILE = countOFLink = 0;
+
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
