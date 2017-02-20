@@ -963,7 +963,7 @@ public class ActivityChat extends ActivityEnhanced
                         } else {
                             if (userStatus != null) {
                                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true));
+                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
                                 } else {
                                     txtLastSeen.setText(userStatus);
                                 }
@@ -2251,7 +2251,7 @@ public class ActivityChat extends ActivityEnhanced
         } else {
             if (status != null) {
                 if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true));
+                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true, false));
                 } else {
                     txtLastSeen.setText(status);
                 }
@@ -5180,7 +5180,7 @@ public class ActivityChat extends ActivityEnhanced
                         } else {
                             if (userStatus != null) {
                                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true));
+                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
                                 } else {
                                     txtLastSeen.setText(userStatus);
                                 }

@@ -30,9 +30,21 @@ public class LastSeenTimeUtil {
      * @param lastSeen time in second state(not millis)
      * @param update if set true time updating after each Config.LAST_SEEN_DELAY_CHECKING time and send callback to onLastSeenUpdateTiming
      */
+    public static String computeTime(long userId, long lastSeen, boolean update, boolean ltr) {
+        if (timeOut(lastSeen * DateUtils.SECOND_IN_MILLIS)) {
+            return computeDays(lastSeen, ltr);
+        } else {
+            if (update) {
+                hashMapLastSeen.put(userId, lastSeen);
+                updateLastSeenTime();
+            }
+            return getMinute(lastSeen);
+        }
+    }
+
     public static String computeTime(long userId, long lastSeen, boolean update) {
         if (timeOut(lastSeen * DateUtils.SECOND_IN_MILLIS)) {
-            return computeDays(lastSeen);
+            return computeDays(lastSeen, true);
         } else {
             if (update) {
                 hashMapLastSeen.put(userId, lastSeen);
@@ -49,10 +61,10 @@ public class LastSeenTimeUtil {
      * @return exactly time if is lower than one days otherwise return days
      */
 
-    private static String computeDays(long beforeMillis) {
+    private static String computeDays(long beforeMillis, boolean ltr) {
 
         String time = "";
-        String exactlyTime = " " + G.context.getResources().getString(R.string.at) + " " + HelperCalander.getClocktime(beforeMillis * DateUtils.SECOND_IN_MILLIS, false);
+        String exactlyTime = " " + G.context.getResources().getString(R.string.at) + " " + HelperCalander.getClocktime(beforeMillis * DateUtils.SECOND_IN_MILLIS, ltr);
 
 
 
@@ -61,7 +73,7 @@ public class LastSeenTimeUtil {
         if (days <= 7) {
             switch (days) {
                 case 0:
-                    time = HelperCalander.getClocktime(beforeMillis * DateUtils.SECOND_IN_MILLIS, false);
+                    time = HelperCalander.getClocktime(beforeMillis * DateUtils.SECOND_IN_MILLIS, ltr);
 
                     Calendar date = Calendar.getInstance();
                     date.getInstance().setTimeInMillis(beforeMillis * DateUtils.SECOND_IN_MILLIS);
@@ -132,7 +144,7 @@ public class LastSeenTimeUtil {
                     String showLastSeen;
                     if (timeOut(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS)) {
                         Log.i("TTT", "updateLastSeenTime timeout 2");
-                        showLastSeen = computeDays(realmRegisteredInfo.getLastSeen());
+                        showLastSeen = computeDays(realmRegisteredInfo.getLastSeen(), true);
                         userIdList.add(userId);
                     } else {
                         Log.i("TTT", "updateLastSeenTime getMinute 3");

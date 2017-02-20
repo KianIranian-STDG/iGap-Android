@@ -247,7 +247,7 @@ public class HelperCalander {
 
     }
 
-    public static String getClocktime(Long timeinMili, boolean rightDirecrion) {
+    public static String getClocktime(Long timeinMili, boolean ltr) {
 
         String result;
 
@@ -255,13 +255,11 @@ public class HelperCalander {
             result = TimeUtils.toLocal(timeinMili, "h:mm a");
             String[] _date = result.split(" ");
             if (_date.length > 1) {
-
-                if (rightDirecrion) {
+                if (ltr) {
                     result = _date[0] + " " + (_date[1].toLowerCase().equals("pm") ? G.context.getString(R.string.pm) : G.context.getString(R.string.am));
                 } else {
                     result = (_date[1].toLowerCase().equals("pm") ? G.context.getString(R.string.pm) : G.context.getString(R.string.am)) + " " + _date[0];
                 }
-
 
             }
         } else {
