@@ -52,7 +52,7 @@ public class LastSeenTimeUtil {
     private static String computeDays(long beforeMillis) {
 
         String time = "";
-        String exactlyTime = " " + G.context.getResources().getString(R.string.at) + " " + HelperCalander.getClocktime(beforeMillis * DateUtils.SECOND_IN_MILLIS);
+        String exactlyTime = " " + G.context.getResources().getString(R.string.at) + " " + HelperCalander.getClocktime(beforeMillis * DateUtils.SECOND_IN_MILLIS, false);
 
 
 
@@ -61,7 +61,7 @@ public class LastSeenTimeUtil {
         if (days <= 7) {
             switch (days) {
                 case 0:
-                    time = HelperCalander.getClocktime(beforeMillis * DateUtils.SECOND_IN_MILLIS);
+                    time = HelperCalander.getClocktime(beforeMillis * DateUtils.SECOND_IN_MILLIS, false);
 
                     Calendar date = Calendar.getInstance();
                     date.getInstance().setTimeInMillis(beforeMillis * DateUtils.SECOND_IN_MILLIS);
@@ -102,6 +102,12 @@ public class LastSeenTimeUtil {
 
 
         }
+
+        if (HelperCalander.isLanguagePersian) {
+            time = HelperCalander.convertToUnicodeFarsiNumber(time);
+        }
+
+
         return time;
     }
 
@@ -189,6 +195,12 @@ public class LastSeenTimeUtil {
             return "*"+G.context.getResources().getString(R.string.last_seen_recently);
         }*/
 
-        return TimeUnit.MILLISECONDS.toMinutes(difference) + " " + G.context.getResources().getString(R.string.minute_ago);
+        String str = TimeUnit.MILLISECONDS.toMinutes(difference) + " " + G.context.getResources().getString(R.string.minute_ago);
+
+        if (HelperCalander.isLanguagePersian) {
+            str = HelperCalander.convertToUnicodeFarsiNumber(str);
+        }
+
+        return str;
     }
 }

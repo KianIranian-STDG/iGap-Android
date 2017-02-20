@@ -182,7 +182,8 @@ public class ActivityChatBackground extends ActivityEnhanced {
                 RealmWallpaper.updateField(null, filePath);
 
                 fillList(false);
-                rcvContent.setAdapter(new AdapterChatBackground(wList));
+
+                adapterChatBackgroundSetting.notifyItemInserted(1);
 
             }
 
@@ -195,10 +196,15 @@ public class ActivityChatBackground extends ActivityEnhanced {
             @Override public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
 
                 RealmWallpaper.updateField(list, "");
-
                 fillList(false);
 
-                adapterChatBackgroundSetting.notifyDataSetChanged();
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        adapterChatBackgroundSetting.notifyDataSetChanged();
+                    }
+                });
+
+
             }
         };
 
@@ -212,7 +218,9 @@ public class ActivityChatBackground extends ActivityEnhanced {
 
     private void fillList(boolean getInfoFromServer) {
 
-        wList = new ArrayList<>();
+        if (wList == null) wList = new ArrayList<>();
+
+        wList.clear();
 
         //add item 0 add new background from local
         StructWallpaper sw = new StructWallpaper();

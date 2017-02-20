@@ -77,7 +77,7 @@ public class RealmWallpaper extends RealmObject {
                         lockalList.add(lockaPath);
                         item.setLocalList(lockalList);
                     } else if (lockalList.indexOf(lockaPath) == -1) {
-                        lockalList.add(lockaPath);
+                        lockalList.add(0, lockaPath);
                         item.setLocalList(lockalList);
                     }
                 }

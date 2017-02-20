@@ -559,7 +559,19 @@ public class HelperUrl {
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            //do something here
+                            final Realm realm = Realm.getDefaultInstance();
+
+                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+
+                            if (realmRoom != null) {
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override public void execute(Realm realm) {
+                                        realmRoom.deleteFromRealm();
+                                    }
+                                });
+                            }
+
+                            realm.close();
                         }
                     })
                     .build();
@@ -572,15 +584,21 @@ public class HelperUrl {
                 TextView txtMemeberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
                 txtMemeberNumber.setText(finalMemberNumber);
 
-                HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
-                    @Override public void onAvatarGet(final String avatarPath, long roomId) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
-                    }
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+                        HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+                            @Override public void onAvatarGet(final String avatarPath, long roomId) {
+                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
+                            }
 
-                    @Override public void onShowInitials(String initials, String color) {
-                        imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            @Override public void onShowInitials(String initials, String color) {
+                                imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            }
+                        });
                     }
-                });
+                }, 400);
+
+
 
                 dialog.show();
 

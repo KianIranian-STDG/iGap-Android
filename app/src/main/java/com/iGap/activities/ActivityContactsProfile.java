@@ -111,6 +111,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private boolean isBlockUser = false;
     private Realm mRealm;
     RealmRegisteredInfo rrg;
+    private long sheardId = -2;
+
 
     TextView txtCountOfShearedMedia;
 
@@ -147,8 +149,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     @Override
     protected void onResume() {
+        super.onResume();
 
-        ActivityShearedMedia.getCountOfSharedMedia(roomId, txtCountOfShearedMedia.getText().toString(), new OnComplete() {
+        ActivityShearedMedia.getCountOfSharedMedia(sheardId, txtCountOfShearedMedia.getText().toString(), new OnComplete() {
             @Override
             public void complete(boolean result, final String messageOne, String MessageTow) {
                 txtCountOfShearedMedia.post(new Runnable() {
@@ -165,7 +168,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         });
 
-        super.onResume();
+
     }
 
     @Override
@@ -197,6 +200,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         userId = extras.getLong("peerId");
         roomId = extras.getLong("RoomId");
         enterFrom = extras.getString("enterFrom");
+
+        if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            if (realmRoom != null) {
+                sheardId = realmRoom.getId();
+            }
+        } else {
+            sheardId = roomId;
+        }
 
         rrg = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
@@ -656,7 +668,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             public void onClick(View view) {
 
                 Intent intent = new Intent(ActivityContactsProfile.this, ActivityShearedMedia.class);
-                intent.putExtra("RoomID", roomId);
+                intent.putExtra("RoomID", sheardId);
                 startActivity(intent);
             }
         });

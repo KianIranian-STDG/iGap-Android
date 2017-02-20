@@ -203,7 +203,7 @@ public class HelperCalander {
 
         if (current.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR) && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
 
-            output = HelperCalander.getClocktime(time);
+            output = HelperCalander.getClocktime(time, true);
 
 
         } else if (current.get(Calendar.DAY_OF_YEAR) < (date.get(Calendar.DAY_OF_YEAR) + 7)) {
@@ -247,7 +247,7 @@ public class HelperCalander {
 
     }
 
-    public static String getClocktime(Long timeinMili) {
+    public static String getClocktime(Long timeinMili, boolean rightDirecrion) {
 
         String result;
 
@@ -255,7 +255,14 @@ public class HelperCalander {
             result = TimeUtils.toLocal(timeinMili, "h:mm a");
             String[] _date = result.split(" ");
             if (_date.length > 1) {
-                result = _date[0] + " " + (_date[1].toLowerCase().equals("pm") ? G.context.getString(R.string.pm) : G.context.getString(R.string.am));
+
+                if (rightDirecrion) {
+                    result = _date[0] + " " + (_date[1].toLowerCase().equals("pm") ? G.context.getString(R.string.pm) : G.context.getString(R.string.am));
+                } else {
+                    result = (_date[1].toLowerCase().equals("pm") ? G.context.getString(R.string.pm) : G.context.getString(R.string.am)) + " " + _date[0];
+                }
+
+
             }
         } else {
             result = TimeUtils.toLocal(timeinMili, "h:mm a");

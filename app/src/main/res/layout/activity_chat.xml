@@ -21,7 +21,7 @@
         <com.iGap.module.MyAppBarLayout
             android:id="@+id/ac_appBarLayout"
             android:layout_width="match_parent"
-            android:background="@color/white"
+            android:background="@color/iGapColor"
             android:layout_height="wrap_content"
             app:popupTheme="@style/ThemeOverlay.AppCompat"
             >

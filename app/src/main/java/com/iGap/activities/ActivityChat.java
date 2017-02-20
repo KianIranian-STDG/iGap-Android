@@ -545,7 +545,7 @@ public class ActivityChat extends ActivityEnhanced
         viewMicRecorder = findViewById(R.id.layout_mic_recorde);
         prgWaiting = (ProgressBar) findViewById(R.id.chl_prgWaiting);
 
-        findViewById(R.id.toolbarContainer).setBackgroundColor(Color.parseColor(G.appBarColor));
+        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
         findViewById(R.id.ac_green_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile, this);
@@ -584,6 +584,10 @@ public class ActivityChat extends ActivityEnhanced
                                     @Override
                                     public void run() {
                                         layoutJoin.setVisibility(View.GONE);
+                                        if (chatType == GROUP) {
+                                            viewAttachFile.setVisibility(View.VISIBLE);
+                                            isChatReadOnly = false;
+                                        }
                                     }
                                 });
 
@@ -597,15 +601,10 @@ public class ActivityChat extends ActivityEnhanced
                                             realmRoom.setDeleted(false);
                                             if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
                                                 realmRoom.setReadOnly(false);
-                                                viewAttachFile.setVisibility(View.VISIBLE);
-                                                isChatReadOnly = false;
                                             }
 
-                                            if (realmRoom.getLastMessage() != null) {
-                                                realmRoom.setUpdatedTime(realmRoom.getLastMessage().getUpdateTime());
-                                            } else {
-                                                realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
-                                            }
+                                            realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
+
                                         }
                                     }
                                 });
@@ -1433,7 +1432,7 @@ public class ActivityChat extends ActivityEnhanced
 
         imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
 
-        final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
+        final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.2);
 
         RippleView rippleMenuButton = (RippleView) findViewById(R.id.chl_ripple_menu_button);
         rippleMenuButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

@@ -1348,17 +1348,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             } else {
                                 intent = new Intent(ActivityGroupProfile.this, ActivityContactsProfile.class);
 
-                                long selectedChatRoomID = -1;
-                                Realm realm = Realm.getDefaultInstance();
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, contactItemGroupProfile.mContact.peerId).findFirst();
-
-                                if (realmRoom != null) {
-                                    selectedChatRoomID = realmRoom.getId();
-                                }
-
-
                                 intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
-                                intent.putExtra("RoomId", selectedChatRoomID);
+                                intent.putExtra("RoomId", roomId);
                                 intent.putExtra("enterFrom", GROUP.toString());
                             }
 
