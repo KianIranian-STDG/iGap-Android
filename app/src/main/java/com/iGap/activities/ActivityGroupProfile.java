@@ -2442,8 +2442,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         });
                         for (int i = 0; i < items.size(); i++) {
                             if (items.get(i).mContact.peerId == memberId) {
-                                //itemAdapter.remove(i);
-                                contacts.remove(i);// check shavad
+                                itemAdapter.remove(i);
+                                //contacts.remove(i); //TODO [Saeed Mozaffari] [2017-02-20 4:09 PM] - don't remove from contacts array list , just work with adapter items
                                 refreshListMember();
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {

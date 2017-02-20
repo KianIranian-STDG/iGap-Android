@@ -1594,8 +1594,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
                     for (int i = 0; i < items.size(); i++) {
                         if (items.get(i).mContact.peerId == memberId) {
-                            //itemAdapter.remove(i);
-                            contacts.remove(i);
+                            itemAdapter.remove(i);
+                            //contacts.remove(i);
                             refreshListMember();
                         }
                     }

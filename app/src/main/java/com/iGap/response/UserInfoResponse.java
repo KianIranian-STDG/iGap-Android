@@ -31,7 +31,7 @@ public class UserInfoResponse extends MessageHandler {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
@@ -53,12 +53,6 @@ public class UserInfoResponse extends MessageHandler {
                         realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
                         RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar(), true);
-
-
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
 
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         if (realmUserInfo != null && (builder.getUser().getId() == realmUserInfo.getUserId())) {
@@ -98,25 +92,6 @@ public class UserInfoResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
         G.onUserInfoResponse.onUserInfoError(majorCode, minorCode);
     }
-
-
-    /*public static void main(String interfaceArgument) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
-        Class<?> someInterface = Class.forName(interfaceArgument);
-
-        Object instance = Proxy.newProxyInstance(someInterface.getClassLoader(), new Class<?>[]{someInterface},
-                new InvocationHandler() {
-
-                    @Override
-                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-                        //Handle the invocations
-                        if (method.getName().equals("someMethod")) {
-                            return 1;
-                        } else return -1;
-                    }
-                });
-        Log.i("WWW", "interface : " + instance.getClass().getDeclaredMethod("someMethod", (Class<?>[]) null).invoke(instance, new Object[]{}));
-    }*/
 }
 
 
