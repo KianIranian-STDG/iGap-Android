@@ -206,6 +206,7 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+import io.github.meness.emoji.EmojiEditText;
 import io.github.meness.emoji.EmojiTextView;
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
@@ -286,6 +287,7 @@ public class ActivityChat extends ActivityEnhanced
     private LinearLayout toolbar;
     private TextView txtName;
     private TextView txtLastSeen;
+    private ViewGroup viewGroupLastSeen;
 
     private ImageView imvUserPicture;
     private RecyclerView recyclerView;
@@ -996,6 +998,10 @@ public class ActivityChat extends ActivityEnhanced
                     if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((RealmRoom.isCloudRoom(mRoomId) || (!RealmRoom.isCloudRoom(mRoomId) && realmRoom.getActionStateUserId() != userId)))) {
                         txtLastSeen.setText(realmRoom.getActionState());
                         avi.setVisibility(View.VISIBLE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
+                            //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                        }
                     } else if (chatType == CHAT) {
                         if (RealmRoom.isCloudRoom(mRoomId)) {
                             txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
@@ -1009,9 +1015,19 @@ public class ActivityChat extends ActivityEnhanced
                             }
                         }
                         avi.setVisibility(View.GONE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                            //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                        }
+
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                        }
+
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(member));
+
                     }
                     // change english number to persian number
                     if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
@@ -1150,11 +1166,17 @@ public class ActivityChat extends ActivityEnhanced
             public void complete(boolean result, String messageOne, String MessageTow) {
 
                 if (result) {
-                    //txtLastSeen.setText(messageOne + " " + getResources().getString(member));
-                    //avi.setVisibility(View.GONE);
-                    //
-                    //// change english number to persian number
-                    //if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+
+                    txtLastSeen.setText(messageOne + " " + getResources().getString(member));
+
+                    avi.setVisibility(View.GONE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                        //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                    }
+
+                    // change english number to persian number
+                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 } else {
                     clearHistory(Long.parseLong(messageOne));
                 }
@@ -1449,6 +1471,7 @@ public class ActivityChat extends ActivityEnhanced
         if (HelperCalander.isLanguagePersian) txtName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtName.getText().toString()));
 
         txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
+        viewGroupLastSeen = (ViewGroup) findViewById(R.id.chl_txt_viewGroup_seen);
 
         if (chatType == CHAT) {
 
@@ -1456,14 +1479,24 @@ public class ActivityChat extends ActivityEnhanced
         } else if (chatType == GROUP) {
 
             if (groupParticipantsCountLabel != null) {
-                txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(member));
+                txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member));
                 avi.setVisibility(View.GONE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                }
+
             }
         } else if (chatType == CHANNEL) {
 
             if (channelParticipantsCountLabel != null) {
+
                 txtLastSeen.setText(channelParticipantsCountLabel + " " + getResources().getString(member));
+
+
                 avi.setVisibility(View.GONE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
             }
         }
 
@@ -1681,7 +1714,7 @@ public class ActivityChat extends ActivityEnhanced
 
         imvSmileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_smile_button);
 
-        edtChat = (io.github.meness.emoji.EmojiEditText) findViewById(R.id.chl_edt_chat);
+        edtChat = (EmojiEditText) findViewById(R.id.chl_edt_chat);
         edtChat.requestFocus();
 
         imvSendButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_send_button);
@@ -2293,6 +2326,10 @@ public class ActivityChat extends ActivityEnhanced
         if (RealmRoom.isCloudRoom(mRoomId)) {
             txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
             avi.setVisibility(View.GONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+            }
         } else {
             if (status != null) {
                 if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -2301,6 +2338,10 @@ public class ActivityChat extends ActivityEnhanced
                     txtLastSeen.setText(status);
                 }
                 avi.setVisibility(View.GONE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                }
                 // change english number to persian number
                 if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
@@ -5219,6 +5260,10 @@ public class ActivityChat extends ActivityEnhanced
                 public void run() {
                     if (action != null) {
                         avi.setVisibility(View.VISIBLE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
+                            //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                        }
                         txtLastSeen.setText(action);
                     } else if (chatType == CHAT) {
                         if (isCloudRoom) {
@@ -5233,9 +5278,17 @@ public class ActivityChat extends ActivityEnhanced
                             }
                         }
                         avi.setVisibility(View.GONE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                            //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                        }
                         //txtLastSeen.setText(userStatus);
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                            //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                        }
                         txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(member));
                     }
 
@@ -5267,6 +5320,10 @@ public class ActivityChat extends ActivityEnhanced
                 if (chatType == CHAT && userIdR == chatPeerId && userId != userIdR) { // userId != userIdR means that , this isn't update status for own user
                     txtLastSeen.setText(showLastSeen);
                     avi.setVisibility(View.GONE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                        //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                    }
                     // change english number to persian number
                     if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }

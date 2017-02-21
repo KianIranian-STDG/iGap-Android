@@ -203,7 +203,12 @@ public class HelperCalander {
 
         if (current.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR) && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
 
-            output = HelperCalander.getClocktime(time, true);
+            if (HelperCalander.isLanguagePersian) {
+                output = "\u200F" + HelperCalander.getClocktime(time, true);
+            } else {
+                output = HelperCalander.getClocktime(time, true);
+            }
+
 
 
         } else if (current.get(Calendar.DAY_OF_YEAR) < (date.get(Calendar.DAY_OF_YEAR) + 7)) {
@@ -234,7 +239,7 @@ public class HelperCalander {
                     output = TimeUtils.toLocal(date.getTimeInMillis(), "MM dd");
                     String[] _date = output.split(" ");
                     if (_date.length > 1) {
-                        output = _date[1] + " " + convertEnglishMonthNameToPersian(Integer.parseInt(_date[0]));
+                        output = convertEnglishMonthNameToPersian(Integer.parseInt(_date[0])) + " " + _date[1];
                     }
                 } else {
                     output = TimeUtils.toLocal(date.getTimeInMillis(), "MMM dd");
@@ -256,9 +261,9 @@ public class HelperCalander {
             String[] _date = result.split(" ");
             if (_date.length > 1) {
                 if (ltr) {
-                    result = _date[0] + " " + (_date[1].toLowerCase().equals("pm") ? G.context.getString(R.string.pm) : G.context.getString(R.string.am));
+                    result = "\u200F" + _date[0] + " " + (_date[1].toLowerCase().equals("pm") ? G.context.getString(R.string.pm) : G.context.getString(R.string.am));
                 } else {
-                    result = (_date[1].toLowerCase().equals("pm") ? G.context.getString(R.string.pm) : G.context.getString(R.string.am)) + " " + _date[0];
+                    result = "\u200F" + _date[0] + " " + (_date[1].toLowerCase().equals("pm") ? G.context.getString(R.string.pm) : G.context.getString(R.string.am));
                 }
 
             }

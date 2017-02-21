@@ -64,7 +64,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
 
         if (mContact.status != null) {
             if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                String timeUser = HelperCalander.getClocktime(mContact.lastSeen * DateUtils.SECOND_IN_MILLIS, true);
+                String timeUser = HelperCalander.getClocktime(mContact.lastSeen * DateUtils.SECOND_IN_MILLIS, false);
 
                 holder.subtitle.setText(G.context.getResources().getString(R.string.last_seen_at) + " " + timeUser);
             } else {

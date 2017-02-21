@@ -117,10 +117,10 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/chl_txt_viewGroup_seen"
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
                             android:orientation="horizontal"
-                            android:layoutDirection="locale"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             >
@@ -131,7 +131,6 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="top"
                                 android:singleLine="true"
-                                android:textDirection="ltr"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/sp12"
                                 />
