@@ -1465,7 +1465,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             List<IItem> items = new ArrayList<>();
             List<RealmMember> memberList = realmRoom.getGroupRoom().getMembers().subList(currentOffset, limit);
             for (RealmMember realmMember : memberList) {
-                if (!userExistInList(realmMember.getId())) {
+                if (!userExistInList(realmMember.getPeerId())) {
                     items.add(new ContactItemGroupProfile().setContact(convertRealmToStruct(realm, realmMember)).withIdentifier(SUID.id().get()));
                 }
             }

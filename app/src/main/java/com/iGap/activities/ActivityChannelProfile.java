@@ -613,8 +613,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 }
             }
         });
-
-
     }
 
     private void showItems() {
@@ -643,7 +641,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             List<IItem> items = new ArrayList<>();
             List<RealmMember> memberList = realmRoom.getChannelRoom().getMembers().subList(currentOffset, limit);
             for (RealmMember realmMember : memberList) {
-                if (!userExistInList(realmMember.getId())) {
+                if (!userExistInList(realmMember.getPeerId())) {
                     items.add(new ContactItemGroupProfile().setContact(convertRealmToStruct(realm, realmMember)).withIdentifier(SUID.id().get()));
                 }
             }
