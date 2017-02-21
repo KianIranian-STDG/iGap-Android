@@ -1,6 +1,5 @@
 package com.iGap.response;
 
-import android.os.Handler;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserInfo;
@@ -28,13 +27,13 @@ public class UserInfoResponse extends MessageHandler {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
                 final Realm realm = Realm.getDefaultInstance();
-
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
-
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
 
                         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId()).findFirst();
                         if (realmRegisteredInfo == null) {
@@ -55,9 +54,17 @@ public class UserInfoResponse extends MessageHandler {
 
                         RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar(), true);
                     }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
+                });
 
+                /**
+                 * call this callbacks with delay for insuring that
+                 * info was set in realm
+                 * hint : don't used from executeTransactionAsync because
+                 * get error when run this async very much(about 100)
+                 */
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         if (realmUserInfo != null && (builder.getUser().getId() == realmUserInfo.getUserId())) {
                             if (G.onUserInfoMyClient != null) {
@@ -76,14 +83,8 @@ public class UserInfoResponse extends MessageHandler {
                         if (G.onUserInfoForAvatar != null) {
                             G.onUserInfoForAvatar.onUserInfoForAvatar(builder.getUser());
                         }
-
-                        realm.close();
                     }
-                }, new Realm.Transaction.OnError() {
-                    @Override public void onError(Throwable error) {
-                        realm.close();
-                    }
-                });
+                }, 1000);
             }
         });
     }

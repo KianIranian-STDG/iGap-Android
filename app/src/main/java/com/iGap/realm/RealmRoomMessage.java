@@ -157,13 +157,13 @@ import org.parceler.Parcel;
 
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
-        final RealmResults<RealmRoomMessage> realmRoomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findAll();
+        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findAll();
 
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 if (realmClientCondition != null) {
                     for (RealmRoomMessage roomMessage : realmRoomMessages) {
@@ -230,6 +230,10 @@ import org.parceler.Parcel;
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId, boolean showMessage, boolean forwardOrReply, Realm realm) {
         long messageId;
         if (forwardOrReply) {
+            /**
+             * for forward and reply set new messageId
+             * for create new message if before not exist
+             */
             messageId = input.getMessageId() * 2;
         } else {
             messageId = input.getMessageId();
@@ -251,10 +255,9 @@ import org.parceler.Parcel;
         }
 
         message.setMessage(input.getMessage());
-
         message.setHasMessageLink(HelperUrl.hasInMessageLink(input.getMessage()));
-
         message.setStatus(input.getStatus().toString());
+
         if (input.getAuthor().hasUser()) {
             message.setUserId(input.getAuthor().getUser().getUserId());
         } else {

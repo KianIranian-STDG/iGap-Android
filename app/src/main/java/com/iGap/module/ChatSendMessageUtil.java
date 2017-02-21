@@ -80,6 +80,32 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         return this;
     }
 
+    public ChatSendMessageUtil buildForward(ProtoGlobal.Room.Type roomType, long roomId, RealmRoomMessage message, long forwardRoomId, long forwardMessageId) {
+        ChatSendMessageUtil builder = newBuilder(roomType, message.getMessageType(), roomId);
+        if (message.getMessage() != null && !message.getMessage().isEmpty()) {
+            builder.message(message.getMessage());
+        }
+        if (message.getAttachment() != null && message.getAttachment().getToken() != null && !message.getAttachment().getToken().isEmpty()) {
+            builder.attachment(message.getAttachment().getToken());
+        }
+        if (message.getRoomMessageContact() != null) {
+            builder.contact(message.getRoomMessageContact().getFirstName(), message.getRoomMessageContact().getLastName(), message.getRoomMessageContact().getPhones().get(0).getString());
+        }
+        if (message.getLocation() != null) {
+            builder.location(message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
+        }
+
+        if (message.getForwardMessage() != null) {
+            builder.forwardMessage(forwardRoomId, forwardMessageId);
+        }
+        if (message.getReplyTo() != null) {
+            builder.replyMessage(message.getReplyTo().getMessageId());
+        }
+
+        builder.sendMessage(Long.toString(message.getMessageId()));
+        return this;
+    }
+
     public ChatSendMessageUtil contact(ProtoGlobal.RoomMessageContact value) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage.contact(value);
