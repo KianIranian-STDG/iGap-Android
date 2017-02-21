@@ -433,10 +433,29 @@ public class ActivityChat extends ActivityEnhanced
         updateUnreadCountRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (room != null) {
                     room.setUnreadCount(0);
                     realm.copyToRealmOrUpdate(room);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            String members = null;
+                            if (room.getType() == GROUP && room.getGroupRoom() != null) {
+                                members = room.getGroupRoom().getMembers().size() + "";
+                            } else if (room.getType() == CHANNEL && room.getGroupRoom() != null) {
+                                members = room.getChannelRoom().getMembers().size() + "";
+                            }
+                            if (members != null) {
+                                txtLastSeen.setText(members + " " + getResources().getString(member));
+                                avi.setVisibility(View.GONE);
+
+                                if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -461,11 +480,14 @@ public class ActivityChat extends ActivityEnhanced
         G.onLastSeenUpdateTiming = this;
 
         G.helperNotificationAndBadge.cancelNotification();
+
         initCallbacks();
 
         HelperNotificationAndBadge.isChatRoomNow = true;
 
-        if (MusicPlayer.mp != null) {
+        if (MusicPlayer.mp != null)
+
+        {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
 
@@ -473,13 +495,18 @@ public class ActivityChat extends ActivityEnhanced
         mAdapter.updateChengedItem(MusicPlayer.playedList);
         MusicPlayer.playedList.clear();
 
-        if (isGoingFromUserLink) {
+        if (isGoingFromUserLink)
+
+        {
             new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
         }
 
         setAvatar();
+
         initLayoutHashNavigation();
+
         showSpamBar(updateUnreadCountRealm);
+
         updateUnreadCountRealm.close();
     }
 
@@ -1111,11 +1138,11 @@ public class ActivityChat extends ActivityEnhanced
             public void complete(boolean result, String messageOne, String MessageTow) {
 
                 if (result) {
-                    txtLastSeen.setText(messageOne + " " + getResources().getString(member));
-                    avi.setVisibility(View.GONE);
-
-                    // change english number to persian number
-                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    //txtLastSeen.setText(messageOne + " " + getResources().getString(member));
+                    //avi.setVisibility(View.GONE);
+                    //
+                    //// change english number to persian number
+                    //if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 } else {
                     clearHistory(Long.parseLong(messageOne));
                 }

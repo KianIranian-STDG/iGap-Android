@@ -205,8 +205,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private TextView txtGroupLink;
     private boolean isPopup = false;
     private ViewGroup ltLink;
-    private int firstLimit = 0;
-    private int lastLimit = 50;
+    //private int firstLimit = 0;
+    //private int lastLimit = 50;
 
 
     private long startMessageId = 0;
@@ -251,7 +251,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         members = realmGroupRoom.getMembers();
         memberList = realmGroupRoom.getMembers();
         description = realmGroupRoom.getDescription();
-
         ViewGroup listMemberGroup = (ViewGroup) findViewById(R.id.agp_root_layout_group_add_member);
         listMemberGroup.setVisibility(View.VISIBLE);
         if (role == GroupChatRole.MODERATOR || role == GroupChatRole.MEMBER) {
@@ -311,6 +310,27 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         LocalBroadcastManager.getInstance(ActivityGroupProfile.this).unregisterReceiver(reciverOnGroupChangeName);
 
         super.onPause();
+    }
+
+    private void setMemberCount(final long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null && realmRoom.getGroupRoom() != null) {
+                    final String memberCount = realmRoom.getGroupRoom().getMembers().size() + "";
+                    realmRoom.getGroupRoom().setParticipantsCountLabel(memberCount);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtMemberNumber.setText(memberCount);
+                        }
+                    });
+                }
+            }
+        });
+        realm.close();
     }
 
 
@@ -640,27 +660,36 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onClick(View view) {
 
-                firstLimit = 0;
-                lastLimit += lastLimit;
 
-                int listSize = contacts.size();
+                //firstLimit = 0;
+                //lastLimit += lastLimit;
+
                 int count = items.size();
+                int listSize = contacts.size();
 
-                if (lastLimit > listSize) lastLimit = listSize;
 
-                items.clear();
-                for (int i = firstLimit; i < lastLimit; i++) {
+
+                //if (lastLimit > listSize) lastLimit = listSize;
+                //
+                //items.clear();
+                //for (int i = firstLimit; i < lastLimit; i++) {
+                //    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+                //}
+
+                for (int i = count; i < listSize && i < count + numberUploadItem; i++) {
                     items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
                 }
 
                 itemAdapter.clear();
                 itemAdapter.add(items);
 
-                if ((listSize - lastLimit) > 0) {
-                    if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
-                } else {
-                    txtMore.setVisibility(View.GONE);
-                }
+                //if ((listSize - lastLimit) > 0) {
+                //    if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
+                //} else {
+                //    txtMore.setVisibility(View.GONE);
+                //}
+
+                if (items.size() >= listSize) txtMore.setVisibility(View.GONE);
             }
         });
 
@@ -1220,7 +1249,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                     struct.color = realmRegisteredInfo.getColor();
                                     struct.lastSeen = realmRegisteredInfo.getLastSeen();
                                     struct.status = realmRegisteredInfo.getStatus();
-                                    struct.userID = userID;
+                                    struct.role = role.toString();
+                                    //struct.userID = userID;
                                 }
 
 
@@ -1348,6 +1378,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             } else {
                                 intent = new Intent(ActivityGroupProfile.this, ActivityContactsProfile.class);
 
+
                                 intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
                                 intent.putExtra("RoomId", roomId);
                                 intent.putExtra("enterFrom", GROUP.toString());
@@ -1438,26 +1469,31 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         //txtMemberNumber.setText(listSize + "");
 
-        if (listSize > lastLimit) {
-            if (txtMore != null) {
-                txtMore.setVisibility(View.VISIBLE);
+        for (int i = 0; i < listSize; i++) {
 
-                for (int i = firstLimit; i < lastLimit; i++) {
-                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-                }
-            }
-        } else {
-
-            if (txtMore != null) {
-                txtMore.setVisibility(View.GONE);
-
-                for (int i = 0; i < listSize; i++) {
-                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-                }
-            }
+            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
         }
+        //if (listSize > lastLimit) {
+        //    if (txtMore != null) {
+        //        txtMore.setVisibility(View.VISIBLE);
+        //
+        //        for (int i = firstLimit; i < lastLimit; i++) {
+        //            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+        //        }
+        //    }
+        //} else {
+        //
+        //    if (txtMore != null) {
+        //        txtMore.setVisibility(View.GONE);
+        //
+        //        for (int i = 0; i < listSize; i++) {
+        //            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+        //        }
+        //    }
+        //}
 
         //if (listSize < 4) txtMore.setVisibility(View.GONE);
+        txtMore.setVisibility(View.GONE);
 
         itemAdapter.add(items);
 
@@ -1501,7 +1537,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 s.color = realmRegisteredInfo.getColor();
                 s.lastSeen = realmRegisteredInfo.getLastSeen();
                 s.status = realmRegisteredInfo.getStatus();
-                s.userID = userID;
+                //s.userID = userID;
                 if (s.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                     contacts.add(0, s);
 
@@ -1935,36 +1971,36 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     //***********************************************************************************************************************
 
 
-    private void updateUi(ArrayList<StructContactInfo> list, Long UserId) {
-
-        StructContactInfo item = null;
-
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).peerId == UserId) {
-                item = list.get(i);
-                break;
-            }
-        }
-
-        contacts.add(item);
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                txtMemberNumber.setText(contacts.size() + "");
-                int count = items.size();
-                final int listSize = contacts.size();
-                for (int i = count; i < listSize; i++) {
-                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-                }
-                itemAdapter.clear();
-                itemAdapter.add(items);
-                //                itemAdapter.add(new ContactItemGroupProfile().setContact(contacts.get(0)).withIdentifier(100 + contacts.indexOf(contacts.get(0))));
-                txtMore.setVisibility(View.GONE);
-            }
-        });
-
-    }
+    //private void updateUi(ArrayList<StructContactInfo> list, Long UserId) {
+    //
+    //    StructContactInfo item = null;
+    //
+    //    for (int i = 0; i < list.size(); i++) {
+    //        if (list.get(i).peerId == UserId) {
+    //            item = list.get(i);
+    //            break;
+    //        }
+    //    }
+    //
+    //    contacts.add(item);
+    //
+    //    runOnUiThread(new Runnable() {
+    //        @Override
+    //        public void run() {
+    //            txtMemberNumber.setText(contacts.size() + "");
+    //            int count = items.size();
+    //            final int listSize = contacts.size();
+    //            for (int i = count; i < listSize; i++) {
+    //                items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+    //            }
+    //            itemAdapter.clear();
+    //            itemAdapter.add(items);
+    //            //                itemAdapter.add(new ContactItemGroupProfile().setContact(contacts.get(0)).withIdentifier(100 + contacts.indexOf(contacts.get(0))));
+    //            txtMore.setVisibility(View.GONE);
+    //        }
+    //    });
+    //
+    //}
 
     /**
      * add member to realm and send request to server for really added this contacts to this group
@@ -2377,13 +2413,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onGroupAddMember(final Long roomIdUser, final Long UserId) {
 
-                final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtMemberNumber.setText((items.size() + 1) + "");
-                    }
-                });
+                //final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+                //runOnUiThread(new Runnable() {
+                //    @Override
+                //    public void run() {
+                //        txtMemberNumber.setText((items.size() + 1) + "");
+                //    }
+                //});
+                setMemberCount(roomIdUser);
 
 
                 runOnUiThread(new Runnable() { //TODO [Saeed Mozaffari] [2016-11-12 5:15 PM] - get member list from group and add new member . like get member list response
@@ -2399,8 +2436,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             struct.color = realmRegistered.getColor();
                             struct.lastSeen = realmRegistered.getLastSeen();
                             struct.status = realmRegistered.getStatus();
-                            contacts.add(struct);
-                            refreshListMember();
+                            IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
+                            itemAdapter.add(item);
+                            //mollareza
+                            //contacts.add(struct);
+                            //refreshListMember();
 
                         } else {
 
@@ -2434,17 +2474,19 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     public void run() {
 
                         final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                txtMemberNumber.setText((items.size() - 1) + "");
-                            }
-                        });
+                        //runOnUiThread(new Runnable() {
+                        //    @Override
+                        //    public void run() {
+                        //        txtMemberNumber.setText((items.size() - 1) + "");
+                        //    }
+                        //});
+                        setMemberCount(roomId);
                         for (int i = 0; i < items.size(); i++) {
                             if (items.get(i).mContact.peerId == memberId) {
                                 itemAdapter.remove(i);
+                                //mollareza
                                 //contacts.remove(i); //TODO [Saeed Mozaffari] [2017-02-20 4:09 PM] - don't remove from contacts array list , just work with adapter items
-                                refreshListMember();
+                                //refreshListMember();
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
@@ -2980,26 +3022,27 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         countWaitTimer.start();
     }
 
-    private void refreshListMember() {
-
-        int listSize = contacts.size();
-
-        if (lastLimit > listSize) lastLimit = listSize;
-
-        items.clear();
-        for (int i = firstLimit; i < lastLimit; i++) {
-            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-        }
-
-        itemAdapter.clear();
-        itemAdapter.add(items);
-
-        if ((listSize - lastLimit) > 0) {
-            if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
-        } else {
-            txtMore.setVisibility(View.GONE);
-        }
-    }
+    //mollareza
+    //private void refreshListMember() {
+    //
+    //    int listSize = contacts.size();
+    //
+    //    if (lastLimit > listSize) lastLimit = listSize;
+    //
+    //    items.clear();
+    //    for (int i = firstLimit; i < lastLimit; i++) {
+    //        items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+    //    }
+    //
+    //    itemAdapter.clear();
+    //    itemAdapter.add(items);
+    //
+    //    if ((listSize - lastLimit) > 0) {
+    //        if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
+    //    } else {
+    //        txtMore.setVisibility(View.GONE);
+    //    }
+    //}
 
     private void descriptionLink() {
         SpannableString wordToSpan;
@@ -3012,7 +3055,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 wordToSpan = new SpannableString(a[i]);
                 wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 wordToSpan.setSpan(new ClickableSpan() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         TextView tv = (TextView) v;
                         if (tv.getText() instanceof Spannable) {
 
@@ -3022,21 +3066,19 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             int end = s.getSpanEnd(this);
                             valuesSpan = s.subSequence(start, end).toString();
                         }
-                        new MaterialDialog.Builder(ActivityGroupProfile.this).items(R.array.phone_profile_chanel)
-                            .negativeText(getString(R.string.cancel))
-                            .itemsCallback(new MaterialDialog.ListCallback() {
-                                @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                    switch (which) {
-                                        case 0:
-                                            break;
-                                        case 1:
-                                            break;
-                                        case 2:
-                                            break;
-                                    }
+                        new MaterialDialog.Builder(ActivityGroupProfile.this).items(R.array.phone_profile_chanel).negativeText(getString(R.string.cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                switch (which) {
+                                    case 0:
+                                        break;
+                                    case 1:
+                                        break;
+                                    case 2:
+                                        break;
                                 }
-                            })
-                            .show();
+                            }
+                        }).show();
                     }
                 }, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else if (a[i].matches("\\@(\\w+)")) {
@@ -3044,7 +3086,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 wordToSpan = new SpannableString(a[i]);
                 wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 wordToSpan.setSpan(new ClickableSpan() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         String valuesSpan;
                         TextView tv = (TextView) v;
                         if (tv.getText() instanceof Spannable) {

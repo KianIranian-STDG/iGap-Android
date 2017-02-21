@@ -5,6 +5,7 @@ import com.iGap.proto.ProtoChannelLeft;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
+import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -59,7 +60,15 @@ public class ChannelLeftResponse extends MessageHandler {
                         }
                     }
                 } else {
-                    //TODO [Saeed Mozaffari] [2017-02-19 12:34 PM] - remove from member list for this roomId (builder.getRoomId())
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+                    if (realmRoom != null && realmRoom.getChannelRoom() != null) {
+                        for (RealmMember member : realmRoom.getChannelRoom().getMembers()) {
+                            if (member.getPeerId() == builder.getMemberId()) {
+                                member.deleteFromRealm();
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         });

@@ -5,6 +5,7 @@ import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupLeft;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
+import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -62,7 +63,15 @@ public class GroupLeftResponse extends MessageHandler {
                         }
                     }
                 } else {
-                    //TODO [Saeed Mozaffari] [2017-02-19 12:34 PM] - remove from member list for this roomId (builder.getRoomId())
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    if (realmRoom != null && realmRoom.getGroupRoom() != null) {
+                        for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
+                            if (member.getPeerId() == memberId) {
+                                member.deleteFromRealm();
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         });
