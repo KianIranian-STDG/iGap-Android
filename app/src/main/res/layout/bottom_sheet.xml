@@ -51,7 +51,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             >
-          <ImageView
+          <com.iGap.module.ColorImageView
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
               android:padding="2dp"
@@ -80,7 +80,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             >
-          <ImageView
+          <com.iGap.module.ColorImageView
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
               android:padding="2dp"
@@ -109,7 +109,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             >
-          <ImageView
+          <com.iGap.module.ColorImageView
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
               android:padding="2dp"
@@ -137,7 +137,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             >
-          <ImageView
+          <com.iGap.module.ColorImageView
               android:id="@+id/imageView2"
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
@@ -168,7 +168,7 @@
             android:orientation="vertical"
             >
 
-          <ImageView
+          <com.iGap.module.ColorImageView
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
               android:padding="2dp"
@@ -208,7 +208,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             >
-          <ImageView
+          <com.iGap.module.ColorImageView
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
               android:padding="2dp"
@@ -237,7 +237,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             >
-          <ImageView
+          <com.iGap.module.ColorImageView
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
               android:padding="2dp"
@@ -267,7 +267,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             >
-          <ImageView
+          <com.iGap.module.ColorImageView
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
               android:padding="2dp"
@@ -297,7 +297,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             >
-          <ImageView
+          <com.iGap.module.ColorImageView
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
               android:padding="2dp"
@@ -326,7 +326,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             >
-          <ImageView
+          <com.iGap.module.ColorImageView
               android:id="@+id/send"
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"

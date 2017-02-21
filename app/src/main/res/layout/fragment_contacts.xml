@@ -139,10 +139,12 @@
         </com.iGap.module.MyAppBarLayout>
 
         <View
+            android:id="@+id/fc_view_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#34a49f"
             android:layout_alignTop="@+id/menu_layout_addContact"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"

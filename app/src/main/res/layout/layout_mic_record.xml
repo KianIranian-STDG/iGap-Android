@@ -78,6 +78,7 @@
 
 
                 <com.iGap.module.MaterialDesignTextView
+                    android:id="@+id/lmr_btn_mic_layout"
                     style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
                     android:layout_width="@dimen/dp68"
                     android:layout_height="@dimen/dp68"

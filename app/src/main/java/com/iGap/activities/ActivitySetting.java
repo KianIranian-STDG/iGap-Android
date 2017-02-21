@@ -151,6 +151,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private Uri uriIntent;
     private ImageView imgAppBarSelected;
     private ImageView imgNotificationColor;
+    private ImageView imgToggleBottomColor;
+    private ImageView imgSendAndAttachColor;
+    private ImageView imgHeaderTextColor;
+
+
     private long idAvatar;
     private File nameImageFile;
     private FloatingActionButton fab;
@@ -1505,6 +1510,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         final TextView txtDataShams = (TextView) findViewById(R.id.st_txt_st_toggle_dataShams);
         final ToggleButton toggleEnableDataShams = (ToggleButton) findViewById(R.id.st_toggle_dataShams);
 
+
         int checkedEnableDataShams = sharedPreferences.getInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 0);
         if (checkedEnableDataShams == 1) {
             toggleEnableDataShams.setChecked(true);
@@ -1580,6 +1586,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        //***********************
         imgAppBarSelected = (ImageView) findViewById(R.id.asn_img_title_bar_color);
         GradientDrawable bgShape = (GradientDrawable) imgAppBarSelected.getBackground();
         bgShape.setColor(Color.parseColor(G.appBarColor));
@@ -1587,16 +1594,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         TextView txtSelectAppColor = (TextView) findViewById(R.id.asn_txt_app_title_bar_color);
         txtSelectAppColor.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                showSelectAppColorDialog(true);
+                showSelectAppColorDialog(R.string.app_theme);
             }
         });
 
         imgAppBarSelected.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                showSelectAppColorDialog(true);
+                showSelectAppColorDialog(R.string.app_theme);
             }
         });
+
+        //***********************
 
         imgNotificationColor = (ImageView) findViewById(R.id.asn_img_notification_color);
         GradientDrawable bgShapeNotification = (GradientDrawable) imgNotificationColor.getBackground();
@@ -1604,19 +1613,75 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         imgNotificationColor.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-
-                showSelectAppColorDialog(false);
+                showSelectAppColorDialog(R.string.app_notif_color);
             }
         });
 
         TextView txtNotificatinColor = (TextView) findViewById(R.id.asn_txt_app_notification_color);
         txtNotificatinColor.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                showSelectAppColorDialog(false);
+                showSelectAppColorDialog(R.string.app_notif_color);
             }
         });
 
+        //***********************
 
+        imgToggleBottomColor = (ImageView) findViewById(R.id.asn_img_toggle_botton_color);
+        GradientDrawable bgShapeToggleBottomColor = (GradientDrawable) imgToggleBottomColor.getBackground();
+        bgShapeToggleBottomColor.setColor(Color.parseColor(G.toggleBottonColor));
+
+        imgToggleBottomColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                showSelectAppColorDialog(R.string.toggle_botton_color);
+            }
+        });
+
+        TextView txtToggleBottomColor = (TextView) findViewById(R.id.asn_txt_app_toggle_botton_color);
+        txtToggleBottomColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                showSelectAppColorDialog(R.string.toggle_botton_color);
+            }
+        });
+
+        //***********************
+
+        imgSendAndAttachColor = (ImageView) findViewById(R.id.asn_img_send_and_attach_color);
+        GradientDrawable bgShapeSendAndAttachColor = (GradientDrawable) imgSendAndAttachColor.getBackground();
+        bgShapeSendAndAttachColor.setColor(Color.parseColor(G.attachmentColor));
+
+        imgSendAndAttachColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                showSelectAppColorDialog(R.string.send_and_attach_botton_color);
+            }
+        });
+
+        TextView txtSendAndAttachColor = (TextView) findViewById(R.id.asn_txt_send_and_attach_color);
+        txtSendAndAttachColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                showSelectAppColorDialog(R.string.send_and_attach_botton_color);
+            }
+        });
+
+        //***********************
+
+        imgHeaderTextColor = (ImageView) findViewById(R.id.asn_img_default_header_font_color);
+        GradientDrawable bgShapeHeaderTextColor = (GradientDrawable) imgHeaderTextColor.getBackground();
+        bgShapeHeaderTextColor.setColor(Color.parseColor(G.headerTextColor));
+
+        imgHeaderTextColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                showSelectAppColorDialog(R.string.default_header_font_color);
+            }
+        });
+
+        TextView txtHeaderTextColor = (TextView) findViewById(R.id.asn_txt_default_header_font_color);
+        txtHeaderTextColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                showSelectAppColorDialog(R.string.default_header_font_color);
+            }
+        });
+
+        //***********************
 
 
 
@@ -2015,12 +2080,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         showImage();
     }
 
-    private void showSelectAppColorDialog(final boolean forAppColor) {
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
+    private void showSelectAppColorDialog(final int title) {
+
         boolean wrapInScrollView = true;
 
-        String titleMessage = forAppColor ? getResources().getString(R.string.app_theme) : getResources().getString(R.string.app_notif_color);
+        String titleMessage = getResources().getString(title);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.stns_popup_colorpicer, wrapInScrollView)
             .positiveText(getResources().getString(R.string.set))
@@ -2051,30 +2115,90 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 dialog.dismiss();
 
-                if (forAppColor) {
+                switch (title) {
 
-                    GradientDrawable bgShape = (GradientDrawable) imgAppBarSelected.getBackground();
-                    G.appBarColor = "#" + Integer.toHexString(picker.getColor());
-                    bgShape.setColor(picker.getColor());
-                    editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
-                    editor.apply();
-
-                    ActivitySetting.this.recreate();
-                    G.onRefreshActivity.refresh(G.selectedLanguage);
-                } else {
-
-                    GradientDrawable bgShape = (GradientDrawable) imgNotificationColor.getBackground();
-                    G.notificationColor = "#" + Integer.toHexString(picker.getColor());
-                    bgShape.setColor(picker.getColor());
-                    editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
-                    editor.apply();
-
-                    G.onRefreshActivity.refresh(G.selectedLanguage);
+                    case R.string.app_theme:
+                        appBarColorClick(picker.getColor());
+                        break;
+                    case R.string.app_notif_color:
+                        notificationColorClick(picker.getColor());
+                        break;
+                    case R.string.toggle_botton_color:
+                        toggleBottomClick(picker.getColor());
+                        break;
+                    case R.string.send_and_attach_botton_color:
+                        sendAndAttachColorClick(picker.getColor());
+                        break;
+                    case R.string.default_header_font_color:
+                        headerColorClick(picker.getColor());
+                        break;
                 }
+
+
             }
         });
 
         dialog.show();
+    }
+
+    private void appBarColorClick(int color) {
+
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        GradientDrawable bgShape = (GradientDrawable) imgAppBarSelected.getBackground();
+        G.appBarColor = "#" + Integer.toHexString(color);
+        bgShape.setColor(color);
+        editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
+        editor.apply();
+
+        ActivitySetting.this.recreate();
+        G.onRefreshActivity.refresh(G.selectedLanguage);
+    }
+
+    private void notificationColorClick(int color) {
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        GradientDrawable bgShape = (GradientDrawable) imgNotificationColor.getBackground();
+        G.notificationColor = "#" + Integer.toHexString(color);
+        bgShape.setColor(color);
+        editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
+        editor.apply();
+
+        G.onRefreshActivity.refresh(G.selectedLanguage);
+    }
+
+    private void toggleBottomClick(int color) {
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        GradientDrawable bgShape = (GradientDrawable) imgToggleBottomColor.getBackground();
+        G.toggleBottonColor = "#" + Integer.toHexString(color);
+        bgShape.setColor(color);
+        editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleBottonColor);
+        editor.apply();
+    }
+
+    private void headerColorClick(int color) {
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        GradientDrawable bgShape = (GradientDrawable) imgHeaderTextColor.getBackground();
+        G.headerTextColor = "#" + Integer.toHexString(color);
+        bgShape.setColor(color);
+        editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
+        editor.apply();
+
+        ActivitySetting.this.recreate();
+    }
+
+    private void sendAndAttachColorClick(int color) {
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        GradientDrawable bgShape = (GradientDrawable) imgSendAndAttachColor.getBackground();
+        G.attachmentColor = "#" + Integer.toHexString(color);
+        bgShape.setColor(color);
+        editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
+        editor.apply();
+
     }
 
     private void openBrowser(String s) {

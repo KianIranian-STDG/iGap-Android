@@ -33,7 +33,6 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
@@ -42,11 +41,9 @@ import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnColorChangedListenerSelect;
 import com.iGap.module.AttachFile;
 import com.iGap.module.ColorPiker;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -120,6 +117,7 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvSend = (TextView) findViewById(R.id.textView_send);
+        tvSend.setTextColor(Color.parseColor(G.attachmentColor));
         tvSend.setOnClickListener(new OnClickListener() {
 
             @Override

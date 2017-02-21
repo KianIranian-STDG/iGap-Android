@@ -257,8 +257,14 @@ public class G extends MultiDexApplication {
     public static boolean firstTimeEnterToApp = true;
     public static String selectedLanguage = "en";
     public static long serverHeartBeatTiming = 60 * 1000;
+
+    // default color
     public static String appBarColor;
     public static String notificationColor;
+    public static String toggleBottonColor;
+    public static String attachmentColor;
+    public static String headerTextColor;
+
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -486,6 +492,9 @@ public class G extends MultiDexApplication {
 
         appBarColor = shKeepAlive.getString(SHP_SETTING.KEY_APP_BAR_COLOR, "#3dbcb3");
         notificationColor = shKeepAlive.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, "#f23131");
+        toggleBottonColor = shKeepAlive.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, "#31bdb6");
+        attachmentColor = shKeepAlive.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, "#31bdb6");
+        headerTextColor = shKeepAlive.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, "#31bdb6");
 
 
         setFont();

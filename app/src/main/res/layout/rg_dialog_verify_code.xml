@@ -5,7 +5,7 @@
 
     <!-- Pretty hint text, and maxLines -->
 
-    <TextView
+    <com.iGap.module.HeaderTextview
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:layout_marginLeft="@dimen/dp24"

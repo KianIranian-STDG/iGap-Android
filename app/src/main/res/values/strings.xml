@@ -788,4 +788,7 @@
   <string name="is"> is </string>
   <string name="are"> are </string>
   <string name="members_are"> members are </string>
+  <string name="toggle_botton_color">Toggle Botton Color</string>
+  <string name="send_and_attach_botton_color">Send And Attach Botton Color</string>
+  <string name="default_header_font_color">Default Title Font Color</string>
 </resources>

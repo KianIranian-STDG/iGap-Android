@@ -188,14 +188,14 @@
           android:visibility="visible"
           >
 
-        <TextView
+        <com.iGap.module.HeaderTextview
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
-            android:text="@string/st_Info"
             android:textColor="@color/green"
+            android:text="@string/st_Info"
             android:textSize="@dimen/sp18"
             android:textStyle="bold"
             fontPath="fonts/IRANSansMobile_Bold.ttf"
@@ -430,7 +430,7 @@
           >
 
 
-        <TextView
+        <com.iGap.module.HeaderTextview
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -674,8 +674,7 @@
           android:visibility="visible"
           >
 
-        <TextView
-
+        <com.iGap.module.HeaderTextview
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -808,7 +807,7 @@
             android:visibility="visible"
             >
 
-          <TextView
+          <com.iGap.module.HeaderTextview
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
@@ -819,6 +818,12 @@
               android:textSize="@dimen/sp18"
               android:textStyle="normal"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
+              />
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/background_editText"
               />
 
           <LinearLayout
@@ -859,6 +864,11 @@
                 />
 
           </LinearLayout>
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/background_editText"
+              />
 
           <LinearLayout
               android:layout_width="match_parent"
@@ -888,6 +898,140 @@
 
             <ImageView
                 android:id="@+id/asn_img_notification_color"
+                android:layout_width="@dimen/dp24"
+                android:layout_height="@dimen/dp24"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp16"
+                android:background="@drawable/circle_color_notificatin_setting"
+                android:gravity="center"
+                />
+
+          </LinearLayout>
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/background_editText"
+              android:visibility="gone"
+              />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_centerInParent="true"
+              android:orientation="horizontal"
+              android:visibility="gone"
+              >
+
+
+            <TextView
+                android:id="@+id/asn_txt_app_toggle_botton_color"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp48"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp16"
+                android:paddingRight="@dimen/dp16"
+                android:paddingTop="@dimen/dp4"
+                android:text="@string/toggle_botton_color"
+                android:textColor="@color/black_register"
+                android:textSize="@dimen/sp15"
+                android:textStyle="normal"
+                fontPath="fonts/IRANSansMobile.ttf"
+                />
+
+            <ImageView
+                android:id="@+id/asn_img_toggle_botton_color"
+                android:layout_width="@dimen/dp24"
+                android:layout_height="@dimen/dp24"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp16"
+                android:background="@drawable/circle_color_notificatin_setting"
+                android:gravity="center"
+                />
+
+          </LinearLayout>
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/background_editText"
+              />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_centerInParent="true"
+              android:orientation="horizontal"
+              >
+
+
+            <TextView
+                android:id="@+id/asn_txt_send_and_attach_color"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp48"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp16"
+                android:paddingRight="@dimen/dp16"
+                android:paddingTop="@dimen/dp4"
+                android:text="@string/send_and_attach_botton_color"
+                android:textColor="@color/black_register"
+                android:textSize="@dimen/sp15"
+                android:textStyle="normal"
+                fontPath="fonts/IRANSansMobile.ttf"
+                />
+
+            <ImageView
+                android:id="@+id/asn_img_send_and_attach_color"
+                android:layout_width="@dimen/dp24"
+                android:layout_height="@dimen/dp24"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp16"
+                android:background="@drawable/circle_color_notificatin_setting"
+                android:gravity="center"
+                />
+
+          </LinearLayout>
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/background_editText"
+              />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_centerInParent="true"
+              android:orientation="horizontal"
+              >
+
+
+            <TextView
+                android:id="@+id/asn_txt_default_header_font_color"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp48"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp16"
+                android:paddingRight="@dimen/dp16"
+                android:paddingTop="@dimen/dp4"
+                android:text="@string/default_header_font_color"
+                android:textColor="@color/black_register"
+                android:textSize="@dimen/sp15"
+                android:textStyle="normal"
+                fontPath="fonts/IRANSansMobile.ttf"
+                />
+
+            <ImageView
+                android:id="@+id/asn_img_default_header_font_color"
                 android:layout_width="@dimen/dp24"
                 android:layout_height="@dimen/dp24"
                 android:layout_gravity="center_vertical"
@@ -1025,7 +1169,7 @@
           android:visibility="visible"
           >
 
-        <TextView
+        <com.iGap.module.HeaderTextview
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -1285,7 +1429,7 @@
           android:visibility="visible"
           >
 
-        <TextView
+        <com.iGap.module.HeaderTextview
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

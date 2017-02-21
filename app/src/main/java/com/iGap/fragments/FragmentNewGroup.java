@@ -299,6 +299,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
         //=======================set image for group
         imgCircleImageView = (CircleImageView) view.findViewById(R.id.ng_profile_circle_image);
+        AndroidUtils.setBackgroundShapeColor(imgCircleImageView, Color.parseColor(G.appBarColor));
 
         RippleView rippleCircleImage = (RippleView) view.findViewById(R.id.ng_ripple_circle_image);
         rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

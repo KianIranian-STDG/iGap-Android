@@ -203,7 +203,7 @@
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <TextView
+                <com.iGap.module.HeaderTextview
                     fontPath="fonts/IRANSansMobile_Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -257,7 +257,7 @@
                     android:textStyle="normal"
                     android:visibility="gone"/>
 
-                <TextView
+                <com.iGap.module.HeaderTextview
                     fontPath="fonts/IRANSansMobile_Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -325,7 +325,7 @@
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <TextView
+                <com.iGap.module.HeaderTextview
                     fontPath="fonts/IRANSansMobile_Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

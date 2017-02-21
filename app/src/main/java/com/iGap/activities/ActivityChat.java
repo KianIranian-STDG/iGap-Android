@@ -1657,6 +1657,7 @@ public class ActivityChat extends ActivityEnhanced
 
                         isThereAnyMoreItemToLoadFromServer = true;
                         isThereAnyMoreItemToLoadFromLocal = false;
+                        llScrollNavigate.setVisibility(View.GONE);
 
                         recyclerView.addOnScrollListener(scrollListener);
 
@@ -1672,6 +1673,7 @@ public class ActivityChat extends ActivityEnhanced
         edtChat.requestFocus();
 
         imvSendButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_send_button);
+        imvSendButton.setTextColor(Color.parseColor(G.attachmentColor));
 
         imvAttachFileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_attach_button);
         layoutAttachBottom = (LinearLayout) findViewById(R.id.layoutAttachBottom);
@@ -1780,16 +1782,18 @@ public class ActivityChat extends ActivityEnhanced
                     countNewMessage = 0;
                 } else {
 
-                    LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (recyclerView.getAdapter().getItemCount() > 0) {
 
-                    int lastposition = llm.findLastVisibleItemPosition();
+                        LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-                    if (lastposition + 50 > mAdapter.getItemCount()) {
-                        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-                    } else {
-                        recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                        int lastposition = llm.findLastVisibleItemPosition();
+
+                        if (lastposition + 50 > mAdapter.getItemCount()) {
+                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                        } else {
+                            recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                        }
                     }
-
 
                 }
             }
@@ -4614,6 +4618,7 @@ public class ActivityChat extends ActivityEnhanced
 
         isThereAnyMoreItemToLoadFromLocal = false;
         isThereAnyMoreItemToLoadFromServer = false;
+        llScrollNavigate.setVisibility(View.GONE);
 
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();

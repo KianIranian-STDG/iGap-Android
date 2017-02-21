@@ -79,8 +79,12 @@ public class SHP_SETTING {
     // keep media
     public static final String KEY_KEEP_MEDIA = "KEY_KEEP_MEDIA";
 
+    // default color
     public static final String KEY_APP_BAR_COLOR = "KEY_APP_BAR_COLOR";
     public static final String KEY_NOTIFICATION_COLOR = "KEY_NOTIFICATION_COLOR";
+    public static final String KEY_TOGGLE_BOTTON_COLOR = "KEY_TOGGLE_BOTTON_COLOR";
+    public static final String KEY_SEND_AND_ATTACH_ICON_COLOR = "KEY_SEND_AND_ATTACH_ICON_COLOR";
+    public static final String KEY_FONT_HEADER_COLOR = "KEY_FONT_HEADER_COLOR";
 
 
     // ========================================================================================== chat background

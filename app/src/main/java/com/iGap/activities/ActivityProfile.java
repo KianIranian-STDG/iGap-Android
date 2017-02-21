@@ -116,6 +116,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
         final View lineEditText = findViewById(R.id.pu_line_below_editText);
         btnSetImage = (com.iGap.module.CircleImageView) findViewById(R.id.pu_profile_circle_image);
+        btnSetImage.setBackgroundColor(Color.parseColor(G.appBarColor));
         btnSetImage.setOnClickListener(new View.OnClickListener() { // button for set image
             @Override
             public void onClick(View view) {
@@ -132,6 +133,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
         edtNikName = (EditTextAdjustPan) findViewById(R.id.pu_edt_nikeName); // edit Text for NikName
 
         btnLetsGo = (Button) findViewById(R.id.pu_btn_letsGo);
+        btnLetsGo.setBackgroundColor(Color.parseColor(G.appBarColor));
+
 
         edtNikName.addTextChangedListener(new TextWatcher() {
             @Override

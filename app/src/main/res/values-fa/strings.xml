@@ -788,4 +788,7 @@
   <string name="is"></string>
   <string name="are"></string>
   <string name="members_are"> نفر </string>
+  <string name="toggle_botton_color">رنگ دکمه های ضامنی</string>
+  <string name="send_and_attach_botton_color">رنگ ایکن های ارسال</string>
+  <string name="default_header_font_color">رنگ نوشته های سربرگ</string>
 </resources>

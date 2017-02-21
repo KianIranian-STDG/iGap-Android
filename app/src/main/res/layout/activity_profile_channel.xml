@@ -158,7 +158,7 @@
                     android:visibility="visible">
 
 
-                    <TextView
+                    <com.iGap.module.HeaderTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -336,7 +336,7 @@
                     android:orientation="vertical"
                     android:visibility="visible">
 
-                    <TextView
+                    <com.iGap.module.HeaderTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -405,7 +405,7 @@
                     android:gravity="left"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.iGap.module.HeaderTextview
                         fontPath="fonts/IRANSansMobile_Bold.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 package com.iGap.module;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -10,12 +11,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperString;
 import com.iGap.interfaces.OnVoiceRecord;
-
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,6 +49,7 @@ public class VoiceRecord {
     private OnVoiceRecord onVoiceRecordListener;
     private TextView txtMilisecend;
     private int milisecend = 0;
+    private MaterialDesignTextView btnMicLayout;
 
     private Context context;
 
@@ -62,6 +62,8 @@ public class VoiceRecord {
         txtMilisecend = (TextView) layoutMic.findViewById(R.id.txt_time_mili_secend);
         layout3 = (LinearLayout) layoutMic.findViewById(R.id.layout3);
         txt_slide_to_cancel = (TextView) layoutMic.findViewById(R.id.txt_slideto_cancel);
+        btnMicLayout = (MaterialDesignTextView) layoutMic.findViewById(R.id.lmr_btn_mic_layout);
+        AndroidUtils.setBackgroundShapeColor(btnMicLayout, Color.parseColor(G.appBarColor));
 
         this.layoutAttach = layoutAttach;
         this.layoutMic = layoutMic;

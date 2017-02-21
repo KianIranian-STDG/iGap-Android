@@ -446,6 +446,7 @@ public class ActivityRegister extends ActivityEnhanced {
         final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
         final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
         btnStart = (Button) findViewById(R.id.rg_btn_start); //check phone and internet connection
+        btnStart.setBackgroundColor(Color.parseColor(G.appBarColor));
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
