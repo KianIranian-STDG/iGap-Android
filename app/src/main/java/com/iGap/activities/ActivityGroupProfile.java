@@ -1217,8 +1217,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                     struct.color = realmRegisteredInfo.getColor();
                                     struct.lastSeen = realmRegisteredInfo.getLastSeen();
                                     struct.status = realmRegisteredInfo.getStatus();
-                                    struct.role = role.toString();
-                                    //struct.userID = userID;
+                                    struct.userID = userID;
                                 }
 
 

@@ -1644,6 +1644,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                             struct.initials = realmRegisteredInfo.getInitials();
                             struct.color = realmRegisteredInfo.getColor();
                             struct.lastSeen = realmRegisteredInfo.getLastSeen();
+                            struct.status = realmRegisteredInfo.getStatus();
+                            struct.userID = userId;
                         }
 
 
