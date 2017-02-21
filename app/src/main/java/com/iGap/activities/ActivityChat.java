@@ -438,15 +438,27 @@ public class ActivityChat extends ActivityEnhanced
                     room.setUnreadCount(0);
                     realm.copyToRealmOrUpdate(room);
 
+                    /**
+                     * set member count
+                     * set this code in onResume for update this value when user
+                     * come back from profile activities
+                     */
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
                             String members = null;
                             if (room.getType() == GROUP && room.getGroupRoom() != null) {
-                                members = room.getGroupRoom().getMembers().size() + "";
+                                if (room.getGroupRoom().getMembers().size() == 0) {
+                                    members = groupParticipantsCountLabel;
+                                } else {
+                                    members = room.getGroupRoom().getMembers().size() + "";
+                                }
                             } else if (room.getType() == CHANNEL && room.getGroupRoom() != null) {
-                                members = room.getChannelRoom().getMembers().size() + "";
+                                if (room.getChannelRoom().getMembers().size() == 0) {
+                                    members = channelParticipantsCountLabel;
+                                } else {
+                                    members = room.getChannelRoom().getMembers().size() + "";
+                                }
                             }
                             if (members != null) {
                                 txtLastSeen.setText(members + " " + getResources().getString(member));

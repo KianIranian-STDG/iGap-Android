@@ -164,8 +164,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     LinearLayout layoutMemberCanAddMember;
     LinearLayout layoutNotificatin;
     LinearLayout layoutDeleteAndLeftGroup;
-    List<StructContactInfo> contacts;
-    List<IItem> items;
+    //List<StructContactInfo> contacts;
     ItemAdapter itemAdapter;
     RecyclerView recyclerView;
     AttachFile attachFile;
@@ -206,6 +205,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private ProgressBar prgWait;
 
     private RealmList<RealmMember> memberList;
+    private int limitation = 10; // limit for show member in list
+    private int currentOffset = 0;
 
 
     @Override
@@ -645,16 +646,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         txtMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                int count = items.size();
-                int listSize = contacts.size();
-                for (int i = count; i < listSize && i < count + numberUploadItem; i++) {
-                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-                }
-                itemAdapter.clear();
-                itemAdapter.add(items);
-
-                if (items.size() >= listSize) txtMore.setVisibility(View.GONE);
+                showItems();
             }
         });
 
@@ -1180,7 +1172,19 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
                 if (identity != null && Long.parseLong(identity) == roomId) {
-                    if (!userExistInList(user.getId())) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
+
+                    /**
+                     * because in other state before currentOffset plussed with limitation
+                     * just use from currentOffset
+                     */
+                    int limit;
+                    if (currentOffset != 0) {
+                        limit = currentOffset;
+                    } else {
+                        limit = limitation;
+                    }
+
+                    if (!userExistInList(user.getId()) && itemAdapter.getAdapterItemCount() < limit) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1221,12 +1225,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                 IItem item = new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get());
                                 if (struct.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                                     itemAdapter.add(0, item);
-
                                 } else {
                                     itemAdapter.add(item);
                                 }
 
-                                itemAdapter.notifyDataSetChanged();
+                                //itemAdapter.notifyDataSetChanged();
 
                                 realm.close();
                             }
@@ -1254,7 +1257,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     @Override
                     public void run() {
                         txtMemberNumber.setText(members.size() + "");
-                        compareMemberList(memberList, members);
+                        //compareMemberList(memberList, members);
                     }
                 });
 
@@ -1422,24 +1425,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         recyclerView.addItemDecoration(decoration);
 
-        items = new ArrayList<>();
-
         ContactItemGroupProfile.mainRole = role.toString();
         ContactItemGroupProfile.roomType = ProtoGlobal.Room.Type.GROUP;
 
-        fillItem();
-
-        int listSize = contacts.size();
-
-        //txtMemberNumber.setText(listSize + "");
-
-        for (int i = 0; i < listSize; i++) {
-
-            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-        }
-        txtMore.setVisibility(View.GONE);
-
-        itemAdapter.add(items);
+        showItems();
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -1450,48 +1439,69 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
     }
 
-    private boolean userExistInList(long userId) {
+    private void showItems() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null && realmRoom.getGroupRoom() != null) {
 
-        for (StructContactInfo info : contacts) {
-            if (info.peerId == userId) {
+            /**
+             * hide more view if all member is showing
+             */
+            int limit;
+            if (realmRoom.getGroupRoom().getMembers().size() <= currentOffset + limitation) {
+                limit = realmRoom.getGroupRoom().getMembers().size();
+                /**
+                 * if members not loaded yet check count with participantsCountLabel
+                 */
+                if (limit > 0) {
+                    txtMore.setVisibility(View.GONE);
+                } else if (Integer.parseInt(participantsCountLabel) == 0) {
+                    txtMore.setVisibility(View.GONE);
+                }
+            } else {
+                limit = currentOffset + limitation;
+            }
+
+            List<IItem> items = new ArrayList<>();
+            List<RealmMember> memberList = realmRoom.getGroupRoom().getMembers().subList(currentOffset, limit);
+            for (RealmMember realmMember : memberList) {
+                if (!userExistInList(realmMember.getId())) {
+                    items.add(new ContactItemGroupProfile().setContact(convertRealmToStruct(realm, realmMember)).withIdentifier(SUID.id().get()));
+                }
+            }
+
+            currentOffset = limit;
+            itemAdapter.add(items);
+        }
+        realm.close();
+    }
+
+    private boolean userExistInList(long userId) {
+        List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+        for (ContactItemGroupProfile info : items) {
+            if (info.mContact.peerId == userId) {
                 return true;
             }
         }
-
         return false;
     }
 
-    private void fillItem() {
-
-        contacts = new ArrayList<>();
-
-        Realm realm = Realm.getDefaultInstance();
-
-        for (RealmMember member : members) {
-            String role = member.getRole();
-            long id = member.getPeerId();
-
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
-
-            if (realmRegisteredInfo != null) {
-                StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
-                s.role = role;
-                s.avatar = realmRegisteredInfo.getLastAvatar();
-                s.initials = realmRegisteredInfo.getInitials();
-                s.color = realmRegisteredInfo.getColor();
-                s.lastSeen = realmRegisteredInfo.getLastSeen();
-                s.status = realmRegisteredInfo.getStatus();
-                //s.userID = userID;
-                if (s.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
-                    contacts.add(0, s);
-
-                } else {
-                    contacts.add(s);
-                }
-            }
+    private StructContactInfo convertRealmToStruct(Realm realm, RealmMember realmMember) {
+        String role = realmMember.getRole();
+        long id = realmMember.getPeerId();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
+        if (realmRegisteredInfo != null) {
+            StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
+            s.role = role;
+            s.avatar = realmRegisteredInfo.getLastAvatar();
+            s.initials = realmRegisteredInfo.getInitials();
+            s.color = realmRegisteredInfo.getColor();
+            s.lastSeen = realmRegisteredInfo.getLastSeen();
+            s.status = realmRegisteredInfo.getStatus();
+            s.userID = userID;
+            return s;
         }
-
-        realm.close();
+        return null;
     }
 
     private List<StructContactInfo> getCurrentUser(ProtoGlobal.GroupRoom.Role role) {
@@ -1871,7 +1881,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         if (items.get(i).mContact.peerId == memberId) {
                             items.get(i).mContact.role = role.toString();
                             if (i < itemAdapter.getAdapterItemCount()) {
-                                IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
+                                IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(SUID.id().get()));
                                 itemAdapter.set(i, item);
                             }
                         }
@@ -1891,6 +1901,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     //***********************************************************************************************************************
+
     /**
      * add member to realm and send request to server for really added this contacts to this group
      */
@@ -2259,7 +2270,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     if (items.get(i).mContact.peerId == memberId) {
                         items.get(i).mContact.role = role.toString();
                         if (i < itemAdapter.getAdapterItemCount()) {
-                            IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(100 + i));
+                            IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(SUID.id().get()));
                             itemAdapter.set(i, item);
                         }
                     }

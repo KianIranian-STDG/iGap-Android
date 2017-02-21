@@ -83,8 +83,10 @@
 
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:orientation="horizontal"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
                             >
 
 
@@ -116,9 +118,11 @@
 
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:orientation="horizontal"
                             android:layoutDirection="locale"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
                             >
 
                             <TextView

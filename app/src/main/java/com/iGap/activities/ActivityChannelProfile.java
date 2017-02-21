@@ -184,9 +184,8 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private boolean isSignature;
     private TextView txtLinkTitle;
     private boolean isPopup = false;
-    //mollareza
-    //private int firstLimit = 0;
-    //private int lastLimit = 50;
+    private int limitation = 10; // limit for show member in list
+    private int currentOffset = 0;
 
     @Override
     protected void onResume() {
@@ -402,15 +401,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         });
 
-        //show option item just for owner
-
-        //        rippleMenu.setVisibility(View.GONE);
-        /*if (role != ChannelChatRole.OWNER) {
-            imgPupupMenul.setVisibility(View.GONE);
-            rippleMenu.setVisibility(View.GONE);
-        }*/
-
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -435,109 +425,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             }
         });
 
-
-
-       /* txtDescription.setMovementMethod(LinkMovementMethod.getInstance());
-
-        String a[] = txtDescription.getText().toString().split(" ");
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-
-        for (int i = 0; i < a.length; i++) {
-            if (a[i].matches("\\d+")) { //check if only digits. Could also be text.matches("[0-9]+")
-
-                wordToSpan = new SpannableString(a[i]);
-                wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                wordToSpan.setSpan(new ClickableSpan() {
-                    @Override
-                    public void onClick(View v) {
-                        TextView tv = (TextView) v;
-                        if (tv.getText() instanceof Spannable) {
-
-                            String valuesSpan;
-                            Spanned s = (Spanned) tv.getText();
-                            int start = s.getSpanStart(this);
-                            int end = s.getSpanEnd(this);
-                            valuesSpan = s.subSequence(start, end).toString();
-                        }
-                        new MaterialDialog.Builder(ActivityChannelProfile.this).items(
-                                R.array.phone_profile_chanel)
-                                .negativeText(getString(R.string.cancel))
-                                .itemsCallback(new MaterialDialog.ListCallback() {
-                                    @Override
-                                    public void onSelection(MaterialDialog dialog, View view, int which,
-                                                            CharSequence text) {
-                                        switch (which) {
-                                            case 0:
-                                                break;
-                                            case 1:
-                                                break;
-                                            case 2:
-                                                break;
-                                        }
-                                    }
-                                })
-                                .show();
-                    }
-                }, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            } else if (a[i].matches("\\@(\\w+)")) {
-
-                wordToSpan = new SpannableString(a[i]);
-                wordToSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 0, a[i].length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                wordToSpan.setSpan(new ClickableSpan() {
-                    @Override
-                    public void onClick(View v) {
-                        String valuesSpan;
-                        TextView tv = (TextView) v;
-                        if (tv.getText() instanceof Spannable) {
-                            Spanned s = (Spanned) tv.getText();
-                            int start = s.getSpanStart(this);
-                            int end = s.getSpanEnd(this);
-                            valuesSpan = s.subSequence(start, end).toString();
-                        }
-                    }
-                }, 0, a[i].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            } else {
-                wordToSpan = new SpannableString(a[i]);
-                wordToSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, a[i].length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-
-            builder.append(wordToSpan).append(" ");
-        }
-        txtDescription.setText(builder);*/
-
         txtChannelLink = (TextView) findViewById(R.id.txt_channel_link);
-
-       /* txtNotifyAndSound = (TextView) findViewById(R.id.pch_txt_notifyAndSound);
-        txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        txtDeleteCache = (TextView) findViewById(R.id.pch_txt_deleteCache);
-        txtDeleteCache.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        txtLeaveChannel = (TextView) findViewById(R.id.pch_txt_leaveChannel);
-        txtLeaveChannel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        txtReport = (TextView) findViewById(R.id.pch_txt_Report);
-        txtReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });*/
 
         lytSharedMedia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -605,34 +493,12 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         //mollareza
         txtMore = (TextView) findViewById(R.id.agp_channel_txt_more);
-        //txtMore.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //
-        //        firstLimit = 0;
-        //        lastLimit += lastLimit;
-        //
-        //        int listSize = contacts.size();
-        //        int count = items.size();
-        //
-        //        if (lastLimit > listSize) lastLimit = listSize;
-        //
-        //        items.clear();
-        //        for (int i = firstLimit; i < lastLimit; i++) {
-        //            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-        //        }
-        //
-        //        itemAdapter.clear();
-        //        itemAdapter.add(items);
-        //
-        //        if ((listSize - lastLimit) > 0) {
-        //            if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
-        //        } else {
-        //            txtMore.setVisibility(View.GONE);
-        //        }
-        //    }
-        //});
-        txtMore.setVisibility(View.GONE);
+        txtMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showItems();
+            }
+        });
 
         attachFile = new AttachFile(this);
 
@@ -751,6 +617,61 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     }
 
+    private void showItems() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null && realmRoom.getChannelRoom() != null) {
+
+            /**
+             * hide more view if all member is showing
+             */
+            int limit;
+            if (realmRoom.getChannelRoom().getMembers().size() <= currentOffset + limitation) {
+                limit = realmRoom.getChannelRoom().getMembers().size();
+                /**
+                 * if members not loaded yet check count with participantsCountLabel
+                 */
+                if (limit > 0) {
+                    txtMore.setVisibility(View.GONE);
+                } else if (Integer.parseInt(participantsCountLabel) == 0) {
+                    txtMore.setVisibility(View.GONE);
+                }
+            } else {
+                limit = currentOffset + limitation;
+            }
+
+            List<IItem> items = new ArrayList<>();
+            List<RealmMember> memberList = realmRoom.getChannelRoom().getMembers().subList(currentOffset, limit);
+            for (RealmMember realmMember : memberList) {
+                if (!userExistInList(realmMember.getId())) {
+                    items.add(new ContactItemGroupProfile().setContact(convertRealmToStruct(realm, realmMember)).withIdentifier(SUID.id().get()));
+                }
+            }
+
+            currentOffset = limit;
+            itemAdapter.add(items);
+        }
+        realm.close();
+    }
+
+    private StructContactInfo convertRealmToStruct(Realm realm, RealmMember realmMember) {
+        String role = realmMember.getRole();
+        long id = realmMember.getPeerId();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
+        if (realmRegisteredInfo != null) {
+            StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
+            s.role = role;
+            s.avatar = realmRegisteredInfo.getLastAvatar();
+            s.initials = realmRegisteredInfo.getInitials();
+            s.color = realmRegisteredInfo.getColor();
+            s.lastSeen = realmRegisteredInfo.getLastSeen();
+            s.status = realmRegisteredInfo.getStatus();
+            s.userID = userId;
+            return s;
+        }
+        return null;
+    }
+
     private void setTextChannelLik() {
 
         if (isPrivate) {
@@ -821,171 +742,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         dialog.show();
     }
 
-    //    private void editUsername() {
-    //        final LinearLayout layoutUserName = new LinearLayout(ActivityChannelProfile.this);
-    //        layoutUserName.setOrientation(LinearLayout.VERTICAL);
-    //
-    //        final View viewUserName = new View(ActivityChannelProfile.this);
-    //        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-    //
-    //        final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
-    //        final EditText edtUserName = new EditText(ActivityChannelProfile.this);
-    //        edtUserName.setHint(getResources().getString(R.string.st_username));
-    //        edtUserName.setText(linkUsername);
-    //        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
-    //        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
-    //        edtUserName.setPadding(0, 8, 0, 8);
-    //        edtUserName.setSingleLine(true);
-    //        inputUserName.addView(edtUserName);
-    //        inputUserName.addView(viewUserName, viewParams);
-    //
-    //        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-    //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-    //            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
-    //        }
-    //        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    //
-    //        layoutUserName.addView(inputUserName, layoutParams);
-    //
-    //        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
-    //
-    //        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-    //        positive.setEnabled(false);
-    //
-    //        final String finalUserName = inviteLink;
-    //        edtUserName.addTextChangedListener(new TextWatcher() {
-    //            @Override
-    //            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-    //
-    //            }
-    //
-    //            @Override
-    //            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-    //            }
-    //
-    //            @Override
-    //            public void afterTextChanged(Editable editable) {
-    //                new RequestChannelCheckUsername().channelCheckUsername(roomId, editable.toString());
-    //            }
-    //        });
-    //
-    //
-    //        G.onChannelCheckUsername = new OnChannelCheckUsername() {
-    //            @Override
-    //            public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
-    //                G.handler.post(new Runnable() {
-    //                    @Override
-    //                    public void run() {
-    //                        if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
-    //
-    //                            if (!edtUserName.getText().toString().equals(finalUserName)) {
-    //                                positive.setEnabled(true);
-    //                            } else {
-    //                                positive.setEnabled(false);
-    //                            }
-    //                            inputUserName.setErrorEnabled(true);
-    //                            inputUserName.setError("");
-    //
-    //
-    //                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.INVALID) {
-    //                            positive.setEnabled(false);
-    //                            inputUserName.setErrorEnabled(true);
-    //                            inputUserName.setError("INVALID");
-    //
-    //                        } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
-    //                            inputUserName.setErrorEnabled(true);
-    //                            inputUserName.setError("TAKEN");
-    //                            positive.setEnabled(false);
-    //                        }
-    //                    }
-    //                });
-    //            }
-    //
-    //            @Override
-    //            public void onError(int majorCode, int minorCode) {
-    //
-    //            }
-    //
-    //            @Override
-    //            public void onTimeOut() {
-    //
-    //            }
-    //        };
-    //
-    //
-    //        G.onChannelUpdateUsername = new OnChannelUpdateUsername() {
-    //            @Override
-    //            public void onChannelUpdateUsername(final long roomId, final String username) {
-    //
-    //                G.handler.post(new Runnable() {
-    //                    @Override
-    //                    public void run() {
-    //                        txtChannelLink.setText("iGap.net/" + username);
-    //
-    //                        Realm realm = Realm.getDefaultInstance();
-    //                        realm.executeTransaction(new Realm.Transaction() {
-    //                            @Override
-    //                            public void execute(Realm realm) {
-    //                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-    //                                realmRoom.getChannelRoom().setUsername(username);
-    //                            }
-    //                        });
-    //
-    //                        realm.close();
-    //                    }
-    //                });
-    //
-    //            }
-    //
-    //            @Override
-    //            public void onError(int majorCode, int minorCode ,int time) {
-    //
-    //            }
-    //
-    //            @Override
-    //            public void onTimeOut() {
-    //                runOnUiThread(new Runnable() {
-    //                    @Override
-    //                    public void run() {
-    //                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
-    //
-    //                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-    //                            @Override
-    //                            public void onClick(View view) {
-    //                                snack.dismiss();
-    //                            }
-    //                        });
-    //                        snack.show();
-    //                    }
-    //                });
-    //            }
-    //        };
-    //
-    //        positive.setOnClickListener(new View.OnClickListener() {
-    //            @Override
-    //            public void onClick(View view) {
-    //
-    //                new RequestChannelUpdateUsername().channelUpdateUsername(roomId, edtUserName.getText().toString());
-    //                dialog.dismiss();
-    //            }
-    //        });
-    //
-    //
-    //        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-    //            @Override
-    //            public void onFocusChange(View view, boolean b) {
-    //                if (b) {
-    //                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
-    //                } else {
-    //                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-    //                }
-    //            }
-    //        });
-    //
-    //        // check each word with server
-    //
-    //        dialog.show();
-    //    }
 
     private void dialogCopyLink() {
 
@@ -1100,7 +856,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         realm.close();
     }
 
-
     //=============================================================== Channel Members ==============
 
     public static OnMenuClick onMenuClick;
@@ -1108,7 +863,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private ItemAdapter itemAdapter;
     private RecyclerView recyclerView;
     private List<IItem> items;
-    private List<StructContactInfo> contacts;
 
     private void initRecycleView() {
 
@@ -1184,36 +938,25 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
             @Override
             public boolean onLongClick(View v, IAdapter adapter, IItem item, int position) {
                 ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
-
                 if (role == ChannelChatRole.OWNER) {
-
                     if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-
                         kickMember(contactItemGroupProfile.mContact.peerId);
-
-                    } else if (contacts.get(position).role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-
+                    } else if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
                         kickAdmin(contactItemGroupProfile.mContact.peerId);
-
                     } else if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-
                         kickModerator(contactItemGroupProfile.mContact.peerId);
-
                     }
                 } else if (role == ChannelChatRole.ADMIN) {
-
                     if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contactItemGroupProfile.mContact.peerId);
                     } else if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                        kickModerator(contacts.get(position).peerId);
+                        kickModerator(contactItemGroupProfile.mContact.peerId);
                     }
                 } else if (role == ChannelChatRole.MODERATOR) {
-
                     if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
                         kickMember(contactItemGroupProfile.mContact.peerId);
                     }
                 }
-
                 return true;
             }
         });
@@ -1237,35 +980,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         ContactItemGroupProfile.mainRole = role.toString();
         ContactItemGroupProfile.roomType = ProtoGlobal.Room.Type.CHANNEL;
 
-        fillItem();
-
-        int listSize = contacts.size();
-
-        //txtMemberNumber.setText(listSize + "");
-
-        for (int i = 0; i < listSize; i++) {
-            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-        }
-
-        //if (listSize > lastLimit) {
-        //    if (txtMore != null) {
-        //        txtMore.setVisibility(View.VISIBLE);
-        //
-        //        for (int i = firstLimit; i < lastLimit; i++) {
-        //            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-        //        }
-        //    }
-        //} else {
-        //
-        //    if (txtMore != null) {
-        //        txtMore.setVisibility(View.GONE);
-        //
-        //        for (int i = 0; i < listSize; i++) {
-        //            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-        //        }
-        //    }
-        //}
-        itemAdapter.add(items);
+        showItems();
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -1320,13 +1035,12 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     //****** user exist in current list checking
 
     private boolean userExistInList(long userId) {
-
-        for (StructContactInfo info : contacts) {
-            if (info.peerId == userId) {
+        List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+        for (ContactItemGroupProfile info : items) {
+            if (info.mContact.peerId == userId) {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -1452,41 +1166,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         }
     }
 
-    //********** fill item
-
-    private void fillItem() {
-
-        contacts = new ArrayList<>();
-
-        Realm realm = Realm.getDefaultInstance();
-
-        for (RealmMember member : members) {
-            String role = member.getRole();
-            long id = member.getPeerId();
-
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
-
-            if (realmRegisteredInfo != null) {
-                StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
-                s.role = role;
-                s.avatar = realmRegisteredInfo.getLastAvatar();
-                s.initials = realmRegisteredInfo.getInitials();
-                s.color = realmRegisteredInfo.getColor();
-                s.lastSeen = realmRegisteredInfo.getLastSeen();
-                s.status = realmRegisteredInfo.getStatus();
-
-                if (s.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
-                    contacts.add(0, s);
-
-                } else {
-                    contacts.add(s);
-                }
-            }
-        }
-
-        realm.close();
-    }
-
     //********** select picture
 
     private void startDialogSelectPicture(int r) {
@@ -1602,29 +1281,12 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     for (int i = 0; i < items.size(); i++) {
                         if (items.get(i).mContact.peerId == memberId) {
                             itemAdapter.remove(i);
-                            //member
-                            //contacts.remove(i);
-                            //refreshListMember();
                         }
                     }
-                    //updateMemberCount(roomIdResponse);
                 }
             });
         }
     }
-
-    //********** update member count
-
-    /*private void updateMemberCount(long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        String memberCount = realmRoom.getChannelRoom().getMembers().size() + "";
-        realmRoom.getChannelRoom().setParticipantsCountLabel(memberCount);
-        memberNumber.setText(memberCount);
-
-        realm.close();
-    }*/
 
     //********** update role (to admin, kick admin , kick moderator and all of this things...)
 
@@ -1680,41 +1342,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     }
 
     private void ChangeGroupName() {
-        //        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_name)
-        //                .positiveText(getString(R.string.save))
-        //                .alwaysCallInputCallback()
-        //                .widgetColor(getResources().getColor(R.color.toolbar_background))
-        //                .onPositive(new MaterialDialog.SingleButtonCallback() {
-        //                    @Override
-        //                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-        //                        editChannelRequest(dialogName, txtDescription.getText().toString());
-        //
-        //                        prgWait.setVisibility(View.VISIBLE);
-        //                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        //                    }
-        //                })
-        //                .negativeText(getString(R.string.cancel))
-        //                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-        //                .alwaysCallInputCallback()
-        //                .input(getString(R.string.please_enter_channel_name), txtChannelNameInfo.getText().toString(), new MaterialDialog.InputCallback() {
-        //                    @Override
-        //                    public void onInput(MaterialDialog dialog, CharSequence input) {
-        //                        // Do something
-        //                        View positive = dialog.getActionButton(DialogAction.POSITIVE);
-        //                        dialogName = input.toString();
-        //                        Log.i("VVVV", "onInput: " + input.toString());
-        //                        if (!input.toString().equals(txtChannelNameInfo.getText().toString())) {
-        //                            positive.setClickable(true);
-        //                            positive.setAlpha(1.0f);
-        //                        } else {
-        //                            positive.setClickable(false);
-        //                            positive.setAlpha(0.5f);
-        //                        }
-        //
-        //
-        //                    }
-        //                }).show();
-
         final LinearLayout layoutUserName = new LinearLayout(ActivityChannelProfile.this);
         layoutUserName.setOrientation(LinearLayout.VERTICAL);
 
@@ -1977,7 +1604,18 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, final String identity) {
         if (identity != null && Long.parseLong(identity) == roomId) {
 
-            if (!userExistInList(user.getId())) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
+            /**
+             * because in other state before currentOffset plussed with limitation
+             * just use from currentOffset
+             */
+            int limit;
+            if (currentOffset != 0) {
+                limit = currentOffset;
+            } else {
+                limit = limitation;
+            }
+
+            if (!userExistInList(user.getId()) && itemAdapter.getAdapterItemCount() < limit) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -2019,7 +1657,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                             itemAdapter.add(item);
                         }
 
-                        itemAdapter.notifyDataSetChanged();
+                        //itemAdapter.notifyDataSetChanged();
 
                         realm.close();
                     }
@@ -2127,14 +1765,6 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         if (G.updateListAfterKick != null) {
             G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.ADMIN);
         }
-
-        //update list is for admin list or moderator list
-        //after do that check this interface or create new interface for that
-
-        /*if (G.updateListAfterKick != null) {
-            G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.ADMIN);
-        }*/
-
         updateRole(roomId, memberId, ProtoGlobal.ChannelRoom.Role.ADMIN);
     }
 
@@ -2722,38 +2352,13 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
                 remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-                //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
             @Override
             public void onFinish() {
-                //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
                 remindTime.setText("00:00");
             }
         };
         countWaitTimer.start();
     }
-
-    //private void refreshListMember() {
-    //
-    //    int listSize = contacts.size();
-    //
-    //    if (lastLimit > listSize) lastLimit = listSize;
-    //
-    //    items.clear();
-    //    for (int i = firstLimit; i < lastLimit; i++) {
-    //        items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-    //    }
-    //
-    //    itemAdapter.clear();
-    //    itemAdapter.add(items);
-    //
-    //    if ((listSize - lastLimit) > 0) {
-    //        if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
-    //    } else {
-    //        txtMore.setVisibility(View.GONE);
-    //    }
-    //}
-
-
 }
