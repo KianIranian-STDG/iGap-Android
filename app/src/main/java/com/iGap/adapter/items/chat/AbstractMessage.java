@@ -81,6 +81,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         // empty
     }
 
+    /**
+     * add this prt for video player
+     */
+    @Override public void onPlayPauseVideo(VH holder, String localPath, int isHide) {
+        // empty
+    }
+
     public AbstractMessage(boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         this.directionalBased = directionalBased;
         this.type = type;
@@ -894,6 +901,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     // TODO: 12/7/2016 [Alireza] ba in shart dige nemishe GIF haro dar fragment show images did
                     if (mMessage.messageType == ProtoGlobal.RoomMessageType.GIF || mMessage.messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                         onPlayPauseGIF(holder, attachment.getLocalFilePath());
+                    }
+                    /**
+                     * add this prt for video player
+                     */
+                    else if (mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                        onPlayPauseVideo(holder, attachment.getLocalFilePath(), holder.itemView.findViewById(R.id.progress).getVisibility());
                     } else {
                         progress.performProgress();
                         messageClickListener.onOpenClick(progress, mMessage, holder.getAdapterPosition());

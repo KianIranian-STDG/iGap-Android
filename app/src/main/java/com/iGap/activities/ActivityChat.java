@@ -1248,9 +1248,9 @@ public class ActivityChat extends ActivityEnhanced
                         break;
                     case VIDEO:
                         if (!addTop) {
-                            mAdapter.add(new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new VideoItem(chatType, this, ActivityChat.this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new VideoItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(0, new VideoItem(chatType, this, ActivityChat.this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case VIDEO_TEXT:
