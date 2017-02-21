@@ -184,8 +184,9 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private boolean isSignature;
     private TextView txtLinkTitle;
     private boolean isPopup = false;
-    private int firstLimit = 0;
-    private int lastLimit = 50;
+    //mollareza
+    //private int firstLimit = 0;
+    //private int lastLimit = 50;
 
     @Override
     protected void onResume() {
@@ -602,35 +603,36 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         //memberNumber.setText(participantsCountLabel);
 
+        //mollareza
         txtMore = (TextView) findViewById(R.id.agp_channel_txt_more);
-        txtMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                firstLimit = 0;
-                lastLimit += lastLimit;
-
-                int listSize = contacts.size();
-                int count = items.size();
-
-                if (lastLimit > listSize) lastLimit = listSize;
-
-                items.clear();
-                for (int i = firstLimit; i < lastLimit; i++) {
-                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-                }
-
-                itemAdapter.clear();
-                itemAdapter.add(items);
-
-                if ((listSize - lastLimit) > 0) {
-                    if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
-                } else {
-                    txtMore.setVisibility(View.GONE);
-                }
-            }
-        });
-
+        //txtMore.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //
+        //        firstLimit = 0;
+        //        lastLimit += lastLimit;
+        //
+        //        int listSize = contacts.size();
+        //        int count = items.size();
+        //
+        //        if (lastLimit > listSize) lastLimit = listSize;
+        //
+        //        items.clear();
+        //        for (int i = firstLimit; i < lastLimit; i++) {
+        //            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+        //        }
+        //
+        //        itemAdapter.clear();
+        //        itemAdapter.add(items);
+        //
+        //        if ((listSize - lastLimit) > 0) {
+        //            if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
+        //        } else {
+        //            txtMore.setVisibility(View.GONE);
+        //        }
+        //    }
+        //});
+        txtMore.setVisibility(View.GONE);
 
         attachFile = new AttachFile(this);
 
@@ -1241,24 +1243,28 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
         //txtMemberNumber.setText(listSize + "");
 
-        if (listSize > lastLimit) {
-            if (txtMore != null) {
-                txtMore.setVisibility(View.VISIBLE);
-
-                for (int i = firstLimit; i < lastLimit; i++) {
-                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-                }
-            }
-        } else {
-
-            if (txtMore != null) {
-                txtMore.setVisibility(View.GONE);
-
-                for (int i = 0; i < listSize; i++) {
-                    items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-                }
-            }
+        for (int i = 0; i < listSize; i++) {
+            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
         }
+
+        //if (listSize > lastLimit) {
+        //    if (txtMore != null) {
+        //        txtMore.setVisibility(View.VISIBLE);
+        //
+        //        for (int i = firstLimit; i < lastLimit; i++) {
+        //            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+        //        }
+        //    }
+        //} else {
+        //
+        //    if (txtMore != null) {
+        //        txtMore.setVisibility(View.GONE);
+        //
+        //        for (int i = 0; i < listSize; i++) {
+        //            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+        //        }
+        //    }
+        //}
         itemAdapter.add(items);
 
         //so the headers are aware of changes
@@ -1570,10 +1576,11 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                         struct.lastSeen = realmRegistered.getLastSeen();
                         struct.status = realmRegistered.getStatus();
                         struct.role = role.toString();
-                        contacts.add(struct);
-                        refreshListMember();
-                        //IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
-                        //itemAdapter.add(item);
+                        IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
+                        itemAdapter.add(item);
+                        //mollareza
+                        //contacts.add(struct);
+                        //refreshListMember();
                     } else {
                         new RequestUserInfo().userInfo(userId, roomId + "");
                     }
@@ -1595,8 +1602,9 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     for (int i = 0; i < items.size(); i++) {
                         if (items.get(i).mContact.peerId == memberId) {
                             itemAdapter.remove(i);
+                            //member
                             //contacts.remove(i);
-                            refreshListMember();
+                            //refreshListMember();
                         }
                     }
                     //updateMemberCount(roomIdResponse);
@@ -2726,26 +2734,26 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         countWaitTimer.start();
     }
 
-    private void refreshListMember() {
-
-        int listSize = contacts.size();
-
-        if (lastLimit > listSize) lastLimit = listSize;
-
-        items.clear();
-        for (int i = firstLimit; i < lastLimit; i++) {
-            items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
-        }
-
-        itemAdapter.clear();
-        itemAdapter.add(items);
-
-        if ((listSize - lastLimit) > 0) {
-            if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
-        } else {
-            txtMore.setVisibility(View.GONE);
-        }
-    }
+    //private void refreshListMember() {
+    //
+    //    int listSize = contacts.size();
+    //
+    //    if (lastLimit > listSize) lastLimit = listSize;
+    //
+    //    items.clear();
+    //    for (int i = firstLimit; i < lastLimit; i++) {
+    //        items.add(new ContactItemGroupProfile().setContact(contacts.get(i)).withIdentifier(100 + contacts.indexOf(contacts.get(i))));
+    //    }
+    //
+    //    itemAdapter.clear();
+    //    itemAdapter.add(items);
+    //
+    //    if ((listSize - lastLimit) > 0) {
+    //        if (items.size() >= listSize) txtMore.setVisibility(View.VISIBLE);
+    //    } else {
+    //        txtMore.setVisibility(View.GONE);
+    //    }
+    //}
 
 
 }

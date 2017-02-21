@@ -6,10 +6,7 @@ import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
-
-import static com.iGap.module.MusicPlayer.roomId;
 
 public class ChannelKickMemberResponse extends MessageHandler {
 
@@ -35,7 +32,7 @@ public class ChannelKickMemberResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
                 for (RealmMember realmMember : realmRoom.getChannelRoom().getMembers()) {
                     if (realmMember.getPeerId() == builder.getMemberId()) {
                         realmMember.deleteFromRealm();
@@ -55,8 +52,9 @@ public class ChannelKickMemberResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-
-        G.onChannelKickMember.onTimeOut();
+        if (G.onChannelKickMember != null) {
+            G.onChannelKickMember.onTimeOut();
+        }
     }
 
     @Override
@@ -66,8 +64,9 @@ public class ChannelKickMemberResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        G.onChannelKickMember.onError(majorCode, minorCode);
+        if (G.onChannelKickMember != null) {
+            G.onChannelKickMember.onError(majorCode, minorCode);
+        }
     }
 }
 
