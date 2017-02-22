@@ -922,7 +922,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         if (time < G.timeVideoPlayer) {
                             onPlayPauseVideo(holder, attachment.getLocalFilePath(), holder.itemView.findViewById(R.id.progress).getVisibility(), time);
                         } else {
-                            Log.i("BBBNNNBB", "path: " + path);
                             if (path != null) {
                                 messageClickListener.onOpenClick(thumbnail, mMessage, holder.getAdapterPosition());
                             }
