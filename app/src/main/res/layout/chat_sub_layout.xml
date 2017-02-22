@@ -71,16 +71,7 @@
                         android:textSize="@dimen/sp15"
                         android:textStyle="bold"/>
 
-                    <com.iGap.module.MaterialDesignTextView
-                        android:id="@+id/cs_txt_mute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp4"
-                        android:layout_marginStart="@dimen/dp4"
-                        android:text="@string/md_muted"
-                        android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/sp14"/>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -136,6 +127,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+                    <com.iGap.module.MaterialDesignTextView
+                        android:id="@+id/cs_txt_mute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp4"
+                        android:layout_marginStart="@dimen/dp4"
+                        android:layout_marginRight="@dimen/dp4"
+                        android:layout_marginEnd="@dimen/dp4"
+                        android:text="@string/md_muted"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/sp14"
+                        />
 
                     <ImageView
                         android:id="@+id/cslr_txt_tic"

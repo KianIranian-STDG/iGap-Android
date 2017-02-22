@@ -587,7 +587,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void setClickListener(SharedPreferences sharedPreferences, String key, final VH holder, final RealmAttachment attachment) {
-        if (sharedPreferences.getInt(key, -1) != -1) {
+        if (sharedPreferences.getInt(key, 5) != -1) {
             autoDownload(holder, attachment);
         } else {
             ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnMessageProgress(new OnMessageProgressClick() {
