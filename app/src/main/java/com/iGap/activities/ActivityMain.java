@@ -1410,7 +1410,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getString(R.string.just_owner_can_delete), Snackbar.LENGTH_LONG);
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -1428,7 +1428,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getString(R.string.just_owner_can_delete), Snackbar.LENGTH_LONG);
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -1457,7 +1457,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getString(R.string.just_owner_can_delete), Snackbar.LENGTH_LONG);
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -1474,7 +1474,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getString(R.string.just_owner_can_delete), Snackbar.LENGTH_LONG);
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -1504,7 +1504,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getString(R.string.just_owner_can_delete), Snackbar.LENGTH_LONG);
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
