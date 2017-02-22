@@ -393,6 +393,7 @@ public class G extends MultiDexApplication {
     public static ConnectionMode connectionMode;
     public static boolean isNetworkRoaming;
     public static boolean hasNetworkBefore;
+    public static double timeVideoPlayer = 30000.0;
 
     public static ConcurrentHashMap<Long, RequestWrapper> currentUploadFiles = new ConcurrentHashMap<>();
     public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
