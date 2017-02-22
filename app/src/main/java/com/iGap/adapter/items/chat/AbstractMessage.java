@@ -159,6 +159,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic)).setVisibility(View.VISIBLE);
                 AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
             }
+
         }
         /**
          * display 'edited' indicator beside message time if message was edited
@@ -1040,11 +1041,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (mMessage.sendType == MyType.SendType.send) {
-            ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel, false);
 
             ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-            contentLoading.setVisibility(View.GONE);
 
             /**
              * update progress when user trying to upload or download
@@ -1062,9 +1060,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else {
                 checkForDownloading(holder, attachment);
             }
+
+            if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.FAILED) {
+
+                onFaildUpload(holder);
+            }
+
+
         } else {
             checkForDownloading(holder, attachment);
         }
+    }
+
+    private void onFaildUpload(VH holder) {
+
+        final MessageProgress progressBar = (MessageProgress) holder.itemView.findViewById(R.id.progress);
+
+        final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
+        // contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+
+        progressBar.withProgress(0);
+
+        progressBar.withDrawable(R.drawable.upload, true);
+        contentLoading.setVisibility(View.GONE);
+
+
     }
 
     private void hideThumbnailIf(VH holder) {
