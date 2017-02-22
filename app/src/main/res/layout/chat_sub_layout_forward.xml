@@ -8,7 +8,10 @@
               android:paddingBottom="@dimen/messageContainerPadding"
               android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
               android:paddingRight="@dimen/messageContainerPaddingLeftRight"
-              android:paddingTop="@dimen/messageContainerPadding">
+    android:paddingTop="@dimen/messageContainerPadding"
+    android:textDirection="locale"
+    android:layoutDirection="locale"
+    >
 
     <View
         android:layout_width="2dp"
@@ -25,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp6"
             android:singleLine="true"
             android:text="@string/forwarded_from"
             android:textColor="@color/newBlack"
@@ -39,6 +43,7 @@
             android:minWidth="@dimen/dp100"
             android:textColor="@color/newBlack"
             android:textSize="@dimen/sp12"
+            android:maxLength="20"
             android:textStyle="bold"/>
     </LinearLayout>
 

@@ -6,8 +6,8 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:layout_marginBottom="@dimen/dp4"
-             android:maxWidth="@dimen/chatBoxMaxWidth"
-             android:textDirection="firstStrong">
+    android:maxWidth="@dimen/chatBoxMaxWidth"
+    >
 
     <RelativeLayout
         android:id="@+id/mainContainer"
@@ -46,7 +46,8 @@
 
                     <include
                         android:id="@+id/cslr_ll_forward"
-                        layout="@layout/chat_sub_layout_forward"/>
+                        layout="@layout/chat_sub_layout_forward"
+                        />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
