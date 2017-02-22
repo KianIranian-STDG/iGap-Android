@@ -4,12 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
-import android.util.Log;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +17,17 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.items.AvatarItem;
+import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.interfaces.OnChannelAvatarDelete;
 import com.iGap.interfaces.OnGroupAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
+import com.iGap.module.TouchImageView;
+import com.iGap.proto.ProtoFileDownload;
+import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -41,54 +42,26 @@ import com.iGap.request.RequestGroupAvatarDelete;
 import com.iGap.request.RequestGroupAvatarGetList;
 import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserAvatarGetList;
-import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
 
-import static com.iGap.R.id.count;
+import static com.iGap.module.AndroidUtils.suitablePath;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/26/2016.
- */
+public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
-public class FragmentShowAvatars extends Fragment {
     private static final String ARG_PEER_ID = "arg_peer_id";
     private static final String ARG_Type = "arg_type";
 
-    private long mPeerId = -1;
-    private int curerntItemPosition = 0;
-
-    private LinearLayout mToolbar;
-    private TextView mCount;
-    private RecyclerView mRecyclerView;
-
-
-    FastItemAdapter<AvatarItem> mAdapter;
-
-    private int avatarListSize = 0;
-
-    public static OnComplete onComplete;
-
-    public static View appBarLayout;
-
-    private Realm mRealm;
-    private RealmResults<RealmAvatar> avatarList;
-
-
-    private GroupChatRole roleGroup;
-    private ChannelChatRole roleChannel;
-
-
     From from = From.chat;
-
     public static final int mChatNumber = 1;
     public static final int mGroupNumber = 2;
     public static final int mChannelNumber = 3;
     public static final int mSettingNumber = 4;
-
 
     public enum From {
         chat(mChatNumber),
@@ -107,161 +80,141 @@ public class FragmentShowAvatars extends Fragment {
         }
     }
 
-    @Override public void onDestroyView() {
-        super.onDestroyView();
+    private TextView txtImageNumber;
+    private TextView txtImageName;
 
-        if (avatarList != null) avatarList.removeChangeListeners();
+    private LinearLayout toolbarShowImage;
+    private boolean isShowToolbar = true;
+    private ViewGroup ltImageName;
+    private ViewPager viewPager;
 
-        if (mRealm != null) mRealm.close();
-    }
+    private long mPeerId = -1;
+    private GroupChatRole roleGroup;
+    private ChannelChatRole roleChannel;
+    private int avatarListSize = 0;
 
+    private FragmentShowAvatars.AdapterViewPager mAdapter;
+    private RealmResults<RealmAvatar> avatarList;
+    public static OnComplete onComplete;
 
-    public static FragmentShowAvatars newInstance(long peerId, From from) {
+    private Realm mRealm;
+    public static View appBarLayout;
+
+    public static FragmentShowAvatars newInstance(long peerId, FragmentShowAvatars.From from) {
         Bundle args = new Bundle();
         args.putLong(ARG_PEER_ID, peerId);
         args.putSerializable(ARG_Type, from);
-
 
         FragmentShowAvatars fragment = new FragmentShowAvatars();
         fragment.setArguments(args);
         return fragment;
     }
 
-    @Override
-    public void onDetach() {
-        if (appBarLayout != null)
-            appBarLayout.setVisibility(View.VISIBLE);
-
-
-        super.onDetach();
+    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        if (appBarLayout != null)
-            appBarLayout.setVisibility(View.GONE);
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (getIntentData(this.getArguments())) {
+            initComponent(view);
+        } else {
+            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+        }
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+
+        if (avatarList != null) avatarList.removeChangeListeners();
+
+        if (appBarLayout != null) appBarLayout.setVisibility(View.VISIBLE);
+
+        if (mRealm != null) mRealm.close();
+    }
+
+    @Override public void onAttach(Context context) {
+        if (appBarLayout != null) appBarLayout.setVisibility(View.GONE);
 
         super.onAttach(context);
     }
 
+    private boolean getIntentData(Bundle bundle) {
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        if (bundle != null) { // get a list of image
 
-        // init passed data through bundle
-        mPeerId = getArguments().getLong(ARG_PEER_ID, -1);
+            // init passed data through bundle
+            mPeerId = getArguments().getLong(ARG_PEER_ID, -1);
 
-        From result = (From) getArguments().getSerializable(ARG_Type);
+            From result = (From) getArguments().getSerializable(ARG_Type);
 
-        if (result != null)
-            from = result;
+            if (result != null) from = result;
 
-    }
+            mRealm = Realm.getDefaultInstance();
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_show_avatars, container, false);
-    }
+            fillListAvatar(from);
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        mRealm = Realm.getDefaultInstance();
-
-
-        // init fields
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mCount = (TextView) view.findViewById(count);
-        mToolbar = (LinearLayout) view.findViewById(R.id.toolbar);
-
-        mAdapter = new FastItemAdapter<>();
-
-        // ripple back
-        ((RippleView) view.findViewById(R.id.back)).setOnRippleCompleteListener(
-                new RippleView.OnRippleCompleteListener() {
-                    @Override
-                    public void onComplete(RippleView rippleView) {
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .remove(FragmentShowAvatars.this)
-                                .commit();
-                        appBarLayout.setVisibility(View.VISIBLE);
-
-                    }
-                });
-
-        // ripple menu
-        ((RippleView) view.findViewById(R.id.menu)).setOnRippleCompleteListener(
-                new RippleView.OnRippleCompleteListener() {
-                    @Override
-                    public void onComplete(RippleView rippleView) {
-
-                        switch (from) {
-                            case setting:
-                                showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
-                                break;
-                            case group:
-                                if (roleGroup == GroupChatRole.OWNER || roleGroup == GroupChatRole.ADMIN) {
-                                    showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
-                                } else {
-                                    showPopupMenu(R.array.pop_up_menu_show_avatar);
-                                }
-                                break;
-                            case channel:
-                                if (roleChannel == ChannelChatRole.OWNER || roleChannel == ChannelChatRole.ADMIN) {
-                                    showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
-                                } else {
-                                    showPopupMenu(R.array.pop_up_menu_show_avatar);
-                                }
-                                break;
-                            case chat:
-                                showPopupMenu(R.array.pop_up_menu_show_avatar);
-                                break;
-                        }
-
-                    }
-                });
-
-        fillListAvatar(from);
-
-
-        if (mAdapter.getAdapterItemCount() > 0) {
-
-            mRecyclerView.setItemAnimator(null);
-            // following lines make scrolling smoother
-            mRecyclerView.setHasFixedSize(true);
-            mRecyclerView.setItemViewCacheSize(20);
-            mRecyclerView.setDrawingCacheEnabled(true);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            mRecyclerView.setLayoutManager(layoutManager);
-            mRecyclerView.setAdapter(mAdapter);
-
-            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-
-                    curerntItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                    try {
-                        mCount.setText(String.format(getString(R.string.d_of_d), curerntItemPosition + 1, mAdapter.getAdapterItemCount()));
-                    } catch (IllegalStateException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            // make RecyclerView snappy
-            SnapHelper helper = new LinearSnapHelper();
-            helper.attachToRecyclerView(mRecyclerView);
-
-            mCount.setText(String.format(getString(R.string.d_of_d), 1, mAdapter.getAdapterItemCount()));
+            if (avatarListSize > 0) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            // no avatar exist
+            return false;
         }
+    }
 
+    private void initComponent(View view) {
+
+        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_back);
+        RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
+            @Override public void onComplete(RippleView rippleView) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        MaterialDesignTextView btnMenu = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_menu);
+        RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
+        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
+            @Override public void onComplete(RippleView rippleView) {
+
+                switch (from) {
+                    case setting:
+                        showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                        break;
+                    case group:
+                        if (roleGroup == GroupChatRole.OWNER || roleGroup == GroupChatRole.ADMIN) {
+                            showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                        } else {
+                            showPopupMenu(R.array.pop_up_menu_show_avatar);
+                        }
+                        break;
+                    case channel:
+                        if (roleChannel == ChannelChatRole.OWNER || roleChannel == ChannelChatRole.ADMIN) {
+                            showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                        } else {
+                            showPopupMenu(R.array.pop_up_menu_show_avatar);
+                        }
+                        break;
+                    case chat:
+                        showPopupMenu(R.array.pop_up_menu_show_avatar);
+                        break;
+                }
+            }
+        });
+        viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
+
+        txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
+        txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
+        ltImageName = (ViewGroup) view.findViewById(R.id.asi_layout_image_name);
+
+        toolbarShowImage = (LinearLayout) view.findViewById(R.id.toolbarShowImage);
+
+        initViewPager();
     }
 
     private void fillListAvatar(From from) {
@@ -301,125 +254,96 @@ public class FragmentShowAvatars extends Fragment {
             avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
                 @Override public void onChange(RealmResults<RealmAvatar> element) {
 
-                    if (avatarListSize != element.size()) {
-                        mAdapter.clear();
-                        fillAdapterChat(avatarList);
-                        mCount.setText(String.format(getString(R.string.d_of_d), curerntItemPosition > 0 ? curerntItemPosition : 1, mAdapter.getAdapterItemCount()));
-                        mRecyclerView.scrollToPosition(curerntItemPosition);
+                    avatarListSize = element.size();
+
+                    viewPager.setAdapter(new FragmentShowAvatars.AdapterViewPager());
+
+                    if (avatarListSize > 0) {
+                        viewPager.getAdapter().notifyDataSetChanged();
+                        txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + getString(R.string.of) + " " + avatarListSize);
+                    } else {
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
                     }
                 }
             });
 
-            fillAdapterChat(avatarList);
-        }
-
-    }
-
-    private void fillAdapterChat(RealmResults<RealmAvatar> avatarList) {
-
-        avatarListSize = avatarList.size();
-
-        for (int i = 0; i < avatarListSize; i++) {
-            RealmAvatar avatar = avatarList.get((i));
-            mAdapter.add(new AvatarItem().setAvatar(avatar.getFile()).withIdentifier(100 + i));
+            avatarListSize = avatarList.size();
         }
     }
 
-    //private void fillListGroupAvatar() {
-    //    //group info
-    //    Realm realm = Realm.getDefaultInstance();
-    //    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
-    //    if (room != null) {
-    //        // user exists in DB
-    //        RealmResults<RealmAvatar> userAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll();
-    //        long identifier = SUID.id().get();
-    //        for (RealmAvatar avatar : userAvatars) {
-    //            mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
-    //            identifier++;
-    //        }
-    //    }
-    //
-    //    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
-    //    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-    //    roleGroup = realmGroupRoom.getRole();
-    //
-    //    realm.close();
-    //}
-    //
-    //
-    //private void fillListChannelAvatar() {
-    //
-    //    //group info
-    //
-    //
-    //    Realm realm = Realm.getDefaultInstance();
-    //    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
-    //    if (room != null) {
-    //        // user exists in DB
-    //
-    //        RealmResults<RealmAvatar> userAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll();
-    //
-    //        long identifier = SUID.id().get();
-    //        for (RealmAvatar avatar : userAvatars) {
-    //            mAdapter.add(new AvatarItem().setAvatar(avatar.getFile(), avatar.getId()).withIdentifier(identifier));
-    //            identifier++;
-    //        }
-    //    }
-    //
-    //    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
-    //    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-    //    roleChannel = realmChannelRoom.getRole();
-    //
-    //    realm.close();
-    //}
+    //***************************************************************************************
 
+    private void initViewPager() {
 
+        mAdapter = new FragmentShowAvatars.AdapterViewPager();
+        viewPager.setAdapter(mAdapter);
 
-    private boolean deleteFromGallery(int itemPos) {
-        // TODO: 10/26/2016 [Alireza] implement
-        return false;
+        viewPager.setCurrentItem(0);
+
+        txtImageNumber.setText(1 + " " + getString(R.string.of) + " " + avatarList.size());
+        if (avatarList.get(0).getFile() != null) {
+            txtImageName.setText(avatarList.get(0).getFile().getName());
+        }
+
+        viewPager.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override public void onPageSelected(int position) {
+
+                txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + avatarList.size());
+
+                if (avatarList.get(position).getFile() != null) {
+                    txtImageName.setText(avatarList.get(position).getFile().getName());
+                }
+            }
+
+            @Override public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
+            @Override public void transformPage(View view, float position) {
+
+                final float normalizedPosition = Math.abs(Math.abs(position) - 1);
+                view.setScaleX(normalizedPosition / 2 + 0.5f);
+                view.setScaleY(normalizedPosition / 2 + 0.5f);
+            }
+        });
     }
 
     private void showPopupMenu(int r) {
-        MaterialDialog dialog =
-                new MaterialDialog.Builder(getActivity()).items(r)
-                        .contentColor(Color.BLACK)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which,
-                                                    CharSequence text) {
-                                if (which == 0) {
-                                    saveToGallery();
-                                } else if (which == 1) {
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(r).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                if (which == 0) {
+                    saveToGallery();
+                } else if (which == 1) {
 
-                                    switch (from) {
-                                        case setting:
-                                            deletePhotoSetting();
-                                            break;
-                                        case group:
-                                            deletePhotoGroup();
-                                            break;
-                                        case channel:
-                                            deletePhotoChannel();
-                                            break;
-                                        case chat:
-                                            deletePhotoChat();
-                                            break;
-                                    }
-
-                                }
-                                // TODO: 10/26/2016 [Alireza] implement delete
-                        /*else if (which == 2) {
-                            int pos = mRecyclerView.getCurrentItem();
-                            if (deleteFromGallery(pos)) {
-                                if (mAdapter.getAdapterItemCount() == 0) {
-                                    getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
-                                    ((ActivitySetting) getActivity()).setAvatar();
-                                }
-                            }
-                        }*/
-                            }
-                        }).show();
+                    switch (from) {
+                        case setting:
+                            deletePhotoSetting();
+                            break;
+                        case group:
+                            deletePhotoGroup();
+                            break;
+                        case channel:
+                            deletePhotoChannel();
+                            break;
+                        case chat:
+                            deletePhotoChat();
+                            break;
+                    }
+                }
+            }
+        }).show();
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
@@ -428,152 +352,34 @@ public class FragmentShowAvatars extends Fragment {
         dialog.getWindow().setAttributes(layoutParams);
     }
 
-    private void deletePhotoChat() {
-
-
-    }
-
-    private void deletePhotoChannel() {
-
-        G.onChannelAvatarDelete = new OnChannelAvatarDelete() {
-            @Override
-            public void onChannelAvatarDelete(long roomId, final long avatarId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
-
-                        int newCount;
-                        if (curerntItemPosition == 0) {
-                            newCount = curerntItemPosition + 1;
-                        } else {
-                            newCount = curerntItemPosition;
-                        }
-                        mAdapter.remove(curerntItemPosition);
-                        mCount.setText(String.format(getString(R.string.d_of_d), newCount, mAdapter.getAdapterItemCount()));
-
-                        if (mAdapter.getAdapterItemCount() == 0) {
-                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
-                            if (appBarLayout != null)
-                                appBarLayout.setVisibility(View.VISIBLE);
-
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-
-            @Override
-            public void onTimeOut() {
-
-            }
-        };
-
-        new RequestChannelAvatarDelete().channelAvatarDelete(mPeerId, avatarList.get(curerntItemPosition).getId());
-
-
-    }
-
-    private void deletePhotoGroup() {
-
-        G.onGroupAvatarDelete = new OnGroupAvatarDelete() {
-            @Override
-            public void onDeleteAvatar(long roomId, final long avatarId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
-
-                        int newCount;
-                        if (curerntItemPosition == 0) {
-                            newCount = curerntItemPosition + 1;
-                        } else {
-                            newCount = curerntItemPosition;
-                        }
-                        mAdapter.remove(curerntItemPosition);
-                        mCount.setText(String.format(getString(R.string.d_of_d), newCount, mAdapter.getAdapterItemCount()));
-
-                        if (mAdapter.getAdapterItemCount() == 0) {
-                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
-                            if (appBarLayout != null)
-                                appBarLayout.setVisibility(View.VISIBLE);
-
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onDeleteAvatarError(int majorCode, int minorCode) {
-                Log.i("HHHHHHHH", "onDeleteAvatarError majorCode: " + majorCode);
-                Log.i("HHHHHHHH", "onDeleteAvatarError minorCode: " + minorCode);
-            }
-
-
-            @Override
-            public void onTimeOut() {
-                Log.i("HHHHHHHH", "onDeleteAvatarError: ");
-            }
-        };
-
-        new RequestGroupAvatarDelete().groupAvatarDelete(mPeerId, avatarList.get(curerntItemPosition).getId());
-    }
-
-    private void deletePhotoSetting() {
-
-
-        G.onUserAvatarDelete = new OnUserAvatarDelete() {
-            @Override
-            public void onUserAvatarDelete(final long avatarId, final String token) {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
-
-                        int newCount;
-                        if (curerntItemPosition == 0) {
-                            newCount = curerntItemPosition + 1;
-                        } else {
-                            newCount = curerntItemPosition;
-                        }
-                        mAdapter.remove(curerntItemPosition);
-                        mCount.setText(String.format(getString(R.string.d_of_d), newCount, mAdapter.getAdapterItemCount()));
-
-                        if (mAdapter.getAdapterItemCount() == 0) {
-                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
-                            if (appBarLayout != null)
-                                appBarLayout.setVisibility(View.VISIBLE);
-
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onUserAvatarDeleteError() {
-
-            }
-        };
-//        RealmAvatar realmAvatar = HelperAvatar.getLastAvatar(userId);
-
-        new RequestUserAvatarDelete().userAvatarDelete(avatarList.get(curerntItemPosition).getId());
-
-    }
-
-    private void showAllMedia() {
-        Log.i(FragmentShowAvatars.class.getSimpleName(), "Show all media");
-    }
+    //private void shareImage() {
+    //
+    //    RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
+    //
+    //    if (rm != null) {
+    //
+    //        if (rm.getForwardMessage() != null) rm = rm.getForwardMessage();
+    //
+    //
+    //        String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
+    //        File file = new File(path);
+    //        if (file.exists()) {
+    //
+    //            Intent intent = new Intent(Intent.ACTION_SEND);
+    //            intent.putExtra(Intent.EXTRA_TEXT, "iGap/download this image");
+    //            Uri screenshotUri = Uri.parse(path);
+    //
+    //            intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+    //            intent.setType("image/*");
+    //            startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
+    //        }
+    //    }
+    //}
 
     private void saveToGallery() {
 
-        if (mAdapter.getItem(curerntItemPosition) != null) {
-            String media = ((AvatarItem) mAdapter.getItem(curerntItemPosition)).avatar.getLocalFilePath();
+        if (avatarList.get(viewPager.getCurrentItem()).getFile() != null) {
+            String media = avatarList.get(viewPager.getCurrentItem()).getFile().getLocalFilePath();
             if (media != null) {
                 File file = new File(media);
                 if (file.exists()) {
@@ -581,5 +387,232 @@ public class FragmentShowAvatars extends Fragment {
                 }
             }
         }
+    }
+
+    private class AdapterViewPager extends PagerAdapter {
+
+        @Override public int getCount() {
+            return avatarList.size();
+        }
+
+        @Override public boolean isViewFromObject(View view, Object object) {
+            return view.equals(object);
+        }
+
+        @Override public Object instantiateItem(View container, final int position) {
+
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
+
+            final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
+            final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
+
+            final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) layout.findViewById(R.id.ch_progress_loadingContent);
+            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+
+            final RealmAttachment ra = avatarList.get(position).getFile();
+
+            if (HelperDownloadFile.isDownLoading(ra.getToken())) {
+                progress.withDrawable(R.drawable.ic_cancel, true);
+                startDownload(position, progress, touchImageView, contentLoading);
+            } else {
+                progress.withDrawable(R.drawable.ic_download, true);
+                contentLoading.setVisibility(View.GONE);
+            }
+
+            if (ra != null) {
+                String path = ra.getLocalFilePath() != null ? ra.getLocalFilePath() : "";
+
+                File file = new File(path);
+                if (file.exists()) {
+                    ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
+                    progress.setVisibility(View.GONE);
+                } else {
+                    path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
+                    file = new File(path);
+                    if (file.exists()) {
+                        ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
+                    } else {
+                        // if thumpnail not exist download it
+                        ProtoFileDownload.FileDownload.Selector selector = null;
+                        long fileSize = 0;
+
+                        if (ra.getSmallThumbnail() != null) {
+                            selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+                            fileSize = ra.getSmallThumbnail().getSize();
+                        } else if (ra.getLargeThumbnail() != null) {
+                            selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+                            fileSize = ra.getLargeThumbnail().getSize();
+                        }
+
+                        final String filePathTumpnail = G.DIR_TEMP + "/" + "thumb_" + ra.getToken() + "_" + ra.getName();
+
+                        if (selector != null && fileSize > 0) {
+                            HelperDownloadFile.startDownload(ra.getToken(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+                                @Override public void OnProgress(String token, int progress) {
+
+                                    if (progress == 100) {
+
+                                        G.currentActivity.runOnUiThread(new Runnable() {
+                                            @Override public void run() {
+                                                ImageLoader.getInstance().displayImage(suitablePath(filePathTumpnail), touchImageView);
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override public void OnError(String token) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            progress.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+
+                    String _tpken = avatarList.get(position).getFile().getToken();
+
+                    if (HelperDownloadFile.isDownLoading(_tpken)) {
+                        HelperDownloadFile.stopDownLoad(_tpken);
+                    } else {
+                        progress.withDrawable(R.drawable.ic_cancel, true);
+                        startDownload(position, progress, touchImageView, contentLoading);
+                    }
+                }
+            });
+
+            touchImageView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    if (isShowToolbar) {
+                        toolbarShowImage.animate().setDuration(150).alpha(0F).start();
+                        ltImageName.setVisibility(View.GONE);
+                        ltImageName.animate().setDuration(150).alpha(0F).start();
+                        toolbarShowImage.setVisibility(View.GONE);
+                        isShowToolbar = false;
+                    } else {
+                        toolbarShowImage.animate().setDuration(150).alpha(1F).start();
+                        toolbarShowImage.setVisibility(View.VISIBLE);
+                        ltImageName.animate().setDuration(150).alpha(1F).start();
+                        ltImageName.setVisibility(View.VISIBLE);
+                        isShowToolbar = true;
+                    }
+                }
+            });
+
+            ((ViewGroup) container).addView(layout);
+            return layout;
+        }
+
+        private void startDownload(int position, final MessageProgress progress, final TouchImageView touchImageView, final ContentLoadingProgressBar contentLoading) {
+
+            contentLoading.setVisibility(View.VISIBLE);
+
+            final RealmAttachment ra = avatarList.get(position).getFile();
+
+            final String dirPath = G.DIR_IMAGE_USER + "/" + ra.getToken() + "_" + ra.getName();
+
+            HelperDownloadFile.startDownload(ra.getToken(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
+                @Override public void OnProgress(String token, final int progres) {
+
+                    if (progress != null) {
+
+                        G.currentActivity.runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                if (progres < 100) {
+                                    progress.withProgress(progres);
+                                } else {
+                                    progress.withProgress(0);
+                                    progress.setVisibility(View.GONE);
+                                    contentLoading.setVisibility(View.GONE);
+
+                                    ImageLoader.getInstance().displayImage(suitablePath(dirPath), touchImageView);
+                                }
+                            }
+                        });
+                    }
+                }
+
+                @Override public void OnError(String token) {
+
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            progress.withProgress(0);
+                            progress.withDrawable(R.drawable.ic_download, true);
+                            contentLoading.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            });
+        }
+
+        @Override public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
+    }
+
+    //******************************************************************************************************
+
+    private void deletePhotoChannel() {
+
+        G.onChannelAvatarDelete = new OnChannelAvatarDelete() {
+            @Override public void onChannelAvatarDelete(long roomId, long avatarId) {
+                if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
+            }
+
+            @Override public void onError(int majorCode, int minorCode) {
+
+            }
+
+            @Override public void onTimeOut() {
+
+            }
+        };
+
+        new RequestChannelAvatarDelete().channelAvatarDelete(mPeerId, avatarList.get(viewPager.getCurrentItem()).getId());
+    }
+
+    private void deletePhotoGroup() {
+
+        G.onGroupAvatarDelete = new OnGroupAvatarDelete() {
+            @Override public void onDeleteAvatar(long roomId, final long avatarId) {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
+                    }
+                });
+            }
+
+            @Override public void onDeleteAvatarError(int majorCode, int minorCode) {
+
+            }
+
+            @Override public void onTimeOut() {
+
+            }
+        };
+
+        new RequestGroupAvatarDelete().groupAvatarDelete(mPeerId, avatarList.get(viewPager.getCurrentItem()).getId());
+    }
+
+    private void deletePhotoSetting() {
+
+        G.onUserAvatarDelete = new OnUserAvatarDelete() {
+            @Override public void onUserAvatarDelete(long avatarId, String token) {
+                if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
+            }
+
+            @Override public void onUserAvatarDeleteError() {
+
+            }
+        };
+
+        new RequestUserAvatarDelete().userAvatarDelete(avatarList.get(viewPager.getCurrentItem()).getId());
+    }
+
+    private void deletePhotoChat() {
+
     }
 }

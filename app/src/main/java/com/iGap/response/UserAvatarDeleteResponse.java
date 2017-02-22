@@ -2,6 +2,9 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoUserAvatarDelete;
+import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmAvatarFields;
+import io.realm.Realm;
 
 public class UserAvatarDeleteResponse extends MessageHandler {
 
@@ -20,9 +23,23 @@ public class UserAvatarDeleteResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoUserAvatarDelete.UserAvatarDeleteResponse.Builder userAvatarDeleteResponse = (ProtoUserAvatarDelete.UserAvatarDeleteResponse.Builder) message;
+        final ProtoUserAvatarDelete.UserAvatarDeleteResponse.Builder userAvatarDeleteResponse = (ProtoUserAvatarDelete.UserAvatarDeleteResponse.Builder) message;
         if (G.onUserAvatarDelete != null) {
             G.onUserAvatarDelete.onUserAvatarDelete(userAvatarDeleteResponse.getId(), identity);
+        } else {
+
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+                    RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, userAvatarDeleteResponse.getId()).findFirst();
+                    if (realmAvatar != null) {
+                        realmAvatar.deleteFromRealm();
+                    }
+                }
+            });
+
+            realm.close();
+
         }
     }
 

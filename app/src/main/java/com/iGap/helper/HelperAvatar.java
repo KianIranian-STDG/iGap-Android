@@ -1,5 +1,6 @@
 package com.iGap.helper;
 
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import com.iGap.G;
 import com.iGap.interfaces.OnAvatarAdd;
@@ -258,48 +259,50 @@ public class HelperAvatar {
      */
 
     public static void avatarDelete(final long ownerId, final long avatarId, final AvatarType avatarType, @Nullable final OnAvatarDelete onAvatarDelete) {
-        Realm realm = Realm.getDefaultInstance();
 
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
-                if (realmAvatar != null) {
-                    realmAvatar.deleteFromRealm();
-                }
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+                final Realm realm = Realm.getDefaultInstance();
 
-                if (onAvatarDelete != null) {
-                    getAvatar(ownerId, avatarType, new OnAvatarGet() {
-                        @Override
-                        public void onAvatarGet(String avatarPath, long ownerId) {
-                            onAvatarDelete.latestAvatarPath(avatarPath);
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
+                        if (realmAvatar != null) {
+                            realmAvatar.deleteFromRealm();
                         }
-
-                        @Override
-                        public void onShowInitials(String initials, String color) {
-                            onAvatarDelete.showInitials(initials, color);
-                        }
-                    });
-                }
-
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                if (onAvatarDelete != null) {
-                    String[] initials = showInitials(ownerId, avatarType);
-                    if (initials != null) {
-                        onAvatarDelete.showInitials(initials[0], initials[1]);
                     }
-                }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
+
+                        if (onAvatarDelete != null) {
+                            getAvatar(ownerId, avatarType, new OnAvatarGet() {
+                                @Override public void onAvatarGet(String avatarPath, long ownerId) {
+                                    onAvatarDelete.latestAvatarPath(avatarPath);
+                                }
+
+                                @Override public void onShowInitials(String initials, String color) {
+                                    onAvatarDelete.showInitials(initials, color);
+                                }
+                            });
+                        }
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+
+                        if (onAvatarDelete != null) {
+                            String[] initials = showInitials(ownerId, avatarType);
+                            if (initials != null) {
+                                onAvatarDelete.showInitials(initials[0], initials[1]);
+                            }
+                        }
+
+                        realm.close();
+                    }
+                });
             }
         });
-
-        realm.close();
     }
 
     private static class AvatarDownload implements OnFileDownloaded {
