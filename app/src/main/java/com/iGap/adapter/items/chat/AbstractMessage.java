@@ -82,6 +82,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         // empty
     }
 
+    /**
+     * add this prt for video player
+     */
+    @Override public void onPlayPauseVideo(VH holder, String localPath, int isHide, double time) {
+        // empty
+    }
+
     public AbstractMessage(boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         this.directionalBased = directionalBased;
         this.type = type;
@@ -902,13 +909,34 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     // TODO: 12/7/2016 [Alireza] ba in shart dige nemishe GIF haro dar fragment show images did
                     if (mMessage.messageType == ProtoGlobal.RoomMessageType.GIF || mMessage.messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                         onPlayPauseGIF(holder, attachment.getLocalFilePath());
-                    } else {
-                        progress.performProgress();
-                        messageClickListener.onOpenClick(progress, mMessage, holder.getAdapterPosition());
+                    }
+                    /**
+                     * add this prt for video player
+                     */
+                    else if (mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+
+                        double time = 0;
+                        String path = null;
+                        if (mMessage.forwardedFrom != null) {
+                            if (mMessage.forwardedFrom.getAttachment() != null) {
+                                time = mMessage.forwardedFrom.getAttachment().getDuration() * 1000L;
+                                path = mMessage.forwardedFrom.getAttachment().getLocalFilePath();
+                            }
+                        } else if (mMessage.attachment != null) {
+                            time = mMessage.attachment.duration * 1000L;
+                            path = mMessage.attachment.getLocalFilePath();
+                        }
+
+                        if (time < G.timeVideoPlayer) {
+                            onPlayPauseVideo(holder, attachment.getLocalFilePath(), holder.itemView.findViewById(R.id.progress).getVisibility(), time);
+                        } else {
+                            if (path != null) {
+                                messageClickListener.onOpenClick(thumbnail, mMessage, holder.getAdapterPosition());
+                            }
+                        }
                     }
                 }
             } else {
-
                 downLoadFile(holder, attachment, 2);
             }
         }
@@ -1112,19 +1140,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void checkForDownloading(VH holder, RealmAttachment attachment) {
+
+        Log.i("VVVVVVVV", "0 checkForDownloading: ");
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
             hideThumbnailIf(holder);
 
             downLoadFile(holder, attachment, 0);
-
+            Log.i("VVVVVVVV", "0.5 checkForDownloading: ");
         } else {
             if (attachment.isFileExistsOnLocal()) {
                 progress.performProgress();
+                Log.i("VVVVVVVV", "1 checkForDownloading: ");
             } else {
                 hideThumbnailIf(holder);
                 progress.withDrawable(R.drawable.ic_download, true);
                 progress.setVisibility(View.VISIBLE);
+                Log.i("VVVVVVVV", "2 checkForDownloading: ");
             }
         }
     }
