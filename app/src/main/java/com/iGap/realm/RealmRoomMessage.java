@@ -245,12 +245,14 @@ import org.parceler.Parcel;
             message.setRoomId(roomId);
 
             if (input.hasForwardFrom()) {
+                Log.i("TTT", "input.hasForwardFrom() : " + input.getMessage());
                 message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), -1));
             }
             if (input.hasReplyTo()) {
+                Log.i("TTT", "input.hasReplyTo() : " + input.getMessage());
                 message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), -1));
             }
-
+            Log.i("TTT", "input : " + input.getMessage());
             message.setShowMessage(showMessage);
         }
 

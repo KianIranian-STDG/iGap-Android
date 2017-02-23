@@ -330,7 +330,7 @@
   <string name="updating">Updating…</string>
   <string name="last_seen_recently">Last Seen Recently</string>
   <string name="member">Members</string>
-  <string name="save_ok">Save OK:</string>
+  <string name="save_ok">Saved</string>
   <string name="exception">Exception:</string>
   <string name="please_enter_phone_number">Please enter phone number.</string>
   <string name="please_enter_firstname_or_lastname">Please enter first name or last name.</string>
@@ -497,7 +497,7 @@
   <string name="phone_selected_for_send">the phone number selected to send</string>
   <string name="crop_selected_for_send">the crop image selected to send</string>
   <string name="location_message">Location Message</string>
-  <string name="chat_to_group">Convert chat to the group</string>
+  <string name="chat_to_group">Convert to group chat</string>
   <string name="last_seen_at">last seen at</string>
   <string name="long_time_ago">long time ago</string>
   <string name="last_month">last month</string>
@@ -733,9 +733,9 @@
   <string name="channel_text_convert_to_public">Do you want Convert channel to public?</string>
   <string name="channel_title_channel_set_username">Set Username</string>
 
-  <string name="group_title_convert_to_private">Convert group to private</string>
+  <string name="group_title_convert_to_private">Convert to private</string>
   <string name="group_text_convert_to_private">Do you want Convert group to private?</string>
-  <string name="group_title_convert_to_public">Convert group to public</string>
+  <string name="group_title_convert_to_public">Convert to public</string>
   <string name="group_text_convert_to_public">Do you want Convert group to public?</string>
   <string name="group_title_set_username">Set Username</string>
   <string name="send_position">send position</string>
@@ -788,7 +788,7 @@
   <string name="is"> is </string>
   <string name="are"> are </string>
   <string name="members_are"> members are </string>
-  <string name="toggle_botton_color">Toggle Botton Color</string>
-  <string name="send_and_attach_botton_color">Send And Attach Botton Color</string>
+  <string name="toggle_botton_color">Toggle Button Color</string>
+  <string name="send_and_attach_botton_color">Send And Attach Button Color</string>
   <string name="default_header_font_color">Default Title Font Color</string>
 </resources>

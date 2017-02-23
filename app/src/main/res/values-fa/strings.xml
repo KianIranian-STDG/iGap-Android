@@ -745,11 +745,11 @@
   <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">USER PROFILE UPDATE USERNAME UPDATE</string>
   <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
   <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
-  <string name="channel_public_hint_revoke">Channel Public Link</string>
-  <string name="channel_link_title_revoke">Invite Link</string>
-  <string name="channel_link_hint_revoke">Channel Invite Link</string>
-  <string name="self_destructs">Self Destructs</string>
-  <string name="save_ok">Save OK:</string>
+  <string name="channel_public_hint_revoke">لینک عمومی کانال</string>
+  <string name="channel_link_title_revoke">لینک دعوت</string>
+  <string name="channel_link_hint_revoke">لینک دعوت به کانال</string>
+  <string name="self_destructs">خود تخریبی</string>
+  <string name="save_ok">ذخیره شد</string>
 
   <string name="Toast_time_wait">لطفا منتظر بمانید تا :</string>
   <string name="array_delete_photo_group">حذف عکس</string>
@@ -789,6 +789,6 @@
   <string name="are"></string>
   <string name="members_are"> نفر </string>
   <string name="toggle_botton_color">رنگ دکمه های ضامنی</string>
-  <string name="send_and_attach_botton_color">رنگ ایکن های ارسال</string>
-  <string name="default_header_font_color">رنگ نوشته های سربرگ</string>
+  <string name="send_and_attach_botton_color">رنگ آیکن ارسال و پیوست ها</string>
+  <string name="default_header_font_color">رنگ تیتر نوشته ها</string>
 </resources>
