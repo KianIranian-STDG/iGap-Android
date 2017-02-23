@@ -260,8 +260,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
 
 
-
-
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
         if (userInfo != null) userID = userInfo.getUserId();
 
@@ -434,6 +432,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 //text1.setPadding(dim20, dim12, dim12, dim20);
                 text2.setPadding(dim20, dim12, dim12, dim12);
                 text3.setPadding(dim20, 0, dim12, dim20);
+
+                text3.setVisibility(View.GONE);
+                if (role == GroupChatRole.OWNER) {
+                    text3.setVisibility(View.VISIBLE);
+                }
 
                 //layoutDialog.addView(text1, params);
                 layoutDialog.addView(text2, params);
@@ -747,7 +750,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                 isPopup = false;
 
-                if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+                if (role == GroupChatRole.OWNER) {
                     if (isPrivate) {
                         dialogRevoke();
                     } else {
@@ -913,6 +916,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onClick(View view) {
                 new RequestGroupRevokeLink().groupRevokeLink(roomId);
+                dialog.dismiss();
             }
         });
         dialog.show();
@@ -1106,7 +1110,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                                realmRoom.getGroupRoom().setUsername("iGap.net" + edtUserName.getText().toString());
+                                realmRoom.getGroupRoom().setUsername(edtUserName.getText().toString());
                                 realmRoom.getGroupRoom().setPrivate(false);
 
                             }
@@ -1122,7 +1126,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                 switch (majorCode) {
                     case 368:
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1735,6 +1738,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+
+                txtGroupLink.setText("" + inviteLink);
                 realmGroupRoom.setInvite_link(inviteLink);
                 realmGroupRoom.setInvite_token(inviteToken);
 

@@ -85,11 +85,8 @@ public class LastSeenTimeUtil {
 
                     break;
                 case 1:
-                    if (HelperCalander.isLanguagePersian) {
-                        time = exactlyTime + " " + G.context.getResources().getString(R.string.last_seen) + " " + G.context.getResources().getString(R.string.yesterday);
-                    } else {
-                        time = G.context.getResources().getString(R.string.last_seen) + " " + G.context.getResources().getString(R.string.yesterday) + " " + exactlyTime;
-                    }
+
+                    time = G.context.getResources().getString(R.string.last_seen) + " " + G.context.getResources().getString(R.string.yesterday) + " " + exactlyTime;
 
                     break;
                 case 2:
@@ -113,14 +110,12 @@ public class LastSeenTimeUtil {
             }
         } else {
             time = G.context.getResources().getString(R.string.last_seen) + " " + HelperCalander.checkHijriAndReturnTime(beforeMillis) + " " + exactlyTime;
-
         }
 
         if (HelperCalander.isLanguagePersian) {
             time = HelperCalander.convertToUnicodeFarsiNumber(time);
         }
 
-        Log.i("CCCCCCCCCCDDDD", "exactlyTime: " + exactlyTime);
         return time;
     }
 
