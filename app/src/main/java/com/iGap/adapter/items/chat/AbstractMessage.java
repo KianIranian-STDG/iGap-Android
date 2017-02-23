@@ -1105,19 +1105,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void checkForDownloading(VH holder, RealmAttachment attachment) {
+
+        Log.i("VVVVVVVV", "0 checkForDownloading: ");
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
             hideThumbnailIf(holder);
 
             downLoadFile(holder, attachment, 0);
-
+            Log.i("VVVVVVVV", "0.5 checkForDownloading: ");
         } else {
             if (attachment.isFileExistsOnLocal()) {
                 progress.performProgress();
+                Log.i("VVVVVVVV", "1 checkForDownloading: ");
             } else {
                 hideThumbnailIf(holder);
                 progress.withDrawable(R.drawable.ic_download, true);
                 progress.setVisibility(View.VISIBLE);
+                Log.i("VVVVVVVV", "2 checkForDownloading: ");
             }
         }
     }

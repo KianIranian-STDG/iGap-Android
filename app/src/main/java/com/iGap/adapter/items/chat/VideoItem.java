@@ -63,7 +63,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     @Override public void onPlayPauseVideo(VideoItem.ViewHolder holder, String localPath, int isHide, double time) {
         super.onPlayPauseVideo(holder, localPath, isHide, time);
 
-        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play, true);
+        //((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play, true);
         //String path = mMessage.attachment.localFilePath;
         if (localPath != null) {
             Uri mp4VideoUri = Uri.parse(localPath);
