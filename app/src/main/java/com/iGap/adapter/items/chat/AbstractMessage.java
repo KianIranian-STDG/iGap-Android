@@ -24,6 +24,7 @@ import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperGetMessageState;
+import com.iGap.helper.HelperInfo;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IChatItemAttachment;
 import com.iGap.interfaces.IMessageItem;
@@ -497,11 +498,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ProtoGlobal.RoomMessageType forwardType = mMessage.replayTo.getForwardMessage() != null ? mMessage.replayTo.getForwardMessage().getMessageType() : mMessage.replayTo.getMessageType();
 
                 if (forwardType == ProtoGlobal.RoomMessageType.CONTACT) {
-                    forwardMessage =
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getRoomMessageContact().getLastPhoneNumber()
-                            : mMessage.replayTo.getForwardMessage().getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getForwardMessage().getRoomMessageContact().getLastPhoneNumber();
+                    forwardMessage = mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getRoomMessageContact().getLastPhoneNumber() : mMessage.replayTo.getForwardMessage().getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getForwardMessage().getRoomMessageContact().getLastPhoneNumber();
                 } else {
-                    forwardMessage = mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessage() : mMessage.replayTo.getForwardMessage().getMessage();
+                    //forwardMessage = mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessage() : mMessage.replayTo.getForwardMessage().getMessage();
+                    if (mMessage.replayTo.getForwardMessage() == null) {
+                        forwardMessage = mMessage.replayTo.getMessage();
+                    } else {
+                        forwardMessage = mMessage.replayTo.getForwardMessage().getMessage();
+                    }
                 }
 
                 ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
@@ -543,12 +547,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                  */
                 RealmRegisteredInfo info = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom.getUserId()).findFirst();
                 if (info != null) {
+                    HelperInfo.needUpdateUser(info.getId(), info.getCacheId());
                     txtForwardFrom.setText(info.getDisplayName());
                     if (mMessage.isSenderMe()) {
                         txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                     } else {
                         txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                     }
+                } else if (mMessage.forwardedFrom.getUserId() != 0) {
+                    HelperInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null);
                 } else {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
                     if (realmRoom != null) {
@@ -561,12 +568,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     } else {
                         RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
                         if (realmRoom1 != null) {
+                            HelperInfo.needUpdateRoomInfo(realmRoom1.getId());
                             txtForwardFrom.setText(realmRoom1.getTitle());
                             if (mMessage.isSenderMe()) {
                                 txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                             } else {
                                 txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                             }
+                        } else {
+                            HelperInfo.needUpdateRoomInfo(mMessage.forwardedFrom.getAuthorRoomId());
                         }
                     }
                 }
@@ -691,10 +701,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (attachment != null) {
-            if (messageType == ProtoGlobal.RoomMessageType.IMAGE
-                || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT
-                || messageType == ProtoGlobal.RoomMessageType.VIDEO
-                || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+            if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
 
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
                 if (imageViewReservedSpace != null) {
@@ -935,7 +942,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     if (progress == 100) {
                         G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
                                 String type;
                                 if (mMessage.forwardedFrom != null) {
@@ -992,7 +1000,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void OnProgress(final String token, final int progress) {
 
                     G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             if (progress == 100) {
                                 progressBar.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
@@ -1013,7 +1022,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void OnError(String token) {
 
                     G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             progressBar.withProgress(0);
                             progressBar.withDrawable(R.drawable.ic_download, true);
                             contentLoading.setVisibility(View.GONE);

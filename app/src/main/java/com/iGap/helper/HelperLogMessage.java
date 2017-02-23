@@ -38,7 +38,7 @@ public class HelperLogMessage {
          * detect authorName
          */
         if (author.hasUser()) {
-            HelperUserInfo.needUpdateUser(author.getUser().getUserId(), author.getUser().getCacheId());
+            HelperInfo.needUpdateUser(author.getUser().getUserId(), author.getUser().getCacheId());
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, author.getUser().getUserId()).findFirst();
             if (realmRegisteredInfo != null) {
                 authorName = realmRegisteredInfo.getDisplayName();

@@ -2,7 +2,7 @@ package com.iGap.response;
 
 import android.os.Handler;
 import com.iGap.G;
-import com.iGap.helper.HelperUserInfo;
+import com.iGap.helper.HelperInfo;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
@@ -49,7 +49,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                         for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
 
                             if (roomMessage.getAuthor().hasUser()) {
-                                HelperUserInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                                HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                             }
 
                             // set info for clientCondition

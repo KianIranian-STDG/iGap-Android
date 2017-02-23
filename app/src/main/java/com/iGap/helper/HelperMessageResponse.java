@@ -41,7 +41,7 @@ public class HelperMessageResponse {
                 if (response.getId().isEmpty()) { // i'm recipient
 
                     if (isAuthorUser) {
-                        HelperUserInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                        HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                     }
                     RealmRoomMessage.putOrUpdate(roomMessage, roomId);
 

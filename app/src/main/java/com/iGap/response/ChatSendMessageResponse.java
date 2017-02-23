@@ -3,7 +3,7 @@ package com.iGap.response;
 import android.os.Handler;
 import android.os.Looper;
 import com.iGap.G;
-import com.iGap.helper.HelperUserInfo;
+import com.iGap.helper.HelperInfo;
 import com.iGap.proto.ProtoChatSendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
@@ -52,7 +52,7 @@ public class ChatSendMessageResponse extends MessageHandler {
 
                 if (chatSendMessageResponse.getResponse().getId().isEmpty()) {
 
-                    HelperUserInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                    HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                     RealmRoomMessage.putOrUpdate(roomMessage, chatSendMessageResponse.getRoomId());
                     if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
                         G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, chatSendMessageResponse.getRoomId());

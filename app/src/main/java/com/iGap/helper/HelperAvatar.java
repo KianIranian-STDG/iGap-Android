@@ -446,7 +446,7 @@ public class HelperAvatar {
 
         public void getUserInfo(long userId) {
             G.onUserInfoForAvatar = this;
-            HelperUserInfo.needUpdateUser(userId, null);
+            HelperInfo.needUpdateUser(userId, null);
         }
 
         @Override

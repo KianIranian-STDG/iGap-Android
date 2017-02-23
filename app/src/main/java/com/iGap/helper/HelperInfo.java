@@ -2,10 +2,13 @@ package com.iGap.helper;
 
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
+import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestUserInfo;
 import io.realm.Realm;
 
-public class HelperUserInfo {
+public class HelperInfo {
 
     /**
      * compare user cacheId , if was equal don't do anything
@@ -25,6 +28,21 @@ public class HelperUserInfo {
             return false;
         }
         new RequestUserInfo().userInfo(userId);
+
+        realm.close();
+        return true;
+    }
+
+    /**
+     * if room isn't exist get info from server
+     */
+    public static boolean needUpdateRoomInfo(long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            return false;
+        }
+        new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.justInfo);
 
         realm.close();
         return true;

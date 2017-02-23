@@ -3,7 +3,7 @@ package com.iGap.response;
 import android.os.Handler;
 import android.os.Looper;
 import com.iGap.G;
-import com.iGap.helper.HelperUserInfo;
+import com.iGap.helper.HelperInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupSendMessage;
 import com.iGap.realm.RealmRoom;
@@ -55,7 +55,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                 if (userId != roomMessage.getAuthor().getUser().getUserId() && builder.getResponse().getId().isEmpty()) {
                     // i'm the recipient
 
-                    HelperUserInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                    HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                     RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId());
                     G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.GROUP, builder.getRoomId());
 
