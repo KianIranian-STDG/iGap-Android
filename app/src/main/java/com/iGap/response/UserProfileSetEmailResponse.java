@@ -3,6 +3,8 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileEmail;
+import com.iGap.realm.RealmUserInfo;
+import io.realm.Realm;
 
 public class UserProfileSetEmailResponse extends MessageHandler {
 
@@ -21,7 +23,18 @@ public class UserProfileSetEmailResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder userProfileEmail = (ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder) message;
+        final ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder userProfileEmail = (ProtoUserProfileEmail.UserProfileSetEmailResponse.Builder) message;
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                realm.where(RealmUserInfo.class).findFirst().setEmail(userProfileEmail.getEmail());
+            }
+        });
+        realm.close();
+
+
+
         G.onUserProfileSetEmailResponse.onUserProfileEmailResponse(userProfileEmail.getEmail(), userProfileEmail.getResponse());
     }
 

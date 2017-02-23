@@ -66,11 +66,8 @@ import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
-import com.iGap.interfaces.OnUserProfileGetEmail;
-import com.iGap.interfaces.OnUserProfileGetGender;
 import com.iGap.interfaces.OnUserProfileSetEmailResponse;
 import com.iGap.interfaces.OnUserProfileSetGenderResponse;
-import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import com.iGap.interfaces.OnUserProfileUpdateUsername;
 import com.iGap.interfaces.OnUserSessionLogout;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -103,6 +100,8 @@ import com.larswerkman.holocolorpicker.SVBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -173,8 +172,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private static String identityCurrent;
     private TextView txtGander;
     private TextView txtEmail;
+    TextView txtNickNameTitle;
     private AttachFile attachFile;
     private CustomTabsHelperFragment mCustomTabsHelperFragment;
+
+    private Realm mRealm;
+    RealmChangeListener<RealmModel> userInfoListener;
+    RealmUserInfo realmUserInfo;
 
     public static long getFolderSize(File dir) throws RuntimeException {
         long size = 0;
@@ -274,18 +278,50 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override protected void onResume() {
+        super.onResume();
+        G.onUserAvatarResponse = this;
+
+        if (realmUserInfo != null) {
+            if (userInfoListener != null) {
+                realmUserInfo.addChangeListener(userInfoListener);
+            }
+
+            updatUserInfoUI(realmUserInfo);
+        }
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        if (realmUserInfo != null) realmUserInfo.removeChangeListeners();
+    }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+
+        if (mRealm != null) {
+            mRealm.close();
+        }
+    }
+
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        mRealm = Realm.getDefaultInstance();
+
+        realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
+        userInfoListener = new RealmChangeListener<RealmModel>() {
+            @Override public void onChange(RealmModel element) {
+                updatUserInfoUI((RealmUserInfo) element);
+            }
+        };
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         G.uploaderUtil.setActivityCallbacks(this);
 
-        final Realm realm = Realm.getDefaultInstance();
-        final TextView txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
-
+        txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
         txtNickName = (TextView) findViewById(R.id.st_txt_nikName);
         txtUserName = (TextView) findViewById(R.id.st_txt_userName);
         txtPhoneNumber = (TextView) findViewById(R.id.st_txt_phoneNumber);
@@ -294,143 +330,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         prgWait = (ProgressBar) findViewById(R.id.st_prgWaiting_addContact);
         prgWait.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
+        updatUserInfoUI(realmUserInfo);
 
-        G.onUserProfileGetGender = new OnUserProfileGetGender() {
-            @Override
-            public void onUserProfileGetGender(final ProtoGlobal.Gender gender) {
-
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                        realmUserInfo.setGender(gender);
-                    }
-                });
-                realm.close();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        userGender = gender;
-                        if (gender == ProtoGlobal.Gender.MALE) {
-                            txtGander.setText(getResources().getString(R.string.Male));
-                        } else if (gender == ProtoGlobal.Gender.FEMALE) {
-                            txtGander.setText(getResources().getString(R.string.Female));
-                        } else {
-                            txtGander.setText(getResources().getString(R.string.set_gender));
-                        }
-
-                    }
-                });
-            }
-
-            @Override
-            public void onUserProfileGetGenderError() {
-                //               runOnUiThread(new Runnable() {
-                //                    @Override
-                //                    public void run() {
-                //                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), ""+R.string.error, Snackbar.LENGTH_LONG);
-                //
-                //                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-                //                            @Override
-                //                            public void onClick(View view) {
-                //                                snack.dismiss();
-                //                            }
-                //                        });
-                //                        snack.show();
-                //                    }
-                //                });
-            }
-
-            @Override
-            public void onUserProfileGetGenderTimeOut() {
-                //                runOnUiThread(new Runnable() {
-                //                    @Override
-                //                    public void run() {
-                //                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), ""+R.string.time_out, Snackbar.LENGTH_LONG);
-                //
-                //                        snack.setAction(R.string.cancel, new View.OnClickListener() {
-                //                            @Override
-                //                            public void onClick(View view) {
-                //                                snack.dismiss();
-                //                            }
-                //                        });
-                //                        snack.show();
-                //                    }
-                //                });
-            }
-        };
         new RequestUserProfileGetGender().userProfileGetGender();
-
-
-        G.onUserProfileGetEmail = new OnUserProfileGetEmail() {
-            @Override
-            public void onUserProfileGetEmail(final String email) {
-
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                        realmUserInfo.setEmail(email);
-                        userEmail = email;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!email.equals("")) {
-                                    txtEmail.setText(email);
-                                } else {
-                                    txtEmail.setText(getResources().getString(R.string.set_email));
-                                }
-
-                            }
-                        });
-                    }
-                });
-                realm.close();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onUserProfileGetEmailError() {
-
-            }
-
-            @Override
-            public void onUserProfileGetEmailTimeOut() {
-
-            }
-        };
-
         new RequestUserProfileGetEmail().userProfileGetEmail();
-
-
-        final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-            userId = realmUserInfo.getUserId();
-            nickName = realmUserInfo.getUserInfo().getDisplayName();
-            userName = realmUserInfo.getUserInfo().getUsername();
-            phoneName = realmUserInfo.getUserInfo().getPhoneNumber();
-            userGender = realmUserInfo.getGender();
-            userEmail = realmUserInfo.getEmail();
-        }
-        if (nickName != null) {
-            txtNickName.setText(nickName);
-            txtNickNameTitle.setText(nickName);
-        }
-        if (userName != null) txtUserName.setText(userName);
-        if (phoneName != null) txtPhoneNumber.setText(phoneName);
-
-        if (HelperCalander.isLanguagePersian) {
-            txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
-        }
 
 
         ViewGroup layoutNickname = (ViewGroup) findViewById(R.id.st_layout_nickname);
@@ -586,44 +489,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             fullName = edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
                         }
 
-                        G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
-                            @Override
-                            public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
 
-                                        Realm realm1 = Realm.getDefaultInstance();
-                                        realm1.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                realm.where(RealmUserInfo.class).findFirst().getUserInfo().setDisplayName(nickName);
-                                                txtNickNameTitle.setText(nickName);
-                                                //FragmentDrawerMenu.txtUserName.setText(nickName);
-
-                                                if (HelperCalander.isLanguagePersian) {
-                                                    //FragmentDrawerMenu.txtUserName.setText(HelperCalander.convertToUnicodeFarsiNumber(nickName));
-                                                }
-                                            }
-                                        });
-
-                                        realm1.close();
-                                        txtNickName.setText(nickName);
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onUserProfileNickNameError(int majorCode, int minorCode) {
-
-                            }
-
-                            @Override
-                            public void onUserProfileNickNameTimeOut() {
-
-                            }
-                        };
                         new RequestUserProfileSetNickname().userProfileNickName(fullName);
+
                         dialog.dismiss();
                     }
                 });
@@ -632,11 +500,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        if (userGender == null || userGender.getNumber() == -1 || userGender == ProtoGlobal.Gender.UNKNOWN) {
-            txtGander.setText(getResources().getString(R.string.set_gender));
-        } else {
-            txtGander.setText(userGender == ProtoGlobal.Gender.MALE ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
-        }
+
         ViewGroup layoutGander = (ViewGroup) findViewById(R.id.st_layout_gander);
         layoutGander.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -659,26 +523,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
                     @Override
                     public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
-
                         hideProgressBar();
-
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                                realmUserInfo.setGender(gender);
-                            }
-                        });
-                        realm.close();
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                txtGander.setText(gender == ProtoGlobal.Gender.MALE ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
-                            }
-                        });
-
                     }
 
                     @Override
@@ -718,12 +563,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             }
         });
-
-        if (userEmail == null || userEmail.equals("")) {
-            txtEmail.setText(getResources().getString(R.string.set_email));
-        } else {
-            txtEmail.setText(userEmail);
-        }
 
         ViewGroup ltEmail = (ViewGroup) findViewById(R.id.st_layout_email);
         ltEmail.setOnClickListener(new View.OnClickListener() {
@@ -813,25 +652,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 G.onUserProfileSetEmailResponse = new OnUserProfileSetEmailResponse() {
                     @Override
                     public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
-
                         hideProgressBar();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                Realm realm1 = Realm.getDefaultInstance();
-                                realm1.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-
-                                        realm.where(RealmUserInfo.class).findFirst().setEmail(email);
-                                        txtEmail.setText(email);
-
-                                    }
-                                });
-                                realm1.close();
-                            }
-                        });
                     }
 
                     @Override
@@ -974,16 +795,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Realm realm1 = Realm.getDefaultInstance();
-                                realm1.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        realm.where(RealmUserInfo.class).findFirst().getUserInfo().setUsername(username);
-                                        txtUserName.setText(username);
-                                        dialog.dismiss();
-                                    }
-                                });
-                                realm1.close();
+                                dialog.dismiss();
                             }
                         });
                     }
@@ -2075,9 +1887,48 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             txtVersionApp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVersionApp.getText().toString()));
         }
 
-        realm.close();
-
         showImage();
+    }
+
+    private void updatUserInfoUI(RealmUserInfo userInfo) {
+
+        if (userInfo != null) {
+            userId = userInfo.getUserId();
+            nickName = userInfo.getUserInfo().getDisplayName();
+            userName = userInfo.getUserInfo().getUsername();
+            phoneName = userInfo.getUserInfo().getPhoneNumber();
+            userGender = userInfo.getGender();
+            userEmail = userInfo.getEmail();
+        }
+
+        if (nickName != null) {
+            txtNickName.setText(nickName);
+            txtNickNameTitle.setText(nickName);
+        }
+
+        if (userName != null) txtUserName.setText(userName);
+
+        if (phoneName != null) txtPhoneNumber.setText(phoneName);
+
+        if (HelperCalander.isLanguagePersian) {
+            txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
+        }
+
+        if (userGender != null) {
+            if (userGender == ProtoGlobal.Gender.MALE) {
+                txtGander.setText(getResources().getString(R.string.Male));
+            } else if (userGender == ProtoGlobal.Gender.FEMALE) {
+                txtGander.setText(getResources().getString(R.string.Female));
+            }
+        } else {
+            txtGander.setText(getResources().getString(R.string.set_gender));
+        }
+
+        if (userEmail != null && userEmail.length() > 0) {
+            txtEmail.setText(userEmail);
+        } else {
+            txtEmail.setText(getResources().getString(R.string.set_email));
+        }
     }
 
     private void showSelectAppColorDialog(final int title) {
@@ -2385,13 +2236,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         startActivity(new Intent(ActivitySetting.this, ActivitySetting.class));
         overridePendingTransition(0, 0);
         finish();
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        G.onUserAvatarResponse = this;
     }
 
     @Override

@@ -1,7 +1,8 @@
 package com.iGap.response;
 
-import com.iGap.G;
 import com.iGap.proto.ProtoUserProfileGetSelfRemove;
+import com.iGap.realm.RealmUserInfo;
+import io.realm.Realm;
 
 public class UserProfileGetSelfRemoveResponse extends MessageHandler {
 
@@ -20,13 +21,20 @@ public class UserProfileGetSelfRemoveResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemoveResponse.Builder builder = (ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemoveResponse.Builder) message;
+        final ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemoveResponse.Builder builder = (ProtoUserProfileGetSelfRemove.UserProfileGetSelfRemoveResponse.Builder) message;
 
         builder.getSelfRemove();
 
-        if (G.onUserProfileGetSelfRemove != null) {
-            G.onUserProfileGetSelfRemove.onUserSetSelfRemove(builder.getSelfRemove());
-        }
+        Realm realm1 = Realm.getDefaultInstance();
+        realm1.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                realm.where(RealmUserInfo.class).findFirst().setSelfRemove(builder.getSelfRemove());
+            }
+        });
+
+        realm1.close();
+
+
 
     }
 

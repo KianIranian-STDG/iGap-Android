@@ -116,7 +116,9 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
         final View lineEditText = findViewById(R.id.pu_line_below_editText);
         btnSetImage = (com.iGap.module.CircleImageView) findViewById(R.id.pu_profile_circle_image);
-        btnSetImage.setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        AndroidUtils.setBackgroundShapeColor(btnSetImage, Color.parseColor(G.appBarColor));
+
         btnSetImage.setOnClickListener(new View.OnClickListener() { // button for set image
             @Override
             public void onClick(View view) {

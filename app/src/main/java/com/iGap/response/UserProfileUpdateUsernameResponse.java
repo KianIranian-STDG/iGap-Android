@@ -3,6 +3,8 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileUpdateUsername;
+import com.iGap.realm.RealmUserInfo;
+import io.realm.Realm;
 
 public class UserProfileUpdateUsernameResponse extends MessageHandler {
 
@@ -20,7 +22,16 @@ public class UserProfileUpdateUsernameResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder builder = (ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder) message;
+        final ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder builder = (ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.Builder) message;
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                realm.where(RealmUserInfo.class).findFirst().getUserInfo().setUsername(builder.getUsername());
+            }
+        });
+        realm.close();
+
 
         if (G.onUserProfileUpdateUsername != null)
         G.onUserProfileUpdateUsername.onUserProfileUpdateUsername(builder.getUsername());
