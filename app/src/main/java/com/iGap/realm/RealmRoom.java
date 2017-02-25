@@ -147,7 +147,9 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getGroupRoom().setDescription(room.getGroupRoomExtra().getDescription());
                 realmRoom.setAvatar(RealmAvatar.put(realmRoom.getId(), room.getGroupRoomExtra().getAvatar(), true));
                 realmRoom.getGroupRoom().setInvite_token(room.getGroupRoomExtra().getPrivateExtra().getInviteToken());
-                realmRoom.getGroupRoom().setInvite_link(room.getGroupRoomExtra().getPrivateExtra().getInviteLink());
+                if (!room.getGroupRoomExtra().getPrivateExtra().getInviteLink().isEmpty()) {
+                    realmRoom.getGroupRoom().setInvite_link(room.getGroupRoomExtra().getPrivateExtra().getInviteLink());
+                }
                 realmRoom.getGroupRoom().setUsername(room.getGroupRoomExtra().getPublicExtra().getUsername());
                 realmRoom.getGroupRoom().setPrivate(room.getGroupRoomExtra().hasPrivateExtra());
                 break;

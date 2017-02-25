@@ -2,7 +2,6 @@ package com.iGap.realm;
 
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.enums.GroupChatRole;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -35,7 +34,9 @@ public class RealmGroupRoom extends RealmObject {
         realmGroupRoom.setRole(GroupChatRole.convert(room.getRole()));
         realmGroupRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
         realmGroupRoom.setDescription(room.getDescription());
-        realmGroupRoom.setInvite_link(room.getPrivateExtra().getInviteLink());
+        if (!room.getPrivateExtra().getInviteLink().isEmpty()) {
+            realmGroupRoom.setInvite_link(room.getPrivateExtra().getInviteLink());
+        }
         realmGroupRoom.setInvite_token(room.getPrivateExtra().getInviteToken());
         realmGroupRoom.setUsername(room.getPublicExtra().getUsername());
         return realmGroupRoom;
