@@ -1,7 +1,8 @@
 package com.iGap.response;
 
-import com.iGap.G;
 import com.iGap.proto.ProtoUserProfileGetGender;
+import com.iGap.realm.RealmUserInfo;
+import io.realm.Realm;
 
 public class UserProfileGetGenderResponse extends MessageHandler {
 
@@ -23,28 +24,24 @@ public class UserProfileGetGenderResponse extends MessageHandler {
         final ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder builder =
                 (ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder) message;
 
-        if (G.onUserProfileGetGender != null) {
-            G.onUserProfileGetGender.onUserProfileGetGender(builder.getGender());
-        }
-
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                realmUserInfo.setGender(builder.getGender());
+            }
+        });
+        realm.close();
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        if (G.onUserProfileGetGender != null) {
-            G.onUserProfileGetGender.onUserProfileGetGenderTimeOut();
-        }
-
     }
 
     @Override
     public void error() {
         super.error();
-        if (G.onUserProfileGetGender != null) {
-            G.onUserProfileGetGender.onUserProfileGetGenderError();
-        }
-
     }
 }
 

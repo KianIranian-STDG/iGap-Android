@@ -1034,7 +1034,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 progressBar.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
 
-                                progressBar.performProgress();
+                                //   progressBar.performProgress();
 
                                 onLoadThumbnailFromLocal(holder, _path, LocalFileType.FILE);
 

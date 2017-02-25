@@ -126,14 +126,10 @@ import com.iGap.interfaces.OnUserInfoMyClient;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserLogin;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
-import com.iGap.interfaces.OnUserProfileGetEmail;
-import com.iGap.interfaces.OnUserProfileGetGender;
 import com.iGap.interfaces.OnUserProfileGetNickname;
-import com.iGap.interfaces.OnUserProfileGetSelfRemove;
 import com.iGap.interfaces.OnUserProfileSetEmailResponse;
 import com.iGap.interfaces.OnUserProfileSetGenderResponse;
 import com.iGap.interfaces.OnUserProfileSetNickNameResponse;
-import com.iGap.interfaces.OnUserProfileSetSelfRemove;
 import com.iGap.interfaces.OnUserProfileUpdateUsername;
 import com.iGap.interfaces.OnUserRegistration;
 import com.iGap.interfaces.OnUserSessionGetActiveList;
@@ -305,8 +301,7 @@ public class G extends MultiDexApplication {
     public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
     public static OnChatDelete onChatDelete;
     public static OnUserUsernameToId onUserUsernameToId;
-    public static OnUserProfileGetEmail onUserProfileGetEmail;
-    public static OnUserProfileGetGender onUserProfileGetGender;
+
     public static OnUserProfileGetNickname onUserProfileGetNickname;
     public static OnGroupCreate onGroupCreate;
     public static OnGroupAddMember onGroupAddMember;
@@ -331,8 +326,7 @@ public class G extends MultiDexApplication {
     public static OnUserAvatarGetList onUserAvatarGetList;
     public static OnDraftMessage onDraftMessage;
     public static OnUserDelete onUserDelete;
-    public static OnUserProfileSetSelfRemove onUserProfileSetSelfRemove;
-    public static OnUserProfileGetSelfRemove onUserProfileGetSelfRemove;
+
     public static OnUserProfileCheckUsername onUserProfileCheckUsername;
     public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;
     public static OnGroupGetMemberList onGroupGetMemberList;

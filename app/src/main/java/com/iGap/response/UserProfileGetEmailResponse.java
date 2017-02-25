@@ -1,7 +1,8 @@
 package com.iGap.response;
 
-import com.iGap.G;
 import com.iGap.proto.ProtoUserProfileGetEmail;
+import com.iGap.realm.RealmUserInfo;
+import io.realm.Realm;
 
 public class UserProfileGetEmailResponse extends MessageHandler {
 
@@ -20,30 +21,28 @@ public class UserProfileGetEmailResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoUserProfileGetEmail.UserProfileGetEmailResponse.Builder builder =
-                (ProtoUserProfileGetEmail.UserProfileGetEmailResponse.Builder) message;
-        builder.getEmail();
+        final ProtoUserProfileGetEmail.UserProfileGetEmailResponse.Builder builder = (ProtoUserProfileGetEmail.UserProfileGetEmailResponse.Builder) message;
 
-        if (G.onUserProfileGetEmail != null) {
-            G.onUserProfileGetEmail.onUserProfileGetEmail(builder.getEmail());
-        }
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                realmUserInfo.setEmail(builder.getEmail());
+            }
+        });
+        realm.close();
+
 
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        if (G.onUserProfileGetEmail != null) {
-            G.onUserProfileGetEmail.onUserProfileGetEmailTimeOut();
-        }
     }
 
     @Override
     public void error() {
         super.error();
-        if (G.onUserProfileGetEmail != null) {
-            G.onUserProfileGetEmail.onUserProfileGetEmailError();
-        }
     }
 }
 

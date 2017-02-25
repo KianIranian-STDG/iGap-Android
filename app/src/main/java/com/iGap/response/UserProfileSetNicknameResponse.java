@@ -3,6 +3,8 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserProfileNickname;
+import com.iGap.realm.RealmUserInfo;
+import io.realm.Realm;
 
 public class UserProfileSetNicknameResponse extends MessageHandler {
 
@@ -22,17 +24,27 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder userProfileNickNameResponse = (ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder) message;
-        G.onUserProfileSetNickNameResponse.onUserProfileNickNameResponse(userProfileNickNameResponse.getNickname(), userProfileNickNameResponse.getResponse());
+        final ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder userProfileNickNameResponse = (ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder) message;
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                realm.where(RealmUserInfo.class).findFirst().getUserInfo().setDisplayName(userProfileNickNameResponse.getNickname());
+            }
+        });
+
+        realm.close();
+
+        if (G.onUserProfileSetNickNameResponse != null) {
+            G.onUserProfileSetNickNameResponse.onUserProfileNickNameResponse(userProfileNickNameResponse.getNickname(), userProfileNickNameResponse.getResponse());
+        }
+
+
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-
-        if (G.onUserProfileSetNickNameResponse != null) {
-            G.onUserProfileSetNickNameResponse.onUserProfileNickNameTimeOut();
-        }
     }
 
     @Override
@@ -42,7 +54,10 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
         final int majorCode = errorResponse.getMajorCode();
         final int minorCode = errorResponse.getMinorCode();
 
-        G.onUserProfileSetNickNameResponse.onUserProfileNickNameError(majorCode, minorCode);
+        if (G.onUserProfileSetNickNameResponse != null) {
+            G.onUserProfileSetNickNameResponse.onUserProfileNickNameError(majorCode, minorCode);
+        }
+
     }
 }
 

@@ -14,8 +14,6 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.interfaces.OnUserProfileGetSelfRemove;
-import com.iGap.interfaces.OnUserProfileSetSelfRemove;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructSessionsGetActiveList;
@@ -23,6 +21,8 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileGetSelfRemove;
 import com.iGap.request.RequestUserProfileSetSelfRemove;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -40,12 +40,40 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     private ArrayList<StructSessionsGetActiveList> itemSessionsgetActivelist = new ArrayList<StructSessionsGetActiveList>();
     private TextView txtDestruction;
 
+    private Realm mRealm;
+    RealmChangeListener<RealmModel> userInfoListener;
+    RealmUserInfo realmUserInfo;
+
     public FragmentPrivacyAndSecurity() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_privacy_and_security, container, false);
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+
+        if (realmUserInfo != null) {
+            if (userInfoListener != null) {
+                realmUserInfo.addChangeListener(userInfoListener);
+            }
+            selfRemove = realmUserInfo.getSelfRemove();
+            setTextSelfDestructs();
+        }
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+
+        if (realmUserInfo != null) realmUserInfo.removeChangeListeners();
+    }
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+
+        if (mRealm != null) mRealm.close();
     }
 
     @Override
@@ -55,8 +83,18 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
         view.findViewById(R.id.fpac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        Realm realm = Realm.getDefaultInstance();
-        selfRemove = realm.where(RealmUserInfo.class).findFirst().getSelfRemove();
+        mRealm = Realm.getDefaultInstance();
+
+        realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
+        userInfoListener = new RealmChangeListener<RealmModel>() {
+            @Override public void onChange(RealmModel element) {
+
+                selfRemove = ((RealmUserInfo) element).getSelfRemove();
+                setTextSelfDestructs();
+            }
+        };
+
+
 
         RelativeLayout parentPrivacySecurity = (RelativeLayout) view.findViewById(R.id.parentPrivacySecurity);
         parentPrivacySecurity.setOnClickListener(new View.OnClickListener() {
@@ -99,8 +137,6 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
 
         txtDestruction = (TextView) view.findViewById(R.id.stps_txt_Self_destruction);
-        setTextSelfDestructs();
-
 
         sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         poSelfRemove = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_SELF_REMOVE, 2);
@@ -112,65 +148,13 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             }
         });
 
-        realm.close();
 
-        G.onUserProfileGetSelfRemove = new OnUserProfileGetSelfRemove() {
-            @Override
-            public void onUserSetSelfRemove(final int numberOfMonth) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Realm realm1 = Realm.getDefaultInstance();
-                        realm1.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                realm.where(RealmUserInfo.class).findFirst().setSelfRemove(numberOfMonth);
-                            }
-                        });
-
-                        realm1.close();
-
-                        setTextSelfDestructs();
-                    }
-                });
-
-
-            }
-        };
 
         new RequestUserProfileGetSelfRemove().userProfileGetSelfRemove();
 
     }
 
     private void selfDestructs() {
-
-        G.onUserProfileSetSelfRemove = new OnUserProfileSetSelfRemove() {
-            @Override
-            public void onUserSetSelfRemove(final int numberOfMonth) {
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Realm realm1 = Realm.getDefaultInstance();
-                        realm1.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                realm.where(RealmUserInfo.class).findFirst().setSelfRemove(numberOfMonth);
-                            }
-                        });
-
-                        realm1.close();
-                    }
-                });
-            }
-
-            @Override
-            public void Error(int majorCode, int minorCode) {
-
-            }
-        };
 
         new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.self_destructs)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
