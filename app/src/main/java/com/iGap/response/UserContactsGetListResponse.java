@@ -66,9 +66,6 @@ public class UserContactsGetListResponse extends MessageHandler {
             }
         });
 
-        if (G.onUserContactGetList != null) {
-            G.onUserContactGetList.onContactGetList();
-        }
 
         realm.close();
 

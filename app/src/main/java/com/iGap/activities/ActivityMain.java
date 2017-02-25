@@ -519,7 +519,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         final Fragment fragment = RegisteredContactsFragment.newInstance();
                         Bundle bundle = new Bundle();
-                        bundle.putString("TITLE", "Contacts");
+                        bundle.putString("TITLE", "New Chat");
                         fragment.setArguments(bundle);
 
                         try {
@@ -610,7 +610,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         Fragment fragment = RegisteredContactsFragment.newInstance();
                         Bundle bundle = new Bundle();
-                        bundle.putString("TITLE", "New Chat");
+                        bundle.putString("TITLE", "Contacts");
                         fragment.setArguments(bundle);
 
                         try {

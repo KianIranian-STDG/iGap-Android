@@ -27,7 +27,6 @@ import com.iGap.adapter.items.ContactItem;
 import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnGetPermission;
-import com.iGap.interfaces.OnUserContactGetList;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
@@ -36,6 +35,7 @@ import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;
+import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
@@ -51,6 +51,8 @@ import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,11 +73,42 @@ public class RegisteredContactsFragment extends Fragment {
     private ItemAdapter itemAdapter;
     private List<IItem> items;
     private Activity mActivity;
+    private StickyRecyclerHeadersDecoration decoration;
+    private StickyHeaderAdapter stickyHeaderAdapter;
 
+    private Realm mRealm;
+    RealmChangeListener<RealmResults<RealmContacts>> contactsChangeListener;
+    RealmResults<RealmContacts> realmContacts;
+
+    @Override public void onResume() {
+        super.onResume();
+
+        if (realmContacts != null) {
+            if (contactsChangeListener != null) {
+                realmContacts.addChangeListener(contactsChangeListener);
+            }
+            fillAdapter();
+        }
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+
+        if (realmContacts != null) realmContacts.removeChangeListeners();
+    }
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+
+        if (mRealm != null) {
+            mRealm.close();
+        }
+    }
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
     }
+
 
     @Nullable
     @Override
@@ -100,7 +133,17 @@ public class RegisteredContactsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.i("MMM", "onViewCreated");
+
+        mRealm = Realm.getDefaultInstance();
+
+        realmContacts = mRealm.where(RealmContacts.class).findAll();
+        contactsChangeListener = new RealmChangeListener<RealmResults<RealmContacts>>() {
+            @Override public void onChange(RealmResults<RealmContacts> element) {
+                fillAdapter();
+            }
+        };
+
+
         sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         isImportContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, false);
         if (!isImportContactList) {
@@ -157,7 +200,7 @@ public class RegisteredContactsFragment extends Fragment {
         fastAdapter.withSelectable(true);
 
         //create our adapters
-        final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
+        stickyHeaderAdapter = new StickyHeaderAdapter();
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItem>() {
@@ -249,50 +292,15 @@ public class RegisteredContactsFragment extends Fragment {
         rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
         //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
 
         items = new ArrayList<>();
-        Log.i("MMMM", "start retrieve ");
+
         contacts = Contacts.retrieve(null);
-        G.onUserContactGetList = new OnUserContactGetList() {
-            @Override
-            public void onContactGetList() {
-                //                if (contacts.size() == 0) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        contacts.clear();
-                        itemAdapter.clear();
-                        items.clear();
-
-                        contacts = Contacts.retrieve(null);
-                        if (contacts != null && fastAdapter != null && itemAdapter != null) {
-                            for (StructContactInfo contact : contacts) {
-                                items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
-                            }
-                            itemAdapter.add(items);
-
-                            //so the headers are aware of changes
-                            stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                                @Override
-                                public void onChanged() {
-                                    decoration.invalidateHeaders();
-                                }
-                            });
-                            //restore selections (this has to be done after the items were added
-                            fastAdapter.withSavedInstanceState(savedInstanceState);
-                            fastAdapter.notifyDataSetChanged();
-                        }
 
 
-                    }
-                });
-            }
-            //            }
-        };
-        Log.i("MMM", "contacts : " + contacts.size());
         if (contacts.size() == 0) {
             /**
              * if contacts size is zero send request for get contacts list
@@ -300,23 +308,6 @@ public class RegisteredContactsFragment extends Fragment {
              */
             Log.i("MMM", "RequestUserContactsGetList 1");
             new RequestUserContactsGetList().userContactGetList();
-        } else {
-            for (StructContactInfo contact : contacts) {
-                Log.i("MMM", "contact : " + contact);
-                items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
-            }
-            itemAdapter.add(items);
-
-            //so the headers are aware of changes
-            stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                @Override
-                public void onChanged() {
-                    decoration.invalidateHeaders();
-                }
-            });
-
-            //restore selections (this has to be done after the items were added
-            fastAdapter.withSavedInstanceState(savedInstanceState);
         }
 
 
@@ -496,5 +487,31 @@ public class RegisteredContactsFragment extends Fragment {
     @Override public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
+    }
+
+    private void fillAdapter() {
+
+        contacts.clear();
+        itemAdapter.clear();
+        items.clear();
+
+        contacts = Contacts.retrieve(null);
+        if (contacts != null && fastAdapter != null && itemAdapter != null) {
+            for (StructContactInfo contact : contacts) {
+                items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+            }
+            itemAdapter.add(items);
+
+            //so the headers are aware of changes
+            stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override public void onChanged() {
+                    decoration.invalidateHeaders();
+                }
+            });
+            //restore selections (this has to be done after the items were added
+            //  fastAdapter.withSavedInstanceState(savedInstanceState);
+            fastAdapter.notifyDataSetChanged();
+        }
+
     }
 }
