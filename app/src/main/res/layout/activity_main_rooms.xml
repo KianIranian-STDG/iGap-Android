@@ -17,7 +17,7 @@
         android:id="@+id/rootToolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-        app:layout_scrollFlags="scroll|enterAlways"
+
         >
       <android.support.v7.widget.Toolbar
           android:id="@+id/main_toolbar"
@@ -96,14 +96,20 @@
       android:id="@+id/activity_main_swipe_refresh_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/dp60"
       >
 
-    <android.support.v7.widget.RecyclerView
+
+    <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
         android:id="@+id/cl_recycler_view_contact"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:rrvLayoutType="LinearLayout"
         android:overScrollMode="never"
+
+
         />
+
 
   </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -145,4 +151,6 @@
         />
 
   </com.iGap.libs.floatingAddButton.ArcMenu>
+
+
 </com.iGap.module.NotTouchableCoordinatorLayout>

@@ -1,12 +1,13 @@
 package com.iGap.response;
 
-import android.text.format.DateUtils;
 import com.iGap.G;
 import com.iGap.proto.ProtoGroupClearMessage;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
 
 public class GroupClearMessageResponse extends MessageHandler {
@@ -47,8 +48,13 @@ public class GroupClearMessageResponse extends MessageHandler {
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
                 if (realmRoom != null) {
-                    realmRoom.setUpdatedTime(builder.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
+                    //  realmRoom.setUpdatedTime(builder.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
+                    realmRoom.setUnreadCount(0);
+                    realmRoom.setLastMessage(null);
                 }
+
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll().deleteAllFromRealm();
+
             }
         });
 
