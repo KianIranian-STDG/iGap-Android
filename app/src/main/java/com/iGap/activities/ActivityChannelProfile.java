@@ -184,7 +184,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
     private boolean isSignature;
     private TextView txtLinkTitle;
     private boolean isPopup = false;
-    private int limitation = 10; // limit for show member in list
+    private int limitation = 50; // limit for show member in list
     private int currentOffset = 0;
 
     @Override

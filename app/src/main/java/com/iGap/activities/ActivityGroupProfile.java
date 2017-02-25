@@ -205,7 +205,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private ProgressBar prgWait;
 
     private RealmList<RealmMember> memberList;
-    private int limitation = 10; // limit for show member in list
+    private int limitation = 50; // limit for show member in list
     private int currentOffset = 0;
 
 

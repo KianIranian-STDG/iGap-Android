@@ -609,7 +609,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * if type was gif auto file start auto download
          */
-        // TODO: 2/25/2017 (molareza)plz check for autoDownload gif
         if (sharedPreferences.getInt(key, ((key.equals(SHP_SETTING.KEY_AD_DATA_GIF) || key.equals(SHP_SETTING.KEY_AD_WIFI_GIF)) ? 5 : -1)) != -1) {
             autoDownload(holder, attachment);
         } else {

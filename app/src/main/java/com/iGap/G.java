@@ -152,7 +152,7 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmMigration;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.request.RequestClientCondition;
+import com.iGap.request.RequestClientGetRoomList;
 import com.iGap.request.RequestQueue;
 import com.iGap.request.RequestUserContactsGetBlockedList;
 import com.iGap.request.RequestUserInfo;
@@ -730,7 +730,8 @@ public class G extends MultiDexApplication {
                          */
                         if (!firstTimeEnterToApp) {
                             Log.i("BBB", "RequestClientCondition after login ");
-                            new RequestClientCondition().clientCondition(clientConditionGlobal);
+                            //new RequestClientCondition().clientCondition(clientConditionGlobal);
+                            new RequestClientGetRoomList().clientGetRoomList();
                         }
 
                         getUserInfo();
@@ -801,7 +802,7 @@ public class G extends MultiDexApplication {
                         latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
                         hasNetworkBefore = true;
                         allowForReconnecting = true;
-                        WebSocketClient.reconnect(true);
+                        reconnect(true);
                     } else {
                         /**
                          * before has network
