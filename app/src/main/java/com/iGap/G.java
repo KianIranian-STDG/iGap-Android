@@ -116,7 +116,6 @@ import com.iGap.interfaces.OnUserAvatarGetList;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserContactDelete;
 import com.iGap.interfaces.OnUserContactEdit;
-import com.iGap.interfaces.OnUserContactGetList;
 import com.iGap.interfaces.OnUserContactsBlock;
 import com.iGap.interfaces.OnUserContactsUnBlock;
 import com.iGap.interfaces.OnUserDelete;
@@ -291,7 +290,7 @@ public class G extends MultiDexApplication {
     public static OnInfoTime onInfoTime;
     //   public static OnUserContactImport onContactImport;
     public static OnUserContactEdit onUserContactEdit;
-    public static OnUserContactGetList onUserContactGetList;
+
     public static OnUserContactDelete onUserContactdelete;
     public static OnClientGetRoomListResponse onClientGetRoomListResponse;
     public static OnClientGetRoomResponse onClientGetRoomResponse;

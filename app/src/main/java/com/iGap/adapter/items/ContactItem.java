@@ -3,7 +3,6 @@ package com.iGap.adapter.items;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
@@ -88,22 +87,12 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
-                    }
-                });
+                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
             }
 
             @Override
             public void onShowInitials(final String initials, final String color) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
+                holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
             }
         });
 
