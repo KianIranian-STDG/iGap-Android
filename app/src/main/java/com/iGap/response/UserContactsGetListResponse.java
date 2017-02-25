@@ -1,10 +1,6 @@
 package com.iGap.response;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.support.v4.content.ContextCompat;
 import com.iGap.G;
-import com.iGap.module.Contacts;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserContactsGetList;
 import com.iGap.realm.RealmAvatar;
@@ -31,48 +27,48 @@ public class UserContactsGetListResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder = (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        G.handler.post(new Runnable() {
             @Override
-            public void execute(Realm realm) {
-                realm.delete(RealmContacts.class);
+            public void run() {
 
-                for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
-                    if (realmRegisteredInfo == null) {
-                        realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, registerUser.getId());
-                        realmRegisteredInfo.setDoNotshowSpamBar(false);
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.delete(RealmContacts.class);
+
+                        for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
+                            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
+                            if (realmRegisteredInfo == null) {
+                                realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, registerUser.getId());
+                                realmRegisteredInfo.setDoNotshowSpamBar(false);
+                            }
+                            realmRegisteredInfo.fillRegisteredUserInfo(registerUser, realmRegisteredInfo);
+
+                            RealmContacts listResponse = realm.createObject(RealmContacts.class);
+                            listResponse.setId(registerUser.getId());
+                            listResponse.setUsername(registerUser.getUsername());
+                            listResponse.setPhone(registerUser.getPhone());
+                            listResponse.setFirst_name(registerUser.getFirstName());
+                            listResponse.setLast_name(registerUser.getLastName());
+                            listResponse.setDisplay_name(registerUser.getDisplayName());
+                            listResponse.setInitials(registerUser.getInitials());
+                            listResponse.setColor(registerUser.getColor());
+                            listResponse.setStatus(registerUser.getStatus().toString());
+                            listResponse.setLast_seen(registerUser.getLastSeen());
+                            listResponse.setAvatarCount(registerUser.getAvatarCount());
+                            listResponse.setCacheId(registerUser.getCacheId());
+                            listResponse.setAvatar(RealmAvatar.put(registerUser.getId(), registerUser.getAvatar(), true));
+                        }
                     }
-                    realmRegisteredInfo.fillRegisteredUserInfo(registerUser, realmRegisteredInfo);
+                });
 
-                    //TODO [Saeed Mozaffari] [2017-02-14 11:20 AM] -check it and after delete following code ==> because we have a realm just for avatars don't need to call put twice here
-                    RealmAvatar.put(registerUser.getId(), registerUser.getAvatar(), true);
-
-                    RealmContacts listResponse = realm.createObject(RealmContacts.class);
-                    listResponse.setId(registerUser.getId());
-                    listResponse.setUsername(registerUser.getUsername());
-                    listResponse.setPhone(registerUser.getPhone());
-                    listResponse.setFirst_name(registerUser.getFirstName());
-                    listResponse.setLast_name(registerUser.getLastName());
-                    listResponse.setDisplay_name(registerUser.getDisplayName());
-                    listResponse.setInitials(registerUser.getInitials());
-                    listResponse.setColor(registerUser.getColor());
-                    listResponse.setStatus(registerUser.getStatus().toString());
-                    listResponse.setLast_seen(registerUser.getLastSeen());
-                    listResponse.setAvatarCount(registerUser.getAvatarCount());
-                    listResponse.setCacheId(registerUser.getCacheId());
-                    listResponse.setAvatar(RealmAvatar.put(registerUser.getId(), registerUser.getAvatar(), true));
-                }
+                realm.close();
             }
         });
-
-
-        realm.close();
-
-        if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            Contacts.FillRealmInviteFriend();
-        }
-
+        //if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        //    Contacts.FillRealmInviteFriend();
+        //}
     }
 
     @Override

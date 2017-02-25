@@ -24,9 +24,7 @@ import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItem;
-import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnChatGetRoom;
-import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
@@ -53,7 +51,6 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +77,8 @@ public class RegisteredContactsFragment extends Fragment {
     RealmChangeListener<RealmResults<RealmContacts>> contactsChangeListener;
     RealmResults<RealmContacts> realmContacts;
 
-    @Override public void onResume() {
+    @Override
+    public void onResume() {
         super.onResume();
 
         if (realmContacts != null) {
@@ -91,13 +89,15 @@ public class RegisteredContactsFragment extends Fragment {
         }
     }
 
-    @Override public void onPause() {
+    @Override
+    public void onPause() {
         super.onPause();
 
         if (realmContacts != null) realmContacts.removeChangeListeners();
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
 
         if (mRealm != null) {
@@ -116,19 +116,6 @@ public class RegisteredContactsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
-    private void importContactList() {
-
-        //G.onContactImport = new OnUserContactImport() {
-        //    @Override
-        //    public void onContactImport() {
-        //
-        //
-        //    }
-        //};
-
-        Contacts.getListOfContact(true);
-
-    }
 
     @Override
     public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
@@ -138,34 +125,39 @@ public class RegisteredContactsFragment extends Fragment {
 
         realmContacts = mRealm.where(RealmContacts.class).findAll();
         contactsChangeListener = new RealmChangeListener<RealmResults<RealmContacts>>() {
-            @Override public void onChange(RealmResults<RealmContacts> element) {
+            @Override
+            public void onChange(RealmResults<RealmContacts> element) {
                 fillAdapter();
             }
         };
 
 
         sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        isImportContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, false);
-        if (!isImportContactList) {
-            try {
-                HelperPermision.getContactPermision(getActivity(), new OnGetPermission() {
-                    @Override
-                    public void Allow() throws IOException {
-                        importContactList();
-                    }
-
-                    @Override
-                    public void deny() {
-
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, true);
-            editor.apply();
-        }
+        /**
+         * not import contact in every enter to this page
+         * for this purpose i comment this code. but not cleared.
+         */
+        //isImportContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, false);
+        //if (!isImportContactList) {
+        //    try {
+        //        HelperPermision.getContactPermision(getActivity(), new OnGetPermission() {
+        //            @Override
+        //            public void Allow() throws IOException {
+        //                importContactList();
+        //            }
+        //
+        //            @Override
+        //            public void deny() {
+        //
+        //            }
+        //        });
+        //    } catch (IOException e) {
+        //        e.printStackTrace();
+        //    }
+        //    SharedPreferences.Editor editor = sharedPreferences.edit();
+        //    editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, true);
+        //    editor.apply();
+        //}
 
         //set interface for get callback here
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
@@ -301,7 +293,12 @@ public class RegisteredContactsFragment extends Fragment {
         contacts = Contacts.retrieve(null);
 
 
-        if (contacts.size() == 0) {
+        /**
+         * after send contact automatically do get contact list
+         * so if !G.isSendContact try for get list for getting
+         * contacts if other account imported to server
+         */
+        if (!G.isSendContact || contacts.size() == 0) {
             /**
              * if contacts size is zero send request for get contacts list
              * for insuring that contacts not exist really or not
@@ -468,7 +465,8 @@ public class RegisteredContactsFragment extends Fragment {
 
         G.handler.post(new Runnable() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
                 mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 prgWaiting.setVisibility(View.GONE);
             }
@@ -477,14 +475,16 @@ public class RegisteredContactsFragment extends Fragment {
 
     private void showProgress() {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 prgWaiting.setVisibility(View.VISIBLE);
             }
         });
     }
 
-    @Override public void onAttach(Activity activity) {
+    @Override
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
     }
@@ -504,7 +504,8 @@ public class RegisteredContactsFragment extends Fragment {
 
             //so the headers are aware of changes
             stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                @Override public void onChanged() {
+                @Override
+                public void onChanged() {
                     decoration.invalidateHeaders();
                 }
             });

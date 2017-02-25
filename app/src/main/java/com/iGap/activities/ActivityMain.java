@@ -91,7 +91,6 @@ import com.iGap.libs.floatingAddButton.ArcMenu;
 import com.iGap.libs.floatingAddButton.StateChangeListener;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
-import com.iGap.module.Contacts;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.OnComplete;
@@ -137,6 +136,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.iGap.G.clientConditionGlobal;
 import static com.iGap.G.context;
 import static com.iGap.G.firstTimeEnterToApp;
+import static com.iGap.G.isSendContact;
 import static com.iGap.G.mFirstRun;
 import static com.iGap.R.string.updating;
 import static com.iGap.realm.RealmRoomFields.UPDATED_TIME;
@@ -200,12 +200,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
-                        importContactList();
+                        /**
+                         * set G.isSendContact = false to permitted user
+                         * for import contacts
+                         */
+                        G.isSendContact = false;
+                        G.importContact();
                     }
 
                     @Override
                     public void deny() {
-
+                        /**
+                         * user not allowed to import contact, so client set
+                         * isSendContact = true for avoid from try again
+                         */
+                        isSendContact = true;
                     }
                 });
             } catch (IOException e) {
@@ -382,22 +391,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }, 1000);
         }
-    }
-
-
-    /**
-     * import contact phone for first one
-     */
-    private void importContactList() {
-
-        //G.onContactImport = new OnUserContactImport() {
-        //    @Override
-        //    public void onContactImport() {
-        //
-        //    }
-        //};
-
-        Contacts.getListOfContact(true);
     }
 
     @Override

@@ -9,13 +9,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 10/4/2016.
- */
 public final class ContactUtils {
     private Context mContext;
     private Uri mContactUri;

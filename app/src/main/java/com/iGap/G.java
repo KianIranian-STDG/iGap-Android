@@ -393,6 +393,7 @@ public class G extends MultiDexApplication {
     public static boolean isNetworkRoaming;
     public static boolean hasNetworkBefore;
     public static double timeVideoPlayer = 30000.0;
+    public static boolean isSendContact = false;
 
     public static ConcurrentHashMap<Long, RequestWrapper> currentUploadFiles = new ConcurrentHashMap<>();
     public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
@@ -420,17 +421,34 @@ public class G extends MultiDexApplication {
     }
 
     public static void importContact() {
+        /**
+         * just import contact in each enter to app
+         * when user login was done
+         */
+        if (isSendContact) {
+            return;
+        }
 
-        //G.onContactImport = new OnUserContactImport() {
-        //    @Override
-        //    public void onContactImport() {
-        //
-        //    }
-        //};
-
-        // this can be go in the activity for check permission in api 6+
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            Contacts.getListOfContact(true);
+        if (G.userLogin) {
+            /**
+             * this can be go in the activity for check permission in api 6+
+             */
+            isSendContact = true;
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Contacts.getListOfContact(true);
+                    }
+                });
+            }
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    importContact();
+                }
+            }, 2000);
         }
     }
 
@@ -735,7 +753,7 @@ public class G extends MultiDexApplication {
                         }
 
                         getUserInfo();
-                        importContact();
+                        //importContact();
                         //sendWaitingRequestWrappers();
 
                         new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
