@@ -137,7 +137,6 @@ import static com.iGap.G.clientConditionGlobal;
 import static com.iGap.G.context;
 import static com.iGap.G.firstTimeEnterToApp;
 import static com.iGap.G.isSendContact;
-import static com.iGap.G.mFirstRun;
 import static com.iGap.R.string.updating;
 import static com.iGap.realm.RealmRoomFields.UPDATED_TIME;
 
@@ -295,7 +294,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     @Override
                     public void run() {
                         firstTimeEnterToApp = false;
-                        getChatsList(false);
+                        getChatsList();
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                     }
                 });
@@ -1257,7 +1256,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private ContentLoadingProgressBar contentLoading;
 
-    private void getChatsList(boolean fromServer) {
+    private void getChatsList() {
         swipeRefreshLayout.setRefreshing(true);
         /*if (fromServer && G.socketConnection) {
             testIsSecure();
@@ -1381,8 +1380,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.onClientCondition = this;
         G.onSetActionInRoom = this;
 
-        getChatsList(mFirstRun);
-        mFirstRun = false;
+        getChatsList();
 
         startService(new Intent(this, ServiceContact.class));
 

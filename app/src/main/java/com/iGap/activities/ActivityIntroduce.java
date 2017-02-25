@@ -48,8 +48,6 @@ import java.io.File;
 import java.io.IOException;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.iGap.G.mFirstRun;
-
 public class ActivityIntroduce extends ActivityEnhanced {
 
     static final String KEY_SAVE = "SAVE";
@@ -90,7 +88,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         /**
          * set true mFirstRun for get room history after logout and login again
          */
-        mFirstRun = true;
+        G.firstTimeEnterToApp = true;
         licenceChecker();
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);

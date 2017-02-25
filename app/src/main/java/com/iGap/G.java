@@ -237,7 +237,6 @@ public class G extends MultiDexApplication {
     public static boolean userLogin = false;
     public static boolean socketConnection = false;
     public static boolean canRunReceiver = false;
-    public static boolean mFirstRun = true;
     public static SecretKeySpec symmetricKey;
     public static String symmetricMethod;
     public static int ivSize;
