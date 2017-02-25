@@ -934,6 +934,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         if (time < G.timeVideoPlayer) {
                             onPlayPauseVideo(holder, attachment.getLocalFilePath(), holder.itemView.findViewById(R.id.progress).getVisibility(), time);
                         } else {
+                            progress.performProgress();
+
                             if (path != null) {
                                 messageClickListener.onOpenClick(thumbnail, mMessage, holder.getAdapterPosition());
                             }
@@ -1038,7 +1040,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 progressBar.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
 
-                                //   progressBar.performProgress();
+                                progressBar.performProgress();
 
                                 onLoadThumbnailFromLocal(holder, _path, LocalFileType.FILE);
 
