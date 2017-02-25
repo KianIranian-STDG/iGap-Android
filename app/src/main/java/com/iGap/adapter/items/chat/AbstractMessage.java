@@ -921,17 +921,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                         double time = 0;
                         String path = null;
+                        long size = 0;
                         if (mMessage.forwardedFrom != null) {
                             if (mMessage.forwardedFrom.getAttachment() != null) {
                                 time = mMessage.forwardedFrom.getAttachment().getDuration() * 1000L;
                                 path = mMessage.forwardedFrom.getAttachment().getLocalFilePath();
+                                size = mMessage.forwardedFrom.getAttachment().getSize();
                             }
                         } else if (mMessage.attachment != null) {
                             time = mMessage.attachment.duration * 1000L;
                             path = mMessage.attachment.getLocalFilePath();
+                            size = mMessage.attachment.size;
+
                         }
 
-                        if (time < G.timeVideoPlayer) {
+                        if (time < G.timeVideoPlayer && size < 2097152) {
                             onPlayPauseVideo(holder, attachment.getLocalFilePath(), holder.itemView.findViewById(R.id.progress).getVisibility(), time);
                         } else {
                             progress.performProgress();
@@ -1147,22 +1151,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void checkForDownloading(VH holder, RealmAttachment attachment) {
 
-        Log.i("VVVVVVVV", "0 checkForDownloading: ");
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
             hideThumbnailIf(holder);
 
             downLoadFile(holder, attachment, 0);
-            Log.i("VVVVVVVV", "0.5 checkForDownloading: ");
         } else {
             if (attachment.isFileExistsOnLocal()) {
                 progress.performProgress();
-                Log.i("VVVVVVVV", "1 checkForDownloading: ");
             } else {
                 hideThumbnailIf(holder);
                 progress.withDrawable(R.drawable.ic_download, true);
                 progress.setVisibility(View.VISIBLE);
-                Log.i("VVVVVVVV", "2 checkForDownloading: ");
             }
         }
     }

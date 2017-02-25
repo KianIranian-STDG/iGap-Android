@@ -183,7 +183,10 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
                 holder.duration.setText(
                     String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)),
                         AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
-                if (holder.checkedAutoGif == 1 && (mMessage.attachment.duration * 1000L) < G.timeVideoPlayer) {
+                if (holder.checkedAutoGif == 1 && (mMessage.attachment.duration * 1000L) < G.timeVideoPlayer && (mMessage.forwardedFrom.getAttachment().getSize() < 2097152) &&
+                    (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN
+                        || ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.DELIVERED
+                        || ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SENT)) {
                     onPlayPauseVideo(holder, mMessage.forwardedFrom.getAttachment().getLocalFilePath(), holder.itemView.findViewById(R.id.progress).getVisibility(),
                         mMessage.forwardedFrom.getAttachment().getDuration());
                 }
@@ -192,18 +195,14 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
             if (mMessage.attachment != null) {
                 holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)),
                     AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true)));
-
-                if (holder.checkedAutoGif == 1 && (mMessage.attachment.duration * 1000L) < G.timeVideoPlayer) {
+                if (holder.checkedAutoGif == 1 && (mMessage.attachment.duration * 1000L) < G.timeVideoPlayer && (mMessage.attachment.size < 2097152) &&
+                    (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN
+                        || ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.DELIVERED
+                        || ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SENT)) {
                     onPlayPauseVideo(holder, mMessage.attachment.getLocalFilePath(), holder.itemView.findViewById(R.id.progress).getVisibility(), mMessage.attachment.duration);
                 }
             }
         }
-        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View v) {
-                holder.itemView.performLongClick();
-                return false;
-            }
-        });
     }
 
     protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
