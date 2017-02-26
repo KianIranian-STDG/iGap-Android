@@ -74,7 +74,6 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
             LoadControl loadControl = new DefaultLoadControl();
 
             player = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
-            if (player.isLoading()) player.release();
             holder.simpleExoPlayer.setPlayer(player);
             holder.simpleExoPlayer.hideController();
             holder.simpleExoPlayer.setUseController(false);
@@ -84,7 +83,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
             ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
             MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri, dataSourceFactory, extractorsFactory, null, null);
             final LoopingMediaSource loopingSource = new LoopingMediaSource(videoSource);
-            player.prepare(loopingSource);
+            player.prepare(loopingSource, true, false);
             player.setVolume(0);
 
             holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
@@ -94,7 +93,6 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
             player.setPlayWhenReady(true);
             player.addListener(new ExoPlayer.EventListener() {
                 @Override public void onLoadingChanged(boolean isLoading) {
-
                 }
 
                 @Override public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
@@ -110,14 +108,12 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
                 }
 
                 @Override public void onPlayerError(ExoPlaybackException error) {
-
                     player.stop();
                     player.prepare(loopingSource);
                     player.setPlayWhenReady(true);
                 }
 
                 @Override public void onPositionDiscontinuity() {
-
                 }
             });
 

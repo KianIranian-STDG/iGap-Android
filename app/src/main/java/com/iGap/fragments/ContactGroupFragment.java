@@ -322,6 +322,7 @@ public class ContactGroupFragment extends Fragment {
         //this adds the Sticky Headers within our list
         final StickyRecyclerHeadersDecoration decoration =
                 new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();

@@ -5,8 +5,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:elevation="999dp"
-                android:background="@android:color/white"
-                android:layoutDirection="ltr">
+    android:background="@android:color/white"
+    >
 
 
     <LinearLayout
@@ -105,10 +105,9 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/dp6"
-                    android:paddingEnd="@dimen/dp52"
+                    android:paddingEnd="@dimen/dp20"
                     android:paddingLeft="@dimen/dp52"
-                    android:paddingRight="@dimen/dp52"
-                    android:paddingStart="@dimen/dp52"
+                    android:paddingRight="@dimen/dp20"
                     android:paddingTop="@dimen/dp12">
 
                     <com.iGap.module.CircleImageView
@@ -123,7 +122,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/dp8"
                         android:layout_marginStart="@dimen/dp8"
-                        android:gravity="left|center_vertical"
+                        android:gravity="start|center_vertical"
                         android:singleLine="true"
                         android:text="@string/menu_add_contact"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"

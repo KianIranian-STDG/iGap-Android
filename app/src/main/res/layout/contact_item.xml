@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingEnd="@dimen/dp28"
+    android:paddingEnd="@dimen/dp20"
     android:paddingLeft="@dimen/dp52"
-    android:paddingRight="@dimen/dp28"
-    android:paddingStart="@dimen/dp52">
+    android:paddingRight="@dimen/dp20"
+    >
 
 
     <View
@@ -38,10 +38,10 @@
 
             <com.iGap.module.CustomTextViewMedium
                 android:id="@+id/title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical|left"
+                android:gravity="center_vertical|start"
                 android:singleLine="true"
                 android:text="Dominika Faniz"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
@@ -50,10 +50,10 @@
 
             <com.iGap.module.CustomTextViewMedium
                 android:id="@+id/subtitle"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical|left"
+                android:gravity="center_vertical|start"
                 android:singleLine="true"
                 android:text="@string/last_seen_recently"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
