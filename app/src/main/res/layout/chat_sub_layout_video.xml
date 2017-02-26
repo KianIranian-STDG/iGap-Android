@@ -65,6 +65,7 @@
                             android:layout_height="match_parent"
                             app:resize_mode="fill"
                             android:visibility="gone"
+                            app:surface_type="surface_view"
                             />
 
                         <TextView

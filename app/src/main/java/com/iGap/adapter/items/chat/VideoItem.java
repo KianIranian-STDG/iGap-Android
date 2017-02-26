@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -60,12 +61,13 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
         this.activity = activity;
     }
 
-    @Override public void onPlayPauseVideo(VideoItem.ViewHolder holder, String localPath, int isHide, double time) {
+    @Override public void onPlayPauseVideo(final VideoItem.ViewHolder holder, String localPath, int isHide, double time) {
         super.onPlayPauseVideo(holder, localPath, isHide, time);
 
         //((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play, true);
         //String path = mMessage.attachment.localFilePath;
         if (localPath != null) {
+
             Uri mp4VideoUri = Uri.parse(localPath);
             Handler mainHandler = new Handler();
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -81,22 +83,38 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
             DefaultBandwidthMeter bm = new DefaultBandwidthMeter();
             DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(activity, Util.getUserAgent(context, "com.iGap.adapter.items.chat"), bm);
             ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-            MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri, dataSourceFactory, extractorsFactory, null, null);
+            MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri, dataSourceFactory, extractorsFactory, mainHandler, null);
             final LoopingMediaSource loopingSource = new LoopingMediaSource(videoSource);
-            player.prepare(loopingSource, true, false);
+            player.prepare(loopingSource, true, true);
             player.setVolume(0);
 
-            holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
+
             if (holder.simpleExoPlayer.getVisibility() == View.GONE) {
                 holder.simpleExoPlayer.setVisibility(View.VISIBLE);
             }
-            player.setPlayWhenReady(true);
+            //player.setPlayWhenReady(true);
             player.addListener(new ExoPlayer.EventListener() {
                 @Override public void onLoadingChanged(boolean isLoading) {
                 }
 
                 @Override public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
+                    if (playbackState == PlaybackStateCompat.STATE_PAUSED) {
+                        holder.simpleExoPlayer.setVisibility(View.GONE);
+                        holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                    }
+                    if (playbackState == ExoPlayer.STATE_ENDED) {
+
+                    } else if (playbackState == ExoPlayer.STATE_BUFFERING) {
+
+                    } else if (playbackState == ExoPlayer.STATE_READY) {
+                        holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
+                        if (holder.simpleExoPlayer.getVisibility() == View.GONE) {
+                            holder.simpleExoPlayer.setVisibility(View.VISIBLE);
+                        }
+                        player.setPlayWhenReady(true);
+                    } else if (playbackState == PlaybackStateCompat.STATE_STOPPED) {
+                    }
                 }
 
                 @Override public void onTimelineChanged(Timeline timeline, Object manifest) {
@@ -114,6 +132,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
                 }
 
                 @Override public void onPositionDiscontinuity() {
+
                 }
             });
 
