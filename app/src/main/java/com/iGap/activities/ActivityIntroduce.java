@@ -82,6 +82,11 @@ public class ActivityIntroduce extends ActivityEnhanced {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @Override protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

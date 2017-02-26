@@ -590,28 +590,36 @@ public class G extends MultiDexApplication {
     }
 
     public static void makeFolder() {
-        new File(DIR_APP).mkdirs();
-        new File(DIR_IMAGES).mkdirs();
-        new File(DIR_VIDEOS).mkdirs();
-        new File(DIR_AUDIOS).mkdirs();
-        new File(DIR_DOCUMENT).mkdirs();
-        new File(DIR_CHAT_BACKGROUND).mkdirs();
-        new File(DIR_NEW_GROUP).mkdirs();
-        new File(DIR_NEW_CHANEL).mkdirs();
-        new File(DIR_IMAGE_USER).mkdirs();
-        new File(DIR_TEMP).mkdirs();
 
-        String file = ".nomedia";
-        new File(DIR_APP + "/" + file).mkdirs();
-        new File(DIR_IMAGES + "/" + file).mkdirs();
-        new File(DIR_VIDEOS + "/" + file).mkdirs();
-        new File(DIR_AUDIOS + "/" + file).mkdirs();
-        new File(DIR_DOCUMENT + "/" + file).mkdirs();
-        new File(DIR_CHAT_BACKGROUND + "/" + file).mkdirs();
-        new File(DIR_NEW_GROUP + "/" + file).mkdirs();
-        new File(DIR_NEW_CHANEL + "/" + file).mkdirs();
-        new File(DIR_IMAGE_USER + "/" + file).mkdirs();
-        new File(DIR_TEMP + "/" + file).mkdirs();
+        new Thread(new Runnable() {
+            @Override public void run() {
+
+                new File(DIR_APP).mkdirs();
+                new File(DIR_IMAGES).mkdirs();
+                new File(DIR_VIDEOS).mkdirs();
+                new File(DIR_AUDIOS).mkdirs();
+                new File(DIR_DOCUMENT).mkdirs();
+                new File(DIR_CHAT_BACKGROUND).mkdirs();
+                new File(DIR_NEW_GROUP).mkdirs();
+                new File(DIR_NEW_CHANEL).mkdirs();
+                new File(DIR_IMAGE_USER).mkdirs();
+                new File(DIR_TEMP).mkdirs();
+
+                String file = ".nomedia";
+                new File(DIR_APP + "/" + file).mkdirs();
+                new File(DIR_IMAGES + "/" + file).mkdirs();
+                new File(DIR_VIDEOS + "/" + file).mkdirs();
+                new File(DIR_AUDIOS + "/" + file).mkdirs();
+                new File(DIR_DOCUMENT + "/" + file).mkdirs();
+                new File(DIR_CHAT_BACKGROUND + "/" + file).mkdirs();
+                new File(DIR_NEW_GROUP + "/" + file).mkdirs();
+                new File(DIR_NEW_CHANEL + "/" + file).mkdirs();
+                new File(DIR_IMAGE_USER + "/" + file).mkdirs();
+                new File(DIR_TEMP + "/" + file).mkdirs();
+            }
+        }).start();
+
+
     }
 
     public void setFont() {

@@ -254,15 +254,18 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
                 @Override public void onChange(RealmResults<RealmAvatar> element) {
 
-                    avatarListSize = element.size();
+                    if (avatarListSize != element.size()) {
 
-                    viewPager.setAdapter(new FragmentShowAvatars.AdapterViewPager());
+                        avatarListSize = element.size();
 
-                    if (avatarListSize > 0) {
-                        viewPager.getAdapter().notifyDataSetChanged();
-                        txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + getString(R.string.of) + " " + avatarListSize);
-                    } else {
-                        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+                        viewPager.setAdapter(new FragmentShowAvatars.AdapterViewPager());
+
+                        if (avatarListSize > 0) {
+                            viewPager.getAdapter().notifyDataSetChanged();
+                            txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + getString(R.string.of) + " " + avatarListSize);
+                        } else {
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+                        }
                     }
                 }
             });
@@ -278,7 +281,6 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         mAdapter = new FragmentShowAvatars.AdapterViewPager();
         viewPager.setAdapter(mAdapter);
 
-        viewPager.setCurrentItem(0);
 
         txtImageNumber.setText(1 + " " + getString(R.string.of) + " " + avatarList.size());
         if (avatarList.get(0).getFile() != null) {

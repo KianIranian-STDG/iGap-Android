@@ -17,7 +17,7 @@
         android:id="@+id/rootToolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-
+        app:layout_scrollFlags="scroll|enterAlways"
         >
       <android.support.v7.widget.Toolbar
           android:id="@+id/main_toolbar"
@@ -96,7 +96,7 @@
       android:id="@+id/activity_main_swipe_refresh_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/dp60"
+
       >
 
 
