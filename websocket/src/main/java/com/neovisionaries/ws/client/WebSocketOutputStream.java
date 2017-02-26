@@ -56,11 +56,7 @@ class WebSocketOutputStream extends FilterOutputStream {
 
 
     private void writeFrame0(WebSocketFrame frame) throws IOException {
-        int b = (frame.getFin() ? 0x80 : 0x00)
-                | (frame.getRsv1() ? 0x40 : 0x00)
-                | (frame.getRsv2() ? 0x20 : 0x00)
-                | (frame.getRsv3() ? 0x10 : 0x00)
-                | (frame.getOpcode() & 0x0F);
+        int b = (frame.getFin() ? 0x80 : 0x00) | (frame.getRsv1() ? 0x40 : 0x00) | (frame.getRsv2() ? 0x20 : 0x00) | (frame.getRsv3() ? 0x10 : 0x00) | (frame.getOpcode() & 0x0F);
 
         write(b);
     }

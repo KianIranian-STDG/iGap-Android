@@ -5,6 +5,7 @@ import android.util.Log;
 import com.iGap.helper.HelperConnectionState;
 import com.iGap.helper.HelperSetAction;
 import com.iGap.helper.HelperTimeOut;
+import com.iGap.request.RequestWrapper;
 import com.iGap.response.HandleResponse;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -74,6 +75,19 @@ public class WebSocketClient {
                     Log.i("reconnect", "1");
                     reconnect(true);
                     super.onError(websocket, cause);
+                }
+
+                @Override
+                public void onFrameSent(WebSocket websocket, WebSocketFrame frame) throws Exception {
+                    super.onFrameSent(websocket, frame);
+
+                    /**
+                     * set time after that actually frame was sent
+                     */
+                    Log.i("RequestWrapper", "onFrameSent time 0 : " + ((RequestWrapper) frame.getRequestWrapper()).time);
+                    ((RequestWrapper) frame.getRequestWrapper()).time = System.currentTimeMillis();
+                    Log.i("RequestWrapper", "onFrameSent time 1 : " + ((RequestWrapper) frame.getRequestWrapper()).time);
+                    Log.i("RequestWrapper", "onFrameSent : " + ((RequestWrapper) frame.getRequestWrapper()).getActionId());
                 }
 
                 @Override

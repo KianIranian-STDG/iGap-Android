@@ -2,7 +2,7 @@ package com.iGap.request;
 
 public class RequestWrapper {
 
-    public long time;
+    public long time = 0;
     public String identity;
     protected Object protoObject;
     protected int actionId;
@@ -28,5 +28,9 @@ public class RequestWrapper {
 
     public Object getProtoObject() {
         return protoObject;
+    }
+
+    public String getIdentity() {
+        return identity;
     }
 }

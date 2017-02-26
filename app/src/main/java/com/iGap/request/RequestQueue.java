@@ -56,7 +56,7 @@ public class RequestQueue {
             }, Config.TIME_OUT_DELAY_MS);
         }
 
-        requestWrapper.time = System.currentTimeMillis();
+        //requestWrapper.time = System.currentTimeMillis(); // here the client was previously recorded time
         ProtoRequest.Request.Builder requestBuilder = ProtoRequest.Request.newBuilder();
         requestBuilder.setId(randomId);
 
@@ -85,7 +85,7 @@ public class RequestQueue {
                     message = AESCrypt.encrypt(G.symmetricKey, message);
                     WebSocket webSocket = WebSocketClient.getInstance();
                     if (webSocket != null) {
-                        webSocket.sendBinary(message);
+                        webSocket.sendBinary(message, requestWrapper);
                     }
                     // remove from waiting request wrappers while user logged-in and send request
                     WAITING_REQUEST_WRAPPERS.remove(requestWrapper);
@@ -96,11 +96,10 @@ public class RequestQueue {
             } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
                 WebSocket webSocket = WebSocketClient.getInstance();
                 if (webSocket != null) {
-                    webSocket.sendBinary(message);
+                    webSocket.sendBinary(message, requestWrapper);
                 }
                 Log.i("SOC_REQ", "RequestQueue ********** sendRequest unSecure successful **********");
             }
-            Log.i("WWW", "requestWrapper.actionId : " + requestWrapper.actionId);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -183,6 +182,13 @@ public class RequestQueue {
     }
 
     private static boolean timeDifference(long beforeTime) {
+
+        /**
+         * if time not set yet don't set timeout
+         */
+        if (beforeTime == 0) {
+            return false;
+        }
 
         long difference;
 

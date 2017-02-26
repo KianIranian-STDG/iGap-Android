@@ -42,7 +42,16 @@ public class WebSocketFrame {
     private int mOpcode;
     private boolean mMask;
     private byte[] mPayload;
+    private Object requestWrapper;
 
+    public Object getRequestWrapper() {
+        return requestWrapper;
+    }
+
+    public WebSocketFrame setRequestWrapper(Object requestWrapper) {
+        this.requestWrapper = requestWrapper;
+        return this;
+    }
 
     /**
      * Get the value of FIN bit.
@@ -414,8 +423,8 @@ public class WebSocketFrame {
      * </p>
      *
      * @param payload The unmasked payload. {@code null} is accepted.
-     *                An empty byte array is treated in the same way
-     *                as {@code null}.
+     * An empty byte array is treated in the same way
+     * as {@code null}.
      * @return {@code this} object.
      */
     public WebSocketFrame setPayload(byte[] payload) {
@@ -439,8 +448,8 @@ public class WebSocketFrame {
      * </p>
      *
      * @param payload The unmasked payload. {@code null} is accepted.
-     *                An empty string is treated in the same way as
-     *                {@code null}.
+     * An empty string is treated in the same way as
+     * {@code null}.
      * @return {@code this} object.
      */
     public WebSocketFrame setPayload(String payload) {
@@ -468,8 +477,8 @@ public class WebSocketFrame {
      * </p>
      *
      * @param closeCode The close code.
-     * @param reason    The reason. {@code null} is accepted. An empty string
-     *                  is treated in the same way as {@code null}.
+     * @param reason The reason. {@code null} is accepted. An empty string
+     * is treated in the same way as {@code null}.
      * @return {@code this} object.
      * @see <a href="http://tools.ietf.org/html/rfc6455#section-5.5.1"
      * >RFC 6455, 5.5.1. Close</a>
@@ -479,8 +488,7 @@ public class WebSocketFrame {
         // Convert the close code to a 2-byte unsigned integer
         // in network byte order.
         byte[] encodedCloseCode = new byte[]{
-                (byte) ((closeCode >> 8) & 0xFF),
-                (byte) ((closeCode) & 0xFF)
+                (byte) ((closeCode >> 8) & 0xFF), (byte) ((closeCode) & 0xFF)
         };
 
         // If a reason string is not given.
@@ -558,13 +566,7 @@ public class WebSocketFrame {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder()
-                .append("WebSocketFrame(FIN=").append(mFin ? "1" : "0")
-                .append(",RSV1=").append(mRsv1 ? "1" : "0")
-                .append(",RSV2=").append(mRsv2 ? "1" : "0")
-                .append(",RSV3=").append(mRsv3 ? "1" : "0")
-                .append(",Opcode=").append(Misc.toOpcodeName(mOpcode))
-                .append(",Length=").append(getPayloadLength());
+        StringBuilder builder = new StringBuilder().append("WebSocketFrame(FIN=").append(mFin ? "1" : "0").append(",RSV1=").append(mRsv1 ? "1" : "0").append(",RSV2=").append(mRsv2 ? "1" : "0").append(",RSV3=").append(mRsv3 ? "1" : "0").append(",Opcode=").append(Misc.toOpcodeName(mOpcode)).append(",Length=").append(getPayloadLength());
 
         switch (mOpcode) {
             case TEXT:
@@ -621,9 +623,7 @@ public class WebSocketFrame {
 
 
     private void appendPayloadClose(StringBuilder builder) {
-        builder
-                .append(",CloseCode=").append(getCloseCode())
-                .append(",Reason=");
+        builder.append(",CloseCode=").append(getCloseCode()).append(",Reason=");
 
         String reason = getCloseReason();
 
@@ -661,8 +661,7 @@ public class WebSocketFrame {
      * payload is {@code null}.
      */
     public static WebSocketFrame createContinuationFrame() {
-        return new WebSocketFrame()
-                .setOpcode(CONTINUATION);
+        return new WebSocketFrame().setOpcode(CONTINUATION);
     }
 
 
@@ -703,10 +702,7 @@ public class WebSocketFrame {
      * the given one.
      */
     public static WebSocketFrame createTextFrame(String payload) {
-        return new WebSocketFrame()
-                .setFin(true)
-                .setOpcode(TEXT)
-                .setPayload(payload);
+        return new WebSocketFrame().setFin(true).setOpcode(TEXT).setPayload(payload);
     }
 
 
@@ -718,11 +714,14 @@ public class WebSocketFrame {
      * {@link WebSocketOpcode#BINARY BINARY} and payload is
      * the given one.
      */
+
+    //original method for this websocket library
     public static WebSocketFrame createBinaryFrame(byte[] payload) {
-        return new WebSocketFrame()
-                .setFin(true)
-                .setOpcode(BINARY)
-                .setPayload(payload);
+        return new WebSocketFrame().setFin(true).setOpcode(BINARY).setPayload(payload);
+    }
+
+    public static WebSocketFrame createBinaryFrame(byte[] payload, Object requestWrapper) {
+        return new WebSocketFrame().setFin(true).setOpcode(BINARY).setPayload(payload).setRequestWrapper(requestWrapper);
     }
 
 
@@ -734,9 +733,7 @@ public class WebSocketFrame {
      * {@code null}.
      */
     public static WebSocketFrame createCloseFrame() {
-        return new WebSocketFrame()
-                .setFin(true)
-                .setOpcode(CLOSE);
+        return new WebSocketFrame().setFin(true).setOpcode(CLOSE);
     }
 
 
@@ -758,10 +755,10 @@ public class WebSocketFrame {
      * Create a close frame.
      *
      * @param closeCode The close code.
-     * @param reason    The close reason.
-     *                  Note that a control frame's payload length must be 125 bytes or less
-     *                  (RFC 6455, <a href="https://tools.ietf.org/html/rfc6455#section-5.5"
-     *                  >5.5. Control Frames</a>).
+     * @param reason The close reason.
+     * Note that a control frame's payload length must be 125 bytes or less
+     * (RFC 6455, <a href="https://tools.ietf.org/html/rfc6455#section-5.5"
+     * >5.5. Control Frames</a>).
      * @return A WebSocket frame whose FIN bit is true, opcode is
      * {@link WebSocketOpcode#CLOSE CLOSE} and payload
      * contains a close code and a close reason.
@@ -780,9 +777,7 @@ public class WebSocketFrame {
      * {@code null}.
      */
     public static WebSocketFrame createPingFrame() {
-        return new WebSocketFrame()
-                .setFin(true)
-                .setOpcode(PING);
+        return new WebSocketFrame().setFin(true).setOpcode(PING);
     }
 
 
@@ -790,9 +785,9 @@ public class WebSocketFrame {
      * Create a ping frame.
      *
      * @param payload The payload for a newly created frame.
-     *                Note that a control frame's payload length must be 125 bytes or less
-     *                (RFC 6455, <a href="https://tools.ietf.org/html/rfc6455#section-5.5"
-     *                >5.5. Control Frames</a>).
+     * Note that a control frame's payload length must be 125 bytes or less
+     * (RFC 6455, <a href="https://tools.ietf.org/html/rfc6455#section-5.5"
+     * >5.5. Control Frames</a>).
      * @return A WebSocket frame whose FIN bit is true, opcode is
      * {@link WebSocketOpcode#PING PING} and payload is
      * the given one.
@@ -806,9 +801,9 @@ public class WebSocketFrame {
      * Create a ping frame.
      *
      * @param payload The payload for a newly created frame.
-     *                Note that a control frame's payload length must be 125 bytes or less
-     *                (RFC 6455, <a href="https://tools.ietf.org/html/rfc6455#section-5.5"
-     *                >5.5. Control Frames</a>).
+     * Note that a control frame's payload length must be 125 bytes or less
+     * (RFC 6455, <a href="https://tools.ietf.org/html/rfc6455#section-5.5"
+     * >5.5. Control Frames</a>).
      * @return A WebSocket frame whose FIN bit is true, opcode is
      * {@link WebSocketOpcode#PING PING} and payload is
      * the given one.
@@ -826,9 +821,7 @@ public class WebSocketFrame {
      * {@code null}.
      */
     public static WebSocketFrame createPongFrame() {
-        return new WebSocketFrame()
-                .setFin(true)
-                .setOpcode(PONG);
+        return new WebSocketFrame().setFin(true).setOpcode(PONG);
     }
 
 
@@ -836,9 +829,9 @@ public class WebSocketFrame {
      * Create a pong frame.
      *
      * @param payload The payload for a newly created frame.
-     *                Note that a control frame's payload length must be 125 bytes or less
-     *                (RFC 6455, <a href="https://tools.ietf.org/html/rfc6455#section-5.5"
-     *                >5.5. Control Frames</a>).
+     * Note that a control frame's payload length must be 125 bytes or less
+     * (RFC 6455, <a href="https://tools.ietf.org/html/rfc6455#section-5.5"
+     * >5.5. Control Frames</a>).
      * @return A WebSocket frame whose FIN bit is true, opcode is
      * {@link WebSocketOpcode#PONG PONG} and payload is
      * the given one.
@@ -852,9 +845,9 @@ public class WebSocketFrame {
      * Create a pong frame.
      *
      * @param payload The payload for a newly created frame.
-     *                Note that a control frame's payload length must be 125 bytes or less
-     *                (RFC 6455, <a href="https://tools.ietf.org/html/rfc6455#section-5.5"
-     *                >5.5. Control Frames</a>).
+     * Note that a control frame's payload length must be 125 bytes or less
+     * (RFC 6455, <a href="https://tools.ietf.org/html/rfc6455#section-5.5"
+     * >5.5. Control Frames</a>).
      * @return A WebSocket frame whose FIN bit is true, opcode is
      * {@link WebSocketOpcode#PONG PONG} and payload is
      * the given one.
@@ -874,8 +867,8 @@ public class WebSocketFrame {
      * </p>
      *
      * @param maskingKey The masking key. If {@code null} is given or the length
-     *                   of the masking key is less than 4, nothing is performed.
-     * @param payload    Payload to be masked/unmasked.
+     * of the masking key is less than 4, nothing is performed.
+     * @param payload Payload to be masked/unmasked.
      * @return {@code payload}.
      * @see <a href="http://tools.ietf.org/html/rfc6455#section-5.3">5.3. Client-to-Server Masking</a>
      */
@@ -900,8 +893,7 @@ public class WebSocketFrame {
         }
 
         // If the frame is neither a TEXT frame nor a BINARY frame.
-        if (frame.isTextFrame() == false &&
-                frame.isBinaryFrame() == false) {
+        if (frame.isTextFrame() == false && frame.isBinaryFrame() == false) {
             // No compression.
             return frame;
         }
@@ -965,8 +957,7 @@ public class WebSocketFrame {
     }
 
 
-    static List<WebSocketFrame> splitIfNecessary(
-            WebSocketFrame frame, int maxPayloadSize, PerMessageCompressionExtension pmce) {
+    static List<WebSocketFrame> splitIfNecessary(WebSocketFrame frame, int maxPayloadSize, PerMessageCompressionExtension pmce) {
         // If the maximum payload size is not specified.
         if (maxPayloadSize == 0) {
             // Not split.
