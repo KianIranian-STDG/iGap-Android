@@ -5082,6 +5082,31 @@ public class ActivityChat extends ActivityEnhanced
                     items.remove(getString(R.string.replay_item_dialog));
                     items.remove(getString(R.string.delete_item_dialog));
                 }
+                final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                ChannelChatRole roleSenderMessage = null;
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                RealmList<RealmMember> realmMembers = realmChannelRoom.getMembers();
+                for (RealmMember rm : realmMembers) {
+                    if (rm.getPeerId() == Long.parseLong(message.senderID)) {
+                        roleSenderMessage = ChannelChatRole.valueOf(rm.getRole());
+                    }
+                }
+                if (senderId != Long.parseLong(message.senderID)) {  // if message dose'nt belong to owner
+                    if (channelRole == ChannelChatRole.MEMBER) {
+                        items.remove(getString(R.string.delete_item_dialog));
+                    } else if (channelRole == ChannelChatRole.MODERATOR) {
+                        if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
+                            items.remove(getString(R.string.delete_item_dialog));
+                        }
+                    } else if (channelRole == ChannelChatRole.ADMIN) {
+                        if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
+                            items.remove(getString(R.string.delete_item_dialog));
+                        }
+                    }
+                    items.remove(getString(R.string.edit_item_dialog));
+                }
+
             } else if (chatType == GROUP) {
 
                 final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
