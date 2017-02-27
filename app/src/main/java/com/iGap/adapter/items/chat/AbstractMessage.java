@@ -85,9 +85,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     /**
      * add this prt for video player
      */
-    @Override public void onPlayPauseVideo(VH holder, String localPath, int isHide, double time) {
-        // empty
-    }
+    //@Override public void onPlayPauseVideo(VH holder, String localPath, int isHide, double time) {
+    //    // empty
+    //}
 
     public AbstractMessage(boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         this.directionalBased = directionalBased;
@@ -96,8 +96,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     protected void setTextIfNeeded(TextView view, String msg) {
-
-
 
         if (!TextUtils.isEmpty(msg)) {
             if (mMessage.hasLinkInMessage) {
@@ -916,38 +914,41 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     // TODO: 12/7/2016 [Alireza] ba in shart dige nemishe GIF haro dar fragment show images did
                     if (_type == ProtoGlobal.RoomMessageType.GIF || _type == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                         onPlayPauseGIF(holder, attachment.getLocalFilePath());
+                    } else {
+                        progress.performProgress();
+                        messageClickListener.onOpenClick(progress, mMessage, holder.getAdapterPosition());
                     }
                     /**
                      * add this prt for video player
                      */
-                    else if (_type == ProtoGlobal.RoomMessageType.VIDEO || _type == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-
-                        double time = 0;
-                        String path = null;
-                        long size = 0;
-                        if (mMessage.forwardedFrom != null) {
-                            if (mMessage.forwardedFrom.getAttachment() != null) {
-                                time = mMessage.forwardedFrom.getAttachment().getDuration() * 1000L;
-                                path = mMessage.forwardedFrom.getAttachment().getLocalFilePath();
-                                size = mMessage.forwardedFrom.getAttachment().getSize();
-                            }
-                        } else if (mMessage.attachment != null) {
-                            time = mMessage.attachment.duration * 1000L;
-                            path = mMessage.attachment.getLocalFilePath();
-                            size = mMessage.attachment.size;
-
-                        }
-
-                        if (time < G.timeVideoPlayer && size < 2097152) {
-                            onPlayPauseVideo(holder, attachment.getLocalFilePath(), holder.itemView.findViewById(R.id.progress).getVisibility(), time);
-                        } else {
-                            progress.performProgress();
-
-                            if (path != null) {
-                                messageClickListener.onOpenClick(thumbnail, mMessage, holder.getAdapterPosition());
-                            }
-                        }
-                    }
+                    //else if (_type == ProtoGlobal.RoomMessageType.VIDEO || _type == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                    //
+                    //    double time = 0;
+                    //    String path = null;
+                    //    long size = 0;
+                    //    if (mMessage.forwardedFrom != null) {
+                    //        if (mMessage.forwardedFrom.getAttachment() != null) {
+                    //            time = mMessage.forwardedFrom.getAttachment().getDuration() * 1000L;
+                    //            path = mMessage.forwardedFrom.getAttachment().getLocalFilePath();
+                    //            size = mMessage.forwardedFrom.getAttachment().getSize();
+                    //        }
+                    //    } else if (mMessage.attachment != null) {
+                    //        time = mMessage.attachment.duration * 1000L;
+                    //        path = mMessage.attachment.getLocalFilePath();
+                    //        size = mMessage.attachment.size;
+                    //
+                    //    }
+                    //
+                    //    if (time < G.timeVideoPlayer && size < 2097152) {
+                    //        onPlayPauseVideo(holder, attachment.getLocalFilePath(), holder.itemView.findViewById(R.id.progress).getVisibility(), time);
+                    //    } else {
+                    //        progress.performProgress();
+                    //
+                    //        if (path != null) {
+                    //            messageClickListener.onOpenClick(thumbnail, mMessage, holder.getAdapterPosition());
+                    //        }
+                    //    }
+                    //}
                 }
             } else {
                 downLoadFile(holder, attachment, 2);

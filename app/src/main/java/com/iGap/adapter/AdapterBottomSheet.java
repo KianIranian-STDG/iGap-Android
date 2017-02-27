@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import com.hanks.library.AnimateCheckBox;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.module.StructBottomSheet;
@@ -78,10 +79,12 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
 
                 if (holder.checkBoxSelect.isChecked()) {
                     holder.checkBoxSelect.setChecked(false);
+                    holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
                     ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
                     mList.setSelected(true);
                 } else {
                     holder.checkBoxSelect.setChecked(true);
+                    holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
                     ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
                     mList.setSelected(false);
                 }
@@ -92,10 +95,12 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
             @Override public void onClick(View v) {
                 if (holder.checkBoxSelect.isChecked()) {
                     holder.checkBoxSelect.setChecked(false);
+                    holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
                     ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
                     mList.setSelected(false);
                 } else {
                     holder.checkBoxSelect.setChecked(true);
+                    holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
                     ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
                     mList.setSelected(true);
                 }

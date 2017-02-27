@@ -95,5 +95,5 @@ dependencies {
   compile project(path: ':lvl')
   compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
   compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
-  compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
+  //  compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
 }

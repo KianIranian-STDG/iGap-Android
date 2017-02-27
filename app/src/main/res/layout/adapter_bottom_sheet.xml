@@ -29,12 +29,12 @@
           android:layout_height="24dp"
           android:layout_gravity="top|end|right"
           android:visibility="visible"
-          app:animDuration="200"
+          app:animDuration="150"
           app:checkedColor="@color/green"
           app:lineColor="#fff"
           app:lineWidth="1.2dp"
           android:background="@drawable/background_check"
-          app:unCheckColor="@android:color/transparent"
+          app:unCheckColor="@color/transparent"
           />
     </android.support.v7.widget.CardView>
   </RelativeLayout>

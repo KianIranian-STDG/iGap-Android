@@ -2,7 +2,6 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/chatSubLayoutVideo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -59,14 +58,14 @@
                             android:layout_height="match_parent"
                             />
 
-                        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-                            android:id="@+id/exoPlayer"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:resize_mode="fill"
-                            android:visibility="gone"
-                            app:surface_type="surface_view"
-                            />
+                        <!--<com.google.android.exoplayer2.ui.SimpleExoPlayerView-->
+                        <!--android:id="@+id/exoPlayer"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--app:resize_mode="fill"-->
+                        <!--android:visibility="gone"-->
+                        <!--app:surface_type="surface_view"-->
+                        <!--/>-->
 
                         <TextView
                             android:id="@+id/duration"

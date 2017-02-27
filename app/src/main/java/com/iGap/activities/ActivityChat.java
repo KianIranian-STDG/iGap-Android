@@ -169,6 +169,7 @@ import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmDraftFile;
 import com.iGap.realm.RealmGroupRoom;
+import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmOfflineDelete;
 import com.iGap.realm.RealmOfflineDeleteFields;
 import com.iGap.realm.RealmOfflineEdited;
@@ -217,6 +218,7 @@ import io.github.meness.emoji.listeners.OnSoftKeyboardCloseListener;
 import io.github.meness.emoji.listeners.OnSoftKeyboardOpenListener;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
@@ -5079,6 +5081,33 @@ public class ActivityChat extends ActivityEnhanced
                     items.remove(getString(R.string.edit_item_dialog));
                     items.remove(getString(R.string.replay_item_dialog));
                     items.remove(getString(R.string.delete_item_dialog));
+                }
+            } else if (chatType == GROUP) {
+
+                final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+
+                GroupChatRole roleSenderMessage = null;
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                RealmList<RealmMember> realmMembers = realmGroupRoom.getMembers();
+                for (RealmMember rm : realmMembers) {
+                    if (rm.getPeerId() == Long.parseLong(message.senderID)) {
+                        roleSenderMessage = GroupChatRole.valueOf(rm.getRole());
+                    }
+                }
+                if (senderId != Long.parseLong(message.senderID)) {  // if message dose'nt belong to owner
+                    if (groupRole == GroupChatRole.MEMBER) {
+                        items.remove(getString(R.string.delete_item_dialog));
+                    } else if (groupRole == GroupChatRole.MODERATOR) {
+                        if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
+                            items.remove(getString(R.string.delete_item_dialog));
+                        }
+                    } else if (groupRole == GroupChatRole.ADMIN) {
+                        if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
+                            items.remove(getString(R.string.delete_item_dialog));
+                        }
+                    }
+                    items.remove(getString(R.string.edit_item_dialog));
                 }
             } else {
                 if (!message.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {

@@ -11,5 +11,5 @@ public interface IChatItemAttachment<VH extends RecyclerView.ViewHolder> {
     /**
      * add this prt for video player
      */
-    void onPlayPauseVideo(VH holder, String localPath, int isHide, double time);
+    //void onPlayPauseVideo(VH holder, String localPath, int isHide, double time);
 }
