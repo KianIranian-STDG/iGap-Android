@@ -6,9 +6,6 @@ import com.iGap.request.RequestUserPrivacySetRule;
 import io.realm.Realm;
 import io.realm.RealmObject;
 
-/**
- * Created by android3 on 2/26/2017.
- */
 
 public class RealmPrivacy extends RealmObject {
 
