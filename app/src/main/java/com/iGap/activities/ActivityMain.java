@@ -45,6 +45,7 @@ import com.iGap.R;
 import com.iGap.WebSocketClient;
 import com.iGap.fragments.ContactGroupFragment;
 import com.iGap.fragments.FragmentCreateChannel;
+import com.iGap.fragments.FragmentIgapSearch;
 import com.iGap.fragments.FragmentNewGroup;
 import com.iGap.fragments.RegisteredContactsFragment;
 import com.iGap.fragments.SearchFragment;
@@ -549,6 +550,37 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }, 256);
             }
         });
+
+        ViewGroup igapSearch = (ViewGroup) findViewById(R.id.lm_ll_igap_search);
+        igapSearch.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
+                        Fragment fragment = FragmentIgapSearch.newInstance();
+
+                        try {
+                            getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .replace(R.id.fragmentContainer, fragment, "Search_fragment_igap")
+                                .commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+                    }
+                }, 256);
+            }
+        });
+
+
+
+
 
         ViewGroup itemNavContacts = (ViewGroup) findViewById(R.id.lm_ll_contacts);
         itemNavContacts.setOnClickListener(new View.OnClickListener() {
@@ -1193,6 +1225,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         FragmentNewGroup fragmentNeGroup = (FragmentNewGroup) getSupportFragmentManager().findFragmentByTag("newGroup_fragment");
         FragmentCreateChannel fragmentCreateChannel = (FragmentCreateChannel) getSupportFragmentManager().findFragmentByTag("createChannel_fragment");
         ContactGroupFragment fragmentContactGroup = (ContactGroupFragment) getSupportFragmentManager().findFragmentByTag("contactGroup_fragment");
+        FragmentIgapSearch fragmentIgapSearch = (FragmentIgapSearch) getSupportFragmentManager().findFragmentByTag("Search_fragment_igap");
+
 
         if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
 
@@ -1216,6 +1250,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 e.getStackTrace();
             }
             ;
+        } else if (fragmentIgapSearch != null && fragmentIgapSearch.isVisible()) {
+            try {
+                getSupportFragmentManager().beginTransaction().remove(fragmentIgapSearch).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
         } else if (myFragment != null && myFragment.isVisible()) {
             try {
                 getSupportFragmentManager().beginTransaction().remove(myFragment).commit();

@@ -4,7 +4,7 @@ import com.iGap.proto.ProtoClientSearchUsername;
 
 public class RequestClientSearchUsername {
 
-    public void channelGetMessagesStats(String query) {
+    public void clientSearchUsername(String query) {
 
         ProtoClientSearchUsername.ClientSearchUsername.Builder builder = ProtoClientSearchUsername.ClientSearchUsername.newBuilder();
         builder.setQuery(query);

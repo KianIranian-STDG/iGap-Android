@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.proto.ProtoClientSearchUsername;
 
 public class ClientSearchUsernameResponse extends MessageHandler {
@@ -21,12 +22,15 @@ public class ClientSearchUsernameResponse extends MessageHandler {
         super.handler();
 
         final ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builder = (ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder) message;
-        for (ProtoClientSearchUsername.ClientSearchUsernameResponse.Result result : builder.getResultList()) {
-            result.getType();
-            result.getExactMatch();
-            result.getUser();
-            result.getRoom();
-        }
+
+        G.onClientSearchUserName.OnGetList(builder);
+
+        //for (ProtoClientSearchUsername.ClientSearchUsernameResponse.Result result : builder.getResultList()) {
+        //    result.getType();
+        //    result.getExactMatch();
+        //    result.getUser();
+        //    result.getRoom();
+        //}
     }
 
     @Override

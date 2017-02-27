@@ -209,8 +209,6 @@
                 android:textColor="@color/gray_4c"
                 android:textSize="@dimen/sp18"
                 fontPath="fonts/iGap_font.ttf"
-
-
                 />
 
             <TextView
@@ -225,6 +223,49 @@
                 android:paddingRight="@dimen/dp8"
                 android:paddingTop="@dimen/dp12"
                 android:text="@string/New_Chanel"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp14"
+
+                />
+
+          </LinearLayout>
+
+          <LinearLayout
+              android:id="@+id/lm_ll_igap_search"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="@dimen/dp6"
+              android:layout_marginTop="@dimen/dp4"
+              android:orientation="horizontal"
+              style="@style/NavigationDrawer.Item"
+              >
+
+
+            <com.iGap.module.MaterialDesignTextView
+                android:id="@+id/amr_btn_search"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:minWidth="@dimen/dp32"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="@string/md_searching_magnifying_glass"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
+                android:textColor="@color/gray_4c"
+                android:textSize="@dimen/sp28"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginStart="@dimen/dp4"
+                android:layout_marginTop="@dimen/dp4"
+                android:paddingBottom="@dimen/dp8"
+                android:paddingLeft="@dimen/dp8"
+                android:paddingRight="@dimen/dp8"
+                android:paddingTop="@dimen/dp12"
+                android:text="@string/igap_search"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp14"
 

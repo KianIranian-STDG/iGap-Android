@@ -662,7 +662,7 @@ public class HelperUrl {
 
     //************************************  go to room by userName   *********************************************************************
 
-    private static void checkUsernameAndGoToRoom(final String userName) {
+    public static void checkUsernameAndGoToRoom(final String userName) {
 
         if (userName == null || userName.length() < 1) return;
 
@@ -707,7 +707,7 @@ public class HelperUrl {
         Long id = user.getId();
 
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
 
         if (realmRoom != null) {
             Intent intent = new Intent(G.currentActivity, ActivityChat.class);

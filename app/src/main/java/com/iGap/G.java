@@ -33,6 +33,7 @@ import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperTimeOut;
 import com.iGap.helper.MyService;
+import com.iGap.interfaces.IClientSearchUserName;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnChannelAddAdmin;
 import com.iGap.interfaces.OnChannelAddMember;
@@ -383,6 +384,7 @@ public class G extends MultiDexApplication {
     public static OnUserContactsUnBlock onUserContactsUnBlock;
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
+    public static IClientSearchUserName onClientSearchUserName;
 
 
     public static File chatBackground;

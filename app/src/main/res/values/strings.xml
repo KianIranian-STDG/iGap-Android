@@ -797,4 +797,5 @@
   <string name="no_body">Nobody</string>
   <string name="my_contacts">My Contacts</string>
   <string name="privacy_setting">Privacy Setting</string>
+  <string name="igap_search">Look and Find</string>
 </resources>
