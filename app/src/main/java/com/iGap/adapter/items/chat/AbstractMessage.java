@@ -904,20 +904,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
                 }
 
-                if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                String _status = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getStatus() : mMessage.status;
+                ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
+
+                if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                     return;
                 }
-                if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                     messageClickListener.onFailedMessageClick(progress, mMessage, holder.getAdapterPosition());
                 } else {
                     // TODO: 12/7/2016 [Alireza] ba in shart dige nemishe GIF haro dar fragment show images did
-                    if (mMessage.messageType == ProtoGlobal.RoomMessageType.GIF || mMessage.messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
+                    if (_type == ProtoGlobal.RoomMessageType.GIF || _type == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                         onPlayPauseGIF(holder, attachment.getLocalFilePath());
                     }
                     /**
                      * add this prt for video player
                      */
-                    else if (mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                    else if (_type == ProtoGlobal.RoomMessageType.VIDEO || _type == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
 
                         double time = 0;
                         String path = null;
@@ -1114,11 +1117,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 checkForDownloading(holder, attachment);
             }
 
-            if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.FAILED) {
-
+            String _status = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getStatus() : mMessage.status;
+            if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                 onFaildUpload(holder);
             }
-
 
         } else {
             checkForDownloading(holder, attachment);
