@@ -49,6 +49,8 @@ public class HelperFillLookUpClass {
         lookupMap.put(30128, "ProtoUserContactsBlock.UserContactsBlockResponse");
         lookupMap.put(30129, "ProtoUserContactsUnblock.UserContactsUnblockResponse");
         lookupMap.put(30130, "ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse");
+        lookupMap.put(30143, "ProtoUserPrivacyGetRule.UserPrivacyGetRuleResponse");
+        lookupMap.put(30144, "ProtoUserPrivacySetRule.UserPrivacySetRuleResponse");
 
         // Chat 2xx , 302xx
         lookupMap.put(30200, "ProtoChatGetRoom.ChatGetRoomResponse");
