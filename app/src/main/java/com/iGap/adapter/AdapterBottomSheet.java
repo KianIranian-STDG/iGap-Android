@@ -73,6 +73,7 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
         } else {
             holder.checkBoxSelect.setChecked(true);
         }
+        holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
 
         holder.checkBoxSelect.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {

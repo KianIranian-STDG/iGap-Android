@@ -470,8 +470,8 @@
   <string name="E_115">"خطای درونی سرور"</string>
   <string name="E_116">"خطایی از سمت کلاینت: نوع جنسیت اشتباه است."</string>
   <string name="E_117">"خطای درونی سرور"</string>
-  <string name="list_admin">فهرست اَدمین‌ها</string>
-  <string name="list_modereator">فهرست مدیران</string>
+  <string name="list_admin">فهرست مدیران</string>
+  <string name="list_modereator">فهرست ناظران</string>
   <string name="desc">توضیحات</string>
   <string name="hello_blank_fragment">تست</string>
   <string name="receive_code_text">آیا پیام متنی دریافت نکردید؟</string>
@@ -480,8 +480,8 @@
   <string name="Invite_Friends">دعوت کردن دوستان</string>
   <string name="iGap_FAQ">‫پرسش‌های متداول آی‌گپ</string>
   <string name="Documents">اسناد</string>
-  <string name="remove_admin">حذف اَدمین</string>
-  <string name="remove_moderator">حذف مدیر</string>
+  <string name="remove_admin">حذف مدیر</string>
+  <string name="remove_moderator">حذف ناظر</string>
   <string name="Male">آقا</string>
   <string name="Female">خانم</string>
   <string name="from_beginning">از ابتدا</string>
@@ -791,4 +791,13 @@
   <string name="toggle_botton_color">رنگ دکمه های ضامنی</string>
   <string name="send_and_attach_botton_color">رنگ آیکن ارسال و پیوست ها</string>
   <string name="default_header_font_color">رنگ تیتر نوشته ها</string>
+
+  <string name="who_can_see_my_avatar">چه کسی آواتارهای من را ببیند؟</string>
+  <string name="who_can_invite_you_to_channel_s">چه کسی من را به کانال دعوت کند ؟</string>
+  <string name="who_can_invite_you_to_group_s">چه کسی من را به گروه دعوت کند ؟</string>
+  <string name="no_body">هیچکس</string>
+  <string name="my_contacts">مخاطبین من</string>
+  <string name="privacy_setting">تنظیمات خصوصی </string>
+
+
 </resources>
