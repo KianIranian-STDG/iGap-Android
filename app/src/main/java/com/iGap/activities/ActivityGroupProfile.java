@@ -285,7 +285,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     @Override
                     public void execute(Realm realm) {
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        realmRoom.getGroupRoom().setParticipantsCountLabel(txtMemberNumber.getText().toString());
+                        if (realmRoom != null && realmRoom.getGroupRoom() != null) {
+                            realmRoom.getGroupRoom().setParticipantsCountLabel(txtMemberNumber.getText().toString());
+                        }
                     }
                 });
                 realm.close();
