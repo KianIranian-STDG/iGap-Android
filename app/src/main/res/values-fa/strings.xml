@@ -791,4 +791,13 @@
   <string name="toggle_botton_color">رنگ دکمه های ضامنی</string>
   <string name="send_and_attach_botton_color">رنگ آیکن ارسال و پیوست ها</string>
   <string name="default_header_font_color">رنگ تیتر نوشته ها</string>
+
+  <string name="who_can_see_my_avatar">چه کسی آواتارهای من را ببیند؟</string>
+  <string name="who_can_invite_you_to_channel_s">چه کسی من را به کانال دعوت کند ؟</string>
+  <string name="who_can_invite_you_to_group_s">چه کسی من را به گروه دعوت کند ؟</string>
+  <string name="no_body">هیچکس</string>
+  <string name="my_contacts">مخاطبین من</string>
+  <string name="privacy_setting">تنظیمات خصوصی </string>
+
+
 </resources>

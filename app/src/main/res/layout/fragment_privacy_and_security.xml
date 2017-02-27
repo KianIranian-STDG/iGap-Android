@@ -222,16 +222,170 @@
                     android:id="@+id/stps_txt_blocked_user"
                     fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
+                    android:layout_height="@dimen/dp40"
                     android:gravity="center_vertical|start"
-                    android:paddingLeft="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp8"
                     android:paddingRight="@dimen/dp16"
                     android:paddingTop="@dimen/dp4"
                     android:text="@string/Block_Users"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp14"
                     android:textStyle="normal"
                     />
+
+                <LinearLayout
+                    android:id="@+id/stps_ll_who_can_see_my_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp40"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:gravity="center_vertical|start"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/who_can_see_my_avatar"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal"
+                        />
+
+                    <TextView
+                        android:id="@+id/stps_txt_who_can_see_my_avatar"
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/everybody"
+                        android:textColor="@color/toolbar_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/stps_ll_who_can_invite_me_to_Channel"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp40"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:gravity="center_vertical|start"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp4"
+                        android:singleLine="true"
+                        android:text="@string/who_can_invite_you_to_channel_s"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal"
+                        />
+
+                    <TextView
+                        android:id="@+id/stps_txt_who_can_invite_me_to_Channel"
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/everybody"
+                        android:textColor="@color/toolbar_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/stps_ll_who_can_invite_me_to_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp40"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:gravity="center_vertical|start"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:singleLine="true"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/who_can_invite_you_to_group_s"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal"
+                        />
+
+                    <TextView
+                        android:id="@+id/stps_txt_who_can_invite_me_to_group"
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp4"
+                        android:paddingLeft="@dimen/dp8"
+                        android:text="@string/everybody"
+                        android:textColor="@color/toolbar_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/stps_ll_who_can_see_my_last_seen"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp40"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:gravity="center_vertical|start"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/last_seen"
+                        android:textColor="@color/black_register"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal"
+                        />
+
+                    <TextView
+                        android:id="@+id/stps_who_can_see_my_last_seen"
+                        fontPath="fonts/IRANSansMobile.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingTop="@dimen/dp4"
+                        android:text="@string/everybody"
+                        android:textColor="@color/toolbar_background"
+                        android:textSize="@dimen/sp14"
+                        android:textStyle="normal"
+                        />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -262,7 +416,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingBottom="@dimen/dp16"
+                    android:paddingBottom="@dimen/dp8"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:paddingTop="@dimen/dp12"
@@ -302,10 +456,10 @@
                     android:id="@+id/stps_activitySessions"
                     fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
+                    android:layout_height="@dimen/dp40"
                     android:gravity="center_vertical|start"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
+                    android:paddingLeft="@dimen/dp8"
+                    android:paddingRight="@dimen/dp8"
                     android:paddingTop="@dimen/dp4"
                     android:text="@string/Active_Sessions"
                     android:textColor="@color/black_register"
@@ -330,7 +484,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingBottom="@dimen/dp16"
+                    android:paddingBottom="@dimen/dp8"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:paddingTop="@dimen/dp12"
@@ -342,7 +496,7 @@
                 <LinearLayout
                     android:id="@+id/stps_layout_Self_destruction"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp48"
+                    android:layout_height="@dimen/dp40"
                     android:orientation="horizontal"
                     >
 
@@ -352,8 +506,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
                         android:gravity="center_vertical|start"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
                         android:paddingTop="@dimen/dp4"
                         android:text="@string/if_you_are_away_for"
                         android:textColor="@color/black_register"
@@ -367,7 +521,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical|start"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
+                        android:paddingRight="@dimen/dp8"
                         android:paddingTop="@dimen/dp4"
                         android:text="1 year"
                         android:textColor="@color/toolbar_background"

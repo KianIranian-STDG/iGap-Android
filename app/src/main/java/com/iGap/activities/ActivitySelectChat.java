@@ -121,8 +121,6 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private void initRecycleView() {
 
         mRecyclerView = (RealmRecyclerView) findViewById(R.id.cl_recycler_view_contact);
-        mRecyclerView.setDrawingCacheEnabled(true);
-        mRecyclerView.setItemViewCacheSize(100);
 
         RealmResults<RealmRoom> results = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(ActivitySelectChat.this, results, null);

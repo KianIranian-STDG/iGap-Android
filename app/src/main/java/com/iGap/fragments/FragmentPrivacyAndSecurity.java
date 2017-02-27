@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -17,6 +18,8 @@ import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructSessionsGetActiveList;
+import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmPrivacy;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserProfileGetSelfRemove;
 import com.iGap.request.RequestUserProfileSetSelfRemove;
@@ -40,9 +43,23 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     private ArrayList<StructSessionsGetActiveList> itemSessionsgetActivelist = new ArrayList<StructSessionsGetActiveList>();
     private TextView txtDestruction;
 
+    private TextView txtWhoCanSeeMyAvatar;
+    private TextView txtWhoCanInviteMeToChannel;
+    private TextView txtWhoCanInviteMeToGroup;
+    private TextView txtWhoCanSeeMyLastSeen;
+
+    private LinearLayout layoutWhoCanSeeMyAvatar;
+    private LinearLayout layoutWhoCanInviteMeToChannel;
+    private LinearLayout layoutWhoCanInviteMeToGroup;
+    private LinearLayout layoutWhoCanSeeMyLastSeen;
+
     private Realm mRealm;
-    RealmChangeListener<RealmModel> userInfoListener;
-    RealmUserInfo realmUserInfo;
+    private RealmChangeListener<RealmModel> userInfoListener;
+    private RealmUserInfo realmUserInfo;
+
+    private RealmPrivacy realmPrivacy;
+    private RealmChangeListener<RealmModel> privacyListener;
+
 
     public FragmentPrivacyAndSecurity() {
     }
@@ -62,12 +79,24 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             selfRemove = realmUserInfo.getSelfRemove();
             setTextSelfDestructs();
         }
+
+        if (realmPrivacy != null) {
+            if (privacyListener != null) {
+                realmPrivacy.addChangeListener(privacyListener);
+            }
+
+            updatePrivacyUI(realmPrivacy);
+        }
+
+
     }
 
     @Override public void onPause() {
         super.onPause();
 
         if (realmUserInfo != null) realmUserInfo.removeChangeListeners();
+
+        if (realmPrivacy != null) realmPrivacy.removeChangeListeners();
     }
 
     @Override public void onDestroy() {
@@ -85,12 +114,22 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
         mRealm = Realm.getDefaultInstance();
 
+        RealmPrivacy.getUpdatePrivacyFromServer();
+
+
         realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
         userInfoListener = new RealmChangeListener<RealmModel>() {
             @Override public void onChange(RealmModel element) {
 
                 selfRemove = ((RealmUserInfo) element).getSelfRemove();
                 setTextSelfDestructs();
+            }
+        };
+
+        realmPrivacy = mRealm.where(RealmPrivacy.class).findFirst();
+        privacyListener = new RealmChangeListener<RealmModel>() {
+            @Override public void onChange(RealmModel element) {
+                updatePrivacyUI((RealmPrivacy) element);
             }
         };
 
@@ -134,6 +173,44 @@ public class FragmentPrivacyAndSecurity extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null).commit();
             }
         });
+
+        txtWhoCanSeeMyAvatar = (TextView) view.findViewById(R.id.stps_txt_who_can_see_my_avatar);
+        txtWhoCanInviteMeToChannel = (TextView) view.findViewById(R.id.stps_txt_who_can_invite_me_to_Channel);
+        txtWhoCanInviteMeToGroup = (TextView) view.findViewById(R.id.stps_txt_who_can_invite_me_to_group);
+        txtWhoCanSeeMyLastSeen = (TextView) view.findViewById(R.id.stps_who_can_see_my_last_seen);
+
+        layoutWhoCanSeeMyAvatar = (LinearLayout) view.findViewById(R.id.stps_ll_who_can_see_my_avatar);
+        layoutWhoCanInviteMeToChannel = (LinearLayout) view.findViewById(R.id.stps_ll_who_can_invite_me_to_Channel);
+        layoutWhoCanInviteMeToGroup = (LinearLayout) view.findViewById(R.id.stps_ll_who_can_invite_me_to_group);
+        layoutWhoCanSeeMyLastSeen = (LinearLayout) view.findViewById(R.id.stps_ll_who_can_see_my_last_seen);
+
+        layoutWhoCanSeeMyAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                openDialogWhoCan(ProtoGlobal.PrivacyType.AVATAR);
+            }
+        });
+
+        layoutWhoCanInviteMeToChannel.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                openDialogWhoCan(ProtoGlobal.PrivacyType.CHANNEL_INVITE);
+            }
+        });
+
+        layoutWhoCanInviteMeToGroup.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                openDialogWhoCan(ProtoGlobal.PrivacyType.GROUP_INVITE);
+            }
+        });
+
+        layoutWhoCanSeeMyLastSeen.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                openDialogWhoCan(ProtoGlobal.PrivacyType.USER_STATUS);
+            }
+        });
+
+
+
+
 
 
         txtDestruction = (TextView) view.findViewById(R.id.stps_txt_Self_destruction);
@@ -213,4 +290,66 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             txtDestruction.setText(getResources().getString(R.string.month_6));
         }
     }
+
+    private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType) {
+
+        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.privacy_setting))
+            .titleGravity(GravityEnum.START)
+            .titleColor(getResources().getColor(android.R.color.black))
+            .items(R.array.privacy_setting_array)
+            .itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
+                @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                    switch (which) {
+                        case 0: {
+                            RealmPrivacy.sendUpdatePrivacyToServer(privacyType, ProtoGlobal.PrivacyLevel.ALLOW_ALL);
+
+                            break;
+                        }
+                        case 1: {
+                            RealmPrivacy.sendUpdatePrivacyToServer(privacyType, ProtoGlobal.PrivacyLevel.ALLOW_CONTACTS);
+                            break;
+                        }
+                        case 2: {
+                            RealmPrivacy.sendUpdatePrivacyToServer(privacyType, ProtoGlobal.PrivacyLevel.DENY_ALL);
+                            break;
+                        }
+                    }
+                    return false;
+                }
+            })
+            .positiveText(getResources().getString(R.string.B_ok))
+            .negativeText(getResources().getString(R.string.B_cancel))
+            .show();
+    }
+
+    private void updatePrivacyUI(RealmPrivacy realmPrivacy) {
+
+        txtWhoCanSeeMyAvatar.setText(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyAvatar()));
+        txtWhoCanInviteMeToChannel.setText(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel()));
+        txtWhoCanInviteMeToGroup.setText(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup()));
+        txtWhoCanSeeMyLastSeen.setText(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyLastSeen()));
+    }
+
+    private int getStringFromEnumString(String str) {
+
+        if (str == null || str.length() == 0) {
+            return R.string.everybody;
+        }
+
+        int resString = 0;
+
+        if (str.equals(ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString())) {
+            resString = R.string.everybody;
+        } else if (str.equals(ProtoGlobal.PrivacyLevel.ALLOW_CONTACTS.toString())) {
+            resString = R.string.my_contacts;
+        } else {
+            resString = R.string.no_body;
+        }
+
+        return resString;
+    }
+
+
+
 }

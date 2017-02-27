@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.proto.ProtoUserPrivacySetRule;
+import com.iGap.realm.RealmPrivacy;
 
 public class UserPrivacySetRuleResponse extends MessageHandler {
 
@@ -21,8 +22,8 @@ public class UserPrivacySetRuleResponse extends MessageHandler {
         super.handler();
 
         ProtoUserPrivacySetRule.UserPrivacySetRuleResponse.Builder builder = (ProtoUserPrivacySetRule.UserPrivacySetRuleResponse.Builder) message;
-        builder.getType();
-        builder.getLevel();
+
+        RealmPrivacy.updateRealmPrivacy(builder.getType(), builder.getLevel());
     }
 
     @Override

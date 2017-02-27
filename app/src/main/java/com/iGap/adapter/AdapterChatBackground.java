@@ -247,7 +247,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                                 messageProgress.withProgress(0);
                                 messageProgress.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
-                                // notifyItemChanged(position);
+                                notifyItemChanged(position);
                             }
                         }
                     });

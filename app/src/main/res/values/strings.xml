@@ -791,4 +791,10 @@
   <string name="toggle_botton_color">Toggle Button Color</string>
   <string name="send_and_attach_botton_color">Send And Attach Button Color</string>
   <string name="default_header_font_color">Default Title Font Color</string>
+  <string name="who_can_see_my_avatar">Who Can See Your Avatar ?</string>
+  <string name="who_can_invite_you_to_channel_s">Who Can invite You to Channel ?</string>
+  <string name="who_can_invite_you_to_group_s">Who Can invite You to Group ?</string>
+  <string name="no_body">Nobody</string>
+  <string name="my_contacts">My Contacts</string>
+  <string name="privacy_setting">Privacy Setting</string>
 </resources>

@@ -229,6 +229,12 @@
         <item>@string/year_1</item>
     </string-array>
 
+    <string-array name="privacy_setting_array">
+        <item>@string/everybody</item>
+        <item>@string/my_contacts</item>
+        <item>@string/no_body</item>
+    </string-array>
+
     <string-array name="array_gander">
         <item>@string/Male</item>
         <item>@string/Female</item>

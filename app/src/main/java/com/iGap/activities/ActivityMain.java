@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -877,8 +878,7 @@ public class ActivityMain extends ActivityEnhanced
     private void initRecycleView() {
 
         mRecyclerView = (RealmRecyclerView) findViewById(R.id.cl_recycler_view_contact);
-        mRecyclerView.setDrawingCacheEnabled(true);
-        mRecyclerView.setItemViewCacheSize(100);
+
 
         RealmResults<RealmRoom> results = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);
@@ -1120,7 +1120,11 @@ public class ActivityMain extends ActivityEnhanced
                 }, new Realm.Transaction.OnSuccess() {
                     @Override public void onSuccess() {
 
-                        roomAdapter.notifyDataSetChanged();
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                roomAdapter.notifyDataSetChanged();
+                            }
+                        });
 
                         realm.close();
                     }
@@ -1212,8 +1216,13 @@ public class ActivityMain extends ActivityEnhanced
 
     }
 
-    @Override public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
+    @Override public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
         // TODO
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                roomAdapter.updateUiById(roomId);
+            }
+        });
     }
 
     @Override
@@ -1221,6 +1230,8 @@ public class ActivityMain extends ActivityEnhanced
 
         runOnUiThread(new Runnable() {
             @Override public void run() {
+
+                roomAdapter.updateUiById(roomId);
 
                 int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager()).findFirstVisibleItemPosition();
                 if (firstVisibleItem < 3) {
@@ -1237,8 +1248,12 @@ public class ActivityMain extends ActivityEnhanced
         }
     }
 
-    @Override public void onMessageFailed(long roomId, RealmRoomMessage roomMessage) {
-        roomAdapter.updateUiById(roomId);
+    @Override public void onMessageFailed(final long roomId, RealmRoomMessage roomMessage) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                roomAdapter.updateUiById(roomId);
+            }
+        });
     }
 
     @Override public void onChatUpdateStatus(final long roomId, long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
@@ -1290,8 +1305,12 @@ public class ActivityMain extends ActivityEnhanced
 
     }
 
-    @Override public void onDraftMessage(long roomId, String draftMessage) {
-        roomAdapter.updateUiById(roomId);
+    @Override public void onDraftMessage(final long roomId, String draftMessage) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                roomAdapter.updateUiById(roomId);
+            }
+        });
     }
 
     @Override public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
@@ -1471,7 +1490,7 @@ public class ActivityMain extends ActivityEnhanced
             return new RoomAdapter.ViewHolder(v);
         }
 
-        @Override public void onBindRealmViewHolder(RoomAdapter.ViewHolder holder, int i) {
+        @Override public void onBindRealmViewHolder(final RoomAdapter.ViewHolder holder, int i) {
 
             RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
@@ -1647,12 +1666,18 @@ public class ActivityMain extends ActivityEnhanced
                     avatarType = HelperAvatar.AvatarType.ROOM;
                 }
 
+
                 final RealmAvatar realmAvatar = getLastAvatar(idForGetAvatar);
                 if (realmAvatar != null) {
                     if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
+                        // ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
+
+                        holder.image.setImageBitmap(BitmapFactory.decodeFile(realmAvatar.getFile().getLocalFilePath()));
+
                     } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
+                        // ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
+
+                        holder.image.setImageBitmap(BitmapFactory.decodeFile(realmAvatar.getFile().getLocalThumbnailPath()));
                     } else {
                         HelperAvatar.getAvatar1(idForGetAvatar, avatarType, new OnAvatarGet() {
                             @Override public void onAvatarGet(final String avatarPath, final long ownerId) {
