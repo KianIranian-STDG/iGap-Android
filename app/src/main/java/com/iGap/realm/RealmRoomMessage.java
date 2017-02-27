@@ -695,7 +695,10 @@ import org.parceler.Parcel;
                 public void execute(Realm realm) {
 
                     realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
-                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().setUnreadCount(0);
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    if (realmRoom != null) {
+                        realmRoom.setUnreadCount(0);
+                    }
                 }
             });
         }
