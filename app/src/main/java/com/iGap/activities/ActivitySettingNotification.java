@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,7 +31,7 @@ import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ActivitySettingNotification extends AppCompatActivity {
+public class ActivitySettingNotification extends ActivityEnhanced {
 
     private TextView txtBack, txtVibrateMessage, txtPopupNotification, txtVibrateGroup,
             txtPopupNotificationGroup, txtSoundGroup, txtSoundMessage, txtRepeat_Notifications, ltAlert,
@@ -58,7 +57,7 @@ public class ActivitySettingNotification extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_notification);
 

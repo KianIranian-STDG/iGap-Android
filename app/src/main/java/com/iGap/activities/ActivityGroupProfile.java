@@ -299,21 +299,31 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         super.onPause();
     }
 
-    private void setMemberCount(final long roomId) {
+    private int memberCount;
+
+    private void setMemberCount(final long roomId, final boolean plus) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null && realmRoom.getGroupRoom() != null) {
-                    final String memberCount = realmRoom.getGroupRoom().getMembers().size() + "";
-                    realmRoom.getGroupRoom().setParticipantsCountLabel(memberCount);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            txtMemberNumber.setText(memberCount);
+                    if (HelperString.isNumeric(realmRoom.getGroupRoom().getParticipantsCountLabel())) {
+
+                        memberCount = Integer.parseInt(realmRoom.getGroupRoom().getParticipantsCountLabel());
+                        if (plus) {
+                            memberCount++;
+                        } else {
+                            memberCount--;
                         }
-                    });
+                        realmRoom.getGroupRoom().setParticipantsCountLabel(memberCount + "");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                txtMemberNumber.setText(memberCount + "");
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -2319,15 +2329,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onGroupAddMember(final Long roomIdUser, final Long UserId) {
 
-                //final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                //runOnUiThread(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        txtMemberNumber.setText((items.size() + 1) + "");
-                //    }
-                //});
-                setMemberCount(roomIdUser);
-
+                setMemberCount(roomIdUser, true);
 
                 runOnUiThread(new Runnable() { //TODO [Saeed Mozaffari] [2016-11-12 5:15 PM] - get member list from group and add new member . like get member list response
                     @Override
@@ -2380,13 +2382,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     public void run() {
 
                         final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                        //runOnUiThread(new Runnable() {
-                        //    @Override
-                        //    public void run() {
-                        //        txtMemberNumber.setText((items.size() - 1) + "");
-                        //    }
-                        //});
-                        setMemberCount(roomId);
+                        setMemberCount(roomId, false);
                         for (int i = 0; i < items.size(); i++) {
                             if (items.get(i).mContact.peerId == memberId) {
                                 itemAdapter.remove(i);

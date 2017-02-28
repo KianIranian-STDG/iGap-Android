@@ -166,26 +166,6 @@ public class HelperString {
         return false;
     }
 
-    public static boolean isDocument(String path) {
-        String[] pathList = path.split("/");
-        for (String pa : pathList) {
-            if (pa.equals("document")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isStorage(String path) {
-        String[] pathList = path.split("/");
-        for (String pa : pathList) {
-            if (pa.equals("storage")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static String dotSplit(String text) {
         String[] parts = text.split("\\.");
         if (parts.length > 0) {
@@ -193,6 +173,16 @@ public class HelperString {
         } else {
             return null;
         }
+    }
+
+    public static boolean isNumeric(String str) {
+        try {
+            long number = Long.parseLong(str);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        return true;
     }
 
 }

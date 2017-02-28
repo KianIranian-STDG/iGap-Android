@@ -452,17 +452,9 @@ public class ActivityChat extends ActivityEnhanced
                         public void run() {
                             String members = null;
                             if (room.getType() == GROUP && room.getGroupRoom() != null) {
-                                if (room.getGroupRoom().getMembers().size() == 0) {
-                                    members = groupParticipantsCountLabel;
-                                } else {
-                                    members = room.getGroupRoom().getMembers().size() + "";
-                                }
-                            } else if (room.getType() == CHANNEL && room.getGroupRoom() != null) {
-                                if (room.getChannelRoom().getMembers().size() == 0) {
-                                    members = channelParticipantsCountLabel;
-                                } else {
-                                    members = room.getChannelRoom().getMembers().size() + "";
-                                }
+                                members = room.getGroupRoom().getParticipantsCountLabel();
+                            } else if (room.getType() == CHANNEL && room.getChannelRoom() != null) {
+                                members = room.getChannelRoom().getParticipantsCountLabel();
                             }
                             if (members != null) {
                                 txtLastSeen.setText(members + " " + getResources().getString(member));

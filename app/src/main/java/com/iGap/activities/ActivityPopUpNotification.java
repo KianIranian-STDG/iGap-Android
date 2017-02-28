@@ -17,7 +17,6 @@ import android.os.PowerManager;
 import android.support.annotation.StringRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -69,7 +68,7 @@ import static com.iGap.G.context;
  * Created by android3 on 10/31/2016.
  */
 
-public class ActivityPopUpNotification extends AppCompatActivity {
+public class ActivityPopUpNotification extends ActivityEnhanced {
 
     public static boolean isPopUpVisible = false;
 

@@ -19,7 +19,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -141,7 +140,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.iGap.G.context;
 import static com.iGap.realm.enums.RoomType.GROUP;
 
-public class ActivityChannelProfile extends AppCompatActivity implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
+public class ActivityChannelProfile extends ActivityEnhanced implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelGetMemberList, OnUserInfoResponse, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnFileUploadForActivities, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
 
     private AppBarLayout appBarLayout;
     private TextView txtDescription, txtChannelLink, txtChannelNameInfo;
@@ -212,7 +211,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_channel);
 
@@ -419,12 +418,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
                     FragmentShowAvatars.appBarLayout = fab;
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
-                    ActivityChannelProfile.this.getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer_channel_profile, fragment, null)
-                        .commit();
+                    ActivityChannelProfile.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
                 }
                 realm.close();
             }
@@ -1241,10 +1235,37 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
         }
     }
 
+    //********** update member count
+
+    private void setMemberCount(final long roomId, final boolean plus) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null && realmRoom.getChannelRoom() != null) {
+                    if (HelperString.isNumeric(realmRoom.getChannelRoom().getParticipantsCountLabel())) {
+                        int memberCount = Integer.parseInt(realmRoom.getChannelRoom().getParticipantsCountLabel());
+                        if (plus) {
+                            memberCount++;
+                        } else {
+                            memberCount--;
+                        }
+                        realmRoom.getChannelRoom().setParticipantsCountLabel(memberCount + "");
+                    }
+                }
+            }
+        });
+        realm.close();
+    }
+
     //********** channel Add Member
 
     private void channelAddMemberResponse(long roomIdResponse, final long userId, final ProtoGlobal.ChannelRoom.Role role) {
         if (roomIdResponse == roomId) {
+
+            setMemberCount(roomId, true);
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -1277,6 +1298,7 @@ public class ActivityChannelProfile extends AppCompatActivity implements OnChann
 
     private void channelKickMember(final long roomIdResponse, final long memberId) {
         if (roomIdResponse == roomId) {
+            setMemberCount(roomId, false);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
