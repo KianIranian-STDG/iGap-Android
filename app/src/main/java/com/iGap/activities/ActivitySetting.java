@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -137,7 +138,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     public static int KEY_AD_ROAMINGN_GIF = -1;
     private SharedPreferences sharedPreferences;
     private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
-    private RelativeLayout ltClearCache;
+    private LinearLayout ltClearCache;
     private RelativeLayout lyCleanUp;
     private PopupWindow popupWindow;
     private int poRbDialogLangouage = -1;
@@ -1216,8 +1217,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
-        ltClearCache = (RelativeLayout) findViewById(R.id.st_layout_clearCache);
+        ltClearCache = (LinearLayout) findViewById(R.id.st_layout_clearCache);
         ltClearCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1292,21 +1292,25 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             stsp_toggle_crop.setChecked(false);
         }
 
+        stsp_toggle_crop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (isChecked) {
+                    editor.putInt(SHP_SETTING.KEY_CROP, 1);
+                    editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_CROP, 0);
+                    editor.apply();
+                }
+            }
+        });
+
         txtCrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                if (stsp_toggle_crop.isChecked()) {
-                    stsp_toggle_crop.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_CROP, 0);
-                    editor.apply();
-                } else {
-                    stsp_toggle_crop.setChecked(true);
-                    editor.putInt(SHP_SETTING.KEY_CROP, 1);
-                    editor.apply();
-                }
+                stsp_toggle_crop.setChecked(!stsp_toggle_crop.isChecked());
             }
         });
 
@@ -1331,21 +1335,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleEnableDataShams.setChecked(false);
         }
 
+        toggleEnableDataShams.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (isChecked) {
+                    editor.putInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 1);
+                    editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 0);
+                    editor.apply();
+                }
+            }
+        });
+
         txtDataShams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                if (toggleEnableDataShams.isChecked()) {
-                    toggleEnableDataShams.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 0);
-                    editor.apply();
-                } else {
-                    toggleEnableDataShams.setChecked(true);
-                    editor.putInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 1);
-                    editor.apply();
-                }
+                toggleEnableDataShams.setChecked(!toggleEnableDataShams.isChecked());
             }
         });
 
@@ -1800,21 +1807,26 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleAutoGifs.setChecked(false);
         }
 
-        ltAutoGifs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        toggleAutoGifs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (toggleAutoGifs.isChecked()) {
-                    toggleAutoGifs.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0);
-                    editor.apply();
-                } else {
-                    toggleAutoGifs.setChecked(true);
+                if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 1);
                     editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, 0);
+                    editor.apply();
                 }
+            }
+        });
+
+        ltAutoGifs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleAutoGifs.setChecked(!toggleAutoGifs.isChecked());
             }
         });
 
@@ -1827,23 +1839,28 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             toggleSaveToGallery.setChecked(false);
         }
 
-        ltSaveToGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        toggleSaveToGallery.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (toggleSaveToGallery.isChecked()) {
-
-                    toggleSaveToGallery.setChecked(false);
-
-                    editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
-                    editor.apply();
-                } else {
-                    toggleSaveToGallery.setChecked(true);
+                if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 1);
                     editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
+                    editor.apply();
                 }
+            }
+        });
+
+
+        ltSaveToGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleSaveToGallery.setChecked(!toggleSaveToGallery.isChecked());
+
             }
         });
 

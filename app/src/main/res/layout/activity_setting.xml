@@ -157,6 +157,31 @@
 
   </android.support.design.widget.AppBarLayout>
 
+  <ProgressBar
+      android:id="@+id/st_prgWaiting_addContact"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:layout_gravity="center"
+      android:background="@drawable/pu_circle_dialog_give_image_gallery"
+      android:indeterminate="true"
+      android:visibility="gone"
+      />
+
+  <android.support.design.widget.FloatingActionButton
+      android:id="@+id/st_fab_setPic"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/dp20"
+      android:background="?attr/selectableItemBackground"
+      android:clickable="true"
+      android:src="@mipmap/pu_camera"
+      android:theme="@style/FabButton"
+      android:tint="@color/gray"
+      app:fabSize="normal"
+      app:layout_anchor="@+id/st_appbar"
+      app:layout_anchorGravity="bottom|right|end"
+      />
   <android.support.v4.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -468,15 +493,17 @@
             />
 
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/st_layout_language"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp52"
+            android:orientation="horizontal"
             >
 
 
           <TextView
-              android:layout_width="match_parent"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="match_parent"
               android:gravity="center_vertical"
               android:paddingEnd="@dimen/dp16"
@@ -493,20 +520,16 @@
               android:id="@+id/st_txt_language"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
               android:gravity="center_vertical"
-              android:paddingEnd="@dimen/dp16"
-              android:paddingLeft="@dimen/dp8"
-              android:paddingRight="@dimen/dp8"
-              android:paddingStart="@dimen/dp16"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
               android:text="English"
               android:textColor="@color/toolbar_background"
               android:textSize="@dimen/sp15"
               android:textStyle="normal"
               fontPath="fonts/IRANSansMobile.ttf"
               />
-        </RelativeLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -514,7 +537,8 @@
             android:background="@color/background_editText"
             />
 
-        <RelativeLayout
+
+        <LinearLayout
 
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
@@ -525,29 +549,11 @@
             android:paddingStart="@dimen/dp16"
             >
 
-          <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              >
-
-            <ToggleButton
-                android:id="@+id/st_toggle_dataShams"
-                android:layout_width="@dimen/dp44"
-                android:layout_height="@dimen/dp40"
-                android:background="@drawable/st_switch_button"
-                android:textOff=""
-                android:textOn=""
-                />
-          </LinearLayout>
-
           <TextView
               android:id="@+id/st_txt_st_toggle_dataShams"
-              android:layout_width="match_parent"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="match_parent"
-              android:layout_centerInParent="true"
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_data_shams"
@@ -558,7 +564,17 @@
               />
 
 
-        </RelativeLayout>
+          <ToggleButton
+              android:id="@+id/st_toggle_dataShams"
+              android:layout_width="@dimen/dp44"
+              android:layout_height="@dimen/dp40"
+              android:background="@drawable/st_switch_button"
+              android:textOff=""
+              android:textOn=""
+              />
+
+        </LinearLayout>
+
 
         <View
             android:layout_width="match_parent"
@@ -566,34 +582,18 @@
             android:background="@color/background_editText"
             />
 
-        <RelativeLayout
+
+        <LinearLayout
             android:id="@+id/st_layout_clearCache"
             android:layout_width="match_parent"
+            android:orientation="horizontal"
             android:layout_height="@dimen/dp48"
             >
 
           <TextView
-              android:id="@+id/st_txt_clearCache"
-              android:layout_width="wrap_content"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="match_parent"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:gravity="center"
-              android:paddingLeft="@dimen/dp16"
-              android:paddingRight="@dimen/dp16"
-              android:text="0 KB"
-              android:textColor="@color/toolbar_background"
-              android:textSize="@dimen/sp15"
-              android:textStyle="normal"
-              fontPath="fonts/IRANSansMobile.ttf"
-              />
-
-          <TextView
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_alignParentLeft="true"
-              android:layout_alignParentStart="true"
-              android:layout_alignParentTop="true"
               android:gravity="center_vertical"
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
@@ -605,7 +605,24 @@
               fontPath="fonts/IRANSansMobile.ttf"
               />
 
-        </RelativeLayout>
+
+          <TextView
+              android:id="@+id/st_txt_clearCache"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
+              android:text="0 KB"
+              android:textColor="@color/toolbar_background"
+              android:textSize="@dimen/sp15"
+              android:textStyle="normal"
+              fontPath="fonts/IRANSansMobile.ttf"
+              />
+
+
+        </LinearLayout>
+
 
         <View
             android:layout_width="match_parent"
@@ -688,14 +705,16 @@
             />
 
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/st_layout_messageTextSize"
             android:layout_width="match_parent"
+            android:orientation="horizontal"
             android:layout_height="@dimen/dp48"
             >
 
           <TextView
-              android:layout_width="match_parent"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="match_parent"
               android:gravity="center_vertical"
               android:paddingLeft="@dimen/dp16"
@@ -712,8 +731,6 @@
               android:id="@+id/st_txt_messageTextSize_number"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
               android:gravity="center"
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
@@ -724,7 +741,8 @@
               android:textStyle="normal"
               fontPath="fonts/IRANSansMobile.ttf"
               />
-        </RelativeLayout>
+        </LinearLayout>
+
 
         <View
             android:layout_width="match_parent"
@@ -733,37 +751,18 @@
             />
 
 
-        <RelativeLayout
-            android:id="@+id/stsp_layout_crop"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp52"
-            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             >
 
-          <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              >
-
-            <ToggleButton
-                android:id="@+id/stsp_toggle_crop"
-                android:layout_width="@dimen/dp44"
-                android:layout_height="@dimen/dp40"
-                android:background="@drawable/st_switch_button"
-                android:textOff=""
-                android:textOn=""
-                />
-          </LinearLayout>
-
           <TextView
               android:id="@+id/stsp_txt_crop"
-              android:layout_width="match_parent"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="match_parent"
               android:gravity="center_vertical"
               android:text="@string/st_crop"
@@ -772,8 +771,17 @@
               android:textStyle="normal"
               />
 
+          <ToggleButton
+              android:id="@+id/stsp_toggle_crop"
+              android:layout_width="@dimen/dp44"
+              android:layout_height="@dimen/dp40"
+              android:background="@drawable/st_switch_button"
+              android:textOff=""
+              android:textOn=""
+              />
 
-        </RelativeLayout>
+
+        </LinearLayout>
 
 
         <View
@@ -1349,7 +1357,7 @@
             android:visibility="gone"
             />
 
-        <RelativeLayout
+        <LinearLayout
 
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
@@ -1360,29 +1368,11 @@
             android:paddingStart="@dimen/dp16"
             >
 
-          <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              >
-
-            <ToggleButton
-                android:id="@+id/st_toggle_autoGif"
-                android:layout_width="@dimen/dp44"
-                android:layout_height="@dimen/dp40"
-                android:background="@drawable/st_switch_button"
-                android:textOff=""
-                android:textOn=""
-                />
-          </LinearLayout>
-
           <TextView
               android:id="@+id/st_txt_autoGif"
-              android:layout_width="match_parent"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="match_parent"
-              android:layout_centerInParent="true"
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_auto_gif"
@@ -1392,8 +1382,16 @@
               fontPath="fonts/IRANSansMobile.ttf"
               />
 
+          <ToggleButton
+              android:id="@+id/st_toggle_autoGif"
+              android:layout_width="@dimen/dp44"
+              android:layout_height="@dimen/dp40"
+              android:background="@drawable/st_switch_button"
+              android:textOff=""
+              android:textOn=""
+              />
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -1401,8 +1399,7 @@
             android:background="@color/background_editText"
             />
 
-        <RelativeLayout
-
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
             android:orientation="horizontal"
@@ -1412,29 +1409,11 @@
             android:paddingStart="@dimen/dp16"
             >
 
-          <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              >
-
-            <ToggleButton
-                android:id="@+id/st_toggle_saveGallery"
-                android:layout_width="@dimen/dp44"
-                android:layout_height="@dimen/dp40"
-                android:background="@drawable/st_switch_button"
-                android:textOff=""
-                android:textOn=""
-                />
-          </LinearLayout>
-
           <TextView
               android:id="@+id/st_txt_saveGallery"
-              android:layout_width="match_parent"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="match_parent"
-              android:layout_centerInParent="true"
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_save_to_gallery"
@@ -1445,7 +1424,19 @@
               />
 
 
-        </RelativeLayout>
+          <ToggleButton
+              android:id="@+id/st_toggle_saveGallery"
+              android:layout_width="@dimen/dp44"
+              android:layout_height="@dimen/dp40"
+              android:background="@drawable/st_switch_button"
+              android:textOff=""
+              android:textOn=""
+              />
+
+
+        </LinearLayout>
+
+
       </LinearLayout>
 
 
@@ -1577,32 +1568,6 @@
       </LinearLayout>
     </LinearLayout>
   </android.support.v4.widget.NestedScrollView>
-
-  <ProgressBar
-      android:id="@+id/st_prgWaiting_addContact"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:layout_gravity="center"
-      android:background="@drawable/pu_circle_dialog_give_image_gallery"
-      android:indeterminate="true"
-      android:visibility="gone"
-      />
-
-  <android.support.design.widget.FloatingActionButton
-      android:id="@+id/st_fab_setPic"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/dp20"
-      android:background="?attr/selectableItemBackground"
-      android:clickable="true"
-      android:src="@mipmap/pu_camera"
-      android:theme="@style/FabButton"
-      android:tint="@color/gray"
-      app:fabSize="normal"
-      app:layout_anchor="@+id/st_appbar"
-      app:layout_anchorGravity="bottom|right|end"
-      />
 
 
 </android.support.design.widget.CoordinatorLayout>
