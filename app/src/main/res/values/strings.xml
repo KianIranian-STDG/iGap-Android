@@ -799,4 +799,6 @@
   <string name="privacy_setting">Privacy Setting</string>
   <string name="igap_search">Look and Find</string>
   <string name="set_color_to_default">Set Color To Default</string>
+  <string name="empty_message">enter text</string>
+  <string name="there_is_no_any_result">there is no any result</string>
 </resources>

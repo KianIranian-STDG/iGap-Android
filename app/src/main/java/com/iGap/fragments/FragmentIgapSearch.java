@@ -10,6 +10,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,6 +79,24 @@ public class FragmentIgapSearch extends Fragment {
         loadingProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
+
+        edtSearch.setInputType(InputType.TYPE_CLASS_TEXT);
+        edtSearch.setFilters(new InputFilter[] {
+            new InputFilter() {
+                public CharSequence filter(CharSequence src, int start, int end, Spanned dst, int dstart, int dend) {
+                    if (src.equals("")) {
+                        return src;
+                    }
+                    if (src.toString().matches("[@\\w]")) {
+                        return src;
+                    }
+                    return "";
+                }
+            }
+        });
+
+
+
         edtSearch.setText("@");
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -86,11 +107,12 @@ public class FragmentIgapSearch extends Fragment {
 
                 itemAdapter.clear();
 
-                int strSize = edtSearch.getText().length();
+                int strSize = edtSearch.getText().toString().trim().length();
 
                 if (strSize > 1) {
                     txtEmptyListComment.setVisibility(View.GONE);
                 } else {
+                    txtEmptyListComment.setText(R.string.empty_message);
                     txtEmptyListComment.setVisibility(View.VISIBLE);
                 }
 
@@ -162,6 +184,8 @@ public class FragmentIgapSearch extends Fragment {
                     }
                 }
 
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIgapSearch.this).commit();
+
                 return false;
             }
         });
@@ -177,6 +201,13 @@ public class FragmentIgapSearch extends Fragment {
                     @Override public void run() {
 
                         loadingProgressBar.setVisibility(View.GONE);
+
+                        if (builderList.getResultList().size() == 0) {
+                            txtEmptyListComment.setText(R.string.there_is_no_any_result);
+                            txtEmptyListComment.setVisibility(View.VISIBLE);
+
+                            return;
+                        }
 
                         List<IItem> items = new ArrayList<>();
 

@@ -133,7 +133,7 @@
         android:layout_gravity="center"
         android:textSize="@dimen/sp18"
         android:visibility="gone"
-        android:text="enter text"
+        android:text="@string/empty_message"
         />
 
     <android.support.v4.widget.ContentLoadingProgressBar

@@ -217,7 +217,7 @@
 
     <!-- privacy and security -->
     <string name="privacy">"حریم خصوصی"</string>
-    <string name="Block_Users">"کاربران مسدود‌ شده"</string>
+  <string name="Block_Users">"لیست مسدود‌ شده"</string>
     <string name="Last_Seen">"آخرین مشاهده"</string>
     <string name="Groups">"گروه‌ها"</string>
     <string name="Security">"امنیت"</string>
@@ -800,6 +800,8 @@
   <string name="privacy_setting">تنظیمات خصوصی </string>
   <string name="igap_search">‫بگرد و کشف کن</string>
   <string name="set_color_to_default">انتخاب رنگ پیش فرض برنامه</string>
+  <string name="empty_message">متن را وارد کنید</string>
+  <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
 
 
 </resources>

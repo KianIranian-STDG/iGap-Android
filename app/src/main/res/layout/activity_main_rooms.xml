@@ -106,8 +106,6 @@
         android:layout_height="match_parent"
         app:rrvLayoutType="LinearLayout"
         android:overScrollMode="never"
-
-
         />
 
 
