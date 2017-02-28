@@ -1,6 +1,6 @@
 package com.iGap.fragments;
 
-
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.graphics.Color;
@@ -60,7 +60,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
     private boolean existAvatar;
     private ProgressBar prgWaiting;
     private String pathSaveImage;
-
+    private Activity mActivity;
 
     public FragmentCreateChannel() {
         // Required empty public constructor
@@ -128,7 +128,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                     @Override
                     public void onChannelUpdateUsername(final long roomId, final String username) {
 
-                        G.handler.post(new Runnable() {
+                        if (mActivity != null) mActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Realm realm = Realm.getDefaultInstance();
@@ -384,7 +384,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
     @Override
     public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
 
-        G.handler.post(new Runnable() {
+        if (mActivity != null) mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
@@ -417,24 +417,26 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
     @Override
     public void onError(int majorCode, int minorCode) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
-                snack.setAction(R.string.cancel, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
-            }
-        });
+
+        if (mActivity != null) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                    snack.setAction(R.string.cancel, new View.OnClickListener() {
+                        @Override public void onClick(View view) {
+                            snack.dismiss();
+                        }
+                    });
+                    snack.show();
+                }
+            });
+        }
     }
 
     @Override
     public void onTimeOut() {
-        G.handler.post(new Runnable() {
+
+        if (mActivity != null) mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
@@ -451,29 +453,41 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
     }
 
     private void showProgressBar() {
-        G.handler.post(new Runnable() {
+
+        if (mActivity != null) mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
                 prgWaiting.setVisibility(View.VISIBLE);
-                if (getActivity() != null) {
-                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
+                mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
             }
         });
     }
 
     private void hideProgressBar() {
-        G.handler.post(new Runnable() {
+
+        if (mActivity != null) mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
                 prgWaiting.setVisibility(View.GONE);
-                if (getActivity() != null) {
-                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
+                mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
             }
         });
     }
 
+    @Override public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = activity;
+    }
+
+    @Override public void onDetach() {
+
+        if (prgWaiting.getVisibility() == View.VISIBLE) {
+            hideProgressBar();
+        }
+        super.onDetach();
+    }
 }

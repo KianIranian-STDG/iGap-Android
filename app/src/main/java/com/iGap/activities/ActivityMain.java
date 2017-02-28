@@ -1155,7 +1155,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private ContentLoadingProgressBar contentLoading;
 
     private void getChatsList() {
-        swipeRefreshLayout.setRefreshing(true);
+        //swipeRefreshLayout.setRefreshing(true);
         /*if (fromServer && G.socketConnection) {
             testIsSecure();
         } else {*/

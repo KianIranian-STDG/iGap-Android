@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp68"
-    android:layoutDirection="ltr"
     android:orientation="vertical">
 
 
@@ -16,12 +15,14 @@
             android:id="@+id/sfsl_imv_contact_avatar"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
+            android:layout_marginStart="@dimen/dp8"
             android:layout_marginLeft="@dimen/dp8"
             />
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp8"
             android:layout_marginLeft="@dimen/dp8"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -38,16 +39,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
                     android:text="how"
                     android:textSize="@dimen/sp18" />
 
 
                 <com.iGap.module.CustomTextViewMedium
                     android:id="@+id/sfsl_txt_contact_name"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:singleLine="true"
                     android:text="Dominika Faniz"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
@@ -59,10 +60,10 @@
 
             <io.github.meness.emoji.EmojiTextView
                 android:id="@+id/sfsl_txt_contact_lastseen"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:gravity="bottom|left"
+                android:gravity="bottom|start"
                 android:singleLine="true"
                 android:text="@string/last_seen_recently"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
