@@ -45,6 +45,7 @@ import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.IntentRequests;
 import com.iGap.R;
@@ -1493,6 +1494,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        TextView txtSetToDefaultColor = (TextView) findViewById(R.id.asn_txt_set_color_to_default);
+        txtSetToDefaultColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                showSetDefaultColorDialog();
+            }
+        });
+
+
+
         //***********************
 
 
@@ -1972,7 +1982,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         appBarColorClick(picker.getColor());
                         break;
                     case R.string.app_notif_color:
-                        notificationColorClick(picker.getColor());
+                        notificationColorClick(picker.getColor(), true);
                         break;
                     case R.string.toggle_botton_color:
                         toggleBottomClick(picker.getColor());
@@ -1981,7 +1991,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         sendAndAttachColorClick(picker.getColor());
                         break;
                     case R.string.default_header_font_color:
-                        headerColorClick(picker.getColor());
+                        headerColorClick(picker.getColor(), true);
                         break;
                 }
 
@@ -1990,6 +2000,28 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         dialog.show();
+    }
+
+    private void showSetDefaultColorDialog() {
+
+        new MaterialDialog.Builder(ActivitySetting.this).title(R.string.set_color_to_default)
+            .positiveText(R.string.st_dialog_reset_all_notification_yes)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
+                    headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
+                    //  toggleBottomClick(Color.parseColor(Config.default_toggleBottonColor));
+                    sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
+                    appBarColorClick(Color.parseColor(Config.default_appBarColor));
+                }
+            })
+            .negativeText(R.string.st_dialog_reset_all_notification_no)
+            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                }
+            })
+            .show();
     }
 
     private void appBarColorClick(int color) {
@@ -2007,7 +2039,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         G.onRefreshActivity.refresh(G.selectedLanguage);
     }
 
-    private void notificationColorClick(int color) {
+    private void notificationColorClick(int color, boolean updateUi) {
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         GradientDrawable bgShape = (GradientDrawable) imgNotificationColor.getBackground();
@@ -2016,7 +2048,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
         editor.apply();
 
-        G.onRefreshActivity.refresh(G.selectedLanguage);
+        if (updateUi) G.onRefreshActivity.refresh(G.selectedLanguage);
     }
 
     private void toggleBottomClick(int color) {
@@ -2029,7 +2061,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         editor.apply();
     }
 
-    private void headerColorClick(int color) {
+    private void headerColorClick(int color, boolean updateUi) {
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         GradientDrawable bgShape = (GradientDrawable) imgHeaderTextColor.getBackground();
@@ -2038,7 +2070,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
         editor.apply();
 
-        ActivitySetting.this.recreate();
+        if (updateUi) ActivitySetting.this.recreate();
     }
 
     private void sendAndAttachColorClick(int color) {

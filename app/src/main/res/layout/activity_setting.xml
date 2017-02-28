@@ -1043,6 +1043,34 @@
 
           </LinearLayout>
 
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_centerInParent="true"
+              android:orientation="horizontal"
+              >
+
+
+            <TextView
+                android:id="@+id/asn_txt_set_color_to_default"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp48"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp16"
+                android:paddingRight="@dimen/dp16"
+                android:paddingTop="@dimen/dp4"
+                android:text="@string/set_color_to_default"
+                android:textColor="@color/black_register"
+                android:textSize="@dimen/sp15"
+                android:textStyle="normal"
+                fontPath="fonts/IRANSansMobile.ttf"
+                />
+
+
+          </LinearLayout>
+
 
         </LinearLayout>
 

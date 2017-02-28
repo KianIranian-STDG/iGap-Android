@@ -23,7 +23,7 @@ public class ClientSearchUsernameResponse extends MessageHandler {
 
         final ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builder = (ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder) message;
 
-        G.onClientSearchUserName.OnGetList(builder);
+        if (G.onClientSearchUserName != null) G.onClientSearchUserName.OnGetList(builder);
 
         //for (ProtoClientSearchUsername.ClientSearchUsernameResponse.Result result : builder.getResultList()) {
         //    result.getType();
@@ -36,11 +36,15 @@ public class ClientSearchUsernameResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+
+        if (G.onClientSearchUserName != null) G.onClientSearchUserName.OnErrore();
     }
 
     @Override
     public void error() {
         super.error();
+
+        if (G.onClientSearchUserName != null) G.onClientSearchUserName.OnErrore();
     }
 }
 

@@ -85,7 +85,7 @@ public class RegisteredContactsFragment extends Fragment {
             if (contactsChangeListener != null) {
                 realmContacts.addChangeListener(contactsChangeListener);
             }
-            fillAdapter();
+
         }
     }
 
@@ -307,7 +307,7 @@ public class RegisteredContactsFragment extends Fragment {
             new RequestUserContactsGetList().userContactGetList();
         }
 
-
+        fillAdapter();
 
     }
 
@@ -513,6 +513,8 @@ public class RegisteredContactsFragment extends Fragment {
             //  fastAdapter.withSavedInstanceState(savedInstanceState);
             fastAdapter.notifyDataSetChanged();
         }
+
+        if (searchView.getQuery().length() > 0) itemAdapter.filter(searchView.getQuery());
 
     }
 }

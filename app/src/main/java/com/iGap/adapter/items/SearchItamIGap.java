@@ -2,7 +2,6 @@ package com.iGap.adapter.items;
 
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.iGap.G;
@@ -46,23 +45,16 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
     @Override public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        //result.getType();
-        //result.getExactMatch();
-        //result.getUser();
-        //result.getRoom();
 
         holder.txtIcon.setVisibility(View.GONE);
 
         if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
-
-            Log.e("ddddddddd", item.getUser() + "");
 
             HelperAvatar.getAvatar(item.getUser().getId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
                 @Override public void onAvatarGet(final String avatarPath, long roomId) {
 
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            Log.e("ddddddddd", avatarPath + "            aaaaaaaaaaaaaaaa");
                             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
                         }
                     });
@@ -72,7 +64,6 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
 
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            Log.e("ddddddddd", "            aaaaaaaaaaaaaaaa");
                             holder.avatar.setImageBitmap(
                                 com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }
@@ -84,15 +75,11 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
             holder.lastSeen.setText(item.getUser().getUsername());
         } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
 
-            Log.e("ddddddddd", item.getRoom() + "");
-
             HelperAvatar.getAvatar(item.getRoom().getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
                 @Override public void onAvatarGet(final String avatarPath, long roomId) {
 
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override public void run() {
-
-                            Log.e("ddddddddd", avatarPath + "          bbbbbbbbbbbbbbbb");
                             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
                         }
                     });
@@ -102,8 +89,6 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
 
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override public void run() {
-
-                            Log.e("ddddddddd", "          bbbbbbbbbbbbbbbb");
                             holder.avatar.setImageBitmap(
                                 com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }

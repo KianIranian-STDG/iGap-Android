@@ -9,4 +9,7 @@ import com.iGap.proto.ProtoClientSearchUsername;
 public interface IClientSearchUserName {
 
     void OnGetList(ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builderList);
+
+    void OnErrore();
+
 }

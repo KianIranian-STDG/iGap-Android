@@ -30,6 +30,13 @@ public class Config {
     public static final long CONNECTION_OPEN_TIME_OUT = (int) (20 * DateUtils.SECOND_IN_MILLIS);
     public static String urlWebsocket = "wss://secure.igap.net/hybrid/";
 
+    public static String default_appBarColor = "#3dbcb3";
+    public static String default_notificationColor = "#f23131";
+    public static String default_toggleBottonColor = "#31bdb6";
+    public static String default_attachmentColor = "#31bdb6";
+    public static String default_headerTextColor = "#31bdb6";
+
+
     // Generate 20 random bytes, and put them here.
     public static final byte[] SALT = new byte[]{
             -46, 65, 30, -128, -103, -57, 74, -64, 51, 88, -95, -45, 77, -117, -36, -113, -11, 32, -64, 89

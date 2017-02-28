@@ -671,7 +671,6 @@ public class HelperUrl {
         // this methode check user name and if it is ok go to room
         G.onClientResolveUsername = new OnClientResolveUsername() {
             @Override public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
-                closeDialogWaiting();
                 openChat(userName, type, user, room);
             }
 
@@ -710,14 +709,15 @@ public class HelperUrl {
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
 
         if (realmRoom != null) {
+            closeDialogWaiting();
+
             Intent intent = new Intent(G.currentActivity, ActivityChat.class);
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.currentActivity.startActivity(intent);
+
             realm.close();
         } else {
-
-            showIndeterminateProgressDialog();
 
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override public void onChatGetRoom(long roomId) {
@@ -726,7 +726,7 @@ public class HelperUrl {
 
                 @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
                     addchatToDatabaseAndGoToChat(user, room.getId());
-                    closeDialogWaiting();
+
                 }
 
                 @Override public void onChatGetRoomTimeOut() {
@@ -771,6 +771,8 @@ public class HelperUrl {
     }
 
     private static void addchatToDatabaseAndGoToChat(final ProtoGlobal.RegisteredUser user, final long roomid) {
+
+        closeDialogWaiting();
 
         new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
             @Override public void run() {
@@ -828,6 +830,8 @@ public class HelperUrl {
             if (realmRoom.isDeleted()) {
                 addRoomToDataBaseAndGoToRoom(username, room);
             } else {
+                closeDialogWaiting();
+
                 Intent intent = new Intent(G.currentActivity, ActivityChat.class);
                 intent.putExtra("RoomId", room.getId());
                 G.currentActivity.startActivity(intent);
@@ -841,6 +845,7 @@ public class HelperUrl {
     }
 
     private static void addRoomToDataBaseAndGoToRoom(final String username, final ProtoGlobal.Room room) {
+        closeDialogWaiting();
 
         new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
             @Override public void run() {

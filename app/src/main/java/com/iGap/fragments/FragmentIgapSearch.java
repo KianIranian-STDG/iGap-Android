@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.SearchItamIGap;
@@ -44,6 +46,8 @@ public class FragmentIgapSearch extends Fragment {
     RippleView rippleDown;
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
+    private TextView txtEmptyListComment;
+    private ContentLoadingProgressBar loadingProgressBar;
 
     public static FragmentIgapSearch newInstance() {
         return new FragmentIgapSearch();
@@ -65,6 +69,12 @@ public class FragmentIgapSearch extends Fragment {
         view.findViewById(R.id.sfl_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
         view.findViewById(R.id.sfl_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
+        txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
+        txtEmptyListComment.setVisibility(View.VISIBLE);
+
+        loadingProgressBar = (ContentLoadingProgressBar) view.findViewById(R.id.sfl_progress_loading);
+        loadingProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
         edtSearch.setText("@");
         edtSearch.addTextChangedListener(new TextWatcher() {
@@ -76,8 +86,17 @@ public class FragmentIgapSearch extends Fragment {
 
                 itemAdapter.clear();
 
-                if (edtSearch.getText().length() > 5) {
+                int strSize = edtSearch.getText().length();
+
+                if (strSize > 1) {
+                    txtEmptyListComment.setVisibility(View.GONE);
+                } else {
+                    txtEmptyListComment.setVisibility(View.VISIBLE);
+                }
+
+                if (strSize > 5) {
                     new RequestClientSearchUsername().clientSearchUsername(edtSearch.getText().toString().substring(1));
+                    loadingProgressBar.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -156,6 +175,9 @@ public class FragmentIgapSearch extends Fragment {
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override public void run() {
+
+                        loadingProgressBar.setVisibility(View.GONE);
+
                         List<IItem> items = new ArrayList<>();
 
                         int i = 0;
@@ -189,6 +211,14 @@ public class FragmentIgapSearch extends Fragment {
                         }
 
                         itemAdapter.add(items);
+                    }
+                });
+            }
+
+            @Override public void OnErrore() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        loadingProgressBar.setVisibility(View.GONE);
                     }
                 });
             }

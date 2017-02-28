@@ -798,6 +798,8 @@
   <string name="no_body">هیچکس</string>
   <string name="my_contacts">مخاطبین من</string>
   <string name="privacy_setting">تنظیمات خصوصی </string>
+  <string name="igap_search">Look and Find</string>
+  <string name="set_color_to_default">Set Color To Default</string>
 
 
 </resources>

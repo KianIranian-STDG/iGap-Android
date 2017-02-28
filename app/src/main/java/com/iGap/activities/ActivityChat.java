@@ -602,6 +602,7 @@ public class ActivityChat extends ActivityEnhanced
             if (isNotJoin) {
 
                 final LinearLayout layoutJoin = (LinearLayout) findViewById(R.id.ac_ll_join);
+                layoutJoin.setBackgroundColor(Color.parseColor(G.appBarColor));
 
                 layoutJoin.setVisibility(View.VISIBLE);
                 layoutJoin.setOnClickListener(new View.OnClickListener() {

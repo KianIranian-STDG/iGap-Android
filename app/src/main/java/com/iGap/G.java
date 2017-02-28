@@ -503,11 +503,13 @@ public class G extends MultiDexApplication {
             startService(intent);
         }
 
-        appBarColor = shKeepAlive.getString(SHP_SETTING.KEY_APP_BAR_COLOR, "#3dbcb3");
-        notificationColor = shKeepAlive.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, "#f23131");
-        toggleBottonColor = shKeepAlive.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, "#31bdb6");
-        attachmentColor = shKeepAlive.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, "#31bdb6");
-        headerTextColor = shKeepAlive.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, "#31bdb6");
+        appBarColor = shKeepAlive.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
+        notificationColor = shKeepAlive.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
+        toggleBottonColor = shKeepAlive.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleBottonColor);
+        attachmentColor = shKeepAlive.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
+        headerTextColor = shKeepAlive.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
+
+
 
 
         setFont();
