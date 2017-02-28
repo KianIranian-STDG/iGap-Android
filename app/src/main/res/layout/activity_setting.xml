@@ -157,31 +157,7 @@
 
   </android.support.design.widget.AppBarLayout>
 
-  <ProgressBar
-      android:id="@+id/st_prgWaiting_addContact"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:layout_gravity="center"
-      android:background="@drawable/pu_circle_dialog_give_image_gallery"
-      android:indeterminate="true"
-      android:visibility="gone"
-      />
 
-  <android.support.design.widget.FloatingActionButton
-      android:id="@+id/st_fab_setPic"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/dp20"
-      android:background="?attr/selectableItemBackground"
-      android:clickable="true"
-      android:src="@mipmap/pu_camera"
-      android:theme="@style/FabButton"
-      android:tint="@color/gray"
-      app:fabSize="normal"
-      app:layout_anchor="@+id/st_appbar"
-      app:layout_anchorGravity="bottom|right|end"
-      />
   <android.support.v4.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -1568,7 +1544,31 @@
       </LinearLayout>
     </LinearLayout>
   </android.support.v4.widget.NestedScrollView>
+  <ProgressBar
+      android:id="@+id/st_prgWaiting_addContact"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:layout_gravity="center"
+      android:background="@drawable/pu_circle_dialog_give_image_gallery"
+      android:indeterminate="true"
+      android:visibility="gone"
+      />
 
+  <android.support.design.widget.FloatingActionButton
+      android:id="@+id/st_fab_setPic"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/dp20"
+      android:background="?attr/selectableItemBackground"
+      android:clickable="true"
+      android:src="@mipmap/pu_camera"
+      android:theme="@style/FabButton"
+      android:tint="@color/gray"
+      app:fabSize="normal"
+      app:layout_anchor="@+id/st_appbar"
+      app:layout_anchorGravity="bottom|right|end"
+      />
 
 </android.support.design.widget.CoordinatorLayout>
 
