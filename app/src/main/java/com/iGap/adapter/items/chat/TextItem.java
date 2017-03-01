@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
@@ -43,7 +44,14 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         Log.i("QQQ", "Bind");
         //unbindView(holder);
 
-        if (!mMessage.hasLinkInMessage) {
+        if (mMessage.hasLinkInMessage) {
+
+            holder.lltime.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+
+                }
+            });
+        } else {
             holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override public boolean onLongClick(View v) {
                     holder.itemView.performLongClick();
@@ -91,9 +99,13 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected EmojiTextView messageText;
+        protected LinearLayout lltime;
+
 
         public ViewHolder(View view) {
             super(view);
+
+            lltime = (LinearLayout) view.findViewById(R.id.csl_ll_time);
 
             messageText = (EmojiTextView) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);

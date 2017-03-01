@@ -14,6 +14,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.SearchItamIGap;
+import com.iGap.helper.HelperError;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IClientSearchUserName;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -84,10 +86,13 @@ public class FragmentIgapSearch extends Fragment {
         edtSearch.setFilters(new InputFilter[] {
             new InputFilter() {
                 public CharSequence filter(CharSequence src, int start, int end, Spanned dst, int dstart, int dend) {
-                    if (src.equals("")) {
+
+                    Log.e("qqqqqq", src + "  " + start + "  " + end + "    " + dst + "   " + dstart + "    " + dend);
+
+                    if (src.equals("") || (dst.length() == 0 && src.equals("@"))) {
                         return src;
                     }
-                    if (src.toString().matches("[@\\w]")) {
+                    if (src.toString().matches("[\\w]")) {
                         return src;
                     }
                     return "";
@@ -117,8 +122,14 @@ public class FragmentIgapSearch extends Fragment {
                 }
 
                 if (strSize > 5) {
-                    new RequestClientSearchUsername().clientSearchUsername(edtSearch.getText().toString().substring(1));
-                    loadingProgressBar.setVisibility(View.VISIBLE);
+
+                    if (G.userLogin) {
+                        new RequestClientSearchUsername().clientSearchUsername(edtSearch.getText().toString().substring(1));
+                        loadingProgressBar.setVisibility(View.VISIBLE);
+                    } else {
+                        HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+                    }
+
                 }
             }
 

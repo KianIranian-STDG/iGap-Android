@@ -96,6 +96,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private void initComponent() {
         //MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.cl_btn_menu);
 
+        findViewById(R.id.ac_arc_button_add).setVisibility(GONE);
+
         findViewById(R.id.appBarLayout).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         MaterialDesignTextView btnSearch = (MaterialDesignTextView) findViewById(R.id.amr_btn_search);
@@ -121,6 +123,9 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private void initRecycleView() {
 
         mRecyclerView = (RealmRecyclerView) findViewById(R.id.cl_recycler_view_contact);
+
+        mRecyclerView.setItemViewCacheSize(100);
+        mRecyclerView.setDrawingCacheEnabled(true);
 
         RealmResults<RealmRoom> results = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(ActivitySelectChat.this, results, null);

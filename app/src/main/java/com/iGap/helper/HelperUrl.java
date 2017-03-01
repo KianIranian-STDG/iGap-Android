@@ -475,22 +475,27 @@ public class HelperUrl {
 
         if (token == null || token.length() < 0) return;
 
-        showIndeterminateProgressDialog();
+        if (G.userLogin) {
+            showIndeterminateProgressDialog();
 
-        G.onClientCheckInviteLink = new OnClientCheckInviteLink() {
-            @Override public void onClientCheckInviteLinkResponse(ProtoGlobal.Room room) {
-                closeDialogWaiting();
-                openDialogJoin(room, token);
-            }
+            G.onClientCheckInviteLink = new OnClientCheckInviteLink() {
+                @Override public void onClientCheckInviteLinkResponse(ProtoGlobal.Room room) {
+                    closeDialogWaiting();
+                    openDialogJoin(room, token);
+                }
 
-            @Override public void onError(int majorCode, int minorCode) {
-                Log.e("ddd", majorCode + "   " + minorCode);
+                @Override public void onError(int majorCode, int minorCode) {
+                    Log.e("ddd", majorCode + "   " + minorCode);
 
-                closeDialogWaiting();
-            }
-        };
+                    closeDialogWaiting();
+                }
+            };
 
-        new RequestClientCheckInviteLink().clientCheckInviteLink(token);
+            new RequestClientCheckInviteLink().clientCheckInviteLink(token);
+        } else {
+            closeDialogWaiting();
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+        }
     }
 
     private static void openDialogJoin(final ProtoGlobal.Room room, final String token) {
@@ -596,7 +601,6 @@ public class HelperUrl {
                                     }
                                 });
                                 dialog.show();
-
                             }
                         });
 
@@ -609,55 +613,52 @@ public class HelperUrl {
                 });
             }
         });
-
-
-
-
-
-
     }
 
     private static void joinToRoom(String token, final ProtoGlobal.Room room) {
+        if (G.userLogin) {
+            showIndeterminateProgressDialog();
 
-        showIndeterminateProgressDialog();
+            G.onClientJoinByInviteLink = new OnClientJoinByInviteLink() {
+                @Override public void onClientJoinByInviteLinkResponse() {
 
-        G.onClientJoinByInviteLink = new OnClientJoinByInviteLink() {
-            @Override public void onClientJoinByInviteLinkResponse() {
+                    closeDialogWaiting();
 
-                closeDialogWaiting();
+                    Realm realm = Realm.getDefaultInstance();
 
-                Realm realm = Realm.getDefaultInstance();
+                    final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
 
-                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+                    if (realmRoom != null) {
 
-                if (realmRoom != null) {
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override public void execute(Realm realm) {
 
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                                if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                    realmRoom.setReadOnly(false);
+                                }
 
-                            if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                realmRoom.setReadOnly(false);
+                                realmRoom.setDeleted(false);
                             }
+                        });
+                    }
 
-                            realmRoom.setDeleted(false);
-                        }
-                    });
+                    realm.close();
+
+                    Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+                    intent.putExtra("RoomId", room.getId());
+                    G.currentActivity.startActivity(intent);
                 }
 
+                @Override public void onError(int majorCode, int minorCode) {
+                    closeDialogWaiting();
+                }
+            };
 
-                realm.close();
-
-                Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-                intent.putExtra("RoomId", room.getId());
-                G.currentActivity.startActivity(intent);
-            }
-
-            @Override public void onError(int majorCode, int minorCode) {
-                closeDialogWaiting();
-            }
-        };
-
-        new RequestClientJoinByInviteLink().clientJoinByInviteLink(token);
+            new RequestClientJoinByInviteLink().clientJoinByInviteLink(token);
+        } else {
+            closeDialogWaiting();
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+        }
     }
 
     //************************************  go to room by userName   *********************************************************************
@@ -666,8 +667,7 @@ public class HelperUrl {
 
         if (userName == null || userName.length() < 1) return;
 
-
-
+        if (G.userLogin) {
         // this methode check user name and if it is ok go to room
         G.onClientResolveUsername = new OnClientResolveUsername() {
             @Override public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
@@ -683,6 +683,11 @@ public class HelperUrl {
         showIndeterminateProgressDialog();
 
         new RequestClientResolveUsername().channelAddMessageReaction(userName);
+        } else {
+            closeDialogWaiting();
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+        }
+
     }
 
     private static void closeDialogWaiting() {
@@ -718,6 +723,7 @@ public class HelperUrl {
 
             realm.close();
         } else {
+            if (G.userLogin) {
 
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override public void onChatGetRoom(long roomId) {
@@ -739,6 +745,12 @@ public class HelperUrl {
             };
 
             new RequestChatGetRoom().chatGetRoomWithIdentity(user.getId());
+            } else {
+                closeDialogWaiting();
+                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+            }
+
+
         }
     }
 

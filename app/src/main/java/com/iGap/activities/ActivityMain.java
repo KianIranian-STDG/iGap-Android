@@ -940,7 +940,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void initRecycleView() {
 
         mRecyclerView = (RealmRecyclerView) findViewById(R.id.cl_recycler_view_contact);
-
+        mRecyclerView.setItemViewCacheSize(100);
+        mRecyclerView.setDrawingCacheEnabled(true);
 
         RealmResults<RealmRoom> results = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);
@@ -1610,7 +1611,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         private Typeface typeFaceIcon;
 
         public RoomAdapter(Context context, RealmResults<RealmRoom> realmResults, OnComplete complete) {
-            super(context, realmResults, true, true, false, "");
+            super(context, realmResults, true, false, false, "");
             this.mComplete = complete;
         }
 

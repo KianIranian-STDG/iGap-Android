@@ -14,6 +14,7 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,21 +88,27 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         }
 
         ltAlert = (TextView) findViewById(R.id.stns_txt_alert);
-        ltAlert.setOnClickListener(new View.OnClickListener() { // alert 1
-            @Override
-            public void onClick(View view) {
+
+        tgAlert.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (tgAlert.isChecked()) {
-                    tgAlert.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 0);
-                    editor.apply();
-                } else {
-                    tgAlert.setChecked(true);
+                if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
                     editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 0);
+                    editor.apply();
                 }
+            }
+        });
+
+        ltAlert.setOnClickListener(new View.OnClickListener() { // alert 1
+            @Override public void onClick(View view) {
+
+                tgAlert.setChecked(!tgAlert.isChecked());
             }
         });
 
@@ -114,21 +121,26 @@ public class ActivitySettingNotification extends ActivityEnhanced {
             tgMessagePreview.setChecked(false);
         }
         ltMessagePreview = (TextView) findViewById(R.id.stns_txt_messagePreview);
-        ltMessagePreview.setOnClickListener(new View.OnClickListener() { // 2
-            @Override
-            public void onClick(View view) {
+
+        tgMessagePreview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (tgMessagePreview.isChecked()) {
-                    tgMessagePreview.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 0);
-                    editor.apply();
-                } else {
-                    tgMessagePreview.setChecked(true);
+                if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
                     editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 0);
+                    editor.apply();
                 }
+            }
+        });
+
+        ltMessagePreview.setOnClickListener(new View.OnClickListener() { // 2
+            @Override public void onClick(View view) {
+                tgMessagePreview.setChecked(!tgMessagePreview.isChecked());
             }
         });
         int ledColorMessage =
@@ -810,21 +822,26 @@ public class ActivitySettingNotification extends ActivityEnhanced {
             tgApp_sound.setChecked(false);
         }
         TextView ltApp_sound = (TextView) findViewById(R.id.stns_txt_app_sound);
-        ltApp_sound.setOnClickListener(new View.OnClickListener() { // 2
-            @Override
-            public void onClick(View view) {
+
+        tgApp_sound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (tgApp_sound.isChecked()) {
-                    tgApp_sound.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 0);
-                    editor.apply();
-                } else {
-                    tgApp_sound.setChecked(true);
+                if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
                     editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 0);
+                    editor.apply();
                 }
+            }
+        });
+
+        ltApp_sound.setOnClickListener(new View.OnClickListener() { // 2
+            @Override public void onClick(View view) {
+                tgApp_sound.setChecked(!tgApp_sound.isChecked());
             }
         });
 
@@ -836,21 +853,26 @@ public class ActivitySettingNotification extends ActivityEnhanced {
             tgApp_Vibrate.setChecked(false);
         }
         TextView ltApp_Vibrate = (TextView) findViewById(R.id.stns_txt_app_vibrate);
-        ltApp_Vibrate.setOnClickListener(new View.OnClickListener() { // 2
-            @Override
-            public void onClick(View view) {
+
+        tgApp_Vibrate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (tgApp_Vibrate.isChecked()) {
-                    tgApp_Vibrate.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0);
-                    editor.apply();
-                } else {
-                    tgApp_Vibrate.setChecked(true);
+                if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
                     editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0);
+                    editor.apply();
                 }
+            }
+        });
+
+        ltApp_Vibrate.setOnClickListener(new View.OnClickListener() { // 2
+            @Override public void onClick(View view) {
+                tgApp_Vibrate.setChecked(!tgApp_Vibrate.isChecked());
             }
         });
 
@@ -861,22 +883,27 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         } else {
             tgApp_preview.setChecked(false);
         }
-        TextView ltApp_preview = (TextView) findViewById(R.id.stns_txt_app_preview);
-        ltApp_preview.setOnClickListener(new View.OnClickListener() { // 2
-            @Override
-            public void onClick(View view) {
+
+        tgApp_preview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (tgApp_preview.isChecked()) {
-                    tgApp_preview.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0);
-                    editor.apply();
-                } else {
-                    tgApp_preview.setChecked(true);
+                if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);
                     editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0);
+                    editor.apply();
                 }
+            }
+        });
+
+        TextView ltApp_preview = (TextView) findViewById(R.id.stns_txt_app_preview);
+        ltApp_preview.setOnClickListener(new View.OnClickListener() { // 2
+            @Override public void onClick(View view) {
+                tgApp_preview.setChecked(!tgApp_preview.isChecked());
             }
         });
 
@@ -888,21 +915,27 @@ public class ActivitySettingNotification extends ActivityEnhanced {
             tgChat_sound.setChecked(false);
         }
         TextView ltChat_sound = (TextView) findViewById(R.id.stns_txt_chat_sound);
-        ltChat_sound.setOnClickListener(new View.OnClickListener() { // 2
-            @Override
-            public void onClick(View view) {
+
+        tgChat_sound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (tgChat_sound.isChecked()) {
-                    tgChat_sound.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0);
-                    editor.apply();
-                } else {
-                    tgChat_sound.setChecked(true);
+                if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 1);
                     editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0);
+                    editor.apply();
                 }
+            }
+        });
+
+        ltChat_sound.setOnClickListener(new View.OnClickListener() { // 2
+            @Override public void onClick(View view) {
+
+                tgChat_sound.setChecked(!tgChat_sound.isChecked());
             }
         });
 
@@ -971,23 +1004,31 @@ public class ActivitySettingNotification extends ActivityEnhanced {
             tgKeep_alive_service.setChecked(false);
         }
         TextView ltKeep_alive_service = (TextView) findViewById(R.id.stns_txt_keep_alive_service);
-        ltKeep_alive_service.setOnClickListener(new View.OnClickListener() { // 2
-            @Override
-            public void onClick(View view) {
+
+        tgKeep_alive_service.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (tgKeep_alive_service.isChecked()) {
-                    tgKeep_alive_service.setChecked(false);
+                if (isChecked) {
+                    editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
+                    editor.apply();
+                } else {
                     editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 0);
                     editor.apply();
+                }
+            }
+        });
 
+        ltKeep_alive_service.setOnClickListener(new View.OnClickListener() { // 2
+            @Override public void onClick(View view) {
+
+                if (tgKeep_alive_service.isChecked()) {
+                    tgKeep_alive_service.setChecked(false);
                     stopService(new Intent(ActivitySettingNotification.this, MyService.class));
                 } else {
                     tgKeep_alive_service.setChecked(true);
-                    editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
-                    editor.apply();
-
                     startService(new Intent(ActivitySettingNotification.this, MyService.class));
                 }
             }

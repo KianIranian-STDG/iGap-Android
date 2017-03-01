@@ -104,6 +104,7 @@
         android:id="@+id/cl_recycler_view_contact"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:rrvEmptyLayoutId="@layout/empty_layout"
         app:rrvLayoutType="LinearLayout"
         android:overScrollMode="never"
         />

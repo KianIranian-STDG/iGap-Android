@@ -802,6 +802,8 @@
   <string name="set_color_to_default">انتخاب رنگ پیش فرض برنامه</string>
   <string name="empty_message">متن را وارد کنید</string>
   <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
+  <string name="there_is_no_connection_to_server">There Is No Connection To Server</string>
+  <string name="empty_room">Empty Room</string>
 
 
 </resources>

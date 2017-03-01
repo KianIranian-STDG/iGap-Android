@@ -5491,6 +5491,13 @@ public class ActivityChat extends ActivityEnhanced
 
         public void setPosition(String messageId) {
 
+            try {
+                if (mAdapter.getItem(searchHash.curentSelectedPosition).mMessage.view != null) {
+                    ((FrameLayout) mAdapter.getItem(searchHash.curentSelectedPosition).mMessage.view).setForeground(null);
+                }
+            } catch (NullPointerException e) {
+            }
+
             curentHashposition = 0;
             hashList.clear();
 
@@ -5547,7 +5554,7 @@ public class ActivityChat extends ActivityEnhanced
                         ((FrameLayout) mAdapter.getItem(curentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
                     }
                 }
-            }, 100);
+            }, 150);
         }
 
     }
