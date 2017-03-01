@@ -97,7 +97,13 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
             });
 
             holder.name.setText(item.getRoom().getTitle());
-            holder.lastSeen.setText(item.getRoom().getType().toString());
+
+            if (item.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                holder.lastSeen.setText(item.getRoom().getChannelRoomExtra().getPublicExtra().getUsername());
+            } else if (item.getRoom().getType() == ProtoGlobal.Room.Type.GROUP) {
+                holder.lastSeen.setText(item.getRoom().getGroupRoomExtra().getPublicExtra().getUsername());
+            }
+
 
             if (item.getRoom().getType() == ProtoGlobal.Room.Type.GROUP) {
                 typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");

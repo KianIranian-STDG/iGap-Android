@@ -1331,7 +1331,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 roomAdapter.updateUiById(roomId);
 
                 int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager()).findFirstVisibleItemPosition();
-                if (firstVisibleItem < 3) {
+                if (firstVisibleItem < 5) {
                     mRecyclerView.getRecycleView().scrollToPosition(0);
                 }
             }

@@ -4700,7 +4700,6 @@ public class ActivityChat extends ActivityEnhanced
                                 room.setUnreadCount(0);
                                 room.setLastMessage(null);
 
-                                realm.copyToRealmOrUpdate(room);
                             }
                             // finally delete whole chat history
                             realmRoomMessages.deleteAllFromRealm();

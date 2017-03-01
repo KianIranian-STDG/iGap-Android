@@ -799,8 +799,8 @@
   <string name="privacy_setting">Privacy Setting</string>
   <string name="igap_search">Look and Find</string>
   <string name="set_color_to_default">Set Color To Default</string>
-  <string name="empty_message">enter text</string>
+  <string name="empty_message">nothing found , please try to enter first 5 char of username</string>
   <string name="there_is_no_any_result">there is no any result</string>
   <string name="there_is_no_connection_to_server">There Is No Connection To Server</string>
-  <string name="empty_room">Empty Room</string>
+  <string name="empty_room">No Message yet</string>
 </resources>

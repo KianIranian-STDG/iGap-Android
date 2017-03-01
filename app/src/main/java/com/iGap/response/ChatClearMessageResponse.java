@@ -50,7 +50,10 @@ public class ChatClearMessageResponse extends MessageHandler {
                     realmRoom.setLastMessage(null);
                 }
 
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatClearMessage.getRoomId()).findAll().deleteAllFromRealm();
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatClearMessage.getRoomId()).
+                    lessThan(RealmRoomMessageFields.MESSAGE_ID, chatClearMessage.getClearId()).findAll().deleteAllFromRealm();
+
+
             }
         });
 

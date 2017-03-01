@@ -172,7 +172,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
         private Typeface typeFaceIcon;
 
         public RoomAdapter(Context context, RealmResults<RealmRoom> realmResults, OnComplete complete) {
-            super(context, realmResults, true, true, false, "");
+            super(context, realmResults, true, false, false, "");
             this.mComplete = complete;
         }
 

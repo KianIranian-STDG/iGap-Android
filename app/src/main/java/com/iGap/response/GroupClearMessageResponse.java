@@ -53,7 +53,8 @@ public class GroupClearMessageResponse extends MessageHandler {
                     realmRoom.setLastMessage(null);
                 }
 
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll().deleteAllFromRealm();
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).
+                    lessThan(RealmRoomMessageFields.MESSAGE_ID, builder.getClearId()).findAll().deleteAllFromRealm();
 
             }
         });
