@@ -78,11 +78,20 @@ public class HelperGetAction {
                     if (HelperCalander.isLanguagePersian) {
                         if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
                             action = realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
+                        } else if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_EUROPEAN_NUMBER) {
+                            action = "\u200F" + realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
                         } else {
-                            action = convertActionEnum(latestStruct.action) + " " + realmRegisteredInfo.getDisplayName();
+                            action = "\u200E" + convertActionEnum(latestStruct.action) + " " + realmRegisteredInfo.getDisplayName();
                         }
                     } else {
-                        action = realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
+                        if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                            action = "\u200E" + realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
+                        } else if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_EUROPEAN_NUMBER) {
+                            action = "\u200E" + realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
+                        } else {
+                            action = realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
+                        }
+
                     }
 
                     return action;

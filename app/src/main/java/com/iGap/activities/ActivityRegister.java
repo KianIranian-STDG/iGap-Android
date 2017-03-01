@@ -591,7 +591,6 @@ public class ActivityRegister extends ActivityEnhanced {
                                         txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                                     } else {
                                         TextView txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
-                                        txtTimer.setVisibility(View.VISIBLE);
                                         txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                                     }
                                 }

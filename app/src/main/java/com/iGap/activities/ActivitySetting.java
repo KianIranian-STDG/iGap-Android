@@ -1161,26 +1161,26 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         switch (which) {
                             case 0:
                                 setLocale("en");
-                                G.onRefreshActivity.refresh("en");
+                                if (G.onRefreshActivity != null) G.onRefreshActivity.refresh("en");
                                 HelperCalander.isLanguagePersian = false;
                                 G.selectedLanguage = "en";
                                 break;
                             case 1:
                                 G.selectedLanguage = "fa";
                                 setLocale("fa");
-                                G.onRefreshActivity.refresh("fa");
+                                if (G.onRefreshActivity != null) G.onRefreshActivity.refresh("fa");
                                 HelperCalander.isLanguagePersian = true;
                                 break;
                             case 2:
                                 G.selectedLanguage = "ar";
                                 setLocale("ar");
-                                G.onRefreshActivity.refresh("ar");
+                                if (G.onRefreshActivity != null) G.onRefreshActivity.refresh("ar");
                                 HelperCalander.isLanguagePersian = false;
                                 break;
                             case 3:
                                 G.selectedLanguage = "nl";
                                 setLocale("nl");
-                                G.onRefreshActivity.refresh("nl");
+                                if (G.onRefreshActivity != null) G.onRefreshActivity.refresh("nl");
                                 HelperCalander.isLanguagePersian = false;
                                 break;
                         }

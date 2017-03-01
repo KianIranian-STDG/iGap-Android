@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -252,15 +253,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 });
-            }
-        };
-
-        //       =======> after change language in ActivitySetting this part refresh Activity main
-        G.onRefreshActivity = new OnRefreshActivity() {
-            @Override
-            public void refresh(String changeLanguage) {
-
-                ActivityMain.this.recreate();
             }
         };
 
@@ -1274,6 +1266,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onResume() {
         super.onResume();
 
+        //       =======> after change language in ActivitySetting this part refresh Activity main
+        G.onRefreshActivity = new OnRefreshActivity() {
+            @Override public void refresh(String changeLanguage) {
+
+                ActivityMain.this.recreate();
+            }
+        };
+
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
         arcMenu.setBackgroundTintColor();
 
@@ -1621,8 +1621,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return new RoomAdapter.ViewHolder(v);
         }
 
-        @Override
-        public void onBindRealmViewHolder(final RoomAdapter.ViewHolder holder, int i) {
+        @Override public void onBindRealmViewHolder(final ViewHolder holder, int i) {
 
             RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
@@ -1768,6 +1767,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         holder.lastMessage.setText(R.string.location_message);
                                         break;
                                     default:
+                                        if (!HelperCalander.isLanguagePersian) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                                holder.lastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
+                                            }
+                                        }
                                         holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
                                         holder.lastMessage.setText(lastMessage);
                                         break;
@@ -1831,13 +1835,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         String[] initials = showInitials(idForGetAvatar, avatarType);
                         if (initials != null) {
-                            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
+                            holder.image.setImageBitmap(
+                                HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
                         }
                     }
                 } else {
                     String[] initials = showInitials(idForGetAvatar, avatarType);
                     if (initials != null) {
-                        holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
+                        holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
                     }
                 }
 

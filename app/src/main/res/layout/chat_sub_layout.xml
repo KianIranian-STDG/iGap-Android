@@ -66,7 +66,7 @@
                         android:maxWidth="@dimen/dp160"
                         android:paddingBottom="1dp"
                         android:singleLine="true"
-                        android:text="naddddddd"
+                        android:text="Name"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/sp15"
                         android:textStyle="bold"/>
@@ -93,10 +93,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="1dp"
-                        android:singleLine="true"
                         android:text="LAST MESSAGE"
                         android:textColor="#FF616161"
-                        android:textDirection="ltr"
+                        android:maxLines="1"
+                        android:layout_gravity="start"
+                        android:gravity="start"
                         android:textSize="@dimen/sp13"/>
 
                     <com.wang.avi.AVLoadingIndicatorView

@@ -24,6 +24,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -158,6 +159,7 @@ import static com.iGap.realm.enums.RoomType.GROUP;
 public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAvatarResponse, OnFileUploadForActivities, OnGroupAvatarDelete, OnGroupRevokeLink {
 
     LinearLayout layoutSetting;
+    NestedScrollView nestedScrollView;
     LinearLayout layoutSetAdmin;
     View viewLineAdmin;
     LinearLayout layoutSetModereator;
@@ -519,6 +521,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
 
         layoutSetting = (LinearLayout) findViewById(R.id.agp_ll_seetting);
+        nestedScrollView = (NestedScrollView) findViewById(R.id.group_nestedScroll);
         layoutSetAdmin = (LinearLayout) findViewById(R.id.agp_ll_set_admin);
         viewLineAdmin = (View) findViewById(R.id.agp_ll_line_admin);
         layoutSetModereator = (LinearLayout) findViewById(R.id.agp_ll_set_modereator);

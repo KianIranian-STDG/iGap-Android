@@ -1,7 +1,6 @@
 package com.iGap.module;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -38,7 +37,6 @@ public class LastSeenTimeUtil {
                 hashMapLastSeen.put(userId, lastSeen);
                 updateLastSeenTime();
             }
-            Log.i("CCCCCCCCCC", "getMinute(lastSeen): " + getMinute(lastSeen));
             return getMinute(lastSeen);
         }
     }
@@ -51,7 +49,6 @@ public class LastSeenTimeUtil {
                 hashMapLastSeen.put(userId, lastSeen);
                 updateLastSeenTime();
             }
-            Log.i("CCCCCCCCCC", "getMinute(lastSeen): " + getMinute(lastSeen));
             return getMinute(lastSeen);
         }
     }
@@ -132,22 +129,17 @@ public class LastSeenTimeUtil {
             Map.Entry<Long, Long> entry = it.next();
             long userId = entry.getKey();
             long value = entry.getValue();
-            Log.i("TTT", "updateLastSeenTime 1");
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
             if (realmRegisteredInfo != null) {
-                Log.i("TTT", "realmRegisteredInfo.getStatus() : " + realmRegisteredInfo.getStatus());
                 if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
                     String showLastSeen;
                     if (timeOut(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS)) {
-                        Log.i("TTT", "updateLastSeenTime timeout 2");
                         showLastSeen = computeDays(realmRegisteredInfo.getLastSeen(), true);
                         userIdList.add(userId);
                     } else {
-                        Log.i("TTT", "updateLastSeenTime getMinute 3");
                         showLastSeen = getMinute(realmRegisteredInfo.getLastSeen());
                     }
                     if (G.onLastSeenUpdateTiming != null) {
-                        Log.i("TTT", "showLastSeen : " + showLastSeen);
                         G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
                     }
                 } else {
@@ -190,10 +182,6 @@ public class LastSeenTimeUtil {
 
         long currentTime = System.currentTimeMillis();
         long difference = (currentTime - (time * DateUtils.SECOND_IN_MILLIS));
-        Log.i("TTT", "time : " + time);
-        Log.i("TTT", "time * DateUtils.SECOND_IN_MILLIS) : " + time * DateUtils.SECOND_IN_MILLIS);
-        Log.i("TTT", "currentTime : " + currentTime);
-        Log.i("TTT", "getMinute TimeUnit.MILLISECONDS.toMinutes(difference) : " + TimeUnit.MILLISECONDS.toMinutes(difference));
         //difference = -(70 * DateUtils.MINUTE_IN_MILLIS);
         if (TimeUnit.MILLISECONDS.toMinutes(difference) <= 0) {
             return G.context.getResources().getString(R.string.last_seen_recently);
@@ -213,7 +201,6 @@ public class LastSeenTimeUtil {
         if (HelperCalander.isLanguagePersian) {
             str = HelperCalander.convertToUnicodeFarsiNumber(str);
         }
-        Log.i("CCCCCCCCCC", "str: " + str);
         return str;
     }
 }

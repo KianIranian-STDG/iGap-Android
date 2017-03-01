@@ -489,6 +489,12 @@ public class RegisteredContactsFragment extends Fragment {
         mActivity = activity;
     }
 
+    //@Override public void onAttach(Context context) {
+    //    super.onAttach(context);
+    //    mActivity = (Activity) context;
+    //
+    //}
+
     private void fillAdapter() {
 
         contacts.clear();
