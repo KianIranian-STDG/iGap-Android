@@ -18,15 +18,15 @@
         >
       <ImageView
           android:id="@+id/img_gallery"
-          android:layout_width="100dp"
-          android:layout_height="100dp"
+          android:layout_width="@dimen/dp100"
+          android:layout_height="@dimen/dp100"
           android:scaleType="centerCrop"
           android:src="@mipmap/difaultimage"
           />
       <com.hanks.library.AnimateCheckBox
           android:id="@+id/cig_checkBox_select_user"
-          android:layout_width="24dp"
-          android:layout_height="24dp"
+          android:layout_width="@dimen/dp24"
+          android:layout_height="@dimen/dp24"
           android:layout_gravity="top|end|right"
           android:visibility="visible"
           app:animDuration="100"

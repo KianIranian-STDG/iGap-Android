@@ -52,10 +52,12 @@
             android:orientation="vertical"
             >
           <com.iGap.module.ColorImageView
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
               android:padding="2dp"
               android:src="@mipmap/am_document"
+              android:layout_gravity="center"
+              android:adjustViewBounds="true"
               android:tint="@color/green"
               />
 
@@ -81,10 +83,12 @@
             android:orientation="vertical"
             >
           <com.iGap.module.ColorImageView
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
               android:padding="2dp"
               android:src="@mipmap/am_music"
+              android:layout_gravity="center"
+              android:adjustViewBounds="true"
               android:tint="@color/green"
               />
 
@@ -110,10 +114,12 @@
             android:orientation="vertical"
             >
           <com.iGap.module.ColorImageView
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
               android:padding="2dp"
               android:src="@mipmap/am_video"
+              android:layout_gravity="center"
+              android:adjustViewBounds="true"
               android:tint="@color/green"
               />
 
@@ -139,10 +145,12 @@
             >
           <com.iGap.module.ColorImageView
               android:id="@+id/imageView2"
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
               android:padding="2dp"
               android:src="@mipmap/am_picture"
+              android:layout_gravity="center"
+              android:adjustViewBounds="true"
               android:tint="@color/green"
               />
 
@@ -169,11 +177,13 @@
             >
 
           <com.iGap.module.ColorImageView
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
               android:padding="2dp"
               android:src="@mipmap/am_camera"
               android:tint="@color/green"
+              android:adjustViewBounds="true"
+              android:layout_gravity="center"
               />
           <TextView
               android:layout_width="wrap_content"
@@ -209,11 +219,13 @@
             android:orientation="vertical"
             >
           <com.iGap.module.ColorImageView
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
               android:padding="2dp"
               android:src="@mipmap/am_contact"
               android:tint="@color/green"
+              android:adjustViewBounds="true"
+              android:layout_gravity="center"
               />
 
           <TextView
@@ -238,11 +250,13 @@
             android:orientation="vertical"
             >
           <com.iGap.module.ColorImageView
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
               android:padding="2dp"
               android:src="@mipmap/am_location"
               android:tint="@color/green"
+              android:adjustViewBounds="true"
+              android:layout_gravity="center"
               />
 
           <TextView
@@ -268,11 +282,13 @@
             android:orientation="vertical"
             >
           <com.iGap.module.ColorImageView
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
               android:padding="2dp"
               android:src="@mipmap/am_paint"
               android:tint="@color/green"
+              android:adjustViewBounds="true"
+              android:layout_gravity="center"
               />
 
           <TextView
@@ -298,11 +314,13 @@
             android:orientation="vertical"
             >
           <com.iGap.module.ColorImageView
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
               android:padding="2dp"
               android:src="@mipmap/am_file"
               android:tint="@color/green"
+              android:adjustViewBounds="true"
+              android:layout_gravity="center"
               />
 
           <TextView
@@ -328,12 +346,14 @@
             >
           <com.iGap.module.ColorImageView
               android:id="@+id/send"
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
               android:tint="@color/green"
               android:src="@mipmap/ic_close"
               android:gravity="center"
+              android:adjustViewBounds="true"
               android:textColor="@color/green"
+              android:layout_gravity="center"
               />
 
           <TextView
