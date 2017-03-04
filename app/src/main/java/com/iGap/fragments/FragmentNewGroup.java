@@ -108,7 +108,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     private boolean isChannel = false;
     public static String mCurrentPhotoPath;
     private AttachFile attachFile;
-
+    private Activity mActivity;
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
     }
@@ -1054,5 +1054,11 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    @Override public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = activity;
+
     }
 }

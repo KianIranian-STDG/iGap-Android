@@ -41,9 +41,11 @@ import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
+import com.iGap.helper.HelperPermision;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatGetRoom;
+import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserContactDelete;
 import com.iGap.interfaces.OnUserContactEdit;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -89,6 +91,7 @@ import io.realm.RealmList;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -656,7 +659,20 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             @Override
             public void onClick(View v) {
 
-                showPopupPhoneNumber(vgPhoneNumber, mPhone);
+                try {
+                    HelperPermision.getContactPermision(ActivityContactsProfile.this, new OnGetPermission() {
+                        @Override public void Allow() throws IOException {
+                            showPopupPhoneNumber(vgPhoneNumber, mPhone);
+                        }
+
+                        @Override public void deny() {
+
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 //popUpMenu(R.menu.chi_popup_phone_number, v);
             }
         });
@@ -758,19 +774,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     private void showPopupPhoneNumber(View v, String number) {
 
-        boolean isExist;
+        boolean isExist = false;
         Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
         String[] mPhoneNumberProjection = {
                 ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME
         };
         Cursor cur = context.getContentResolver().query(lookupUri, mPhoneNumberProjection, null, null, null);
         try {
-            if (cur.moveToFirst()) {
-
-                isExist = true;
-            } else {
-
-                isExist = false;
+            if (cur != null) {
+                isExist = cur.moveToFirst();
             }
         } finally {
             if (cur != null) cur.close();
