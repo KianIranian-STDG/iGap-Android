@@ -729,20 +729,37 @@ import org.parceler.Parcel;
 
     private static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
 
-        RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId()).equalTo(RealmRoomMessageFields.SHOW_TIME, true).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).
-                greaterThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
+        RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId())
+            .equalTo(RealmRoomMessageFields.SHOW_TIME, true)
+            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
+            .equalTo(RealmRoomMessageFields.DELETED, false)
+            .greaterThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId())
+            .findFirst();
 
-        RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId()).equalTo(RealmRoomMessageFields.SHOW_TIME, true).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).lessThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
+        RealmRoomMessage lastMessage = null;
+
+        RealmResults<RealmRoomMessage> list = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId())
+            .equalTo(RealmRoomMessageFields.SHOW_TIME, true)
+            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
+            .equalTo(RealmRoomMessageFields.DELETED, false)
+            .lessThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId())
+            .findAll();
+
+        if (list.size() > 0) {
+            lastMessage = list.last();
+        }
 
         if (lastMessage == null) {
             message.setShowTime(true);
         } else {
-            message.setShowTime(isTimeDayDiferent(message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS, lastMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS));
+            message.setShowTime(isTimeDayDiferent(message.getUpdateTime(), lastMessage.getUpdateTime()));
         }
 
         if (nextMessage != null && message.isShowTime()) {
 
-            boolean difTime = isTimeDayDiferent(message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS, nextMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+            boolean difTime = isTimeDayDiferent(message.getUpdateTime(), nextMessage.getUpdateTime());
             nextMessage.setShowTime(difTime);
         }
     }
