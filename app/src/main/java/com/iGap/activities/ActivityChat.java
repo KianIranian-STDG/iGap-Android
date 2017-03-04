@@ -1743,6 +1743,12 @@ public class ActivityChat extends ActivityEnhanced
                         recyclerView.addOnScrollListener(scrollListener);
 
 
+                        recyclerView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.add(new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                            }
+                        });
                         /**
                          * get history from server
                          */
@@ -4226,7 +4232,7 @@ public class ActivityChat extends ActivityEnhanced
         }
 
         if (progressState == SHOW) {
-            if ((mAdapter.getAdapterItemCount() > 0) || !(mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
+            if ((mAdapter.getAdapterItemCount() > 0) && !(mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
                 recyclerView.post(new Runnable() {
                     @Override
                     public void run() {
