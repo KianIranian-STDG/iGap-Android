@@ -1,10 +1,8 @@
 package com.iGap.response;
 
 import android.os.Handler;
-import android.util.Log;
 import com.iGap.G;
 import com.iGap.helper.HelperInfo;
-import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
@@ -38,11 +36,9 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
             public void run() {
 
                 final Realm realm = Realm.getDefaultInstance();
-                final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
 
                 final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
 
-                Log.i("ZZZ", "builder : " + builder);
                 final ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
@@ -51,7 +47,6 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
                         for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
-                            Log.i("ZZZ", "builder item : " + roomMessage.getMessageId());
                             if (roomMessage.getAuthor().hasUser()) {
                                 HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                             }
@@ -64,11 +59,6 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                                 }
                             }
                         }
-
-                        //Collections.sort(realmRoomMessages, SortMessages.DESC);
-                        //for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-                        //    structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
-                        //}
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override

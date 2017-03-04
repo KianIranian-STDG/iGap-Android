@@ -41,7 +41,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
@@ -155,6 +154,7 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.VoiceRecord;
 import com.iGap.module.enums.LocalFileType;
+import com.iGap.module.enums.ProgressState;
 import com.iGap.proto.ProtoChannelGetMessagesStats;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoGlobal;
@@ -242,6 +242,8 @@ import static com.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static com.iGap.module.MessageLoader.getLocalMessage;
+import static com.iGap.module.enums.ProgressState.HIDE;
+import static com.iGap.module.enums.ProgressState.SHOW;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_FILE;
@@ -1530,7 +1532,7 @@ public class ActivityChat extends ActivityEnhanced
                 avi.setVisibility(View.GONE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-            }
+                }
             }
         }
 
@@ -4135,9 +4137,20 @@ public class ActivityChat extends ActivityEnhanced
         if (!isWaitingForHistory) {
             isWaitingForHistory = true;
 
+            /**
+             * show progress when start for get history from server
+             */
+            progressItem(SHOW, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+
             MessageLoader.getOnlineMessage(mRoomId, oldMessageId, reachMessageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP, new OnMessageReceive() {
                 @Override
                 public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached) {
+
+                    /**
+                     * hide progress received history
+                     */
+                    progressItem(HIDE, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+
                     Realm realm = Realm.getDefaultInstance();
 
                     RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, endMessageId).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
@@ -4164,7 +4177,7 @@ public class ActivityChat extends ActivityEnhanced
                         /**
                          * calculate that exist any gap again or not
                          */
-                        if (realmRoomMessages.size() > 0) {//TODO [Saeed Mozaffari] [2017-03-04 12:04 PM] - check start messageId
+                        if (realmRoomMessages.size() > 0) {
                             Object[] objects = MessageLoader.gapExist(mRoomId, startMessageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
                             gapMessageId = (long) objects[0];
                             reachMessageId = (long) objects[1];
@@ -4183,6 +4196,12 @@ public class ActivityChat extends ActivityEnhanced
 
                 @Override
                 public void onError(int majorCode, int minorCode) {
+
+                    /**
+                     * hide progress if have any error
+                     */
+                    progressItem(HIDE, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+
                     isWaitingForHistory = false;
                     allowGetHistory = false;
                     if (majorCode == 5) {
@@ -4190,6 +4209,35 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
             });
+        }
+    }
+
+    /**
+     * manage progress state in adapter
+     *
+     * @param progressState SHOW or HIDE state detect with enum
+     * @param direction define direction for show progress in UP or DOWN
+     */
+    private void progressItem(ProgressState progressState, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+        int progressIndex = 0;
+        if (direction == ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN) {
+            // direction down not tested yet
+            progressIndex = mAdapter.getAdapterItemCount() - 1;
+        }
+
+        if (progressState == SHOW) {
+            if ((mAdapter.getAdapterItemCount() > 0) || !(mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
+                recyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                    }
+                });
+            }
+        } else {
+            if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
+                mAdapter.remove(progressIndex);
+            }
         }
     }
 
