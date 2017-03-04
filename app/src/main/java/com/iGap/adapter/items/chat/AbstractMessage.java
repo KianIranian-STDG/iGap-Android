@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -467,24 +468,33 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * set replay container visible if message was replayed, otherwise, gone it
          */
-        LinearLayout replayContainer = (LinearLayout) holder.itemView.findViewById(R.id.replayLayout);
-        if (replayContainer != null) {
-            TextView replyFrom = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from);
-            TextView replayMessage = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message);
-            if (mMessage.replayTo != null) {
-                replayContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+
+        if (mMessage.replayTo != null) {
+            LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
+            if (mContainer == null) {
+                return;
+            }
+            View replayView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_reply, null);
+            mContainer.addView(replayView, 0);
+
+            if (replayView != null) {
+                TextView replyFrom = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from);
+                TextView replayMessage = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message);
+
+                replayView.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
                         messageClickListener.onReplyClick(mMessage.replayTo);
                     }
                 });
                 holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
 
                 try {
-                    AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
+                    AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)),
+                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(),
+                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
-                }
+                    }
 
                 Realm realm = Realm.getDefaultInstance();
                 if (type == ProtoGlobal.Room.Type.CHANNEL) {
@@ -497,40 +507,40 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (replayToInfo != null) {
                         replyFrom.setText(replayToInfo.getDisplayName());
                     }
-                }
+                    }
 
                 String forwardMessage;
                 ProtoGlobal.RoomMessageType forwardType = mMessage.replayTo.getForwardMessage() != null ? mMessage.replayTo.getForwardMessage().getMessageType() : mMessage.replayTo.getMessageType();
 
                 if (forwardType == ProtoGlobal.RoomMessageType.CONTACT) {
-                    forwardMessage = mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getRoomMessageContact().getLastPhoneNumber() : mMessage.replayTo.getForwardMessage().getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getForwardMessage().getRoomMessageContact().getLastPhoneNumber();
-                } else {
+                    forwardMessage =
+                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getRoomMessageContact().getLastPhoneNumber()
+                            : mMessage.replayTo.getForwardMessage().getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getForwardMessage().getRoomMessageContact().getLastPhoneNumber();
+                    } else {
                     //forwardMessage = mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessage() : mMessage.replayTo.getForwardMessage().getMessage();
                     if (mMessage.replayTo.getForwardMessage() == null) {
                         forwardMessage = mMessage.replayTo.getMessage();
                     } else {
                         forwardMessage = mMessage.replayTo.getForwardMessage().getMessage();
                     }
-                }
+                    }
 
                 ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
 
-                replayContainer.setVisibility(View.VISIBLE);
                 realm.close();
 
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
-                    replayContainer.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
+                    replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
                     holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.colorOldBlack));
                     replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                     replayMessage.setTextColor(Color.WHITE);
                 } else {
-                    replayContainer.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundReceive));
+                    replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundReceive));
                     holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_sendColor));
                     replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                     replayMessage.setTextColor(Color.BLACK);
                 }
-            } else {
-                replayContainer.setVisibility(View.GONE);
+
             }
         }
     }
@@ -540,11 +550,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * set forward container visible if message was forwarded, otherwise, gone it
          */
-        LinearLayout forwardContainer = (LinearLayout) holder.itemView.findViewById(R.id.cslr_ll_forward);
-        TextView txtForwardFrom = (TextView) holder.itemView.findViewById(R.id.cslr_txt_forward_from);
-        if (forwardContainer != null) {
-            if (mMessage.forwardedFrom != null) {
-                forwardContainer.setVisibility(View.VISIBLE);
+
+        if (mMessage.forwardedFrom != null) {
+
+            LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
+            if (mContainer == null) {
+                return;
+            }
+            View forwardView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_forward, null);
+            mContainer.addView(forwardView, 0);
+
+            TextView txtForwardFrom = (TextView) holder.itemView.findViewById(R.id.cslr_txt_forward_from);
+            if (forwardView != null) {
+
                 Realm realm = Realm.getDefaultInstance();
                 /**
                  * if forward message from chat or group , sender is user
@@ -554,23 +572,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (info != null) {
                     HelperInfo.needUpdateUser(info.getId(), info.getCacheId());
                     txtForwardFrom.setText(info.getDisplayName());
-                    if (mMessage.isSenderMe()) {
-                        txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-                    } else {
-                        txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
-                    }
-                } else if (mMessage.forwardedFrom.getUserId() != 0) {
-                    HelperInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null);
-                } else {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
-                    if (realmRoom != null) {
-                        txtForwardFrom.setText(realmRoom.getTitle());
                         if (mMessage.isSenderMe()) {
                             txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                         } else {
                             txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                         }
+                } else if (mMessage.forwardedFrom.getUserId() != 0) {
+                    HelperInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null);
                     } else {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
+                    if (realmRoom != null) {
+                        txtForwardFrom.setText(realmRoom.getTitle());
+                            if (mMessage.isSenderMe()) {
+                                txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+                            } else {
+                                txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
+                            }
+                        } else {
                         RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
                         if (realmRoom1 != null) {
                             HelperInfo.needUpdateRoomInfo(realmRoom1.getId());
@@ -583,11 +601,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         } else {
                             HelperInfo.needUpdateRoomInfo(mMessage.forwardedFrom.getAuthorRoomId());
                         }
+                        }
                     }
-                }
                 realm.close();
-            } else {
-                forwardContainer.setVisibility(View.GONE);
+
             }
         }
     }

@@ -37,18 +37,13 @@
                 >
 
                 <LinearLayout
+                    android:id="@+id/m_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minWidth="50dp"
                     android:orientation="vertical">
 
-                    <include
-                        android:id="@+id/replayLayout"
-                        layout="@layout/chat_sub_layout_reply"/>
 
-                    <include
-                        android:id="@+id/cslr_ll_forward"
-                        layout="@layout/chat_sub_layout_forward"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
