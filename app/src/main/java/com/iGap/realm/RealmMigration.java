@@ -44,7 +44,14 @@ public class RealmMigration implements io.realm.RealmMigration {
 
         if (oldVersion == 4) {
             schema.create(RealmPrivacy.class.getSimpleName()).addField("whoCanSeeMyAvatar", String.class).addField("whoCanInviteMeToChannel", String.class).addField("whoCanInviteMeToGroup", String.class).addField("whoCanSeeMyLastSeen", String.class);
+            oldVersion++;
         }
 
+        if (oldVersion == 5) {
+            RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
+            if (realmRoomMessageSchema != null) {
+                realmRoomMessageSchema.addField("previousMessageId", long.class, FieldAttribute.REQUIRED);
+            }
+        }
     }
 }

@@ -53,7 +53,7 @@ import org.parceler.Parcel;
     private long authorRoomId;
     // for channel message should be exist in other rooms (forwarded message)
     private RealmChannelExtra channelExtra;
-
+    private long previousMessageId;
 
     public long getUpdateOrCreateTime() {
         return updateTime >= createTime ? updateTime : createTime;
@@ -331,6 +331,8 @@ import org.parceler.Parcel;
         }
         message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
 
+        message.setPreviousMessageId(input.getPreviousMessageId());
+
         if (input.hasChannelExtra()) {
             RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
             realmChannelExtra.setMessageId(input.getMessageId());
@@ -553,6 +555,14 @@ import org.parceler.Parcel;
 
     public void setAuthorHash(String authorHash) {
         this.authorHash = authorHash;
+    }
+
+    public long getPreviousMessageId() {
+        return previousMessageId;
+    }
+
+    public void setPreviousMessageId(long previousMessageId) {
+        this.previousMessageId = previousMessageId;
     }
 
     public boolean isSenderMe() {
