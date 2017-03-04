@@ -33,6 +33,7 @@ import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnProgressUpdate;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
+import com.iGap.module.CircleImageView;
 import com.iGap.module.MyType;
 import com.iGap.module.ReserveSpaceGifImageView;
 import com.iGap.module.ReserveSpaceRoundedImageView;
@@ -183,43 +184,41 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
-                holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
 
-                holder.itemView.findViewById(R.id.messageSenderAvatar).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
-                    }
-                });
+                LinearLayout mainContainer = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
+                if (mainContainer != null) {
 
-                HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
-                    @Override
-                    public void onAvatarGet(final String avatarPath, long ownerId) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
-                            }
-                        });
-                    }
+                    mainContainer.addView(makeCircleImageView(), 0);
 
-                    @Override
-                    public void onShowInitials(final String initials, final String color) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                            }
-                        });
-                    }
-                });
-            } else {
-                holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
-            }
-        } else {
-            if (!mMessage.isTimeOrLogMessage()) {
-                holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
-            }
+                    holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
+
+                    holder.itemView.findViewById(R.id.messageSenderAvatar).setOnClickListener(new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
+                        }
+                    });
+
+                    HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+                        @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+                            G.handler.post(new Runnable() {
+                                @Override public void run() {
+                                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                                }
+                            });
+                        }
+
+                        @Override public void onShowInitials(final String initials, final String color) {
+                            G.handler.post(new Runnable() {
+                                @Override public void run() {
+                                    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
+                                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                                }
+                            });
+                        }
+                    });
+                }
+
+        }
         }
         /**
          * set message time
@@ -254,11 +253,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
                 if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                     showVote(holder);
-                } else {
-                    hideVote(holder);
                 }
-            } else {
-                hideVote(holder);
             }
         }
         Log.i("WWW", "12");
@@ -278,18 +273,32 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    /**
-     * hide vote views
-     */
-    private void hideVote(VH holder) {
-        LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
-        if (lytVote != null) {
-            lytVote.setVisibility(View.GONE);
-        }
+    private View makeCircleImageView() {
+
+        CircleImageView circleImageView = new CircleImageView(G.context);
+        circleImageView.setId(R.id.messageSenderAvatar);
+
+        int size = (int) G.context.getResources().getDimension(R.dimen.dp48);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+        params.setMargins(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
+
+        circleImageView.setLayoutParams(params);
+
+        return circleImageView;
     }
+
 
     @CallSuper
     protected void voteAction(VH holder) {
+
+        LinearLayout voteContainer = (LinearLayout) holder.itemView.findViewById(R.id.vote_container);
+        if (voteContainer == null) {
+            return;
+        }
+        View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
+        voteContainer.addView(voteView);
+
 
         LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
         if (lytVote != null) {

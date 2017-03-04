@@ -9,26 +9,18 @@
              android:maxWidth="@dimen/chatBoxMaxWidth"
              android:textDirection="firstStrong">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/mainContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:ignore="UselessParent">
 
-        <com.iGap.module.CircleImageView
-            android:id="@+id/messageSenderAvatar"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/empty"/>
 
 
         <LinearLayout
-            android:id="@+id/middleLayout"
+            android:id="@+id/vote_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/messageSenderAvatar"
-            android:layout_toRightOf="@+id/messageSenderAvatar"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
@@ -99,15 +91,6 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/middleLayout"
-            android:layout_alignStart="@+id/middleLayout"
-            android:layout_below="@+id/middleLayout">
 
-            <include layout="@layout/chat_sub_layout_messages_vote"/>
-
-        </RelativeLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </FrameLayout>

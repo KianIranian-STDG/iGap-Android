@@ -1,5 +1,7 @@
 <resources>
 
+    <item name="messageSenderAvatar" type="id" />
+
     <bool name="isTablet">false</bool>
 
     <dimen name="messageContainerPadding">6dp</dimen>

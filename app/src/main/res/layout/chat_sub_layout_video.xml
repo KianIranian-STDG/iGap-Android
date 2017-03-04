@@ -17,14 +17,8 @@
         android:orientation="horizontal"
         tools:ignore="UselessParent">
 
-        <com.iGap.module.CircleImageView
-            android:id="@+id/messageSenderAvatar"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:layout_marginRight="@dimen/dp8"
-            android:src="@mipmap/empty"/>
-
         <LinearLayout
+            android:id="@+id/vote_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -126,7 +120,10 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <include layout="@layout/chat_sub_layout_messages_vote"/>
+
         </LinearLayout>
+
+
     </LinearLayout>
+
 </FrameLayout>
