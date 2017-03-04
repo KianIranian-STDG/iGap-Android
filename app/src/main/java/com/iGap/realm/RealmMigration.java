@@ -50,7 +50,8 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 5) {
             RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
             if (realmRoomMessageSchema != null) {
-                realmRoomMessageSchema.addField("previousMessageId", long.class, FieldAttribute.REQUIRED);
+                realmRoomMessageSchema.addField(RealmRoomMessageFields.PREVIOUS_MESSAGE_ID, long.class, FieldAttribute.REQUIRED);
+                realmRoomMessageSchema.addField(RealmRoomMessageFields.SHOW_TIME, boolean.class, FieldAttribute.REQUIRED);
             }
         }
     }
