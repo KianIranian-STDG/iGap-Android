@@ -103,7 +103,7 @@ public final class MessageLoader {
 
     //*********** get message from server
 
-    public static void getOnlineMessage(long roomId, final long messageId, final long reachMessageId, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
+    public static void getOnlineMessage(final long roomId, final long messageId, final long reachMessageId, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
         new RequestClientGetRoomHistory().getRoomHistory(roomId, messageId, direction, Long.toString(roomId));
 
         G.onClientGetRoomHistoryResponse = new OnClientGetRoomHistoryResponse() {
@@ -143,6 +143,23 @@ public final class MessageLoader {
 
             @Override
             public void onGetRoomHistoryError(int majorCode, int minorCode) {
+                if (majorCode == 617 && minorCode == 8) {
+                    /**
+                     * clear all gap state because not exist any more message
+                     */
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo("previousMessageId", 0).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                            for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                                realmRoomMessage.setPreviousMessageId(0);
+                            }
+                        }
+                    });
+                    realm.close();
+                }
+
                 onMessageReceive.onError(majorCode, minorCode);
             }
         };
