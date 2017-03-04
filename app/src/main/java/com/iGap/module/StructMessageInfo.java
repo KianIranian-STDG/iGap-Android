@@ -46,6 +46,7 @@ public class StructMessageInfo implements Parcelable {
     public String messageText = "";
     public boolean hasLinkInMessage = false;
     public RealmRoomMessageLocation location;
+    public boolean showTime = false;
 
     public String fileMime = "";
     public String filePic = "";
@@ -328,6 +329,8 @@ public class StructMessageInfo implements Parcelable {
         } else {
             messageInfo.channelExtra = new StructChannelExtra();
         }
+
+        messageInfo.showTime = roomMessage.isShowTime();
 
         return messageInfo;
     }

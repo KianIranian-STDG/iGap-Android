@@ -268,7 +268,7 @@ public class ActivityChat extends ActivityEnhanced
     private AttachFile attachFile;
     private LinearLayout mediaLayout;
     public static MusicPlayer musicPlayer;
-    private boolean isNeedAddTime = true;
+    //  private boolean isNeedAddTime = true;
     private LinearLayout ll_Search;
     private EditText edtSearchMessage;
     private long messageId;
@@ -1273,6 +1273,24 @@ public class ActivityChat extends ActivityEnhanced
         };
     }
 
+    private StructMessageInfo makeLayoutTime(long time) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+
+        String timeString = TimeUtils.getChatSettingsTimeAgo(this, calendar.getTime());
+
+        RealmRoomMessage timeMessage = new RealmRoomMessage();
+        timeMessage.setMessageId(SUID.id().get());
+        // -1 means time message
+        timeMessage.setUserId(-1);
+        timeMessage.setUpdateTime(time);
+        timeMessage.setMessage(timeString);
+        timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+
+        return StructMessageInfo.convert(timeMessage);
+    }
+
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
         if (prgWaiting != null) prgWaiting.setVisibility(View.GONE);
 
@@ -1280,47 +1298,67 @@ public class ActivityChat extends ActivityEnhanced
         for (StructMessageInfo messageInfo : messageInfos) {
 
             if (!messageInfo.isTimeOrLogMessage()) {
+                int index = 0;
+                if (addTop && messageInfo.showTime) {
+
+                    for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
+                        if (mAdapter.getAdapterItem(i) instanceof TimeItem) {
+                            if (!RealmRoomMessage.isTimeDayDiferent(messageInfo.time, mAdapter.getAdapterItem(i).mMessage.time)) {
+                                mAdapter.remove(i);
+                            }
+                            break;
+                        }
+                    }
+                    mAdapter.add(0, new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                    index = 1;
+                }
+
+                if (!addTop && messageInfo.showTime) {
+                    mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                }
+
+
                 switch (messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType) {
                     case TEXT:
                         if (!addTop) {
                             mAdapter.add(new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case IMAGE:
                         if (!addTop) {
                             mAdapter.add(new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case IMAGE_TEXT:
                         if (!addTop) {
                             mAdapter.add(new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case VIDEO:
                         if (!addTop) {
                             mAdapter.add(new VideoItem(chatType, this, ActivityChat.this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new VideoItem(chatType, this, ActivityChat.this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new VideoItem(chatType, this, ActivityChat.this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case VIDEO_TEXT:
                         if (!addTop) {
                             mAdapter.add(new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case LOCATION:
                         if (!addTop) {
                             mAdapter.add(new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case FILE:
@@ -1328,14 +1366,14 @@ public class ActivityChat extends ActivityEnhanced
                         if (!addTop) {
                             mAdapter.add(new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case VOICE:
                         if (!addTop) {
                             mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case AUDIO:
@@ -1343,44 +1381,45 @@ public class ActivityChat extends ActivityEnhanced
                         if (!addTop) {
                             mAdapter.add(new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case CONTACT:
                         if (!addTop) {
                             mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case GIF:
                         if (!addTop) {
                             mAdapter.add(new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case GIF_TEXT:
                         if (!addTop) {
                             mAdapter.add(new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case LOG:
                         if (!addTop) {
                             mAdapter.add(new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(0, new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                 }
             } else {
-                if (!addTop) {
-                    mAdapter.add(new TimeItem(this).setMessage(messageInfo).withIdentifier(identifier));
-                } else {
-                    mAdapter.add(0, new TimeItem(this).setMessage(messageInfo).withIdentifier(identifier));
-                }
+
+                //if (!addTop) {
+                //    mAdapter.add(new TimeItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                //} else {
+                //    mAdapter.add(0, new TimeItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                //}
             }
 
             // super necessary
@@ -1935,10 +1974,10 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
 
-                    // if need to add time before insert new message
-                    if (isNeedAddTime) {
-                        addTimeToList(SUID.id().get());
-                    }
+                    //// if need to add time before insert new message
+                    //if (isNeedAddTime) {
+                    //    addTimeToList(SUID.id().get());
+                    //}
 
                     sendMessage(latestRequestCode, listPathString.get(0));
                     listPathString.clear();
@@ -2025,12 +2064,12 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 } else {
 
-                    /**
-                     * if need to add time before insert new message
-                     */
-                    if (isNeedAddTime) {
-                        addTimeToList(SUID.id().get());
-                    }
+                    ///**
+                    // * if need to add time before insert new message
+                    // */
+                    //if (isNeedAddTime) {
+                    //    addTimeToList(SUID.id().get());
+                    //}
 
                     // new message has written
                     final String message = getWrittenMessage();
@@ -4217,22 +4256,22 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    private void addTimeToList(Long messageId) {
-
-        isNeedAddTime = false;
-
-        String timeString = getTimeSettingMessage(TimeUtils.currentLocalTime());
-        if (!TextUtils.isEmpty(timeString)) {
-
-            RealmRoomMessage timeMessage = new RealmRoomMessage();
-            timeMessage.setMessageId(messageId);
-            // -1 means time message
-            timeMessage.setUserId(-1);
-            timeMessage.setMessage(timeString);
-            timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-            switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(timeMessage))), false);
-        }
-    }
+    //private void addTimeToList(Long messageId) {
+    //
+    //    isNeedAddTime = false;
+    //
+    //    String timeString = getTimeSettingMessage(TimeUtils.currentLocalTime());
+    //    if (!TextUtils.isEmpty(timeString)) {
+    //
+    //        RealmRoomMessage timeMessage = new RealmRoomMessage();
+    //        timeMessage.setMessageId(messageId);
+    //        // -1 means time message
+    //        timeMessage.setUserId(-1);
+    //        timeMessage.setMessage(timeString);
+    //        timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+    //        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(timeMessage))), false);
+    //    }
+    //}
 
     @Override
     public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
@@ -4293,10 +4332,10 @@ public class ActivityChat extends ActivityEnhanced
                                             }
                                         });
 
-                                        // if need to add time befor insert new message
-                                        if (isNeedAddTime) {
-                                            addTimeToList(SUID.id().get());
-                                        }
+                                        //// if need to add time befor insert new message
+                                        //if (isNeedAddTime) {
+                                        //    addTimeToList(SUID.id().get());
+                                        //}
                                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
                                         setBtnDownVisible();
                                     } else {
@@ -4518,7 +4557,7 @@ public class ActivityChat extends ActivityEnhanced
 
                     Collections.sort(lastResultMessages, SortMessages.DESC);
 
-                    if (mAdapter.getItemCount() > 0 && mAdapter.getAdapterItem(0) instanceof TimeItem) mAdapter.remove(0);
+                    // if (mAdapter.getItemCount() > 0 && mAdapter.getAdapterItem(0) instanceof TimeItem) mAdapter.remove(0);
 
                     String topID = "";
                     if (mAdapter.getItemCount() > 0) {

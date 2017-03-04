@@ -20,6 +20,7 @@ import io.realm.RealmRoomMessageRealmProxy;
 import io.realm.Sort;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
+import java.util.Calendar;
 import org.parceler.Parcel;
 
 @Parcel(implementations = {RealmRoomMessageRealmProxy.class},
@@ -47,6 +48,7 @@ import org.parceler.Parcel;
     private RealmRoomMessage replyTo;
     private boolean showMessage = true;
     private String authorHash;
+    private boolean showTime = false;
     //TODO [Saeed Mozaffari] [2017-01-19 9:28 AM] - use RealmAuthor instead of author hash
     private long authorRoomId;
     // for channel message should be exist in other rooms (forwarded message)
@@ -201,7 +203,13 @@ import org.parceler.Parcel;
         realm.close();
     }
 
+    public boolean isShowTime() {
+        return showTime;
+    }
 
+    public void setShowTime(boolean showTime) {
+        this.showTime = showTime;
+    }
 
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
@@ -333,6 +341,9 @@ import org.parceler.Parcel;
             message.setChannelExtra(realmChannelExtra);
         }
         Log.i("XXX", "END");
+
+        addTimeIfNeed(message, realm);
+
         return message;
     }
 
@@ -705,5 +716,53 @@ import org.parceler.Parcel;
 
         realm.close();
     }
+
+    private static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
+
+        RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId())
+            .equalTo(RealmRoomMessageFields.SHOW_TIME, true)
+            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
+            .equalTo(RealmRoomMessageFields.DELETED, false)
+            .
+                greaterThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId())
+            .findFirst();
+
+        RealmRoomMessage lastMessage = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId())
+            .equalTo(RealmRoomMessageFields.SHOW_TIME, true)
+            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
+            .equalTo(RealmRoomMessageFields.DELETED, false)
+            .lessThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId())
+            .findFirst();
+
+        if (lastMessage == null) {
+            message.setShowTime(true);
+        } else {
+            message.setShowTime(isTimeDayDiferent(message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS, lastMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS));
+        }
+
+        if (nextMessage != null && message.isShowTime()) {
+
+            boolean difTime = isTimeDayDiferent(message.getUpdateTime() * DateUtils.SECOND_IN_MILLIS, nextMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS);
+            nextMessage.setShowTime(difTime);
+        }
+    }
+
+    public static boolean isTimeDayDiferent(long time, long nextTime) {
+
+        Calendar date1 = Calendar.getInstance();
+        date1.setTimeInMillis(time);
+
+        Calendar date2 = Calendar.getInstance();
+        date2.setTimeInMillis(nextTime);
+
+        if (date1.get(Calendar.YEAR) == date2.get(Calendar.YEAR) && date1.get(Calendar.DAY_OF_YEAR) == date2.get(Calendar.DAY_OF_YEAR)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
 }
