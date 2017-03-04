@@ -1434,9 +1434,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         recyclerView = (RecyclerView) findViewById(R.id.agp_recycler_view_group_member);
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityGroupProfile.this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
-        recyclerView.setNestedScrollingEnabled(false);
 
         //this adds the Sticky Headers within our list
         final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);

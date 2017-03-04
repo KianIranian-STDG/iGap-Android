@@ -1767,10 +1767,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         holder.lastMessage.setText(R.string.location_message);
                                         break;
                                     default:
-                                        if (!HelperCalander.isLanguagePersian) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                                holder.lastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
-                                            }
+                                        if (!HelperCalander.isLanguagePersian) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                            holder.lastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
                                         }
                                         holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
                                         holder.lastMessage.setText(lastMessage);

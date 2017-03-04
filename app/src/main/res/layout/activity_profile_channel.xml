@@ -38,6 +38,7 @@
                     android:layoutDirection="ltr"
                     app:contentInsetLeft="0dp"
                     app:contentInsetStart="0dp"
+                    android:padding="0dp"
                     app:layout_collapseMode="pin">
 
 
@@ -92,7 +93,7 @@
 
                             <com.iGap.module.MaterialDesignTextView
                                 android:id="@+id/pch_img_menuPopup"
-                                android:layout_width="@dimen/dp60"
+                                android:layout_width="@dimen/dp52"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
                                 android:text="@string/md_show_more_button"
