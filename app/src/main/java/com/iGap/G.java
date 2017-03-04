@@ -494,7 +494,7 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(false).build()).build());
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
         SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
@@ -596,7 +596,8 @@ public class G extends MultiDexApplication {
     public static void makeFolder() {
 
         new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 new File(DIR_APP).mkdirs();
                 new File(DIR_IMAGES).mkdirs();
