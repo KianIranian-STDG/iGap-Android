@@ -1,10 +1,10 @@
 package com.iGap.module;
 
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnMessageReceive;
 import com.iGap.proto.ProtoClientGetRoomHistory;
-import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestClientGetRoomHistory;
@@ -109,17 +109,22 @@ public final class MessageLoader {
 
         G.onClientGetRoomHistoryResponse = new OnClientGetRoomHistoryResponse() {
             @Override
-            public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> roomMessages) {
+            public void onGetRoomHistory(final long roomId, final long startMessageId, long endMessageId) {
 
+                Log.i("ZZZ", "startMessageId : " + startMessageId);
+                Log.i("ZZZ", "endMessageId : " + endMessageId);
                 boolean gapReached = false;
                 /**
                  * convert message from RealmRoomMessage to StructMessageInfo for send to view
                  */
-                for (ProtoGlobal.RoomMessage roomMessage : roomMessages) { //TODO [Saeed Mozaffari] [2017-03-01 3:23 PM] - get index 0 for direction up and check and also get index max for direction down
-                    if (!gapReached && reachMessageId >= roomMessage.getMessageId()) {
-                        gapReached = true;
-                    }
+                if (reachMessageId >= startMessageId) {
+                    gapReached = true;
                 }
+                //for (ProtoGlobal.RoomMessage roomMessage : roomMessages) { //TODO [Saeed Mozaffari] [2017-03-01 3:23 PM] - get index 0 for direction up and check and also get index max for direction down
+                //    if (!gapReached && reachMessageId >= roomMessage.getMessageId()) {
+                //        gapReached = true;
+                //    }
+                //}
 
                 final boolean gapReachedFinal = gapReached;
                 Realm realm = Realm.getDefaultInstance();
@@ -135,13 +140,13 @@ public final class MessageLoader {
                          * if not reached to gap yet set new gap state for compute message for gap
                          */
                         if (!gapReachedFinal) {
-                            setGap(roomMessages.get((roomMessages.size() - 1)).getMessageId(), realm);
+                            setGap(startMessageId, realm); // should set top of messages
                         }
                     }
                 });
                 realm.close();
 
-                onMessageReceive.onMessage(roomId, roomMessages, gapReached);
+                onMessageReceive.onMessage(roomId, startMessageId, endMessageId, gapReached);
             }
 
             @Override

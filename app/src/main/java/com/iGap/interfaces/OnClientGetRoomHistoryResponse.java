@@ -1,10 +1,7 @@
 package com.iGap.interfaces;
 
-import com.iGap.proto.ProtoGlobal;
-import java.util.List;
-
 public interface OnClientGetRoomHistoryResponse {
-    void onGetRoomHistory(long roomId, List<ProtoGlobal.RoomMessage> roomMessages);
+    void onGetRoomHistory(long roomId, long startMessageId, long endMessageId);
 
     void onGetRoomHistoryError(int majorCode, int minorCode);
 }

@@ -94,7 +94,6 @@ import com.iGap.helper.HelperCancelDownloadUpload;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperGetMessageState;
-import com.iGap.helper.HelperInfo;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
@@ -149,7 +148,6 @@ import com.iGap.module.OnComplete;
 import com.iGap.module.ResendMessage;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
-import com.iGap.module.SortMessages;
 import com.iGap.module.StructBottomSheet;
 import com.iGap.module.StructChannelExtra;
 import com.iGap.module.StructMessageAttachment;
@@ -4100,43 +4098,16 @@ public class ActivityChat extends ActivityEnhanced
 
             MessageLoader.getOnlineMessage(mRoomId, oldMessageId, reachMessageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP, new OnMessageReceive() {
                 @Override
-                public void onMessage(final long roomId, final List<ProtoGlobal.RoomMessage> roomMessages, boolean gapReached) {
+                public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached) {
+                    Realm realm = Realm.getDefaultInstance();
 
-                    /**
-                     * this history is for another room so just add to realm and return
-                     */
-                    if (roomId != mRoomId) {
-                        final Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                for (ProtoGlobal.RoomMessage roomMessage : roomMessages) {
-                                    if (roomMessage.getAuthor().hasUser()) {
-                                        HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                                    }
-
-                                    RealmRoomMessage.putOrUpdate(roomMessage, roomId);
-                                }
-
-                                for (int i = 0; i < roomMessages.size(); i++) {
-                                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                                }
-                            }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                realm.close();
-                            }
-                        });
-
-                        return;
-                    }
+                    RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, endMessageId).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
                     /**
                      * send seen status to server when get message from server
                      */
-                    for (int i = 0; i < roomMessages.size(); i++) {
-                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                    for (int i = 0; i < realmRoomMessages.size(); i++) {
+                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, realmRoomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                     }
 
                     isWaitingForHistory = false;
@@ -4154,47 +4125,20 @@ public class ActivityChat extends ActivityEnhanced
                         /**
                          * calculate that exist any gap again or not
                          */
-                        if (roomMessages.size() > 0) {
-                            Object[] objects = MessageLoader.gapExist(mRoomId, roomMessages.get((roomMessages.size() - 1)).getMessageId(), ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+                        if (realmRoomMessages.size() > 0) {//TODO [Saeed Mozaffari] [2017-03-04 12:04 PM] - check start messageId
+                            Object[] objects = MessageLoader.gapExist(mRoomId, startMessageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
                             gapMessageId = (long) objects[0];
                             reachMessageId = (long) objects[1];
                         }
-                    } else {
-                        //TODO [Saeed Mozaffari] [2017-03-01 7:17 PM] - can optimize this code or no ??? please check it!!!
-                        // i comment this code because this code get all message that exist in server at loop
-                        //if (!topMore) {
-                        //    if (messageInfos.size() > 0) {
-                        //        getOnlineMessage(Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID));
-                        //    } else {
-                        //        getOnlineMessage(0);
-                        //    }
-                        //}
                     }
 
-                    //==========
+                    final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
+                    //Collections.sort(realmRoomMessages, SortMessages.DESC);
+                    for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                        structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
+                    }
+                    switchAddItem(structMessageInfos, true);
 
-                    final Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            final ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
-                            final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
-                            for (ProtoGlobal.RoomMessage roomMessage : roomMessages) {
-                                if (roomMessage.getAuthor().hasUser()) {
-                                    HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                                }
-
-                                realmRoomMessages.add(RealmRoomMessage.putOrUpdate(roomMessage, roomId));
-                            }
-
-                            Collections.sort(realmRoomMessages, SortMessages.DESC);
-                            for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-                                structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
-                            }
-
-                            switchAddItem(structMessageInfos, true);
-                        }
-                    });
                     realm.close();
                 }
 
