@@ -2,15 +2,13 @@ package com.iGap.response;
 
 import android.os.Handler;
 import com.iGap.G;
-import com.iGap.helper.HelperInfo;
+import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoError;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmClientCondition;
-import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
+import java.util.ArrayList;
 
 public class ClientGetRoomHistoryResponse extends MessageHandler {
 
@@ -37,23 +35,25 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
             public void run() {
 
                 final Realm realm = Realm.getDefaultInstance();
+                final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
 
                 final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
 
+                final ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
                         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
-                        for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
-
-                            if (roomMessage.getAuthor().hasUser()) {
-                                HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                            }
+                        //for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
+                        //
+                        //    if (roomMessage.getAuthor().hasUser()) {
+                        //        HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                        //    }
 
                             // set info for clientCondition
-                            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, Long.parseLong(identity)).findFirst();
+                        // RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, Long.parseLong(identity)).findFirst();
 
                            /* long latestMessageId = 0;
                             RealmRoomMessage realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, Long.parseLong(identity)).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).last();
@@ -61,28 +61,31 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                                 latestMessageId = realmRoomMessages.getMessageId();
                             }*/
 
-                            if (realmClientCondition != null) {
-                                realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
-                                realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
-                            }
+                        //if (realmClientCondition != null) {
+                        //    realmClientCondition.setMessageVersion(roomMessage.getMessageVersion());
+                        //    realmClientCondition.setStatusVersion(roomMessage.getStatusVersion());
+                        //}
 
-                            i[0]++;
+                        //i[0]++;
 
-                            RealmRoomMessage.putOrUpdate(roomMessage, Long.parseLong(identity));
+                        //realmRoomMessages.add(RealmRoomMessage.putOrUpdate(roomMessage, Long.parseLong(identity)));
 
-                            if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
-                                if (!G.isAppInFg) {
-                                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, Long.parseLong(identity));
-                                }
-                            }
-                        }
+                        //if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
+                        //    if (!G.isAppInFg) {
+                        //        G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, Long.parseLong(identity));
+                        //    }
+                        //}
+                        //}
+
+                        //Collections.sort(realmRoomMessages, SortMessages.DESC);
+                        //for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                        //    structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
+                        //}
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-
-                        G.onClientGetRoomHistoryResponse.onGetRoomHistory(Long.parseLong(identity), builder.getMessageList(), i[0]);
-
+                        G.onClientGetRoomHistoryResponse.onGetRoomHistory(Long.parseLong(identity), builder.getMessageList());
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {

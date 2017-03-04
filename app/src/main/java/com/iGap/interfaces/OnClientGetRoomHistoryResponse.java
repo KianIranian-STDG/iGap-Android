@@ -4,7 +4,7 @@ import com.iGap.proto.ProtoGlobal;
 import java.util.List;
 
 public interface OnClientGetRoomHistoryResponse {
-    void onGetRoomHistory(long roomId, List<ProtoGlobal.RoomMessage> messages, int count);
+    void onGetRoomHistory(long roomId, List<ProtoGlobal.RoomMessage> roomMessages);
 
     void onGetRoomHistoryError(int majorCode, int minorCode);
 }

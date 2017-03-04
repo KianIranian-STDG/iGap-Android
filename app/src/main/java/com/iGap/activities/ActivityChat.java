@@ -94,6 +94,7 @@ import com.iGap.helper.HelperCancelDownloadUpload;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperGetMessageState;
+import com.iGap.helper.HelperInfo;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
@@ -115,13 +116,13 @@ import com.iGap.interfaces.OnChatMessageSelectionChanged;
 import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.interfaces.OnChatUpdateStatusResponse;
 import com.iGap.interfaces.OnClearChatHistory;
-import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnClientJoinByUsername;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnHelperSetAction;
 import com.iGap.interfaces.OnLastSeenUpdateTiming;
+import com.iGap.interfaces.OnMessageReceive;
 import com.iGap.interfaces.OnPathAdapterBottomSheet;
 import com.iGap.interfaces.OnSetAction;
 import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
@@ -140,6 +141,7 @@ import com.iGap.module.FileUploadStructure;
 import com.iGap.module.FileUtils;
 import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.MessageLoader;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.MyType;
@@ -156,6 +158,7 @@ import com.iGap.module.TimeUtils;
 import com.iGap.module.VoiceRecord;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoChannelGetMessagesStats;
+import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAttachment;
@@ -193,7 +196,6 @@ import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatUpdateDraft;
-import com.iGap.request.RequestClientGetRoomHistory;
 import com.iGap.request.RequestClientJoinByUsername;
 import com.iGap.request.RequestClientSubscribeToRoom;
 import com.iGap.request.RequestClientUnsubscribeFromRoom;
@@ -241,6 +243,7 @@ import static com.iGap.R.string.member;
 import static com.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
 import static com.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
+import static com.iGap.module.MessageLoader.getLocalMessage;
 import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
 import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_FILE;
@@ -255,13 +258,13 @@ import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.CONTACT;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.GIF_TEXT;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT;
+import static com.iGap.proto.ProtoGlobal.RoomMessageType.LOG;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
 
 public class ActivityChat extends ActivityEnhanced
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnClientGetRoomHistoryResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction,
-        OnChannelGetMessagesStats {
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -478,7 +481,6 @@ public class ActivityChat extends ActivityEnhanced
         G.uploaderUtil.setActivityCallbacks(this);
         G.uploaderUtil.setActivityCallbacks(this);
         G.onUserInfoResponse = this;
-        G.onClientGetRoomHistoryResponse = this;
         G.onChannelAddMessageReaction = this;
         G.onChannelGetMessagesStats = this;
         activityChatForFinish = this;
@@ -911,7 +913,7 @@ public class ActivityChat extends ActivityEnhanced
         Realm realm = Realm.getDefaultInstance();
         if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().size() < 3) {
             isSendingRequestClientGetHistory = true;
-            new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
+            //new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
         }
         realm.close();
     }
@@ -1491,7 +1493,7 @@ public class ActivityChat extends ActivityEnhanced
                 avi.setVisibility(View.GONE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-            }
+                }
             }
         }
 
@@ -1701,7 +1703,11 @@ public class ActivityChat extends ActivityEnhanced
 
                         recyclerView.addOnScrollListener(scrollListener);
 
-                        requestMessageHistory();
+
+                        /**
+                         * get history from server
+                         */
+                        getOnlineMessage(0);
                     }
                 });
             }
@@ -1756,6 +1762,8 @@ public class ActivityChat extends ActivityEnhanced
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+
+                //TODO [Saeed Mozaffari] [2017-02-28 4:20 PM] - use switchAddItem in getLocalMessages method
                 switchAddItem(getLocalMessages(), true);
                 manageForwardedMessage();
 
@@ -3891,92 +3899,187 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    private long lastMessageId;
+
+    private boolean topMore; // more message exist in local for load in top direction
+    private boolean bottomMore;  // more message exist in local for load in bottom direction
+    private boolean isWaitingForHistory; // client send request for getHistory, avoid for send request again
+    private long gapMessageId; // messageId that maybe lost in local
+    private long reachMessageId; // messageId that will be checked after getHistory for detect reached to that or no
+    //TODO [Saeed Mozaffari] [2017-03-01 7:28 PM] - check for use this field
+    private boolean allowGetHistory = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
 
     private ArrayList<StructMessageInfo> getLocalMessages() {
-
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
-
-        if (results.size() > 0) lastMessageId = results.get(0).getMessageId();
-
-
-        for (RealmRoomMessage message : results) {
-            String timeString = getTimeSettingMessage(message.getCreateTime());
-            if (!TextUtils.isEmpty(timeString)) {
-                RealmRoomMessage timeMessage = new RealmRoomMessage();
-                timeMessage.setMessageId(message.getMessageId() - 1L);
-                // -1 means time message
-                timeMessage.setUserId(-1);
-                timeMessage.setMessage(timeString);
-                timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                mLocalList.add(timeMessage);
-            }
-
-            mLocalList.add(message);
-        }
-
-        Collections.sort(mLocalList, SortMessages.DESC);
-
+        /**
+         * get message in first enter to chat
+         */
+        RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
         ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
 
-        if (countLoadItemToChat > maxLoadFromLocalInOneStep) {
-            maxLoadFromLocalInOneStep = countLoadItemToChat;
+        /**
+         * detect gap exist in this room or not
+         * (hint : if gapMessageId==0 means that gap not exist)
+         * if gapMessageId exist, not compute again
+         */
+        if (gapMessageId == 0 && results.size() > 0) {
+            Object[] objects = MessageLoader.gapExist(mRoomId, results.first().getMessageId(), ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+            gapMessageId = (long) objects[0];
+            reachMessageId = (long) objects[1];
         }
 
-        for (int i = 0; i < mLocalList.size() && i < maxLoadFromLocalInOneStep; i++) {
-            messageInfos.add(StructMessageInfo.convert(mLocalList.get(i)));
-        }
+        if (results.size() > 0) {
 
-        if (mLocalList.size() > maxLoadFromLocalInOneStep) {
-            isThereAnyMoreItemToLoadFromLocal = true;
-            countOfCurrentLoadInList = maxLoadFromLocalInOneStep;
+            Object[] object = MessageLoader.getLocalMessage(mRoomId, results.first().getMessageId(), gapMessageId, 10, true, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+            messageInfos = (ArrayList<StructMessageInfo>) object[0];
+            topMore = (boolean) object[1];
+
+            /**
+             * if gap is exist ,check that reached to gap or not and if
+             * reached send request to server for clientGetRoomHistory
+             */
+            if (gapMessageId > 0) {
+                boolean hasSpaceToGap = (boolean) object[2];
+                if (!hasSpaceToGap) {
+
+                    long oldMessageId = 0;
+                    if (messageInfos.size() > 0) {
+                        oldMessageId = Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID);
+                    }
+                    /**
+                     * send request to server for clientGetRoomHistory
+                     */
+                    getOnlineMessage(oldMessageId);
+                }
+            } else {
+                if (!topMore) {
+                    if (messageInfos.size() > 0) {
+                        getOnlineMessage(Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID));
+                    } else {
+                        getOnlineMessage(0);
+                    }
+                }
+            }
+
         } else {
-            isThereAnyMoreItemToLoadFromLocal = false;
+            //TODO [Saeed Mozaffari] [2017-02-28 2:16 PM] - can remove get history in first enter to page ==> removed (so clear that code)
+            /**
+             * send request to server for get message
+             */
+            getOnlineMessage(0);
         }
 
+        /**
+         * make scrollListener for detect change in scroll and load more in chat
+         */
         scrollListener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (isThereAnyMoreItemToLoadFromLocal || isThereAnyMoreItemToLoadFromServer) {
+                int visibleItemCount = (recyclerView.getLayoutManager()).getChildCount();
+                int totalItemCount = (recyclerView.getLayoutManager()).getItemCount();
+                int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-                    int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                if (firstVisiblePosition < 15) {
 
-                    if (firstVisiblePosition < 15) {
+                    if (topMore) {
+                        /**
+                         * get first item in view (hint : time item should be ignore)
+                         */
+                        for (AbstractMessage message : mAdapter.getAdapterItems()) {
+                            if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
+                                Object[] object = getLocalMessage(mRoomId, Long.parseLong(message.mMessage.messageID), gapMessageId, 10, false, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+                                topMore = (boolean) object[1];
+                                ArrayList<StructMessageInfo> structMessageInfos = (ArrayList<StructMessageInfo>) object[0];
+                                switchAddItem(structMessageInfos, true);
 
-                        if (isThereAnyMoreItemToLoadFromLocal) {
+                                /**
+                                 * if gap is exist ,check that reached to gap or not and if
+                                 * reached send request to server for clientGetRoomHistory
+                                 */
+                                if (gapMessageId > 0) {
+                                    boolean hasSpaceToGap = (boolean) object[2];
+                                    if (!hasSpaceToGap) {
+                                        /**
+                                         * send request to server for clientGetRoomHistory
+                                         */
 
+                                        if (structMessageInfos.size() > 0) {
+                                            long oldMessageId = Long.parseLong(structMessageInfos.get(structMessageInfos.size() - 1).messageID);
+                                            getOnlineMessage(oldMessageId);
+                                        }
+                                    }
+                                }
 
-                            ArrayList<StructMessageInfo> convertedMessages = new ArrayList<>();
-                            for (int i = countOfCurrentLoadInList; i < mLocalList.size() && i < maxLoadFromLocalInOneStep + countOfCurrentLoadInList; i++) {
-                                convertedMessages.add(StructMessageInfo.convert(mLocalList.get(i)));
+                                break;
                             }
-                            switchAddItem(convertedMessages, true);
-
-                            if (mLocalList.size() > maxLoadFromLocalInOneStep + countOfCurrentLoadInList) {
-                                isThereAnyMoreItemToLoadFromLocal = true;
-                                countOfCurrentLoadInList = maxLoadFromLocalInOneStep + countOfCurrentLoadInList;
-                            } else {
-                                isThereAnyMoreItemToLoadFromLocal = false;
-                            }
-
-
-                        } else if (isThereAnyMoreItemToLoadFromServer) {
-                            if (!isSendingRequestClientGetHistory) requestMessageHistory();
                         }
-                    }
-                } else {
-                    recyclerView.removeOnScrollListener(this);
-                }
+                    } else if (gapMessageId > 0) {
+                        for (AbstractMessage message : mAdapter.getAdapterItems()) {
+                            if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
+                                /**
+                                 * detect old messageId that should get history from server with that
+                                 */
+                                getOnlineMessage(Long.parseLong(message.mMessage.messageID));
+                            }
+                        }
+                    } else {
 
+                        for (AbstractMessage message : mAdapter.getAdapterItems()) {
+                            if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
+                                if (!topMore && allowGetHistory) {
+                                    getOnlineMessage(Long.parseLong(message.mMessage.messageID));
+                                }
+                            }
+                        }
+
+                    }
+
+                } else {
+
+                    if (firstVisiblePosition + visibleItemCount >= (totalItemCount - 15)) {
+
+                        if (bottomMore) {
+                            for (int i = (mAdapter.getAdapterItemCount() - 1); i >= 0; i--) {
+                                AbstractMessage message = mAdapter.getAdapterItem(i);
+                                if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
+                                    Object[] object = getLocalMessage(mRoomId, Long.parseLong(message.mMessage.messageID), gapMessageId, 10, false, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN);
+                                    bottomMore = (boolean) object[1];
+                                    ArrayList<StructMessageInfo> structMessageInfos = (ArrayList<StructMessageInfo>) object[0];
+                                    switchAddItem(structMessageInfos, false);
+
+                                    /**
+                                     * if gap is exist ,check that reached to gap or not and if
+                                     * reached send request to server for clientGetRoomHistory
+                                     */
+                                    if (gapMessageId > 0) {
+                                        boolean hasGap = (boolean) object[2];
+                                        if (!hasGap) {
+                                            /**
+                                             * send request to server for clientGetRoomHistory
+                                             */
+
+                                            long oldMessageId = 0;
+                                            if (structMessageInfos.size() > 0) {
+                                                oldMessageId = Long.parseLong(structMessageInfos.get(structMessageInfos.size() - 1).messageID);
+                                            }
+                                            getOnlineMessage(oldMessageId);
+                                        }
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+
+
+                    }
+                }
             }
         };
 
         recyclerView.addOnScrollListener(scrollListener);
-
         realm.close();
 
         if (prgWaiting != null) {
@@ -3985,6 +4088,129 @@ public class ActivityChat extends ActivityEnhanced
 
         return messageInfos;
     }
+
+    /**
+     * get message history from server
+     *
+     * @param oldMessageId if set oldMessageId=0 messages will be get from latest message that exist in server
+     */
+    private void getOnlineMessage(long oldMessageId) {
+        if (!isWaitingForHistory) {
+            isWaitingForHistory = true;
+
+            MessageLoader.getOnlineMessage(mRoomId, oldMessageId, reachMessageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP, new OnMessageReceive() {
+                @Override
+                public void onMessage(final long roomId, final List<ProtoGlobal.RoomMessage> roomMessages, boolean gapReached) {
+
+                    /**
+                     * this history is for another room so just add to realm and return
+                     */
+                    if (roomId != mRoomId) {
+                        final Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                for (ProtoGlobal.RoomMessage roomMessage : roomMessages) {
+                                    if (roomMessage.getAuthor().hasUser()) {
+                                        HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                                    }
+
+                                    RealmRoomMessage.putOrUpdate(roomMessage, roomId);
+                                }
+
+                                for (int i = 0; i < roomMessages.size(); i++) {
+                                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                }
+                            }
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                realm.close();
+                            }
+                        });
+
+                        return;
+                    }
+
+                    /**
+                     * send seen status to server when get message from server
+                     */
+                    for (int i = 0; i < roomMessages.size(); i++) {
+                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, roomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                    }
+
+                    isWaitingForHistory = false;
+                    /**
+                     * when reached to gap set gapMessageId = 0 , do this action
+                     * means that gap not exist (need this value for future get message)
+                     * set topMore true for allow that get message from local after
+                     * that gap reached
+                     */
+                    if (gapReached) {
+                        gapMessageId = 0;
+                        reachMessageId = 0;
+                        topMore = true;
+
+                        /**
+                         * calculate that exist any gap again or not
+                         */
+                        if (roomMessages.size() > 0) {
+                            Object[] objects = MessageLoader.gapExist(mRoomId, roomMessages.get((roomMessages.size() - 1)).getMessageId(), ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+                            gapMessageId = (long) objects[0];
+                            reachMessageId = (long) objects[1];
+                        }
+                    } else {
+                        //TODO [Saeed Mozaffari] [2017-03-01 7:17 PM] - can optimize this code or no ??? please check it!!!
+                        // i comment this code because this code get all message that exist in server at loop
+                        //if (!topMore) {
+                        //    if (messageInfos.size() > 0) {
+                        //        getOnlineMessage(Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID));
+                        //    } else {
+                        //        getOnlineMessage(0);
+                        //    }
+                        //}
+                    }
+
+                    //==========
+
+                    final Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            final ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
+                            final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
+                            for (ProtoGlobal.RoomMessage roomMessage : roomMessages) {
+                                if (roomMessage.getAuthor().hasUser()) {
+                                    HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                                }
+
+                                realmRoomMessages.add(RealmRoomMessage.putOrUpdate(roomMessage, roomId));
+                            }
+
+                            Collections.sort(realmRoomMessages, SortMessages.DESC);
+                            for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                                structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
+                            }
+
+                            switchAddItem(structMessageInfos, true);
+                        }
+                    });
+                    realm.close();
+                }
+
+                @Override
+                public void onError(int majorCode, int minorCode) {
+                    isWaitingForHistory = false;
+                    allowGetHistory = false;
+                    if (majorCode == 5) {
+                        //TODO [Saeed Mozaffari] [2017-02-28 3:56 PM] - retry for get message after timeout
+                    }
+                }
+            });
+        }
+    }
+
+
 
     private long latestMessageIdHistory = -1;
 
@@ -4010,7 +4236,7 @@ public class ActivityChat extends ActivityEnhanced
             latestMessageIdHistory = oldestMessageId;
 
             isSendingRequestClientGetHistory = true;
-            new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
+            //new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
 
             if (mAdapter.getAdapterItemCount() > 0) {
                 if (!(mAdapter.getAdapterItem(0) instanceof ProgressWaiting)) {
@@ -4467,95 +4693,95 @@ public class ActivityChat extends ActivityEnhanced
     public void onUserInfoError(int majorCode, int minorCode) {
 
     }
-
-    @Override
-    public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages, final int count) {
-        // I'm in the room
-
-        if (roomId == mRoomId) {
-
-            isSendingRequestClientGetHistory = false;
-
-
-            for (int i = 0; i < messages.size(); i++) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, messages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-            }
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
-
-                    if (count < 1) {
-                        isThereAnyMoreItemToLoadFromServer = false;
-                        return;
-                    }
-
-
-                    Realm realm = Realm.getDefaultInstance();
-                    RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
-
-                    if (results.size() > 0) lastMessageId = results.get(0).getMessageId();
-                    lastDateCalendar.clear();
-
-                    List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
-
-                    for (RealmRoomMessage message : results) {
-                        String timeString = getTimeSettingMessage(message.getCreateTime());
-                        if (!TextUtils.isEmpty(timeString)) {
-                            RealmRoomMessage timeMessage = new RealmRoomMessage();
-                            timeMessage.setMessageId(message.getMessageId() - 1L);
-                            // -1 means time message
-                            timeMessage.setUserId(-1);
-                            timeMessage.setMessage(timeString);
-                            timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                            lastResultMessages.add(timeMessage);
-                        }
-
-                        lastResultMessages.add(message);
-                    }
-
-                    Collections.sort(lastResultMessages, SortMessages.DESC);
-
-                    if (mAdapter.getItemCount() > 0 && mAdapter.getAdapterItem(0) instanceof TimeItem) mAdapter.remove(0);
-
-                    String topID = "";
-                    if (mAdapter.getItemCount() > 0) {
-                        topID = mAdapter.getAdapterItem(0) instanceof UnreadMessage ? mAdapter.getItem(1).mMessage.messageID : mAdapter.getItem(0).mMessage.messageID;
-                    }
-
-
-                    for (RealmRoomMessage realmRoomMessage : lastResultMessages) {
-
-                        if (realmRoomMessage == null || (topID.compareTo(realmRoomMessage.getMessageId() + "") <= 0 && topID.length() > 0)) {
-                            continue;
-                        }
-                        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), true);
-                    }
-
-                    recyclerView.scrollToPosition(count);
-
-
-                    realm.close();
-
-
-
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onGetRoomHistoryError(int majorCode, int minorCode) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                isSendingRequestClientGetHistory = false;
-                if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
-            }
-        });
-    }
+    //
+    //@Override
+    //public void onGetRoomHistory(final long roomId, final List<ProtoGlobal.RoomMessage> messages, final int count) {
+    //    // I'm in the room
+    //
+    //    if (roomId == mRoomId) {
+    //
+    //        isSendingRequestClientGetHistory = false;
+    //
+    //
+    //        for (int i = 0; i < messages.size(); i++) {
+    //            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, messages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+    //        }
+    //
+    //        runOnUiThread(new Runnable() {
+    //            @Override
+    //            public void run() {
+    //
+    //                if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
+    //
+    //                if (count < 1) {
+    //                    isThereAnyMoreItemToLoadFromServer = false;
+    //                    return;
+    //                }
+    //
+    //
+    //                Realm realm = Realm.getDefaultInstance();
+    //                RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
+    //
+    //                //if (results.size() > 0) lastMessageId = results.get(0).getMessageId();
+    //                lastDateCalendar.clear();
+    //
+    //                List<RealmRoomMessage> lastResultMessages = new ArrayList<>();
+    //
+    //                for (RealmRoomMessage message : results) {
+    //                    String timeString = getTimeSettingMessage(message.getCreateTime());
+    //                    if (!TextUtils.isEmpty(timeString)) {
+    //                        RealmRoomMessage timeMessage = new RealmRoomMessage();
+    //                        timeMessage.setMessageId(message.getMessageId() - 1L);
+    //                        // -1 means time message
+    //                        timeMessage.setUserId(-1);
+    //                        timeMessage.setMessage(timeString);
+    //                        timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+    //                        lastResultMessages.add(timeMessage);
+    //                    }
+    //
+    //                    lastResultMessages.add(message);
+    //                }
+    //
+    //                Collections.sort(lastResultMessages, SortMessages.DESC);
+    //
+    //                if (mAdapter.getItemCount() > 0 && mAdapter.getAdapterItem(0) instanceof TimeItem) mAdapter.remove(0);
+    //
+    //                String topID = "";
+    //                if (mAdapter.getItemCount() > 0) {
+    //                    topID = mAdapter.getAdapterItem(0) instanceof UnreadMessage ? mAdapter.getItem(1).mMessage.messageID : mAdapter.getItem(0).mMessage.messageID;
+    //                }
+    //
+    //
+    //                for (RealmRoomMessage realmRoomMessage : lastResultMessages) {
+    //
+    //                    if (realmRoomMessage == null || (topID.compareTo(realmRoomMessage.getMessageId() + "") <= 0 && topID.length() > 0)) {
+    //                        continue;
+    //                    }
+    //                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), true);
+    //                }
+    //
+    //                recyclerView.scrollToPosition(count);
+    //
+    //
+    //                realm.close();
+    //
+    //
+    //
+    //            }
+    //        });
+    //    }
+    //}
+    //
+    //@Override
+    //public void onGetRoomHistoryError(int majorCode, int minorCode) {
+    //    runOnUiThread(new Runnable() {
+    //        @Override
+    //        public void run() {
+    //            isSendingRequestClientGetHistory = false;
+    //            if (mAdapter.getItemCount() > 0) if (mAdapter.getAdapterItem(0) instanceof ProgressWaiting) mAdapter.remove(0);
+    //        }
+    //    });
+    //}
 
     @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, final String identity) {
