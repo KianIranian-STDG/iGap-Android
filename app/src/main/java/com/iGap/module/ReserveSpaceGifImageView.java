@@ -3,7 +3,7 @@ package com.iGap.module;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
-
+import com.iGap.proto.ProtoGlobal;
 import pl.droidsonroids.gif.GifImageView;
 
 /**
@@ -14,8 +14,8 @@ public class ReserveSpaceGifImageView extends GifImageView {
     private int reservedWidth = 0;
     private int reservedHeight = 0;
 
-    public int[] reserveSpace(float width, float height) {
-        final int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(getContext(), width, height);
+    public int[] reserveSpace(float width, float height, ProtoGlobal.Room.Type roomType) {
+        final int[] dimens = AndroidUtils.scaleDimenWithSavedRatio(getContext(), width, height, roomType);
         Bitmap bitmap = Bitmap.createBitmap(dimens[0], dimens[1], Bitmap.Config.ARGB_4444);
         setImageBitmap(bitmap);
 

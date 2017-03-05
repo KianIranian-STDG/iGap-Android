@@ -77,6 +77,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         file;
     }
 
+    protected ProtoGlobal.Room.Type getRoomType() {
+        return type;
+    }
 
 
     @Override
@@ -90,7 +93,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     //@Override public void onPlayPauseVideo(VH holder, String localPath, int isHide, double time) {
     //    // empty
     //}
-
     public AbstractMessage(boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         this.directionalBased = directionalBased;
         this.type = type;
@@ -193,32 +195,36 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
 
                     holder.itemView.findViewById(R.id.messageSenderAvatar).setOnClickListener(new View.OnClickListener() {
-                        @Override public void onClick(View v) {
+                        @Override
+                        public void onClick(View v) {
                             messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
                         }
                     });
 
                     HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
-                        @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+                        @Override
+                        public void onAvatarGet(final String avatarPath, long ownerId) {
                             G.handler.post(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
                                 }
                             });
                         }
 
-                        @Override public void onShowInitials(final String initials, final String color) {
+                        @Override
+                        public void onShowInitials(final String initials, final String color) {
                             G.handler.post(new Runnable() {
-                                @Override public void run() {
-                                    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
-                                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                                @Override
+                                public void run() {
+                                    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                                 }
                             });
                         }
                     });
                 }
 
-        }
+            }
         }
         /**
          * set message time
@@ -503,19 +509,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 TextView replayMessage = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message);
 
                 replayView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         messageClickListener.onReplyClick(mMessage.replayTo);
                     }
                 });
                 holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
 
                 try {
-                    AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)),
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(),
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
+                    AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
-                    }
+                }
 
                 Realm realm = Realm.getDefaultInstance();
                 if (type == ProtoGlobal.Room.Type.CHANNEL) {
@@ -528,23 +533,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (replayToInfo != null) {
                         replyFrom.setText(replayToInfo.getDisplayName());
                     }
-                    }
+                }
 
                 String forwardMessage;
                 ProtoGlobal.RoomMessageType forwardType = mMessage.replayTo.getForwardMessage() != null ? mMessage.replayTo.getForwardMessage().getMessageType() : mMessage.replayTo.getMessageType();
 
                 if (forwardType == ProtoGlobal.RoomMessageType.CONTACT) {
-                    forwardMessage =
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getRoomMessageContact().getLastPhoneNumber()
-                            : mMessage.replayTo.getForwardMessage().getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getForwardMessage().getRoomMessageContact().getLastPhoneNumber();
-                    } else {
+                    forwardMessage = mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getRoomMessageContact().getLastPhoneNumber() : mMessage.replayTo.getForwardMessage().getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getForwardMessage().getRoomMessageContact().getLastPhoneNumber();
+                } else {
                     //forwardMessage = mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessage() : mMessage.replayTo.getForwardMessage().getMessage();
                     if (mMessage.replayTo.getForwardMessage() == null) {
                         forwardMessage = mMessage.replayTo.getMessage();
                     } else {
                         forwardMessage = mMessage.replayTo.getForwardMessage().getMessage();
                     }
-                    }
+                }
 
                 ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
 
@@ -601,23 +604,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (info != null) {
                     HelperInfo.needUpdateUser(info.getId(), info.getCacheId());
                     txtForwardFrom.setText(info.getDisplayName());
+                    if (mMessage.isSenderMe()) {
+                        txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+                    } else {
+                        txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
+                    }
+                } else if (mMessage.forwardedFrom.getUserId() != 0) {
+                    HelperInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null);
+                } else {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
+                    if (realmRoom != null) {
+                        txtForwardFrom.setText(realmRoom.getTitle());
                         if (mMessage.isSenderMe()) {
                             txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                         } else {
                             txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                         }
-                } else if (mMessage.forwardedFrom.getUserId() != 0) {
-                    HelperInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null);
                     } else {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
-                    if (realmRoom != null) {
-                        txtForwardFrom.setText(realmRoom.getTitle());
-                            if (mMessage.isSenderMe()) {
-                                txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-                            } else {
-                                txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
-                            }
-                        } else {
                         RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
                         if (realmRoom1 != null) {
                             HelperInfo.needUpdateRoomInfo(realmRoom1.getId());
@@ -630,8 +633,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         } else {
                             HelperInfo.needUpdateRoomInfo(mMessage.forwardedFrom.getAuthorRoomId());
                         }
-                        }
                     }
+                }
                 realm.close();
 
             }
@@ -788,7 +791,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     }
 
-                    int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight);
+                    int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight, type);
                     if (dimens[0] != 0 && dimens[1] != 0) {
                         ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
                     }
@@ -811,7 +814,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         _hight = (int) G.context.getResources().getDimension(R.dimen.dp200);
                     }
 
-                    int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight);
+                    int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight, type);
                     ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
                 }
             }

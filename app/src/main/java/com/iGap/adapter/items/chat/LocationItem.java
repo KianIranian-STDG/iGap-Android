@@ -43,6 +43,8 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     @Override public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        holder.imgMapPosition.reserveSpace(G.context.getResources().getDimension(R.dimen.dp240), G.context.getResources().getDimension(R.dimen.dp120), getRoomType());
+
         RealmRoomMessageLocation item = null;
 
         if (mMessage.forwardedFrom != null) {
@@ -122,13 +124,6 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                 }
             });
         }
-
-
-
-
-
-
-
     }
 
     @Override
@@ -166,11 +161,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
         public ViewHolder(View view) {
             super(view);
-
             imgMapPosition = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
-
-            imgMapPosition.reserveSpace(G.context.getResources().getDimension(R.dimen.dp240), G.context.getResources().getDimension(R.dimen.dp120));
-
         }
     }
 }

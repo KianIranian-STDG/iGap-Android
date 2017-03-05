@@ -411,10 +411,15 @@ public final class AndroidUtils {
         return null;
     }
 
-    public static int[] scaleDimenWithSavedRatio(Context context, float width, float height) {
+    public static int[] scaleDimenWithSavedRatio(Context context, float width, float height, ProtoGlobal.Room.Type roomType) {
         DisplayMetrics display = context.getResources().getDisplayMetrics();
         float density = display.density * 0.9f;
-        float maxWidth = context.getResources().getDimension(R.dimen.dp200);
+        float maxWidth;
+        if (roomType == ProtoGlobal.Room.Type.CHANNEL || roomType == ProtoGlobal.Room.Type.CHAT) {
+            maxWidth = context.getResources().getDimension(R.dimen.dp240);
+        } else {
+            maxWidth = context.getResources().getDimension(R.dimen.dp200);
+        }
         float newWidth;
         float newHeight;
 
