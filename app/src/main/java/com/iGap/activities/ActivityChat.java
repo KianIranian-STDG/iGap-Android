@@ -4205,7 +4205,8 @@ public class ActivityChat extends ActivityEnhanced
                     /**
                      * hide progress if have any error
                      */
-                    progressItem(HIDE, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+                    //progressItem(HIDE, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+                    hideProgressItem();
 
                     isWaitingForHistory = false;
                     allowGetHistory = false;
@@ -4257,6 +4258,25 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }, 500);
             }
+        }
+    }
+
+    /**
+     * hide recycler view item
+     */
+    private void hideProgressItem() {
+        if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(0) instanceof ProgressWaiting)) {
+            recyclerView.getChildAt(0).setVisibility(View.GONE);
+        } else {
+            final int index = 0;
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(index) instanceof ProgressWaiting)) {
+                        recyclerView.getChildAt(0).setVisibility(View.GONE);
+                    }
+                }
+            }, 500);
         }
     }
 
