@@ -9,7 +9,6 @@ import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -262,9 +261,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             }
         }
-        Log.i("WWW", "12");
-
-
     }
 
     /**
@@ -670,7 +666,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void checkAutoDownload(final VH holder, final RealmAttachment attachment, Context context, ConnectionMode connectionMode) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        switch (mMessage.messageType) {
+        ProtoGlobal.RoomMessageType messageType;
+        if (mMessage.forwardedFrom != null) {
+            messageType = mMessage.forwardedFrom.getMessageType();
+        } else {
+            messageType = mMessage.messageType;
+        }
+        switch (messageType) {
             case IMAGE:
             case IMAGE_TEXT:
                 switch (connectionMode) {
