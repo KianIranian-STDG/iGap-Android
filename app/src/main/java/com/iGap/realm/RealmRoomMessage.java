@@ -1,7 +1,6 @@
 package com.iGap.realm;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 import com.iGap.Config;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperLogMessage;
@@ -254,14 +253,11 @@ import org.parceler.Parcel;
             message.setRoomId(roomId);
 
             if (input.hasForwardFrom()) {
-                Log.i("TTT", "input.hasForwardFrom() : " + input.getMessage());
                 message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), -1));
             }
             if (input.hasReplyTo()) {
-                Log.i("TTT", "input.hasReplyTo() : " + input.getMessage());
                 message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), -1));
             }
-            Log.i("TTT", "input : " + input.getMessage());
             message.setShowMessage(showMessage);
         }
 
@@ -289,7 +285,6 @@ import org.parceler.Parcel;
              * need to get it again
              */
             if (forwardOrReply) {
-                Log.i("XXX", "input.getAuthor().getRoom().getRoomId() : " + input.getAuthor().getRoom().getRoomId());
                 //RealmRoom.needGetRoom(input.getAuthor().getRoom().getRoomId());
             }
         }
@@ -351,7 +346,6 @@ import org.parceler.Parcel;
             realmChannelExtra.setViewsLabel(input.getChannelExtra().getViewsLabel());
             message.setChannelExtra(realmChannelExtra);
         }
-        Log.i("XXX", "END");
 
         addTimeIfNeed(message, realm);
 
