@@ -52,6 +52,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmRoomMessageSchema != null) {
                 realmRoomMessageSchema.addField(RealmRoomMessageFields.PREVIOUS_MESSAGE_ID, long.class, FieldAttribute.REQUIRED);
                 realmRoomMessageSchema.addField(RealmRoomMessageFields.SHOW_TIME, boolean.class, FieldAttribute.REQUIRED);
+                realmRoomMessageSchema.addField(RealmRoomMessageFields.LINK_INFO, String.class);
             }
         }
     }

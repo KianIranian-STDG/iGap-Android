@@ -4230,8 +4230,9 @@ public class ActivityChat extends ActivityEnhanced
                     /**
                      * hide progress if have any error
                      */
-                    //progressItem(HIDE, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
-                    hideProgressItem();
+                    progressItem(HIDE, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+                    // for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
+                    mAdapter.notifyDataSetChanged();
 
                     isWaitingForHistory = false;
                     allowGetHistory = false;
@@ -4285,26 +4286,6 @@ public class ActivityChat extends ActivityEnhanced
             }
         }
     }
-
-    /**
-     * hide recycler view item
-     */
-    private void hideProgressItem() {
-        if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(0) instanceof ProgressWaiting)) {
-            recyclerView.getChildAt(0).setVisibility(View.GONE);
-        } else {
-            final int index = 0;
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(index) instanceof ProgressWaiting)) {
-                        recyclerView.getChildAt(0).setVisibility(View.GONE);
-                    }
-                }
-            }, 500);
-        }
-    }
-
 
 
     private long latestMessageIdHistory = -1;
