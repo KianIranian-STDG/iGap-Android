@@ -1,6 +1,7 @@
 package com.iGap.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,12 +11,14 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -59,7 +62,6 @@ import static com.iGap.G.context;
 
 public class RegisteredContactsFragment extends Fragment {
     private FastAdapter fastAdapter;
-    private SearchView searchView;
     private TextView menu_txt_titleToolbar;
     private ViewGroup vgAddContact, vgRoot;
     private List<StructContactInfo> contacts;
@@ -72,6 +74,7 @@ public class RegisteredContactsFragment extends Fragment {
     private Activity mActivity;
     private StickyRecyclerHeadersDecoration decoration;
     private StickyHeaderAdapter stickyHeaderAdapter;
+    private EditText edtSearch;
 
     private Realm mRealm;
     RealmChangeListener<RealmResults<RealmContacts>> contactsChangeListener;
@@ -214,41 +217,47 @@ public class RegisteredContactsFragment extends Fragment {
         menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
         menu_txt_titleToolbar.setText(title);
 
-        searchView = (android.support.v7.widget.SearchView) view.findViewById(R.id.menu_edtSearch);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                itemAdapter.filter(newText);
-                return false;
+        final RippleView txtClose = (RippleView) view.findViewById(R.id.menu_ripple_close);
+        edtSearch = (EditText) view.findViewById(R.id.menu_edt_search);
+        final TextView txtSearch = (TextView) view.findViewById(R.id.menu_btn_search);
+        txtSearch.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                txtClose.setVisibility(View.VISIBLE);
+                edtSearch.setVisibility(View.VISIBLE);
+                edtSearch.setFocusable(true);
+                menu_txt_titleToolbar.setVisibility(View.GONE);
+                txtSearch.setVisibility(View.GONE);
             }
         });
 
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b && menu_txt_titleToolbar.getVisibility() == View.VISIBLE) {
-                    menu_txt_titleToolbar.setVisibility(View.GONE);
+        txtClose.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (edtSearch.getText().length() > 0) {
+                    edtSearch.setText("");
+                } else {
+                    txtClose.setVisibility(View.GONE);
+                    edtSearch.setVisibility(View.GONE);
+                    menu_txt_titleToolbar.setVisibility(View.VISIBLE);
+                    txtSearch.setVisibility(View.VISIBLE);
+                    InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
         });
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                menu_txt_titleToolbar.setVisibility(View.VISIBLE);
-                return false;
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                itemAdapter.filter(s.toString());
+            }
+
+            @Override public void afterTextChanged(Editable s) {
+
             }
         });
-
-        final EditText searchBox = ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
-        searchBox.setTextColor(getResources().getColor(R.color.white));
-
-
         vgAddContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -268,10 +277,10 @@ public class RegisteredContactsFragment extends Fragment {
             @Override
             public void onComplete(RippleView rippleView) {
                 // close and remove fragment from stack
-                if (!searchView.isIconified()) {
-                    searchView.onActionViewCollapsed();
-                }
+
                 getActivity().getSupportFragmentManager().popBackStack();
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(rippleView.getWindowToken(), 0);
             }
         });
         //as we provide id's for the items we want the hasStableIds enabled to speed up things
@@ -520,7 +529,7 @@ public class RegisteredContactsFragment extends Fragment {
             fastAdapter.notifyDataSetChanged();
         }
 
-        if (searchView.getQuery().length() > 0) itemAdapter.filter(searchView.getQuery());
+        if (edtSearch.getText().length() > 0) itemAdapter.filter(edtSearch.getText());
 
     }
 }

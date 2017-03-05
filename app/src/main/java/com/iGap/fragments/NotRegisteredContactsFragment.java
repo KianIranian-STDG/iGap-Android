@@ -159,17 +159,17 @@ public class NotRegisteredContactsFragment extends Fragment {
             }
         });
 
-        ViewGroup layout = (ViewGroup) view.findViewById(R.id.menu_layout);
+        //ViewGroup layout = (ViewGroup) view.findViewById(R.id.menu_layout);
 
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //                searchView.onActionViewExpanded();
-                searchView.setIconified(false);
-                menu_txt_titleToolbar.setVisibility(View.GONE);
-            }
-        });
+        //layout.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //
+        //        //                searchView.onActionViewExpanded();
+        //        searchView.setIconified(false);
+        //        menu_txt_titleToolbar.setVisibility(View.GONE);
+        //    }
+        //});
 
         searchView.setOnCloseListener(
                 new SearchView.OnCloseListener() { // close SearchView and show title again

@@ -14,19 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="@color/green"
-        android:gravity="bottom"
         android:orientation="horizontal">
 
-        <RelativeLayout
-            android:id="@+id/menu_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layoutDirection="ltr">
         <com.iGap.libs.rippleeffect.RippleView
             android:id="@+id/menu_ripple_txtBack"
             rv_centered="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             app:rv_alpha="200"
             app:rv_centered="true"
             app:rv_rippleDuration="0"
@@ -37,45 +32,98 @@
                 android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
-                android:layout_gravity="left"
                 android:gravity="center"
                 android:text="@string/md_back_arrow"
                 android:textColor="@color/whit_background"
                 />
         </com.iGap.libs.rippleeffect.RippleView>
 
-            <android.support.v7.widget.SearchView
-                android:id="@+id/menu_edtSearch"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:theme="@style/SearchViewToolbar"
-                android:layoutDirection="ltr"
-                android:layout_marginLeft="@dimen/dp52"
-                android:layout_marginStart="@dimen/dp52"
-                android:visibility="visible" />
+      <TextView
+          android:id="@+id/menu_txt_titleToolbar"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:gravity="center"
+          android:layout_gravity="center"
+          android:singleLine="true"
+          android:text="@string/igap"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textColor="@android:color/white"
+          android:textSize="@dimen/sp18"
+          android:visibility="visible"
+          />
 
-            <TextView
-                android:id="@+id/menu_txt_titleToolbar"
-                android:layout_width="match_parent"
+      <com.iGap.libs.rippleeffect.RippleView
+                android:id="@+id/menu_edtSearch"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          app:rv_alpha="200"
+          app:rv_centered="true"
+          app:rv_rippleDuration="100"
+          rv_centered="true"
+          >
+
+        <com.iGap.module.MaterialDesignTextView
+            android:id="@+id/menu_btn_search"
+            android:layout_width="@dimen/dp52"
+                android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:text="@string/md_searching_magnifying_glass"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp28"
+            android:gravity="center"
+            android:visibility="visible"
+            />
+
+      </com.iGap.libs.rippleeffect.RippleView>
+
+      <EditText
+          android:id="@+id/menu_edt_search"
+          android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/igap"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/sp18"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
+          android:autoText="false"
+          android:background="@null"
+          android:hint="@string/search"
+          android:paddingEnd="@dimen/dp8"
+          android:paddingLeft="@dimen/dp8"
+          android:paddingRight="@dimen/dp8"
+          android:paddingStart="@dimen/dp8"
+          android:textColor="@color/white"
+          android:textColorHint="#dededd"
+          android:textCursorDrawable="@drawable/white_cursor_color"
+          android:textSize="@dimen/sp15"
+          android:visibility="gone"
+          />
 
+      <com.iGap.libs.rippleeffect.RippleView
+          android:id="@+id/menu_ripple_close"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          app:rv_alpha="200"
+          app:rv_centered="true"
+          app:rv_rippleDuration="100"
+          app:rv_ripplePadding="5dp"
+          rv_centered="true"
+          android:visibility="gone"
+          >
 
-        </RelativeLayout>
+        <com.iGap.module.MaterialDesignTextView
+            android:id="@+id/menu_btn_close"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="center"
+            android:text="@string/md_close_button"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="#dededd"
+            android:textSize="@dimen/sp26"
+            />
 
+      </com.iGap.libs.rippleeffect.RippleView>
     </LinearLayout>
-
 
     <android.support.design.widget.CoordinatorLayout
 

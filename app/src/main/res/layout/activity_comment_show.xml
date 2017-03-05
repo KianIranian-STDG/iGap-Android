@@ -6,11 +6,96 @@
     android:layoutDirection="ltr"
     android:orientation="vertical">
 
+
+    <LinearLayout
+        android:id="@+id/acs_ll_replay"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+
+        <ImageView
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginLeft="@dimen/dp8"
+            android:adjustViewBounds="true"
+            android:padding="@dimen/dp4"
+            android:src="@mipmap/reply"
+            android:visibility="visible"
+            />
+
+        <View
+            android:layout_width="3dp"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginLeft="@dimen/dp8"
+            android:background="@color/green"
+            />
+
+
+        <com.iGap.module.CircleImageView
+            android:id="@+id/acs_imv_replay_pic"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginLeft="@dimen/dp8"
+            android:src="@mipmap/empty"
+            android:visibility="visible"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/acs_txt_replay_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="@dimen/dp280"
+                android:singleLine="true"
+                android:text="New Text"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/sp14"
+                />
+
+            <TextView
+                android:id="@+id/acs_txt_replay_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:maxWidth="@dimen/dp280"
+                android:singleLine="true"
+                android:text="New Text"
+                android:textSize="@dimen/sp14"
+                />
+        </LinearLayout>
+
+        <com.iGap.module.MaterialDesignTextView
+            android:id="@+id/acs_btn_close"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/md_close_button"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="@dimen/sp22"
+            android:visibility="visible"
+            />
+
+    </LinearLayout>
+
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@mipmap/chat_background3"
+        android:background="@drawable/newbg"
         android:orientation="vertical">
 
 
@@ -112,84 +197,6 @@
         </android.support.design.widget.AppBarLayout>
 
     </android.support.design.widget.CoordinatorLayout>
-
-
-    <LinearLayout
-        android:id="@+id/acs_ll_replay"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-
-        <ImageView
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginLeft="@dimen/dp8"
-            android:adjustViewBounds="true"
-            android:padding="@dimen/dp4"
-            android:src="@mipmap/reply"
-            android:visibility="visible" />
-
-        <View
-            android:layout_width="3dp"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginLeft="@dimen/dp8"
-            android:background="@color/green" />
-
-
-        <com.iGap.module.CircleImageView
-            android:id="@+id/acs_imv_replay_pic"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginLeft="@dimen/dp8"
-            android:src="@mipmap/empty"
-            android:visibility="visible" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp8"
-            android:layout_weight="1"
-            android:gravity="left|center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/acs_txt_replay_from"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="@dimen/dp280"
-                android:singleLine="true"
-                android:text="New Text"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/sp14" />
-
-            <TextView
-                android:id="@+id/acs_txt_replay_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp4"
-                android:maxWidth="@dimen/dp280"
-                android:singleLine="true"
-                android:text="New Text"
-                android:textSize="@dimen/sp14" />
-        </LinearLayout>
-
-        <com.iGap.module.MaterialDesignTextView
-            android:id="@+id/acs_btn_close"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:textAppearance="@style/TextIconAppearance_toolbar"
-            android:text="@string/md_close_button"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/sp22"
-            android:visibility="visible" />
-
-    </LinearLayout>
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
