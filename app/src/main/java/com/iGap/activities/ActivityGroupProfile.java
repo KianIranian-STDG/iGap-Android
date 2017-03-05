@@ -245,6 +245,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         members = realmGroupRoom.getMembers();
         memberList = realmGroupRoom.getMembers();
         description = realmGroupRoom.getDescription();
+
         ViewGroup listMemberGroup = (ViewGroup) findViewById(R.id.agp_root_layout_group_add_member);
         listMemberGroup.setVisibility(View.VISIBLE);
         if (role == GroupChatRole.MODERATOR || role == GroupChatRole.MEMBER) {
@@ -409,6 +410,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 //text1.setText(getResources().getString(R.string.Search));
                 text2.setText(getResources().getString(R.string.clear_history));
                 if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+
                     text3.setVisibility(View.VISIBLE);
                     if (isPrivate) {
                         text3.setText(getResources().getString(R.string.group_title_convert_to_public));
@@ -651,7 +653,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                 }
             });
-
+        } else {
+            fab.setVisibility(View.GONE);
         }
         if (role != GroupChatRole.OWNER) {
             if (description.equals("")) {

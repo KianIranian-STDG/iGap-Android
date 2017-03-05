@@ -384,7 +384,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setSupportActionBar(mainToolbar);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mainToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
             }
@@ -398,6 +398,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
         };
+
+        ViewGroup drawerButton = (ViewGroup) findViewById(R.id.amr_ripple_menu);
+        drawerButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
+
+        toggle.setDrawerIndicatorEnabled(false);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 

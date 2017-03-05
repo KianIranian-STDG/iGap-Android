@@ -32,10 +32,27 @@
             android:id="@+id/amr_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:orientation="horizontal"
             >
 
+          <LinearLayout
+              android:id="@+id/amr_ripple_menu"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="match_parent"
+              android:gravity="center"
+
+              >
+
+            <ImageView
+                android:id="@+id/amr_btn_menu"
+                android:layout_width="@dimen/dp28"
+                android:layout_height="@dimen/dp28"
+                android:src="@drawable/hamburger_menu"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center"
+                android:tint="@color/white"
+                />
+          </LinearLayout>
           <View
               android:layout_width="0dp"
               android:layout_height="match_parent"
