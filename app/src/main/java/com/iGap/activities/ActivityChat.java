@@ -4021,7 +4021,6 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 int visibleItemCount = (recyclerView.getLayoutManager()).getChildCount();
                 int totalItemCount = (recyclerView.getLayoutManager()).getItemCount();
                 int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
@@ -4210,6 +4209,7 @@ public class ActivityChat extends ActivityEnhanced
 
                     isWaitingForHistory = false;
                     allowGetHistory = false;
+                    recyclerView.removeOnScrollListener(scrollListener);
                     if (majorCode == 5) {
                         //TODO [Saeed Mozaffari] [2017-02-28 3:56 PM] - retry for get message after timeout
                     }
@@ -4230,7 +4230,6 @@ public class ActivityChat extends ActivityEnhanced
             // direction down not tested yet
             progressIndex = mAdapter.getAdapterItemCount() - 1;
         }
-
         if (progressState == SHOW) {
             if ((mAdapter.getAdapterItemCount() > 0) && !(mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
                 recyclerView.post(new Runnable() {
@@ -4241,8 +4240,22 @@ public class ActivityChat extends ActivityEnhanced
                 });
             }
         } else {
+            /**
+             * i do this action with delay because sometimes instance wasn't successful
+             * for detect progress so client need delay for detect this instance
+             */
             if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
                 mAdapter.remove(progressIndex);
+            } else {
+                final int index = progressIndex;
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(index) instanceof ProgressWaiting)) {
+                            mAdapter.remove(index);
+                        }
+                    }
+                }, 500);
             }
         }
     }

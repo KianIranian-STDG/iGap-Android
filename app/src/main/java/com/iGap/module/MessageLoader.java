@@ -129,9 +129,10 @@ public final class MessageLoader {
                         clearGap(roomId, messageId, direction, realm);
 
                         /**
-                         * if not reached to gap yet set new gap state for compute message for gap
+                         * if not reached to gap yet and exist reachMessageId
+                         * set new gap state for compute message for gap
                          */
-                        if (!gapReachedFinal) {
+                        if (!gapReachedFinal && reachMessageId > 0) {
                             setGap(startMessageId, realm);
                         }
                     }

@@ -294,7 +294,7 @@ public class HelperError {
                 error = G.context.getResources().getString(R.string.E_613);
                 break;
             case 614:
-                error = G.context.getResources().getString(R.string.E_614);
+                //error = G.context.getResources().getString(R.string.E_614);
                 break;
             case 615:
                 if (minorCode == 1) {
