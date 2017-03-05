@@ -188,7 +188,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 LinearLayout mainContainer = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
                 if (mainContainer != null) {
 
-                    mainContainer.addView(makeCircleImageView(), 0);
+                    if (holder.itemView.findViewById(R.id.messageSenderAvatar) == null) mainContainer.addView(makeCircleImageView(), 0);
 
                     holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
 
@@ -297,8 +297,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        LinearLayout lytVoteTest = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
-        if (lytVoteTest == null) {
+        voteContainer.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp220));
+
+        if (holder.itemView.findViewById(R.id.lyt_vote) == null) {
             View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
             voteContainer.addView(voteView);
         }
@@ -487,9 +488,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 return;
             }
 
-            TextView replyFromTest = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from);
+
             View replayView = null;
-            if (replyFromTest == null) {
+            if (holder.itemView.findViewById(R.id.chslr_txt_replay_from) == null) {
                 replayView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_reply, null);
                 mContainer.addView(replayView, 0);
             } else {
@@ -579,8 +580,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             View forwardView = null;
-            TextView txtForwardFromTest = (TextView) holder.itemView.findViewById(R.id.cslr_txt_forward_from);
-            if (txtForwardFromTest == null) {
+            if (holder.itemView.findViewById(R.id.cslr_txt_forward_from) == null) {
                 forwardView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_forward, null);
                 mContainer.addView(forwardView, 0);
             } else {
