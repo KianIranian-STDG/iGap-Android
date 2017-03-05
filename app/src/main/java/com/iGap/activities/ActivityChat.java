@@ -2036,7 +2036,15 @@ public class ActivityChat extends ActivityEnhanced
                                     // update message text in database
                                     roomMessage.setMessage(message);
                                     roomMessage.setEdited(true);
-                                    roomMessage.setHasMessageLink(HelperUrl.hasInMessageLink(message));
+
+                                    String linkInfo = HelperUrl.getLinkInfo(message);
+                                    if (linkInfo.length() > 0) {
+                                        roomMessage.setHasMessageLink(true);
+                                        roomMessage.setLinkInfo(linkInfo);
+                                    } else {
+                                        roomMessage.setHasMessageLink(false);
+                                    }
+
                                 }
 
                                 RealmRoom rm = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -2102,7 +2110,15 @@ public class ActivityChat extends ActivityEnhanced
                                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                                 roomMessage.setMessage(message);
                                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                                roomMessage.setHasMessageLink(HelperUrl.hasInMessageLink(message));
+
+                                String linkInfo = HelperUrl.getLinkInfo(message);
+                                if (linkInfo.length() > 0) {
+                                    roomMessage.setHasMessageLink(true);
+                                    roomMessage.setLinkInfo(linkInfo);
+                                } else {
+                                    roomMessage.setHasMessageLink(false);
+                                }
+
                                 roomMessage.setRoomId(mRoomId);
                                 roomMessage.setShowMessage(true);
 
@@ -3506,7 +3522,16 @@ public class ActivityChat extends ActivityEnhanced
 
                 roomMessage.setMessageType(finalMessageType);
                 roomMessage.setMessage(getWrittenMessage());
-                roomMessage.setHasMessageLink(HelperUrl.hasInMessageLink(getWrittenMessage()));
+
+                String linkInfo = HelperUrl.getLinkInfo(getWrittenMessage());
+                if (linkInfo.length() > 0) {
+                    roomMessage.setHasMessageLink(true);
+                    roomMessage.setLinkInfo(linkInfo);
+                } else {
+                    roomMessage.setHasMessageLink(false);
+                }
+
+
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.FILE);

@@ -54,6 +54,7 @@ import org.parceler.Parcel;
     // for channel message should be exist in other rooms (forwarded message)
     private RealmChannelExtra channelExtra;
     private long previousMessageId;
+    private String linkInfo;
 
     public long getUpdateOrCreateTime() {
         return updateTime >= createTime ? updateTime : createTime;
@@ -265,7 +266,15 @@ import org.parceler.Parcel;
         }
 
         message.setMessage(input.getMessage());
-        message.setHasMessageLink(HelperUrl.hasInMessageLink(input.getMessage()));
+
+        String linkInfo = HelperUrl.getLinkInfo(input.getMessage());
+        if (linkInfo.length() > 0) {
+            message.setHasMessageLink(true);
+            message.setLinkInfo(linkInfo);
+        } else {
+            message.setHasMessageLink(false);
+        }
+
         message.setStatus(input.getStatus().toString());
 
         if (input.getAuthor().hasUser()) {
@@ -581,6 +590,14 @@ import org.parceler.Parcel;
         }
         realm.close();
         return output;
+    }
+
+    public String getLinkInfo() {
+        return linkInfo;
+    }
+
+    public void setLinkInfo(String linkInfo) {
+        this.linkInfo = linkInfo;
     }
 
     public boolean isOnlyTime() {

@@ -102,7 +102,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (!TextUtils.isEmpty(msg)) {
             if (mMessage.hasLinkInMessage) {
-                view.setText(HelperUrl.setUrlLink(msg, true, true, mMessage.messageID, true));
+                view.setText(HelperUrl.getLinkyText(msg, mMessage.linkInfo, mMessage.messageID));
             } else {
 
                 msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
@@ -183,6 +183,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * display user avatar only if chat type is GROUP
          */
+        if (holder.itemView.findViewById(R.id.messageSenderAvatar) != null) {
+            holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
+        }
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
 
@@ -231,6 +234,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (holder.itemView.findViewById(R.id.cslr_txt_time) != null) {
             ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
         }
+
+        if (holder.itemView.findViewById(R.id.cslr_replay_layout) != null) {
+            holder.itemView.findViewById(R.id.cslr_replay_layout).setVisibility(View.GONE);
+        }
+
+        if (holder.itemView.findViewById(R.id.cslr_ll_forward) != null) {
+            holder.itemView.findViewById(R.id.cslr_ll_forward).setVisibility(View.GONE);
+        }
+
         replyMessageIfNeeded(holder);
         forwardMessageIfNeeded(holder);
 
@@ -251,6 +263,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * show vote layout for channel otherwise hide layout
          * also get message state for channel
          */
+
+        if (holder.itemView.findViewById(R.id.lyt_vote) != null) {
+            holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.GONE);
+        }
         if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
             showVote(holder);
         } else {
@@ -299,7 +315,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        voteContainer.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp220));
+        voteContainer.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp260));
 
         if (holder.itemView.findViewById(R.id.lyt_vote) == null) {
             View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
@@ -501,6 +517,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
             if (replayView != null) {
+                replayView.setVisibility(View.VISIBLE);
                 TextView replyFrom = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from);
                 TextView replayMessage = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message);
 
@@ -590,7 +607,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             TextView txtForwardFrom = (TextView) holder.itemView.findViewById(R.id.cslr_txt_forward_from);
             if (forwardView != null) {
-
+                forwardView.setVisibility(View.VISIBLE);
                 Realm realm = Realm.getDefaultInstance();
                 /**
                  * if forward message from chat or group , sender is user

@@ -56,6 +56,14 @@ import org.chromium.customtabsclient.CustomTabsActivityHelper;
 
 public class HelperUrl {
 
+    enum linkType {
+        hash,
+        atSighn,
+        igapLink,
+        igapResolve,
+        webLink
+
+    }
 
 
     public static int LinkColor = Color.GRAY;
@@ -447,26 +455,195 @@ public class HelperUrl {
 
     //*********************************************************************************************************
 
-    public static boolean hasInMessageLink(String message) {
+    //public static boolean hasInMessageLink(String message) {
+    //
+    //    message = message.toLowerCase();
+    //
+    //    if (message.contains("#") || message.contains("@")) return true;
+    //
+    //    if (message.contains(igapSite2)) return true;
+    //
+    //    if (message.contains(igapResolve)) return true;
+    //
+    //    String[] list = message.replace(System.getProperty("line.separator"), " ").split(" ");
+    //    for (int i = 0; i < list.length; i++) {
+    //        String str = list[i];
+    //        if (isTextLink(str)) {
+    //            return true;
+    //        }
+    //    }
+    //
+    //    return false;
+    //}
 
-        message = message.toLowerCase();
+    //******************************************************************************************************************
+    //******************************************************************************************************************
 
-        if (message.contains("#") || message.contains("@")) return true;
+    public static SpannableStringBuilder getLinkyText(String text, String linkInfo, String messageID) {
 
-        if (message.contains(igapSite2)) return true;
+        if (text == null) return null;
+        if (text.trim().length() < 1) return null;
 
-        if (message.contains(igapResolve)) return true;
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(text);
 
-        String[] list = message.replace(System.getProperty("line.separator"), " ").split(" ");
-        for (int i = 0; i < list.length; i++) {
-            String str = list[i];
-            if (isTextLink(str)) {
-                return true;
+        if (linkInfo != null && linkInfo.length() > 0) {
+
+            String[] list = linkInfo.split("@");
+
+            for (int i = 0; i < list.length; i++) {
+
+                String[] info = list[i].split("_");
+
+                int start = Integer.parseInt(info[0]);
+                int end = Integer.parseInt(info[1]);
+                String type = info[2];
+                String message = info[3];
+
+                if (type.equals("hash")) {
+                    insertHashLink(message, strBuilder, start, messageID);
+                } else if (type.equals("atSighn")) {
+                    insertAtSignLink(message, strBuilder, start);
+                } else if (type.equals("igapLink")) {
+                    insertIgapLink(strBuilder, start, end);
+                } else if (type.equals("igapResolve")) {
+                    insertIgapResolveLink(strBuilder, start, end);
+                } else if (type.equals("webLink")) {
+                    insertLinkSpan(strBuilder, start, end, true);
+                }
             }
         }
 
-        return false;
+        return strBuilder;
     }
+
+    public static String getLinkInfo(String text) {
+
+        String linkInfo = "";
+
+        if (text == null) return linkInfo;
+
+        if (text.trim().length() < 1) return linkInfo;
+
+        linkInfo += analaysAtSignLinkInfo(text);
+
+        linkInfo += analaysHashLinkInfo(text);
+
+        String newText = text.toLowerCase();
+
+        String[] list = newText.replace(System.getProperty("line.separator"), " ").split(" ");
+
+        int count = 0;
+
+        for (int i = 0; i < list.length; i++) {
+
+            String str = list[i];
+
+            if (str.contains(igapSite2)) {
+                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapLink.toString() + "_" + "no" + "@";
+            } else if (str.contains(igapResolve)) {
+                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapResolve.toString() + "_" + "no" + "@";
+            } else if (isTextLink(str)) {
+                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.webLink.toString() + "_" + "no" + "@";
+            }
+            count += str.length() + 1;
+        }
+
+        return linkInfo;
+    }
+
+    private static String analaysAtSignLinkInfo(String text) {
+
+        String result = "";
+        if (text == null || text.length() < 1) return result;
+
+        String s = "";
+        String tmp = "";
+        Boolean isAtSign = false;
+        int start = 0;
+        String enter = System.getProperty("line.separator");
+
+        for (int i = 0; i < text.length(); i++) {
+
+            s = text.substring(i, i + 1);
+            if (s.equals("@")) {
+                isAtSign = true;
+                tmp = "";
+                start = i;
+                continue;
+            }
+
+            if (isAtSign) {
+                if (s.equals("!") || s.equals("#") || s.equals("$") || s.equals("%") || s.equals("^") || s.equals("&") ||
+                    s.equals("(") || s.equals(")") || s.equals("-") || s.equals("+") || s.equals("=") || s.equals("!") ||
+                    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
+                    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
+                    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
+
+                    result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
+
+                    tmp = "";
+                    isAtSign = false;
+                } else {
+                    tmp += s;
+                }
+            }
+        }
+
+        if (isAtSign) {
+            if (!tmp.equals("")) result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
+        }
+
+        return result;
+    }
+
+    private static String analaysHashLinkInfo(String text) {
+
+        String result = "";
+        if (text == null || text.length() < 1) return result;
+
+        String s = "";
+        String tmp = "";
+        Boolean isHash = false;
+        int start = 0;
+        String enter = System.getProperty("line.separator");
+
+        for (int i = 0; i < text.length(); i++) {
+
+            s = text.substring(i, i + 1);
+            if (s.equals("#")) {
+                isHash = true;
+                tmp = "";
+                start = i;
+                continue;
+            }
+
+            if (isHash) {
+                if (s.equals("!") || s.equals("@") || s.equals("$") || s.equals("%") || s.equals("^") || s.equals("&") ||
+                    s.equals("(") || s.equals(")") || s.equals("-") || s.equals("+") || s.equals("=") || s.equals("!") ||
+                    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
+                    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
+                    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
+
+                    result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
+
+                    tmp = "";
+                    isHash = false;
+                } else {
+                    tmp += s;
+                }
+            }
+        }
+
+        if (isHash) {
+            result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
+        }
+
+        return result;
+    }
+
+    //******************************************************************************************************************
+    //******************************************************************************************************************
+
 
 
     //**************************************    invite by link *******************************************************************

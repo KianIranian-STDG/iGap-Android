@@ -2069,7 +2069,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public class PreCachingLayoutManager extends LinearLayoutManager {
-        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 1000;
+        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 1600;
         private int extraLayoutSpace = -1;
         private Context context;
 
