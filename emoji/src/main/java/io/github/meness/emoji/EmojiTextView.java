@@ -6,11 +6,11 @@ import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.widget.TextView;
-
 import com.vanniktech.emoji.R;
 
 public class EmojiTextView extends TextView {
     private int emojiSize;
+    public boolean hasEmoji = true;
 
     public EmojiTextView(final Context context) {
         super(context);
@@ -45,10 +45,15 @@ public class EmojiTextView extends TextView {
 
     @Override
     public void setText(final CharSequence rawText, final BufferType type) {
-        final CharSequence text = rawText == null ? "" : rawText;
-        final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text);
-        EmojiHandler.addEmojis(getContext(), spannableStringBuilder, emojiSize);
-        super.setText(spannableStringBuilder, type);
+        if (hasEmoji) {
+            final CharSequence text = rawText == null ? "" : rawText;
+            final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text);
+            EmojiHandler.addEmojis(getContext(), spannableStringBuilder, emojiSize);
+            super.setText(spannableStringBuilder, type);
+        } else {
+            super.setText(rawText, type);
+        }
+
     }
 
     public void setEmojiSize(final int pixels) {

@@ -615,12 +615,15 @@ public class ActivityChat extends ActivityEnhanced
                             public void onClientJoinByUsernameResponse() {
 
                                 isNotJoin = false;
-                                HelperUrl.dialogWaiting.dismiss();
+                                HelperUrl.closeDialogWaiting();
 
                                 ActivityChat.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         layoutJoin.setVisibility(View.GONE);
+
+                                        findViewById(R.id.ac_ll_parent).invalidate();
+
                                         if (chatType == GROUP) {
                                             viewAttachFile.setVisibility(View.VISIBLE);
                                             isChatReadOnly = false;
@@ -2030,6 +2033,10 @@ public class ActivityChat extends ActivityEnhanced
                                         roomMessage.setHasMessageLink(false);
                                     }
 
+                                    RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
+
+                                    RealmRoomMessage.isEmojeInText(roomMessage, message);
+
                                 }
 
                                 RealmRoom rm = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -2103,6 +2110,9 @@ public class ActivityChat extends ActivityEnhanced
                                 } else {
                                     roomMessage.setHasMessageLink(false);
                                 }
+
+                                RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
+                                RealmRoomMessage.isEmojeInText(roomMessage, message);
 
                                 roomMessage.setRoomId(mRoomId);
                                 roomMessage.setShowMessage(true);
@@ -3515,6 +3525,9 @@ public class ActivityChat extends ActivityEnhanced
                 } else {
                     roomMessage.setHasMessageLink(false);
                 }
+
+                RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
+                RealmRoomMessage.isEmojeInText(roomMessage, getWrittenMessage());
 
 
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());

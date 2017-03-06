@@ -105,7 +105,7 @@ public class FragmentIgapSearch extends Fragment {
                     if (src.equals("") || (dst.length() == 0 && src.equals("@"))) {
                         return src;
                     }
-                    if (src.toString().matches("[\\w]")) {
+                    if (src.toString().matches("\\w")) {
                         return src;
                     }
                     return "";

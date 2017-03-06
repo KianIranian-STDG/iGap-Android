@@ -55,6 +55,7 @@ import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestChannelAddMessageReaction;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import io.github.meness.emoji.EmojiTextView;
 import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
 import io.meness.github.messageprogress.OnProgress;
@@ -115,6 +116,27 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             view.setVisibility(View.GONE);
         }
     }
+
+    protected void setTextIfNeeded(EmojiTextView view, String msg) {
+
+        if (!TextUtils.isEmpty(msg)) {
+            if (mMessage.hasLinkInMessage) {
+                view.hasEmoji = mMessage.hasEmojiInText;
+                view.setText(HelperUrl.getLinkyText(msg, mMessage.linkInfo, mMessage.messageID));
+            } else {
+                msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
+                view.hasEmoji = mMessage.hasEmojiInText;
+                ;
+                view.setText(msg);
+            }
+
+            view.setVisibility(View.VISIBLE);
+        } else {
+            view.setVisibility(View.GONE);
+        }
+    }
+
+
 
     public AbstractMessage setMessage(StructMessageInfo message) {
         this.mMessage = message;

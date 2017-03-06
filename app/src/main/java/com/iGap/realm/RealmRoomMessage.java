@@ -1,7 +1,9 @@
 package com.iGap.realm;
 
+import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
 import com.iGap.Config;
+import com.iGap.G;
 import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperLogMessage;
 import com.iGap.helper.HelperUrl;
@@ -11,6 +13,8 @@ import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
+import io.github.meness.emoji.EmojiHandler;
+import io.github.meness.emoji.EmojiSpan;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
@@ -47,6 +51,7 @@ import org.parceler.Parcel;
     private RealmRoomMessage replyTo;
     private boolean showMessage = true;
     private String authorHash;
+    private boolean hasEmojiInText;
     private boolean showTime = false;
     //TODO [Saeed Mozaffari] [2017-01-19 9:28 AM] - use RealmAuthor instead of author hash
     private long authorRoomId;
@@ -349,6 +354,8 @@ import org.parceler.Parcel;
 
         addTimeIfNeed(message, realm);
 
+        isEmojeInText(message, input.getMessage());
+
         return message;
     }
 
@@ -422,6 +429,14 @@ import org.parceler.Parcel;
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public boolean isHasEmojiInText() {
+        return hasEmojiInText;
+    }
+
+    public void setHasEmojiInText(boolean hasEmojiInText) {
+        this.hasEmojiInText = hasEmojiInText;
     }
 
     public RealmRoomMessageLocation getLocation() {
@@ -738,7 +753,7 @@ import org.parceler.Parcel;
         realm.close();
     }
 
-    private static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
+    public static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
 
         RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class)
             .equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId())
@@ -790,5 +805,17 @@ import org.parceler.Parcel;
         }
     }
 
+    public static void isEmojeInText(RealmRoomMessage roomMessage, String message) {
+
+        final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(message);
+
+        EmojiHandler.addEmojis(G.context, spannableStringBuilder, 30);
+
+        if (spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), EmojiSpan.class).length > 0) {
+            roomMessage.setHasEmojiInText(true);
+        } else {
+            roomMessage.setHasEmojiInText(false);
+        }
+    }
 
 }

@@ -3,10 +3,9 @@ package io.github.meness.emoji;
 import android.content.Context;
 import android.text.Spannable;
 import android.util.SparseIntArray;
-
 import com.vanniktech.emoji.R;
 
-final class EmojiHandler {
+public final class EmojiHandler {
     private static final SparseIntArray EMOJIS_MAP = new SparseIntArray(949);
     private static final SparseIntArray SOFTBANKS_MAP = new SparseIntArray(27);
 

@@ -345,11 +345,7 @@ public class HelperUrl {
             }
 
             if (isHash) {
-                if (s.equals("!") || s.equals("@") || s.equals("$") || s.equals("%") || s.equals("^") || s.equals("&") ||
-                    s.equals("(") || s.equals(")") || s.equals("-") || s.equals("+") || s.equals("=") || s.equals("!") ||
-                    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
-                    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
-                    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
+                if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
 
                     insertHashLink(tmp, builder, start, messageID);
 
@@ -413,11 +409,12 @@ public class HelperUrl {
             }
 
             if (isAtSign) {
-                if (s.equals("!") || s.equals("#") || s.equals("$") || s.equals("%") || s.equals("^") || s.equals("&") ||
-                    s.equals("(") || s.equals(")") || s.equals("-") || s.equals("+") || s.equals("=") || s.equals("!") ||
-                    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
-                    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
-                    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
+                if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
+                    //if (s.equals("!") || s.equals("#") || s.equals("$") || s.equals("%") || s.equals("^") || s.equals("&") ||
+                    //    s.equals("(") || s.equals(")") || s.equals("-") || s.equals("+") || s.equals("=") || s.equals("!") ||
+                    //    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
+                    //    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
+                    //    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
 
                     insertAtSignLink(tmp, builder, start);
 
@@ -497,7 +494,11 @@ public class HelperUrl {
                 int start = Integer.parseInt(info[0]);
                 int end = Integer.parseInt(info[1]);
                 String type = info[2];
-                String message = info[3];
+                String message = "";
+
+                if (info.length > 3) {
+                    message = info[3];
+                }
 
                 if (type.equals("hash")) {
                     insertHashLink(message, strBuilder, start, messageID);
@@ -573,11 +574,7 @@ public class HelperUrl {
             }
 
             if (isAtSign) {
-                if (s.equals("!") || s.equals("#") || s.equals("$") || s.equals("%") || s.equals("^") || s.equals("&") ||
-                    s.equals("(") || s.equals(")") || s.equals("-") || s.equals("+") || s.equals("=") || s.equals("!") ||
-                    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
-                    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
-                    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
+                if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
 
                     result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
 
@@ -605,7 +602,7 @@ public class HelperUrl {
         String tmp = "";
         Boolean isHash = false;
         int start = 0;
-        String enter = System.getProperty("line.separator");
+        // String enter = System.getProperty("line.separator");
 
         for (int i = 0; i < text.length(); i++) {
 
@@ -617,12 +614,10 @@ public class HelperUrl {
                 continue;
             }
 
+            Log.e("ddddd", s + "   " + s.charAt(0) + "    " + s.codePointAt(0));
+
             if (isHash) {
-                if (s.equals("!") || s.equals("@") || s.equals("$") || s.equals("%") || s.equals("^") || s.equals("&") ||
-                    s.equals("(") || s.equals(")") || s.equals("-") || s.equals("+") || s.equals("=") || s.equals("!") ||
-                    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
-                    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
-                    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
+                if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
 
                     result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
 
@@ -867,7 +862,7 @@ public class HelperUrl {
 
     }
 
-    private static void closeDialogWaiting() {
+    public static void closeDialogWaiting() {
         if (dialogWaiting != null) if (dialogWaiting.isShowing()) dialogWaiting.dismiss();
     }
 

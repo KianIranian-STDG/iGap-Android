@@ -47,6 +47,7 @@ public class StructMessageInfo implements Parcelable {
     public boolean hasLinkInMessage = false;
     public RealmRoomMessageLocation location;
     public String linkInfo = "";
+    public boolean hasEmojiInText = true;
     public boolean showTime = false;
 
     public String fileMime = "";
@@ -281,6 +282,8 @@ public class StructMessageInfo implements Parcelable {
         messageInfo.status = roomMessage.getStatus();
         messageInfo.hasLinkInMessage = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getHasMessageLink() : roomMessage.getHasMessageLink();
         messageInfo.linkInfo = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getLinkInfo() : roomMessage.getLinkInfo();
+        messageInfo.hasEmojiInText = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().isHasEmojiInText() : roomMessage.isHasEmojiInText();
+
         messageInfo.messageID = Long.toString(roomMessage.getMessageId());
         messageInfo.isEdited = roomMessage.isEdited();
         if (!roomMessage.isSenderMe()) {
