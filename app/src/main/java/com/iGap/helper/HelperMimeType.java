@@ -12,9 +12,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.ImageView;
-
 import com.iGap.R;
-
 import java.io.File;
 
 import static com.iGap.G.context;
@@ -69,8 +67,7 @@ public class HelperMimeType {
                 || path.endsWith(".mpg")
                 || path.endsWith(".mpeg")
                 || path.endsWith(".flv")
-                || path.endsWith(".wmv")
-                || path.endsWith(".m4v")) {
+                || path.endsWith(".wmv") || path.endsWith(".m4v") || path.endsWith(".mov")) {
 
             intent.setDataAndType(uri, "video/*");
         } else if (path.endsWith(".pdf")) {
@@ -123,8 +120,7 @@ public class HelperMimeType {
                 "wma")) {
             x = R.mipmap.j_mp3;
         } else if (extention.endsWith("mp4") || extention.endsWith("3gp") || extention.endsWith(
-                "avi") || extention.endsWith("mpg") || extention.endsWith("flv") || extention.endsWith(
-                "wmv") || extention.endsWith("m4v")) {
+                "avi") || extention.endsWith("mpg") || extention.endsWith("flv") || extention.endsWith("wmv") || extention.endsWith("m4v") || extention.endsWith("mov")) {
             x = R.mipmap.j_video;
         } else if (extention.endsWith("m4a") || extention.endsWith("amr") || extention.endsWith(
                 "wav")) {

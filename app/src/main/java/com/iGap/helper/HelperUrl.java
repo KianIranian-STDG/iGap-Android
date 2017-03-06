@@ -278,9 +278,6 @@ public class HelperUrl {
                         checkUsernameAndGoToRoom(token);
                     }
 
-
-
-                    Log.e("ddd", "token = " + token);
                 }
             }
 
@@ -613,8 +610,6 @@ public class HelperUrl {
                 start = i;
                 continue;
             }
-
-            Log.e("ddddd", s + "   " + s.charAt(0) + "    " + s.codePointAt(0));
 
             if (isHash) {
                 if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {

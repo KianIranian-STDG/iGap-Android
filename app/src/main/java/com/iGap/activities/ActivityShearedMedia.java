@@ -172,30 +172,39 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         changeListener = new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
             @Override public void onChange(RealmResults<RealmRoomMessage> element) {
 
-                if (changesize - mRealmList.size() != 0) {
+                if (changesize - element.size() != 0) {
 
-                    mNewList.clear();
-                    mNewList = addTimeToList(mRealmList);
-                    // TODO: 1/2/2017  nejate  use best action
+                    // int positionStart=mNewList.size();
 
-                    if (adapter instanceof ImageAdapter) {
-                        adapter = new ImageAdapter(ActivityShearedMedia.this, mNewList);
-                    } else if (adapter instanceof VideoAdapter) {
-                        adapter = new VideoAdapter(ActivityShearedMedia.this, mNewList);
-                    } else if (adapter instanceof VoiceAdapter) {
-                        adapter = new VoiceAdapter(ActivityShearedMedia.this, mNewList);
-                    } else if (adapter instanceof GifAdapter) {
-                        adapter = new GifAdapter(ActivityShearedMedia.this, mNewList);
-                    } else if (adapter instanceof FileAdapter) {
-                        adapter = new FileAdapter(ActivityShearedMedia.this, mNewList);
-                    } else if (adapter instanceof LinkAdapter) {
-                        adapter = new LinkAdapter(ActivityShearedMedia.this, mNewList);
-                    }
+                    //  mNewList.clear();
+                    //  mNewList = addTimeToList(mRealmList);
 
-                    recyclerView.setAdapter(adapter);
+                    mNewList.addAll(addTimeToList(element));
 
-                    mListcount = mRealmList.size();
-                    changesize = mRealmList.size();
+                    //// TODO: 1/2/2017  nejate  use best action
+                    //
+                    //if (adapter instanceof ImageAdapter) {
+                    //    adapter = new ImageAdapter(ActivityShearedMedia.this, mNewList);
+                    //} else if (adapter instanceof VideoAdapter) {
+                    //    adapter = new VideoAdapter(ActivityShearedMedia.this, mNewList);
+                    //} else if (adapter instanceof VoiceAdapter) {
+                    //    adapter = new VoiceAdapter(ActivityShearedMedia.this, mNewList);
+                    //} else if (adapter instanceof GifAdapter) {
+                    //    adapter = new GifAdapter(ActivityShearedMedia.this, mNewList);
+                    //} else if (adapter instanceof FileAdapter) {
+                    //    adapter = new FileAdapter(ActivityShearedMedia.this, mNewList);
+                    //} else if (adapter instanceof LinkAdapter) {
+                    //    adapter = new LinkAdapter(ActivityShearedMedia.this, mNewList);
+                    //}
+                    //
+                    //recyclerView.setAdapter(adapter);
+
+                    recyclerView.getRecycledViewPool().clear();
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                    recyclerView.invalidateItemDecorations();
+
+                    mListcount = element.size();
+                    changesize = element.size();
                 }
             }
         };
@@ -478,7 +487,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         });
 
         recyclerView.setLayoutManager(gLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setItemViewCacheSize(1000);
 
         recyclerView.setAdapter(adapter);
 
@@ -690,21 +699,23 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         handler.post(new Runnable() {
             @Override public void run() {
-                mRealmList.removeChangeListeners();
+                // mRealmList.removeChangeListeners();
 
                 Realm realm = Realm.getDefaultInstance();
 
-                for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
                             RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, false, realm);
                         }
-                    });
-                }
+                    }
+                });
+
+
                 realm.close();
 
-                changeListener.onChange(mRealmList);
-                mRealmList.addChangeListener(changeListener);
+                // changeListener.onChange(mRealmList);
+                // mRealmList.addChangeListener(changeListener);
             }
         });
     }
@@ -974,13 +985,17 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         private void setBackgroundColor(RecyclerView.ViewHolder holder, int position) {
 
-            // set blue back ground for selected file
-            FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
+            try {
+                // set blue back ground for selected file
+                FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
-            if (SelectedList.indexOf(mList.get(position).item.getMessageId()) >= 0) {
-                layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
-            } else {
-                layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
+                if (SelectedList.indexOf(mList.get(position).item.getMessageId()) >= 0) {
+                    layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
+                } else {
+                    layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
+                }
+            } catch (Exception e) {
+
             }
         }
 
