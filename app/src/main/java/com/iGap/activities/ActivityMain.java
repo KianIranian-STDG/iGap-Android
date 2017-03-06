@@ -262,7 +262,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("BBB", "onClientGetRoomList 1");
                         /**
                          * to first enter to app , client first compute clientCondition then
                          * getRoomList and finally send condition that before get clientCondition;
@@ -270,10 +269,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                          */
                         if (firstTimeEnterToApp) {
                             firstTimeEnterToApp = false;
-                            Log.i("BBB", "sendClientCondition 2 ");
                             sendClientCondition();
                         } else {
-                            Log.i("BBB", "RequestClientCondition 3 ");
                             new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
                         }
 
@@ -402,7 +399,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ViewGroup drawerButton = (ViewGroup) findViewById(R.id.amr_ripple_menu);
         drawerButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 drawer.openDrawer(GravityCompat.START);
             }
         });
@@ -555,23 +553,23 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         ViewGroup igapSearch = (ViewGroup) findViewById(R.id.lm_ll_igap_search);
         igapSearch.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
 
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         Fragment fragment = FragmentIgapSearch.newInstance();
 
                         try {
-                            getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(R.id.fragmentContainer, fragment, "Search_fragment_igap")
-                                .commit();
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "Search_fragment_igap").commit();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -753,9 +751,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                                         new RequestUserSessionLogout().userSessionLogout();
                                     }
-                                })
-
-                                .show();
+                                }).show();
                     }
                 }, 256);
             }
@@ -882,7 +878,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         btnStartNewChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "New Chat");
@@ -894,9 +889,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     e.getStackTrace();
                 }
                 arcMenu.toggleMenu();
-
-                //                isMenuButtonAddShown = true;
-                //
 
             }
         });
@@ -1024,17 +1016,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
 
                 for (ProtoGlobal.Room room : rooms) {
-                    //TODO [Saeed Mozaffari] [2017-02-27 4:52 PM] - Clear This Code After MessageLoader Completed
-                    if (room.getUnreadCount() >= 40) {
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).findAll().deleteAllFromRealm();
-                    }
                     RealmRoom.putOrUpdate(room);
                 }
 
                 // delete messages and rooms that was deleted
                 RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
                 for (RealmRoom item : deletedRoomsList) {
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();//delete all message in deleted room
+                    /**
+                     * delete all message in deleted room
+                     */
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
                     item.deleteFromRealm();
                 }
             }
@@ -1271,7 +1262,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         //       =======> after change language in ActivitySetting this part refresh Activity main
         G.onRefreshActivity = new OnRefreshActivity() {
-            @Override public void refresh(String changeLanguage) {
+            @Override
+            public void refresh(String changeLanguage) {
 
                 ActivityMain.this.recreate();
             }
@@ -1598,16 +1590,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return new RoomAdapter.ViewHolder(v);
         }
 
-        @Override public void onBindRealmViewHolder(final ViewHolder holder, final int i) {
+        @Override
+        public void onBindRealmViewHolder(final ViewHolder holder, final int i) {
 
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
 
                     RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
                     if (mInfo != null && mInfo.isValid() && !mInfo.isDeleted()) {
-                        if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (!RealmRoom.isCloudRoom(
-                            mInfo.getId()) && mInfo.getActionStateUserId() != userId))))) {
+                        if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (!RealmRoom.isCloudRoom(mInfo.getId()) && mInfo.getActionStateUserId() != userId))))) {
                             //holder.messageStatus.setVisibility(GONE);
                             holder.lastMessageSender.setVisibility(View.GONE);
                             holder.lastMessage.setVisibility(View.VISIBLE);
@@ -1626,8 +1619,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         } else {
                             holder.avi.setVisibility(View.GONE);
                             if (mInfo.getLastMessage() != null) {
-                                String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(),
-                                    mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                                String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
                                 if (lastMessage == null) {
                                     lastMessage = mInfo.getLastMessage().getMessage();
                                 }
@@ -1638,8 +1630,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                     holder.lastMessageSender.setVisibility(GONE);
                                 } else {
                                     if (mInfo.getLastMessage().isSenderMe()) {
-                                        AppUtils.rightMessageStatus(holder.messageStatus, ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()),
-                                            mInfo.getLastMessage().isSenderMe());
+                                        AppUtils.rightMessageStatus(holder.messageStatus, ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isSenderMe());
                                         holder.messageStatus.setVisibility(View.VISIBLE);
                                     } else {
                                         holder.messageStatus.setVisibility(GONE);
@@ -1658,14 +1649,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                                     } else {
                                         Realm realm1 = Realm.getDefaultInstance();
-                                        RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class)
-                                            .equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.getId())
-                                            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                                        RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.getId()).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
                                         if (!results.isEmpty()) {
                                             RealmRoomMessage realmRoomMessage = results.first();
                                             if (realmRoomMessage != null) {
-                                                RealmRegisteredInfo realmRegisteredInfo =
-                                                    realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessage.getUserId()).findFirst();
+                                                RealmRegisteredInfo realmRegisteredInfo = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessage.getUserId()).findFirst();
                                                 if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
                                                     if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
                                                         if (HelperCalander.isLanguagePersian) {
@@ -1796,7 +1784,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                 holder.image.setImageBitmap(BitmapFactory.decodeFile(realmAvatar.getFile().getLocalThumbnailPath()));
                             } else {
                                 HelperAvatar.getAvatar1(idForGetAvatar, avatarType, new OnAvatarGet() {
-                                    @Override public void onAvatarGet(final String avatarPath, final long ownerId) {
+                                    @Override
+                                    public void onAvatarGet(final String avatarPath, final long ownerId) {
                         /*G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1805,7 +1794,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         });*/
                                     }
 
-                                    @Override public void onShowInitials(final String initials, final String color) {
+                                    @Override
+                                    public void onShowInitials(final String initials, final String color) {
                         /*G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1817,15 +1807,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                                 String[] initials = showInitials(idForGetAvatar, avatarType);
                                 if (initials != null) {
-                                    holder.image.setImageBitmap(
-                                        HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
+                                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
                                 }
                             }
                         } else {
                             String[] initials = showInitials(idForGetAvatar, avatarType);
                             if (initials != null) {
-                                holder.image.setImageBitmap(
-                                    HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
+                                holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
                             }
                         }
 
@@ -2093,7 +2081,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             this.extraLayoutSpace = extraLayoutSpace;
         }
 
-        @Override protected int getExtraLayoutSpace(RecyclerView.State state) {
+        @Override
+        protected int getExtraLayoutSpace(RecyclerView.State state) {
             if (extraLayoutSpace > 0) {
                 return extraLayoutSpace;
             }

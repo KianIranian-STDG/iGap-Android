@@ -42,7 +42,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -803,8 +802,6 @@ public class ActivityChat extends ActivityEnhanced
 
         initComponent();
         initAppbarSelected();
-        //manageForwardedMessage();
-        getChatHistory();
         getDraft();
         getUserInfo();
         setUpEmojiPopup();
@@ -904,18 +901,6 @@ public class ActivityChat extends ActivityEnhanced
             }
 
         }
-    }
-
-    /**
-     * check and send request for get history if needed
-     */
-    private void getChatHistory() {
-        Realm realm = Realm.getDefaultInstance();
-        if (realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().size() < 3) {
-            isSendingRequestClientGetHistory = true;
-            //new RequestClientGetRoomHistory().getRoomHistory(mRoomId, 0, Long.toString(mRoomId));
-        }
-        realm.close();
     }
 
     /**
@@ -4032,7 +4017,6 @@ public class ActivityChat extends ActivityEnhanced
             }
 
         } else {
-            //TODO [Saeed Mozaffari] [2017-02-28 2:16 PM] - can remove get history in first enter to page ==> removed (so clear that code)
             /**
              * send request to server for get message
              */
@@ -4141,8 +4125,6 @@ public class ActivityChat extends ActivityEnhanced
                                 }
                             }
                         }
-
-
                     }
                 }
             }
@@ -4231,7 +4213,7 @@ public class ActivityChat extends ActivityEnhanced
                      * hide progress if have any error
                      */
                     progressItem(HIDE, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
-                    // for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
+                    //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
                     mAdapter.notifyDataSetChanged();
 
                     isWaitingForHistory = false;
@@ -4287,70 +4269,6 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-
-    private long latestMessageIdHistory = -1;
-
-    private void requestMessageHistory() {
-        //  long oldestMessageId = AppUtils.findLastMessageId(mRoomId);
-
-
-        long oldestMessageId = 0;
-
-        RealmRoomMessage messageFirst = null;
-        RealmResults<RealmRoomMessage> realmRoomMessages = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).
-                equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
-
-        if (realmRoomMessages.size() > 0) {
-            messageFirst = realmRoomMessages.first();
-        }
-
-        if (messageFirst != null) {
-            oldestMessageId = messageFirst.getMessageId();
-        }
-
-        if (latestMessageIdHistory != oldestMessageId) {
-            latestMessageIdHistory = oldestMessageId;
-
-            isSendingRequestClientGetHistory = true;
-            //new RequestClientGetRoomHistory().getRoomHistory(mRoomId, oldestMessageId, Long.toString(mRoomId));
-
-            if (mAdapter.getAdapterItemCount() > 0) {
-                if (!(mAdapter.getAdapterItem(0) instanceof ProgressWaiting)) {
-                    recyclerView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
-                        }
-                    });
-                }
-            } else {
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
-                    }
-                });
-            }
-
-        }
-    }
-
-    private String getTimeSettingMessage(long comingDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(comingDate);
-
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-
-        long diff = Math.abs(calendar.getTimeInMillis() - lastDateCalendar.getTimeInMillis());
-
-        if (diff + 1000 > DateUtils.DAY_IN_MILLIS) {
-            lastDateCalendar.setTimeInMillis(calendar.getTimeInMillis());
-            return TimeUtils.getChatSettingsTimeAgo(this, calendar.getTime());
-        }
-
-        return null;
-    }
-
     @Override
     public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
         Intent intent = new Intent(G.context, ActivityContactsProfile.class);
@@ -4362,7 +4280,7 @@ public class ActivityChat extends ActivityEnhanced
 
     private void showImage(final StructMessageInfo messageInfo) {
 
-        // for gone appbare
+        // for gone app bar
         FragmentShowImage.appBarLayout = appBarLayout;
 
         String selectedFileToken = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getToken() : messageInfo.attachment.token;
