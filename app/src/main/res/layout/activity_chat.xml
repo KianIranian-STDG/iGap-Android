@@ -97,7 +97,6 @@
                                 android:gravity="bottom"
                                 android:maxWidth="@dimen/dp240"
                                 android:singleLine="true"
-                                android:text="New Text"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/sp14"
                                 />

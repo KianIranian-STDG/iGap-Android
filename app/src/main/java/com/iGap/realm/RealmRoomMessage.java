@@ -101,7 +101,7 @@ import org.parceler.Parcel;
         });
     }
 
-    public static void fetchMessages(final long roomId, final OnActivityChatStart callback) {
+    public static void fetchMessagesBB(final long roomId, final OnActivityChatStart callback) {
         // when user receive message, I send update status as SENT to the message sender
         // but imagine user is not in the room (or he is in another room) and received some messages
         // when came back to the room with new messages, I make new update status request as SEEN to
@@ -158,19 +158,16 @@ import org.parceler.Parcel;
         });
     }
 
-    public static void fetchMessagesBB(final long roomId, final OnActivityChatStart callback) {
+    public static void fetchMessages(final long roomId, final OnActivityChatStart callback) {
 
         final Realm realm = Realm.getDefaultInstance();
 
-        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-
-        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findAll();
-
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findAll();
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
                 if (realmClientCondition != null) {
                     for (RealmRoomMessage roomMessage : realmRoomMessages) {
@@ -204,7 +201,6 @@ import org.parceler.Parcel;
                 }
             }
         });
-
         realm.close();
     }
 

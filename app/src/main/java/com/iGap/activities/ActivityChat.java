@@ -162,7 +162,6 @@ import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmChannelRoom;
-import com.iGap.realm.RealmChatRoom;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmContacts;
@@ -330,6 +329,7 @@ public class ActivityChat extends ActivityEnhanced
     public static String titleStatic;
     private String initialize;
     private String color;
+    private io.github.meness.emoji.EmojiPopup emojiPopup;
 
     private boolean isChatReadOnly = false;
     //chat
@@ -357,7 +357,7 @@ public class ActivityChat extends ActivityEnhanced
     private MaterialDesignTextView iconMute;
 
     public static OnComplete onComplete;
-    MyAppBarLayout appBarLayout;
+    private MyAppBarLayout appBarLayout;
     private boolean hasDraft = false;
     private long replyToMessageId = 0;
     private long userId;
@@ -369,17 +369,11 @@ public class ActivityChat extends ActivityEnhanced
     private Boolean isNotJoin = false;
     private String userName = "";
     private boolean blockUser = false;
-    ViewGroup vgSpamUser;
-    TextView txtSpamUser;
-    TextView txtSpamClose;
-    Realm mRealm;
+    private ViewGroup vgSpamUser;
+    private TextView txtSpamUser;
+    private TextView txtSpamClose;
+    private Realm mRealm;
 
-    private int countOfCurrentLoadInList = 0;
-    private int maxLoadFromLocalInOneStep = 200;
-    private boolean isThereAnyMoreItemToLoadFromLocal = false;
-    private boolean isThereAnyMoreItemToLoadFromServer = true;
-    private boolean isSendingRequestClientGetHistory = false;
-    private ArrayList<RealmRoomMessage> mLocalList = new ArrayList<>();
     private RecyclerView.OnScrollListener scrollListener;
 
     private boolean hasForward = false;
@@ -402,12 +396,16 @@ public class ActivityChat extends ActivityEnhanced
     private ImageView send;
     private TextView txtCountItem;
     private View viewBottomSheet;
+    private RealmRoom realmRoom;
+    private boolean initHash = false;
+    private boolean initAttach = false;
+    private boolean initEmoji = false;
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        RealmRoomMessage.fetchMessagesBB(mRoomId, new OnActivityChatStart() {
+        RealmRoomMessage.fetchMessages(mRoomId, new OnActivityChatStart() {
             @Override
             public void resendMessage(RealmRoomMessage message) {
                 G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
@@ -435,46 +433,76 @@ public class ActivityChat extends ActivityEnhanced
     protected void onResume() {
         super.onResume();
 
-        final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
-        updateUnreadCountRealm.executeTransaction(new Realm.Transaction() {
+        G.handler.postDelayed(new Runnable() {
             @Override
-            public void execute(Realm realm) {
-                final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                if (room != null) {
-                    room.setUnreadCount(0);
-                    realm.copyToRealmOrUpdate(room);
+            public void run() {
+                //initMain();
+                initLayoutHashNavigationCallback();
+                showSpamBar();
 
-                    /**
-                     * set member count
-                     * set this code in onResume for update this value when user
-                     * come back from profile activities
-                     */
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                musicPlayer = new MusicPlayer(mediaLayout);
+                if (MusicPlayer.mp != null) {
+                    MusicPlayer.initLayoutTripMusic(mediaLayout);
+                }
+
+                /**
+                 * update view for played music
+                 */
+                mAdapter.updateChengedItem(MusicPlayer.playedList);
+                MusicPlayer.playedList.clear();
+
+                if (isGoingFromUserLink) {
+                    new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
+                }
+
+                final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
+                updateUnreadCountRealm.executeTransactionAsync(new Realm.Transaction() {//ASYNC
+                    @Override
+                    public void execute(Realm realm) {
+                        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                        if (room != null) {
+                            room.setUnreadCount(0);
+                            realm.copyToRealmOrUpdate(room);
+
+                            /**
+                             * set member count
+                             * set this code in onResume for update this value when user
+                             * come back from profile activities
+                             */
+
                             String members = null;
                             if (room.getType() == GROUP && room.getGroupRoom() != null) {
                                 members = room.getGroupRoom().getParticipantsCountLabel();
                             } else if (room.getType() == CHANNEL && room.getChannelRoom() != null) {
                                 members = room.getChannelRoom().getParticipantsCountLabel();
                             }
-                            if (members != null) {
-                                txtLastSeen.setText(members + " " + getResources().getString(member));
-                                avi.setVisibility(View.GONE);
 
-                                if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                            final String finalMembers = members;
+                            if (finalMembers != null) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        txtLastSeen.setText(finalMembers + " " + getResources().getString(member));
+                                        avi.setVisibility(View.GONE);
+
+                                        if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                    }
+                                });
                             }
                         }
-                    });
-                }
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        updateUnreadCountRealm.close();
+                    }
+                });
             }
-        });
+        }, 20);
 
         chatTypeStatic = chatType;
         mRoomIdStatic = mRoomId;
         titleStatic = title;
-
-        musicPlayer = new MusicPlayer(mediaLayout);
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.uploaderUtil.setActivityCallbacks(this);
@@ -487,102 +515,113 @@ public class ActivityChat extends ActivityEnhanced
         G.onSetAction = this;
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
-
         G.helperNotificationAndBadge.cancelNotification();
 
         initCallbacks();
-
         HelperNotificationAndBadge.isChatRoomNow = true;
-
-        if (MusicPlayer.mp != null)
-
-        {
-            MusicPlayer.initLayoutTripMusic(mediaLayout);
-        }
-
-        //update view for played music
-        mAdapter.updateChengedItem(MusicPlayer.playedList);
-        MusicPlayer.playedList.clear();
-
-        if (isGoingFromUserLink)
-
-        {
-            new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
-        }
-
-        setAvatar();
-
-        initLayoutHashNavigation();
-
-        showSpamBar(updateUnreadCountRealm);
-
-        updateUnreadCountRealm.close();
-    }
-
-    private void showSpamBar(Realm realm) {
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-        RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (realmRegisteredInfo != null && realmUserInfo != null && realmRegisteredInfo.getId() != realmUserInfo.getUserId()) {
-            if (phoneNumber == null && realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
-                if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
-                    vgSpamUser.setVisibility(View.VISIBLE);
-                }
-            }
-
-            if (realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
-                if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
-
-                    if (realmRegisteredInfo.isBlockUser()) {
-                        blockUser = true;
-                        txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-                        vgSpamUser.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-
-            if (realmContacts != null && realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
-                if (realmContacts.isBlockUser()) {
-                    if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
-                        blockUser = true;
-                        txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-                        vgSpamUser.setVisibility(View.VISIBLE);
-                    } else {
-                        blockUser = true;
-                        txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-                        vgSpamUser.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        startPageFastInitialize();
 
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initMain();
+            }
+        }, 10);
+    }
+
+    /**
+     * set just important item to view in onCreate and load another objects in onResume
+     * actions : set app color, load avatar, set background, set title, set status chat or member for group or channel
+     */
+    private void startPageFastInitialize() {
         mRealm = Realm.getDefaultInstance();
-        HelperGetMessageState.clearMessageViews();
-        checkIfOrientationChanged(getResources().getConfiguration());
-        pageSettings();
-        initAttach();
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mRoomId = extras.getLong("RoomId");
+            realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            pageSettings();
+
+            /**
+             * need this info for load avatar
+             */
+            if (realmRoom != null) {
+                chatType = realmRoom.getType();
+                if (chatType == CHAT) {
+                    chatPeerId = realmRoom.getChatRoom().getPeerId();
+                    RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    title = realmRegisteredInfo.getDisplayName();
+                    lastSeen = realmRegisteredInfo.getLastSeen();
+                    userStatus = realmRegisteredInfo.getStatus();
+                } else {
+                    mRoomId = realmRoom.getId();
+                    title = realmRoom.getTitle();
+                    if (chatType == GROUP) {
+                        groupParticipantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
+                    } else {
+                        groupParticipantsCountLabel = realmRoom.getChannelRoom().getParticipantsCountLabel();
+                    }
+                }
+
+                avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
+                txtName = (TextView) findViewById(R.id.chl_txt_name);
+                txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
+                viewGroupLastSeen = (ViewGroup) findViewById(R.id.chl_txt_viewGroup_seen);
+                imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
+
+                if (title != null) {
+                    txtName.setText(title);
+                }
+
+                /**
+                 * change english number to persian number
+                 */
+                if (HelperCalander.isLanguagePersian) {
+                    txtName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtName.getText().toString()));
+                }
+
+                if (chatType == CHAT) {
+                    setUserStatus(userStatus, lastSeen);
+                } else if ((chatType == GROUP) || (chatType == CHANNEL)) {
+                    if (groupParticipantsCountLabel != null) {
+                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member));
+                        avi.setVisibility(View.GONE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                        }
+                    }
+                }
+
+                /**
+                 * change english number to persian number
+                 */
+                if (HelperCalander.isLanguagePersian) {
+                    txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                }
+
+                setAvatar();
+            }
+        }
+    }
+
+    private void initMain() {
+        HelperGetMessageState.clearMessageViews();
         MusicPlayer.playedList.clear();
 
         /**
          * define views
          */
-        avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
-        appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
         mediaLayout = (LinearLayout) findViewById(R.id.ac_ll_music_layout);
         lyt_user = (LinearLayout) findViewById(R.id.lyt_user);
         viewAttachFile = findViewById(R.id.layout_attach_file);
         viewMicRecorder = findViewById(R.id.layout_mic_recorde);
         prgWaiting = (ProgressBar) findViewById(R.id.chl_prgWaiting);
-
-        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
-        findViewById(R.id.ac_green_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile, this);
         attachFile = new AttachFile(this);
@@ -595,16 +634,13 @@ public class ActivityChat extends ActivityEnhanced
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mRoomId = extras.getLong("RoomId");
-
             isGoingFromUserLink = extras.getBoolean("GoingFromUserLink");
             isNotJoin = extras.getBoolean("ISNotJoin");
             userName = extras.getString("UserName");
 
             if (isNotJoin) {
-
                 final LinearLayout layoutJoin = (LinearLayout) findViewById(R.id.ac_ll_join);
                 layoutJoin.setBackgroundColor(Color.parseColor(G.appBarColor));
-
                 layoutJoin.setVisibility(View.VISIBLE);
                 layoutJoin.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -661,21 +697,17 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
             }
-
-
             messageId = extras.getLong("MessageId");
 
-            Realm realm = Realm.getDefaultInstance();
-
-            //get userId . use in chat set action.
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            /**
+             * get userId . use in chat set action.
+             */
+            RealmUserInfo realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo == null) {
                 finish();
                 return;
             }
             userId = realmUserInfo.getUserId();
-
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
             if (realmRoom != null) { // room exist
 
@@ -690,19 +722,18 @@ public class ActivityChat extends ActivityEnhanced
                     ((RecyclerView) findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
                 }
 
-                if (realmRoom.getType() == CHAT) {
+                if (chatType == CHAT) {
 
-                    chatType = CHAT;
-                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                    chatPeerId = realmChatRoom.getPeerId();
+                    //RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                    //chatPeerId = realmChatRoom.getPeerId();
 
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                     if (realmRegisteredInfo != null) {
-                        title = realmRegisteredInfo.getDisplayName();
+                        //title = realmRegisteredInfo.getDisplayName();
                         initialize = realmRegisteredInfo.getInitials();
                         color = realmRegisteredInfo.getColor();
-                        lastSeen = realmRegisteredInfo.getLastSeen();
-                        userStatus = realmRegisteredInfo.getStatus();
+                        //lastSeen = realmRegisteredInfo.getLastSeen();
+                        //userStatus = realmRegisteredInfo.getStatus();
                         phoneNumber = realmRegisteredInfo.getPhoneNumber();
                     } else {
                         title = realmRoom.getTitle();
@@ -710,14 +741,11 @@ public class ActivityChat extends ActivityEnhanced
                         color = realmRoom.getColor();
                         userStatus = getResources().getString(R.string.last_seen_recently);
                     }
-                } else if (realmRoom.getType() == GROUP) {
-                    chatType = GROUP;
+                } else if (chatType == GROUP) {
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     groupRole = realmGroupRoom.getRole();
                     groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
-                } else if (realmRoom.getType() == CHANNEL) {
-
-                    chatType = CHANNEL;
+                } else if (chatType == CHANNEL) {
                     RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                     channelRole = realmChannelRoom.getRole();
                     channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
@@ -725,7 +753,7 @@ public class ActivityChat extends ActivityEnhanced
             } else {
                 chatPeerId = extras.getLong("peerId");
                 chatType = CHAT;
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                 if (realmRegisteredInfo != null) {
                     title = realmRegisteredInfo.getDisplayName();
                     initialize = realmRegisteredInfo.getInitials();
@@ -734,80 +762,12 @@ public class ActivityChat extends ActivityEnhanced
                     userStatus = realmRegisteredInfo.getStatus();
                 }
             }
-
-            //*****block or unBlock User Start
-
-            final RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-            vgSpamUser = (ViewGroup) findViewById(R.id.layout_add_contact);
-            txtSpamUser = (TextView) findViewById(R.id.chat_txt_addContact);
-            txtSpamClose = (TextView) findViewById(R.id.chat_txt_close);
-            txtSpamClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    vgSpamUser.setVisibility(View.GONE);
-                    if (registeredInfo != null) {
-
-                        mRealm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                registeredInfo.setDoNotshowSpamBar(true);
-                            }
-                        });
-
-                    }
-
-                }
-            });
-
-
-            txtSpamUser.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (blockUser) {
-                        G.onUserContactsUnBlock = new OnUserContactsUnBlock() {
-                            @Override
-                            public void onUserContactsUnBlock(final long userId) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        blockUser = false;
-                                        if (userId == chatPeerId) {
-                                            txtSpamUser.setText(getResources().getString(R.string.block_user));
-                                        }
-                                    }
-                                });
-                            }
-                        };
-                        new RequestUserContactsUnblock().userContactsUnblock(chatPeerId);
-                    } else {
-
-                        G.onUserContactsBlock = new OnUserContactsBlock() {
-                            @Override
-                            public void onUserContactsBlock(final long userId) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        blockUser = true;
-                                        if (userId == chatPeerId) {
-                                            txtSpamUser.setText(getResources().getString(R.string.un_block_user));
-                                        }
-                                    }
-                                });
-                            }
-                        };
-                        new RequestUserContactsBlock().userContactsBlock(chatPeerId);
-                    }
-                }
-            });
-
-            realm.close();
         }
 
         initComponent();
         initAppbarSelected();
         getDraft();
         getUserInfo();
-        setUpEmojiPopup();
         checkAction();
         insertShearedData();
     }
@@ -821,15 +781,12 @@ public class ActivityChat extends ActivityEnhanced
             final LinearLayout ll_Forward = (LinearLayout) findViewById(R.id.ac_ll_forward);
 
             if (hasForward) {
-
                 imvCancelForward.performClick();
-
                 ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
                 for (Parcelable messageInfo : messageInfos) {
                     sendForwardedMessage((StructMessageInfo) Parcels.unwrap(messageInfo));
                 }
             } else {
-
                 imvCancelForward = (ImageView) findViewById(R.id.cslhf_imv_cansel);
                 imvCancelForward.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -902,9 +859,128 @@ public class ActivityChat extends ActivityEnhanced
                 hasForward = true;
                 ll_Forward.setVisibility(View.VISIBLE);
             }
-
         }
     }
+
+    /**
+     * manage need showSpamBar for user or no
+     */
+    private void showSpamBar() {
+        /**
+         * use handler for run async
+         */
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                Realm realm = Realm.getDefaultInstance();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmRegisteredInfo != null && realmUserInfo != null && realmRegisteredInfo.getId() != realmUserInfo.getUserId()) {
+                    if (phoneNumber == null && realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                        if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
+                            initSpamBarLayout(realmRegisteredInfo);
+                            vgSpamUser.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    if (realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                        if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
+
+                            if (realmRegisteredInfo.isBlockUser()) {
+                                initSpamBarLayout(realmRegisteredInfo);
+                                blockUser = true;
+                                txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                                vgSpamUser.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+
+                    if (realmContacts != null && realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                        if (realmContacts.isBlockUser()) {
+                            if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
+                                initSpamBarLayout(realmRegisteredInfo);
+                                blockUser = true;
+                                txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                                vgSpamUser.setVisibility(View.VISIBLE);
+                            } else {
+                                initSpamBarLayout(realmRegisteredInfo);
+                                blockUser = true;
+                                txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                                vgSpamUser.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                }
+                realm.close();
+            }
+        });
+    }
+
+    /**
+     * init spamBar layout
+     */
+    private void initSpamBarLayout(final RealmRegisteredInfo registeredInfo) {
+        vgSpamUser = (ViewGroup) findViewById(R.id.layout_add_contact);
+        txtSpamUser = (TextView) findViewById(R.id.chat_txt_addContact);
+        txtSpamClose = (TextView) findViewById(R.id.chat_txt_close);
+        txtSpamClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vgSpamUser.setVisibility(View.GONE);
+                if (registeredInfo != null) {
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            registeredInfo.setDoNotshowSpamBar(true);
+                        }
+                    });
+                }
+            }
+        });
+
+        txtSpamUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (blockUser) {
+                    G.onUserContactsUnBlock = new OnUserContactsUnBlock() {
+                        @Override
+                        public void onUserContactsUnBlock(final long userId) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    blockUser = false;
+                                    if (userId == chatPeerId) {
+                                        txtSpamUser.setText(getResources().getString(R.string.block_user));
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    new RequestUserContactsUnblock().userContactsUnblock(chatPeerId);
+                } else {
+
+                    G.onUserContactsBlock = new OnUserContactsBlock() {
+                        @Override
+                        public void onUserContactsBlock(final long userId) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    blockUser = true;
+                                    if (userId == chatPeerId) {
+                                        txtSpamUser.setText(getResources().getString(R.string.un_block_user));
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    new RequestUserContactsBlock().userContactsBlock(chatPeerId);
+                }
+            }
+        });
+    }
+
 
     /**
      * get settings state and change view
@@ -917,17 +993,27 @@ public class ActivityChat extends ActivityEnhanced
         int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
         sendByEnter = checkedSendByEnter == 1;
 
+        /**
+         * set background
+         */
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         if (backGroundPath.length() > 0) {
 
             File f = new File(backGroundPath);
             if (f.exists()) {
                 Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                //View chat = findViewById(ac_ll_parent);
-                ////chat.setBackgroundDrawable(d);
                 getWindow().setBackgroundDrawable(d);
             }
+        } else {
+            getWindow().setBackgroundDrawableResource(R.drawable.newbg);
         }
+
+        /**
+         * set app color to appBar
+         */
+        appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
+        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+        findViewById(R.id.ac_green_line).setBackgroundColor(Color.parseColor(G.appBarColor));
     }
 
     public void sendPosition(final Double latitude, final Double longitude, final String imagePath) {
@@ -1435,12 +1521,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void initComponent() {
-
-        initLayoutSearchNavigation();
-
         toolbar = (LinearLayout) findViewById(R.id.toolbar);
-        MaterialDesignTextView imvBackButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_back_Button);
-
         iconMute = (MaterialDesignTextView) findViewById(R.id.imgMutedRoom);
         RippleView rippleBackButton = (RippleView) findViewById(R.id.chl_ripple_back_Button);
 
@@ -1488,52 +1569,9 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        txtName = (TextView) findViewById(R.id.chl_txt_name);
-        if (title != null) txtName.setText(title);
-
-        // change english number to persian number
-        if (HelperCalander.isLanguagePersian) txtName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtName.getText().toString()));
-
-        txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
-        viewGroupLastSeen = (ViewGroup) findViewById(R.id.chl_txt_viewGroup_seen);
-
-        if (chatType == CHAT) {
-
-            setUserStatus(userStatus, lastSeen);
-        } else if (chatType == GROUP) {
-
-            if (groupParticipantsCountLabel != null) {
-                txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member));
-                avi.setVisibility(View.GONE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                }
-
-            }
-        } else if (chatType == CHANNEL) {
-
-            if (channelParticipantsCountLabel != null) {
-
-                txtLastSeen.setText(channelParticipantsCountLabel + " " + getResources().getString(member));
-
-
-                avi.setVisibility(View.GONE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                }
-            }
-        }
-
-        // change english number to persian number
-        if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
-
-
-        imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
-
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.2);
 
         RippleView rippleMenuButton = (RippleView) findViewById(R.id.chl_ripple_menu_button);
-
         rippleMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View rippleView) {
@@ -1655,6 +1693,9 @@ public class ActivityChat extends ActivityEnhanced
                 text1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+                        initLayoutSearchNavigation();
+
                         popupWindow.dismiss();
                         findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
                         ll_Search.setVisibility(View.VISIBLE);
@@ -1724,8 +1765,6 @@ public class ActivityChat extends ActivityEnhanced
                         RealmRoomMessage.ClearAllMessage(false, mRoomId);
                         mAdapter.clear();
 
-                        isThereAnyMoreItemToLoadFromServer = true;
-                        isThereAnyMoreItemToLoadFromLocal = false;
                         llScrollNavigate.setVisibility(View.GONE);
 
                         recyclerView.addOnScrollListener(scrollListener);
@@ -1763,7 +1802,7 @@ public class ActivityChat extends ActivityEnhanced
         // remove blinking for updates on items
         recyclerView.setItemAnimator(null);
         // following lines make scrolling smoother
-        recyclerView.setHasFixedSize(true);
+        //recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(1000);
         recyclerView.setDrawingCacheEnabled(true);
 
@@ -1792,7 +1831,10 @@ public class ActivityChat extends ActivityEnhanced
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
-        G.handler.postDelayed(new Runnable() {
+        /**
+         * load message , use handler for load async
+         */
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
 
@@ -1823,9 +1865,8 @@ public class ActivityChat extends ActivityEnhanced
                         addLayoutUnreadMessage();
                     }
                 }
-
             }
-        }, 100);
+        });
 
         llScrollNavigate = (FrameLayout) findViewById(R.id.ac_ll_scrool_navigate);
         txtNewUnreadMessage = (TextView) findViewById(R.id.cs_txt_unread_message);
@@ -1834,7 +1875,6 @@ public class ActivityChat extends ActivityEnhanced
         MaterialDesignTextView txtNavigationLayout = (MaterialDesignTextView) findViewById(R.id.ac_txt_down_navigation);
         AndroidUtils.setBackgroundShapeColor(txtNavigationLayout, Color.parseColor(G.appBarColor));
 
-
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1842,9 +1882,7 @@ public class ActivityChat extends ActivityEnhanced
                 llScrollNavigate.setVisibility(View.GONE);
 
                 if (countNewMessage > 0) {
-
                     for (int i = 0; i < mAdapter.getItemCount(); i++) {
-
                         if (mAdapter.getItem(i) instanceof UnreadMessage) mAdapter.remove(i);
                     }
 
@@ -1867,15 +1905,13 @@ public class ActivityChat extends ActivityEnhanced
 
                         LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-                        int lastposition = llm.findLastVisibleItemPosition();
-
-                        if (lastposition + 50 > mAdapter.getItemCount()) {
+                        int lastPosition = llm.findLastVisibleItemPosition();
+                        if (lastPosition + 50 > mAdapter.getItemCount()) {
                             recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
                         } else {
                             recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
                         }
                     }
-
                 }
             }
         });
@@ -1928,8 +1964,6 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-
-
         rippleBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1943,6 +1977,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
+        imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -2194,6 +2229,11 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void onClick(View view) {
 
+                if (!initAttach) {
+                    initAttach = true;
+                    initAttach();
+                }
+
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 itemAdapterBottomSheet();
@@ -2240,6 +2280,11 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void onClick(View v) {
+                if (!initEmoji) {
+                    initEmoji = true;
+                    setUpEmojiPopup();
+                }
+
                 emojiPopup.toggle();
             }
         });
@@ -2320,9 +2365,8 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void goToProfile() {
-        if (chatType == CHAT && chatPeerId != 134) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast
+        if (chatType == CHAT) {//TODO [Saeed Mozaffari] [2016-09-07 11:46 AM] -  in if eshtebah ast // && chatPeerId != 134
             // check for iGap message ==> chatPeerId == 134(alan baraye check kardane) ,
-            // waiting for userDetail proto
             Intent intent = new Intent(G.context, ActivityContactsProfile.class);
             intent.putExtra("peerId", chatPeerId);
             intent.putExtra("RoomId", mRoomId);
@@ -2375,8 +2419,6 @@ public class ActivityChat extends ActivityEnhanced
             LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
             llm.scrollToPositionWithOffset(unreadPosition + 1, 0);
         }
-
-
     }
 
     private void setUserStatus(String status, long time) {
@@ -2519,11 +2561,20 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    private void initLayoutHashNavigation() {
+
+    /**
+     * init layout for hashtak up and down
+     */
+    private void initLayoutHashNavigationCallback() {
 
         hashListener = new OnComplete() {
             @Override
             public void complete(boolean result, String text, String messageId) {
+
+                if (!initHash) {
+                    initHash = true;
+                    initHashView();
+                }
 
                 searchHash.setHashString(text);
                 searchHash.setPosition(messageId);
@@ -2531,7 +2582,12 @@ public class ActivityChat extends ActivityEnhanced
                 viewAttachFile.setVisibility(View.GONE);
             }
         };
+    }
 
+    /**
+     * init layout hashtak for up and down
+     */
+    private void initHashView() {
         ll_navigateHash = (LinearLayout) findViewById(R.id.ac_ll_hash_navigation);
         btnUpHash = (TextView) findViewById(R.id.ac_btn_hash_up);
         btnDownHash = (TextView) findViewById(R.id.ac_btn_hash_down);
@@ -2547,8 +2603,8 @@ public class ActivityChat extends ActivityEnhanced
                 ll_navigateHash.setVisibility(View.GONE);
                 viewAttachFile.setVisibility(View.VISIBLE);
 
-                if (mAdapter.getItem(searchHash.curentSelectedPosition).mMessage.view != null) {
-                    ((FrameLayout) mAdapter.getItem(searchHash.curentSelectedPosition).mMessage.view).setForeground(null);
+                if (mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view != null) {
+                    ((FrameLayout) mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view).setForeground(null);
                 }
             }
         });
@@ -2725,7 +2781,7 @@ public class ActivityChat extends ActivityEnhanced
                 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
             }
         } catch (Exception e) {
-            Log.e("ddddd", "activity chat   putExtra  " + e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -2863,7 +2919,7 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     /**
-     * initialize boomMenu for use in attachment
+     * initialize bottomSheet for use in attachment
      */
     private void initAttach() {
 
@@ -3919,7 +3975,6 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    private io.github.meness.emoji.EmojiPopup emojiPopup;
 
     private void setUpEmojiPopup() {
         emojiPopup = io.github.meness.emoji.EmojiPopup.Builder.fromRootView(findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
@@ -3958,14 +4013,14 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        checkIfOrientationChanged(newConfig);
+        //checkIfOrientationChanged(newConfig);
     }
 
-    private void checkIfOrientationChanged(Configuration configuration) {
-        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            getWindow().setBackgroundDrawableResource(R.drawable.newbg);
-        }
-    }
+    //private void checkIfOrientationChanged(Configuration configuration) {
+    //    if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+    //        getWindow().setBackgroundDrawableResource(R.drawable.newbg);
+    //    }
+    //}
 
 
     private boolean topMore; // more message exist in local for load in top direction
@@ -4227,7 +4282,7 @@ public class ActivityChat extends ActivityEnhanced
                      */
                     progressItem(HIDE, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
                     //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
-                    mAdapter.notifyDataSetChanged();
+                    //mAdapter.notifyDataSetChanged();
 
                     isWaitingForHistory = false;
                     allowGetHistory = false;
@@ -4897,8 +4952,6 @@ public class ActivityChat extends ActivityEnhanced
     public void clearHistory(long item) {
         final long chatId = item;
 
-        isThereAnyMoreItemToLoadFromLocal = false;
-        isThereAnyMoreItemToLoadFromServer = false;
         llScrollNavigate.setVisibility(View.GONE);
 
         // make request for clearing messages
@@ -5711,9 +5764,9 @@ public class ActivityChat extends ActivityEnhanced
 
     private class SearchHash {
 
-        public int curentSelectedPosition = 0;
+        public int currentSelectedPosition = 0;
         private String hashString = "";
-        private int curentHashposition = 0;
+        private int currentHashPosition = 0;
 
         private ArrayList<Integer> hashList = new ArrayList<>();
 
@@ -5724,19 +5777,20 @@ public class ActivityChat extends ActivityEnhanced
         public void setPosition(String messageId) {
 
             try {
-                if (mAdapter.getItem(searchHash.curentSelectedPosition).mMessage.view != null) {
-                    ((FrameLayout) mAdapter.getItem(searchHash.curentSelectedPosition).mMessage.view).setForeground(null);
+                if (mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view != null) {
+                    ((FrameLayout) mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view).setForeground(null);
                 }
             } catch (NullPointerException e) {
+                e.printStackTrace();
             }
 
-            curentHashposition = 0;
+            currentHashPosition = 0;
             hashList.clear();
 
             for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
 
                 if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
-                    curentHashposition = hashList.size() + 1;
+                    currentHashPosition = hashList.size() + 1;
                 }
 
                 if (mAdapter.getItem(i).mMessage.messageText.contains(hashString)) {
@@ -5744,46 +5798,46 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            txtHashCounter.setText(curentHashposition + " / " + hashList.size());
+            txtHashCounter.setText(currentHashPosition + " / " + hashList.size());
 
-            curentSelectedPosition = hashList.get(curentHashposition - 1);
+            currentSelectedPosition = hashList.get(currentHashPosition - 1);
 
-            if (mAdapter.getItem(curentSelectedPosition).mMessage.view != null) {
-                ((FrameLayout) mAdapter.getItem(curentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+            if (mAdapter.getItem(currentSelectedPosition).mMessage.view != null) {
+                ((FrameLayout) mAdapter.getItem(currentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
             }
         }
 
         public void downHash() {
 
-            if (curentHashposition < hashList.size()) {
-                goToSelectedPosition(hashList.get(curentHashposition));
-                curentHashposition++;
-                txtHashCounter.setText(curentHashposition + " / " + hashList.size());
+            if (currentHashPosition < hashList.size()) {
+                goToSelectedPosition(hashList.get(currentHashPosition));
+                currentHashPosition++;
+                txtHashCounter.setText(currentHashPosition + " / " + hashList.size());
             }
         }
 
         public void upHash() {
 
-            if (curentHashposition > 1) {
-                curentHashposition--;
-                goToSelectedPosition(hashList.get(curentHashposition - 1));
-                txtHashCounter.setText(curentHashposition + " / " + hashList.size());
+            if (currentHashPosition > 1) {
+                currentHashPosition--;
+                goToSelectedPosition(hashList.get(currentHashPosition - 1));
+                txtHashCounter.setText(currentHashPosition + " / " + hashList.size());
             }
         }
 
         private void goToSelectedPosition(int position) {
 
-            ((FrameLayout) mAdapter.getItem(curentSelectedPosition).mMessage.view).setForeground(null);
+            ((FrameLayout) mAdapter.getItem(currentSelectedPosition).mMessage.view).setForeground(null);
 
             recyclerView.scrollToPosition(position);
 
-            curentSelectedPosition = position;
+            currentSelectedPosition = position;
 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (mAdapter.getItem(curentSelectedPosition).mMessage.view != null) {
-                        ((FrameLayout) mAdapter.getItem(curentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+                    if (mAdapter.getItem(currentSelectedPosition).mMessage.view != null) {
+                        ((FrameLayout) mAdapter.getItem(currentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
                     }
                 }
             }, 150);

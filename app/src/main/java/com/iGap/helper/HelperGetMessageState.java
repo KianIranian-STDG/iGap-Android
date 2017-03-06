@@ -67,7 +67,7 @@ public class HelperGetMessageState {
     }
 
     /**
-     * clear getViews(ArrayList) . when getViews contain a messageId
+     * clear getViews(ArrayList) .reason : when getViews contain a messageId
      * not allow that messageId send for getState. client clear this
      * array in enter to chat for allow message to get new state
      */
