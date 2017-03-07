@@ -140,7 +140,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmList;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
@@ -210,6 +212,57 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private int limitation = 50; // limit for show member in list
     private int currentOffset = 0;
 
+    private Realm mRealm;
+    private RealmChangeListener<RealmModel> changeListener;
+    private RealmRoom mRoom;
+
+    @Override protected void onStop() {
+        super.onStop();
+
+        if (mRoom != null) mRoom.removeChangeListeners();
+    }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        if (mRealm != null) mRealm.close();
+    }
+
+    @Override protected void onResume() {
+
+        super.onResume();
+
+        mRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (mRoom != null) {
+
+            if (changeListener == null) {
+
+                changeListener = new RealmChangeListener<RealmModel>() {
+                    @Override public void onChange(final RealmModel element) {
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                String countText = ((RealmRoom) element).getSharedMediaCount();
+
+                                if (countText == null || countText.length() == 0) {
+                                    txtNumberOfSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
+                                } else {
+                                    if (HelperCalander.isLanguagePersian) {
+                                        txtNumberOfSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
+                                    } else {
+                                        txtNumberOfSharedMedia.setText(countText);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                };
+            }
+
+            mRoom.addChangeListener(changeListener);
+            changeListener.onChange(mRoom);
+        }
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -223,11 +276,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         Bundle extras = getIntent().getExtras();
         roomId = extras.getLong("RoomId");
 
+        mRealm = Realm.getDefaultInstance();
 
-        Realm realm = Realm.getDefaultInstance();
+
 
         //group info
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             //HelperError.showSnackMessage(getClientErrorCode(-2, 0));
             finish();
@@ -262,8 +316,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             e.getStackTrace();
         }
 
-
-        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+        RealmUserInfo userInfo = mRealm.where(RealmUserInfo.class).findFirst();
         if (userInfo != null) userID = userInfo.getUserId();
 
         //realm.close(); // in fillItem when make iterator with members client will be have error . This Realm instance has already been closed, making it unusable.
@@ -275,6 +328,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         G.onGroupAvatarResponse = this;
         G.onGroupAvatarDelete = this;
         G.onGroupRevokeLink = this;
+
+        ActivityShearedMedia.getCountOfSharedMedia(roomId);
     }
 
     @Override
@@ -331,30 +386,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         });
         realm.close();
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        ActivityShearedMedia.getCountOfSharedMedia(roomId, txtNumberOfSharedMedia.getText().toString(), new OnComplete() {
-            @Override
-            public void complete(boolean result, final String messageOne, String MessageTow) {
-                txtNumberOfSharedMedia.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (HelperCalander.isLanguagePersian) {
-                            txtNumberOfSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(messageOne));
-                        } else {
-                            txtNumberOfSharedMedia.setText(messageOne);
-                        }
-                    }
-                });
-            }
-        });
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
     }
 
     private BroadcastReceiver reciverOnGroupChangeName = new BroadcastReceiver() {

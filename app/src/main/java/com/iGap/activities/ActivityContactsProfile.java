@@ -55,7 +55,6 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
-import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.StructListOfContact;
 import com.iGap.module.StructMessageAttachment;
@@ -150,28 +149,48 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         }
     }
 
+    private RealmChangeListener<RealmModel> changeListener;
+    private RealmRoom mRoom;
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        if (mRealm != null) mRealm.close();
+    }
+
     @Override
     protected void onResume() {
+
         super.onResume();
 
-        ActivityShearedMedia.getCountOfSharedMedia(sheardId, txtCountOfShearedMedia.getText().toString(), new OnComplete() {
-            @Override
-            public void complete(boolean result, final String messageOne, String MessageTow) {
-                txtCountOfShearedMedia.post(new Runnable() {
-                    @Override
-                    public void run() {
+        mRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (mRoom != null) {
 
-                        if (HelperCalander.isLanguagePersian) {
-                            txtCountOfShearedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(messageOne));
-                        } else {
-                            txtCountOfShearedMedia.setText(messageOne);
-                        }
+            if (changeListener == null) {
+
+                changeListener = new RealmChangeListener<RealmModel>() {
+                    @Override public void onChange(final RealmModel element) {
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                String countText = ((RealmRoom) element).getSharedMediaCount();
+
+                                if (countText == null || countText.length() == 0) {
+                                    txtCountOfShearedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
+                                } else {
+                                    if (HelperCalander.isLanguagePersian) {
+                                        txtCountOfShearedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
+                                    } else {
+                                        txtCountOfShearedMedia.setText(countText);
+                                    }
+                                }
+                            }
+                        });
                     }
-                });
+                };
             }
-        });
 
-
+            mRoom.addChangeListener(changeListener);
+            changeListener.onChange(mRoom);
+        }
     }
 
     @Override
@@ -726,6 +745,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         setUserStatus(userStatus, lastSeen);
 
         setAvatar();
+
+        ActivityShearedMedia.getCountOfSharedMedia(sheardId);
     }
 
     private void setAvatar() {

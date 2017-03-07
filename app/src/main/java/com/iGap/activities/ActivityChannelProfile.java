@@ -129,7 +129,9 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmList;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
@@ -186,34 +188,64 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
     private int limitation = 50; // limit for show member in list
     private int currentOffset = 0;
 
+    private Realm mRealm;
+    private RealmChangeListener<RealmModel> changeListener;
+    private RealmRoom mRoom;
+
+    @Override protected void onStop() {
+        super.onStop();
+
+        if (mRoom != null) mRoom.removeChangeListeners();
+    }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        if (mRealm != null) mRealm.close();
+    }
+
     @Override
     protected void onResume() {
 
-        ActivityShearedMedia.getCountOfSharedMedia(roomId, txtSharedMedia.getText().toString(), new OnComplete() {
-            @Override
-            public void complete(boolean result, final String messageOne, String MessageTow) {
-                txtSharedMedia.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtSharedMedia.setText(messageOne);
-                        if (HelperCalander.isLanguagePersian) {
-                            txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(messageOne));
-                        } else {
-                            txtSharedMedia.setText(messageOne);
-                        }
-                    }
-                });
-            }
-        });
-
         super.onResume();
-    }
 
+        mRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (mRoom != null) {
+
+            if (changeListener == null) {
+
+                changeListener = new RealmChangeListener<RealmModel>() {
+                    @Override public void onChange(final RealmModel element) {
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                String countText = ((RealmRoom) element).getSharedMediaCount();
+
+                                if (countText == null || countText.length() == 0) {
+                                    txtSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
+                                } else {
+
+                                    if (HelperCalander.isLanguagePersian) {
+                                        txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
+                                    } else {
+                                        txtSharedMedia.setText(countText);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                };
+            }
+
+            mRoom.addChangeListener(changeListener);
+            changeListener.onChange(mRoom);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_channel);
+
+        mRealm = Realm.getDefaultInstance();
 
         G.uploaderUtil.setActivityCallbacks(this);
         G.onChannelAddMember = this;
@@ -612,6 +644,9 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                 }
             }
         });
+
+        ActivityShearedMedia.getCountOfSharedMedia(roomId);
+
     }
 
     private void showItems() {

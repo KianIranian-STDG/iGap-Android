@@ -767,13 +767,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
     }
 
-    private static void updateCountOfSharedMedia(OnComplete complete, long roomid) {
+    private static void updateCountOfSharedMedia(long roomid) {
 
         String countStr = getStringSharedMediaCount();
-
-        if (complete != null) {
-            complete.complete(true, countStr, "");
-        }
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -809,7 +805,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         return result;
     }
 
-    public static void getCountOfSharedMedia(final long roomid, String text, final OnComplete complete) {
+    public static void getCountOfSharedMedia(final long roomid) {
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
             @Override public void onClientSearchRoomHistory(final int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, String identyty) {
@@ -839,7 +835,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                             break;
                     }
 
-                    updateCountOfSharedMedia(complete, roomid);
+                    updateCountOfSharedMedia(roomid);
                 }
             }
 
@@ -848,11 +844,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         };
 
-        if (complete != null) {
-            complete.complete(true, context.getString(R.string.there_is_no_sheared_media), "");
-        }
-
-        if (text.length() == 0) {
 
             countOFImage = countOFVIDEO = countOFAUDIO = countOFVOICE = countOFGIF = countOFFILE = countOFLink = 0;
 
@@ -863,11 +854,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE);
             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomid, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL);
-        } else {
-            if (complete != null) {
-                complete.complete(true, getStringSharedMediaCount(), "");
-            }
-        }
     }
 
     //****************************************************    Adapter    ****************************************

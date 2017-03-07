@@ -1452,12 +1452,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onUpdateAvatar(final long roomId) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
 
-            }
-        });
     }
 
     @Override
