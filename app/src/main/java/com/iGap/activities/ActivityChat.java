@@ -1695,9 +1695,9 @@ public class ActivityChat extends ActivityEnhanced
                     public void onClick(View view) {
 
                         initLayoutSearchNavigation();
-
+                        findViewById(R.id.ac_green_line).setVisibility(View.GONE);
                         popupWindow.dismiss();
-                        findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
+                        //findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
                         ll_Search.setVisibility(View.VISIBLE);
                         popupWindow.dismiss();
                         ll_navigate_Message.setVisibility(View.VISIBLE);

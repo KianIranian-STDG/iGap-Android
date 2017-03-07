@@ -395,7 +395,7 @@
                     >
 
                     <com.iGap.module.MaterialDesignTextView
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
@@ -432,7 +432,7 @@
 
                     <com.iGap.module.MaterialDesignTextView
                         android:id="@+id/ac_btn_clear_message_search"
-                        android:layout_width="@dimen/dp60"
+                        android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
