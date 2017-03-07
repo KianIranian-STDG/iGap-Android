@@ -5310,9 +5310,14 @@ public class ActivityChat extends ActivityEnhanced
 
             try {
                 AbstractMessage item = mAdapter.getAdapterItem(i);
-                String mToken = item.mMessage.forwardedFrom != null ? item.mMessage.forwardedFrom.getAttachment().getToken() : item.mMessage.getAttachment().token;
 
-                if (mToken.equals(token) && (!item.mMessage.messageID.equals(messageID))) mAdapter.notifyItemChanged(i);
+                if (item.mMessage.hasAttachment()) {
+                    if (item.mMessage.getAttachment().token.equals(token) && (!item.mMessage.messageID.equals(messageID))) {
+                        mAdapter.notifyItemChanged(i);
+                    }
+                }
+
+
             } catch (Exception e) {
                 Log.e("dddddd", "activity chat    onDownloadAllEqualCashid  " + e);
             }

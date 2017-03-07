@@ -1116,7 +1116,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Long size = attachment.getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-        messageClickListener.onDownloadAllEqualCashId(token, mMessage.messageID);
+        if (!HelperDownloadFile.isDownLoading(token)) messageClickListener.onDownloadAllEqualCashId(token, mMessage.messageID);
 
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
 
