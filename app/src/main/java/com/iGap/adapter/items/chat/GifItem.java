@@ -29,7 +29,7 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     public void onPlayPauseGIF(ViewHolder holder, String localPath) {
         super.onPlayPauseGIF(holder, localPath);
 
-        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play, true);
+        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.photogif, true);
 
         GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
         if (gifDrawable != null) {
@@ -83,7 +83,7 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.image.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.findViewById(R.id.progress).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isSelected()) {
@@ -105,6 +105,12 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
                         }
                     }
                 }
+            }
+        });
+
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                holder.itemView.findViewById(R.id.progress).performClick();
             }
         });
 
