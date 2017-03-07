@@ -10,11 +10,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.InputType;
-import android.text.Spanned;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,29 +93,28 @@ public class FragmentIgapSearch extends Fragment {
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
 
         edtSearch.setInputType(InputType.TYPE_CLASS_TEXT);
-        edtSearch.setFilters(new InputFilter[] {
-            new InputFilter() {
-                public CharSequence filter(CharSequence src, int start, int end, Spanned dst, int dstart, int dend) {
 
-                    Log.e("qqqqqq", src + "  " + start + "  " + end + "    " + dst + "   " + dstart + "    " + dend);
-
-                    if (src.equals("") || (dst.length() == 0 && src.equals("@"))) {
-                        return src;
-                    }
-                    if (src.toString().matches("\\w")) {
-                        return src;
-                    }
-                    return "";
-                }
-            }
-        });
-
+        //edtSearch.setFilters(new InputFilter[] {
+        //    new InputFilter() {
+        //        public CharSequence filter(CharSequence src, int start, int end, Spanned dst, int dstart, int dend) {
+        //
+        //            Log.e("qqqqqq", src + "  " + start + "  " + end + "    " + dst + "   " + dstart + "    " + dend);
+        //
+        //            if (src.equals("") || (dst.length() == 0 && src.equals("@"))) {
+        //                return src;
+        //            }
+        //            if (src.toString().matches("\\w")) {
+        //                return src;
+        //            }
+        //            return "";
+        //        }
+        //    }
+        //});
 
 
         edtSearch.setText("@");
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -126,6 +122,16 @@ public class FragmentIgapSearch extends Fragment {
                 itemAdapter.clear();
 
                 int strSize = edtSearch.getText().toString().trim().length();
+
+                // filter some character
+                if (strSize > 1) {
+                    String _str = edtSearch.getText().toString().substring(strSize - 1);
+                    if (!_str.matches("\\w")) {
+                        edtSearch.setText(edtSearch.getText().subSequence(0, strSize - 1));
+                        edtSearch.setSelection(edtSearch.getText().length());
+                    }
+                }
+
 
                 if (strSize > 1) {
                     txtEmptyListComment.setVisibility(View.GONE);
@@ -151,7 +157,7 @@ public class FragmentIgapSearch extends Fragment {
             }
 
             @Override public void afterTextChanged(Editable editable) {
-                if (edtSearch.getText().length() == 0) {
+                if (edtSearch.getText().length() == 0 || !edtSearch.getText().toString().substring(0, 1).equals("@")) {
                     edtSearch.setText("@");
                     edtSearch.setSelection(1);
                 }

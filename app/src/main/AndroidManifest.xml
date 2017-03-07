@@ -103,8 +103,7 @@
 
         <activity
             android:name=".activities.ActivityMain"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-            android:theme="@style/AppThemeTranslucent">
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -200,8 +199,7 @@
         <activity
             android:name=".activities.ActivitySelectChat"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-            android:label="@string/select_room"
-            android:theme="@style/AppThemeTranslucent"/>
+            android:label="@string/select_room" />
 
         <receiver android:name=".module.IncomingSms"/>
         <receiver

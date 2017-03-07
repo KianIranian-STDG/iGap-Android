@@ -16,7 +16,6 @@ import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -136,18 +135,47 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
 
-        if (changeListener != null) mRealmList.addChangeListener(changeListener);
+        setListener();
+
     }
 
     @Override protected void onStop() {
         super.onStop();
 
-        if (mRealmList != null) mRealmList.removeChangeListeners();
+        if (mRealmList != null) {
+            mRealmList.removeChangeListeners();
+        }
     }
 
     @Override protected void onDestroy() {
         super.onDestroy();
         if (mRealm != null) mRealm.close();
+    }
+
+    private void setListener() {
+
+        changeListener = new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
+            @Override public void onChange(RealmResults<RealmRoomMessage> element) {
+
+                if (changesize - element.size() != 0) {
+
+                    mNewList.clear();
+                    mNewList.addAll(addTimeToList(element));
+
+                    int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+                    recyclerView.getLayoutManager().removeAllViews();
+                    recyclerView.getAdapter().notifyDataSetChanged();
+
+                    recyclerView.scrollToPosition(position);
+
+                    mListcount = element.size();
+                    changesize = element.size();
+                }
+            }
+        };
+
+        if (changeListener != null) mRealmList.addChangeListener(changeListener);
     }
 
     @Override protected void attachBaseContext(Context newBase) {
@@ -169,45 +197,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         handler = new Handler();
 
-        changeListener = new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
-            @Override public void onChange(RealmResults<RealmRoomMessage> element) {
 
-                if (changesize - element.size() != 0) {
-
-                    // int positionStart=mNewList.size();
-
-                    //  mNewList.clear();
-                    //  mNewList = addTimeToList(mRealmList);
-
-                    mNewList.addAll(addTimeToList(element));
-
-                    //// TODO: 1/2/2017  nejate  use best action
-                    //
-                    //if (adapter instanceof ImageAdapter) {
-                    //    adapter = new ImageAdapter(ActivityShearedMedia.this, mNewList);
-                    //} else if (adapter instanceof VideoAdapter) {
-                    //    adapter = new VideoAdapter(ActivityShearedMedia.this, mNewList);
-                    //} else if (adapter instanceof VoiceAdapter) {
-                    //    adapter = new VoiceAdapter(ActivityShearedMedia.this, mNewList);
-                    //} else if (adapter instanceof GifAdapter) {
-                    //    adapter = new GifAdapter(ActivityShearedMedia.this, mNewList);
-                    //} else if (adapter instanceof FileAdapter) {
-                    //    adapter = new FileAdapter(ActivityShearedMedia.this, mNewList);
-                    //} else if (adapter instanceof LinkAdapter) {
-                    //    adapter = new LinkAdapter(ActivityShearedMedia.this, mNewList);
-                    //}
-                    //
-                    //recyclerView.setAdapter(adapter);
-
-                    recyclerView.getRecycledViewPool().clear();
-                    recyclerView.getAdapter().notifyDataSetChanged();
-                    recyclerView.invalidateItemDecorations();
-
-                    mListcount = element.size();
-                    changesize = element.size();
-                }
-            }
-        };
     }
 
     @Override public void onBackPressed() {
@@ -284,6 +274,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         };
 
         recyclerView = (RecyclerView) findViewById(R.id.asm_recycler_view_sheared_media);
+        recyclerView.setItemViewCacheSize(1000);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -294,7 +285,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
-                        if (adapter.getItemCount() <= lastVisiblePosition + 15) {
+                        if (adapter.getItemCount() <= lastVisiblePosition + 25) {
 
                             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, mFilter);
                         }
@@ -487,8 +478,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         });
 
         recyclerView.setLayoutManager(gLayoutManager);
-        recyclerView.setItemViewCacheSize(1000);
-
         recyclerView.setAdapter(adapter);
 
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -535,8 +524,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         adapter = new VoiceAdapter(ActivityShearedMedia.this, mNewList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityShearedMedia.this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         recyclerView.setAdapter(adapter);
     }
 
@@ -548,8 +535,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         adapter = new VoiceAdapter(ActivityShearedMedia.this, mNewList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityShearedMedia.this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         recyclerView.setAdapter(adapter);
     }
 
@@ -571,8 +556,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         adapter = new FileAdapter(ActivityShearedMedia.this, mNewList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityShearedMedia.this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         recyclerView.setAdapter(adapter);
     }
 
@@ -595,8 +578,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         adapter = new LinkAdapter(ActivityShearedMedia.this, mNewList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityShearedMedia.this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         recyclerView.setAdapter(adapter);
     }
 
@@ -604,8 +585,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private ArrayList<StructShearedMedia> loadLoackData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter, String type) {
 
+        if (mRealmList != null) mRealmList.removeChangeListeners();
+
         mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
             contains(RealmRoomMessageFields.MESSAGE_TYPE, type).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+
+        setListener();
 
         changesize = mRealmList.size();
 
@@ -699,11 +684,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         handler.post(new Runnable() {
             @Override public void run() {
-                // mRealmList.removeChangeListeners();
 
-                Realm realm = Realm.getDefaultInstance();
-
-                realm.executeTransaction(new Realm.Transaction() {
+                mRealm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
                         for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
                             RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, false, realm);
@@ -711,11 +693,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     }
                 });
 
-
-                realm.close();
-
-                // changeListener.onChange(mRealmList);
-                // mRealmList.addChangeListener(changeListener);
             }
         });
     }
@@ -904,6 +881,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         public ArrayList<Long> SelectedList = new ArrayList<>();
         protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
+
 
         abstract void openSelectedItem(int position, RecyclerView.ViewHolder holder);
 
@@ -1184,7 +1162,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
 
-            if (!mList.get(position).isItemTime) {
+            if (holder instanceof ImageAdapter.ViewHolder) {
 
                 final ImageAdapter.ViewHolder vh = (ImageAdapter.ViewHolder) holder;
 
@@ -1290,7 +1268,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
 
-            if (!mList.get(position).isItemTime) {
+            if (holder instanceof ViewHolder) {
                 ViewHolder vh = (ViewHolder) holder;
                 File file = new File(vh.tempFilePath);
 
@@ -1566,7 +1544,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
 
-            if (!mList.get(position).isItemTime) {
+            if (holder instanceof ViewHolder) {
                 ViewHolder vh = (ViewHolder) holder;
                 File file = new File(vh.tempFilePath);
 
