@@ -937,9 +937,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mRecyclerView.setItemViewCacheSize(100);
         mRecyclerView.setDrawingCacheEnabled(true);
 
-        PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(this);
-
-        mRecyclerView.getRecycleView().setLayoutManager(preCachingLayoutManager);
+        //PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(this);
+        //mRecyclerView.getRecycleView().setLayoutManager(preCachingLayoutManager);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
+        mRecyclerView.getRecycleView().setLayoutManager(mLayoutManager);
 
         RealmResults<RealmRoom> results = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);

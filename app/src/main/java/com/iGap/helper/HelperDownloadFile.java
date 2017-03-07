@@ -362,16 +362,11 @@ public class HelperDownloadFile {
     }
 
     private static void updateView(final StructDownLoad item) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                for (UpdateListener listener : item.listeners) {
-                    if (listener != null) {
-                        listener.OnProgress(item.Token, item.progress);
-                    }
-                }
+        for (UpdateListener listener : item.listeners) {
+            if (listener != null) {
+                listener.OnProgress(item.Token, item.progress);
             }
-        });
+        }
     }
 
     private void onError(int majorCode, int minorCode, final Context context) {
