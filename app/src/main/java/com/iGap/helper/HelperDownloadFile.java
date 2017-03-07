@@ -37,7 +37,8 @@ public class HelperDownloadFile {
     public HelperDownloadFile() {
 
         onFileDownloadResponse = new OnFileDownloadResponse() {
-            @Override public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+            @Override
+            public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
 
                 String PrimaryKey = token + selector;
 
@@ -49,13 +50,13 @@ public class HelperDownloadFile {
                     if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
 
                         if (mQueue.size() > 0) {
-                                if (mQueue.get(0).priority > item.priority) {
+                            if (mQueue.get(0).priority > item.priority) {
 
-                                    addItemToQueue(item.Token + item.selector, ++item.priority);
-                                    addDownloadFromQueue();
-                                    return;
-                                }
+                                addItemToQueue(item.Token + item.selector, ++item.priority);
+                                addDownloadFromQueue();
+                                return;
                             }
+                        }
                     }
 
 
@@ -64,11 +65,13 @@ public class HelperDownloadFile {
                 }
             }
 
-            @Override public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
+            @Override
+            public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
 
             }
 
-            @Override public void onError(int majorCode, int minorCode, String token, ProtoFileDownload.FileDownload.Selector selector) {
+            @Override
+            public void onError(int majorCode, int minorCode, String token, ProtoFileDownload.FileDownload.Selector selector) {
 
                 String primaryKey = token + selector;
 
@@ -310,7 +313,8 @@ public class HelperDownloadFile {
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findAll();
 
                 for (RealmAttachment attachment : attachments) {
@@ -345,7 +349,8 @@ public class HelperDownloadFile {
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findAll();
 
                 for (RealmAttachment attachment : attachments) {
@@ -356,23 +361,29 @@ public class HelperDownloadFile {
         realm.close();
     }
 
-    private static void updateView(StructDownLoad item) {
-
-        for (UpdateListener listener : item.listeners) {
-            if (listener != null) {
-                listener.OnProgress(item.Token, item.progress);
+    private static void updateView(final StructDownLoad item) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (UpdateListener listener : item.listeners) {
+                    if (listener != null) {
+                        listener.OnProgress(item.Token, item.progress);
+                    }
+                }
             }
-        }
+        });
     }
 
     private void onError(int majorCode, int minorCode, final Context context) {
         if (majorCode == 713 && minorCode == 1) {
             ((Activity) context).runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(((Activity) context).findViewById(android.R.id.content), context.getResources().getString(R.string.E_713_1), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -381,11 +392,13 @@ public class HelperDownloadFile {
             });
         } else if (majorCode == 713 && minorCode == 2) {
             ((Activity) context).runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(((Activity) context).findViewById(android.R.id.content), context.getResources().getString(R.string.E_713_2), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -394,11 +407,13 @@ public class HelperDownloadFile {
             });
         } else if (majorCode == 713 && minorCode == 3) {
             ((Activity) context).runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(((Activity) context).findViewById(android.R.id.content), context.getResources().getString(R.string.E_713_3), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -407,11 +422,13 @@ public class HelperDownloadFile {
             });
         } else if (majorCode == 713 && minorCode == 4) {
             ((Activity) context).runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(((Activity) context).findViewById(android.R.id.content), context.getResources().getString(R.string.E_713_4), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -420,11 +437,13 @@ public class HelperDownloadFile {
             });
         } else if (majorCode == 713 && minorCode == 5) {
             ((Activity) context).runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(((Activity) context).findViewById(android.R.id.content), context.getResources().getString(R.string.E_713_5), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -433,11 +452,13 @@ public class HelperDownloadFile {
             });
         } else if (majorCode == 714) {
             ((Activity) context).runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(((Activity) context).findViewById(android.R.id.content), context.getResources().getString(R.string.E_714), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -446,11 +467,13 @@ public class HelperDownloadFile {
             });
         } else if (majorCode == 715) {
             ((Activity) context).runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(((Activity) context).findViewById(android.R.id.content), context.getResources().getString(R.string.E_715), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });

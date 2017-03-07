@@ -276,7 +276,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         putChatToDatabase(roomList);
 
-                        swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
+                        //swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                     }
                 });
             }
@@ -1007,7 +1007,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      */
     private void putChatToDatabase(final List<ProtoGlobal.Room> rooms) {
 
-        mRealm.executeTransaction(new Realm.Transaction() {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
@@ -1028,6 +1028,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
                     item.deleteFromRealm();
                 }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
             }
         });
     }

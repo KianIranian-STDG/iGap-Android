@@ -498,7 +498,7 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
             }
-        }, 20);
+        }, 25);
 
         chatTypeStatic = chatType;
         mRoomIdStatic = mRoomId;
@@ -532,7 +532,7 @@ public class ActivityChat extends ActivityEnhanced
             public void run() {
                 initMain();
             }
-        }, 10);
+        }, 20);
     }
 
     /**
@@ -4282,7 +4282,7 @@ public class ActivityChat extends ActivityEnhanced
                      */
                     progressItem(HIDE, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
                     //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
-                    //mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyDataSetChanged();
 
                     isWaitingForHistory = false;
                     allowGetHistory = false;
