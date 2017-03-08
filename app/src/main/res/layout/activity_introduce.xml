@@ -96,7 +96,7 @@
             android:foregroundGravity="center"
             android:scaleType="centerInside"
             android:src="@drawable/transfer"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <!--page 5-->
