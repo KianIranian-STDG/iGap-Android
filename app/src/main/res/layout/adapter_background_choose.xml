@@ -20,7 +20,8 @@
             android:layout_height="@dimen/dp200"
             android:layout_gravity="center"
             android:scaleType="centerInside"
-            android:src="@mipmap/add_chat_background"/>
+            android:src="@drawable/add_chat_background_setting"
+            />
 
     </android.support.v7.widget.CardView>
 

@@ -118,6 +118,6 @@
     <color name="messageBox_replyBoxBackgroundReceive">#f2f2f2</color>
     <color name="colorOldBlack">#2A2A2A</color>
     <color name="room_message_blue">#007eff</color>
-    <color name="room_message_gray">#FF616161</color>
+    <color name="room_message_gray">#3e616161</color>
 
 </resources>

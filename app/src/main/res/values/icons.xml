@@ -64,7 +64,19 @@
     <string name="md_videocam">\ue04b</string>
     <string name="md_library_music">\ue030</string>
     <string name="md_folder">\ue2c7</string>
-    <string name="md_gps">\ue8b4</string>
+
+
+    <string name="icon_location">\ue901</string>
+    <string name="icon_music">\ue911</string>
+    <string name="icon_file_empty">\ue924</string>
+    <string name="icon_brush">\ue902</string>
+    <string name="icon_folder">\ue900</string>
+    <string name="icon_keyboard_arrow_down">\ue313</string>
+    <string name="icon_user">\uf007</string>
+    <string name="icon_camera">\uf030</string>
+    <string name="icon_video_camera">\uf03d</string>
+    <string name="icon_photo">\uf03e</string>
+    <string name="icon_send">\ue163</string>
 
 
     <string name="md_eraser">&#x61;</string>

@@ -366,7 +366,8 @@
                             android:layout_height="@dimen/dp48"
                             android:layout_marginLeft="@dimen/dp4"
                             android:scaleType="centerCrop"
-                            android:src="@mipmap/add_chat_background3"/>
+                            android:src="@drawable/add_chat_background"
+                            />
 
                         <TextView
                             android:layout_width="match_parent"

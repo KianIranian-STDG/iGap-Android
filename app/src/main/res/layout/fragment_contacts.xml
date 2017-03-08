@@ -161,7 +161,8 @@
                     <com.iGap.module.CircleImageView
                         android:layout_width="@dimen/dp48"
                         android:layout_height="@dimen/dp48"
-                        android:src="@mipmap/add_chat_background3" />
+                        android:src="@drawable/add_chat_background"
+                        />
 
 
                     <com.iGap.module.CustomTextViewMedium
