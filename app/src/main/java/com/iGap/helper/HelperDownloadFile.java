@@ -311,19 +311,24 @@ public class HelperDownloadFile {
 
     private static void setThumbnailPathDataBaseAttachment(final String token, final String name) {
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        G.handler.post(new Runnable() {
             @Override
-            public void execute(Realm realm) {
-                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findAll();
-                for (RealmAttachment attachment : attachments) {
-                    attachment.setLocalThumbnailPath(name);
-                }
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                realm.close();
+            public void run() {
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findAll();
+                        for (RealmAttachment attachment : attachments) {
+                            attachment.setLocalThumbnailPath(name);
+                        }
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        realm.close();
+                    }
+                });
             }
         });
     }
