@@ -23,6 +23,11 @@
     <color name="default_shadow_color">#88757575</color>
     <color name="transparent">#00000000</color>
 
+    <color name="notification_text">@color/gray_4c</color>
+    <color name="notification_background">@color/white</color>
+
+    <color name="notification_music_background">@color/white</color>
+    <color name="notification_music_icons">@color/gray_4c</color>
     //mo
     <!--toolbar-->
 

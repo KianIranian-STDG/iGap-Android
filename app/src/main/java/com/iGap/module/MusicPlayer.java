@@ -216,6 +216,7 @@ public class MusicPlayer {
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
 
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         isPause = true;
