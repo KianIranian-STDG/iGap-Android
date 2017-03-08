@@ -545,9 +545,16 @@ public class ActivityChat extends ActivityEnhanced
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mRoomId = extras.getLong("RoomId");
+            chatPeerId = extras.getLong("peerId");
             realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
+
+            avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
+            txtName = (TextView) findViewById(R.id.chl_txt_name);
+            txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
+            viewGroupLastSeen = (ViewGroup) findViewById(R.id.chl_txt_viewGroup_seen);
+            imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
             /**
              * need this info for load avatar
              */
@@ -569,23 +576,6 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
 
-                avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
-                txtName = (TextView) findViewById(R.id.chl_txt_name);
-                txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
-                viewGroupLastSeen = (ViewGroup) findViewById(R.id.chl_txt_viewGroup_seen);
-                imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
-
-                if (title != null) {
-                    txtName.setText(title);
-                }
-
-                /**
-                 * change english number to persian number
-                 */
-                if (HelperCalander.isLanguagePersian) {
-                    txtName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtName.getText().toString()));
-                }
-
                 if (chatType == CHAT) {
                     setUserStatus(userStatus, lastSeen);
                 } else if ((chatType == GROUP) || (chatType == CHANNEL)) {
@@ -598,15 +588,33 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
 
-                /**
-                 * change english number to persian number
-                 */
-                if (HelperCalander.isLanguagePersian) {
-                    txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
-                }
 
-                setAvatar();
+            } else if (chatPeerId != 0) {
+                /**
+                 * when user start new chat this block will be called
+                 */
+                chatType = CHAT;
+                RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                title = realmRegisteredInfo.getDisplayName();
+                lastSeen = realmRegisteredInfo.getLastSeen();
+                userStatus = realmRegisteredInfo.getStatus();
+                setUserStatus(userStatus, lastSeen);
             }
+
+            if (title != null) {
+                txtName.setText(title);
+            }
+            /**
+             * change english number to persian number
+             */
+            if (HelperCalander.isLanguagePersian) {
+                txtName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtName.getText().toString()));
+            }
+            if (HelperCalander.isLanguagePersian) {
+                txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+            }
+
+            setAvatar();
         }
     }
 
