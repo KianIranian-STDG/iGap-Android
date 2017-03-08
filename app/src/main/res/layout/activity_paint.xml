@@ -150,6 +150,7 @@
             android:text="@string/md_save"
             android:textAlignment="gravity"
             android:textColor="@color/colorPrimary"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textSize="@dimen/sp32"
             />
 
