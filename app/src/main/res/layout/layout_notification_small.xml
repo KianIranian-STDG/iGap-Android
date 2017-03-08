@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="64dp"
-              android:background="@color/gray_5c"
+    android:background="@color/notification_background"
               android:gravity="center"
               android:layoutDirection="ltr"
               android:orientation="horizontal"
@@ -40,7 +40,7 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="New Text"
-                android:textColor="@color/white"
+                android:textColor="@color/notification_text"
                 android:textDirection="ltr"
                 android:textSize="@dimen/sp16"
                 />
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="10:52"
-                android:textColor="@color/white"
+                android:textColor="@color/notification_text"
                 android:textSize="@dimen/sp12"
                 />
 
@@ -67,7 +67,7 @@
             android:gravity="left"
             android:singleLine="true"
             android:text="New Text"
-            android:textColor="@color/white"
+            android:textColor="@color/notification_text"
             android:textSize="@dimen/sp12"
             />
 

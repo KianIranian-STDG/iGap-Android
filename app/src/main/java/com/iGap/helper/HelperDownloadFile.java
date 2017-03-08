@@ -304,42 +304,45 @@ public class HelperDownloadFile {
             case SMALL_THUMBNAIL:
             case LARGE_THUMBNAIL:
                 String dirPathThumpnail = G.DIR_TEMP + "/" + item.path;
-                setThumpnailPathDataBaseAttachment(token, dirPathThumpnail);
+                setThumbnailPathDataBaseAttachment(token, dirPathThumpnail);
                 break;
         }
     }
 
-    private static void setThumpnailPathDataBaseAttachment(final String token, final String name) {
+    private static void setThumbnailPathDataBaseAttachment(final String token, final String name) {
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        final Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findAll();
-
                 for (RealmAttachment attachment : attachments) {
                     attachment.setLocalThumbnailPath(name);
                 }
             }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                realm.close();
+            }
         });
-        realm.close();
     }
 
     public static boolean isDownLoading(String token) {
 
-        String primarykey = token + ProtoFileDownload.FileDownload.Selector.FILE;
+        String primaryKey = token + ProtoFileDownload.FileDownload.Selector.FILE;
 
-        if (list.containsKey(primarykey)) return true;
+        if (list.containsKey(primaryKey)) return true;
 
         return false;
     }
 
     public static int getProgress(String token) {
 
-        String primarykey = token + ProtoFileDownload.FileDownload.Selector.FILE;
+        String primaryKey = token + ProtoFileDownload.FileDownload.Selector.FILE;
 
-        if (list.containsKey(primarykey)) {
-            return list.get(primarykey).progress;
+        if (list.containsKey(primaryKey)) {
+            return list.get(primaryKey).progress;
         } else {
             return 0;
         }
