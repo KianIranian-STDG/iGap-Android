@@ -21,12 +21,7 @@ public class ClientSearchRoomHistoryResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.Builder builder = (ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.Builder) message;
-//        builder.getTotalCount();
-//        builder.getNotDeletedCount();
-//        builder.getResultList();
-
         G.onClientSearchRoomHistory.onClientSearchRoomHistory(builder.getTotalCount(), builder.getNotDeletedCount(), builder.getResultList(), identity);
-
     }
 
 
@@ -38,7 +33,7 @@ public class ClientSearchRoomHistoryResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        G.onClientSearchRoomHistory.onError(majorCode, minorCode);
+        G.onClientSearchRoomHistory.onError(majorCode, minorCode, identity);
     }
 }
 

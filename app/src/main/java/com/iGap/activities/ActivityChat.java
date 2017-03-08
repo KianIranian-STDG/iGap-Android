@@ -4306,40 +4306,45 @@ public class ActivityChat extends ActivityEnhanced
      * @param progressState SHOW or HIDE state detect with enum
      * @param direction define direction for show progress in UP or DOWN
      */
-    private void progressItem(ProgressState progressState, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        int progressIndex = 0;
-        if (direction == ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN) {
-            // direction down not tested yet
-            progressIndex = mAdapter.getAdapterItemCount() - 1;
-        }
-        if (progressState == SHOW) {
-            if ((mAdapter.getAdapterItemCount() > 0) && !(mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+    private void progressItem(final ProgressState progressState, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int progressIndex = 0;
+                if (direction == ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN) {
+                    // direction down not tested yet
+                    progressIndex = mAdapter.getAdapterItemCount() - 1;
+                }
+                if (progressState == SHOW) {
+                    if ((mAdapter.getAdapterItemCount() > 0) && !(mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
+                        recyclerView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                            }
+                        });
                     }
-                });
-            }
-        } else {
-            /**
-             * i do this action with delay because sometimes instance wasn't successful
-             * for detect progress so client need delay for detect this instance
-             */
-            if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
-                mAdapter.remove(progressIndex);
-            } else {
-                final int index = progressIndex;
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(index) instanceof ProgressWaiting)) {
-                            mAdapter.remove(index);
-                        }
+                } else {
+                    /**
+                     * i do this action with delay because sometimes instance wasn't successful
+                     * for detect progress so client need delay for detect this instance
+                     */
+                    if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
+                        mAdapter.remove(progressIndex);
+                    } else {
+                        final int index = progressIndex;
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(index) instanceof ProgressWaiting)) {
+                                    mAdapter.remove(index);
+                                }
+                            }
+                        }, 500);
                     }
-                }, 500);
+                }
             }
-        }
+        });
     }
 
     @Override

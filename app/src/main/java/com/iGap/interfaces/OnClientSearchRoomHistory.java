@@ -7,6 +7,6 @@ public interface OnClientSearchRoomHistory {
 
     void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, String identity);
 
-    void onError(int majorCode, int minorCode);
+    void onError(int majorCode, int minorCode, String identity);
 
 }
