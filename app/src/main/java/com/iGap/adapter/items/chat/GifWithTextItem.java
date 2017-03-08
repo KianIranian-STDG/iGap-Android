@@ -95,8 +95,6 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
 
-        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.photogif, true);
-
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

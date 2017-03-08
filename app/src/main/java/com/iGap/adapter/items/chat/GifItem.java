@@ -83,7 +83,6 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.photogif, true);
 
         holder.itemView.findViewById(R.id.progress).setOnClickListener(new View.OnClickListener() {
             @Override
