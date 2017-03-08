@@ -259,6 +259,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
             mRoom.addChangeListener(changeListener);
             changeListener.onChange(mRoom);
+        } else {
+            txtNumberOfSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
         }
 
         LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));

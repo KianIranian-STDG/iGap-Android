@@ -237,6 +237,8 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
             mRoom.addChangeListener(changeListener);
             changeListener.onChange(mRoom);
+        } else {
+            txtSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
         }
     }
 

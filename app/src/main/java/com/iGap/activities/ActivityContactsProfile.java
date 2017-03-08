@@ -162,7 +162,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         super.onResume();
 
-        mRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        mRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, sheardId).findFirst();
         if (mRoom != null) {
 
             if (changeListener == null) {
@@ -190,6 +190,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
             mRoom.addChangeListener(changeListener);
             changeListener.onChange(mRoom);
+        } else {
+            txtCountOfShearedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
         }
     }
 
