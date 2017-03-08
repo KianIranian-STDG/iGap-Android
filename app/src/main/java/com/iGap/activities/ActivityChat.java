@@ -1373,7 +1373,8 @@ public class ActivityChat extends ActivityEnhanced
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
 
-            if (!messageInfo.isTimeOrLogMessage()) {
+            ProtoGlobal.RoomMessageType messageType = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType;
+            if (!messageInfo.isTimeOrLogMessage() || (messageType == LOG)) {
                 int index = 0;
                 if (addTop && messageInfo.showTime) {
 
@@ -1393,8 +1394,7 @@ public class ActivityChat extends ActivityEnhanced
                     mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                 }
 
-
-                switch (messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType) {
+                switch (messageType) {
                     case TEXT:
                         if (!addTop) {
                             mAdapter.add(new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
@@ -4282,11 +4282,16 @@ public class ActivityChat extends ActivityEnhanced
                      */
                     progressItem(HIDE, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
                     //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
-                    mAdapter.notifyDataSetChanged();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            recyclerView.removeOnScrollListener(scrollListener);
+                        }
+                    });
 
                     isWaitingForHistory = false;
                     allowGetHistory = false;
-                    recyclerView.removeOnScrollListener(scrollListener);
                     if (majorCode == 5) {
                         //TODO [Saeed Mozaffari] [2017-02-28 3:56 PM] - retry for get message after timeout
                     }

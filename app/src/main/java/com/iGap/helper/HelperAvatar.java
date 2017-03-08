@@ -27,11 +27,14 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * helper avatar for add or delete avatars for user or room
  */
 public class HelperAvatar {
+
+    private static HashMap<Long, OnAvatarGet> onAvatarGetHashMap = new HashMap<>();
 
     public enum AvatarType {
         USER, ROOM
@@ -112,7 +115,7 @@ public class HelperAvatar {
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
                 onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalThumbnailPath(), ownerId);
             } else {
-
+                onAvatarGetHashMap.put(ownerId, onAvatarGet);
                 new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
                     @Override
                     public void onDownload(final String filepath, final String token) {
@@ -137,7 +140,14 @@ public class HelperAvatar {
                                         Realm realm1 = Realm.getDefaultInstance();
                                         for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).findAll()) {
                                             if (realmAvatar1.getFile().getToken().equals(token)) {
-                                                onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
+                                                //onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
+                                                OnAvatarGet onAvatarGetCallback = (onAvatarGetHashMap.get(realmAvatar1.getOwnerId()));
+                                                if (onAvatarGetCallback != null) {
+                                                    onAvatarGetCallback.onAvatarGet(filepath, realmAvatar1.getOwnerId());
+                                                    onAvatarGetHashMap.remove(realmAvatar1.getOwnerId());
+                                                } else {
+                                                    onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
+                                                }
                                                 break;
                                             }
                                         }
@@ -261,26 +271,31 @@ public class HelperAvatar {
     public static void avatarDelete(final long ownerId, final long avatarId, final AvatarType avatarType, @Nullable final OnAvatarDelete onAvatarDelete) {
 
         new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
                         if (realmAvatar != null) {
                             realmAvatar.deleteFromRealm();
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
+                    @Override
+                    public void onSuccess() {
 
                         if (onAvatarDelete != null) {
                             getAvatar(ownerId, avatarType, new OnAvatarGet() {
-                                @Override public void onAvatarGet(String avatarPath, long ownerId) {
+                                @Override
+                                public void onAvatarGet(String avatarPath, long ownerId) {
                                     onAvatarDelete.latestAvatarPath(avatarPath);
                                 }
 
-                                @Override public void onShowInitials(String initials, String color) {
+                                @Override
+                                public void onShowInitials(String initials, String color) {
                                     onAvatarDelete.showInitials(initials, color);
                                 }
                             });
@@ -289,7 +304,8 @@ public class HelperAvatar {
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
-                    @Override public void onError(Throwable error) {
+                    @Override
+                    public void onError(Throwable error) {
 
                         if (onAvatarDelete != null) {
                             String[] initials = showInitials(ownerId, avatarType);

@@ -1073,20 +1073,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void OnProgress(String token, int progress) {
 
                     if (progress == 100) {
-                        //G.handler.post(new Runnable() {
-                        //    @Override
-                        //    public void run() {
-                        //        String type;
-                        //        if (mMessage.forwardedFrom != null) {
-                        //            type = mMessage.forwardedFrom.getMessageType().toString().toLowerCase();
-                        //        } else {
-                        //            type = mMessage.messageType.toString().toLowerCase();
-                        //        }
-                        //        if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-                        //            onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
-                        //        }
-                        //    }
-                        //});
                         G.currentActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1100,7 +1086,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 if (type.contains("image") || type.contains("video") || type.contains("gif")) {
                                     onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
                                 }
-
                             }
                         });
                     }
@@ -1145,22 +1130,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void OnProgress(final String token, final int progress) {
 
-                    //G.handler.post(new Runnable() {
-                    //    @Override
-                    //    public void run() {
-                    //        if (progress == 100) {
-                    //            progressBar.setVisibility(View.GONE);
-                    //            contentLoading.setVisibility(View.GONE);
-                    //
-                    //            progressBar.performProgress();
-                    //
-                    //            onLoadThumbnailFromLocal(holder, _path, LocalFileType.FILE);
-                    //
-                    //        } else {
-                    //            progressBar.withProgress(progress);
-                    //        }
-                    //    }
-                    //});
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

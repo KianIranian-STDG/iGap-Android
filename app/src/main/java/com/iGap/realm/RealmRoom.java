@@ -121,7 +121,7 @@ public class RealmRoom extends RealmObject {
         realmRoom.setType(RoomType.convert(room.getType()));
         realmRoom.setUnreadCount(room.getUnreadCount());
         realmRoom.setReadOnly(room.getReadOnly());
-        realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - agar mute ro az server gereftim be jaye false sabt mikonim
+        //realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - after get mute state from server unComment this code and set server value
         realmRoom.setActionState(null, 0);
         switch (room.getType()) {
             case CHANNEL:
