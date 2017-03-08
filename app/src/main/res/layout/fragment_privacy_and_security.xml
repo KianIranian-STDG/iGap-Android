@@ -27,7 +27,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
+                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"

@@ -35,7 +35,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     public void onPlayPauseGIF(ViewHolder holder, String localPath) {
         super.onPlayPauseGIF(holder, localPath);
 
-        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_play, true);
+        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.photogif, true);
 
         GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
         if (gifDrawable != null) {
@@ -95,7 +95,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
 
-        holder.image.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isSelected()) {
@@ -117,6 +117,12 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
                         }
                     }
                 }
+            }
+        });
+
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                holder.itemView.findViewById(R.id.progress).performClick();
             }
         });
 

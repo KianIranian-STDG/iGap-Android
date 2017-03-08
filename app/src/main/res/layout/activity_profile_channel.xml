@@ -55,7 +55,7 @@
                             android:text="@string/st_titleToolbar"
                             android:textColor="@color/whit_background"
                             android:textSize="@dimen/sp22"
-                            android:textStyle="bold"
+                            android:textStyle="normal"
                             android:visibility="gone"/>
 
                         <com.iGap.libs.rippleeffect.RippleView
@@ -129,7 +129,8 @@
                         android:textColor="@android:color/white"
                         android:maxLength="24"
                         android:textSize="@dimen/sp16"
-                        android:textStyle="bold"/>
+                        android:textStyle="normal"
+                        />
 
                 </LinearLayout>
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -160,6 +161,7 @@
 
 
                     <com.iGap.module.HeaderTextview
+                        fontPath="fonts/IRANSansMobile_Bold.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -338,6 +340,7 @@
                     android:visibility="visible">
 
                     <com.iGap.module.HeaderTextview
+                        fontPath="fonts/IRANSansMobile_Bold.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
