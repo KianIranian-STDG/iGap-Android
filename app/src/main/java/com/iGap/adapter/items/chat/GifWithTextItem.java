@@ -95,7 +95,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             setTextIfNeeded(holder.messageText, mMessage.messageText);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isSelected()) {
@@ -120,9 +120,9 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             }
         });
 
-        holder.image.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.findViewById(R.id.progress).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                holder.itemView.findViewById(R.id.progress).performClick();
+                holder.image.performClick();
             }
         });
 
