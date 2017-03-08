@@ -5820,7 +5820,9 @@ public class ActivityChat extends ActivityEnhanced
                     currentHashPosition = hashList.size() + 1;
                 }
 
-                if (mAdapter.getItem(i).mMessage.messageText.contains(hashString)) {
+                String mText = mAdapter.getItem(i).mMessage.forwardedFrom != null ? mAdapter.getItem(i).mMessage.forwardedFrom.getMessage() : mAdapter.getItem(i).mMessage.messageText;
+
+                if (mText.contains(hashString)) {
                     hashList.add(i);
                 }
             }
