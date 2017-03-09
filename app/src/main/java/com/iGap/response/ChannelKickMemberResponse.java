@@ -13,6 +13,7 @@ public class ChannelKickMemberResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public String identity;
+    public boolean isDeleted = false;
 
     public ChannelKickMemberResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -36,6 +37,7 @@ public class ChannelKickMemberResponse extends MessageHandler {
                 for (RealmMember realmMember : realmRoom.getChannelRoom().getMembers()) {
                     if (realmMember.getPeerId() == builder.getMemberId()) {
                         realmMember.deleteFromRealm();
+                        isDeleted = true;
                         break;
                     }
                 }
@@ -43,8 +45,10 @@ public class ChannelKickMemberResponse extends MessageHandler {
         });
         realm.close();
 
-        if (G.onChannelKickMember != null) {
-            G.onChannelKickMember.onChannelKickMember(builder.getRoomId(), builder.getMemberId());
+        if (isDeleted) {
+            if (G.onChannelKickMember != null) {
+                G.onChannelKickMember.onChannelKickMember(builder.getRoomId(), builder.getMemberId());
+            }
         }
 
     }

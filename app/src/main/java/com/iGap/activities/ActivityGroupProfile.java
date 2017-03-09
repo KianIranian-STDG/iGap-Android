@@ -25,10 +25,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
@@ -36,7 +33,6 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,10 +48,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.items.ContactItemGroupProfile;
-import com.iGap.fragments.FragmentListAdmin;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
+import com.iGap.fragments.FragmentShowMember;
 import com.iGap.fragments.ShowCustomList;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
@@ -68,31 +63,24 @@ import com.iGap.interfaces.OnAvatarDelete;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermission;
-import com.iGap.interfaces.OnGroupAddAdmin;
 import com.iGap.interfaces.OnGroupAddMember;
-import com.iGap.interfaces.OnGroupAddModerator;
 import com.iGap.interfaces.OnGroupAvatarDelete;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupCheckUsername;
 import com.iGap.interfaces.OnGroupDelete;
 import com.iGap.interfaces.OnGroupEdit;
-import com.iGap.interfaces.OnGroupGetMemberList;
-import com.iGap.interfaces.OnGroupKickAdmin;
 import com.iGap.interfaces.OnGroupKickMember;
-import com.iGap.interfaces.OnGroupKickModerator;
 import com.iGap.interfaces.OnGroupLeft;
 import com.iGap.interfaces.OnGroupRemoveUsername;
 import com.iGap.interfaces.OnGroupRevokeLink;
 import com.iGap.interfaces.OnGroupUpdateUsername;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
-import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
-import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
@@ -100,7 +88,6 @@ import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupCheckUsername;
-import com.iGap.proto.ProtoGroupGetMemberList;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
 import com.iGap.realm.RealmGroupRoom;
@@ -120,7 +107,6 @@ import com.iGap.request.RequestGroupAvatarAdd;
 import com.iGap.request.RequestGroupCheckUsername;
 import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupEdit;
-import com.iGap.request.RequestGroupGetMemberList;
 import com.iGap.request.RequestGroupKickAdmin;
 import com.iGap.request.RequestGroupKickMember;
 import com.iGap.request.RequestGroupKickModerator;
@@ -129,16 +115,7 @@ import com.iGap.request.RequestGroupRemoveUsername;
 import com.iGap.request.RequestGroupRevokeLink;
 import com.iGap.request.RequestGroupUpdateUsername;
 import com.iGap.request.RequestUserInfo;
-import com.mikepenz.fastadapter.AbstractAdapter;
-import com.mikepenz.fastadapter.FastAdapter;
-import com.mikepenz.fastadapter.IAdapter;
-import com.mikepenz.fastadapter.IItem;
-import com.mikepenz.fastadapter.IItemAdapter;
-import com.mikepenz.fastadapter.adapters.HeaderAdapter;
-import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -153,7 +130,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
 import static com.iGap.R.id.fragmentContainer_group_profile;
-import static com.iGap.realm.enums.RoomType.GROUP;
 
 /**
  * Created by android3 on 9/18/2016.
@@ -168,9 +144,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     LinearLayout layoutMemberCanAddMember;
     LinearLayout layoutNotificatin;
     LinearLayout layoutDeleteAndLeftGroup;
-    //List<StructContactInfo> contacts;
-    ItemAdapter itemAdapter;
-    RecyclerView recyclerView;
+
     AttachFile attachFile;
     private CircleImageView imvGroupAvatar;
     private TextView txtGroupNameTitle;
@@ -178,12 +152,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private TextView txtGroupDescription;
     private TextView txtNumberOfSharedMedia;
     private TextView txtMemberNumber;
-    private TextView txtMore;
+
     private AppBarLayout appBarLayout;
     private FloatingActionButton fab;
     private String tmp = "";
-    private int numberUploadItem = 5;
-    private FastAdapter fastAdapter;
+
     private long roomId;
     private String title;
     private String description;
@@ -194,7 +167,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private GroupChatRole role;
     private long noLastMessage;
     private String participantsCountLabel;
-    private RealmList<RealmMember> members;
+
     public static OnMenuClick onMenuClick;
     private Long userID = 0l;
     private boolean isPrivate;
@@ -208,9 +181,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private PopupWindow popupWindow;
     private ProgressBar prgWait;
 
-    private RealmList<RealmMember> memberList;
-    private int limitation = 50; // limit for show member in list
-    private int currentOffset = 0;
+    private boolean isNeedgetContactlist = true;
 
     private Realm mRealm;
     private RealmChangeListener<RealmModel> changeListener;
@@ -280,8 +251,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         mRealm = Realm.getDefaultInstance();
 
-
-
         //group info
         RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
@@ -298,8 +267,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         linkUsername = realmGroupRoom.getUsername();
         isPrivate = realmGroupRoom.isPrivate();
         participantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
-        members = realmGroupRoom.getMembers();
-        memberList = realmGroupRoom.getMembers();
         description = realmGroupRoom.getDescription();
 
         ViewGroup listMemberGroup = (ViewGroup) findViewById(R.id.agp_root_layout_group_add_member);
@@ -695,12 +662,18 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         }
 
+        TextView txtShowMember = (TextView) findViewById(R.id.agp_txt_show_member);
+        txtShowMember.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
 
-        txtMore = (TextView) findViewById(R.id.agp_txt_more);
-        txtMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showItems();
+                FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userID, "", isNeedgetContactlist);
+                getSupportFragmentManager().beginTransaction()
+                    .addToBackStack("null")
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(R.id.fragmentContainer_group_profile, fragment, "Show_member")
+                    .commit();
+
+                isNeedgetContactlist = false;
             }
         });
 
@@ -709,6 +682,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onClick(View view) {
                 addMemberToGroup();
+
             }
         });
 
@@ -716,7 +690,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         txtSetAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setMemberRoleToAdmin();
+
+                showListForCustomRole(ProtoGlobal.GroupRoom.Role.ADMIN.toString());
             }
         });
 
@@ -724,7 +699,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         txtAddModerator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setMemberRoleToModerator();
+                showListForCustomRole(ProtoGlobal.GroupRoom.Role.MODERATOR.toString());
             }
         });
 
@@ -853,14 +828,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         showAvatar();
         setUiIndependentRole();
         initRecycleView();
-        getMemberList();
+
         //TODO [Saeed Mozaffari] [2016-11-29 3:12 PM] - please impalement this callbacks
         onGroupAddMemberCallback();
         onGroupKickMemberCallback();
-        onSetAdminCallback();
-        onGroupKickAdminCallback();
-        onGroupAddModeratorCallback();
-        onGroupKickModeratorCallback();
+
     }
 
     private void dialogCopyLink() {
@@ -1219,110 +1191,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
 
-    private void getMemberList() {
-
-        G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-
-                if (identity != null && Long.parseLong(identity) == roomId) {
-
-                    /**
-                     * because in other state before currentOffset plussed with limitation
-                     * just use from currentOffset
-                     */
-                    int limit;
-                    if (currentOffset != 0) {
-                        limit = currentOffset;
-                    } else {
-                        limit = limitation;
-                    }
-
-                    if (!userExistInList(user.getId()) && itemAdapter.getAdapterItemCount() < limit) { // if user exist in current list don't add that, because maybe duplicated this user and show twice.
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Realm realm = Realm.getDefaultInstance();
-                                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
-
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                RealmGroupRoom realmGroupRoom = null;
-                                if (realmRoom != null) {
-                                    realmGroupRoom = realmRoom.getGroupRoom();
-                                }
-
-                                final StructContactInfo struct = new StructContactInfo(user.getId(), user.getDisplayName(), user.getStatus().toString(), false, false, user.getPhone() + "");
-                                if (realmGroupRoom != null) {
-                                    RealmList<RealmMember> result = realmGroupRoom.getMembers();
-
-                                    String _Role = "";
-                                    for (int i = 0; i < result.size(); i++) {
-                                        if (result.get(i).getPeerId() == user.getId()) {
-                                            _Role = result.get(i).getRole();
-                                            break;
-                                        }
-                                    }
-                                    struct.role = _Role;
-                                }
-
-                                if (realmRegisteredInfo != null) {
-                                    struct.avatar = realmRegisteredInfo.getLastAvatar();
-                                    struct.initials = realmRegisteredInfo.getInitials();
-                                    struct.color = realmRegisteredInfo.getColor();
-                                    struct.lastSeen = realmRegisteredInfo.getLastSeen();
-                                    struct.status = realmRegisteredInfo.getStatus();
-                                    struct.userID = userID;
-                                }
-
-
-                                IItem item = new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get());
-                                if (struct.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
-                                    itemAdapter.add(0, item);
-                                } else {
-                                    itemAdapter.add(item);
-                                }
-
-                                //itemAdapter.notifyDataSetChanged();
-
-                                realm.close();
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onUserInfoTimeOut() {
-
-            }
-
-            @Override
-            public void onUserInfoError(int majorCode, int minorCode) {
-
-            }
-        };
-
-        G.onGroupGetMemberList = new OnGroupGetMemberList() {
-            @Override
-            public void onGroupGetMemberList(final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtMemberNumber.setText(members.size() + "");
-                        //compareMemberList(memberList, members);
-                    }
-                });
-
-                for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
-                    new RequestUserInfo().userInfo(member.getUserId(), roomId + "");
-                }
-            }
-        };
-
-        new RequestGroupGetMemberList().getMemberList(roomId);
-    }
-
     private void setAvatarGroup() {
 
         Realm realm = Realm.getDefaultInstance();
@@ -1359,7 +1227,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void initRecycleView() {
 
-
         onMenuClick = new OnMenuClick() {
             @Override
             public void clicked(View view, StructContactInfo info) {
@@ -1367,206 +1234,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         };
 
-
-        //create our FastAdapter
-        fastAdapter = new FastAdapter<>();
-        fastAdapter.withSelectable(true);
-
-        //create our adapters
-        final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
-        final HeaderAdapter headerAdapter = new HeaderAdapter();
-        itemAdapter = new ItemAdapter();
-        itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroupProfile>() {
-            @Override
-            public boolean filter(ContactItemGroupProfile item, CharSequence constraint) {
-                return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
-            }
-        });
-        fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroupProfile>() {
-            @Override
-            public boolean onClick(View v, IAdapter adapter, final ContactItemGroupProfile item, final int position) {
-
-                try {
-                    HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermission() {
-                        @Override
-                        public void Allow() {
-                            ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
-                            Intent intent = null;
-
-                            if (contactItemGroupProfile.mContact.peerId == userID) {
-                                intent = new Intent(ActivityGroupProfile.this, ActivitySetting.class);
-                            } else {
-                                intent = new Intent(ActivityGroupProfile.this, ActivityContactsProfile.class);
-
-
-                                intent.putExtra("peerId", contactItemGroupProfile.mContact.peerId);
-                                intent.putExtra("RoomId", roomId);
-                                intent.putExtra("enterFrom", GROUP.toString());
-                            }
-
-                            finish();
-                            if (ActivityChat.activityChat != null) ActivityChat.activityChat.finish();
-
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-
-                        }
-
-                        @Override
-                        public void deny() {
-
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                return false;
-            }
-        });
-
-        fastAdapter.withOnLongClickListener(new FastAdapter.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v, IAdapter adapter, IItem item, int position) {
-                ContactItemGroupProfile contactItemGroupProfile = (ContactItemGroupProfile) item;
-
-                if (role == GroupChatRole.OWNER) {
-
-                    if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-
-                        kickMember(contactItemGroupProfile.mContact.peerId);
-
-                    } else if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-
-                        kickAdmin(contactItemGroupProfile.mContact.peerId);
-
-                    } else if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-
-                        kickModerator(contactItemGroupProfile.mContact.peerId);
-
-                    }
-                } else if (role == GroupChatRole.ADMIN) {
-
-                    if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                        kickMember(contactItemGroupProfile.mContact.peerId);
-                    } else if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                        kickModerator(contactItemGroupProfile.mContact.peerId);
-                    }
-                } else if (role == GroupChatRole.MODERATOR) {
-
-                    if (contactItemGroupProfile.mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                        kickMember(contactItemGroupProfile.mContact.peerId);
-                    }
-                }
-
-                return true;
-            }
-        });
-
-        fastAdapter.setHasStableIds(true);
-
-        //get our recyclerView and do basic setup
-        recyclerView = (RecyclerView) findViewById(R.id.agp_recycler_view_group_member);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ActivityGroupProfile.this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
-
-
-        //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
-        recyclerView.addItemDecoration(decoration);
-
-        ContactItemGroupProfile.mainRole = role.toString();
-        ContactItemGroupProfile.roomType = ProtoGlobal.Room.Type.GROUP;
-
-        showItems();
-
-        //so the headers are aware of changes
-        stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                decoration.invalidateHeaders();
-            }
-        });
-    }
-
-    private void showItems() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null && realmRoom.getGroupRoom() != null) {
-
-            /**
-             * hide more view if all member is showing
-             */
-            int limit;
-            if (realmRoom.getGroupRoom().getMembers().size() <= currentOffset + limitation) {
-                limit = realmRoom.getGroupRoom().getMembers().size();
-                /**
-                 * if members not loaded yet check count with participantsCountLabel
-                 */
-                if (limit > 0) {
-                    txtMore.setVisibility(View.GONE);
-                } else if (Integer.parseInt(participantsCountLabel) == 0) {
-                    txtMore.setVisibility(View.GONE);
-                }
-            } else {
-                limit = currentOffset + limitation;
-            }
-
-            List<IItem> items = new ArrayList<>();
-            List<RealmMember> memberList = realmRoom.getGroupRoom().getMembers().subList(currentOffset, limit);
-            for (RealmMember realmMember : memberList) {
-                if (!userExistInList(realmMember.getPeerId())) {
-                    items.add(new ContactItemGroupProfile().setContact(convertRealmToStruct(realm, realmMember)).withIdentifier(SUID.id().get()));
-                }
-            }
-
-            currentOffset = limit;
-            itemAdapter.add(items);
-        }
-        realm.close();
-    }
-
-    private boolean userExistInList(long userId) {
-        List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-        for (ContactItemGroupProfile info : items) {
-            if (info.mContact.peerId == userId) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private StructContactInfo convertRealmToStruct(Realm realm, RealmMember realmMember) {
-        String role = realmMember.getRole();
-        long id = realmMember.getPeerId();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
-        if (realmRegisteredInfo != null) {
-            StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
-            s.role = role;
-            s.avatar = realmRegisteredInfo.getLastAvatar();
-            s.initials = realmRegisteredInfo.getInitials();
-            s.color = realmRegisteredInfo.getColor();
-            s.lastSeen = realmRegisteredInfo.getLastSeen();
-            s.status = realmRegisteredInfo.getStatus();
-            s.userID = userID;
-            return s;
-        }
-        return null;
-    }
-
-    private List<StructContactInfo> getCurrentUser(ProtoGlobal.GroupRoom.Role role) {
-        List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-
-        List<StructContactInfo> users = new ArrayList<>();
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).mContact.role.equals(role.toString())) {
-                users.add(items.get(i).mContact);
-            }
-        }
-        return users;
     }
 
     private void setUiIndependentRole() {
@@ -1750,11 +1417,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         List<StructContactInfo> userList = Contacts.retrieve(null);
 
-        List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
+        RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
 
-        for (int i = 0; i < items.size(); i++) {
+        for (int i = 0; i < memberList.size(); i++) {
             for (int j = 0; j < userList.size(); j++) {
-                if (userList.get(j).peerId == items.get(i).mContact.peerId) {
+                if (userList.get(j).peerId == memberList.get(i).getPeerId()) {
                     userList.remove(j);
                     break;
                 }
@@ -1924,26 +1592,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         }
 
-        private void updateRole(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
-            ContactItemGroupProfile.mainRole = role.toString();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-
-                    for (int i = 0; i < items.size(); i++) {
-                        if (items.get(i).mContact.peerId == memberId) {
-                            items.get(i).mContact.role = role.toString();
-                            if (i < itemAdapter.getAdapterItemCount()) {
-                                IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(SUID.id().get()));
-                                itemAdapter.set(i, item);
-                            }
-                        }
-                    }
-                }
-            });
-        }
 
         private void setToAdmin(Long peerId) {
             new RequestGroupAddAdmin().groupAddAdmin(roomId, peerId);
@@ -2314,30 +1962,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }).show();
     }
 
-    private void updateRole(final long memberId, final ProtoGlobal.GroupRoom.Role role) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
 
-
-                List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                for (int i = 0; i < items.size(); i++) {
-                    if (items.get(i).mContact.peerId == memberId) {
-                        items.get(i).mContact.role = role.toString();
-                        if (i < itemAdapter.getAdapterItemCount()) {
-                            IItem item = (new ContactItemGroupProfile().setContact(items.get(i).mContact).withIdentifier(SUID.id().get()));
-                            itemAdapter.set(i, item);
-                        }
-                    }
-                }
-            }
-        });
-    }
 
     /**
      * if user was admin set  role to member
      */
-    private void kickAdmin(final long memberID) {
+    public void kickAdmin(final long memberID) {
 
         new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
@@ -2351,7 +1981,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     /**
      * delete this member from list of member group
      */
-    private void kickMember(final long memberID) {
+    public void kickMember(final long memberID) {
 
         new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
@@ -2370,38 +2000,17 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                 setMemberCount(roomIdUser, true);
 
-                runOnUiThread(new Runnable() { //TODO [Saeed Mozaffari] [2016-11-12 5:15 PM] - get member list from group and add new member . like get member list response
-                    @Override
-                    public void run() {
-                        Realm realm = Realm.getDefaultInstance();
-                        RealmRegisteredInfo realmRegistered = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, UserId).findFirst();
+                Realm realm = Realm.getDefaultInstance();
+                RealmRegisteredInfo realmRegistered = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, UserId).findFirst();
 
-                        if (realmRegistered != null) {
-                            StructContactInfo struct = new StructContactInfo(realmRegistered.getId(), realmRegistered.getDisplayName(), realmRegistered.getStatus(), false, false, realmRegistered.getPhoneNumber() + "");
-                            struct.avatar = realmRegistered.getLastAvatar();
-                            struct.initials = realmRegistered.getInitials();
-                            struct.color = realmRegistered.getColor();
-                            struct.lastSeen = realmRegistered.getLastSeen();
-                            struct.status = realmRegistered.getStatus();
-                            IItem item = (new ContactItemGroupProfile().setContact(struct).withIdentifier(SUID.id().get()));
-                            itemAdapter.add(item);
-                            //mollareza
-                            //contacts.add(struct);
-                            //refreshListMember();
-
-                        } else {
-
-                            if (roomIdUser == roomId) {
-                                new RequestUserInfo().userInfo(UserId, roomId + "");
-                            }
-                        }
-
-                        realm.close();
+                if (realmRegistered == null) {
+                    if (roomIdUser == roomId) {
+                        new RequestUserInfo().userInfo(UserId, roomId + "");
                     }
-                });
+                }
 
+                realm.close();
 
-                //                        updateUi(list, UserId);
             }
 
             @Override
@@ -2416,40 +2025,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onGroupKickMember(final long roomId, final long memberId) {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-                        setMemberCount(roomId, false);
-                        for (int i = 0; i < items.size(); i++) {
-                            if (items.get(i).mContact.peerId == memberId) {
-                                itemAdapter.remove(i);
-                                //mollareza
-                                //contacts.remove(i); //TODO [Saeed Mozaffari] [2017-02-20 4:09 PM] - don't remove from contacts array list , just work with adapter items
-                                //refreshListMember();
-                                Realm realm = Realm.getDefaultInstance();
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                        for (RealmMember realmMember : realmRoom.getGroupRoom().getMembers()) {
-                                            if (realmMember.getPeerId() == memberId) {
-                                                realmMember.deleteFromRealm();
-                                                participantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
-                                                participantsCountLabel = (Integer.parseInt(participantsCountLabel) - 1) + "";
-                                                realmRoom.getGroupRoom().setParticipantsCountLabel(participantsCountLabel);
-                                                break;
-                                            }
-                                        }
-
-                                    }
-                                });
-                                realm.close();
-                            }
-                        }
-                    }
-                });
+                setMemberCount(roomId, false);
 
             }
 
@@ -2465,113 +2041,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         };
     }
 
-    private void onGroupKickModeratorCallback() {
-        G.onGroupKickModerator = new OnGroupKickModerator() {
-            @Override
-            public void onGroupKickModerator(long roomId, long memberId) {
-
-                updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
-
-                if (G.updateListAfterKick != null) {
-                    G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
-                }
-
-                //                                for (int i = 0; i < contacts.size(); i++) {
-                //                                    if (contacts.get(i).peerId == memberId) {
-                //                                        contacts.get(i).role =
-                //                                                ProtoGlobal.GroupRoom.Role.MEMBER.toString();
-                //                                        final int finalI = i;
-                //                                        runOnUiThread(new Runnable() {
-                //                                            @Override
-                //                                            public void run() {
-                //                                                IItem item = (new ContactItemGroupProfile().setContact(
-                //                                                        contacts.get(finalI))
-                //                                                        .withIdentifier(
-                //                                                                100 + contacts.indexOf(contacts.get(finalI))));
-                //                                                itemAdapter.set(finalI, item);
-                //                                            }
-                //                                        });
-                //
-                //                                        break;
-                //                                    }
-                //                                }
-            }
-
-            @Override
-            public void onError(int majorCode, final int minorCode) {
-            }
-
-            @Override
-            public void timeOut() {
-
-            }
-        };
-    }
-
-    private void onGroupAddModeratorCallback() {
-        G.onGroupAddModerator = new OnGroupAddModerator() {
-            @Override
-            public void onGroupAddModerator(long roomId, final long memberId) {
-                updateRole(memberId, ProtoGlobal.GroupRoom.Role.MODERATOR);
-            }
-
-            @Override
-            public void onError(int majorCode, final int minorCode) {
-
-            }
-
-            @Override
-            public void onTimeOut() {
-
-            }
-        };
-    }
-
-    private void onGroupKickAdminCallback() {
-        G.onGroupKickAdmin = new OnGroupKickAdmin() {
-            @Override
-            public void onGroupKickAdmin(long roomId, long memberId) {
-
-                updateRole(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
-
-                if (G.updateListAfterKick != null) {
-                    G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.MEMBER);
-                }
-            }
-
-            @Override
-            public void onError(int majorCode, final int minorCode) {
-
-            }
-
-            @Override
-            public void onTimeOut() {
-
-            }
-        };
-    }
-
-    private void onSetAdminCallback() {
-        G.onGroupAddAdmin = new OnGroupAddAdmin() {
-            @Override
-            public void onGroupAddAdmin(long roomId, final long memberId) {
-
-                updateRole(memberId, ProtoGlobal.GroupRoom.Role.ADMIN);
-
-                if (G.updateListAfterKick != null) {
-                    G.updateListAfterKick.updateList(memberId, ProtoGlobal.GroupRoom.Role.ADMIN);
-                }
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-        };
-    }
-
-
-    private void kickModerator(final long memberID) {
+    public void kickModerator(final long memberID) {
 
         new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
@@ -2581,26 +2051,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }).show();
     }
 
-    private void setMemberRoleToModerator() {
-        Fragment fragment = FragmentListAdmin.newInstance(getCurrentUser(ProtoGlobal.GroupRoom.Role.MODERATOR));
-        Bundle bundle = new Bundle();
-        bundle.putString("TYPE", "MODERATOR");
-        bundle.putLong("ID", roomId);
-        bundle.putString("ROOM_TYPE", ProtoGlobal.Room.Type.GROUP.toString());
-        bundle.putBoolean("DIALOG_SHOWING", false);
-        fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
-    }
+    private void showListForCustomRole(String SelectedRole) {
+        FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userID, SelectedRole, isNeedgetContactlist);
+        getSupportFragmentManager().beginTransaction()
+            .addToBackStack("null")
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+            .replace(R.id.fragmentContainer_group_profile, fragment, "Show_member")
+            .commit();
 
-    private void setMemberRoleToAdmin() {
-        Fragment fragment = FragmentListAdmin.newInstance(getCurrentUser(ProtoGlobal.GroupRoom.Role.ADMIN));
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("DIALOG_SHOWING", false);
-        bundle.putLong("ID", roomId);
-        bundle.putString("ROOM_TYPE", ProtoGlobal.Room.Type.GROUP.toString());
-        bundle.putString("TYPE", "ADMIN");
-        fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
+        isNeedgetContactlist = false;
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
@@ -2646,137 +2105,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
     }
 
-    public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecyclerHeadersAdapter {
-        @Override
-        public long getHeaderId(int position) {
-            IItem item = getItem(position);
-
-            //            ContactItemGroupProfile ci=(ContactItemGroupProfile)item;
-            //            if(ci!=null){
-            //                return ci.mContact.displayName.toUpperCase().charAt(0);
-            //            }
-
-            return -1;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-            //we create the view for the header
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
-            return new RecyclerView.ViewHolder(view) {
-            };
-        }
-
-        @Override
-        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-            CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
-
-            IItem item = getItem(position);
-            if (((ContactItemGroupProfile) item).mContact != null) {
-                //based on the position we set the headers text
-                textView.setText(String.valueOf(((ContactItemGroupProfile) item).mContact.displayName.toUpperCase().charAt(0)));
-            }
-        }
-
-
-        /**
-         * REQUIRED FOR THE FastAdapter. Set order to < 0 to tell the FastAdapter he can ignore
-         * this
-         * one.
-         *
-         * @return int
-         */
-        @Override
-        public int getOrder() {
-            return -100;
-        }
-
-        @Override
-        public int getAdapterItemCount() {
-            return 0;
-        }
-
-        @Override
-        public List<IItem> getAdapterItems() {
-            return null;
-        }
-
-        @Override
-        public IItem getAdapterItem(int position) {
-            return null;
-        }
-
-        @Override
-        public int getAdapterPosition(IItem item) {
-            return -1;
-        }
-
-        @Override
-        public int getAdapterPosition(long identifier) {
-            return 0;
-        }
-
-        @Override
-        public int getGlobalPosition(int position) {
-            return -1;
-        }
-
-    }
-
-    //********** compare member list
-
-    private void compareMemberList(final RealmList<RealmMember> memberList, final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> serverLiseMember) {
-
-
-        final ArrayList<Long> b1 = new ArrayList<>();
-        for (RealmMember r : memberList) {
-            b1.add(r.getPeerId());
-        }
-        ArrayList<Long> c1 = new ArrayList<>();
-        for (int i = 0; i < memberList.size(); i++) {
-            for (int j = 0; j < serverLiseMember.size(); j++) {
-                if (serverLiseMember.get(j).getUserId() == memberList.get(i).getPeerId()) {
-                    c1.add(memberList.get(i).getPeerId());
-                    break;
-                }
-            }
-        }
-        b1.removeAll(c1);
-        Realm realm = Realm.getDefaultInstance();
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
-                for (int i = 0; i < realmMembers.size(); i++) {
-                    for (int j = 0; j < b1.size(); j++) {
-
-                        if (realmMembers.get(i).getPeerId() == b1.get(j)) {
-                            realmMembers.get(i).deleteFromRealm();
-                            itemAdapter.notifyDataSetChanged();
-                        }
-                    }
-                }
-            }
-        });
-        realm.close();
-
-        final List<ContactItemGroupProfile> items = itemAdapter.getAdapterItems();
-        for (int i = 0; i < b1.size(); i++) {
-            for (int j = 0; j < items.size(); j++) {
-                if (items.get(j).mContact.peerId == b1.get(i)) {
-                    itemAdapter.remove(i);
-                    itemAdapter.notifyDataSetChanged();
-                }
-            }
-        }
-    }
-
-    //********** Avatars
-
-    //***Get Avatar
 
     private void showAvatar() {
         HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {

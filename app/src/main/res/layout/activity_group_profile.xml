@@ -442,21 +442,14 @@
                         android:layout_marginBottom="@dimen/dp4"
                         />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/agp_recycler_view_group_member"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="vertical"
-                        android:visibility="visible"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
                     <TextView
-                        android:id="@+id/agp_txt_more"
+                        android:id="@+id/agp_txt_show_member"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="@dimen/dp12"
-                        android:text="@string/more"
+                        android:text="@string/show_member"
                         android:textSize="@dimen/sp16"/>
 
 

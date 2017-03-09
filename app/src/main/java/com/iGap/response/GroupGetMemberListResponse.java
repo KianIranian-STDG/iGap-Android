@@ -26,7 +26,12 @@ public class GroupGetMemberListResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+
         final ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder builder = (ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder) message;
+
+        G.onGroupGetMemberList.onGroupGetMemberList(builder.getMemberList());
+
+
         final RealmList<RealmMember> newMembers = new RealmList<>();
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransactionAsync(new Realm.Transaction() {
@@ -34,43 +39,23 @@ public class GroupGetMemberListResponse extends MessageHandler {
             public void execute(Realm realm) {
 
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
-                realmRoom.getGroupRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
-                RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+                if (realmRoom != null) {
 
-                for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : builder.getMemberList()) {
-                    boolean newUser = true;
-                    RealmMember realmMem = null;
-                    for (RealmMember realmMember : realmMembers) {
-                        if (realmMember.getPeerId() == member.getUserId()) {
-                            newUser = false;
-                            realmMem = realmMember;
-                            break;
-                        }
-                    }
+                    realmRoom.getGroupRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
+                    realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
 
-                    if (realmMem == null) {
-                        realmMem = realm.createObject(RealmMember.class, SUID.id().get());
-                    }
-                    realmMem.setRole(member.getRole().toString());
-                    realmMem.setPeerId(member.getUserId());
-                    if (newUser) {
+                    for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : builder.getMemberList()) {
+                        RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
+                        realmMem.setRole(member.getRole().toString());
+                        realmMem.setPeerId(member.getUserId());
                         newMembers.add(realmMem);
                     }
-                }
-                if (realmMembers != null && !realmMembers.isEmpty()) {
-                    for (RealmMember member : realmMembers) {
-                        newMembers.add(member);
-                    }
-                    realmRoom.getGroupRoom().setMembers(newMembers);
-                } else {
                     realmRoom.getGroupRoom().setMembers(newMembers);
                 }
             }
         });
 
         realm.close();
-
-        G.onGroupGetMemberList.onGroupGetMemberList(builder.getMemberList());
     }
 
     @Override

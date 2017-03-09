@@ -50,34 +50,15 @@ public class RealmMember extends RealmObject {
                 realmRoom.getChannelRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
                 RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
 
-                for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : builder.getMemberList()) {
-                    boolean newUser = true;
-                    RealmMember realmMem = null;
-                    for (RealmMember realmMember : realmMembers) {
-                        if (realmMember.getPeerId() == member.getUserId()) {
-                            newUser = false;
-                            realmMem = realmMember;
-                            break;
-                        }
-                    }
+                if (realmRoom != null) {
+                    for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : builder.getMemberList()) {
 
-                    if (realmMem == null) {
-                        realmMem = realm.createObject(RealmMember.class, SUID.id().get());
-                    }
-                    realmMem.setRole(member.getRole().toString());
-                    realmMem.setPeerId(member.getUserId());
-
-                    if (newUser) {
+                        RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
+                        realmMem.setRole(member.getRole().toString());
+                        realmMem.setPeerId(member.getUserId());
                         newMembers.add(realmMem);
+                        realmRoom.getChannelRoom().setMembers(newMembers);
                     }
-                }
-                if (realmMembers != null && !realmMembers.isEmpty()) {
-                    for (RealmMember member : realmMembers) {
-                        newMembers.add(member);
-                    }
-                    realmRoom.getChannelRoom().setMembers(newMembers);
-                } else {
-                    realmRoom.getChannelRoom().setMembers(newMembers);
                 }
             }
         });

@@ -804,6 +804,7 @@
   <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
   <string name="there_is_no_connection_to_server">ارتباط با سرور برقرار نیست</string>
   <string name="empty_room">هنوز پیامی ندارید</string>
+  <string name="show_member">نمایش اعضا</string>
 
 
 </resources>

@@ -1,6 +1,8 @@
 package com.iGap.response;
 
+import android.os.Handler;
 import com.iGap.G;
+import com.iGap.fragments.FragmentShowMember;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserInfo;
 import com.iGap.realm.RealmAvatar;
@@ -27,13 +29,12 @@ public class UserInfoResponse extends MessageHandler {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
 
                         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId()).findFirst();
                         if (realmRegisteredInfo == null) {
@@ -53,18 +54,11 @@ public class UserInfoResponse extends MessageHandler {
                         realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
                         RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar(), true);
-                    }
-                });
 
-                /**
-                 * call this callbacks with delay for insuring that
-                 * info was set in realm
-                 * hint : don't used from executeTransactionAsync because
-                 * get error when run this async very much(about 100)
-                 */
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
+
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         if (realmUserInfo != null && (builder.getUser().getId() == realmUserInfo.getUserId())) {
                             if (G.onUserInfoMyClient != null) {
@@ -83,8 +77,18 @@ public class UserInfoResponse extends MessageHandler {
                         if (G.onUserInfoForAvatar != null) {
                             G.onUserInfoForAvatar.onUserInfoForAvatar(builder.getUser());
                         }
+
+                        if (FragmentShowMember.infoUpdateListenerCount != null) {
+                            FragmentShowMember.infoUpdateListenerCount.complete(true, "", "");
+                        }
+
+                        realm.close();
                     }
-                }, 1000);
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
             }
         });
     }
@@ -102,6 +106,10 @@ public class UserInfoResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         G.onUserInfoResponse.onUserInfoError(majorCode, minorCode);
+
+        if (FragmentShowMember.infoUpdateListenerCount != null) {
+            FragmentShowMember.infoUpdateListenerCount.complete(true, "", "");
+        }
     }
 }
 

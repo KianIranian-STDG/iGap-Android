@@ -6,7 +6,6 @@ import com.iGap.proto.ProtoGroupKickMember;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -15,6 +14,7 @@ public class GroupKickMemberResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public String identity;
+    public boolean isDeleted = false;
 
     public GroupKickMemberResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -32,8 +32,10 @@ public class GroupKickMemberResponse extends MessageHandler {
         final long memberId = builder.getMemberId();
 
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom =
-                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+
+
         if (realmRoom != null) {
             final RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
             realm.executeTransaction(new Realm.Transaction() {
@@ -43,7 +45,8 @@ public class GroupKickMemberResponse extends MessageHandler {
                         RealmMember member = realmMembers.get(i);
                         if (member.getPeerId() == memberId) {
                             member.deleteFromRealm();          //delete member from database
-                            G.onGroupKickMember.onGroupKickMember(roomId, memberId);
+                            realmRoom.getGroupRoom().setParticipantsCountLabel((Integer.parseInt(realmRoom.getGroupRoom().getParticipantsCountLabel()) - 1) + "");
+                            isDeleted = true;
                             break;
                         }
                     }
@@ -52,6 +55,14 @@ public class GroupKickMemberResponse extends MessageHandler {
         }
 
         realm.close();
+
+        if (isDeleted) {
+            if (G.onGroupKickMember != null) {
+                G.onGroupKickMember.onGroupKickMember(roomId, memberId);
+            }
+        }
+
+
     }
 
     @Override

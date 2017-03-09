@@ -24,11 +24,13 @@ public class ChannelGetMemberListResponse extends MessageHandler {
 
         ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder builder = (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder) message;
 
-        RealmMember.convertProtoMemberListToRealmMember(builder, identity);
-
         if (G.onChannelGetMemberList != null) {
             G.onChannelGetMemberList.onChannelGetMemberList(builder.getMemberList());
         }
+
+        RealmMember.convertProtoMemberListToRealmMember(builder, identity);
+
+
     }
 
     @Override
