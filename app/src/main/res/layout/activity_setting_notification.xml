@@ -17,6 +17,7 @@
       android:layoutDirection="ltr"
       app:contentInsetLeft="0dp"
       app:contentInsetStart="0dp"
+      android:padding="0dp"
 
       >
 

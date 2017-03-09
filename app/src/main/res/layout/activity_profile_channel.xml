@@ -113,7 +113,7 @@
                     android:paddingTop="@dimen/dp8"
                     app:layout_collapseMode="parallax">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
+                    <com.iGap.module.CircleImageView
                         android:id="@+id/pch_img_circleImage"
                         android:layout_width="@dimen/dp88"
                         android:layout_height="@dimen/dp88"

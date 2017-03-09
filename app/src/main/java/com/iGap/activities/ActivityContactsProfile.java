@@ -83,7 +83,6 @@ import com.iGap.request.RequestUserContactsEdit;
 import com.iGap.request.RequestUserContactsUnblock;
 import com.iGap.request.RequestUserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -124,7 +123,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     private TextView txtLastSeen, txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtPhoneNumber, txtNotifyAndSound, txtNickname;
     private ViewGroup vgPhoneNumber, vgSharedMedia, layoutNickname;
-    private CircleImageView imgUser;
+    private com.iGap.module.CircleImageView imgUser;
     private MaterialDesignTextView imgMenu, txtBack;
 
     private FloatingActionButton fab;
@@ -300,7 +299,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             showNumber = false;
         }
 
-        imgUser = (CircleImageView) findViewById(R.id.chi_img_circleImage);
+        imgUser = (com.iGap.module.CircleImageView) findViewById(R.id.chi_img_circleImage);
 
         //Set ContactAvatar
        /* if (avatarPath != null) {

@@ -37,6 +37,7 @@
           app:contentInsetLeft="0dp"
           app:contentInsetStart="0dp"
           app:layout_collapseMode="pin"
+          android:padding="0dp"
           >
 
         <RelativeLayout
@@ -127,7 +128,7 @@
             rv_centered="true"
             >
 
-          <de.hdodenhof.circleimageview.CircleImageView
+          <com.iGap.module.CircleImageView
               android:id="@+id/st_img_circleImage"
               android:layout_width="match_parent"
               android:layout_height="match_parent"

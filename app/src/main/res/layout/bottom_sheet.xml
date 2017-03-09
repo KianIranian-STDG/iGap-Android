@@ -56,6 +56,7 @@
 
 
           <TextView
+              android:id="@+id/txtDocument"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_folder"
@@ -90,6 +91,7 @@
 
 
           <TextView
+              android:id="@+id/txtMusic"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_music"
@@ -123,6 +125,7 @@
             >
 
           <TextView
+
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_video_camera"
@@ -130,7 +133,7 @@
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
-              android:id="@+id/textView8"
+              android:id="@+id/txtVideo"
               fontPath="fonts/iGap_menu_font.ttf"
               />
 
@@ -163,7 +166,7 @@
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
-              android:id="@+id/textView9"
+              android:id="@+id/textPicture"
               fontPath="fonts/iGap_menu_font.ttf"
               />
 
@@ -191,6 +194,7 @@
 
 
           <TextView
+              android:id="@+id/txtCamera"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_camera"
@@ -234,6 +238,7 @@
             android:orientation="vertical"
             >
           <TextView
+              android:id="@+id/txtContact"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_user"
@@ -268,6 +273,7 @@
 
 
           <TextView
+              android:id="@+id/txtLocation"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_location"
@@ -310,6 +316,7 @@
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
               fontPath="fonts/iGap_menu_font.ttf"
+              android:id="@+id/txtPaint"
               />
 
           <TextView
@@ -344,7 +351,7 @@
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
               fontPath="fonts/iGap_menu_font.ttf"
-              android:id="@+id/textView10"
+              android:id="@+id/txtFile"
               />
 
           <TextView
@@ -370,7 +377,7 @@
             >
 
           <TextView
-              android:id="@+id/send"
+              android:id="@+id/txtSend"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_keyboard_arrow_down"

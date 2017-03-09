@@ -84,6 +84,7 @@ import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
+import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MaterialDesignTextView;
@@ -147,7 +148,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
     private AppBarLayout appBarLayout;
     private TextView txtDescription, txtChannelLink, txtChannelNameInfo;
     private MaterialDesignTextView imgPupupMenul;
-    private de.hdodenhof.circleimageview.CircleImageView imgCircleImageView;
+    private CircleImageView imgCircleImageView;
     private FloatingActionButton fab;
     private PopupWindow popupWindow;
     private TextView titleToolbar;
@@ -443,7 +444,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             }
         });
 
-        imgCircleImageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.pch_img_circleImage);
+        imgCircleImageView = (CircleImageView) findViewById(R.id.pch_img_circleImage);
         imgCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -2935,7 +2935,28 @@ public class ActivityChat extends ActivityEnhanced
 
         viewBottomSheet = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
-        send = (TextView) viewBottomSheet.findViewById(R.id.send);
+        TextView txtCamera = (TextView) viewBottomSheet.findViewById(R.id.txtCamera);
+        TextView textPicture = (TextView) viewBottomSheet.findViewById(R.id.textPicture);
+        TextView txtVideo = (TextView) viewBottomSheet.findViewById(R.id.txtVideo);
+        TextView txtMusic = (TextView) viewBottomSheet.findViewById(R.id.txtMusic);
+        TextView txtDocument = (TextView) viewBottomSheet.findViewById(R.id.txtDocument);
+        TextView txtFile = (TextView) viewBottomSheet.findViewById(R.id.txtFile);
+        TextView txtPaint = (TextView) viewBottomSheet.findViewById(R.id.txtPaint);
+        TextView txtLocation = (TextView) viewBottomSheet.findViewById(R.id.txtLocation);
+        TextView txtContact = (TextView) viewBottomSheet.findViewById(R.id.txtContact);
+        send = (TextView) viewBottomSheet.findViewById(R.id.txtSend);
+
+        txtCamera.setTextColor(Color.parseColor(G.attachmentColor));
+        textPicture.setTextColor(Color.parseColor(G.attachmentColor));
+        txtVideo.setTextColor(Color.parseColor(G.attachmentColor));
+        txtMusic.setTextColor(Color.parseColor(G.attachmentColor));
+        txtDocument.setTextColor(Color.parseColor(G.attachmentColor));
+        txtFile.setTextColor(Color.parseColor(G.attachmentColor));
+        txtPaint.setTextColor(Color.parseColor(G.attachmentColor));
+        txtLocation.setTextColor(Color.parseColor(G.attachmentColor));
+        txtContact.setTextColor(Color.parseColor(G.attachmentColor));
+        send.setTextColor(Color.parseColor(G.attachmentColor));
+
         txtCountItem = (TextView) viewBottomSheet.findViewById(R.id.txtNumberItem);
         ViewGroup camera = (ViewGroup) viewBottomSheet.findViewById(R.id.camera);
         ViewGroup picture = (ViewGroup) viewBottomSheet.findViewById(R.id.picture);

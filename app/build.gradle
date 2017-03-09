@@ -66,7 +66,6 @@ dependencies {
   compile 'com.android.support:design:25.0.1'
   compile 'com.vicmikhailau:MaskedEditText:1.1.1'
   compile 'com.uncopt:android.justified:1.0'
-  compile 'de.hdodenhof:circleimageview:2.1.0'
   compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1'
   compile 'com.android.support:percent:25.1.1'
   compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'

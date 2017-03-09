@@ -100,7 +100,6 @@ import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
@@ -160,7 +159,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private long idAvatar;
     private File nameImageFile;
     private FloatingActionButton fab;
-    private CircleImageView circleImageView;
+    private com.iGap.module.CircleImageView circleImageView;
     private String nickName;
     private String userName;
     private String phoneName;
@@ -1110,7 +1109,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         };
 
-        circleImageView = (CircleImageView) findViewById(R.id.st_img_circleImage);
+        circleImageView = (com.iGap.module.CircleImageView) findViewById(R.id.st_img_circleImage);
         RippleView rippleImageView = (RippleView) findViewById(R.id.st_ripple_circleImage);
         rippleImageView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
