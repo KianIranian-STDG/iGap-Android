@@ -4063,6 +4063,8 @@ public class ActivityChat extends ActivityEnhanced
     private long reachMessageId; // messageId that will be checked after getHistory for detect reached to that or no
     //TODO [Saeed Mozaffari] [2017-03-01 7:28 PM] - check for use this field
     private boolean allowGetHistory = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
+    private long startFutureMessageId; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
+    private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
 
     private ArrayList<StructMessageInfo> getLocalMessages() {
         Realm realm = Realm.getDefaultInstance();
@@ -4089,6 +4091,11 @@ public class ActivityChat extends ActivityEnhanced
             Object[] object = MessageLoader.getLocalMessage(mRoomId, results.first().getMessageId(), gapMessageId, 10, true, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
             messageInfos = (ArrayList<StructMessageInfo>) object[0];
             topMore = (boolean) object[1];
+            if (messageInfos.size() > 0) {
+                startFutureMessageId = Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID);
+            } else {
+                startFutureMessageId = 0;
+            }
 
             /**
              * if gap is exist ,check that reached to gap or not and if
@@ -4133,7 +4140,7 @@ public class ActivityChat extends ActivityEnhanced
                 super.onScrolled(recyclerView, dx, dy);
                 int visibleItemCount = (recyclerView.getLayoutManager()).getChildCount();
                 int totalItemCount = (recyclerView.getLayoutManager()).getItemCount();
-                int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
                 if (firstVisiblePosition < 15) {
 
@@ -4141,52 +4148,60 @@ public class ActivityChat extends ActivityEnhanced
                         /**
                          * get first item in view (hint : time item should be ignore)
                          */
-                        for (AbstractMessage message : mAdapter.getAdapterItems()) {
-                            if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
-                                Object[] object = getLocalMessage(mRoomId, Long.parseLong(message.mMessage.messageID), gapMessageId, 10, false, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
-                                topMore = (boolean) object[1];
-                                ArrayList<StructMessageInfo> structMessageInfos = (ArrayList<StructMessageInfo>) object[0];
-                                switchAddItem(structMessageInfos, true);
+                        //for (AbstractMessage message : mAdapter.getAdapterItems()) {
+                        //if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
+                        Object[] object = getLocalMessage(mRoomId, startFutureMessageId, gapMessageId, 10, false, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
+                        topMore = (boolean) object[1];
+                        ArrayList<StructMessageInfo> structMessageInfos = (ArrayList<StructMessageInfo>) object[0];
+                        if (structMessageInfos.size() > 0) {
+                            startFutureMessageId = Long.parseLong(structMessageInfos.get(structMessageInfos.size() - 1).messageID);
+                        } else {
+                            startFutureMessageId = 0;
+                        }
+                        switchAddItem(structMessageInfos, true);
 
+                        /**
+                         * if gap is exist ,check that reached to gap or not and if
+                         * reached send request to server for clientGetRoomHistory
+                         */
+                        if (gapMessageId > 0) {
+                            boolean hasSpaceToGap = (boolean) object[2];
+                            if (!hasSpaceToGap) {
                                 /**
-                                 * if gap is exist ,check that reached to gap or not and if
-                                 * reached send request to server for clientGetRoomHistory
+                                 * send request to server for clientGetRoomHistory
                                  */
-                                if (gapMessageId > 0) {
-                                    boolean hasSpaceToGap = (boolean) object[2];
-                                    if (!hasSpaceToGap) {
-                                        /**
-                                         * send request to server for clientGetRoomHistory
-                                         */
 
-                                        if (structMessageInfos.size() > 0) {
-                                            long oldMessageId = Long.parseLong(structMessageInfos.get(structMessageInfos.size() - 1).messageID);
-                                            getOnlineMessage(oldMessageId);
-                                        }
-                                    }
+                                if (structMessageInfos.size() > 0) {
+                                    long oldMessageId = Long.parseLong(structMessageInfos.get(structMessageInfos.size() - 1).messageID);
+                                    getOnlineMessage(oldMessageId);
                                 }
+                            }
+                        }
 
-                                break;
-                            }
-                        }
+                        //break;
+                        //}
+                        //}
                     } else if (gapMessageId > 0) {
-                        for (AbstractMessage message : mAdapter.getAdapterItems()) {
-                            if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
-                                /**
-                                 * detect old messageId that should get history from server with that
-                                 */
-                                getOnlineMessage(Long.parseLong(message.mMessage.messageID));
-                            }
-                        }
+                        //for (AbstractMessage message : mAdapter.getAdapterItems()) {
+                        //if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
+                        /**
+                         * detect old messageId that should get history from server with that
+                         */
+                        getOnlineMessage(startFutureMessageId);
+
+                        //break;
+                        //}
+                        //}
                     } else {
 
-                        for (AbstractMessage message : mAdapter.getAdapterItems()) {
-                            if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
-                                if (!topMore && allowGetHistory) {
-                                    getOnlineMessage(Long.parseLong(message.mMessage.messageID));
-                                }
-                            }
+                        //for (AbstractMessage message : mAdapter.getAdapterItems()) {
+                        //if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
+                        if (!topMore && allowGetHistory) {
+                            getOnlineMessage(startFutureMessageId);
                         }
+                        //break;
+                        //}
+                        //}
 
                     }
 
@@ -4258,7 +4273,7 @@ public class ActivityChat extends ActivityEnhanced
             MessageLoader.getOnlineMessage(mRoomId, oldMessageId, reachMessageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP, new OnMessageReceive() {
                 @Override
                 public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached) {
-
+                    startFutureMessageId = startMessageId;
                     /**
                      * hide progress received history
                      */
@@ -4266,7 +4281,8 @@ public class ActivityChat extends ActivityEnhanced
 
                     Realm realm = Realm.getDefaultInstance();
 
-                    RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, endMessageId).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                    RealmResults<RealmRoomMessage> realmRoomMessages =
+                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, endMessageId).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
                     /**
                      * send seen status to server when get message from server
@@ -4295,6 +4311,11 @@ public class ActivityChat extends ActivityEnhanced
                             gapMessageId = (long) objects[0];
                             reachMessageId = (long) objects[1];
                         }
+                    } else if (isReachedToTopView()) {
+                        /**
+                         * check this state because if user is near to top view and not scroll get top message from server
+                         */
+                        getOnlineMessage(startFutureMessageId);
                     }
 
                     final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
@@ -4331,6 +4352,16 @@ public class ActivityChat extends ActivityEnhanced
                 }
             });
         }
+    }
+
+    /**
+     * return true if now view is near to top
+     */
+    private boolean isReachedToTopView() {
+        if (firstVisiblePosition <= 5) {
+            return true;
+        }
+        return false;
     }
 
     /**

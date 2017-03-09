@@ -29,12 +29,19 @@ public final class MessageLoader {
      * @return Object[] ==> [0] -> ArrayList<StructMessageInfo>, [1] -> boolean hasMore, [2] -> boolean hasGap
      */
     public static Object[] getLocalMessage(long roomId, long messageId, long gapMessageId, int limit, boolean duplicateMessage, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+
         Realm realm = Realm.getDefaultInstance();
         limit = 100;//TODO [Saeed Mozaffari] [2017-03-01 7:40 PM] - set all of this value to Config
         boolean hasMore = true;
         boolean hasSpaceToGap = true;
         List<RealmRoomMessage> realmRoomMessages;
         ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
+
+        if (messageId == 0) {
+            realm.close();
+            return new Object[]{structMessageInfos, false, false};
+        }
+
 
         /**
          * get message from RealmRoomMessage

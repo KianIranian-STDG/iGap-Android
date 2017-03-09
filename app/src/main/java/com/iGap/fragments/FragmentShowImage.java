@@ -26,6 +26,7 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MaterialDesignTextView;
+import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.TouchImageView;
 import com.iGap.proto.ProtoFileDownload;
@@ -300,22 +301,26 @@ public class FragmentShowImage extends Fragment {
         RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
 
         if (rm != null) {
-
             if (rm.getForwardMessage() != null) rm = rm.getForwardMessage();
-
-
             String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
             File file = new File(path);
             if (file.exists()) {
-
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, "iGap/download this image");
-                Uri screenshotUri = Uri.parse(path);
-
-                intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
                 intent.setType("image/*");
+                putExtra(intent, StructMessageInfo.convert(rm));
                 startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
             }
+        }
+    }
+
+    private void putExtra(Intent intent, StructMessageInfo messageInfo) {
+        try {
+            String filePath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
+            if (filePath != null) {
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
