@@ -118,6 +118,7 @@ public class ActivityRegister extends ActivityEnhanced {
     private int digitCount;
     private MaterialDialog dialogWait;
     private Typeface titleTypeface;
+    private TextView txtTimerLand;
 
     public enum Reason {
         SOCKET, TIME_OUT, INVALID_CODE
@@ -576,9 +577,15 @@ public class ActivityRegister extends ActivityEnhanced {
                             } else {
                                 time = Config.COUNTER_TIMER;
                             }
+
+                            int portrait_landscape = getResources().getConfiguration().orientation;
+                            if (portrait_landscape == 1) {//portrait
+                                txtTimer = (TextView) findViewById(R.id.rg_txt_verify_timer);
+                            } else {
+                                txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
+                            }
+
                             countDownTimer = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
-
-
                                 public void onTick(long millisUntilFinished) {
 
                                     int seconds = (int) ((millisUntilFinished) / 1000);
@@ -586,12 +593,14 @@ public class ActivityRegister extends ActivityEnhanced {
                                     seconds = seconds % 60;
                                     int portrait_landscape = getResources().getConfiguration().orientation;
                                     if (portrait_landscape == 1) {//portrait
-                                        txtTimer = (TextView) findViewById(R.id.rg_txt_verify_timer);
+                                        if (txtTimer != null) {
                                         txtTimer.setVisibility(View.VISIBLE);
                                         txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                                        }
                                     } else {
-                                        TextView txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
-                                        txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                                        if (txtTimerLand != null) {
+                                            txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                                        }
                                     }
                                 }
 
@@ -601,7 +610,6 @@ public class ActivityRegister extends ActivityEnhanced {
                                         txtTimer.setText("00:00");
                                         txtTimer.setVisibility(View.INVISIBLE);
                                     } else {
-                                        TextView txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
                                         txtTimerLand.setText("00:00");
                                         txtTimerLand.setVisibility(View.INVISIBLE);
                                     }

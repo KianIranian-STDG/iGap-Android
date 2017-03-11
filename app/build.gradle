@@ -27,7 +27,7 @@ android {
     versionCode 16
     versionName "0.0.16"
     multiDexEnabled true
-    //vectorDrawables.useSupportLibrary = true
+    vectorDrawables.useSupportLibrary = true
   }
   buildTypes {
     release {
@@ -39,6 +39,14 @@ android {
   lintOptions {
     disable 'MissingTranslation'
   }
+  //  splits {
+  //    abi {
+  //      enable true
+  //      reset()
+  //      include 'x86', 'armeabi', 'armeabi-v7a', 'mips'
+  //      universalApk false
+  //    }
+  //  }
 }
 
 dependencies {

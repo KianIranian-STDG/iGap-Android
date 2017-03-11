@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="bottom|right"
-              android:layout_marginTop="1dp"
-              android:gravity="center_vertical|right"
-              android:orientation="horizontal"
-              android:paddingBottom="@dimen/messageContainerPaddingBottom"
-              android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
-              android:paddingRight="@dimen/messageContainerPaddingLeftRight"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="bottom|right"
+    android:layout_marginTop="1dp"
+    android:gravity="center_vertical|right"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/messageContainerPaddingBottom"
+    android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
+    android:paddingRight="@dimen/messageContainerPaddingLeftRight"
     >
 
     <TextView
@@ -34,7 +35,7 @@
         android:layout_width="16dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp4"
-        android:src="@drawable/ic_double_check"
+        app:srcCompat="@drawable/ic_double_check"
         android:tint="@color/colorOldBlack"/>
 
     <LinearLayout

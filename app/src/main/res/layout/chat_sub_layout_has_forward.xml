@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp48"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:attr/windowBackground"
     android:clickable="true"
     android:gravity="center_vertical"
@@ -58,7 +59,7 @@
       android:layout_width="30dp"
       android:layout_height="30dp"
       android:contentDescription="@null"
-      android:src="@drawable/ic_gray_cancel"
+      app:srcCompat="@drawable/ic_gray_cancel"
       />
 
 </LinearLayout>

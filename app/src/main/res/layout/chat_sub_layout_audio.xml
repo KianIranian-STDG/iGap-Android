@@ -70,7 +70,7 @@
                                     android:layout_height="@dimen/dp48"
                                     android:adjustViewBounds="true"
                                     android:scaleType="fitXY"
-                                    android:src="@drawable/green_music_note"
+                                    app:srcCompat="@drawable/green_music_note"
                                     app:riv_corner_radius="@dimen/messageBox_cornerRadius"
                                     />
 

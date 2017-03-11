@@ -421,7 +421,7 @@
                             android:layout_marginLeft="@dimen/dp4"
                             android:layout_marginStart="@dimen/dp4"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/add_chat_background"
+                            app:srcCompat="@drawable/add_chat_background"
                             />
 
                         <TextView

@@ -47,7 +47,7 @@
                 android:id="@+id/amr_btn_menu"
                 android:layout_width="@dimen/dp28"
                 android:layout_height="@dimen/dp28"
-                android:src="@drawable/hamburger_menu"
+                app:srcCompat="@drawable/hamburger_menu"
                 android:adjustViewBounds="true"
                 android:layout_gravity="center"
                 android:tint="@color/white"

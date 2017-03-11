@@ -21,7 +21,7 @@
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@mipmap/city"
+            app:srcCompat="@mipmap/city"
             app:layout_heightPercent="83%"/>
 
         <ImageView
@@ -30,7 +30,7 @@
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@mipmap/city"
+            app:srcCompat="@mipmap/city"
             app:layout_heightPercent="83%"/>
 
         <ImageView
@@ -39,7 +39,7 @@
             android:layout_alignParentLeft="true"
             android:adjustViewBounds="true"
             android:scaleType="fitEnd"
-            android:src="@drawable/sabz"
+            app:srcCompat="@drawable/sabz"
             app:layout_heightPercent="83%"/>
         <!--page 1-->
         <ImageView
@@ -65,7 +65,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:src="@drawable/secure"
+            app:srcCompat="@drawable/secure"
             android:visibility="gone"
             />
         <!--page 2-->
@@ -80,7 +80,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:src="@drawable/chat"
+            app:srcCompat="@drawable/chat"
             android:visibility="gone"
             />
 
@@ -95,7 +95,7 @@
             android:adjustViewBounds="true"
             android:foregroundGravity="center"
             android:scaleType="centerInside"
-            android:src="@drawable/transfer"
+            app:srcCompat="@drawable/transfer"
             android:visibility="gone"
             />
 
@@ -108,7 +108,7 @@
             android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/boy"
+            app:srcCompat="@drawable/boy"
             android:visibility="gone"/>
 
     </android.support.percent.PercentRelativeLayout>

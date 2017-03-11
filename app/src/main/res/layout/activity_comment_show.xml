@@ -241,7 +241,7 @@
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp36"
                 android:layout_gravity="center"
-                android:background="@drawable/send_button_gray"
+                app:srcCompat="@drawable/send_button_gray"
                 android:gravity="center"
                 android:textSize="@dimen/sp26"
                 android:visibility="visible" />
