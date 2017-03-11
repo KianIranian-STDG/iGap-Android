@@ -4969,25 +4969,26 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onUploadStarted(final FileUploadStructure struct) {
-        Log.i("ZZZ", "onUploadStarted UploadTask 5");
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
-        if (roomMessage != null) {
-            AbstractMessage message = mAdapter.getItemByFileIdentity(struct.messageId);
-            // message doesn't exists
-            if (message == null) {
-                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
-                if (!G.userLogin) {
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            makeFailed(struct.messageId);
-                        }
-                    }, 200);
+        if (struct != null) {
+            Realm realm = Realm.getDefaultInstance();
+            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
+            if (roomMessage != null && mAdapter != null) {
+                AbstractMessage message = mAdapter.getItemByFileIdentity(struct.messageId);
+                // message doesn't exists
+                if (message == null) {
+                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+                    if (!G.userLogin) {
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                makeFailed(struct.messageId);
+                            }
+                        }, 200);
+                    }
                 }
             }
+            realm.close();
         }
-        realm.close();
     }
 
     @Override

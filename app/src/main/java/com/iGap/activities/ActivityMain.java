@@ -1007,7 +1007,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      */
     private void putChatToDatabase(final List<ProtoGlobal.Room> rooms) {
 
-        mRealm.executeTransactionAsync(new Realm.Transaction() {
+        /**
+         * (( hint : i don't used from mRealm instance ,because i have an error
+         * that realm is closed, and for avoid from that error i used from
+         * new instance for this action ))
+         */
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
@@ -1032,6 +1039,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
+                realm.close();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
