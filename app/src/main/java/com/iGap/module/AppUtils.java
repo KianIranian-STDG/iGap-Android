@@ -59,7 +59,7 @@ public final class AppUtils {
     public static String getStatsForUser(String status) {
 
         String userStatus = "";
-        if (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString())) {
+        if ((status == null) || (status.equals(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE.toString()))) {
             userStatus = context.getResources().getString(R.string.last_seen_recently);
         } else if (status.equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
             userStatus = context.getResources().getString(R.string.long_time_ago);

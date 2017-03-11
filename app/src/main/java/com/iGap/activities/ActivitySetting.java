@@ -112,6 +112,7 @@ import org.chromium.customtabsclient.CustomTabsActivityHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.iGap.G.context;
+import static com.iGap.G.onRefreshActivity;
 import static com.iGap.R.string.log_out;
 
 public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
@@ -1165,26 +1166,26 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         switch (which) {
                             case 0:
                                 setLocale("en");
-                                if (G.onRefreshActivity != null) G.onRefreshActivity.refresh("en");
+                                if (onRefreshActivity != null) onRefreshActivity.refresh("en");
                                 HelperCalander.isLanguagePersian = false;
                                 G.selectedLanguage = "en";
                                 break;
                             case 1:
                                 G.selectedLanguage = "fa";
                                 setLocale("fa");
-                                if (G.onRefreshActivity != null) G.onRefreshActivity.refresh("fa");
+                                if (onRefreshActivity != null) onRefreshActivity.refresh("fa");
                                 HelperCalander.isLanguagePersian = true;
                                 break;
                             case 2:
                                 G.selectedLanguage = "ar";
                                 setLocale("ar");
-                                if (G.onRefreshActivity != null) G.onRefreshActivity.refresh("ar");
+                                if (onRefreshActivity != null) onRefreshActivity.refresh("ar");
                                 HelperCalander.isLanguagePersian = false;
                                 break;
                             case 3:
                                 G.selectedLanguage = "nl";
                                 setLocale("nl");
-                                if (G.onRefreshActivity != null) G.onRefreshActivity.refresh("nl");
+                                if (onRefreshActivity != null) onRefreshActivity.refresh("nl");
                                 HelperCalander.isLanguagePersian = false;
                                 break;
                         }
@@ -2073,7 +2074,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         editor.apply();
 
         ActivitySetting.this.recreate();
-        G.onRefreshActivity.refresh(G.selectedLanguage);
+        if (G.onRefreshActivity != null) {
+            G.onRefreshActivity.refresh(G.selectedLanguage);
+        }
     }
 
     private void notificationColorClick(int color, boolean updateUi) {
@@ -2085,7 +2088,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
         editor.apply();
 
-        if (updateUi) G.onRefreshActivity.refresh(G.selectedLanguage);
+        if (updateUi && G.onRefreshActivity != null) {
+            G.onRefreshActivity.refresh(G.selectedLanguage);
+        }
     }
 
     private void toggleBottomClick(int color) {

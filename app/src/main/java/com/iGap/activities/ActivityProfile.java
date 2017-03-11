@@ -16,7 +16,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -478,15 +477,18 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
     private void delete() {
         Realm realm = Realm.getDefaultInstance();
-        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        final RealmResults<RealmAvatar> realmAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll();
-        if (!realmAvatars.isEmpty()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realmAvatars.deleteAllFromRealm();
-                }
-            });
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo != null) {
+            final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+            final RealmResults<RealmAvatar> realmAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll();
+            if (!realmAvatars.isEmpty()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realmAvatars.deleteAllFromRealm();
+                    }
+                });
+            }
         }
         realm.close();
     }
@@ -496,7 +498,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        Log.i("RRR", "onAvatarAdd 3");
         HelperAvatar.avatarAdd(userId, pathSaveImage, avatar, new OnAvatarAdd() {
             @Override
             public void onAvatarAdd(final String avatarPath) {
@@ -504,13 +505,11 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("RRR", "onAvatarAdd 4");
                         existAvatar = true;
                         hideProgressBar();
                         setImage(avatarPath);
                     }
                 });
-
             }
         });
     }
@@ -568,19 +567,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
     @Override
     public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
-       /* runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                *//*existAvatar = true;
-                token = uploadStructure.token;*//*
-                hideProgressBar();
-                pathSaveImage = uploadStructure.filePath;
-                setImage(pathSaveImage);
-            }
-        });*/
 
         pathSaveImage = uploadStructure.filePath;
-
         new RequestUserAvatarAdd().userAddAvatar(uploadStructure.token);
     }
 

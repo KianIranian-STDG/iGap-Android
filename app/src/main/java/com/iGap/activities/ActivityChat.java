@@ -5134,6 +5134,9 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void showDraftLayout() {
+        if (ll_attach_text == null) { // have null error , so reInitialize for avoid that
+            ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);
+        }
         ll_attach_text.setVisibility(View.VISIBLE);
         layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
             @Override
