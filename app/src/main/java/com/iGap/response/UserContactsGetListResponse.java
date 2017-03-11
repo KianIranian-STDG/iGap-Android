@@ -66,9 +66,6 @@ public class UserContactsGetListResponse extends MessageHandler {
                 realm.close();
             }
         });
-        //if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-        //    Contacts.FillRealmInviteFriend();
-        //}
     }
 
     @Override

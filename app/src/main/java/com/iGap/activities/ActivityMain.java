@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -1781,13 +1780,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         final RealmAvatar realmAvatar = getLastAvatar(idForGetAvatar);
                         if (realmAvatar != null) {
                             if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                                // ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
-
-                                holder.image.setImageBitmap(BitmapFactory.decodeFile(realmAvatar.getFile().getLocalFilePath()));
+                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
                             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                                // ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
-
-                                holder.image.setImageBitmap(BitmapFactory.decodeFile(realmAvatar.getFile().getLocalThumbnailPath()));
+                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
                             } else {
                                 HelperAvatar.getAvatar1(idForGetAvatar, avatarType, new OnAvatarGet() {
                                     @Override

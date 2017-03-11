@@ -498,7 +498,7 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
             }
-        }, 25);
+        }, Config.LOW_START_PAGE_TIME);
 
         chatTypeStatic = chatType;
         mRoomIdStatic = mRoomId;
@@ -532,7 +532,7 @@ public class ActivityChat extends ActivityEnhanced
             public void run() {
                 initMain();
             }
-        }, 20);
+        }, Config.FAST_START_PAGE_TIME);
     }
 
     /**
@@ -2919,9 +2919,10 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-
-        voiceRecord.dispatchTouchEvent(event);
+    public boolean dispatchTouchEvent(final MotionEvent event) {
+        if (voiceRecord != null) {
+            voiceRecord.dispatchTouchEvent(event);
+        }
 
         return super.dispatchTouchEvent(event);
     }
