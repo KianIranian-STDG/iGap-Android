@@ -279,7 +279,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         G.onUserAvatarResponse = this;
 
@@ -288,16 +289,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 realmUserInfo.addChangeListener(userInfoListener);
             }
 
-            updatUserInfoUI(realmUserInfo);
+            updateUserInfoUI(realmUserInfo);
         }
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
         if (realmUserInfo != null) realmUserInfo.removeChangeListeners();
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
 
         if (mRealm != null) {
@@ -305,7 +308,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
@@ -313,8 +317,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
         userInfoListener = new RealmChangeListener<RealmModel>() {
-            @Override public void onChange(RealmModel element) {
-                updatUserInfoUI((RealmUserInfo) element);
+            @Override
+            public void onChange(RealmModel element) {
+                updateUserInfoUI((RealmUserInfo) element);
             }
         };
 
@@ -331,7 +336,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         prgWait = (ProgressBar) findViewById(R.id.st_prgWaiting_addContact);
         prgWait.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
-        updatUserInfoUI(realmUserInfo);
+        updateUserInfoUI(realmUserInfo);
 
         new RequestUserProfileGetGender().userProfileGetGender();
         new RequestUserProfileGetEmail().userProfileGetEmail();
@@ -1292,7 +1297,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         stsp_toggle_crop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1335,7 +1341,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         toggleEnableDataShams.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -1368,8 +1375,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize))
-                        .titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
                         .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -1412,13 +1418,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         TextView txtSelectAppColor = (TextView) findViewById(R.id.asn_txt_app_title_bar_color);
         txtSelectAppColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.app_theme);
             }
         });
 
         imgAppBarSelected.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 showSelectAppColorDialog(R.string.app_theme);
             }
@@ -1431,14 +1439,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         bgShapeNotification.setColor(Color.parseColor(G.notificationColor));
 
         imgNotificationColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showSelectAppColorDialog(R.string.app_notif_color);
             }
         });
 
         TextView txtNotificatinColor = (TextView) findViewById(R.id.asn_txt_app_notification_color);
         txtNotificatinColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.app_notif_color);
             }
         });
@@ -1450,14 +1460,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         bgShapeToggleBottomColor.setColor(Color.parseColor(G.toggleBottonColor));
 
         imgToggleBottomColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showSelectAppColorDialog(R.string.toggle_botton_color);
             }
         });
 
         TextView txtToggleBottomColor = (TextView) findViewById(R.id.asn_txt_app_toggle_botton_color);
         txtToggleBottomColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.toggle_botton_color);
             }
         });
@@ -1469,14 +1481,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         bgShapeSendAndAttachColor.setColor(Color.parseColor(G.attachmentColor));
 
         imgSendAndAttachColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showSelectAppColorDialog(R.string.send_and_attach_botton_color);
             }
         });
 
         TextView txtSendAndAttachColor = (TextView) findViewById(R.id.asn_txt_send_and_attach_color);
         txtSendAndAttachColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.send_and_attach_botton_color);
             }
         });
@@ -1488,21 +1502,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         bgShapeHeaderTextColor.setColor(Color.parseColor(G.headerTextColor));
 
         imgHeaderTextColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showSelectAppColorDialog(R.string.default_header_font_color);
             }
         });
 
         TextView txtHeaderTextColor = (TextView) findViewById(R.id.asn_txt_default_header_font_color);
         txtHeaderTextColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.default_header_font_color);
             }
         });
 
         TextView txtSetToDefaultColor = (TextView) findViewById(R.id.asn_txt_set_color_to_default);
         txtSetToDefaultColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSetDefaultColorDialog();
             }
         });
@@ -1807,7 +1824,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         toggleAutoGifs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1839,7 +1857,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         toggleSaveToGallery.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1916,45 +1935,53 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         showImage();
     }
 
-    private void updatUserInfoUI(RealmUserInfo userInfo) {
-
-        if (userInfo != null) {
+    private void updateUserInfoUI(RealmUserInfo userInfo) {
+        if (checkValidationForRealm(userInfo)) {
+            //if (userInfo != null) {
             userId = userInfo.getUserId();
             nickName = userInfo.getUserInfo().getDisplayName();
             userName = userInfo.getUserInfo().getUsername();
             phoneName = userInfo.getUserInfo().getPhoneNumber();
             userGender = userInfo.getGender();
             userEmail = userInfo.getEmail();
-        }
+            //}
 
-        if (nickName != null) {
-            txtNickName.setText(nickName);
-            txtNickNameTitle.setText(nickName);
-        }
-
-        if (userName != null) txtUserName.setText(userName);
-
-        if (phoneName != null) txtPhoneNumber.setText(phoneName);
-
-        if (HelperCalander.isLanguagePersian) {
-            txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
-        }
-
-        if (userGender != null) {
-            if (userGender == ProtoGlobal.Gender.MALE) {
-                txtGander.setText(getResources().getString(R.string.Male));
-            } else if (userGender == ProtoGlobal.Gender.FEMALE) {
-                txtGander.setText(getResources().getString(R.string.Female));
+            if (nickName != null) {
+                txtNickName.setText(nickName);
+                txtNickNameTitle.setText(nickName);
             }
-        } else {
-            txtGander.setText(getResources().getString(R.string.set_gender));
-        }
 
-        if (userEmail != null && userEmail.length() > 0) {
-            txtEmail.setText(userEmail);
-        } else {
-            txtEmail.setText(getResources().getString(R.string.set_email));
+            if (userName != null) txtUserName.setText(userName);
+
+            if (phoneName != null) txtPhoneNumber.setText(phoneName);
+
+            if (HelperCalander.isLanguagePersian) {
+                txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
+            }
+
+            if (userGender != null) {
+                if (userGender == ProtoGlobal.Gender.MALE) {
+                    txtGander.setText(getResources().getString(R.string.Male));
+                } else if (userGender == ProtoGlobal.Gender.FEMALE) {
+                    txtGander.setText(getResources().getString(R.string.Female));
+                }
+            } else {
+                txtGander.setText(getResources().getString(R.string.set_gender));
+            }
+
+            if (userEmail != null && userEmail.length() > 0) {
+                txtEmail.setText(userEmail);
+            } else {
+                txtEmail.setText(getResources().getString(R.string.set_email));
+            }
         }
+    }
+
+    private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
+        if (realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded()) {
+            return true;
+        }
+        return false;
     }
 
     private void showSelectAppColorDialog(final int title) {
@@ -1963,21 +1990,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         String titleMessage = getResources().getString(title);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.stns_popup_colorpicer, wrapInScrollView)
-            .positiveText(getResources().getString(R.string.set))
-            .negativeText(getResources().getString(R.string.DISCARD))
-            .title(titleMessage)
-            .onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(getResources().getString(R.string.set)).negativeText(getResources().getString(R.string.DISCARD)).title(titleMessage).onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            })
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            }
+        }).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            })
-            .build();
+            }
+        }).build();
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
@@ -1988,7 +2011,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         picker.addOpacityBar(opacityBar);
 
         dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 dialog.dismiss();
 
@@ -2020,24 +2044,21 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void showSetDefaultColorDialog() {
 
-        new MaterialDialog.Builder(ActivitySetting.this).title(R.string.set_color_to_default)
-            .positiveText(R.string.st_dialog_reset_all_notification_yes)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
-                    headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
-                    //  toggleBottomClick(Color.parseColor(Config.default_toggleBottonColor));
-                    sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
-                    appBarColorClick(Color.parseColor(Config.default_appBarColor));
-                }
-            })
-            .negativeText(R.string.st_dialog_reset_all_notification_no)
-            .onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivitySetting.this).title(R.string.set_color_to_default).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
+                headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
+                //  toggleBottomClick(Color.parseColor(Config.default_toggleBottonColor));
+                sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
+                appBarColorClick(Color.parseColor(Config.default_appBarColor));
+            }
+        }).negativeText(R.string.st_dialog_reset_all_notification_no).onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            })
-            .show();
+            }
+        }).show();
     }
 
     private void appBarColorClick(int color) {
