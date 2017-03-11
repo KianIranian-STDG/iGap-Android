@@ -27,7 +27,7 @@ android {
     versionCode 16
     versionName "0.0.16"
     multiDexEnabled true
-    vectorDrawables.useSupportLibrary = true
+    //vectorDrawables.useSupportLibrary = true
   }
   buildTypes {
     release {

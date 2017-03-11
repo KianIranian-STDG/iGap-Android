@@ -1091,41 +1091,43 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             });
         }
-
-
     }
 
     private void onSelectRoomMenu(String message, RealmRoom item) {
-        switch (message) {
-            case "txtMuteNotification":
-                muteNotification(item.getId(), item.getMute());
-                break;
-            case "txtClearHistory":
-                clearHistory(item.getId());
-                break;
-            case "txtDeleteChat":
-
-                if (item.getType() == ProtoGlobal.Room.Type.CHAT) {
-
-                    new RequestChatDelete().chatDelete(item.getId());
-                } else if (item.getType() == ProtoGlobal.Room.Type.GROUP) {
-
-                    if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
-                        new RequestGroupDelete().groupDelete(item.getId());
-                    } else {
-                        new RequestGroupLeft().groupLeft(item.getId());
+        if (checkValidationForRealm(item)) {
+            switch (message) {
+                case "txtMuteNotification":
+                    muteNotification(item.getId(), item.getMute());
+                    break;
+                case "txtClearHistory":
+                    clearHistory(item.getId());
+                    break;
+                case "txtDeleteChat":
+                    if (item.getType() == ProtoGlobal.Room.Type.CHAT) {
+                        new RequestChatDelete().chatDelete(item.getId());
+                    } else if (item.getType() == ProtoGlobal.Room.Type.GROUP) {
+                        if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
+                            new RequestGroupDelete().groupDelete(item.getId());
+                        } else {
+                            new RequestGroupLeft().groupLeft(item.getId());
+                        }
+                    } else if (item.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                        if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
+                            new RequestChannelDelete().channelDelete(item.getId());
+                        } else {
+                            new RequestChannelLeft().channelLeft(item.getId());
+                        }
                     }
-                } else if (item.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-
-                    if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
-                        new RequestChannelDelete().channelDelete(item.getId());
-                    } else {
-                        new RequestChannelLeft().channelLeft(item.getId());
-                    }
-                }
-
-                break;
+                    break;
+            }
         }
+    }
+
+    private boolean checkValidationForRealm(RealmRoom realmRoom) {
+        if (realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && !realmRoom.isDeleted()) {
+            return true;
+        }
+        return false;
     }
 
     private boolean heartBeatTimeOut() {

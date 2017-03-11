@@ -37,7 +37,9 @@ public class HelperSetStatusBarColor {
         hackStatusBarColor(activity, G.appBarColor);
     }
 
-    @SuppressLint("NewApi") @SuppressWarnings("deprecation") private static View hackStatusBarColor(final Activity act, final String colorResID) {
+    @SuppressLint("NewApi")
+    @SuppressWarnings("deprecation")
+    private static View hackStatusBarColor(final Activity act, final String colorResID) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             try {
 
@@ -48,7 +50,8 @@ public class HelperSetStatusBarColor {
                         final View statusBar = new View(act);
 
                         vg.post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
                                 int statusBarHeight = (int) Math.ceil(25 * vg.getContext().getResources().getDisplayMetrics().density);
                                 statusBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight));
@@ -66,7 +69,11 @@ public class HelperSetStatusBarColor {
         } else if (act.getWindow() != null) {
             act.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             act.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            act.getWindow().setStatusBarColor(Color.parseColor(colorResID));
+            try {
+                act.getWindow().setStatusBarColor(Color.parseColor(colorResID));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -136,7 +143,8 @@ public class HelperSetStatusBarColor {
         return 0;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT) private static void setTranslucentStatus(Window win, boolean on) {
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private static void setTranslucentStatus(Window win, boolean on) {
         WindowManager.LayoutParams winParams = win.getAttributes();
         final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
         if (on) {
