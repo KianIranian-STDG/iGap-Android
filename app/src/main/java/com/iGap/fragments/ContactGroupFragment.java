@@ -278,7 +278,9 @@ public class ContactGroupFragment extends Fragment {
         contacts = Contacts.retrieve(null);
 
         for (StructContactInfo contact : contacts) {
-            items.add(new ContactItemGroup().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+            if (contact != null) {
+                items.add(new ContactItemGroup().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+            }
         }
         itemAdapter.add(items);
 

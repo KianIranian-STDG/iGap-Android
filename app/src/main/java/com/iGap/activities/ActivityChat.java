@@ -563,9 +563,18 @@ public class ActivityChat extends ActivityEnhanced
                 if (chatType == CHAT) {
                     chatPeerId = realmRoom.getChatRoom().getPeerId();
                     RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-                    title = realmRegisteredInfo.getDisplayName();
-                    lastSeen = realmRegisteredInfo.getLastSeen();
-                    userStatus = realmRegisteredInfo.getStatus();
+                    if (realmRegisteredInfo != null) {
+                        title = realmRegisteredInfo.getDisplayName();
+                        lastSeen = realmRegisteredInfo.getLastSeen();
+                        userStatus = realmRegisteredInfo.getStatus();
+                    } else {
+                        /**
+                         * when userStatus isn't EXACTLY lastSeen time not used so don't need
+                         * this time and also this time not exist in room info
+                         */
+                        title = realmRoom.getTitle();
+                        userStatus = getResources().getString(R.string.last_seen_recently);
+                    }
                 } else {
                     mRoomId = realmRoom.getId();
                     title = realmRoom.getTitle();
@@ -3849,19 +3858,20 @@ public class ActivityChat extends ActivityEnhanced
                     public void run() {
 
                         for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
-                            Long messageId = parseLong(messageID.mMessage.messageID);
-                            list.add(messageId);
+                            if (messageID.mMessage != null && messageID.mMessage.messageID != null) {
+                                Long messageId = parseLong(messageID.mMessage.messageID);
+                                list.add(messageId);
 
-                            // remove deleted message from adapter
-                            mAdapter.removeMessage(messageId);
+                                // remove deleted message from adapter
+                                mAdapter.removeMessage(messageId);
 
-                            // remove tag from edtChat if the message has deleted
-                            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                if (messageID.mMessage.messageID.equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                    edtChat.setTag(null);
+                                // remove tag from edtChat if the message has deleted
+                                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                    if (messageID.mMessage.messageID.equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                        edtChat.setTag(null);
+                                    }
                                 }
                             }
-
                         }
                     }
                 });
@@ -5006,7 +5016,10 @@ public class ActivityChat extends ActivityEnhanced
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item).findFirst().setMute(isMuteNotification);
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item).findFirst();
+                if (realmRoom != null) {
+                    realmRoom.setMute(isMuteNotification);
+                }
             }
         });
 
@@ -5153,45 +5166,45 @@ public class ActivityChat extends ActivityEnhanced
             replyToMessageId = 0;
         }
 
-        if (ll_attach_text.getVisibility() == View.VISIBLE) {
-            //draftForFile();
-        } else {
-            final String message = edtChat.getText().toString();
-            if (!message.trim().isEmpty() || ((mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE))) {
+        //if (ll_attach_text.getVisibility() == View.VISIBLE) {
+        //    //draftForFile();
+        //} else {
+        final String message = edtChat.getText().toString();
+        if (!message.trim().isEmpty() || ((mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE))) {
 
-                hasDraft = true;
+            hasDraft = true;
 
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                        if (realmRoom != null) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                    if (realmRoom != null) {
 
-                            RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
-                            draft.setMessage(message);
-                            draft.setReplyToMessageId(replyToMessageId);
+                        RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
+                        draft.setMessage(message);
+                        draft.setReplyToMessageId(replyToMessageId);
 
-                            realmRoom.setDraft(draft);
+                        realmRoom.setDraft(draft);
 
-                            if (chatType == CHAT) {
-                                new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, message, replyToMessageId);
-                            } else if (chatType == GROUP) {
-                                new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, replyToMessageId);
-                            } else if (chatType == CHANNEL) {
-                                new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, message, replyToMessageId);
-                            }
-                            if (G.onDraftMessage != null) { // zamani ke mostaghim varede chat beshim bedune vorud be list room ha onDraftMessage null mishe
-                                G.onDraftMessage.onDraftMessage(mRoomId, message);
-                            }
+                        if (chatType == CHAT) {
+                            new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, message, replyToMessageId);
+                        } else if (chatType == GROUP) {
+                            new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, replyToMessageId);
+                        } else if (chatType == CHANNEL) {
+                            new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, message, replyToMessageId);
+                        }
+                        if (G.onDraftMessage != null) { // zamani ke mostaghim varede chat beshim bedune vorud be list room ha onDraftMessage null mishe
+                            G.onDraftMessage.onDraftMessage(mRoomId, message);
                         }
                     }
-                });
-                realm.close();
-            } else {
-                clearDraftRequest();
-            }
+                }
+            });
+            realm.close();
+        } else {
+            clearDraftRequest();
         }
+        //}
     }
 
     private void getDraft() {
@@ -5433,166 +5446,167 @@ public class ActivityChat extends ActivityEnhanced
             List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
 
             Realm realm = Realm.getDefaultInstance();
-            // if user clicked on any message which he wasn't its sender, remove edit mList option
-            if (chatType == CHANNEL) {
-                if (channelRole == ChannelChatRole.MEMBER) {
-                    items.remove(getString(R.string.edit_item_dialog));
-                    items.remove(getString(R.string.replay_item_dialog));
-                    items.remove(getString(R.string.delete_item_dialog));
-                }
-                final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-                ChannelChatRole roleSenderMessage = null;
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                RealmList<RealmMember> realmMembers = realmChannelRoom.getMembers();
-                for (RealmMember rm : realmMembers) {
-                    if (rm.getPeerId() == Long.parseLong(message.senderID)) {
-                        roleSenderMessage = ChannelChatRole.valueOf(rm.getRole());
-                    }
-                }
-                if (senderId != Long.parseLong(message.senderID)) {  // if message dose'nt belong to owner
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.roomId).findFirst();
+            if (realmRoom != null) {
+                // if user clicked on any message which he wasn't its sender, remove edit mList option
+                if (chatType == CHANNEL) {
                     if (channelRole == ChannelChatRole.MEMBER) {
+                        items.remove(getString(R.string.edit_item_dialog));
+                        items.remove(getString(R.string.replay_item_dialog));
                         items.remove(getString(R.string.delete_item_dialog));
-                    } else if (channelRole == ChannelChatRole.MODERATOR) {
-                        if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
-                    } else if (channelRole == ChannelChatRole.ADMIN) {
-                        if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
-                            items.remove(getString(R.string.delete_item_dialog));
+                    }
+                    final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                    ChannelChatRole roleSenderMessage = null;
+                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                    RealmList<RealmMember> realmMembers = realmChannelRoom.getMembers();
+                    for (RealmMember rm : realmMembers) {
+                        if (rm.getPeerId() == Long.parseLong(message.senderID)) {
+                            roleSenderMessage = ChannelChatRole.valueOf(rm.getRole());
                         }
                     }
-                    items.remove(getString(R.string.edit_item_dialog));
-                }
+                    if (senderId != Long.parseLong(message.senderID)) {  // if message dose'nt belong to owner
+                        if (channelRole == ChannelChatRole.MEMBER) {
+                            items.remove(getString(R.string.delete_item_dialog));
+                        } else if (channelRole == ChannelChatRole.MODERATOR) {
+                            if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
+                                items.remove(getString(R.string.delete_item_dialog));
+                            }
+                        } else if (channelRole == ChannelChatRole.ADMIN) {
+                            if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
+                                items.remove(getString(R.string.delete_item_dialog));
+                            }
+                        }
+                        items.remove(getString(R.string.edit_item_dialog));
+                    }
 
-            } else if (chatType == GROUP) {
+                } else if (chatType == GROUP) {
 
-                final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                    final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
-                GroupChatRole roleSenderMessage = null;
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                RealmList<RealmMember> realmMembers = realmGroupRoom.getMembers();
-                for (RealmMember rm : realmMembers) {
-                    if (rm.getPeerId() == Long.parseLong(message.senderID)) {
-                        roleSenderMessage = GroupChatRole.valueOf(rm.getRole());
+                    GroupChatRole roleSenderMessage = null;
+                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                    RealmList<RealmMember> realmMembers = realmGroupRoom.getMembers();
+                    for (RealmMember rm : realmMembers) {
+                        if (rm.getPeerId() == Long.parseLong(message.senderID)) {
+                            roleSenderMessage = GroupChatRole.valueOf(rm.getRole());
+                        }
+                    }
+                    if (senderId != Long.parseLong(message.senderID)) {  // if message dose'nt belong to owner
+                        if (groupRole == GroupChatRole.MEMBER) {
+                            items.remove(getString(R.string.delete_item_dialog));
+                        } else if (groupRole == GroupChatRole.MODERATOR) {
+                            if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
+                                items.remove(getString(R.string.delete_item_dialog));
+                            }
+                        } else if (groupRole == GroupChatRole.ADMIN) {
+                            if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
+                                items.remove(getString(R.string.delete_item_dialog));
+                            }
+                        }
+                        items.remove(getString(R.string.edit_item_dialog));
+                    }
+                } else {
+                    if (!message.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
+                        items.remove(getString(R.string.edit_item_dialog));
                     }
                 }
-                if (senderId != Long.parseLong(message.senderID)) {  // if message dose'nt belong to owner
-                    if (groupRole == GroupChatRole.MEMBER) {
-                        items.remove(getString(R.string.delete_item_dialog));
-                    } else if (groupRole == GroupChatRole.MODERATOR) {
-                        if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
-                    } else if (groupRole == GroupChatRole.ADMIN) {
-                        if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
-                    }
-                    items.remove(getString(R.string.edit_item_dialog));
-                }
-            } else {
-                if (!message.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
-                    items.remove(getString(R.string.edit_item_dialog));
-                }
-            }
 
-            realm.close();
+                realm.close();
 
-            new MaterialDialog.Builder(this).title(getString(R.string.messages)).negativeText(getString(R.string.cancel)).items(items).itemsCallback(new MaterialDialog.ListCallback() {
-                @Override
-                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                    if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
-                        // copy message
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        String _text = message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText;
-                        if (_text != null && _text.length() > 0) {
-                            ClipData clip = ClipData.newPlainText("Copied Text", _text);
-                            clipboard.setPrimaryClip(clip);
-                            Toast.makeText(G.context, R.string.text_copied, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(G.context, R.string.text_is_empty, Toast.LENGTH_SHORT).show();
-                        }
+                new MaterialDialog.Builder(this).title(getString(R.string.messages)).negativeText(getString(R.string.cancel)).items(items).itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        if (text.toString().equalsIgnoreCase(getString(R.string.copy_item_dialog))) {
+                            // copy message
+                            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                            String _text = message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText;
+                            if (_text != null && _text.length() > 0) {
+                                ClipData clip = ClipData.newPlainText("Copied Text", _text);
+                                clipboard.setPrimaryClip(clip);
+                                Toast.makeText(G.context, R.string.text_copied, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(G.context, R.string.text_is_empty, Toast.LENGTH_SHORT).show();
+                            }
 
-                    } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
-                        final Realm realmCondition = Realm.getDefaultInstance();
-                        final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirstAsync();
-                        realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-                            @Override
-                            public void onChange(final RealmClientCondition element) {
-                                realmCondition.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        if (element != null) {
-                                            if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
+                            final Realm realmCondition = Realm.getDefaultInstance();
+                            final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, message.roomId).findFirstAsync();
+                            realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
+                                @Override
+                                public void onChange(final RealmClientCondition element) {
+                                    realmCondition.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            if (element != null) {
+                                                if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
 
-                                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
-                                                if (roomMessage != null) {
-                                                    // delete message from database
-                                                    //roomMessage.deleteFromRealm();
-                                                    roomMessage.setDeleted(true);
-                                                }
+                                                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
+                                                    if (roomMessage != null) {
+                                                        // delete message from database
+                                                        //roomMessage.deleteFromRealm();
+                                                        roomMessage.setDeleted(true);
+                                                    }
 
-                                                RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class, SUID.id().get());
-                                                realmOfflineDelete.setOfflineDelete(parseLong(message.messageID));
-                                                element.getOfflineDeleted().add(realmOfflineDelete);
+                                                    RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class, SUID.id().get());
+                                                    realmOfflineDelete.setOfflineDelete(parseLong(message.messageID));
+                                                    element.getOfflineDeleted().add(realmOfflineDelete);
 
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        // remove deleted message from adapter
-                                                        mAdapter.removeMessage(parseLong(message.messageID));
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            // remove deleted message from adapter
+                                                            mAdapter.removeMessage(parseLong(message.messageID));
 
-                                                        // remove tag from edtChat if the
-                                                        // message has deleted
-                                                        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                                            if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                                                edtChat.setTag(null);
+                                                            // remove tag from edtChat if the
+                                                            // message has deleted
+                                                            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                                                if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                                                    edtChat.setTag(null);
+                                                                }
                                                             }
                                                         }
+                                                    });
+                                                    // delete message
+                                                    if (chatType == GROUP) {
+                                                        new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(message.messageID));
+                                                    } else if (chatType == CHAT) {
+                                                        new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(message.messageID));
+                                                    } else if (chatType == CHANNEL) {
+                                                        new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(message.messageID));
                                                     }
-                                                });
-                                                // delete message
-                                                if (chatType == GROUP) {
-                                                    new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(message.messageID));
-                                                } else if (chatType == CHAT) {
-                                                    new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(message.messageID));
-                                                } else if (chatType == CHANNEL) {
-                                                    new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(message.messageID));
                                                 }
+                                                element.removeChangeListeners();
                                             }
-                                            element.removeChangeListeners();
                                         }
-                                    }
-                                });
+                                    });
 
-                                realmCondition.close();
+                                    realmCondition.close();
+                                }
+                            });
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
+                            // edit message
+                            // put message text to EditText
+                            if (message.messageText != null && !message.messageText.isEmpty()) {
+                                edtChat.setText(message.messageText);
+                                edtChat.setSelection(0, edtChat.getText().length());
+                                // put message object to edtChat's tag to obtain it later and
+                                // found is user trying to edit a message
+                                edtChat.setTag(message);
                             }
-                        });
-                    } else if (text.toString().equalsIgnoreCase(getString(R.string.edit_item_dialog))) {
-                        // edit message
-                        // put message text to EditText
-                        if (message.messageText != null && !message.messageText.isEmpty()) {
-                            edtChat.setText(message.messageText);
-                            edtChat.setSelection(0, edtChat.getText().length());
-                            // put message object to edtChat's tag to obtain it later and
-                            // found is user trying to edit a message
-                            edtChat.setTag(message);
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.replay_item_dialog))) {
+                            replay(message);
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.forward_item_dialog))) {
+                            // forward selected messages to room list for selecting room
+                            if (mAdapter != null) {
+                                finish();
+                                startActivity(makeIntentForForwardMessages(message));
+                            }
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.share_item_dialog))) {
+                            shearedDataToOtherProgram(message);
                         }
-                    } else if (text.toString().equalsIgnoreCase(getString(R.string.replay_item_dialog))) {
-                        replay(message);
-                    } else if (text.toString().equalsIgnoreCase(getString(R.string.forward_item_dialog))) {
-                        // forward selected messages to room list for selecting room
-                        if (mAdapter != null) {
-                            finish();
-                            startActivity(makeIntentForForwardMessages(message));
-                        }
-                    } else if (text.toString().equalsIgnoreCase(getString(R.string.share_item_dialog))) {
-                        shearedDataToOtherProgram(message);
                     }
-                }
-            }).show();
+                }).show();
+            }
         }
     }
 

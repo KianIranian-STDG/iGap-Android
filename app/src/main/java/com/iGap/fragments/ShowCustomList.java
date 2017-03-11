@@ -66,8 +66,7 @@ public class ShowCustomList extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contact_group, container, false);
     }
 
@@ -129,8 +128,7 @@ public class ShowCustomList extends Fragment {
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroup>() {
             @Override
             public boolean filter(ContactItemGroup item, CharSequence constraint) {
-                return !item.mContact.displayName.toLowerCase()
-                        .startsWith(String.valueOf(constraint).toLowerCase());
+                return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroup>() {
@@ -209,15 +207,15 @@ public class ShowCustomList extends Fragment {
         rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
         //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration =
-                new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
+        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
 
         for (StructContactInfo contact : contacts) {
-            items.add(new ContactItemGroup().setContact(contact)
-                    .withIdentifier(100 + contacts.indexOf(contact)));
+            if (contact != null) {
+                items.add(new ContactItemGroup().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+            }
         }
         itemAdapter.add(items);
 
@@ -237,70 +235,57 @@ public class ShowCustomList extends Fragment {
 
     private void showDialog() {
 
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.show_message_count)
-                .items(R.array.numberCountGroup)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+        new MaterialDialog.Builder(getActivity()).title(R.string.show_message_count).items(R.array.numberCountGroup).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        switch (which) {
-                            case 0:
-                                count = 0;
-                                if (onSelectedList != null) {
-                                    onSelectedList.getSelectedList(true, "", count, getSelectedList());
-                                }
-                                getActivity().getSupportFragmentManager().popBackStack();
-                                break;
-                            case 1:
-                                count = (int) lastId;
-                                if (onSelectedList != null) {
-
-                                    onSelectedList.getSelectedList(true, "", count, getSelectedList());
-                                }
-                                getActivity().getSupportFragmentManager().popBackStack();
-                                break;
-                            case 2:
-                                count = 50;
-                                if (onSelectedList != null) {
-                                    onSelectedList.getSelectedList(true, "", count, getSelectedList());
-                                }
-                                getActivity().getSupportFragmentManager().popBackStack();
-                                break;
-                            case 3:
-                                dialog.dismiss();
-                                new MaterialDialog.Builder(getActivity()).title(R.string.customs)
-                                        .positiveText(getString(R.string.B_ok))
-                                        .alwaysCallInputCallback()
-                                        .widgetColor(getResources().getColor(R.color.toolbar_background))
-                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                            @Override
-                                            public void onClick(@NonNull MaterialDialog dialog,
-                                                                @NonNull DialogAction which) {
-                                                if (onSelectedList != null) {
-                                                    onSelectedList.getSelectedList(true, "", count, getSelectedList());
-                                                }
-                                                getActivity().getSupportFragmentManager().popBackStack();
-                                            }
-                                        })
-                                        .inputType(InputType.TYPE_CLASS_PHONE)
-                                        .input(getString(R.string.count_of_show_message), "50",
-                                                new MaterialDialog.InputCallback() {
-                                                    @Override
-                                                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                                                        if (input.toString() != null && !input.toString().isEmpty()) {
-                                                            count = Integer.parseInt(input.toString());
-                                                        } else {
-                                                            count = 0;
-                                                        }
-                                                    }
-                                                })
-                                        .show();
-                                break;
+                switch (which) {
+                    case 0:
+                        count = 0;
+                        if (onSelectedList != null) {
+                            onSelectedList.getSelectedList(true, "", count, getSelectedList());
                         }
-                    }
-                })
-                .show();
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        break;
+                    case 1:
+                        count = (int) lastId;
+                        if (onSelectedList != null) {
+
+                            onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                        }
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        break;
+                    case 2:
+                        count = 50;
+                        if (onSelectedList != null) {
+                            onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                        }
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        break;
+                    case 3:
+                        dialog.dismiss();
+                        new MaterialDialog.Builder(getActivity()).title(R.string.customs).positiveText(getString(R.string.B_ok)).alwaysCallInputCallback().widgetColor(getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                if (onSelectedList != null) {
+                                    onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                                }
+                                getActivity().getSupportFragmentManager().popBackStack();
+                            }
+                        }).inputType(InputType.TYPE_CLASS_PHONE).input(getString(R.string.count_of_show_message), "50", new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                if (input.toString() != null && !input.toString().isEmpty()) {
+                                    count = Integer.parseInt(input.toString());
+                                } else {
+                                    count = 0;
+                                }
+                            }
+                        }).show();
+                        break;
+                }
+            }
+        }).show();
     }
 
     private void refreshView() {
