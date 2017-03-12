@@ -32,6 +32,7 @@ import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperTimeOut;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.MyService;
 import com.iGap.interfaces.IClientSearchUserName;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
@@ -78,7 +79,6 @@ import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnDraftMessage;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.interfaces.OnFileDownloaded;
-import com.iGap.interfaces.OnFileUploadStatusResponse;
 import com.iGap.interfaces.OnGetUserInfo;
 import com.iGap.interfaces.OnGetWallpaper;
 import com.iGap.interfaces.OnGroupAddAdmin;
@@ -146,7 +146,6 @@ import com.iGap.module.ClearMessagesUtil;
 import com.iGap.module.Connectivity;
 import com.iGap.module.Contacts;
 import com.iGap.module.SHP_SETTING;
-import com.iGap.module.UploaderUtil;
 import com.iGap.module.enums.ConnectionMode;
 import com.iGap.proto.ProtoClientCondition;
 import com.iGap.proto.ProtoGlobal;
@@ -245,7 +244,7 @@ public class G extends MultiDexApplication {
     public static Activity currentActivity;
     public static LayoutInflater inflater;
     public static Typeface FONT_IGAP;
-    public static List<String> downloadingTokens = new ArrayList<>();
+
     public static long currentTime;
     public static long userId;
     public static long latestHearBeatTime = System.currentTimeMillis();
@@ -269,11 +268,11 @@ public class G extends MultiDexApplication {
 
     public static File imageFile;
     public static int COPY_BUFFER_SIZE = 1024;
-    public static UploaderUtil uploaderUtil = new UploaderUtil();
+
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
     public static ChatSendMessageUtil chatSendMessageUtil = new ChatSendMessageUtil();
     public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
-    public static OnFileUploadStatusResponse onFileUploadStatusResponse;
+
     public static Config.ConnectionState connectionState;
     public static OnConnectionChangeState onConnectionChangeState;
     public static OnUpdating onUpdating;
@@ -396,7 +395,6 @@ public class G extends MultiDexApplication {
     public static double timeVideoPlayer = 30000.0;
     public static boolean isSendContact = false;
 
-    public static ConcurrentHashMap<Long, RequestWrapper> currentUploadFiles = new ConcurrentHashMap<>();
     public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
 
     public static void setUserTextSize() {
@@ -571,7 +569,9 @@ public class G extends MultiDexApplication {
             }
         }
         setUserTextSize();
+
         new HelperDownloadFile();
+        new HelperUploadFile();
     }
 
     private void realmConfiguration() {

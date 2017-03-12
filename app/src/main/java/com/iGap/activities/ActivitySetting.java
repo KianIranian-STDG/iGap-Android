@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -55,16 +54,15 @@ import com.iGap.fragments.FragmentPrivacyAndSecurity;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
-import com.iGap.helper.HelperError;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
 import com.iGap.interfaces.OnAvatarGet;
-import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
@@ -115,7 +113,7 @@ import static com.iGap.G.context;
 import static com.iGap.G.onRefreshActivity;
 import static com.iGap.R.string.log_out;
 
-public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
+public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse {
 
     public static String pathSaveImage;
     public static int KEY_AD_DATA_PHOTO = -1;
@@ -325,8 +323,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         };
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-        G.uploaderUtil.setActivityCallbacks(this);
 
         txtNickNameTitle = (TextView) findViewById(R.id.ac_txt_nickname_title);
         txtNickName = (TextView) findViewById(R.id.st_txt_nikName);
@@ -2295,7 +2291,23 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             lastUploadedAvatarId = idAvatar + 1L;
 
-            new UploadTask(prgWait, ActivitySetting.this).execute(pathSaveImage, lastUploadedAvatarId);
+            showProgressBar();
+            HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                    if (progress < 100) {
+                        prgWait.setProgress(progress);
+                    } else {
+                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                    }
+                }
+
+                @Override public void OnError() {
+                    hideProgressBar();
+                }
+            });
+
+
+
         }
     }
 
@@ -2346,70 +2358,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     @Override
-    public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
-        new RequestUserAvatarAdd().userAddAvatar(uploadStructure.token);
-    }
-
-    @Override
-    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
-        // TODO: 10/20/2016 [Alireza] update view something like updating progress
-    }
-
-    @Override
     public void onAvatarError() {
         hideProgressBar();
-    }
-
-
-
-    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-
-        private ProgressBar prg;
-        private Activity myActivityReference;
-
-        public UploadTask(ProgressBar prg, Activity myActivityReference) {
-            this.prg = prg;
-            this.myActivityReference = myActivityReference;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected FileUploadStructure doInBackground(Object... params) {
-            try {
-                String filePath = (String) params[0];
-                long avatarId = (long) params[1];
-                File file = new File(filePath);
-                String fileName = file.getName();
-                long fileSize = file.length();
-                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
-                fileUploadStructure.openFile(filePath);
-
-                byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
-                fileUploadStructure.setFileHash(fileHash);
-
-                return fileUploadStructure;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(FileUploadStructure result) {
-            super.onPostExecute(result);
-            myActivityReference.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            prg.setVisibility(View.GONE);
-            if (result != null) {
-                identityCurrent = Long.toString(result.messageId);
-                G.uploaderUtil.startUploading(result, identityCurrent);
-            } else {
-                HelperError.getErrorFromCode(-1, 0);
-            }
-        }
     }
 
     private String getAppVersion() {
@@ -2424,30 +2374,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         return info.versionName;
     }
 
-    @Override
-    public void onUploadStarted(FileUploadStructure struct) {
-        showProgressBar();
-    }
-
-    @Override
-    public void onBadDownload(String token) {
-    }
-
-    @Override
-    public void onFileTimeOut(String identity) {
-        if (identityCurrent.equals(identity)) {
-            hideProgressBar();
-        }
-    }
-
     //***Show And Hide Progress
 
     private void showProgressBar() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                prgWait.setVisibility(View.VISIBLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (prgWait != null) {
+                    prgWait.setVisibility(View.VISIBLE);
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+
             }
         });
     }
@@ -2456,8 +2393,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                prgWait.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (prgWait != null) {
+                    prgWait.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+
             }
         });
     }

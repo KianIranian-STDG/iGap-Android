@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -50,6 +49,7 @@ import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
@@ -70,7 +70,6 @@ import com.iGap.interfaces.OnChannelRemoveUsername;
 import com.iGap.interfaces.OnChannelRevokeLink;
 import com.iGap.interfaces.OnChannelUpdateSignature;
 import com.iGap.interfaces.OnChannelUpdateUsername;
-import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnMenuClick;
 import com.iGap.interfaces.OnSelectedList;
@@ -128,7 +127,7 @@ import static com.iGap.G.context;
 
 public class ActivityChannelProfile extends ActivityEnhanced
     implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete, OnChannelLeft, OnChannelEdit,
-    OnFileUploadForActivities, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
+    OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
 
     private AppBarLayout appBarLayout;
     private TextView txtDescription, txtChannelLink, txtChannelNameInfo;
@@ -237,7 +236,6 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
         mRealm = Realm.getDefaultInstance();
 
-        G.uploaderUtil.setActivityCallbacks(this);
         G.onChannelAddMember = this;
         G.onChannelKickMember = this;
         G.onChannelAddAdmin = this;
@@ -1366,36 +1364,7 @@ public class ActivityChannelProfile extends ActivityEnhanced
         });
     }
 
-    //***Upload File Callbacks
 
-    @Override
-    public void onFileUploaded(FileUploadStructure uploadStructure, String identity) {
-        //if (Long.parseLong(identity) == avatarId) {
-        new RequestChannelAvatarAdd().channelAvatarAdd(roomId, uploadStructure.token);
-        //}
-    }
-
-    @Override
-    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
-
-    }
-
-    @Override
-    public void onUploadStarted(FileUploadStructure struct) {
-        showProgressBar();
-    }
-
-    @Override
-    public void onBadDownload(String token) {
-
-    }
-
-    @Override
-    public void onFileTimeOut(String identity) {
-        //if (Long.parseLong(identity) == avatarId) {
-        hideProgressBar();
-        //}
-    }
 
 
     //***Edit Channel
@@ -1926,50 +1895,9 @@ public class ActivityChannelProfile extends ActivityEnhanced
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_channel_profile, fragmentNotification).commit();
     }
 
-    //*** UploadTask
 
-    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
 
-        private ProgressBar prg;
-        private Activity myActivityReference;
 
-        public UploadTask(ProgressBar prg, Activity myActivityReference) {
-            this.prg = prg;
-            this.myActivityReference = myActivityReference;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected FileUploadStructure doInBackground(Object... params) {
-            try {
-                String filePath = (String) params[0];
-                long avatarId = (long) params[1];
-                File file = new File(filePath);
-                String fileName = file.getName();
-                long fileSize = file.length();
-                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
-                fileUploadStructure.openFile(filePath);
-
-                byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
-                fileUploadStructure.setFileHash(fileHash);
-
-                return fileUploadStructure;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(FileUploadStructure result) {
-            super.onPostExecute(result);
-            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
-        }
-    }
 
     //*** onActivityResult
 
@@ -2004,7 +1932,20 @@ public class ActivityChannelProfile extends ActivityEnhanced
                     break;
             }
 
-            new ActivityChannelProfile.UploadTask(prgWait, ActivityChannelProfile.this).execute(filePath, avatarId);
+            showProgressBar();
+            HelperUploadFile.startUploadTaskAvatar(filePath, avatarId, new HelperUploadFile.UpdateListener() {
+                @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                    if (progress < 100) {
+                        prgWait.setProgress(progress);
+                    } else {
+                        new RequestChannelAvatarAdd().channelAvatarAdd(roomId, struct.token);
+                    }
+                }
+
+                @Override public void OnError() {
+                    hideProgressBar();
+                }
+            });
         }
     }
 
@@ -2012,8 +1953,11 @@ public class ActivityChannelProfile extends ActivityEnhanced
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                prgWait.setVisibility(View.VISIBLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (prgWait != null) {
+                    prgWait.setVisibility(View.VISIBLE);
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+
             }
         });
     }

@@ -2,7 +2,7 @@ package com.iGap.module;
 
 import android.content.Context;
 import com.iGap.G;
-import com.iGap.activities.ActivityChat;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.interfaces.IResendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
@@ -91,7 +91,8 @@ public class ResendMessage implements IResendMessage {
                             ProtoGlobal.Room.Type roomType = realmRoom.getType();
                             G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
                         } else {
-                            new ActivityChat.UploadTask().execute(roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getRoomId(), roomMessage.getMessage());
+                            HelperUploadFile.startUploadTaskChat(roomMessage.getRoomId(), realmRoom.getType(), roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(),
+                                roomMessage.getMessageType(), roomMessage.getMessage(), null);
                         }
                     }
                 }
@@ -105,7 +106,8 @@ public class ResendMessage implements IResendMessage {
                             if (roomMessage.getAttachment() == null) {
                                 G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
                             } else {
-                                new ActivityChat.UploadTask().execute(roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getRoomId(), roomMessage.getMessage());
+                                HelperUploadFile.startUploadTaskChat(roomMessage.getRoomId(), roomType, roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(),
+                                    roomMessage.getMessageType(), roomMessage.getMessage(), null);
                             }
                         }
                     }

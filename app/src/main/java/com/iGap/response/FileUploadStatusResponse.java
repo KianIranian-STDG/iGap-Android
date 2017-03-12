@@ -2,11 +2,11 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.helper.HelperSetAction;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.proto.ProtoFileUploadStatus;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-
 import io.realm.Realm;
 
 public class FileUploadStatusResponse extends MessageHandler {
@@ -27,7 +27,7 @@ public class FileUploadStatusResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoFileUploadStatus.FileUploadStatusResponse.Builder builder = (ProtoFileUploadStatus.FileUploadStatusResponse.Builder) message;
-        G.onFileUploadStatusResponse.onFileUploadStatus(builder.getStatus(), builder.getProgress(), builder.getRecheckDelayMs(), this.identity, builder.getResponse());
+        HelperUploadFile.onFileUploadStatusResponse.onFileUploadStatus(builder.getStatus(), builder.getProgress(), builder.getRecheckDelayMs(), this.identity, builder.getResponse());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class FileUploadStatusResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        G.uploaderUtil.onFileUploadTimeOut(this.identity);
+        HelperUploadFile.onFileUpload.onFileUploadTimeOut(this.identity);
         HelperSetAction.sendCancel(Long.parseLong(this.identity));
         makeFailed();
     }

@@ -19,12 +19,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperDownloadFile;
+import com.iGap.helper.HelperError;
 import com.iGap.helper.HelperGetMessageState;
 import com.iGap.helper.HelperInfo;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IChatItemAttachment;
 import com.iGap.interfaces.IMessageItem;
@@ -33,6 +34,7 @@ import com.iGap.interfaces.OnProgressUpdate;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
+import com.iGap.module.FileUploadStructure;
 import com.iGap.module.MyType;
 import com.iGap.module.ReserveSpaceGifImageView;
 import com.iGap.module.ReserveSpaceRoundedImageView;
@@ -69,6 +71,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
+    public boolean isUploadTimout = false;
 
     public ProtoGlobal.Room.Type type;
 
@@ -976,8 +979,27 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         //    }
         //}
 
-        if (MessagesAdapter.hasUploadRequested(Long.parseLong(mMessage.messageID))) {
-            messageClickListener.onUploadCancel(progress, mMessage, holder.getAdapterPosition());
+        if (HelperUploadFile.isUploading(mMessage.messageID)) {
+
+            if (isUploadTimout) {
+
+                if (G.userLogin) {
+                    HelperUploadFile.reUpload(mMessage.messageID);
+
+                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel, false);
+                    holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                    final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
+                    contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+                    contentLoading.setVisibility(View.VISIBLE);
+                    isUploadTimout = false;
+                } else {
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+                }
+            } else {
+                messageClickListener.onUploadCancel(progress, mMessage, holder.getAdapterPosition());
+            }
+
+
         } else if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
             HelperDownloadFile.stopDownLoad(attachment.getToken());
         } else {
@@ -1177,7 +1199,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      *
      * @param holder VH
      */
-    private void prepareProgress(VH holder, RealmAttachment attachment) {
+    private void prepareProgress(final VH holder, RealmAttachment attachment) {
         if (!hasProgress(holder.itemView)) {
             return;
         }
@@ -1186,24 +1208,46 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (mMessage.sendType == MyType.SendType.send) {
             ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.ic_cancel, false);
 
-            ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
+            final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
             contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
             contentLoading.setVisibility(View.GONE);
-
 
             /**
              * update progress when user trying to upload or download
              */
-            if (MessagesAdapter.uploading.containsKey(Long.parseLong(mMessage.messageID))) {
+            if (HelperUploadFile.isUploading(mMessage.messageID)) {
                 hideThumbnailIf(holder);
+
+                HelperUploadFile.AddListener(mMessage.messageID, new HelperUploadFile.UpdateListener() {
+                    @Override public void OnProgress(final int progress, FileUploadStructure struct) {
+
+                        G.currentActivity.runOnUiThread(new Runnable() {
+                            @Override public void run() {
+
+                                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(progress);
+
+                                if (progress == 100) {
+                                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
+                                    contentLoading.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override public void OnError() {
+
+                        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(0);
+                        ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.upload, true);
+                        isUploadTimout = true;
+                        contentLoading.setVisibility(View.GONE);
+                    }
+                });
+
 
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 contentLoading.setVisibility(View.VISIBLE);
-                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)));
-                if (MessagesAdapter.uploading.get(Long.parseLong(mMessage.messageID)) == 100) {
-                    ((MessageProgress) holder.itemView.findViewById(R.id.progress)).performProgress();
-                    contentLoading.setVisibility(View.GONE);
-                }
+                ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(HelperUploadFile.getUploadProgress(mMessage.messageID));
+
             } else {
                 checkForDownloading(holder, attachment);
             }
@@ -1230,7 +1274,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         progressBar.withDrawable(R.drawable.upload, true);
         contentLoading.setVisibility(View.GONE);
 
-
+        isUploadTimout = true;
     }
 
     private void hideThumbnailIf(VH holder) {

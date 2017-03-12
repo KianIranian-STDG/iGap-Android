@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,13 +38,13 @@ import com.iGap.activities.ActivityCrop;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnChannelAvatarAdd;
 import com.iGap.interfaces.OnChannelCreate;
 import com.iGap.interfaces.OnChatConvertToGroup;
 import com.iGap.interfaces.OnClientGetRoomResponse;
-import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnGroupCreate;
@@ -83,7 +82,7 @@ import static com.iGap.module.AttachFile.request_code_TAKE_PICTURE;
 import static com.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 import static com.iGap.module.MusicPlayer.roomId;
 
-public class FragmentNewGroup extends Fragment implements OnFileUploadForActivities, OnGroupAvatarResponse, OnChannelAvatarAdd {
+public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse, OnChannelAvatarAdd {
 
     private MaterialDesignTextView txtBack;
     private CircleImageView imgCircleImageView;
@@ -254,7 +253,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     }
 
     public void initComponent(View view) {
-        G.uploaderUtil.setActivityCallbacks(this);
         G.onGroupAvatarResponse = this;
         G.onChannelAvatarAdd = this;
 
@@ -738,62 +736,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
         });
     }
 
-    @Override
-    public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
-        hideProgressBar();
-        existAvatar = true;
-        token = uploadStructure.token;
-        // disable progress and show snack bar for retry upload avatar
-//        if (prefix.equals("NewChanel")) {
-//            new RequestChannelAvatarAdd().channelAvatarAdd(roomId, uploadStructure.token);
-//        } else {
-//            new RequestGroupAvatarAdd().groupAvatarAdd(roomId, uploadStructure.token);
-//        }
 
-        setImage(pathSaveImage);
-
-        /*getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                if (prefix.equals("NewChanel")) {
-                    existAvatar = true;
-                    token = uploadStructure.token;
-                    prgWaiting.setVisibility(View.GONE);
-                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    txtNextStep.setEnabled(true);
-                    setImage(pathSaveImage);
-
-                } else {
-                    avatarExist = true;
-                    fileUploadStructure = uploadStructure;
-                    imgCircleImageView.setTag(uploadStructure.token);
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(pathSaveImage), imgCircleImageView);
-                    imgCircleImageView.setPadding(0, 0, 0, 0);
-                    txtNextStep.setEnabled(true);
-                }
-            }
-        });*/
-    }
-
-    @Override
-    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
-        // TODO: 10/20/2016 [Alireza] update view something like updating progress
-
-        G.handler.post(new Runnable() {
-            @Override public void run() {
-                txtNextStep.setEnabled(false);
-            }
-        });
-    }
-
-    @Override
-    public void onFileTimeOut(String identity) {
-
-        if (Long.parseLong(identity) == avatarId) {
-            hideProgressBar();
-        }
-    }
 
     @Override
     public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
@@ -913,51 +856,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     }
 
 
-    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected FileUploadStructure doInBackground(Object... params) {
-            try {
-                String filePath = (String) params[0];
-                long avatarId = (long) params[1];
-                File file = new File(filePath);
-                String fileName = file.getName();
-                long fileSize = file.length();
-                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
-                fileUploadStructure.openFile(filePath);
-
-                byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
-                fileUploadStructure.setFileHash(fileHash);
-
-                return fileUploadStructure;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(FileUploadStructure result) {
-            super.onPostExecute(result);
-            avatarId = result.messageId;
-            G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
-        }
-    }
-
-    @Override
-    public void onUploadStarted(FileUploadStructure struct) {
-        showProgressBar();
-    }
-
-    @Override
-    public void onBadDownload(String token) {
-        // empty
-    }
 
     //=======================result for picture
     @Override
@@ -1003,7 +901,29 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
             if (data != null) {
                 pathSaveImage = data.getData().toString();
                 avatarId = System.nanoTime();
-                new UploadTask().execute(pathSaveImage, avatarId);
+
+                showProgressBar();
+                HelperUploadFile.startUploadTaskAvatar(pathSaveImage, avatarId, new HelperUploadFile.UpdateListener() {
+                    @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                        if (progress < 100) {
+                            prgWaiting.setProgress(progress);
+                        } else {
+                            hideProgressBar();
+                            existAvatar = true;
+                            token = struct.token;
+                            setImage(pathSaveImage);
+                        }
+                    }
+
+                    @Override public void OnError() {
+                        hideProgressBar();
+                    }
+                });
+
+
+
+
+
             }
         }
     }

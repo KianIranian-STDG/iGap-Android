@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -29,9 +28,9 @@ import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
-import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -58,7 +57,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.iGap.G.context;
 import static com.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
-public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarResponse, OnFileUploadForActivities {
+public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarResponse {
 
     public final static String ARG_USER_ID = "arg_user_id";
     public static boolean IsDeleteFile;
@@ -73,7 +72,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
     private int idAvatar;
     private int lastUploadedAvatarId;
     private ProgressBar prgWait;
-    private String pathSaveImage;
     private boolean existAvatar = false;
     private Typeface titleTypeface;
 
@@ -99,8 +97,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
         txtAddPhoto = (TextView) findViewById(R.id.pu_txt_addPhoto);
         prgWait = (ProgressBar) findViewById(R.id.prg);
-
-        G.uploaderUtil.setActivityCallbacks(this);
 
         findViewById(R.id.ap_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -450,7 +446,22 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
             lastUploadedAvatarId = idAvatar + 1;
 
-            new UploadTask().execute(pathImageUser, lastUploadedAvatarId);
+            showProgressBar();
+            HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                    if (progress < 100) {
+                        prgWait.setProgress(progress);
+                    } else {
+                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                    }
+                }
+
+                @Override public void OnError() {
+                    hideProgressBar();
+                }
+            });
+
+
         }
     }
 
@@ -498,7 +509,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
         Realm realm = Realm.getDefaultInstance();
         long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        HelperAvatar.avatarAdd(userId, pathSaveImage, avatar, new OnAvatarAdd() {
+        HelperAvatar.avatarAdd(userId, pathImageUser, avatar, new OnAvatarAdd() {
             @Override
             public void onAvatarAdd(final String avatarPath) {
 
@@ -524,64 +535,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
         hideProgressBar();
     }
 
-    private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-        @Override
-        protected FileUploadStructure doInBackground(Object... params) {
-            try {
-                String filePath = (String) params[0];
-                int avatarId = (int) params[1];
-                File file = new File(filePath);
-                String fileName = file.getName();
-                long fileSize = file.length();
-                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, avatarId);
-                fileUploadStructure.openFile(filePath);
-
-                byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
-                fileUploadStructure.setFileHash(fileHash);
-
-                return fileUploadStructure;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(FileUploadStructure result) {
-            super.onPostExecute(result);
-            if (result != null) {
-                G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
-            }
-        }
-
-    }
-
-    @Override
-    public void onUploadStarted(FileUploadStructure struct) {
-        showProgressBar();
-    }
-
-    @Override
-    public void onFileUploading(FileUploadStructure uploadStructure, String identity, double progress) {
-    }
-
-    @Override
-    public void onFileUploaded(final FileUploadStructure uploadStructure, String identity) {
-
-        pathSaveImage = uploadStructure.filePath;
-        new RequestUserAvatarAdd().userAddAvatar(uploadStructure.token);
-    }
-
-
-    @Override
-    public void onBadDownload(String token) {
-        hideProgressBar();
-    }
-
-    @Override
-    public void onFileTimeOut(String identity) {
-        hideProgressBar();
-    }
 
     //***Show And Hide Progress
 
@@ -589,8 +542,11 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                prgWait.setVisibility(View.VISIBLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (prgWait != null) {
+                    prgWait.setVisibility(View.VISIBLE);
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+
             }
         });
     }
@@ -599,8 +555,10 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                prgWait.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (prgWait != null) {
+                    prgWait.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
             }
         });
     }

@@ -9,16 +9,7 @@
                 tools:ignore="MissingPrefix"
     >
 
-    <ProgressBar
-        android:id="@+id/prg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:background="@drawable/pu_circle_dialog_give_image_gallery"
-        android:indeterminate="true"
-        android:visibility="gone"
-        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -94,6 +85,7 @@
                 android:textSize="@dimen/sp14"/>
         </LinearLayout>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -129,6 +121,7 @@
                 android:textSize="@dimen/sp14"/>
 
         </LinearLayout>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -205,6 +198,18 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/prg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:background="@drawable/pu_circle_dialog_give_image_gallery"
+        android:indeterminate="true"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>
 

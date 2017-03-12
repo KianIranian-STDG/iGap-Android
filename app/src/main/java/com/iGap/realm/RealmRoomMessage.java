@@ -4,8 +4,8 @@ import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
 import com.iGap.Config;
 import com.iGap.G;
-import com.iGap.adapter.MessagesAdapter;
 import com.iGap.helper.HelperLogMessage;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.OnActivityChatStart;
 import com.iGap.interfaces.OnActivityMainStart;
@@ -137,7 +137,7 @@ import org.parceler.Parcel;
                                              */
                                             if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
                                                 if (roomMessage.getAttachment() != null) {
-                                                    if (!MessagesAdapter.hasUploadRequested(roomMessage.getMessageId())) {
+                                                    if (!HelperUploadFile.isUploading(roomMessage.getMessageId() + "")) {
                                                         callback.resendMessageNeedsUpload(roomMessage);
                                                     }
                                                 } else {
@@ -187,7 +187,7 @@ import org.parceler.Parcel;
                                      */
                                     if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
                                         if (roomMessage.getAttachment() != null) {
-                                            if (!MessagesAdapter.hasUploadRequested(roomMessage.getMessageId())) {
+                                            if (!HelperUploadFile.isUploading(roomMessage.getMessageId() + "")) {
                                                 callback.resendMessageNeedsUpload(roomMessage);
                                             }
                                         } else {

@@ -4,13 +4,13 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-
-import com.iGap.activities.ActivityChat;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
-
 import io.realm.Realm;
 
 /**
@@ -42,6 +42,14 @@ public class UploadService extends Service {
     private void sendVoice(final String savedPath, final Long mRoomId) {
 
         Realm realm = Realm.getDefaultInstance();
+
+        ProtoGlobal.Room.Type chatType = null;
+
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) {
+            chatType = realmRoom.getType();
+        }
+
         final long messageId = SUID.id().get();
         final long updateTime = System.currentTimeMillis();
         final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
@@ -62,7 +70,7 @@ public class UploadService extends Service {
             }
         });
 
-        new ActivityChat.UploadTask().execute(savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, mRoomId, "");
+        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, "", null);
 
         realm.close();
     }

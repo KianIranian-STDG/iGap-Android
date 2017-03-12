@@ -2,17 +2,14 @@ package com.iGap.adapter;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.widget.FrameLayout;
-import com.iGap.G;
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.adapter.items.chat.TimeItem;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
-import com.iGap.interfaces.OnProgressUpdate;
 import com.iGap.module.StructMessageAttachment;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
@@ -27,7 +24,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     // contain sender id
     public static List<String> avatarsRequested = new ArrayList<>();
     public static List<String> usersInfoRequested = new ArrayList<>();
-    public static ArrayMap<Long, Integer> uploading = new ArrayMap<>();
 
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private IMessageItem iMessageItem;
@@ -106,13 +102,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         });
     }
 
-    public static boolean hasUploadRequested(long messageId) {
-        if (uploading == null) {
-            return false;
-        }
-        return uploading.containsKey(messageId);
-    }
-
     public List<StructMessageInfo> getFailedMessages() {
         List<StructMessageInfo> failedMessages = new ArrayList<>();
         for (Item item : getAdapterItems()) {
@@ -123,42 +112,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         return failedMessages;
     }
 
-
-
-    /**
-     * update progress while file uploading
-     * NOTE: it needs rewriting, because currently updates whole item view not just the progress
-     * (almost)
-     */
-    public void updateProgress(long messageId, int progress) {
-        if (!uploading.containsKey(messageId)) {
-            uploading.put(messageId, progress);
-        } else {
-            int pos2 = uploading.indexOfKey(messageId);
-            uploading.setValueAt(pos2, progress);
-        }
-
-        final Item item = getItemByFileIdentity(messageId);
-        if (item != null) {
-            final int pos = getAdapterItems().indexOf(item);
-
-            if (pos >= 0) {
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        item.updateProgress(new OnProgressUpdate() {
-                            @Override
-                            public void onProgressUpdate() {
-                                notifyAdapterItemChanged(pos);
-                                //set(pos, item);
-                            }
-                        });
-                    }
-                }, 500);
-            }
-
-        }
-    }
 
     public void updateChengedItem(ArrayList<String> list) {
 

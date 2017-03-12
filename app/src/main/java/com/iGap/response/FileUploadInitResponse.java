@@ -2,11 +2,11 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.helper.HelperSetAction;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.proto.ProtoFileUploadInit;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-
 import io.realm.Realm;
 
 public class FileUploadInitResponse extends MessageHandler {
@@ -27,12 +27,9 @@ public class FileUploadInitResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoFileUploadInit.FileUploadInitResponse.Builder fileUploadInitResponse =
-                (ProtoFileUploadInit.FileUploadInitResponse.Builder) message;
+        ProtoFileUploadInit.FileUploadInitResponse.Builder fp = (ProtoFileUploadInit.FileUploadInitResponse.Builder) message;
 
-        G.uploaderUtil.OnFileUploadInit(fileUploadInitResponse.getToken(),
-                fileUploadInitResponse.getProgress(), fileUploadInitResponse.getOffset(),
-                fileUploadInitResponse.getLimit(), this.identity, fileUploadInitResponse.getResponse());
+        HelperUploadFile.onFileUpload.OnFileUploadInit(fp.getToken(), fp.getProgress(), fp.getOffset(), fp.getLimit(), this.identity, fp.getResponse());
     }
 
     @Override
@@ -43,7 +40,7 @@ public class FileUploadInitResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        G.uploaderUtil.onFileUploadTimeOut(this.identity);
+        HelperUploadFile.onFileUpload.onFileUploadTimeOut(this.identity);
         HelperSetAction.sendCancel(Long.parseLong(this.identity));
         makeFailed();
     }

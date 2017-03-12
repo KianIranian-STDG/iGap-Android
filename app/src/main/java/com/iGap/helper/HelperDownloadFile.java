@@ -15,15 +15,14 @@ import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
+import com.iGap.request.RequestWrapper;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-/**
- * Created by Maryam on 12/9/2016.
- */
+import java.util.Iterator;
+import java.util.Map;
 
 public class HelperDownloadFile {
 
@@ -230,7 +229,7 @@ public class HelperDownloadFile {
 
         if (list.size() > 0 && list.containsKey(primaryKey)) {
 
-            HelperCancelDownloadUpload.removeRequestQueue(list.get(primaryKey).identity);
+            removeRequestQueue(list.get(primaryKey).identity);
 
             StructDownLoad item = list.get(primaryKey);
 
@@ -375,6 +374,18 @@ public class HelperDownloadFile {
                 listener.OnProgress(item.Token, item.progress);
             }
         }
+    }
+
+    public static boolean removeRequestQueue(String identity) {
+        for (Iterator<Map.Entry<String, RequestWrapper>> it = G.requestQueueMap.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<String, RequestWrapper> entry = it.next();
+
+            if (entry.getValue().identity != null && entry.getValue().identity.contains(identity)) {
+                G.requestQueueMap.remove(entry.getKey());
+                return true;
+            }
+        }
+        return false;
     }
 
     private void onError(int majorCode, int minorCode, final Context context) {

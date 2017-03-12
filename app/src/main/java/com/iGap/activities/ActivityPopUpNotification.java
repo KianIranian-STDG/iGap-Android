@@ -285,7 +285,11 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (voiceRecord.getItemTag().equals("ivVoice")) voiceRecord.dispatchTouchEvent(event);
+
+        if (voiceRecord != null) {
+            voiceRecord.dispatchTouchEvent(event);
+        }
+
         return super.dispatchTouchEvent(event);
     }
 

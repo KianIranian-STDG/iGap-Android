@@ -21,7 +21,6 @@ import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -88,7 +87,6 @@ import com.iGap.fragments.FragmentMap;
 import com.iGap.fragments.FragmentShowImage;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
-import com.iGap.helper.HelperCancelDownloadUpload;
 import com.iGap.helper.HelperGetAction;
 import com.iGap.helper.HelperGetDataFromOtherApp;
 import com.iGap.helper.HelperGetMessageState;
@@ -96,6 +94,7 @@ import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperSetAction;
+import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.HelperUrl;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.IMessageItem;
@@ -115,7 +114,6 @@ import com.iGap.interfaces.OnChatUpdateStatusResponse;
 import com.iGap.interfaces.OnClearChatHistory;
 import com.iGap.interfaces.OnClientJoinByUsername;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
-import com.iGap.interfaces.OnFileUploadForActivities;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnHelperSetAction;
 import com.iGap.interfaces.OnLastSeenUpdateTiming;
@@ -242,14 +240,6 @@ import static com.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static com.iGap.module.MessageLoader.getLocalMessage;
 import static com.iGap.module.enums.ProgressState.HIDE;
 import static com.iGap.module.enums.ProgressState.SHOW;
-import static com.iGap.proto.ProtoGlobal.ClientAction.CHOOSING_CONTACT;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_AUDIO;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_FILE;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_GIF;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_IMAGE;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_LOCATION;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_VIDEO;
-import static com.iGap.proto.ProtoGlobal.ClientAction.SENDING_VOICE;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -262,7 +252,8 @@ import static java.lang.Long.parseLong;
 
 
 public class ActivityChat extends ActivityEnhanced
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnFileUploadForActivities, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
+    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
+    OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -316,7 +307,7 @@ public class ActivityChat extends ActivityEnhanced
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
     private ProtoGlobal.Room.Type chatType;
-    private static ProtoGlobal.Room.Type chatTypeStatic;
+
     private long lastSeen;
     public long mRoomId = 0;
     public static long mRoomIdStatic = 0;
@@ -400,6 +391,8 @@ public class ActivityChat extends ActivityEnhanced
     private boolean initHash = false;
     private boolean initAttach = false;
     private boolean initEmoji = false;
+    HelperUploadFile.UpdateListener uploadUpdateListener;
+
 
     @Override
     protected void onStart() {
@@ -413,7 +406,9 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void resendMessageNeedsUpload(RealmRoomMessage message) {
-                new UploadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getRoomId(), message.getMessage());
+                HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(),
+                    uploadUpdateListener);
+
             }
 
             @Override
@@ -500,13 +495,11 @@ public class ActivityChat extends ActivityEnhanced
             }
         }, Config.LOW_START_PAGE_TIME);
 
-        chatTypeStatic = chatType;
+
         mRoomIdStatic = mRoomId;
         titleStatic = title;
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
-        G.uploaderUtil.setActivityCallbacks(this);
-        G.uploaderUtil.setActivityCallbacks(this);
         G.onUserInfoResponse = this;
         G.onChannelAddMessageReaction = this;
         G.onChannelGetMessagesStats = this;
@@ -521,10 +514,68 @@ public class ActivityChat extends ActivityEnhanced
         HelperNotificationAndBadge.isChatRoomNow = true;
     }
 
+    private void addItemAfterStartUpload(final FileUploadStructure struct) {
+
+        Log.i("ZZZ", "onUploadStarted UploadTask 5");
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
+        if (roomMessage != null) {
+            AbstractMessage message = mAdapter.getItemByFileIdentity(struct.messageId);
+            // message doesn't exists
+            if (message == null) {
+                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+                if (!G.userLogin) {
+                    G.handler.postDelayed(new Runnable() {
+                        @Override public void run() {
+                            makeFailed(struct.messageId);
+                        }
+                    }, 200);
+                }
+            }
+        }
+        realm.close();
+    }
+
+
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        uploadUpdateListener = new HelperUploadFile.UpdateListener() {
+            @Override public void OnProgress(int progress, final FileUploadStructure struct) {
+                if (progress == 0) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            addItemAfterStartUpload(struct);
+                        }
+                    });
+                } else if (progress == 100) {
+
+                    String messageid = struct.messageId + "";
+                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                        AbstractMessage item = mAdapter.getAdapterItem(i);
+
+                        if (item.mMessage.messageID.equals(messageid)) {
+                            if (item.mMessage.hasAttachment()) {
+                                item.mMessage.attachment.token = struct.token;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            @Override public void OnError() {
+
+            }
+        };
+
+
+
         startPageFastInitialize();
 
         G.handler.postDelayed(new Runnable() {
@@ -1408,7 +1459,14 @@ public class ActivityChat extends ActivityEnhanced
                 }
 
                 if (!addTop && messageInfo.showTime) {
-                    mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+
+                    if (mAdapter.getItemCount() > 0) {
+                        if (RealmRoomMessage.isTimeDayDiferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
+                            mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                        }
+                    } else {
+                        mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                    }
                 }
 
                 switch (messageType) {
@@ -3101,16 +3159,26 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (isCheckBottomSheet) {
                     bottomSheetDialog.dismiss();
-                    for (String path : listPathString) {
-                        if (!path.toLowerCase().endsWith(".gif")) {
-                            String localpathNew = attachFile.saveGalleryPicToLocal(path);
-                            sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localpathNew);
-                            fastItemAdapter.clear();
-                            //send.setImageResource(R.mipmap.ic_close);
-                            send.setText(getResources().getString(R.string.icon_keyboard_arrow_down));
-                            txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
+
+                    fastItemAdapter.clear();
+                    //send.setImageResource(R.mipmap.ic_close);
+                    send.setText(getResources().getString(R.string.icon_keyboard_arrow_down));
+                    txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
+
+                    new Thread(new Runnable() {
+                        @Override public void run() {
+
+                            for (String path : listPathString) {
+                                if (!path.toLowerCase().endsWith(".gif")) {
+                                    String localpathNew = attachFile.saveGalleryPicToLocal(path);
+                                    sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localpathNew);
+                                }
+                            }
+
                         }
-                    }
+                    }).start();
+
+
                 } else {
                     bottomSheetDialog.dismiss();
                 }
@@ -3229,15 +3297,24 @@ public class ActivityChat extends ActivityEnhanced
                 showDraftLayout();
                 setDraftMessage(requestCode);
             } else if (listPathString.size() > 1) {
-                for (final String path : listPathString) {
-                    if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !path.toLowerCase().endsWith(".gif")) {
-                        String localpathNew = attachFile.saveGalleryPicToLocal(path);
-                        sendMessage(requestCode, localpathNew);
 
-                    } else {
-                        sendMessage(requestCode, path);
+                new Thread(new Runnable() {
+                    @Override public void run() {
+
+                        for (final String path : listPathString) {
+                            if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !path.toLowerCase().endsWith(".gif")) {
+                                String localpathNew = attachFile.saveGalleryPicToLocal(path);
+                                sendMessage(requestCode, localpathNew);
+                            } else {
+                                sendMessage(requestCode, path);
+                            }
+                        }
+
                     }
-                }
+                }).start();
+
+
+
             }
 
             if (listPathString.size() == 1) {
@@ -3675,7 +3752,10 @@ public class ActivityChat extends ActivityEnhanced
                 }
 
                 if (finalFilePath != null && finalMessageType != CONTACT) {
-                    new UploadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, finalFilePath, finalMessageId, finalMessageType, mRoomId, getWrittenMessage());
+
+                    HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), uploadUpdateListener);
+
+
                 } else {
                     ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
                     if (finalMessageType == CONTACT) {
@@ -4431,6 +4511,34 @@ public class ActivityChat extends ActivityEnhanced
         startActivity(intent);
     }
 
+    @Override public void onUploadCancel(View view, final StructMessageInfo message, int pos) {
+
+        HelperSetAction.sendCancel(Long.parseLong(message.messageID));
+
+        if (HelperUploadFile.cancelUploading(message.messageID)) {
+            // empty tag if selected message has been set
+            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                    edtChat.setTag(null);
+                }
+            }
+
+            mAdapter.removeMessage(pos);
+
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID)).findFirst();
+                    if (roomMessage != null) {
+                        // delete message from database
+                        roomMessage.deleteFromRealm();
+                    }
+                }
+            });
+            realm.close();
+        }
+    }
+
     private void showImage(final StructMessageInfo messageInfo) {
 
         // for gone app bar
@@ -4719,12 +4827,6 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-
-    @Override
-    public void onFileTimeOut(String identity) {
-        //empty
-    }
-
     private RealmRoomMessage voiceLastMessage = null;
 
     @Override
@@ -4754,7 +4856,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        new UploadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, mRoomId, getWrittenMessage());
+        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), uploadUpdateListener);
 
         StructMessageInfo messageInfo;
 
@@ -4930,71 +5032,6 @@ public class ActivityChat extends ActivityEnhanced
     //    });
     //}
 
-    @Override
-    public void onFileUploaded(final FileUploadStructure uploadStructure, final String identity) {
-
-        HelperSetAction.sendCancel(uploadStructure.messageId);
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmAttachment.updateToken(uploadStructure.messageId, uploadStructure.token);
-                    }
-                });
-                realm.close();
-                mAdapter.updateProgress(parseLong(identity), 100);
-                mAdapter.updateToken(uploadStructure.messageId, uploadStructure.token);
-            }
-        });
-
-        /**
-         * this code should exist in under of other codes in this block
-         */
-        new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId).attachment(uploadStructure.token).message(uploadStructure.text).sendMessage(Long.toString(uploadStructure.messageId));
-    }
-
-    @Override
-    public void onFileUploading(FileUploadStructure uploadStructure, final String identity, final double progress) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.updateProgress(parseLong(identity), (int) progress);
-            }
-        });
-    }
-
-    @Override
-    public void onUploadStarted(final FileUploadStructure struct) {
-        if (struct != null) {
-            Realm realm = Realm.getDefaultInstance();
-            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
-            if (roomMessage != null && mAdapter != null) {
-                AbstractMessage message = mAdapter.getItemByFileIdentity(struct.messageId);
-                // message doesn't exists
-                if (message == null) {
-                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
-                    if (!G.userLogin) {
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                makeFailed(struct.messageId);
-                            }
-                        }, 200);
-                    }
-                }
-            }
-            realm.close();
-        }
-    }
-
-    @Override
-    public void onBadDownload(String token) {
-
-    }
 
     private void onSelectRoomMenu(String message, int item) {
         switch (message) {
@@ -5614,35 +5651,7 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    @Override
-    public void onUploadCancel(View view, final StructMessageInfo message, final int pos) {
 
-        HelperSetAction.sendCancel(Long.parseLong(message.messageID));
-
-        if (HelperCancelDownloadUpload.cancelUpload(Long.parseLong(message.messageID))) {
-            // empty tag if selected message has been set
-            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                    edtChat.setTag(null);
-                }
-            }
-
-            mAdapter.removeMessage(pos);
-
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID)).findFirst();
-                    if (roomMessage != null) {
-                        // delete message from database
-                        roomMessage.deleteFromRealm();
-                    }
-                }
-            });
-            realm.close();
-        }
-    }
 
     @Override
     public void onFailedMessageClick(View view, final StructMessageInfo message, final int pos) {
@@ -5761,72 +5770,6 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    public static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
-        @Override
-        protected FileUploadStructure doInBackground(Object... params) {
-            try {
-                String filePath = (String) params[0];
-                long messageId = (long) params[1];
-                ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) params[2];
-                long roomId = (long) params[3];
-                String messageText = (String) params[4];
-                File file = new File(filePath);
-                String fileName = file.getName();
-                long fileSize = file.length();
-                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, roomId);
-                fileUploadStructure.openFile(filePath);
-                fileUploadStructure.text = messageText;
-
-                byte[] fileHash = AndroidUtils.getFileHashFromPath(filePath);
-                fileUploadStructure.setFileHash(fileHash);
-
-                return fileUploadStructure;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(FileUploadStructure result) {
-            super.onPostExecute(result);
-
-            if (result != null) {
-                if (MessagesAdapter.uploading != null) {
-                    MessagesAdapter.uploading.put(result.messageId, 0);
-                    G.uploaderUtil.startUploading(result, Long.toString(result.messageId));
-                    HelperSetAction.setActionFiles(mRoomIdStatic, result.messageId, getAction(result.messageType), chatTypeStatic);
-                }
-            }
-        }
-    }
-
-    private static ProtoGlobal.ClientAction getAction(ProtoGlobal.RoomMessageType type) {
-
-        //TODO [Saeed Mozaffari] [2016-11-14 11:14 AM] - some actions need to detect
-
-        ProtoGlobal.ClientAction action = null;
-
-        if ((type == ProtoGlobal.RoomMessageType.IMAGE) || (type == IMAGE_TEXT)) {
-            action = SENDING_IMAGE;
-        } else if ((type == ProtoGlobal.RoomMessageType.VIDEO) || (type == VIDEO_TEXT)) {
-            action = SENDING_VIDEO;
-        } else if ((type == ProtoGlobal.RoomMessageType.AUDIO) || (type == ProtoGlobal.RoomMessageType.AUDIO_TEXT)) {
-            action = SENDING_AUDIO;
-        } else if (type == ProtoGlobal.RoomMessageType.VOICE) {
-            action = SENDING_VOICE;
-        } else if ((type == ProtoGlobal.RoomMessageType.GIF) || type == GIF_TEXT) {
-            action = SENDING_GIF;
-        } else if ((type == ProtoGlobal.RoomMessageType.FILE) || (type == ProtoGlobal.RoomMessageType.FILE_TEXT)) {
-            action = SENDING_FILE;
-        } else if (type == ProtoGlobal.RoomMessageType.LOCATION) {
-            action = SENDING_LOCATION;
-        } else if (type == CONTACT) {
-            action = CHOOSING_CONTACT;
-        }
-
-        return action;
-    }
 
     /**
      * change message status from sending to failed
