@@ -716,7 +716,7 @@
   <string name="MEMBER_JOINED_BY_INVITE_LINK">"Join by invite link"</string>
   <string name="MEMBER_JOINED_BY_INVITE_LINK_2">"اضافه شد"</string>
   <string name="Room_Deleted">"Deleted Room"</string>
-  <string name="page">""</string>
+  <string name="conversation">""</string>
 
   <string name="delete_account_text1">other</string>
   <string name="delete_account_text2">other</string>

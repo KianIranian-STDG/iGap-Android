@@ -30,7 +30,7 @@ public class HelperLogMessage {
         String authorName = "";
         String targetName = "";
         String logMessage;
-        String pershianResult = null;
+        String persianResult = null;
         Realm realm = Realm.getDefaultInstance();
         ProtoGlobal.Room.Type typeRoom = null;
 
@@ -48,11 +48,6 @@ public class HelperLogMessage {
             if (realmRoom != null) {
                 authorName = realmRoom.getTitle();
             }
-        }
-
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            typeRoom = realmRoom.getType();
         }
 
         /**
@@ -74,61 +69,66 @@ public class HelperLogMessage {
         /**
          * final message
          */
-
         String finalTypeRoom;
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            typeRoom = realmRoom.getType();
 
-        if (typeRoom.toString().equals("CHANNEL")) {
-            finalTypeRoom = G.context.getResources().getString(R.string.channel);
-        } else if (typeRoom.toString().equals("GROUP")) {
-            finalTypeRoom = G.context.getResources().getString(R.string.group);
+            if (typeRoom.toString().equals("CHANNEL")) {
+                finalTypeRoom = G.context.getResources().getString(R.string.channel);
+            } else if (typeRoom.toString().equals("GROUP")) {
+                finalTypeRoom = G.context.getResources().getString(R.string.group);
+            } else {
+                finalTypeRoom = G.context.getResources().getString(R.string.conversation);
+            }
         } else {
-            finalTypeRoom = G.context.getResources().getString(R.string.page);
+            finalTypeRoom = G.context.getResources().getString(R.string.conversation);
         }
 
         englishResult = authorName + " " + logMessage + " " + targetName;
 
         switch (messageLog.getType()) {
             case USER_JOINED:
-                pershianResult = authorName + " " + logMessage;
+                persianResult = authorName + " " + logMessage;
                 break;
             case USER_DELETED:
-                pershianResult = authorName + " " + logMessage;
+                persianResult = authorName + " " + logMessage;
                 break;
             case ROOM_CREATED:
 
-                if (typeRoom.toString().equals("CHANNEL")) {
-                    pershianResult = logMessage + " " + finalTypeRoom + " " + authorName;
+                if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
+                    persianResult = logMessage + " " + finalTypeRoom + " " + authorName;
                 } else {
-                    pershianResult = logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                    persianResult = logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                 }
                 break;
             case MEMBER_ADDED:
-                pershianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                persianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                 break;
             case MEMBER_KICKED:
-                pershianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                persianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                 break;
             case MEMBER_LEFT:
-                pershianResult = authorName + " " + finalTypeRoom + " " + logMessage;
+                persianResult = authorName + " " + finalTypeRoom + " " + logMessage;
                 break;
             case ROOM_CONVERTED_TO_PUBLIC:
-                pershianResult = finalTypeRoom + " " + authorName + " " + logMessage;
+                persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
                 break;
             case ROOM_CONVERTED_TO_PRIVATE:
-                pershianResult = finalTypeRoom + " " + authorName + " " + logMessage;
+                persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
                 break;
             case MEMBER_JOINED_BY_INVITE_LINK:
-                pershianResult = authorName + " " + logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK_2);
+                persianResult = authorName + " " + logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK_2);
 
                 break;
             case ROOM_DELETED:
-                pershianResult = logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                persianResult = logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
                 break;
         }
 
         realm.close();
 
-        return (englishResult + "\n" + pershianResult);
+        return (englishResult + "\n" + persianResult);
     }
 
     private static String logMessageString(ProtoGlobal.RoomMessageLog.Type type) {

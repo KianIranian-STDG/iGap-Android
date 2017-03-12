@@ -361,37 +361,70 @@
                         android:gravity="left|center"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/dp8"
+                        android:paddingEnd="@dimen/dp8"
                         android:paddingLeft="@dimen/dp8"
-                        android:paddingStart="@dimen/dp8">
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingStart="@dimen/dp8"
+                        >
 
                         <ImageView
-                            android:layout_width="@dimen/dp48"
-                            android:layout_height="@dimen/dp48"
+                            android:layout_width="@dimen/dp32"
+                            android:layout_height="@dimen/dp32"
                             android:layout_marginLeft="@dimen/dp4"
+                            android:layout_marginStart="@dimen/dp4"
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/add_chat_background"
                             />
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:padding="@dimen/dp8"
+                            android:layout_height="wrap_content"
                             android:text="@string/add_new_member"
-                            android:textSize="@dimen/sp16"/>
+                            android:textSize="@dimen/sp16"
+                            android:id="@+id/textView8"
+                            android:layout_margin="@dimen/dp8"
+                            android:layout_gravity="center_vertical"
+                            />
+
+
                     </LinearLayout>
 
 
-
-                    <TextView
-                        android:id="@+id/agp_txt_show_member"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="@dimen/dp12"
-                        android:text="@string/show_member"
-                        android:textSize="@dimen/sp16"
-                        />
+                        android:gravity="left|center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/dp8"
+                        android:paddingEnd="@dimen/dp8"
+                        android:paddingLeft="@dimen/dp8"
+                        android:paddingRight="@dimen/dp8"
+                        android:paddingStart="@dimen/dp8"
+                        >
+
+                        <ImageView
+                            android:layout_width="@dimen/dp32"
+                            android:layout_height="@dimen/dp32"
+                            android:layout_marginLeft="@dimen/dp4"
+                            android:layout_marginStart="@dimen/dp4"
+                            android:scaleType="centerCrop"
+                            android:tint="@color/gray_5c"
+                            android:adjustViewBounds="true"
+                            app:srcCompat="@drawable/account_multiple"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/agp_txt_show_member"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity=""
+                            android:text="@string/show_member"
+                            android:textSize="@dimen/sp16"
+                            android:layout_margin="@dimen/dp8"
+                            android:layout_gravity="center_vertical"
+                            />
+                    </LinearLayout>
 
                 </LinearLayout>
                 <!-- member list end -->

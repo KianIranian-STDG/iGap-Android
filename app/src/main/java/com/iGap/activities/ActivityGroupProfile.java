@@ -733,7 +733,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
 
 
-        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+        if (role == GroupChatRole.OWNER) {
             txtDeleteGroup.setText(getString(R.string.delete_group));
         } else {
             txtDeleteGroup.setText(getString(R.string.left_group));
@@ -1846,7 +1846,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void groupLeft() {
 
         String text = "";
-        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+        if (role == GroupChatRole.OWNER) {
             text = getString(R.string.do_you_want_to_delete_this_group);
         } else {
             text = getString(R.string.do_you_want_to_leave_this_group);
@@ -1953,7 +1953,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     }
                 };
 
-                if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+                if (role == GroupChatRole.OWNER) {
                     new RequestGroupDelete().groupDelete(roomId);
                 } else {
                     new RequestGroupLeft().groupLeft(roomId);

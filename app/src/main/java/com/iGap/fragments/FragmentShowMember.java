@@ -444,32 +444,24 @@ public class FragmentShowMember extends Fragment {
             }
 
             if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-
                 holder.btnMenu.setVisibility(View.GONE);
-            } else {
 
-                if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
+            } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+
+                if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString()))) {
                     holder.btnMenu.setVisibility(View.GONE);
                 } else {
-
-                    holder.btnMenu.setVisibility(View.VISIBLE);
-
-                    holder.btnMenu.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                                if (ActivityChannelProfile.onMenuClick != null) {
-                                    ActivityChannelProfile.onMenuClick.clicked(v, mContact);
-                                }
-                            } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
-                                if (ActivityGroupProfile.onMenuClick != null) {
-                                    ActivityGroupProfile.onMenuClick.clicked(v, mContact);
-                                }
-                            }
-                        }
-                    });
+                    showPopup(holder, mContact);
                 }
+            } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+
+                if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString()))) {
+                    holder.btnMenu.setVisibility(View.GONE);
+                } else {
+                    showPopup(holder, mContact);
+                }
+            } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
+                showPopup(holder, mContact);
             }
 
             /**
@@ -479,6 +471,26 @@ public class FragmentShowMember extends Fragment {
             if (mContact.peerId == mContact.userID) {
                 holder.btnMenu.setVisibility(View.GONE);
             }
+        }
+
+        private void showPopup(ViewHolder holder, final StructContactInfo mContact) {
+            holder.btnMenu.setVisibility(View.VISIBLE);
+
+            holder.btnMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+                        if (ActivityChannelProfile.onMenuClick != null) {
+                            ActivityChannelProfile.onMenuClick.clicked(v, mContact);
+                        }
+                    } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                        if (ActivityGroupProfile.onMenuClick != null) {
+                            ActivityGroupProfile.onMenuClick.clicked(v, mContact);
+                        }
+                    }
+                }
+            });
         }
 
         private void setRoleStarColor(MaterialDesignTextView view, StructContactInfo mContact) {

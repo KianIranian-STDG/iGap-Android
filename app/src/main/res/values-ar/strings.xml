@@ -111,7 +111,7 @@
   <string name="igap">"آی گپ"</string>
   <string name="igapChanel">"آی گپ"</string>
   <string name="search">"جستجو"</string>
-  <string name="d_of_d" formatted="false">"%d از %d"</string>
+  <string formatted="false" name="d_of_d">"%d از %d"</string>
   <string name="add_to_contact">"افزودن به مخاطبین"</string>
   <string name="cancel">"انصراف"</string>
   <string name="B_cancel">"انصراف"</string>
@@ -145,7 +145,7 @@
   <string name="cannot_load_data_en">"عدم توانایی در بارگیری داده‌ها"</string>
   <string name="do_you_want_exit">"آیا می‌خواهید خارج شوید؟"</string>
   <string name="slide_to_cancel_en">"برای لغو کردن بکشید و رها کنید."</string>
-  <string name="video_duration" formatted="false">"%s (%s)"</string>
+  <string formatted="false" name="video_duration">"%s (%s)"</string>
 
 
   <!-- setting -->
@@ -364,7 +364,7 @@
   <string name="private_channel">"کانال خصوصی"</string>
   <string name="desc_private_channel">"برای پیوستن به کانال‌های خصوصی باید از طریق پیوند دعوت اقدام کرد."</string>
   <string name="desc_public_channel">"کانال‌های عمومی ممکن است در نتایج جستجو ظاهر شوند، هرکس می‌تواند عضو آنها شود."</string>
-  <string name="last_msg_format_chat" formatted="false">"%s"</string>
+  <string formatted="false" name="last_msg_format_chat">"%s"</string>
 
 
   <!-- Error -->
@@ -719,7 +719,7 @@
   <string name="MEMBER_JOINED_BY_INVITE_LINK_2">"اضافه شد"</string>
   <string name="Room_Deleted">"حذف"</string>
   <string name="revoke">ابطال</string>
-  <string name="page">صفحه</string>
+  <string name="conversation">گفتگو</string>
 
 
   <string name="send_position">ارسال موقعیت</string>
