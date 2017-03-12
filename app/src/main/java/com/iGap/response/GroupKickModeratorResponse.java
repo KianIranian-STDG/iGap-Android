@@ -7,7 +7,6 @@ import com.iGap.proto.ProtoGroupKickModerator;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -63,6 +62,8 @@ public class GroupKickModeratorResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        G.onGroupKickModerator.onError(majorCode, minorCode);
+        if (G.onGroupKickModerator != null) {
+            G.onGroupKickModerator.onError(majorCode, minorCode);
+        }
     }
 }

@@ -45,7 +45,7 @@ public class GroupKickMemberResponse extends MessageHandler {
                         RealmMember member = realmMembers.get(i);
                         if (member.getPeerId() == memberId) {
                             member.deleteFromRealm();          //delete member from database
-                            realmRoom.getGroupRoom().setParticipantsCountLabel((Integer.parseInt(realmRoom.getGroupRoom().getParticipantsCountLabel()) - 1) + "");
+                            //realmRoom.getGroupRoom().setParticipantsCountLabel((Integer.parseInt(realmRoom.getGroupRoom().getParticipantsCountLabel()) - 1) + "");
                             isDeleted = true;
                             break;
                         }

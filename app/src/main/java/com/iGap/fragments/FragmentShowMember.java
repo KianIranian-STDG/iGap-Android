@@ -96,11 +96,14 @@ public class FragmentShowMember extends Fragment {
         return fragmentShowMember;
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_show_member, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
 
@@ -134,7 +137,8 @@ public class FragmentShowMember extends Fragment {
         mMemberCount = 200;
 
         infoUpdateListenerCount = new OnComplete() {
-            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
 
                 try {
 
@@ -149,21 +153,14 @@ public class FragmentShowMember extends Fragment {
                         infoUpdateListenerCount = null;
                     }
                 } catch (NullPointerException e) {
-
+                    e.printStackTrace();
                 }
             }
         };
 
         G.onGroupGetMemberList = new OnGroupGetMemberList() {
-            @Override public void onGroupGetMemberList(final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
-
-                //runOnUiThread(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        txtMemberNumber.setText(members.size() + "");
-                //        //compareMemberList(memberList, members);
-                //    }
-                //});
+            @Override
+            public void onGroupGetMemberList(final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
 
                 mMemberCount = members.size();
 
@@ -174,7 +171,8 @@ public class FragmentShowMember extends Fragment {
         };
 
         G.onChannelGetMemberList = new OnChannelGetMemberList() {
-            @Override public void onChannelGetMemberList(List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> members) {
+            @Override
+            public void onChannelGetMemberList(List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> members) {
 
                 mMemberCount = members.size();
 
@@ -183,11 +181,13 @@ public class FragmentShowMember extends Fragment {
                 }
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
 
             }
 
-            @Override public void onTimeOut() {
+            @Override
+            public void onTimeOut() {
 
             }
         };
@@ -204,7 +204,8 @@ public class FragmentShowMember extends Fragment {
         }
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
 
         if (mRealm != null) mRealm.close();
@@ -221,7 +222,8 @@ public class FragmentShowMember extends Fragment {
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 getActivity().getSupportFragmentManager().popBackStack();
             }
@@ -291,7 +293,8 @@ public class FragmentShowMember extends Fragment {
             this.userid = userid;
         }
 
-        @Override public MemberAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        @Override
+        public MemberAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
             View v = inflater.inflate(R.layout.contact_item_group_profile, viewGroup, false);
             return new ViewHolder(v);
         }
@@ -319,7 +322,8 @@ public class FragmentShowMember extends Fragment {
             }
         }
 
-        @Override public void onBindRealmViewHolder(final MemberAdapter.ViewHolder holder, int i) {
+        @Override
+        public void onBindRealmViewHolder(final MemberAdapter.ViewHolder holder, int i) {
 
             final StructContactInfo mContact = convertRealmToStruct(mRealm, realmResults.get(i));
 
@@ -328,10 +332,12 @@ public class FragmentShowMember extends Fragment {
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     try {
                         HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
-                            @Override public void Allow() {
+                            @Override
+                            public void Allow() {
 
                                 Intent intent = null;
 
@@ -352,7 +358,8 @@ public class FragmentShowMember extends Fragment {
                                 startActivity(intent);
                             }
 
-                            @Override public void deny() {
+                            @Override
+                            public void deny() {
 
                             }
                         });
@@ -363,7 +370,8 @@ public class FragmentShowMember extends Fragment {
             });
 
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View v) {
+                @Override
+                public boolean onLongClick(View v) {
 
                     if (role.equals(GroupChatRole.OWNER.toString())) {
 
@@ -406,19 +414,22 @@ public class FragmentShowMember extends Fragment {
             setRoleStarColor(holder.roleStar, mContact);
 
             HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
-                @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+                @Override
+                public void onAvatarGet(final String avatarPath, long ownerId) {
                     G.handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                         }
                     });
                 }
 
-                @Override public void onShowInitials(final String initials, final String color) {
+                @Override
+                public void onShowInitials(final String initials, final String color) {
                     G.handler.post(new Runnable() {
-                        @Override public void run() {
-                            holder.image.setImageBitmap(
-                                com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        @Override
+                        public void run() {
+                            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }
                     });
                 }
@@ -430,14 +441,6 @@ public class FragmentShowMember extends Fragment {
                 } else {
                     holder.subtitle.setText(mContact.status);
                 }
-            }
-
-            /**
-             * don't allow for use dialog if this item
-             * is for own user
-             */
-            if (mContact.peerId == mContact.userID) {
-                holder.btnMenu.setVisibility(View.GONE);
             }
 
             if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
@@ -452,7 +455,8 @@ public class FragmentShowMember extends Fragment {
                     holder.btnMenu.setVisibility(View.VISIBLE);
 
                     holder.btnMenu.setOnClickListener(new View.OnClickListener() {
-                        @Override public void onClick(View v) {
+                        @Override
+                        public void onClick(View v) {
 
                             if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
                                 if (ActivityChannelProfile.onMenuClick != null) {
@@ -466,6 +470,14 @@ public class FragmentShowMember extends Fragment {
                         }
                     });
                 }
+            }
+
+            /**
+             * don't allow for use dialog if this item
+             * is for own user
+             */
+            if (mContact.peerId == mContact.userID) {
+                holder.btnMenu.setVisibility(View.GONE);
             }
         }
 
@@ -490,8 +502,7 @@ public class FragmentShowMember extends Fragment {
             long id = realmMember.getPeerId();
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
             if (realmRegisteredInfo != null) {
-                StructContactInfo s =
-                    new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
+                StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
                 s.role = role;
                 s.avatar = realmRegisteredInfo.getLastAvatar();
                 s.initials = realmRegisteredInfo.getInitials();

@@ -32,6 +32,7 @@ import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -187,18 +188,21 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
 
         if (mRoom != null) mRoom.removeChangeListeners();
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         if (mRealm != null) mRealm.close();
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
 
         super.onResume();
 
@@ -208,9 +212,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             if (changeListener == null) {
 
                 changeListener = new RealmChangeListener<RealmModel>() {
-                    @Override public void onChange(final RealmModel element) {
+                    @Override
+                    public void onChange(final RealmModel element) {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 String countText = ((RealmRoom) element).getSharedMediaCount();
 
                                 if (countText == null || countText.length() == 0) {
@@ -305,7 +311,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     protected void onPause() {
         if (ActivityChat.onComplete != null) {
             if (!txtMemberNumber.getText().toString().equals(participantsCountLabel)) {
-                ActivityChat.onComplete.complete(true, txtMemberNumber.getText().toString(), "");
+                //ActivityChat.onComplete.complete(true, txtMemberNumber.getText().toString(), "");
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
@@ -664,14 +670,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         TextView txtShowMember = (TextView) findViewById(R.id.agp_txt_show_member);
         txtShowMember.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userID, "", isNeedgetContactlist);
-                getSupportFragmentManager().beginTransaction()
-                    .addToBackStack("null")
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.fragmentContainer_group_profile, fragment, "Show_member")
-                    .commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, "Show_member").commit();
 
                 isNeedgetContactlist = false;
             }
@@ -1986,8 +1989,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-
                 new RequestGroupKickMember().groupKickMember(roomId, memberID);
             }
         }).show();
@@ -2024,9 +2025,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         G.onGroupKickMember = new OnGroupKickMember() {
             @Override
             public void onGroupKickMember(final long roomId, final long memberId) {
-
+                Log.i("WWW", "Kick Member memberId : " + memberId);
                 setMemberCount(roomId, false);
-
             }
 
             @Override
@@ -2053,11 +2053,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void showListForCustomRole(String SelectedRole) {
         FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userID, SelectedRole, isNeedgetContactlist);
-        getSupportFragmentManager().beginTransaction()
-            .addToBackStack("null")
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            .replace(R.id.fragmentContainer_group_profile, fragment, "Show_member")
-            .commit();
+        getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, "Show_member").commit();
 
         isNeedgetContactlist = false;
     }
