@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.iGap.G;
@@ -20,7 +21,6 @@ import com.iGap.module.MusicPlayer;
 import com.iGap.module.OnComplete;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.github.meness.emoji.EmojiTextView;
 import java.io.File;
@@ -204,7 +204,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
-        protected RoundedImageView thumbnail;
+        protected ImageView thumbnail;
         protected TextView fileSize;
         protected TextView fileName;
         protected TextView songArtist;
@@ -220,7 +220,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         public ViewHolder(View view) {
             super(view);
-            thumbnail = (RoundedImageView) view.findViewById(R.id.thumbnail);
+            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             fileSize = (TextView) view.findViewById(R.id.fileSize);
             fileName = (TextView) view.findViewById(R.id.fileName);
             songArtist = (TextView) view.findViewById(R.id.songArtist);

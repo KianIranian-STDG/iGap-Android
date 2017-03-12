@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.helper.HelperPermision;
@@ -38,9 +39,9 @@ public class ActivityEnhanced extends AppCompatActivity {
         HelperSetStatusBarColor.setColor(this);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         checkLanguage(this);
-
 
 
     }

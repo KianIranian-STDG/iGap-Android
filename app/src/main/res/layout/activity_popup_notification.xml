@@ -159,6 +159,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp8"
                 android:text="@string/md_send_button"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:visibility="gone" />
 
 

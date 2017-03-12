@@ -64,14 +64,13 @@
                                 android:layout_height="wrap_content"
                                 >
 
-                                <com.makeramen.roundedimageview.RoundedImageView
+                                <ImageView
                                     android:id="@+id/thumbnail"
                                     android:layout_width="@dimen/dp48"
                                     android:layout_height="@dimen/dp48"
                                     android:adjustViewBounds="true"
                                     android:scaleType="fitXY"
                                     app:srcCompat="@drawable/green_music_note"
-                                    app:riv_corner_radius="@dimen/messageBox_cornerRadius"
                                     />
 
                                 <include
