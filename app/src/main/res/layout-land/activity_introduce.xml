@@ -37,7 +37,7 @@
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/city"
+            app:srcCompat="@drawable/city"
             app:layout_heightPercent="85%"/>
 
         <ImageView
@@ -83,7 +83,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@drawable/secure"
+            app:srcCompat="@drawable/secure"
             android:visibility="invisible"/>
         <!--page 2-->
 
@@ -97,7 +97,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@drawable/chat"
+            app:srcCompat="@drawable/chat"
             android:visibility="invisible"/>
 
         <!--page 4-->
@@ -112,7 +112,7 @@
             android:layout_marginLeft="@dimen/dp12"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/transfer"
+            app:srcCompat="@drawable/transfer"
             android:visibility="invisible"/>
 
         <!--page 5-->
@@ -124,7 +124,7 @@
             android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@drawable/boy"
+            app:srcCompat="@drawable/boy"
             android:visibility="gone"/>
 
     </android.support.percent.PercentRelativeLayout>

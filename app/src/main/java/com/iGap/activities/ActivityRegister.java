@@ -607,11 +607,16 @@ public class ActivityRegister extends ActivityEnhanced {
                                 public void onFinish() {
                                     int portrait_landscape = getResources().getConfiguration().orientation;
                                     if (portrait_landscape == 1) {//portrait
-                                        txtTimer.setText("00:00");
-                                        txtTimer.setVisibility(View.INVISIBLE);
+                                        if (txtTimer != null) {
+                                            txtTimer.setText("00:00");
+                                            txtTimer.setVisibility(View.INVISIBLE);
+                                        }
+
                                     } else {
-                                        txtTimerLand.setText("00:00");
-                                        txtTimerLand.setVisibility(View.INVISIBLE);
+                                        if (txtTimerLand != null) {
+                                            txtTimerLand.setText("00:00");
+                                            txtTimerLand.setVisibility(View.INVISIBLE);
+                                        }
                                     }
                                     errorVerifySms(Reason.TIME_OUT); // open rg_dialog for enter sms code
                                 }
@@ -706,7 +711,13 @@ public class ActivityRegister extends ActivityEnhanced {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtTimer.setVisibility(View.INVISIBLE);
+
+                int portrait_landscape = getResources().getConfiguration().orientation;
+                if (portrait_landscape == 1) {//portrait
+                    txtTimer.setVisibility(View.INVISIBLE);
+                } else {
+                    txtTimerLand.setVisibility(View.INVISIBLE);
+                }
                 if (!edtEnterCodeVerify.getText().toString().equals("")) {
                     userVerify(userName, edtEnterCodeVerify.getText().toString());
                     dialog.dismiss();
@@ -752,7 +763,12 @@ public class ActivityRegister extends ActivityEnhanced {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        txtTimer.setVisibility(View.VISIBLE);
+                        int portrait_landscape = getResources().getConfiguration().orientation;
+                        if (portrait_landscape == 1) {//portrait
+                            txtTimer.setVisibility(View.VISIBLE);
+                        } else {
+                            txtTimerLand.setVisibility(View.VISIBLE);
+                        }
                         userName = userNameR;
                         userId = userIdR;
                         authorHash = authorHashR;
@@ -897,8 +913,20 @@ public class ActivityRegister extends ActivityEnhanced {
     }
 
     private void userVerify(final String userName, final String verificationCode) {
-        rg_prg_verify_generate.setVisibility(View.VISIBLE);
-        rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
+
+        int portrait_landscape = getResources().getConfiguration().orientation;
+        if (portrait_landscape == 1) {//portrait
+            rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key);
+            rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key);
+            rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key);
+        } else {
+            rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key_DialogLand);
+            rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key_DialogLand);
+            rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key_DialogLand);
+        }
+
+        if (rg_prg_verify_generate != null) rg_prg_verify_generate.setVisibility(View.VISIBLE);
+        if (rg_txt_verify_generate != null) rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
 
         userVerifyResponse(verificationCode);
         ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
@@ -929,10 +957,12 @@ public class ActivityRegister extends ActivityEnhanced {
 
                         newUser = newUserR;
                         token = tokenR;
-                        rg_prg_verify_generate.setVisibility(View.GONE);
-                        rg_img_verify_generate.setVisibility(View.VISIBLE);
-                        rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
+                        if (rg_prg_verify_generate != null) {
+                            rg_prg_verify_generate.setVisibility(View.GONE);
+                            rg_img_verify_generate.setVisibility(View.VISIBLE);
+                            rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                        }
                         userLogin(token);
                     }
                 });
@@ -1023,8 +1053,8 @@ public class ActivityRegister extends ActivityEnhanced {
     }
 
     private void userLogin(final String token) {
-        rg_prg_verify_register.setVisibility(View.VISIBLE);
-        rg_txt_verify_register.setTextAppearance(G.context, R.style.RedHUGEText);
+        if (rg_prg_verify_register != null) rg_prg_verify_register.setVisibility(View.VISIBLE);
+        if (rg_txt_verify_register != null) rg_txt_verify_register.setTextAppearance(G.context, R.style.RedHUGEText);
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
@@ -1051,9 +1081,9 @@ public class ActivityRegister extends ActivityEnhanced {
                             }
                         });
 
-                        rg_prg_verify_register.setVisibility(View.GONE);
-                        rg_img_verify_register.setVisibility(View.VISIBLE);
-                        rg_txt_verify_register.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                        if (rg_prg_verify_register != null) rg_prg_verify_register.setVisibility(View.GONE);
+                        if (rg_img_verify_register != null) rg_img_verify_register.setVisibility(View.VISIBLE);
+                        if (rg_txt_verify_register != null) rg_txt_verify_register.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
                         if (newUser) {
                             Intent intent = new Intent(G.context, ActivityProfile.class);
