@@ -25,6 +25,7 @@ public class Config {
     public static final long LAST_SEEN_DELAY_CHECKING = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final long GROUP_SHOW_ACTIONS_COUNT = 3;
     public static final long IMAGE_CORNER = 15;
+    public static final long GET_CONTACT_LIST_TIME_OUT = (int) (20 * DateUtils.SECOND_IN_MILLIS);
     public static final long HEART_BEAT_CHECKING_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final long UPDATING_TIME_SHOWING = (int) (5 * DateUtils.SECOND_IN_MILLIS);
     public static final long CONNECTION_OPEN_TIME_OUT = (int) (20 * DateUtils.SECOND_IN_MILLIS);

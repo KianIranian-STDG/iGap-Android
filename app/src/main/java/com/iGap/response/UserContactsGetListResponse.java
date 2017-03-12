@@ -1,6 +1,8 @@
 package com.iGap.response;
 
+import com.iGap.Config;
 import com.iGap.G;
+import com.iGap.helper.HelperTimeOut;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserContactsGetList;
 import com.iGap.realm.RealmAvatar;
@@ -23,49 +25,61 @@ public class UserContactsGetListResponse extends MessageHandler {
         this.identity = identity;
     }
 
+    private static long getListTime;
+
     @Override
     public void handler() {
         super.handler();
         final ProtoUserContactsGetList.UserContactsGetListResponse.Builder builder = (ProtoUserContactsGetList.UserContactsGetListResponse.Builder) message;
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
 
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.delete(RealmContacts.class);
+        /**
+         * for avoid from multiple running in same time.
+         * (( hint : we have an error for this class and now use from timeout.
+         * in next version of app will be checked that any of users get this error again or no ))
+         */
+        if (HelperTimeOut.timeoutChecking(0, getListTime, Config.GET_CONTACT_LIST_TIME_OUT)) {
+            getListTime = System.currentTimeMillis();
 
-                        for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
-                            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
-                            if (realmRegisteredInfo == null) {
-                                realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, registerUser.getId());
-                                realmRegisteredInfo.setDoNotshowSpamBar(false);
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            realm.delete(RealmContacts.class);
+
+                            for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
+                                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registerUser.getId()).findFirst();
+                                if (realmRegisteredInfo == null) {
+                                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, registerUser.getId());
+                                    realmRegisteredInfo.setDoNotshowSpamBar(false);
+                                }
+                                realmRegisteredInfo.fillRegisteredUserInfo(registerUser, realmRegisteredInfo);
+
+                                RealmContacts listResponse = realm.createObject(RealmContacts.class);
+                                listResponse.setId(registerUser.getId());
+                                listResponse.setUsername(registerUser.getUsername());
+                                listResponse.setPhone(registerUser.getPhone());
+                                listResponse.setFirst_name(registerUser.getFirstName());
+                                listResponse.setLast_name(registerUser.getLastName());
+                                listResponse.setDisplay_name(registerUser.getDisplayName());
+                                listResponse.setInitials(registerUser.getInitials());
+                                listResponse.setColor(registerUser.getColor());
+                                listResponse.setStatus(registerUser.getStatus().toString());
+                                listResponse.setLast_seen(registerUser.getLastSeen());
+                                listResponse.setAvatarCount(registerUser.getAvatarCount());
+                                listResponse.setCacheId(registerUser.getCacheId());
+                                listResponse.setAvatar(RealmAvatar.put(registerUser.getId(), registerUser.getAvatar(), true));
                             }
-                            realmRegisteredInfo.fillRegisteredUserInfo(registerUser, realmRegisteredInfo);
-
-                            RealmContacts listResponse = realm.createObject(RealmContacts.class);
-                            listResponse.setId(registerUser.getId());
-                            listResponse.setUsername(registerUser.getUsername());
-                            listResponse.setPhone(registerUser.getPhone());
-                            listResponse.setFirst_name(registerUser.getFirstName());
-                            listResponse.setLast_name(registerUser.getLastName());
-                            listResponse.setDisplay_name(registerUser.getDisplayName());
-                            listResponse.setInitials(registerUser.getInitials());
-                            listResponse.setColor(registerUser.getColor());
-                            listResponse.setStatus(registerUser.getStatus().toString());
-                            listResponse.setLast_seen(registerUser.getLastSeen());
-                            listResponse.setAvatarCount(registerUser.getAvatarCount());
-                            listResponse.setCacheId(registerUser.getCacheId());
-                            listResponse.setAvatar(RealmAvatar.put(registerUser.getId(), registerUser.getAvatar(), true));
                         }
-                    }
-                });
+                    });
 
-                realm.close();
-            }
-        });
+                    realm.close();
+                }
+            });
+        }
     }
 
     @Override

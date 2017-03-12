@@ -929,19 +929,19 @@ public class ActivityRegister extends ActivityEnhanced {
      */
     private void userVerify(final String userName, final String verificationCode) {
         if (G.socketConnection) {
-        int portrait_landscape = getResources().getConfiguration().orientation;
-        if (portrait_landscape == 1) {//portrait
-            rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key);
-            rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key);
-            rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key);
-        } else {
-            rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key_DialogLand);
-            rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key_DialogLand);
-            rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key_DialogLand);
-        }
+            int portrait_landscape = getResources().getConfiguration().orientation;
+            if (portrait_landscape == 1) {//portrait
+                rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key);
+                rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key);
+                rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key);
+            } else {
+                rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key_DialogLand);
+                rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key_DialogLand);
+                rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key_DialogLand);
+            }
 
-        if (rg_prg_verify_generate != null) rg_prg_verify_generate.setVisibility(View.VISIBLE);
-        if (rg_txt_verify_generate != null) rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
+            if (rg_prg_verify_generate != null) rg_prg_verify_generate.setVisibility(View.VISIBLE);
+            if (rg_txt_verify_generate != null) rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
 
             userVerifyResponse(verificationCode);
             ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
@@ -1125,10 +1125,8 @@ public class ActivityRegister extends ActivityEnhanced {
                             startActivity(intent);
                             finish();
                         } else {
-                            // get user info for set nick name and after from that go to
-                            // ActivityMain
+                            // get user info for set nick name and after from that go to ActivityMain
                             G.importContact();
-                            //G.getUserInfo();
                             getUserInfo();
                             requestUserInfo();
                         }
@@ -1306,22 +1304,6 @@ public class ActivityRegister extends ActivityEnhanced {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    private void getVerificationSms() { //TODO [Saeed Mozaffari] [2016-08-22 10:48 AM] - this
-        // method is fake and will be removed later
-        rg_prg_verify_sms.setVisibility(View.VISIBLE);
-        rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                rg_prg_verify_sms.setVisibility(View.GONE);
-                rg_img_verify_sms.setVisibility(View.VISIBLE);
-                rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
-
-                receiveVerifySms("Your login code is : 12345 This code can be used to login to your account.");
-            }
-        }, 4000);
     }
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
