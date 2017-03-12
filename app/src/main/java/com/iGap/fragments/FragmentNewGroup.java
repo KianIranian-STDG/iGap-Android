@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.InputType;
@@ -108,7 +109,7 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
     private boolean isChannel = false;
     public static String mCurrentPhotoPath;
     private AttachFile attachFile;
-    private Activity mActivity;
+    private FragmentActivity mActivity;
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
     }
@@ -887,12 +888,12 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
         bundle.putBoolean("NewRoom", true);
         fragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager()
+        mActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                 .replace(fragmentContainer, fragment, "contactGroup_fragment")
                 .commitAllowingStateLoss();
-        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+        mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
         //ActivityMain.mLeftDrawerLayout.closeDrawer();
     }
 
@@ -1058,7 +1059,6 @@ public class FragmentNewGroup extends Fragment implements OnFileUploadForActivit
 
     @Override public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = activity;
-
+        mActivity = (FragmentActivity) activity;
     }
 }

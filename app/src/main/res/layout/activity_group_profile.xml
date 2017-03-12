@@ -415,7 +415,7 @@
                         android:paddingRight="@dimen/dp8"
                         android:paddingStart="@dimen/dp8">
 
-                        <com.iGap.module.CircleImageView
+                        <ImageView
                             android:layout_width="@dimen/dp48"
                             android:layout_height="@dimen/dp48"
                             android:layout_marginLeft="@dimen/dp4"

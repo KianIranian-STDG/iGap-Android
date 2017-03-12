@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -71,7 +72,7 @@ public class RegisteredContactsFragment extends Fragment {
     private ProgressBar prgWaiting;
     private ItemAdapter itemAdapter;
     private List<IItem> items;
-    private Activity mActivity;
+    private FragmentActivity mActivity;
     private StickyRecyclerHeadersDecoration decoration;
     private StickyHeaderAdapter stickyHeaderAdapter;
     private EditText edtSearch;
@@ -412,7 +413,7 @@ public class RegisteredContactsFragment extends Fragment {
                                         intent.putExtra("RoomId", roomId);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         context.startActivity(intent);
-                                        getActivity().getSupportFragmentManager().popBackStack();
+                                        mActivity.getSupportFragmentManager().popBackStack();
                                     } catch (IllegalStateException e) {
                                         e.printStackTrace();
                                     }
@@ -495,7 +496,7 @@ public class RegisteredContactsFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = activity;
+        mActivity = (FragmentActivity) activity;
     }
 
     //@Override public void onAttach(Context context) {
@@ -530,6 +531,10 @@ public class RegisteredContactsFragment extends Fragment {
         }
 
         if (edtSearch.getText().length() > 0) itemAdapter.filter(edtSearch.getText());
+    }
 
+    @Override public void onDetach() {
+        super.onDetach();
+        hideProgress();
     }
 }
