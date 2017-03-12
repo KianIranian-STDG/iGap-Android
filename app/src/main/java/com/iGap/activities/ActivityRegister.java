@@ -18,7 +18,6 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -119,6 +118,7 @@ public class ActivityRegister extends ActivityEnhanced {
     private MaterialDialog dialogWait;
     private Typeface titleTypeface;
     private TextView txtTimerLand;
+    private String verifyCode;
 
     public enum Reason {
         SOCKET, TIME_OUT, INVALID_CODE
@@ -594,8 +594,8 @@ public class ActivityRegister extends ActivityEnhanced {
                                     int portrait_landscape = getResources().getConfiguration().orientation;
                                     if (portrait_landscape == 1) {//portrait
                                         if (txtTimer != null) {
-                                        txtTimer.setVisibility(View.VISIBLE);
-                                        txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                                            txtTimer.setVisibility(View.VISIBLE);
+                                            txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                                         }
                                     } else {
                                         if (txtTimerLand != null) {
@@ -719,7 +719,8 @@ public class ActivityRegister extends ActivityEnhanced {
                     txtTimerLand.setVisibility(View.INVISIBLE);
                 }
                 if (!edtEnterCodeVerify.getText().toString().equals("")) {
-                    userVerify(userName, edtEnterCodeVerify.getText().toString());
+                    verifyCode = edtEnterCodeVerify.getText().toString();
+                    userVerify(userName, verifyCode);
                     dialog.dismiss();
 
                 } else {
@@ -847,6 +848,8 @@ public class ActivityRegister extends ActivityEnhanced {
                             dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES_SEND, time, majorCode);
                         }
                     });
+                } else if (majorCode == 5 && minorCode == 1) { // timeout
+                    requestRegister();
                 }
             }
         };
@@ -898,22 +901,34 @@ public class ActivityRegister extends ActivityEnhanced {
 
     private void requestRegister() {
 
-        phoneNumber = phoneNumber.replace("-", "");
-        ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
-        builder.setCountryCode(isoCode);
-        builder.setPhoneNumber(Long.parseLong(phoneNumber));
-        builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
-        RequestWrapper requestWrapper = new RequestWrapper(100, builder);
+        if (G.socketConnection) {
+            phoneNumber = phoneNumber.replace("-", "");
+            ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
+            builder.setCountryCode(isoCode);
+            builder.setPhoneNumber(Long.parseLong(phoneNumber));
+            builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+            RequestWrapper requestWrapper = new RequestWrapper(100, builder);
 
-        try {
-            RequestQueue.sendRequest(requestWrapper);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            try {
+                RequestQueue.sendRequest(requestWrapper);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    requestRegister();
+                }
+            }, 1000);
         }
     }
 
+    /**
+     * if the connection is established do verify otherwise start registration(step one) again
+     */
     private void userVerify(final String userName, final String verificationCode) {
-
+        if (G.socketConnection) {
         int portrait_landscape = getResources().getConfiguration().orientation;
         if (portrait_landscape == 1) {//portrait
             rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key);
@@ -928,16 +943,33 @@ public class ActivityRegister extends ActivityEnhanced {
         if (rg_prg_verify_generate != null) rg_prg_verify_generate.setVisibility(View.VISIBLE);
         if (rg_txt_verify_generate != null) rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
 
-        userVerifyResponse(verificationCode);
-        ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
-        userVerify.setCode(Integer.parseInt(verificationCode));
-        userVerify.setUsername(userName);
+            userVerifyResponse(verificationCode);
+            ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
+            userVerify.setCode(Integer.parseInt(verificationCode));
+            userVerify.setUsername(userName);
 
-        RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
-        try {
-            RequestQueue.sendRequest(requestWrapper);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
+            try {
+                RequestQueue.sendRequest(requestWrapper);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            /**
+             * return view for step one and two because now start registration again from step one
+             */
+
+            // return step one
+            rg_prg_verify_connect.setVisibility(View.VISIBLE);
+            rg_img_verify_connect.setVisibility(View.GONE);
+            rg_txt_verify_connect.setTextAppearance(G.context, Typeface.NORMAL);
+            // clear step two
+            rg_prg_verify_sms.setVisibility(View.GONE);
+            rg_img_verify_sms.setVisibility(View.INVISIBLE);
+            rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
+            rg_txt_verify_sms.setTextAppearance(G.context, Typeface.NORMAL);
+
+            requestRegister();
         }
     }
 
@@ -1047,6 +1079,8 @@ public class ActivityRegister extends ActivityEnhanced {
 
                         }
                     });
+                } else if (majorCode == 5 && minorCode == 1) {
+                    userVerify(userName, verifyCode);
                 }
             }
         };
@@ -1096,6 +1130,7 @@ public class ActivityRegister extends ActivityEnhanced {
                             G.importContact();
                             //G.getUserInfo();
                             getUserInfo();
+                            requestUserInfo();
                         }
                         realm.close();
                     }
@@ -1143,6 +1178,8 @@ public class ActivityRegister extends ActivityEnhanced {
                             requestLogin();
                         }
                     });
+                } else if (majorCode == 5 && minorCode == 1) {
+                    requestLogin();
                 }
             }
         };
@@ -1182,7 +1219,7 @@ public class ActivityRegister extends ActivityEnhanced {
 
             @Override
             public void onUserInfoTimeOut() {
-
+                requestUserInfo();
             }
 
             @Override
@@ -1190,12 +1227,52 @@ public class ActivityRegister extends ActivityEnhanced {
 
             }
         };
+    }
 
-        new RequestUserInfo().userInfo(userId);
+    private void requestUserInfo() {
+        if (G.socketConnection) {
+            if (userId == 0) {
+                Realm realm = Realm.getDefaultInstance();
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo == null) {
+                    finish();
+                } else {
+                    userId = realmUserInfo.getUserId();
+                }
+                realm.close();
+            }
+            new RequestUserInfo().userInfo(userId);
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    requestUserInfo();
+                }
+            }, 1000);
+        }
     }
 
     private void requestLogin() {
-        new RequestUserLogin().userLogin(token);
+        if (G.socketConnection) {
+            if (token == null) {
+                Realm realm = Realm.getDefaultInstance();
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo == null) {
+                    finish();
+                } else {
+                    token = realmUserInfo.getToken();
+                }
+                realm.close();
+            }
+            new RequestUserLogin().userLogin(token);
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    requestLogin();
+                }
+            }, 1000);
+        }
     }
 
     private void receiveVerifySms(String message) {
@@ -1205,6 +1282,7 @@ public class ActivityRegister extends ActivityEnhanced {
         }
 
         String verificationCode = HelperString.regexExtractValue(message, regexFetchCodeVerification);
+        verifyCode = verificationCode;
         countDownTimer.cancel(); //cancel method CountDown and continue process verify
 
         rg_prg_verify_sms.setVisibility(View.GONE);
@@ -1255,7 +1333,6 @@ public class ActivityRegister extends ActivityEnhanced {
         savedInstanceState.putString(KEY_SAVE_REGEX, regex);
         savedInstanceState.putString(KEY_SAVE_AGREEMENT, txtAgreement_register.getText().toString());
 
-        Log.i("TTTTT", "onSaveInstanceState: ");
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }

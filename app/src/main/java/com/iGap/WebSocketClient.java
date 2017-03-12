@@ -84,10 +84,7 @@ public class WebSocketClient {
                     /**
                      * set time after that actually frame was sent
                      */
-                    Log.i("RequestWrapper", "onFrameSent time 0 : " + ((RequestWrapper) frame.getRequestWrapper()).time);
                     ((RequestWrapper) frame.getRequestWrapper()).time = System.currentTimeMillis();
-                    Log.i("RequestWrapper", "onFrameSent time 1 : " + ((RequestWrapper) frame.getRequestWrapper()).time);
-                    Log.i("RequestWrapper", "onFrameSent : " + ((RequestWrapper) frame.getRequestWrapper()).getActionId());
                 }
 
                 @Override
@@ -118,7 +115,6 @@ public class WebSocketClient {
                 public void onStateChanged(WebSocket websocket, WebSocketState newState) throws Exception {
                     super.onStateChanged(websocket, newState);
                     connectionState = newState;
-                    Log.i("SOC_WebSocket_X", "onStateChanged");
                     Log.i("SOC_WebSocket_X", "newState : " + newState);
                 }
 
@@ -127,6 +123,7 @@ public class WebSocketClient {
                     Log.i("SOC_WebSocket", "onDisconnected");
                     Log.i("SOC_WebSocket", "closedByServer : " + closedByServer);
                     allowForReconnecting = true;
+                    G.socketConnection = false;
                     Log.i("reconnect", "2");
                     reconnect(true);
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
