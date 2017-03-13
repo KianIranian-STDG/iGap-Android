@@ -3,9 +3,12 @@ package com.iGap.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,15 +126,32 @@ public class FragmentShowMember extends Fragment {
 
                 if (G.userLogin) {
 
-                    if (progressBar != null) {
-                        progressBar.setVisibility(View.VISIBLE);
-                    }
+                    G.handler.postDelayed(new Runnable() {
+                        @Override public void run() {
 
-                    getMemberList();
+                            if (progressBar != null) {
+                                progressBar.setVisibility(View.VISIBLE);
+                            }
+
+                            new getAcynkMember().execute();
+                        }
+                    }, 100);
+
                 }
             }
         }
     }
+
+    class getAcynkMember extends AsyncTask {
+
+        @Override protected Object doInBackground(Object[] params) {
+
+            getMemberList();
+
+            return null;
+        }
+    }
+
 
     private void getMemberList() {
         mMemberCount = 200;
@@ -145,11 +165,16 @@ public class FragmentShowMember extends Fragment {
                     mCurrentUpdateCount++;
 
                     if (mCurrentUpdateCount >= mMemberCount) {
-                        fillAdapter();
 
-                        if (progressBar != null) {
-                            progressBar.setVisibility(View.GONE);
-                        }
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                fillAdapter();
+                                if (progressBar != null) {
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+
                         infoUpdateListenerCount = null;
                     }
                 } catch (NullPointerException e) {
@@ -192,16 +217,22 @@ public class FragmentShowMember extends Fragment {
             }
         };
 
-        mCurrentUpdateCount = 0;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override public void run() {
+                mCurrentUpdateCount = 0;
 
-        RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
-        if (realmRoom != null) {
-            if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                new RequestGroupGetMemberList().getMemberList(mRoomID);
-            } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                new RequestChannelGetMemberList().channelGetMemberList(mRoomID);
+                RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+                if (realmRoom != null) {
+                    if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                        new RequestGroupGetMemberList().getMemberList(mRoomID);
+                    } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID);
+                    }
+                }
             }
-        }
+        });
+
+
     }
 
     @Override
@@ -215,6 +246,10 @@ public class FragmentShowMember extends Fragment {
 
         mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.fcm_recycler_view_show_member);
         mRecyclerView.setItemViewCacheSize(500);
+
+        PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(getActivity());
+        mRecyclerView.getRecycleView().setLayoutManager(preCachingLayoutManager);
+
 
         progressBar = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
 
@@ -239,7 +274,9 @@ public class FragmentShowMember extends Fragment {
             txtNumberOfMember.setText(getResources().getString(R.string.member));
         }
 
-        fillAdapter();
+        if (!isNeedGetMemberList) {
+            fillAdapter();
+        }
     }
 
     private void fillAdapter() {
@@ -286,7 +323,8 @@ public class FragmentShowMember extends Fragment {
         public long userid;
 
         public MemberAdapter(Context context, RealmResults<RealmMember> realmResults, ProtoGlobal.Room.Type roomType, String mainRole, long userid) {
-            super(context, realmResults, true, false, "");
+            //super(context, realmResults, true, false, "");
+            super(context, realmResults, false, false, false, "");
 
             this.roomType = roomType;
             this.mainRole = mainRole;
@@ -527,4 +565,40 @@ public class FragmentShowMember extends Fragment {
             return null;
         }
     }
+
+    public class PreCachingLayoutManager extends LinearLayoutManager {
+        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 2500;
+        private int extraLayoutSpace = -1;
+        private Context context;
+
+        public PreCachingLayoutManager(Context context) {
+            super(context);
+            this.context = context;
+        }
+
+        public PreCachingLayoutManager(Context context, int extraLayoutSpace) {
+            super(context);
+            this.context = context;
+            this.extraLayoutSpace = extraLayoutSpace;
+        }
+
+        public PreCachingLayoutManager(Context context, int orientation, boolean reverseLayout) {
+            super(context, orientation, reverseLayout);
+            this.context = context;
+        }
+
+        public void setExtraLayoutSpace(int extraLayoutSpace) {
+            this.extraLayoutSpace = extraLayoutSpace;
+        }
+
+        @Override protected int getExtraLayoutSpace(RecyclerView.State state) {
+            if (extraLayoutSpace > 0) {
+                return extraLayoutSpace;
+            }
+            return DEFAULT_EXTRA_LAYOUT_SPACE;
+        }
+    }
+
+
+
 }

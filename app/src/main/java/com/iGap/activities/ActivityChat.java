@@ -740,22 +740,30 @@ public class ActivityChat extends ActivityEnhanced
                                 });
 
                                 Realm realm = Realm.getDefaultInstance();
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                final RealmRoom joinedRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                if (joinedRoom != null) {
 
-                                        if (realmRoom != null) {
-                                            realmRoom.setDeleted(false);
-                                            if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                                realmRoom.setReadOnly(false);
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override public void execute(Realm realm) {
+                                            joinedRoom.setDeleted(false);
+                                            if (joinedRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                                joinedRoom.setReadOnly(false);
                                             }
 
-                                            realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
+                                            RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).
+                                                equalTo(RealmRoomMessageFields.DELETED, false).findAll().last();
+                                            if (message != null) {
+                                                joinedRoom.setLastMessage(message);
+
+                                                joinedRoom.setUpdatedTime(joinedRoom.getLastMessage().getUpdateOrCreateTime());
+
+                                                ActivityMain.needUpdateSortList = true;
+                                            }
 
                                         }
-                                    }
-                                });
+                                    });
+                                }
+
                                 realm.close();
                             }
 
@@ -3793,7 +3801,12 @@ public class ActivityChat extends ActivityEnhanced
 
         if (mReplayLayout != null && userTriesReplay()) {
             mReplayLayout.setTag(null);
-            mReplayLayout.setVisibility(View.GONE);
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    mReplayLayout.setVisibility(View.GONE);
+                }
+            });
+
         }
 
         scrollToEnd();

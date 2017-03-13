@@ -150,6 +150,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     FloatingActionButton btnCreateNewChannel;
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
+    public static boolean needUpdateSortList = false;
 
     public static MyAppBarLayout appBarLayout;
 
@@ -938,8 +939,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         //PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(this);
         //mRecyclerView.getRecycleView().setLayoutManager(preCachingLayoutManager);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
-        mRecyclerView.getRecycleView().setLayoutManager(mLayoutManager);
+        //LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
+        //mRecyclerView.getRecycleView().setLayoutManager(mLayoutManager);
 
         RealmResults<RealmRoom> results = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);
@@ -1193,18 +1194,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             item.deleteFromRealm();
                         }
 
-                        ///**
-                        // * set update time for last message in room update time
-                        // */
-                        //for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
-                        //    if (Room.getLastMessage() != null) {
-                        //        if (Room.getLastMessage().getUpdateTime() > 0) {
-                        //            if (Room.getLastMessage().getUpdateOrCreateTime() != Room.getUpdatedTime()) {
-                        //                Room.setUpdatedTime(Room.getLastMessage().getUpdateOrCreateTime());
-                        //            }
-                        //        }
-                        //    }
-                        //}
+                        if (needUpdateSortList) {
+
+                            for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
+                                if (Room.getLastMessage() != null) {
+                                    if (Room.getLastMessage().getUpdateTime() > 0) {
+                                        Room.setUpdatedTime(Room.getLastMessage().getUpdateOrCreateTime());
+                                    }
+                                }
+                            }
+
+                            needUpdateSortList = false;
+                        }
 
                         swipeRefreshLayout.setRefreshing(false);
                     }
@@ -1304,6 +1305,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         G.onClientCondition = this;
         G.onSetActionInRoom = this;
+
 
         getChatsList();
 

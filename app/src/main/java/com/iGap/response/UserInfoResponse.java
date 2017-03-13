@@ -33,7 +33,7 @@ public class UserInfoResponse extends MessageHandler {
             @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
 
                         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId()).findFirst();
@@ -54,41 +54,33 @@ public class UserInfoResponse extends MessageHandler {
                         realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
                         RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar(), true);
-
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
-
-                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                        if (realmUserInfo != null && (builder.getUser().getId() == realmUserInfo.getUserId())) {
-                            if (G.onUserInfoMyClient != null) {
-                                G.onUserInfoMyClient.onUserInfoMyClient(builder.getUser(), identity);
-                            }
-                        }
-
-                        if (G.onUserUpdateStatus != null) {
-                            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), builder.getUser().getStatus().toString());
-                        }
-
-                        if (G.onUserInfoResponse != null) {
-                            G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
-                        }
-
-                        if (G.onUserInfoForAvatar != null) {
-                            G.onUserInfoForAvatar.onUserInfoForAvatar(builder.getUser());
-                        }
-
-                        if (FragmentShowMember.infoUpdateListenerCount != null) {
-                            FragmentShowMember.infoUpdateListenerCount.complete(true, "", "");
-                        }
-
-                        realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override public void onError(Throwable error) {
-                        realm.close();
                     }
                 });
+
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo != null && (builder.getUser().getId() == realmUserInfo.getUserId())) {
+                    if (G.onUserInfoMyClient != null) {
+                        G.onUserInfoMyClient.onUserInfoMyClient(builder.getUser(), identity);
+                    }
+                }
+
+                realm.close();
+
+                if (G.onUserUpdateStatus != null) {
+                    G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), builder.getUser().getStatus().toString());
+                }
+
+                if (G.onUserInfoResponse != null) {
+                    G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
+                }
+
+                if (G.onUserInfoForAvatar != null) {
+                    G.onUserInfoForAvatar.onUserInfoForAvatar(builder.getUser());
+                }
+
+                if (FragmentShowMember.infoUpdateListenerCount != null) {
+                    FragmentShowMember.infoUpdateListenerCount.complete(true, "", "");
+                }
             }
         });
     }

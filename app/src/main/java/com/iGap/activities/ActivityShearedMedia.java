@@ -177,6 +177,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
                     recyclerView.getLayoutManager().removeAllViews();
+                    recyclerView.destroyDrawingCache();
+                    recyclerView.invalidateItemDecorations();
                     recyclerView.getAdapter().notifyDataSetChanged();
 
                     recyclerView.scrollToPosition(position);
