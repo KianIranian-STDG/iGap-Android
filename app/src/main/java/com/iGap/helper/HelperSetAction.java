@@ -50,19 +50,17 @@ public class HelperSetAction {
      */
 
     public static void setCancel(final long roomId) {
-
-        if (!checkExistAction(roomId, ProtoGlobal.ClientAction.CANCEL)) {
+        if (checkExistAction(roomId, ProtoGlobal.ClientAction.TYPING)) {
             for (int i = structActions.size() - 1; i >= 0; i--) {
                 StructAction action = structActions.get(i);
                 if (action.action == ProtoGlobal.ClientAction.TYPING) {
-                    removeStruct(action.randomKey);
                     if (action.chatType.toString().equals(ProtoGlobal.Room.Type.GROUP.toString())) {
                         new RequestGroupSetAction().groupSetAction(roomId, ProtoGlobal.ClientAction.CANCEL, action.randomKey);
-                        break;
                     } else {
                         new RequestChatSetAction().chatSetAction(roomId, ProtoGlobal.ClientAction.CANCEL, action.randomKey);
-                        break;
                     }
+                    removeStruct(action.randomKey);
+                    break;
                 }
             }
         }
@@ -104,6 +102,15 @@ public class HelperSetAction {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                /**
+                 * check that this action exist in structAction or not.
+                 * if not exist don't try for cancel that ,because this
+                 * means that this randomKey removed before
+                 */
+                if (!existStruct(structAction.randomKey)) {
+                    return;
+                }
+
                 if (autoCancel(structAction.currentTime)) {
                     removeStruct(structAction.randomKey);
 
@@ -207,6 +214,20 @@ public class HelperSetAction {
                 break;
             }
         }
+    }
+
+    /**
+     * check that exist this value or not
+     *
+     * @param randomKey check with randomKey that exist in StructAction
+     */
+    private static boolean existStruct(int randomKey) {
+        for (int i = 0; i < structActions.size(); i++) {
+            if (structActions.get(i).randomKey == randomKey) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
