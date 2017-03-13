@@ -1,6 +1,5 @@
 package com.iGap.request;
 
-import android.util.Log;
 import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoClientGetRoomList;
 import com.iGap.proto.ProtoRequest;
@@ -8,11 +7,8 @@ import com.iGap.proto.ProtoRequest;
 public class RequestClientGetRoomList {
 
     public void clientGetRoomList() {
-        Log.i("TTT", "ClientGetRoomListResponse");
-        ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList =
-                ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
-        clientGetRoomList.setRequest(
-                ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+        ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
+        clientGetRoomList.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
 
         RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList);
         try {

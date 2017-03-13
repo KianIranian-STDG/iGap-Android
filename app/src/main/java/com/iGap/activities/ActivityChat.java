@@ -251,9 +251,7 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
 
-public class ActivityChat extends ActivityEnhanced
-    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
-    OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
+public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -406,16 +404,17 @@ public class ActivityChat extends ActivityEnhanced
 
             @Override
             public void resendMessageNeedsUpload(RealmRoomMessage message) {
-                HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(),
-                    new HelperUploadFile.UpdateListener() {
-                        @Override public void OnProgress(int progress, FileUploadStructure struct) {
-                            insertItemAndUpdateAfterStartUpload(progress, struct);
-                        }
+                HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(), new HelperUploadFile.UpdateListener() {
+                    @Override
+                    public void OnProgress(int progress, FileUploadStructure struct) {
+                        insertItemAndUpdateAfterStartUpload(progress, struct);
+                    }
 
-                        @Override public void OnError() {
+                    @Override
+                    public void OnError() {
 
-                        }
-                    });
+                    }
+                });
 
             }
 
@@ -527,7 +526,8 @@ public class ActivityChat extends ActivityEnhanced
         if (progress == 0) {
 
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     addItemAfterStartUpload(struct);
                 }
             });
@@ -561,7 +561,8 @@ public class ActivityChat extends ActivityEnhanced
                 switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
                 if (!G.userLogin) {
                     G.handler.postDelayed(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             makeFailed(struct.messageId);
                         }
                     }, 200);
@@ -744,14 +745,15 @@ public class ActivityChat extends ActivityEnhanced
                                 if (joinedRoom != null) {
 
                                     realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
+                                        @Override
+                                        public void execute(Realm realm) {
                                             joinedRoom.setDeleted(false);
                                             if (joinedRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
                                                 joinedRoom.setReadOnly(false);
                                             }
 
                                             RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).
-                                                equalTo(RealmRoomMessageFields.DELETED, false).findAll().last();
+                                                    equalTo(RealmRoomMessageFields.DELETED, false).findAll().last();
                                             if (message != null) {
                                                 joinedRoom.setLastMessage(message);
 
@@ -3178,7 +3180,8 @@ public class ActivityChat extends ActivityEnhanced
                     txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
 
                     new Thread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             for (String path : listPathString) {
                                 if (!path.toLowerCase().endsWith(".gif")) {
@@ -3311,7 +3314,8 @@ public class ActivityChat extends ActivityEnhanced
             } else if (listPathString.size() > 1) {
 
                 new Thread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         for (final String path : listPathString) {
                             if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !path.toLowerCase().endsWith(".gif")) {
@@ -3778,11 +3782,13 @@ public class ActivityChat extends ActivityEnhanced
         if (finalFilePath != null && finalMessageType != CONTACT) {
 
             HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), new HelperUploadFile.UpdateListener() {
-                @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                @Override
+                public void OnProgress(int progress, FileUploadStructure struct) {
                     insertItemAndUpdateAfterStartUpload(progress, struct);
                 }
 
-                @Override public void OnError() {
+                @Override
+                public void OnError() {
 
                 }
             });
@@ -3802,7 +3808,8 @@ public class ActivityChat extends ActivityEnhanced
         if (mReplayLayout != null && userTriesReplay()) {
             mReplayLayout.setTag(null);
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     mReplayLayout.setVisibility(View.GONE);
                 }
             });
@@ -4525,7 +4532,8 @@ public class ActivityChat extends ActivityEnhanced
         startActivity(intent);
     }
 
-    @Override public void onUploadCancel(View view, final StructMessageInfo message, int pos) {
+    @Override
+    public void onUploadCancel(View view, final StructMessageInfo message, int pos) {
 
         HelperSetAction.sendCancel(Long.parseLong(message.messageID));
 
@@ -4541,7 +4549,8 @@ public class ActivityChat extends ActivityEnhanced
 
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID)).findFirst();
                     if (roomMessage != null) {
                         // delete message from database
@@ -4871,11 +4880,13 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), new HelperUploadFile.UpdateListener() {
-            @Override public void OnProgress(int progress, FileUploadStructure struct) {
+            @Override
+            public void OnProgress(int progress, FileUploadStructure struct) {
                 insertItemAndUpdateAfterStartUpload(progress, struct);
             }
 
-            @Override public void OnError() {
+            @Override
+            public void OnError() {
 
             }
         });
@@ -5109,7 +5120,8 @@ public class ActivityChat extends ActivityEnhanced
 
         if (realmClientCondition.isLoaded() && realmClientCondition.isValid()) {
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
 
                     if (realmRoom.isLoaded() && realmRoom.isValid() && realmRoom.getLastMessage() != null) {
@@ -5226,12 +5238,11 @@ public class ActivityChat extends ActivityEnhanced
         //    //draftForFile();
         //} else {
 
-        String message = null;
-        try {
-            message = edtChat.getText().toString();
-        } catch (NullPointerException e) {
+        if (edtChat == null) {
+            return;
         }
 
+        String message = edtChat.getText().toString();
 
         if (!message.trim().isEmpty() || ((mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE))) {
 
