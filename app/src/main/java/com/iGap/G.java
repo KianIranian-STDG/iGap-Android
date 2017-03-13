@@ -756,18 +756,18 @@ public class G extends MultiDexApplication {
                         /**
                          * in first enter to app client send clientCondition after get room list
                          * but, in another login when user not closed app after login client send
-                         * latest state to server  after login without get room list
+                         * latest state to server  after login without get room list , also if
+                         * app in background is running now if firstTimeEnterToApp is false we send
+                         * client condition because this field(firstTimeEnterToApp) will be lost value
+                         * in close app and after app start running in background we don't send
+                         * client condition!!! for avoid from this problem we checked isAppInFg state
+                         * app is background send clientCondition (: .
                          */
-                        if (!firstTimeEnterToApp) {
-                            Log.i("BBB", "RequestClientCondition after login ");
-                            //new RequestClientCondition().clientCondition(clientConditionGlobal);
+                        if (!firstTimeEnterToApp || !isAppInFg) {
                             new RequestClientGetRoomList().clientGetRoomList();
                         }
 
                         getUserInfo();
-                        //importContact();
-                        //sendWaitingRequestWrappers();
-
                         new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
                     }
                 });
@@ -793,7 +793,6 @@ public class G extends MultiDexApplication {
                     }
                     realm.close();
                 } else {
-                    Log.i("TTT", "Not Secure");
                     login();
                 }
             }

@@ -1,6 +1,5 @@
 package com.iGap.request;
 
-import android.util.Log;
 import com.iGap.module.StructListOfContact;
 import com.iGap.proto.ProtoUserContactsImport;
 import java.util.ArrayList;
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 public class RequestUserContactImport {
 
     public void contactImport(ArrayList<StructListOfContact> itemContactList, boolean force) {
-        Log.i("MMMM", "ContactsContract.Contacts.DISPLAY_NAME 1 : " + itemContactList);
         RequestWrapper requestWrapper = new RequestWrapper(106, contact(itemContactList, force));
         try {
             RequestQueue.sendRequest(requestWrapper);
