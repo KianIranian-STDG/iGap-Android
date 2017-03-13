@@ -382,7 +382,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
     public static void startUploadTaskChat(Long roomID, ProtoGlobal.Room.Type chatType, String filePath, long messageId, ProtoGlobal.RoomMessageType messageType, String messageText,
         UpdateListener listener) {
 
-        new UploadTask(roomID, chatType, listener).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, filePath, messageId, messageType, roomID, messageText);
+        new UploadTask(roomID, chatType, listener).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, filePath, messageId, messageType, roomID, messageText);
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
